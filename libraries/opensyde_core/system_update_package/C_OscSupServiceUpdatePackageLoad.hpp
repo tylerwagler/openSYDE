@@ -17,6 +17,7 @@
 
 #include "stwtypes.hpp"
 #include <string>
+#include <system_error>
 #include "C_OscXmlParser.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscSecurityEcdsa.hpp"
@@ -39,62 +40,62 @@ class C_OscSupServiceUpdatePackageLoad :
    public C_OscSupServiceUpdatePackageBase
 {
 public:
-   static int32_t h_ProcessPackageUsingPemFiles(const std::string & orc_PackagePath,
+   static std::error_code h_ProcessPackageUsingPemFiles(const std::string & orc_PackagePath,
                                                 const std::string & orc_TargetUnzipPath,
                                                 C_OscSystemDefinition & orc_SystemDefinition,
                                                 uint32_t & oru32_ActiveBusIndex, std::vector<uint8_t> & orc_ActiveNodes,
                                                 std::vector<uint32_t> & orc_NodesUpdateOrder,
                                                 std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-                                                stw::scl::std::vector<std::string> & orc_WarningMessages,
+                                                std::vector<std::string> & orc_WarningMessages,
                                                 std::string & orc_ErrorMessage, const bool oq_IsZip,
                                                 const std::vector<uint8_t> & orc_DecryptNodes = std::vector<uint8_t>(),
                                                 const std::vector<std::string> & orc_DecryptNodesPassword = std::vector<std::string>(), const std::vector<std::string> & orc_NodeSignaturePemFiles = std::vector<std::string>());
 
-   static int32_t h_ProcessPackage(const std::string & orc_PackagePath,
+   static std::error_code h_ProcessPackage(const std::string & orc_PackagePath,
                                    const std::string & orc_TargetUnzipPath,
                                    C_OscSystemDefinition & orc_SystemDefinition, uint32_t & oru32_ActiveBusIndex,
                                    std::vector<uint8_t> & orc_ActiveNodes, std::vector<uint32_t> & orc_NodesUpdateOrder,
                                    std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-                                   stw::scl::std::vector<std::string> & orc_WarningMessages,
+                                   std::vector<std::string> & orc_WarningMessages,
                                    std::string & orc_ErrorMessage, const bool oq_IsZip,
                                    const std::vector<uint8_t> & orc_DecryptNodes = std::vector<uint8_t>(),
                                    const std::vector<std::string> & orc_DecryptNodesPassword = std::vector<std::string>(), const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys = std::vector<std::vector<uint8_t> >());
 
 private:
-   static int32_t mh_CheckSupFiles(const std::string & orc_PackagePath);
+   static std::error_code mh_CheckSupFiles(const std::string & orc_PackagePath);
 
-   static int32_t mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
-                                                 std::string & orc_TargetUnzipPath, const bool oq_IsZip);
+   static std::error_code mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
+                                                         std::string & orc_TargetUnzipPath, const bool oq_IsZip);
 
-   static int32_t mh_SetNodesUpdateOrder(const std::map<uint32_t,
-                                                        uint32_t> & orc_UpdateOrderByNodes,
-                                         std::vector<uint32_t> & orc_NodesUpdateOrder);
-   static int32_t mh_UnpackAndLoadNodes(const C_OscSystemDefinition & orc_SystemDefinition,
-                                        const std::vector<std::string> & orc_PackageFiles,
-                                        const std::string & orc_TargetUnzipPath,
-                                        const std::vector<uint8_t> & orc_ActiveNodes,
-                                        const std::vector<uint32_t> & orc_UpdatePosition,
-                                        std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-                                        std::vector<uint32_t> & orc_NodesUpdateOrder,
-                                        const std::vector<uint8_t> & orc_DecryptNodes,
-                                        const std::vector<std::string> & orc_DecryptNodesPassword,
-                                        const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
-                                        const bool oq_UseMinorVersion1);
-   static int32_t mh_UnpackNodes(const std::vector<uint8_t> & orc_DecryptNodes,
-                                 const std::vector<std::string> & orc_DecryptNodesPassword,
-                                 const uint32_t ou32_NodeCount,
-                                 const std::vector<std::string> & orc_PackageFiles,
-                                 const std::string & orc_TargetUnzipPath,
-                                 const std::vector<std::string> & orc_NodeFoldersAbs);
-   static int32_t mh_VerifySignatures(const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-                                      const std::vector<uint8_t> & orc_ActiveNodes,
-                                      const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
-                                      const std::vector<std::string> & orc_Signatures,
-                                      const std::vector<std::string> & orc_AbsSydeSecureDefFileNames);
-   static int32_t mh_VerifySignature(const C_OscSuSequences::C_DoFlash & orc_ApplicationsToWrite,
-                                     const std::vector<uint8_t> & orc_NodeSignatureKeys,
-                                     const std::string & orc_Signature,
-                                     const std::string & orc_AbsSydeSecureDefFileName);
+   static std::error_code mh_SetNodesUpdateOrder(const std::map<uint32_t,
+                                                                uint32_t> & orc_UpdateOrderByNodes,
+                                                 std::vector<uint32_t> & orc_NodesUpdateOrder);
+   static std::error_code mh_UnpackAndLoadNodes(const C_OscSystemDefinition & orc_SystemDefinition,
+                                                const std::vector<std::string> & orc_PackageFiles,
+                                                const std::string & orc_TargetUnzipPath,
+                                                const std::vector<uint8_t> & orc_ActiveNodes,
+                                                const std::vector<uint32_t> & orc_UpdatePosition,
+                                                std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+                                                std::vector<uint32_t> & orc_NodesUpdateOrder,
+                                                const std::vector<uint8_t> & orc_DecryptNodes,
+                                                const std::vector<std::string> & orc_DecryptNodesPassword,
+                                                const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
+                                                const bool oq_UseMinorVersion1);
+   static std::error_code mh_UnpackNodes(const std::vector<uint8_t> & orc_DecryptNodes,
+                                         const std::vector<std::string> & orc_DecryptNodesPassword,
+                                         const uint32_t ou32_NodeCount,
+                                         const std::vector<std::string> & orc_PackageFiles,
+                                         const std::string & orc_TargetUnzipPath,
+                                         const std::vector<std::string> & orc_NodeFoldersAbs);
+   static std::error_code mh_VerifySignatures(const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+                                              const std::vector<uint8_t> & orc_ActiveNodes,
+                                              const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
+                                              const std::vector<std::string> & orc_Signatures,
+                                              const std::vector<std::string> & orc_AbsSydeSecureDefFileNames);
+   static std::error_code mh_VerifySignature(const C_OscSuSequences::C_DoFlash & orc_ApplicationsToWrite,
+                                             const std::vector<uint8_t> & orc_NodeSignatureKeys,
+                                             const std::string & orc_Signature,
+                                             const std::string & orc_AbsSydeSecureDefFileName);
    static void mh_GetDigestFiles(const C_OscSuSequences::C_DoFlash & orc_ApplicationsToWrite,
                                  const std::string & orc_AbsSydeSecureDefFileName,
                                  std::set<std::string> & orc_Files);

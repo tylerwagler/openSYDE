@@ -15,12 +15,14 @@
 #define CCANDISPATCHERHPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include <deque>
 #include <vector>
+#include <system_error>
 #include "stwtypes.hpp"
 #include "C_CanBase.hpp"
-#include "TglTasks.hpp"
 #include "stw_can.hpp"
+#include "C_OscErrorCategory.hpp"
 
 namespace stw
 {
@@ -37,13 +39,13 @@ class C_CanRxQueue
 private:
    std::deque<T_STWCAN_Msg_RX> mc_Messages;
    uint32_t mu32_MaxSize;
-   int32_t ms32_Status;
+   std::error_code mc_Status;
 
 public:
    C_CanRxQueue(void);
 
-   int32_t Push(const T_STWCAN_Msg_RX & orc_Message);
-   int32_t Pop(T_STWCAN_Msg_RX & orc_Message);
+   std::error_code Push(const T_STWCAN_Msg_RX & orc_Message);
+   std::error_code Pop(T_STWCAN_Msg_RX & orc_Message);
 
    void SetMaxSize(const uint32_t ou32_MaxSize);
    uint32_t GetMaxSize(void) const;
@@ -51,7 +53,7 @@ public:
    uint32_t GetSize(void) const;
    void Clear(void);
 
-   int32_t GetStatus(void);
+   std::error_code GetStatus(void);
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -97,7 +99,7 @@ private:
 
    void m_ResyncShortcutPointers(void);
 
-   stw::tgl::C_TglCriticalSection mc_CriticalSection;
+   std::mutex mc_CriticalSection;
 
 protected:
    //-----------------------------------------------------------------------------
@@ -110,30 +112,31 @@ protected:
       \param[out]  orc_Message  read message
 
       \return
-      C_NO_ERR   message read
-      else       no message read or error
+      Errc::success   message read
+      else            no message read or error
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t m_CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message) = 0;
+   virtual std::error_code m_CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message) = 0;
 
 public:
    C_CanDispatcher(void);
    C_CanDispatcher(const uint8_t ou8_CommChannel);
    virtual ~C_CanDispatcher(void);
 
+   //returns the number of newly received messages, not an error code -> stays on int32_t
    int32_t DispatchIncoming(void);
-   int32_t RegisterClient(uint16_t & oru16_Handle, const C_CanRxFilter * const opc_RXFilter = NULL,
-                          const uint32_t & oru32_BufferSize = mu32_CAN_QUEUE_DEFAULT_MAX_SIZE);
-   int32_t RemoveClient(const uint16_t ou16_Handle);
-   int32_t SetRXFilter(const uint16_t ou16_Handle, const C_CanRxFilter & orc_RXFilter);
+   std::error_code RegisterClient(uint16_t & oru16_Handle, const C_CanRxFilter * const opc_RXFilter = nullptr,
+                                  const uint32_t & oru32_BufferSize = mu32_CAN_QUEUE_DEFAULT_MAX_SIZE);
+   std::error_code RemoveClient(const uint16_t ou16_Handle);
+   std::error_code SetRXFilter(const uint16_t ou16_Handle, const C_CanRxFilter & orc_RXFilter);
 
-   int32_t ReadFromQueue(const uint16_t ou16_Handle, T_STWCAN_Msg_RX & orc_Message);
-   int32_t ClearQueue(const uint16_t ou16_Handle);
+   std::error_code ReadFromQueue(const uint16_t ou16_Handle, T_STWCAN_Msg_RX & orc_Message);
+   std::error_code ClearQueue(const uint16_t ou16_Handle);
 
    //we hide the base class function on purpose here
-   int32_t CAN_Read_Msg(const uint16_t ou16_Handle, T_STWCAN_Msg_RX & orc_Message); //lint !e1411
+   std::error_code CAN_Read_Msg(const uint16_t ou16_Handle, T_STWCAN_Msg_RX & orc_Message); //lint !e1411
    //try to read from CAN driver and add message to all installed RX queues:
-   virtual int32_t CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message);
+   virtual std::error_code CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message);
 };
 
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */

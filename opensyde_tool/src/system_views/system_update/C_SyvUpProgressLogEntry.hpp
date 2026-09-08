@@ -34,7 +34,7 @@ class C_SyvUpProgressLogEntry :
    Q_OBJECT
 
 public:
-   explicit C_SyvUpProgressLogEntry(const uint32_t ou32_NodeIndex, QWidget * const opc_Parent = NULL);
+   explicit C_SyvUpProgressLogEntry(const uint32_t ou32_NodeIndex, QWidget * const opc_Parent = nullptr);
    ~C_SyvUpProgressLogEntry(void) override;
 
    void SetEntryDescription(const QString & orc_Value) const;

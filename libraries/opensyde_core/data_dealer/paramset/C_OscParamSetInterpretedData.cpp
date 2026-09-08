@@ -45,7 +45,7 @@ C_OscParamSetInterpretedData::C_OscParamSetInterpretedData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscParamSetInterpretedData::Clear()
 {
-   this->c_FileInfo.clear();
+   this->c_FileInfo.Clear();
    this->c_InterpretedNodes.clear();
 }
 
@@ -74,7 +74,7 @@ const C_OscParamSetInterpretedNode * C_OscParamSetInterpretedData::GetInterprete
    const std::string & orc_NodeName)
 const
 {
-   const C_OscParamSetInterpretedNode * pc_Retval = NULL;
+   const C_OscParamSetInterpretedNode * pc_Retval = nullptr;
 
    for (uint32_t u32_ItInterpretedNode = 0; u32_ItInterpretedNode < this->c_InterpretedNodes.size();
         ++u32_ItInterpretedNode)

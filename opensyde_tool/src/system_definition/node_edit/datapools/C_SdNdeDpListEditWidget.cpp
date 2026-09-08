@@ -204,7 +204,7 @@ void C_SdNdeDpListEditWidget::m_UpdateButtonTooltips(const uint32_t ou32_NodeInd
    const C_OscNodeDataPool * pc_Dp = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(ou32_NodeIndex, s32_Next);
 
    // next
-   if ((pc_Dp != NULL) && (s32_Next >= 0))
+   if ((pc_Dp != nullptr) && (s32_Next >= 0))
    {
       this->mpc_Ui->pc_PubNext->
       SetToolTipInformation("Go to Next Datapool",
@@ -216,7 +216,7 @@ void C_SdNdeDpListEditWidget::m_UpdateButtonTooltips(const uint32_t ou32_NodeInd
 
    // previous
    pc_Dp = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(ou32_NodeIndex, s32_Prev);
-   if ((pc_Dp != NULL) && (s32_Next >= 0))
+   if ((pc_Dp != nullptr) && (s32_Next >= 0))
    {
       this->mpc_Ui->pc_PubPrevious->
       SetToolTipInformation("Go to Previous Datapool",

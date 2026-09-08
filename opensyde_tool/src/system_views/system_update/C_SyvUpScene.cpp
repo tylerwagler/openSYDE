@@ -80,12 +80,12 @@ void C_SyvUpScene::SetConnecting(const bool oq_Active) const
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-      if (pc_CurItemParent != NULL)
+      if (pc_CurItemParent != nullptr)
       {
          //Nodes
 
          C_GiSvNodeSyvUpdate * const pc_Node = dynamic_cast<C_GiSvNodeSyvUpdate *>(pc_CurItemParent);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             pc_Node->SetConnecting(oq_Active);
          }
@@ -107,19 +107,19 @@ void C_SyvUpScene::SetConnected(const bool oq_Active) const
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-      if (pc_CurItemParent != NULL)
+      if (pc_CurItemParent != nullptr)
       {
          //Nodes
 
          C_GiSvNodeSyvUpdate * const pc_Node = dynamic_cast<C_GiSvNodeSyvUpdate *>(pc_CurItemParent);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             pc_Node->SetConnected(oq_Active);
          }
          else
          {
             C_GiSvPc * const pc_Pc = dynamic_cast<C_GiSvPc *>(pc_CurItemParent);
-            if (pc_Pc != NULL)
+            if (pc_Pc != nullptr)
             {
                pc_Pc->SetConnected(oq_Active);
             }
@@ -142,12 +142,12 @@ void C_SyvUpScene::SetUpdating(const bool oq_Active) const
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-      if (pc_CurItemParent != NULL)
+      if (pc_CurItemParent != nullptr)
       {
          //Nodes
 
          C_GiSvNodeSyvUpdate * const pc_Node = dynamic_cast<C_GiSvNodeSyvUpdate *>(pc_CurItemParent);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             pc_Node->SetUpdating(oq_Active);
          }
@@ -175,12 +175,12 @@ void C_SyvUpScene::UpdateDeviceInformation(const std::vector<uint32_t> & orc_Nod
       for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
       {
          QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-         if (pc_CurItemParent != NULL)
+         if (pc_CurItemParent != nullptr)
          {
             //Nodes
             C_GiSvNodeSyvUpdate * const pc_Node = dynamic_cast<C_GiSvNodeSyvUpdate *>(pc_CurItemParent);
 
-            if ((pc_Node != NULL) &&
+            if ((pc_Node != nullptr) &&
                 (pc_Node->IsActiveInView() == true))
             {
                for (uint32_t u32_ItDevice = 0; u32_ItDevice < orc_NodeIndexes.size(); ++u32_ItDevice)
@@ -218,15 +218,15 @@ void C_SyvUpScene::StartConnectionAnimation(void) const
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-      if (pc_CurItemParent != NULL)
+      if (pc_CurItemParent != nullptr)
       {
          //PC connection
 
          C_GiSvPcBusConnector * const pc_CurPcConnector = dynamic_cast<C_GiSvPcBusConnector *>(pc_CurItemParent);
-         if (pc_CurPcConnector != NULL)
+         if (pc_CurPcConnector != nullptr)
          {
             bool q_SpeedUp = false;
-            if ((pc_CurPcConnector->GetBusItem() != NULL) &&
+            if ((pc_CurPcConnector->GetBusItem() != nullptr) &&
                 (pc_CurPcConnector->GetBusItem()->GetType() == C_OscSystemBus::eETHERNET))
             {
                q_SpeedUp = true;
@@ -250,7 +250,7 @@ void C_SyvUpScene::StartProgressAnimation(const uint32_t ou32_NodeIndex) const
    const C_SyvRoRouteCalculation c_Routing(this->mu32_ViewIndex, ou32_NodeIndex, C_OscRoutingCalculation::eUPDATE);
    const C_OscRoutingRoute * const pc_Route = c_Routing.GetBestRoute();
 
-   if ((pc_Route != NULL) && (pc_View != NULL))
+   if ((pc_Route != nullptr) && (pc_View != nullptr))
    {
       const QList<QGraphicsItem *> c_Items = this->items();
 
@@ -258,12 +258,12 @@ void C_SyvUpScene::StartProgressAnimation(const uint32_t ou32_NodeIndex) const
       for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
       {
          QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-         if (pc_CurItemParent != NULL)
+         if (pc_CurItemParent != nullptr)
          {
             //Connectors
 
             C_GiLiBusConnector * const pc_CurBusConnector = dynamic_cast<C_GiLiBusConnector *>(pc_CurItemParent);
-            if (pc_CurBusConnector != NULL)
+            if (pc_CurBusConnector != nullptr)
             {
                m_HandleBusConnectorInProgressAnimationStart(*pc_CurBusConnector, c_Routing, *pc_Route, *pc_View,
                                                             ou32_NodeIndex);
@@ -274,10 +274,10 @@ void C_SyvUpScene::StartProgressAnimation(const uint32_t ou32_NodeIndex) const
 
                C_GiSvPcBusConnector * const pc_CurPcConnector =
                   dynamic_cast<C_GiSvPcBusConnector *>(pc_CurItemParent);
-               if (pc_CurPcConnector != NULL)
+               if (pc_CurPcConnector != nullptr)
                {
                   bool q_SpeedUp = false;
-                  if ((pc_CurPcConnector->GetBusItem() != NULL) &&
+                  if ((pc_CurPcConnector->GetBusItem() != nullptr) &&
                       (pc_CurPcConnector->GetBusItem()->GetType() == C_OscSystemBus::eETHERNET))
                   {
                      q_SpeedUp = true;
@@ -291,7 +291,7 @@ void C_SyvUpScene::StartProgressAnimation(const uint32_t ou32_NodeIndex) const
 
                   C_GiSvNodeSyvUpdate * const pc_Node =
                      dynamic_cast<C_GiSvNodeSyvUpdate *>(pc_CurItemParent);
-                  if (pc_Node != NULL)
+                  if (pc_Node != nullptr)
                   {
                      //Check if currently updated node
                      if (pc_Node->CheckIndexRelevantForThisNode(ou32_NodeIndex))
@@ -336,12 +336,12 @@ void C_SyvUpScene::StopProgressAnimation(const bool oq_Abort, const uint32_t ou3
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-      if (pc_CurItemParent != NULL)
+      if (pc_CurItemParent != nullptr)
       {
          //Busses
 
          C_GiLiBus * const pc_CurBus = dynamic_cast<C_GiLiBus *>(pc_CurItemParent);
-         if (pc_CurBus != NULL)
+         if (pc_CurBus != nullptr)
          {
             //Deactivate
             pc_CurBus->SetAnimated(false);
@@ -351,7 +351,7 @@ void C_SyvUpScene::StopProgressAnimation(const bool oq_Abort, const uint32_t ou3
             //Connectors
 
             C_GiLiBusConnector * const pc_CurBusConnector = dynamic_cast<C_GiLiBusConnector *>(pc_CurItemParent);
-            if (pc_CurBusConnector != NULL)
+            if (pc_CurBusConnector != nullptr)
             {
                //Deactivate
                pc_CurBusConnector->SetAnimated(false);
@@ -362,7 +362,7 @@ void C_SyvUpScene::StopProgressAnimation(const bool oq_Abort, const uint32_t ou3
 
                C_GiSvPcBusConnector * const pc_CurPcConnector =
                   dynamic_cast<C_GiSvPcBusConnector *>(pc_CurItemParent);
-               if (pc_CurPcConnector != NULL)
+               if (pc_CurPcConnector != nullptr)
                {
                   //Deactivate
                   pc_CurPcConnector->SetAnimated(false);
@@ -373,7 +373,7 @@ void C_SyvUpScene::StopProgressAnimation(const bool oq_Abort, const uint32_t ou3
 
                   C_GiSvNodeSyvUpdate * const pc_Node =
                      dynamic_cast<C_GiSvNodeSyvUpdate *>(pc_CurItemParent);
-                  if (pc_Node != NULL)
+                  if (pc_Node != nullptr)
                   {
                      pc_Node->SetNodeUpdateInProgress(false, oq_Abort, ou32_FailedApplicationIndex, 0UL);
                   }
@@ -400,12 +400,12 @@ void C_SyvUpScene::SetNodeError(const uint32_t ou32_NodeIndex) const
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-      if (pc_CurItemParent != NULL)
+      if (pc_CurItemParent != nullptr)
       {
          //Nodes
 
          C_GiSvNodeSyvUpdate * const pc_Node = dynamic_cast<C_GiSvNodeSyvUpdate *>(pc_CurItemParent);
-         if ((pc_Node != NULL) && (pc_Node->CheckIndexRelevantForThisNode(u32_TopologyNodeIndex)))
+         if ((pc_Node != nullptr) && (pc_Node->CheckIndexRelevantForThisNode(u32_TopologyNodeIndex)))
          {
             pc_Node->SetNodeError(ou32_NodeIndex);
             break;
@@ -430,12 +430,12 @@ std::vector<uint32_t> C_SyvUpScene::GetActiveNoneThirdPartyNodeIndices(void) con
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       const QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-      if (pc_CurItemParent != NULL)
+      if (pc_CurItemParent != nullptr)
       {
          //Nodes
 
          const C_GiSvNodeSyvUpdate * const pc_Node = dynamic_cast<const C_GiSvNodeSyvUpdate *>(pc_CurItemParent);
-         if ((((pc_Node != NULL) && (pc_Node->GetIndex() >= 0)) && (pc_Node->IsActiveInView() == true)) &&
+         if ((((pc_Node != nullptr) && (pc_Node->GetIndex() >= 0)) && (pc_Node->IsActiveInView() == true)) &&
              (pc_Node->HasNodeAnAvailableFlashloader() == true))
          {
             const std::vector<uint32_t> c_AllCurrent = pc_Node->GetAllActiveFlashableSubNodeIndices();
@@ -462,12 +462,12 @@ void C_SyvUpScene::CheckUpdateDisabledState(void) const
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-      if (pc_CurItemParent != NULL)
+      if (pc_CurItemParent != nullptr)
       {
          //Nodes
 
          C_GiSvNodeSyvUpdate * const pc_Node = dynamic_cast<C_GiSvNodeSyvUpdate *>(pc_CurItemParent);
-         if (((pc_Node != NULL) && (pc_Node->GetIndex() >= 0)) && (pc_Node->IsActiveInView() == true))
+         if (((pc_Node != nullptr) && (pc_Node->GetIndex() >= 0)) && (pc_Node->IsActiveInView() == true))
          {
             pc_Node->UpdateIcons();
          }
@@ -490,12 +490,12 @@ void C_SyvUpScene::SetNodeConnectStates(const std::vector<C_OscSuSequencesNodeCo
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-      if (pc_CurItemParent != NULL)
+      if (pc_CurItemParent != nullptr)
       {
          //Nodes
 
          C_GiSvNodeSyvUpdate * const pc_Node = dynamic_cast<C_GiSvNodeSyvUpdate *>(pc_CurItemParent);
-         if (((pc_Node != NULL) && (pc_Node->GetIndex() >= 0)) && (pc_Node->IsActiveInView() == true))
+         if (((pc_Node != nullptr) && (pc_Node->GetIndex() >= 0)) && (pc_Node->IsActiveInView() == true))
          {
             pc_Node->SetNodeConnectStates(orc_NodeStates, orc_NodePreconditionErrors);
          }
@@ -516,12 +516,12 @@ void C_SyvUpScene::SetNodeUpdateStates(const std::vector<C_OscSuSequencesNodeUpd
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-      if (pc_CurItemParent != NULL)
+      if (pc_CurItemParent != nullptr)
       {
          //Nodes
 
          C_GiSvNodeSyvUpdate * const pc_Node = dynamic_cast<C_GiSvNodeSyvUpdate *>(pc_CurItemParent);
-         if (((pc_Node != NULL) && (pc_Node->GetIndex() >= 0)) && (pc_Node->IsActiveInView() == true))
+         if (((pc_Node != nullptr) && (pc_Node->GetIndex() >= 0)) && (pc_Node->IsActiveInView() == true))
          {
             pc_Node->SetNodeUpdateStates(orc_NodeStates);
          }
@@ -577,13 +577,13 @@ bool C_SyvUpScene::IsItemSelectable(const QGraphicsItem * const opc_Item) const
 //----------------------------------------------------------------------------------------------------------------------
 C_SebBaseContextMenuManager * C_SyvUpScene::m_GetContextMenuManager(void)
 {
-   return NULL;
+   return nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoBaseManager * C_SyvUpScene::m_GetUndoManager(void)
 {
-   return NULL;
+   return nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -606,17 +606,17 @@ void C_SyvUpScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * const opc_Ev
 {
    QGraphicsItem * const pc_Item = this->itemAt(opc_Event->scenePos(), QTransform());
 
-   if ((pc_Item != NULL) &&
+   if ((pc_Item != nullptr) &&
        (opc_Event->buttons().testFlag(Qt::LeftButton) == true))
    {
       QGraphicsItem * const pc_Parent = C_SebUtil::h_GetHighestParent(pc_Item);
 
-      if (pc_Parent != NULL)
+      if (pc_Parent != nullptr)
       {
          //Nodes
 
          C_GiSvNodeSyvUpdate * const pc_Node = dynamic_cast<C_GiSvNodeSyvUpdate *>(pc_Parent);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             pc_Node->ShowInfo();
          }
@@ -624,7 +624,7 @@ void C_SyvUpScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * const opc_Ev
          {
             C_GiSvPc * const pc_Pc = dynamic_cast<C_GiSvPc * const>(pc_Parent);
 
-            if (pc_Pc != NULL)
+            if (pc_Pc != nullptr)
             {
                pc_Pc->OpenDialog();
             }
@@ -643,7 +643,7 @@ void C_SyvUpScene::m_AddNodeToScene(C_GiNode * const opc_NodeGraphicsItem)
 {
    C_GiSvNodeSyvUpdate * const pc_UpdateNode = dynamic_cast<C_GiSvNodeSyvUpdate * const>(opc_NodeGraphicsItem);
 
-   if (pc_UpdateNode != NULL)
+   if (pc_UpdateNode != nullptr)
    {
       connect(pc_UpdateNode, &C_GiSvNodeSyvUpdate::SigDiscardInfo, this, &C_SyvUpScene::SigDiscardInfo);
    }
@@ -670,7 +670,7 @@ void C_SyvUpScene::m_HandleBusConnectorInProgressAnimationStart(C_GiLiBusConnect
    const C_GiNode * const pc_ConnectedNode = orc_BusConnector.GetNodeItem();
    const C_PuiSdNodeConnectionId * const pc_ConnectionData = orc_BusConnector.GetConnectionData();
 
-   if (((pc_ConnectedBus != NULL) && (pc_ConnectedNode != NULL)) && (pc_ConnectionData != NULL))
+   if (((pc_ConnectedBus != nullptr) && (pc_ConnectedNode != nullptr)) && (pc_ConnectionData != nullptr))
    {
       //On route
       bool q_Inverse = false;
@@ -715,7 +715,7 @@ void C_SyvUpScene::m_HandleBusConnectorInProgressAnimationStart(C_GiLiBusConnect
       else
       {
          bool q_SpeedUp = false;
-         if ((orc_BusConnector.GetBusItem() != NULL) &&
+         if ((orc_BusConnector.GetBusItem() != nullptr) &&
              (orc_BusConnector.GetBusItem()->GetType() == C_OscSystemBus::eETHERNET))
          {
             q_SpeedUp = true;
@@ -752,7 +752,7 @@ bool C_SyvUpScene::m_IsLastBusConnectorInProgressAnimationToNode(const C_PuiSdNo
    const C_OscNode * const pc_NodeData = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
       ou32_NodeIndex);
 
-   if (pc_NodeData != NULL)
+   if (pc_NodeData != nullptr)
    {
       uint32_t u32_BusIndexToSearchFor = 0;
       if (orc_Route.c_VecRoutePoints.size() > 0)
@@ -817,8 +817,8 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
    const C_OscRoutingRoute * const pc_Route = orc_Calc.GetBestRoute();
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (((pc_UiNode != NULL) && (pc_OscNode != NULL)) &&
-       (((pc_Route != NULL) && (pc_View != NULL)) && (pc_View->GetOscPcData().GetConnected() == true)))
+   if (((pc_UiNode != nullptr) && (pc_OscNode != nullptr)) &&
+       (((pc_Route != nullptr) && (pc_View != nullptr)) && (pc_View->GetOscPcData().GetConnected() == true)))
    {
       //Internal knowledge: Index of connector interaction point on bus is: LAST index
       //Special cases
@@ -857,7 +857,7 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
                rc_Point.u32_NodeIndex, rc_Point.u8_InInterfaceNumber, rc_Point.e_InInterfaceType);
             const C_PuiSdNodeConnection * const pc_OutConnection = C_PuiSdHandler::h_GetInstance()->GetUiConnection(
                rc_Point.u32_NodeIndex, rc_Point.u8_OutInterfaceNumber, rc_Point.e_OutInterfaceType);
-            if ((pc_InConnection != NULL) && (pc_OutConnection != NULL))
+            if ((pc_InConnection != nullptr) && (pc_OutConnection != nullptr))
             {
                const std::vector<QPointF> & rc_InConnectionPoints =
                   pc_InConnection->c_UiNodeConnectionInteractionPoints;
@@ -892,7 +892,7 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
                const C_PuiSdNodeConnection * const pc_UiConnectionData =
                   C_PuiSdHandler::h_GetInstance()->GetUiConnection(ou32_NodeIndex, rc_Interface.u8_InterfaceNumber,
                                                                    rc_Interface.e_InterfaceType);
-               if (pc_UiConnectionData != NULL)
+               if (pc_UiConnectionData != nullptr)
                {
                   const std::vector<QPointF> & rc_ConnectionPoints =
                      pc_UiConnectionData->c_UiNodeConnectionInteractionPoints;
@@ -910,7 +910,7 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
             for (uint64_t u64_ItBus = 0; u64_ItBus < c_Busses.size(); ++u64_ItBus)
             {
                const C_PuiSdBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetUiBus(c_Busses[u64_ItBus]);
-               if (pc_Bus != NULL)
+               if (pc_Bus != nullptr)
                {
                   QPolygonF c_AnimatedPoints;
                   bool q_Inverse;
@@ -930,12 +930,12 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
                           ++c_ItItem)
                      {
                         QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-                        if (pc_CurItemParent != NULL)
+                        if (pc_CurItemParent != nullptr)
                         {
                            //Busses
 
                            C_GiLiBus * const pc_CurBus = dynamic_cast<C_GiLiBus *>(pc_CurItemParent);
-                           if ((pc_CurBus != NULL) &&
+                           if ((pc_CurBus != nullptr) &&
                                (static_cast<uint32_t>(pc_CurBus->GetIndex()) == c_Busses[u64_ItBus]))
                            {
                               bool q_SpeedUp = false;

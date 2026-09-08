@@ -98,7 +98,7 @@ void C_SyvUpPacListNodeItemPemFileWidget::ViewFileInfo(void)
          //No confirmation
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();
@@ -143,8 +143,9 @@ void C_SyvUpPacListNodeItemPemFileWidget::m_LoadFileInformation(bool & orq_FileE
       std::string c_ErrorMessage;
       std::vector<uint8_t> c_Modulus;
       std::vector<uint8_t> c_Exponent;
+      //C_OscSecurityPem reports std::error_code; the switch below still works on the STW codes
       int32_t s32_Result = stw::opensyde_core::C_OscSecurityPem::h_ExtractModulusAndExponentFromFile(
-         this->GetAppAbsoluteFilePath().toStdString(), c_Modulus, c_Exponent, c_ErrorMessage);
+         this->GetAppAbsoluteFilePath().toStdString(), c_Modulus, c_Exponent, c_ErrorMessage).value();
 
       if (s32_Result == C_NO_ERR)
       {

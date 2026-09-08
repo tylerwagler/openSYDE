@@ -262,7 +262,7 @@ bool C_SdNdeDbSelectDataPools::m_IsCommDatapoolSelectionValid(void)
    std::map<C_OscCanProtocol::E_Type, uint32_t> c_Counter;
    std::map<C_OscCanProtocol::E_Type, uint32_t>::const_iterator c_It;
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       // put already used and newly selected datapools together
       // note: in fact we only need to check COMM datapools, but differentiating also needs to check every DP (for type)
@@ -279,7 +279,7 @@ bool C_SdNdeDbSelectDataPools::m_IsCommDatapoolSelectionValid(void)
       for (uint32_t u32_It = 0UL; u32_It < c_DatapoolIndices.size(); ++u32_It)
       {
          const C_OscCanProtocol * const pc_Protocol = pc_Node->GetRelatedCanProtocolConst(c_DatapoolIndices[u32_It]);
-         if (pc_Protocol != NULL)
+         if (pc_Protocol != nullptr)
          {
             c_Counter[pc_Protocol->e_Type] += 1;
          }

@@ -30,7 +30,7 @@ class C_OgeWiDashboardSpinBoxGroup :
    Q_OBJECT
 
 public:
-   C_OgeWiDashboardSpinBoxGroup(QWidget * const opc_Parent = NULL);
+   C_OgeWiDashboardSpinBoxGroup(QWidget * const opc_Parent = nullptr);
 
    void AdjustFontToSize(void);
 

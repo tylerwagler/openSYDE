@@ -44,7 +44,7 @@ class C_GiBiRectBaseGroup :
 public:
    C_GiBiRectBaseGroup(const uint64_t & oru64_Id, const float64_t of64_MinWidth, const float64_t of64_MinHeight,
                        const float64_t of64_ActionPointOffset, const bool oq_KeepAspectRatio,
-                       QGraphicsItem * const opc_Parent = NULL, const QPointF & orc_PosOffset = QPointF(-1.0, -1.0));
+                       QGraphicsItem * const opc_Parent = nullptr, const QPointF & orc_PosOffset = QPointF(-1.0, -1.0));
    ~C_GiBiRectBaseGroup() override;
 
    void RestoreDefaultCursor(void) override;
@@ -52,7 +52,7 @@ public:
    void SetDefaultCursor(const QCursor & orc_Value) override;
 
    void paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-              QWidget * const opc_Widget = NULL) override;
+              QWidget * const opc_Widget = nullptr) override;
 
    QRectF boundingRect() const override;
    QRectF GetVisibleBoundingRect() const;

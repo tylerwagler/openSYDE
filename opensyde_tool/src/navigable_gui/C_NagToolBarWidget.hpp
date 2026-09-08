@@ -42,7 +42,7 @@ class C_NagToolBarWidget :
    Q_OBJECT
 
 public:
-   explicit C_NagToolBarWidget(QWidget * const opc_Parent = NULL);
+   explicit C_NagToolBarWidget(QWidget * const opc_Parent = nullptr);
    ~C_NagToolBarWidget() override;
 
    void SetDarkTheme(void);

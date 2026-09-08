@@ -45,7 +45,7 @@ public:
       eACTION_REMOVE
    };
 
-   C_SyvDaItPaTreeModel(QObject * const opc_Parent = NULL);
+   C_SyvDaItPaTreeModel(QObject * const opc_Parent = nullptr);
    ~C_SyvDaItPaTreeModel(void) override;
 
    bool IsEmpty(void) const;

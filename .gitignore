@@ -1,9 +1,13 @@
 # CMake build artifacts
+# NB: do NOT add a blanket *.cmake rule here. This is a CMake project — toolchain
+# files, lint_config.cmake and Find modules are source, not artifacts, and a
+# blanket rule silently swallows them on `git add` with no warning. Generated
+# .cmake files live under the ignored build/ and CMakeFiles/ directories, plus
+# the explicit cmake_install.cmake below.
 build/
 cmake-build-*/
 cmake-build-debug/
 cmake-build-release/
-*.cmake
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
@@ -137,6 +141,13 @@ venv/
 
 # OpenCode working directory
 .omo/
+
+# Claude Code harness state (user-local)
+# .claude/skills/, .claude/agents/ and .claude/settings.json stay trackable —
+# they hold intentional shared project content.
+.claude/projects/
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
 
 # Local configuration (if any)
 .env

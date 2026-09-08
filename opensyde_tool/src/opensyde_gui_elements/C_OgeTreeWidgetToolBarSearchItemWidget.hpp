@@ -34,9 +34,9 @@ class C_OgeTreeWidgetToolBarSearchItemWidget :
    Q_OBJECT
 
 public:
-   explicit C_OgeTreeWidgetToolBarSearchItemWidget(QWidget * const opc_Parent = NULL);
+   explicit C_OgeTreeWidgetToolBarSearchItemWidget(QWidget * const opc_Parent = nullptr);
    explicit C_OgeTreeWidgetToolBarSearchItemWidget(const QString & orc_Title, const QString & orc_Subtitle,
-                                                   QWidget * const opc_Parent = NULL);
+                                                   QWidget * const opc_Parent = nullptr);
    ~C_OgeTreeWidgetToolBarSearchItemWidget() override;
 
 private:

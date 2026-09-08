@@ -12,9 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QMap>
 #include <QList>
+#include <system_error>
 
 #include "stwtypes.hpp"
 
+#include "C_OscErrorCategory.hpp"
 #include "C_OscDataDealerNvmSafe.hpp"
 
 #include "C_OscNode.hpp"
@@ -43,15 +45,16 @@ public:
 
    void RegisterWidget(C_PuiSvDbDataElementHandler * const opc_Widget);
 
-   int32_t DataPoolReadWithWidget(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                  const uint16_t ou16_ElementIndex,
-                                  C_PuiSvDbDataElementHandler * const opc_DashboardWidget, uint8_t * const opu8_NrCode);
-   int32_t DataPoolRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                        const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode) override;
-   int32_t NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex, const uint16_t ou16_ElementIndex,
-                   uint8_t * const opu8_NrCode) override;
-   int32_t NvmReadList(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex,
-                       uint8_t * const opu8_NrCode) override;
+   std::error_code DataPoolReadWithWidget(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                          const uint16_t ou16_ElementIndex,
+                                          C_PuiSvDbDataElementHandler * const opc_DashboardWidget,
+                                          uint8_t * const opu8_NrCode);
+   std::error_code DataPoolRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode) override;
+   std::error_code NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                           const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode) override;
+   std::error_code NvmReadList(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex,
+                               uint8_t * const opu8_NrCode) override;
 
 protected:
    void m_OnReadDataPoolEventReceivedForWidget(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,

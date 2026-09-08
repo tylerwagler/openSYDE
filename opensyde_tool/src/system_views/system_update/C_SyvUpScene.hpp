@@ -36,7 +36,7 @@ class C_SyvUpScene :
    Q_OBJECT
 
 public:
-   C_SyvUpScene(const uint32_t ou32_ViewIndex = 0, QObject * const opc_Parent = NULL);
+   C_SyvUpScene(const uint32_t ou32_ViewIndex = 0, QObject * const opc_Parent = nullptr);
    ~C_SyvUpScene() override;
 
    void SetConnecting(const bool oq_Active) const;

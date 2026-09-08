@@ -31,7 +31,7 @@ class C_FlaSetAdvancedPropertiesWidget :
    Q_OBJECT
 
 public:
-   explicit C_FlaSetAdvancedPropertiesWidget(QWidget * const opc_Parent = NULL);
+   explicit C_FlaSetAdvancedPropertiesWidget(QWidget * const opc_Parent = nullptr);
    ~C_FlaSetAdvancedPropertiesWidget(void) override;
 
    void EnableSettings(const bool oq_Enabled);

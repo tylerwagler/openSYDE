@@ -72,7 +72,7 @@ const C_OscHalcConfig * C_PuiSdHandlerHalc::GetHalcConfig(const uint32_t ou32_No
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -94,13 +94,13 @@ const C_OscHalcConfigDomain * C_PuiSdHandlerHalc::GetHalcDomainConfigDataConst(c
    const C_OscHalcConfigDomain * pc_Retval;
    const C_OscHalcConfig * const pc_Config = this->GetHalcConfig(ou32_NodeIndex);
 
-   if (pc_Config != NULL)
+   if (pc_Config != nullptr)
    {
       pc_Retval = pc_Config->GetDomainConfigDataConst(ou32_DomainIndex);
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -126,7 +126,7 @@ const C_OscHalcConfigChannel * C_PuiSdHandlerHalc::GetHalcDomainChannelConfigDat
    const C_OscHalcConfigChannel * pc_Retval;
    const C_OscHalcConfigDomain * const pc_Config = this->GetHalcDomainConfigDataConst(ou32_NodeIndex, ou32_DomainIndex);
 
-   if (pc_Config != NULL)
+   if (pc_Config != nullptr)
    {
       if (oq_UseChannelIndex)
       {
@@ -136,7 +136,7 @@ const C_OscHalcConfigChannel * C_PuiSdHandlerHalc::GetHalcDomainChannelConfigDat
          }
          else
          {
-            pc_Retval = NULL;
+            pc_Retval = nullptr;
          }
       }
       else
@@ -146,7 +146,7 @@ const C_OscHalcConfigChannel * C_PuiSdHandlerHalc::GetHalcDomainChannelConfigDat
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -175,7 +175,7 @@ const C_OscHalcConfigParameterStruct * C_PuiSdHandlerHalc::GetHalcDomainChannelP
                                                                                          ou32_ChannelIndex,
                                                                                          oq_UseChannelIndex);
 
-   if (pc_Config != NULL)
+   if (pc_Config != nullptr)
    {
       if (ou32_ParameterIndex < pc_Config->c_Parameters.size())
       {
@@ -183,12 +183,12 @@ const C_OscHalcConfigParameterStruct * C_PuiSdHandlerHalc::GetHalcDomainChannelP
       }
       else
       {
-         pc_Retval = NULL;
+         pc_Retval = nullptr;
       }
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -210,13 +210,13 @@ const C_OscHalcDefDomain * C_PuiSdHandlerHalc::GetHalcDomainFileDataConst(const 
    const C_OscHalcDefDomain * pc_Retval;
    const C_OscHalcConfig * const pc_Config = this->GetHalcConfig(ou32_NodeIndex);
 
-   if (pc_Config != NULL)
+   if (pc_Config != nullptr)
    {
       pc_Retval = pc_Config->GetDomainDefDataConst(ou32_DomainIndex);
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -240,7 +240,7 @@ const C_OscHalcDefChannelDef * C_PuiSdHandlerHalc::GetHalcDomainFileChannelDataC
    const C_OscHalcDefChannelDef * pc_Retval;
    const C_OscHalcDefDomain * const pc_Config = this->GetHalcDomainFileDataConst(ou32_NodeIndex, ou32_DomainIndex);
 
-   if (pc_Config != NULL)
+   if (pc_Config != nullptr)
    {
       if (ou32_Channel < pc_Config->c_Channels.size())
       {
@@ -248,12 +248,12 @@ const C_OscHalcDefChannelDef * C_PuiSdHandlerHalc::GetHalcDomainFileChannelDataC
       }
       else
       {
-         pc_Retval = NULL;
+         pc_Retval = nullptr;
       }
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -278,7 +278,7 @@ const
    const C_OscHalcDefChannelUseCase * pc_Retval;
    const C_OscHalcDefDomain * const pc_Config = this->GetHalcDomainFileDataConst(ou32_NodeIndex, ou32_DomainIndex);
 
-   if (pc_Config != NULL)
+   if (pc_Config != nullptr)
    {
       if (ou32_UseCaseIndex < pc_Config->c_ChannelUseCases.size())
       {
@@ -286,12 +286,12 @@ const
       }
       else
       {
-         pc_Retval = NULL;
+         pc_Retval = nullptr;
       }
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -318,7 +318,7 @@ const C_OscHalcDefChannelAvailability * C_PuiSdHandlerHalc::GetHalcDomainFileUse
                                                                                            ou32_DomainIndex,
                                                                                            ou32_UseCaseIndex);
 
-   if (pc_Config != NULL)
+   if (pc_Config != nullptr)
    {
       if (ou32_AvailabilityIndex < pc_Config->c_Availability.size())
       {
@@ -326,12 +326,12 @@ const C_OscHalcDefChannelAvailability * C_PuiSdHandlerHalc::GetHalcDomainFileUse
       }
       else
       {
-         pc_Retval = NULL;
+         pc_Retval = nullptr;
       }
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -359,7 +359,7 @@ const C_OscHalcDefStruct * C_PuiSdHandlerHalc::GetHalcDomainFileVariableData(con
    const C_OscHalcConfigDomain * const pc_ConfigDomain = this->GetHalcDomainConfigDataConst(ou32_NodeIndex,
                                                                                             ou32_DomainIndex);
 
-   if ((pc_DefDomain != NULL) && (pc_ConfigDomain != NULL))
+   if ((pc_DefDomain != nullptr) && (pc_ConfigDomain != nullptr))
    {
       //differentiate domain or channel values
       const C_OscHalcDefChannelValues & rc_Values =
@@ -375,7 +375,7 @@ const C_OscHalcDefStruct * C_PuiSdHandlerHalc::GetHalcDomainFileVariableData(con
          }
          else
          {
-            pc_Retval = NULL;
+            pc_Retval = nullptr;
          }
          break;
       case C_OscHalcDefDomain::eVA_INPUT:
@@ -385,7 +385,7 @@ const C_OscHalcDefStruct * C_PuiSdHandlerHalc::GetHalcDomainFileVariableData(con
          }
          else
          {
-            pc_Retval = NULL;
+            pc_Retval = nullptr;
          }
          break;
       case C_OscHalcDefDomain::eVA_OUTPUT:
@@ -395,7 +395,7 @@ const C_OscHalcDefStruct * C_PuiSdHandlerHalc::GetHalcDomainFileVariableData(con
          }
          else
          {
-            pc_Retval = NULL;
+            pc_Retval = nullptr;
          }
          break;
       case C_OscHalcDefDomain::eVA_STATUS:
@@ -405,17 +405,17 @@ const C_OscHalcDefStruct * C_PuiSdHandlerHalc::GetHalcDomainFileVariableData(con
          }
          else
          {
-            pc_Retval = NULL;
+            pc_Retval = nullptr;
          }
          break;
       default:
-         pc_Retval = NULL;
+         pc_Retval = nullptr;
          break;
       }
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -434,7 +434,7 @@ const C_OscHalcDefStruct * C_PuiSdHandlerHalc::GetHalcDomainFileVariableData(con
 const C_OscNodeDataPool * C_PuiSdHandlerHalc::GetHalcDatapool(const uint32_t ou32_NodeIndex,
                                                               const bool oq_SafeDatapool) const
 {
-   const C_OscNodeDataPool * pc_Retval = NULL;
+   const C_OscNodeDataPool * pc_Retval = nullptr;
 
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
@@ -481,7 +481,7 @@ C_OscHalcDefDomain::E_Category C_PuiSdHandlerHalc::GetDomainCategoryFromDpId(
    {
       const C_OscHalcDefDomain * const pc_Domain = this->GetHalcDomainFileDataConst(orc_Id.u32_NodeIndex,
                                                                                     u32_DomainIndex);
-      if (pc_Domain != NULL)
+      if (pc_Domain != nullptr)
       {
          e_Category = pc_Domain->e_Category;
 
@@ -576,7 +576,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainConfig(const uint32_t ou32_NodeIndex, c
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      s32_Retval = rc_Node.c_HalcConfig.SetDomainConfig(ou32_DomainIndex, orc_Domain);
+      s32_Retval = rc_Node.c_HalcConfig.SetDomainConfig(ou32_DomainIndex, orc_Domain).value();
    }
    else
    {
@@ -638,7 +638,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfig(const uint32_t ou32_NodeI
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
       s32_Retval = rc_Node.c_HalcConfig.SetDomainChannelConfig(ou32_DomainIndex, ou32_ChannelIndex, oq_UseChannelIndex,
                                                                orc_Name, orc_Comment, oq_SafetyRelevant,
-                                                               ou32_UseCaseIndex);
+                                                               ou32_UseCaseIndex).value();
    }
    else
    {
@@ -671,7 +671,7 @@ int32_t C_PuiSdHandlerHalc::ResetHalcDomainChannelConfig(const uint32_t ou32_Nod
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
       s32_Retval =
-         rc_Node.c_HalcConfig.ResetDomainChannelConfig(ou32_DomainIndex, ou32_ChannelIndex, oq_UseChannelIndex);
+         rc_Node.c_HalcConfig.ResetDomainChannelConfig(ou32_DomainIndex, ou32_ChannelIndex, oq_UseChannelIndex).value();
    }
    else
    {
@@ -705,7 +705,8 @@ int32_t C_PuiSdHandlerHalc::ResetHalcDomainChannelUseCase(const uint32_t ou32_No
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
       s32_Retval =
-         rc_Node.c_HalcConfig.ResetDomainChannelUseCase(ou32_DomainIndex, ou32_ChannelIndex, oq_UseChannelIndex);
+         rc_Node.c_HalcConfig.ResetDomainChannelUseCase(ou32_DomainIndex, ou32_ChannelIndex,
+                                                        oq_UseChannelIndex).value();
    }
    else
    {
@@ -741,7 +742,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfigName(const uint32_t ou32_N
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
       s32_Retval = rc_Node.c_HalcConfig.SetDomainChannelConfigName(ou32_DomainIndex, ou32_ChannelIndex,
-                                                                   oq_UseChannelIndex, orc_Name);
+                                                                   oq_UseChannelIndex, orc_Name).value();
    }
    else
    {
@@ -777,7 +778,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfigComment(const uint32_t ou3
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
       s32_Retval = rc_Node.c_HalcConfig.SetDomainChannelConfigComment(ou32_DomainIndex, ou32_ChannelIndex,
-                                                                      oq_UseChannelIndex, orc_Comment);
+                                                                      oq_UseChannelIndex, orc_Comment).value();
    }
    else
    {
@@ -813,7 +814,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfigSafety(const uint32_t ou32
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
       s32_Retval = rc_Node.c_HalcConfig.SetDomainChannelConfigSafety(ou32_DomainIndex, ou32_ChannelIndex,
-                                                                     oq_UseChannelIndex, oq_SafetyRelevant);
+                                                                     oq_UseChannelIndex, oq_SafetyRelevant).value();
    }
    else
    {
@@ -849,7 +850,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfigUseCase(const uint32_t ou3
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
       s32_Retval = rc_Node.c_HalcConfig.SetDomainChannelConfigUseCase(ou32_DomainIndex, ou32_ChannelIndex,
-                                                                      oq_UseChannelIndex, ou32_UseCaseIndex);
+                                                                      oq_UseChannelIndex, ou32_UseCaseIndex).value();
    }
    else
    {
@@ -888,7 +889,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelParameterConfig(const uint32_t o
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
       s32_Retval = rc_Node.c_HalcConfig.SetDomainChannelParameterConfig(ou32_DomainIndex, ou32_ChannelIndex,
                                                                         ou32_ParameterIndex, oq_UseChannelIndex,
-                                                                        orc_Parameter);
+                                                                        orc_Parameter).value();
    }
    else
    {
@@ -927,9 +928,10 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelParameterConfigElement(const uin
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      s32_Retval = rc_Node.c_HalcConfig.SetDomainChannelParameterConfigElement(ou32_DomainIndex, ou32_ChannelIndex,
-                                                                               ou32_ParameterIndex, ou32_ElementIndex,
-                                                                               oq_UseChannelIndex, orc_Parameter);
+      s32_Retval =
+         rc_Node.c_HalcConfig.SetDomainChannelParameterConfigElement(ou32_DomainIndex, ou32_ChannelIndex,
+                                                                     ou32_ParameterIndex, ou32_ElementIndex,
+                                                                     oq_UseChannelIndex, orc_Parameter).value();
    }
    else
    {
@@ -968,10 +970,10 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelParameterConfigElementPlain(cons
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      s32_Retval = rc_Node.c_HalcConfig.SetDomainChannelParameterConfigElementPlain(ou32_DomainIndex, ou32_ChannelIndex,
-                                                                                    ou32_ParameterIndex,
-                                                                                    ou32_ElementIndex,
-                                                                                    oq_UseChannelIndex, orc_Value);
+      s32_Retval =
+         rc_Node.c_HalcConfig.SetDomainChannelParameterConfigElementPlain(ou32_DomainIndex, ou32_ChannelIndex,
+                                                                          ou32_ParameterIndex, ou32_ElementIndex,
+                                                                          oq_UseChannelIndex, orc_Value).value();
    }
    else
    {
@@ -1010,10 +1012,10 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelParameterConfigElementEnum(const
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      s32_Retval = rc_Node.c_HalcConfig.SetDomainChannelParameterConfigElementEnum(ou32_DomainIndex, ou32_ChannelIndex,
-                                                                                   ou32_ParameterIndex,
-                                                                                   ou32_ElementIndex,
-                                                                                   oq_UseChannelIndex, orc_DisplayName);
+      s32_Retval =
+         rc_Node.c_HalcConfig.SetDomainChannelParameterConfigElementEnum(ou32_DomainIndex, ou32_ChannelIndex,
+                                                                         ou32_ParameterIndex, ou32_ElementIndex,
+                                                                         oq_UseChannelIndex, orc_DisplayName).value();
    }
    else
    {
@@ -1059,7 +1061,8 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelParameterConfigElementBitmask(co
                                                                                       ou32_ParameterIndex,
                                                                                       ou32_ElementIndex,
                                                                                       oq_UseChannelIndex,
-                                                                                      orc_DisplayName, oq_Value);
+                                                                                      orc_DisplayName,
+                                                                                      oq_Value).value();
    }
    else
    {
@@ -1103,7 +1106,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelParameterConfigElementString(con
                                                                                      ou32_ParameterIndex,
                                                                                      ou32_ElementIndex,
                                                                                      oq_UseChannelIndex,
-                                                                                     orc_Value);
+                                                                                     orc_Value).value();
    }
    else
    {
@@ -1135,7 +1138,7 @@ int32_t C_PuiSdHandlerHalc::GetHalChannelOrDomainName(const uint32_t ou32_NodeIn
    const C_OscHalcConfigDomain * const pc_Domain = this->GetHalcDomainConfigDataConst(ou32_NodeIndex,
                                                                                       ou32_DomainIndex);
 
-   if (pc_Domain != NULL)
+   if (pc_Domain != nullptr)
    {
       if (oq_UseChannelIndex)
       {
@@ -1214,7 +1217,7 @@ int32_t C_PuiSdHandlerHalc::TranslateToHalcIndex(const C_OscNodeDataPoolListElem
       break;
    }
 
-   if ((pc_Node != NULL) && (pc_Dp != NULL))
+   if ((pc_Node != nullptr) && (pc_Dp != nullptr))
    {
       const C_OscHalcMagicianDatapoolListHandler c_DpHandler(pc_Node->c_HalcConfig, ore_Selector, pc_Dp->q_IsSafety);
       bool q_Found = false;
@@ -1231,7 +1234,7 @@ int32_t C_PuiSdHandlerHalc::TranslateToHalcIndex(const C_OscNodeDataPoolListElem
             pc_Node->c_HalcConfig.GetDomainDefDataConst(u32_ItDomain);
          const C_OscHalcConfigDomain * const pc_CurrentDomainConfig = pc_Node->c_HalcConfig.GetDomainConfigDataConst(
             u32_ItDomain);
-         if ((pc_CurrentDomainDef != NULL) && (pc_CurrentDomainConfig != NULL))
+         if ((pc_CurrentDomainDef != nullptr) && (pc_CurrentDomainConfig != nullptr))
          {
             const uint32_t u32_CountRelevantItems = c_DpHandler.CountRelevantItems(
                pc_CurrentDomainConfig->c_ChannelConfigs, pc_CurrentDomainConfig->c_DomainConfig);
@@ -1559,12 +1562,13 @@ int32_t C_PuiSdHandlerHalc::CheckHalcDomainChannelLinked(const uint32_t ou32_Nod
    int32_t s32_Retval = C_RANGE;
    const C_OscHalcConfigDomain * const pc_Domain = this->GetHalcDomainConfigDataConst(ou32_NodeIndex, ou32_DomainIndex);
 
-   if (pc_Domain != NULL)
+   if (pc_Domain != nullptr)
    {
       std::vector<std::string> c_LinkedChannelNames;
       s32_Retval = pc_Domain->CheckChannelLinked(ou32_ChannelIndex, oq_UseChannelIndex, orq_IsLinked,
-                                                 &c_LinkedChannelNames, opc_LinkedChannelIndices, opu32_UseCaseIndex);
-      if (opc_LinkedChannelNames != NULL)
+                                                 &c_LinkedChannelNames, opc_LinkedChannelIndices,
+                                                 opu32_UseCaseIndex).value();
+      if (opc_LinkedChannelNames != nullptr)
       {
          for (std::vector<std::string>::const_iterator c_ItNames = c_LinkedChannelNames.begin();
               c_ItNames != c_LinkedChannelNames.end(); ++c_ItNames)
@@ -1611,13 +1615,13 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfigOfLinkedChannels(const uin
 
       // get information about linked channels
       s32_Retval = this->CheckHalcDomainChannelLinked(ou32_NodeIndex, ou32_DomainIndex, ou32_ChannelIndex,
-                                                      oq_UseChannelIndex, q_IsLinkedOld, NULL,
+                                                      oq_UseChannelIndex, q_IsLinkedOld, nullptr,
                                                       &c_LinkedChannelIndicesOld, &ou32_UseCaseIndexOld);
 
       if (s32_Retval == C_NO_ERR)
       {
          s32_Retval = this->CheckHalcDomainChannelLinked(ou32_NodeIndex, ou32_DomainIndex, ou32_ChannelIndex,
-                                                         oq_UseChannelIndex, q_IsLinkedNew, NULL,
+                                                         oq_UseChannelIndex, q_IsLinkedNew, nullptr,
                                                          &c_LinkedChannelIndicesNew, &ou32_UseCaseIndexNew);
       }
 
@@ -1641,7 +1645,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfigOfLinkedChannels(const uin
                                                                                                    ou32_DomainIndex,
                                                                                                    ou32_ChannelIndex,
                                                                                                    oq_UseChannelIndex);
-            if (pc_Channel != NULL)
+            if (pc_Channel != nullptr)
             {
                for (std::vector<uint32_t>::const_iterator c_ItChannels = c_LinkedChannelIndicesNew.begin();
                     (c_ItChannels != c_LinkedChannelIndicesNew.end()) && (s32_Retval == C_NO_ERR); ++c_ItChannels)
@@ -1693,7 +1697,7 @@ int32_t C_PuiSdHandlerHalc::CheckHalcDomainChannelError(const uint32_t ou32_Node
 
    const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       bool q_DomainInvalid;
       bool q_Tmp;
@@ -1755,12 +1759,12 @@ const
 
    const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       s32_Retval = pc_Node->c_HalcConfig.GetRelevantIndicesForSelectedUseCase(ou32_DomainIndex, ou32_ChannelIndex,
                                                                               oq_UseChannelIndex, opc_ParameterIndices,
                                                                               opc_InputIndices, opc_OutputIndices,
-                                                                              opc_StatusIndices);
+                                                                              opc_StatusIndices).value();
    }
    else
    {
@@ -1823,7 +1827,7 @@ int32_t C_PuiSdHandlerHalc::HalcGenerateDatapools(const uint32_t ou32_NodeIndex)
             {
                std::vector<C_OscNodeDataPool> c_Datapools;
                const C_OscHalcMagicianGenerator c_Magician(&rc_OscNode);
-               s32_Retval = c_Magician.GenerateHalcDatapools(c_Datapools);
+               s32_Retval = c_Magician.GenerateHalcDatapools(c_Datapools).value();
                if (s32_Retval == C_NO_ERR)
                {
                   C_PuiSdNode & rc_UiNode = this->mc_UiNodes[ou32_NodeIndex];
@@ -2007,14 +2011,14 @@ bool C_PuiSdHandlerHalc::CheckHalcChannelNameAvailable(const uint32_t ou32_NodeI
 
    const C_OscHalcConfigDomain * const pc_Domain = this->GetHalcDomainConfigDataConst(ou32_NodeIndex, ou32_DomainIndex);
 
-   if (pc_Domain != NULL)
+   if (pc_Domain != nullptr)
    {
       // compare channel name with all existing channel names
       for (uint32_t u32_ItChannel = 0; (u32_ItChannel < pc_Domain->c_ChannelConfigs.size()) && (q_Retval == true);
            ++u32_ItChannel)
       {
          bool q_Skip = false;
-         if (opu32_ChannelIndexToSkip != NULL)
+         if (opu32_ChannelIndexToSkip != nullptr)
          {
             if (*opu32_ChannelIndexToSkip == u32_ItChannel)
             {

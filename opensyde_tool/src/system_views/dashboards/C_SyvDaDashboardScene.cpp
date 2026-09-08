@@ -126,7 +126,7 @@ bool C_SyvDaDashboardScene::IsMousePosRelevantForProxyWidgetInteraction(const QP
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
    {
       C_GiSvDaRectBaseGroup * const pc_Item = dynamic_cast<C_GiSvDaRectBaseGroup *>(*c_ItItem);
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          if ((this->mq_EditMode == false) ||
              (pc_Item->IsEditContentEnabled() == true))
@@ -163,7 +163,7 @@ bool C_SyvDaDashboardScene::IsSelectionRelevantForProxyWidgetInteraction(void) c
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
    {
       C_GiSvDaRectBaseGroup * const pc_Item = dynamic_cast<C_GiSvDaRectBaseGroup *>(*c_ItItem);
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          q_Return = pc_Item->IsEditContentEnabled();
          if (q_Return == true)
@@ -205,7 +205,7 @@ bool C_SyvDaDashboardScene::IsOverrideCursorNecessary(const QPointF & orc_SceneP
       {
          C_GiSvDaRectBaseGroup * const pc_Item = dynamic_cast<C_GiSvDaRectBaseGroup *>(*c_ItItem);
 
-         if ((pc_Item != NULL) &&
+         if ((pc_Item != nullptr) &&
              (pc_Item->isUnderMouse() == true))
          {
             Qt::CursorShape e_TempCursor;
@@ -256,12 +256,12 @@ void C_SyvDaDashboardScene::SetEditMode(const bool oq_Active)
 
       C_GiBiTextElement * const pc_TextItem = dynamic_cast<C_GiBiTextElement *>(*c_ItItem);
 
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          pc_Item->EditModeActiveChanged(oq_Active);
       }
 
-      if (pc_TextItem != NULL)
+      if (pc_TextItem != nullptr)
       {
          pc_TextItem->SetEditable(oq_Active);
       }
@@ -284,7 +284,7 @@ void C_SyvDaDashboardScene::SetDrawingActive(const bool oq_Active) const
       QGraphicsItem * const pc_Parent = C_SebUtil::h_GetHighestParent(*c_ItItem);
 
       C_GiSvDaRectBaseGroup * const pc_DataElement = dynamic_cast<C_GiSvDaRectBaseGroup *>(pc_Parent);
-      if (pc_DataElement != NULL)
+      if (pc_DataElement != nullptr)
       {
          pc_DataElement->SetDrawingActive(oq_Active);
       }
@@ -311,7 +311,7 @@ void C_SyvDaDashboardScene::SetDashboardIndex(const uint32_t ou32_DashboardIndex
       QGraphicsItem * const pc_Parent = C_SebUtil::h_GetHighestParent(*c_ItItem);
 
       C_PuiSvDbDataElement * const pc_DataElement = dynamic_cast<C_PuiSvDbDataElement *>(pc_Parent);
-      if (pc_DataElement != NULL)
+      if (pc_DataElement != nullptr)
       {
          pc_DataElement->SetDashboardIndex(ou32_DashboardIndex);
       }
@@ -331,7 +331,7 @@ void C_SyvDaDashboardScene::Load(void)
    tgl_assert(C_PuiSvHandler::h_GetInstance()->SyncDashboardScalingInformation(this->mu32_ViewIndex,
                                                                                this->mu32_DashboardIndex) == C_NO_ERR);
 
-   this->m_LoadSubset(c_SaveIndices, false, NULL);
+   this->m_LoadSubset(c_SaveIndices, false, nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -348,7 +348,7 @@ void C_SyvDaDashboardScene::Save(void) const
       // TODO Watch if parent necessary
 
       C_PuiSvDbDataElement * const pc_DataElement = dynamic_cast<C_PuiSvDbDataElement *>(*c_ItItem);
-      if (pc_DataElement != NULL)
+      if (pc_DataElement != nullptr)
       {
          pc_DataElement->UpdateData();
       }
@@ -368,10 +368,10 @@ void C_SyvDaDashboardScene::CopyFromSnapshotToScene(const C_PuiSvDashboard & orc
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-      if (pc_Dashboard != NULL)
+      if (pc_Dashboard != nullptr)
       {
          uint32_t u32_ItElem;
          const std::vector<C_PuiSvDbLabel> & rc_Labels = orc_Snapshot.GetLabels();
@@ -520,42 +520,42 @@ void C_SyvDaDashboardScene::DeleteItem(QGraphicsItem * const opc_Item)
    // if the selected item is a bus, the bus class itself is the parent
    QGraphicsItem * const pc_Item = C_SebUtil::h_GetHighestParent(opc_Item);
 
-   if (pc_Item != NULL)
+   if (pc_Item != nullptr)
    {
       C_PuiBsDataElement * const pc_DataElement = dynamic_cast<C_PuiBsDataElement *>(pc_Item);
 
       QObject * const pc_Object = dynamic_cast<QObject *>(pc_Item);
 
       const C_GiSvDaRectBaseGroup * const pc_Widget = dynamic_cast<C_GiSvDaRectBaseGroup *>(pc_Item);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          m_RemoveWidgetOfScene(pc_Widget);
       }
       else
       {
          const C_GiSvDaBoundary * const pc_Boundary = dynamic_cast<C_GiSvDaBoundary *>(pc_Item);
-         if (pc_Boundary != NULL)
+         if (pc_Boundary != nullptr)
          {
             m_RemoveBoundaryOfScene(pc_Boundary);
          }
          else
          {
             const C_GiSvDaTextElement * const pc_TextElement = dynamic_cast<C_GiSvDaTextElement *>(pc_Item);
-            if (pc_TextElement != NULL)
+            if (pc_TextElement != nullptr)
             {
                m_RemoveTextElementOfScene(pc_TextElement);
             }
             else
             {
                const C_GiSvDaImageGroup * const pc_ImageGroup = dynamic_cast<C_GiSvDaImageGroup *>(pc_Item);
-               if (pc_ImageGroup != NULL)
+               if (pc_ImageGroup != nullptr)
                {
                   m_RemoveImageGroupOfScene(pc_ImageGroup);
                }
                else
                {
                   const C_GiSvDaArrow * const pc_Arrow = dynamic_cast<C_GiSvDaArrow *>(pc_Item);
-                  if (pc_Arrow != NULL)
+                  if (pc_Arrow != nullptr)
                   {
                      m_RemoveLineArrowOfScene(pc_Arrow);
                   }
@@ -565,7 +565,7 @@ void C_SyvDaDashboardScene::DeleteItem(QGraphicsItem * const opc_Item)
       }
 
       // common data delete function
-      if (pc_DataElement != NULL)
+      if (pc_DataElement != nullptr)
       {
          pc_DataElement->DeleteData();
       }
@@ -574,7 +574,7 @@ void C_SyvDaDashboardScene::DeleteItem(QGraphicsItem * const opc_Item)
       //this->removeItem(pc_Item);
 
       // common object clean up
-      if (pc_Object != NULL)
+      if (pc_Object != nullptr)
       {
          pc_Object->deleteLater();
       }
@@ -604,7 +604,7 @@ void C_SyvDaDashboardScene::UpdateBoundaries(void) const
         ++c_ItItem)
    {
       C_GiSvDaBoundary * const pc_Item = dynamic_cast< C_GiSvDaBoundary * const>(*c_ItItem);
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          pc_Item->update();
       }
@@ -627,14 +627,14 @@ void C_SyvDaDashboardScene::CopyFromManagerToScene(const QPointF * const opc_Pos
    const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
               C_PuiSvReadDataConfiguration> * const pc_Rails = this->mc_CopyPasteManager.GetRails();
 
-   if ((pc_SnapShot != NULL) && (pc_Rails != NULL))
+   if ((pc_SnapShot != nullptr) && (pc_Rails != nullptr))
    {
       const QPointF c_OFFSET = QPointF(10.0, 10.0);
       const uint32_t u32_ItemCount = pc_SnapShot->Count();
 
       std::vector<uint64_t> c_UniqueIds;
       QPointF c_TotalOffset;
-      if (opc_Pos == NULL)
+      if (opc_Pos == nullptr)
       {
          //Add point offset
          this->mc_CopyPasteManager.IncrementPasteCounter();
@@ -937,7 +937,7 @@ void C_SyvDaDashboardScene::RegisterWidgets(C_SyvComDriverDiag & orc_ComDriver) 
 
       C_GiSvDaParam * const pc_Param = dynamic_cast<C_GiSvDaParam *>(*c_ItItem);
 
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          uint32_t u32_Counter;
 
@@ -952,7 +952,7 @@ void C_SyvDaDashboardScene::RegisterWidgets(C_SyvComDriverDiag & orc_ComDriver) 
       }
 
       // Special case: Parameterization widget needs the entire SyvComDriver
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          pc_Param->SetSyvComDriver(orc_ComDriver);
       }
@@ -976,7 +976,7 @@ const
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
    {
       C_GiSvDaRectBaseGroup * const pc_Item = dynamic_cast<C_GiSvDaRectBaseGroup *>(*c_ItItem);
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          pc_Item->ConnectionActiveChanged(oq_Active, orc_MappingNodeToTrafficEncryptionStatus);
       }
@@ -990,7 +990,7 @@ const
       for (QList<QGraphicsItem *>::const_iterator c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
       {
          C_GiSvDaRectBaseGroup * const pc_Item = dynamic_cast<C_GiSvDaRectBaseGroup *>(*c_ItItem);
-         if (pc_Item != NULL)
+         if (pc_Item != nullptr)
          {
             pc_Item->ConnectionActiveStarted();
          }
@@ -1010,7 +1010,7 @@ void C_SyvDaDashboardScene::UpdateShowValues(void) const
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
    {
       C_GiSvDaRectBaseGroup * const pc_Item = dynamic_cast<C_GiSvDaRectBaseGroup *>(*c_ItItem);
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          pc_Item->UpdateShowValue();
       }
@@ -1029,7 +1029,7 @@ void C_SyvDaDashboardScene::UpdateTransmissionConfiguration(void) const
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
    {
       C_GiSvDaRectBaseGroup * const pc_Item = dynamic_cast<C_GiSvDaRectBaseGroup *>(*c_ItItem);
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          pc_Item->UpdateElementTransmissionConfiguration();
       }
@@ -1053,7 +1053,7 @@ void C_SyvDaDashboardScene::HandleManualOperationFinished(const int32_t os32_Res
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
    {
       C_GiSvDaRectBaseGroup * const pc_Item = dynamic_cast<C_GiSvDaRectBaseGroup *>(*c_ItItem);
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          pc_Item->HandleManualOperationFinished(os32_Result, ou8_Nrc);
       }
@@ -1133,7 +1133,7 @@ void C_SyvDaDashboardScene::m_AddImage(const QString & orc_Path, const QPointF &
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       this->mc_UndoManager.DoAddGeneric(C_PuiSvDbDataElement::eIMAGE,
                                         m_GetNewUniqueId(), orc_Position, this->GetHighestUsedZetValueList(
@@ -1156,7 +1156,7 @@ bool C_SyvDaDashboardScene::m_AddOfMime(const QMimeData * const opc_MimeData, co
 {
    bool q_Retval = true;
 
-   if (opc_MimeData != NULL)
+   if (opc_MimeData != nullptr)
    {
       C_PuiSvDbDataElement::E_Type e_Type = C_PuiSvDbDataElement::eUNKNOWN;
       QString c_Text;
@@ -1272,7 +1272,7 @@ bool C_SyvDaDashboardScene::m_AddOfMime(const QMimeData * const opc_MimeData, co
       {
          const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             this->mc_UndoManager.DoAddGeneric(e_Type, m_GetNewUniqueId(), orc_Position,
                                               this->GetHighestUsedZetValueList(this->items()) + 1.0,
@@ -1363,7 +1363,7 @@ bool C_SyvDaDashboardScene::m_HandleDeleteUserConfirmation(const QList<QGraphics
    if (this->views().size() > 0)
    {
       QGraphicsView * const pc_View = this->views().at(0);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
          C_OgeWiCustomMessage c_MessageBox(pc_View, C_OgeWiCustomMessage::E_Type::eQUESTION);
@@ -1404,7 +1404,7 @@ void C_SyvDaDashboardScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
       QGraphicsItem * const pc_Parent = C_SebUtil::h_GetHighestParent(pc_Item);
       C_GiSvDaRectBaseGroup * const pc_Widget = dynamic_cast<C_GiSvDaRectBaseGroup *>(pc_Parent);
 
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          if (pc_Widget->IsEditContentEnabled() == true)
          {
@@ -1455,7 +1455,7 @@ void C_SyvDaDashboardScene::contextMenuEvent(QGraphicsSceneContextMenuEvent * co
         ++c_ItItem)
    {
       C_GiSvDaRectBaseGroup * const pc_Widget = dynamic_cast<C_GiSvDaRectBaseGroup *>(*c_ItItem);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          pc_Widget->ConfigureContextMenu(&this->mc_ContextMenuManager, false);
       }
@@ -1471,7 +1471,7 @@ void C_SyvDaDashboardScene::contextMenuEvent(QGraphicsSceneContextMenuEvent * co
          QGraphicsItem * const pc_Parent = C_SebUtil::h_GetHighestParent(pc_Item);
 
          C_GiSvDaRectBaseGroup * const pc_Widget = dynamic_cast<C_GiSvDaRectBaseGroup *>(pc_Parent);
-         if (pc_Widget != NULL)
+         if (pc_Widget != nullptr)
          {
             pc_Widget->ConfigureContextMenu(&this->mc_ContextMenuManager, true);
          }
@@ -1505,7 +1505,7 @@ void C_SyvDaDashboardScene::mousePressEvent(QGraphicsSceneMouseEvent * const opc
          QGraphicsItem * const pc_Parent = C_SebUtil::h_GetHighestParent(pc_Item);
          C_GiSvDaRectBaseGroup * const pc_Widget = dynamic_cast<C_GiSvDaRectBaseGroup *>(pc_Parent);
 
-         if ((pc_Widget != NULL) &&
+         if ((pc_Widget != nullptr) &&
              (pc_Widget->IsEditContentEnabled() == true) &&
              (pc_Widget->IsMousePosRelevantForProxyWidgetInteraction(opc_Event->scenePos())))
          {
@@ -1538,7 +1538,7 @@ void C_SyvDaDashboardScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * con
    {
       C_GiSvDaRectBaseGroup * const pc_RectBase = dynamic_cast<C_GiSvDaRectBaseGroup * const>(rc_SelectedItems[0]);
 
-      if (pc_RectBase != NULL)
+      if (pc_RectBase != nullptr)
       {
          if (pc_RectBase->IsEditContentEnabled() == true)
          {
@@ -1580,7 +1580,7 @@ void C_SyvDaDashboardScene::m_OnWidgetEditProperties(QGraphicsItem * const opc_I
 {
    C_GiSvDaRectBaseGroup * const pc_RectBase = dynamic_cast<C_GiSvDaRectBaseGroup * const>(opc_Item);
 
-   if (pc_RectBase != NULL)
+   if (pc_RectBase != nullptr)
    {
       pc_RectBase->CallProperties();
       Q_EMIT (this->SigErrorChange());
@@ -1597,7 +1597,7 @@ void C_SyvDaDashboardScene::m_OnWidgetEditContent(QGraphicsItem * const opc_Item
 {
    C_GiSvDaRectBaseGroup * const pc_RectBase = dynamic_cast<C_GiSvDaRectBaseGroup * const>(opc_Item);
 
-   if (pc_RectBase != NULL)
+   if (pc_RectBase != nullptr)
    {
       pc_RectBase->EnableEditContent();
       Q_EMIT (this->SigErrorChange());
@@ -1607,7 +1607,7 @@ void C_SyvDaDashboardScene::m_OnWidgetEditContent(QGraphicsItem * const opc_Item
       // Special case: Text element
       C_GiSvDaTextElement  * const pc_TextElement = dynamic_cast<C_GiSvDaTextElement * const>(opc_Item);
 
-      if (pc_TextElement != NULL)
+      if (pc_TextElement != nullptr)
       {
          pc_TextElement->EnableEditContent();
          Q_EMIT (this->SigErrorChange());
@@ -1666,7 +1666,7 @@ void C_SyvDaDashboardScene::m_AddWidgetToScene(C_GiSvDaRectBaseGroup * const opc
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardScene::m_RemoveWidgetOfScene(const C_GiSvDaRectBaseGroup * const opc_Item)
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       //Connection(s)
       disconnect(opc_Item, &C_GiSvDaRectBaseGroup::SigWidgetHandling, this,
@@ -1699,7 +1699,7 @@ void C_SyvDaDashboardScene::m_RemoveWidgetOfScene(const C_GiSvDaRectBaseGroup * 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardScene::m_RemoveBoundaryOfScene(const C_GiSvDaBoundary * const opc_Item)
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       m_RemoveRectBaseGroupOfScene(opc_Item);
       //Update indices
@@ -1716,7 +1716,7 @@ void C_SyvDaDashboardScene::m_RemoveBoundaryOfScene(const C_GiSvDaBoundary * con
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardScene::m_RemoveTextElementOfScene(const C_GiSvDaTextElement * const opc_Item)
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       disconnect(opc_Item, &C_GiBiTextElement::SigTextInteractionModeStateChanged, this,
                  &C_SyvDaDashboardScene::m_HandleProxyWidgetInteractionChange);
@@ -1735,7 +1735,7 @@ void C_SyvDaDashboardScene::m_RemoveTextElementOfScene(const C_GiSvDaTextElement
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardScene::m_RemoveImageGroupOfScene(const C_GiSvDaImageGroup * const opc_Item)
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       m_RemoveRectBaseGroupOfScene(opc_Item);
       //Update indices
@@ -1752,7 +1752,7 @@ void C_SyvDaDashboardScene::m_RemoveImageGroupOfScene(const C_GiSvDaImageGroup *
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardScene::m_RemoveLineArrowOfScene(const C_GiSvDaArrow * const opc_Item)
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       m_RemoveLineGroupOfScene(opc_Item);
       //Update indices
@@ -1781,7 +1781,7 @@ void C_SyvDaDashboardScene::m_SyncIndex(const C_PuiSvDbDataElement::E_Type & ore
       // TODO Watch if parent necessary
 
       C_PuiSvDbDataElement * const pc_DataElement = dynamic_cast<C_PuiSvDbDataElement *>(*c_ItItem);
-      if (pc_DataElement != NULL)
+      if (pc_DataElement != nullptr)
       {
          pc_DataElement->SyncIndex(ore_Type, ors32_Index, ore_Action);
       }
@@ -1813,11 +1813,11 @@ void C_SyvDaDashboardScene::m_LoadSubset(const QVector<uint32_t> & orc_OtherStar
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
 
-      if (pc_Dashboard != NULL)
+      if (pc_Dashboard != nullptr)
       {
          //Load
          uint64_t u64_CurUniqueId;
@@ -2127,7 +2127,7 @@ void C_SyvDaDashboardScene::m_SelectionChanged(void)
       C_GiBiRectBaseGroup * const pc_Item = dynamic_cast<C_GiBiRectBaseGroup *>(c_SelectedItems[0]);
 
       // check if the only one selected item is a resizable rectangle based item
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          // activate the resizing only if exactly one node is selected
          pc_Item->SetResizing(true);
@@ -2135,7 +2135,7 @@ void C_SyvDaDashboardScene::m_SelectionChanged(void)
       else
       {
          C_GiLiLineGroup * const pc_LineItem = dynamic_cast<C_GiLiLineGroup *>(c_SelectedItems[0]);
-         if (pc_LineItem != NULL)
+         if (pc_LineItem != nullptr)
          {
             //Custom rubberband flag
             if (this->m_IsRubberBandActive() == true)
@@ -2157,12 +2157,12 @@ void C_SyvDaDashboardScene::m_SelectionChanged(void)
          // check if the only one selected item is a resizable rectangle based item
 
          C_GiBiRectBaseGroup * const pc_Item = dynamic_cast<C_GiBiRectBaseGroup *>(*c_ItItem);
-         if (pc_Item != NULL)
+         if (pc_Item != nullptr)
          {
             pc_Item->SetResizing(false);
 
             C_GiSvDaRectBaseGroup * const pc_DbItem = dynamic_cast<C_GiSvDaRectBaseGroup *>(pc_Item);
-            if ((pc_DbItem != NULL) && (pc_DbItem->IsEditContentEnabled() == true))
+            if ((pc_DbItem != nullptr) && (pc_DbItem->IsEditContentEnabled() == true))
             {
                // In case of a change of number of selected items from 1 to n and a still active edit content mode
                // the mode must be disabled
@@ -2172,7 +2172,7 @@ void C_SyvDaDashboardScene::m_SelectionChanged(void)
          else
          {
             C_GiLiLineGroup * const pc_LineItem = dynamic_cast<C_GiLiLineGroup *>(*c_ItItem);
-            if (pc_LineItem != NULL)
+            if (pc_LineItem != nullptr)
             {
                pc_LineItem->SetResizing(false);
             }

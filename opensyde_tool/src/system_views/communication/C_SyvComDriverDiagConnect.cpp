@@ -48,7 +48,7 @@ C_SyvComDriverDiagConnect::C_SyvComDriverDiagConnect(QObject * const opc_Parent)
    QThread(opc_Parent),
    ms64_RemainingWaitMs(0),
    me_ConnectState(eCDCS_UNINITIALIZED),
-   mpc_ComDriverDiag(NULL),
+   mpc_ComDriverDiag(nullptr),
    ms32_OperationResult(0)
 {
 }
@@ -176,8 +176,8 @@ void C_SyvComDriverDiagConnect::m_RunSetDiagnosticMode(void)
    this->mc_ErrorMessage = "";
    this->mc_ErrorMessageDetails = "";
 
-   tgl_assert(this->mpc_ComDriverDiag != NULL);
-   if (this->mpc_ComDriverDiag != NULL)
+   tgl_assert(this->mpc_ComDriverDiag != nullptr);
+   if (this->mpc_ComDriverDiag != nullptr)
    {
       QString c_ErrorDetails;
 
@@ -270,8 +270,8 @@ void C_SyvComDriverDiagConnect::m_RunSetUpCyclicTransmissions(void)
 {
    this->mc_ErrorMessage = "";
    this->mc_ErrorMessageDetails = "";
-   tgl_assert(this->mpc_ComDriverDiag != NULL);
-   if (this->mpc_ComDriverDiag != NULL)
+   tgl_assert(this->mpc_ComDriverDiag != nullptr);
+   if (this->mpc_ComDriverDiag != nullptr)
    {
       QString c_ErrorDetails;
       std::vector<C_OscNodeDataPoolListElementId> c_FailedIdRegisters;
@@ -317,7 +317,7 @@ void C_SyvComDriverDiagConnect::m_RunSetUpCyclicTransmissions(void)
                      this->mc_ErrorMessageDetails += "\n\n";
                   }
 
-                  if (pc_Node != NULL)
+                  if (pc_Node != nullptr)
                   {
                      const std::map<uint32_t,
                                     uint32_t>::const_iterator c_ItFailedNodesElementNumber =

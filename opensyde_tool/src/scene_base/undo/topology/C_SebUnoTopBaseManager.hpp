@@ -29,7 +29,7 @@ class C_SebUnoTopBaseManager :
    public C_SebUnoBaseManager
 {
 public:
-   C_SebUnoTopBaseManager(QGraphicsScene * const opc_Scene = NULL, QObject * const opc_Parent = NULL);
+   C_SebUnoTopBaseManager(QGraphicsScene * const opc_Scene = nullptr, QObject * const opc_Parent = nullptr);
    ~C_SebUnoTopBaseManager(void) override;
 
    void RegisterResizeLine(const QList<QGraphicsItem *> & orc_Items, const int32_t & ors32_InteractionPointId,

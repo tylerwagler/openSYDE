@@ -52,7 +52,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaItPaTreeDelegate::C_SyvDaItPaTreeDelegate(QObject * const opc_Parent) :
    QStyledItemDelegate(opc_Parent),
-   mpc_Editor(NULL)
+   mpc_Editor(nullptr)
 {
    connect(this, &C_SyvDaItPaTreeDelegate::SigNewEditor, this, &C_SyvDaItPaTreeDelegate::m_SetNewEditor);
 }
@@ -86,7 +86,7 @@ QWidget * C_SyvDaItPaTreeDelegate::GetEditor(void)
 QWidget * C_SyvDaItPaTreeDelegate::createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem & orc_Option,
                                                 const QModelIndex & orc_Index) const
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
    Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
@@ -110,7 +110,7 @@ QWidget * C_SyvDaItPaTreeDelegate::createEditor(QWidget * const opc_Parent, cons
             {
                const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
                   c_Id.u32_NodeIndex, c_Id.u32_DataPoolIndex, c_Id.u32_ListIndex);
-               if (pc_List != NULL)
+               if (pc_List != nullptr)
                {
                   pc_ComboBox = new C_OgeCbxParam(opc_Parent);
                   pc_ComboBox->addItem("Custom values");
@@ -202,7 +202,7 @@ QWidget * C_SyvDaItPaTreeDelegate::createEditor(QWidget * const opc_Parent, cons
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeDelegate::setEditorData(QWidget * const opc_Editor, const QModelIndex & orc_Index) const
 {
-   if ((opc_Editor != NULL) && (orc_Index.isValid() == true))
+   if ((opc_Editor != nullptr) && (orc_Index.isValid() == true))
    {
       C_OscNodeDataPoolListElementId c_Id;
       uint32_t u32_ValidLayers;
@@ -220,7 +220,7 @@ void C_SyvDaItPaTreeDelegate::setEditorData(QWidget * const opc_Editor, const QM
             else if (u32_ValidLayers == 3UL)
             {
                QComboBox * const pc_ComboBox = dynamic_cast<QComboBox * const>(opc_Editor);
-               if (pc_ComboBox != NULL)
+               if (pc_ComboBox != nullptr)
                {
                   bool q_Ok;
                   pc_ComboBox->setCurrentIndex(orc_Index.data(static_cast<int32_t>(Qt::EditRole)).toInt(&q_Ok));
@@ -249,7 +249,7 @@ void C_SyvDaItPaTreeDelegate::setEditorData(QWidget * const opc_Editor, const QM
 void C_SyvDaItPaTreeDelegate::setModelData(QWidget * const opc_Editor, QAbstractItemModel * const opc_Model,
                                            const QModelIndex & orc_Index) const
 {
-   if (((opc_Editor != NULL) && (opc_Model != NULL)) && (orc_Index.isValid() == true))
+   if (((opc_Editor != nullptr) && (opc_Model != nullptr)) && (orc_Index.isValid() == true))
    {
       C_OscNodeDataPoolListElementId c_Id;
       uint32_t u32_ValidLayers;
@@ -267,7 +267,7 @@ void C_SyvDaItPaTreeDelegate::setModelData(QWidget * const opc_Editor, QAbstract
             else if (u32_ValidLayers == 3UL)
             {
                QComboBox * const pc_ComboBox = dynamic_cast<QComboBox * const>(opc_Editor);
-               if (pc_ComboBox != NULL)
+               if (pc_ComboBox != nullptr)
                {
                   opc_Model->setData(orc_Index, pc_ComboBox->currentIndex());
                }
@@ -331,7 +331,7 @@ void C_SyvDaItPaTreeDelegate::paint(QPainter * const opc_Painter, const QStyleOp
 void C_SyvDaItPaTreeDelegate::destroyEditor(QWidget * const opc_Editor, const QModelIndex & orc_Index) const
 {
    QStyledItemDelegate::destroyEditor(opc_Editor, orc_Index);
-   Q_EMIT this->SigNewEditor(NULL);
+   Q_EMIT this->SigNewEditor(nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -366,7 +366,7 @@ bool C_SyvDaItPaTreeDelegate::eventFilter(QObject * const opc_Object, QEvent * c
    C_OgeCbxParam * const pc_ComboBox = dynamic_cast<C_OgeCbxParam *>(opc_Object);
    bool q_Return = false;
 
-   if (pc_ComboBox != NULL)
+   if (pc_ComboBox != nullptr)
    {
       if (opc_Event->type() == QEvent::MouseButtonRelease)
       {
@@ -388,7 +388,7 @@ bool C_SyvDaItPaTreeDelegate::eventFilter(QObject * const opc_Object, QEvent * c
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeDelegate::m_DelayedFocus(void)
 {
-   if (this->mpc_Editor != NULL)
+   if (this->mpc_Editor != nullptr)
    {
       this->mpc_Editor->setFocus();
    }
@@ -417,7 +417,7 @@ void C_SyvDaItPaTreeDelegate::m_SetNewEditor(QWidget * const opc_Editor)
 //----------------------------------------------------------------------------------------------------------------------
 QWidget * C_SyvDaItPaTreeDelegate::m_CreateEditor(QWidget * const opc_Parent, const QModelIndex & orc_Index) const
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
    if (orc_Index.isValid() == true)
    {
@@ -431,12 +431,12 @@ QWidget * C_SyvDaItPaTreeDelegate::m_CreateEditor(QWidget * const opc_Parent, co
          const C_OscNodeDataPoolListElement * const pc_Element =
             C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id.u32_NodeIndex, c_Id.u32_DataPoolIndex,
                                                                        c_Id.u32_ListIndex, c_Id.u32_ElementIndex);
-         if (pc_Element != NULL)
+         if (pc_Element != nullptr)
          {
             pc_Retval = C_SdNdeDpUtil::h_CreateGenericEditor(opc_Parent, orc_Index, pc_Element->c_MinValue,
                                                              pc_Element->c_MaxValue, pc_Element->f64_Factor,
                                                              pc_Element->f64_Offset, 0, true);
-            if (pc_Retval == NULL)
+            if (pc_Retval == nullptr)
             {
                //Send link click
                Q_EMIT this->SigLinkClicked(orc_Index);

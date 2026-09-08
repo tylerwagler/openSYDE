@@ -35,7 +35,7 @@ class C_SdNdeHalcChannelWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeHalcChannelWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeHalcChannelWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeHalcChannelWidget(void) override;
 
    void InitStaticNames(void) const;

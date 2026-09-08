@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp" //pre-compiled headers
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscChecksummedXml.hpp"
 
 #include <sstream>
@@ -74,29 +75,28 @@ C_OscChecksummedXml::C_OscChecksummedXml(void) :
    \param[in]   orc_FileName   path to XML file to open
 
    \return
-   C_NO_ERR    data was read from file
-   C_NOACT     could not load from file; invalid XML
-   C_RD_WR     file was read but checksum entry not found at defined position
-   C_CHECKSUM  data was read but CRC is not correct
+   Errc::success    data was read from file
+   Errc::noact      could not load from file; invalid XML
+   Errc::rd_wr      file was read but checksum entry not found at defined position
+   Errc::checksum   data was read but CRC is not correct
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscChecksummedXml::LoadFromFile(const std::string & orc_FileName)
+std::error_code C_OscChecksummedXml::LoadFromFile(const std::string & orc_FileName)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = C_OscXmlParser::LoadFromFile(orc_FileName);
 
-   s32_Return = C_OscXmlParser::LoadFromFile(orc_FileName);
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
        const std::string c_Text = this->SelectRoot();
       if (c_Text == "")
       {
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
       else
       {
          if (this->AttributeExists(mc_NAME_CRC_ATTRIBUTE) == false)
          {
-            s32_Return = C_RD_WR;
+            c_Return = Errc::rd_wr;
          }
          else
          {
@@ -104,12 +104,12 @@ int32_t C_OscChecksummedXml::LoadFromFile(const std::string & orc_FileName)
             const uint16_t u16_CrcCalc = this->m_CalcXmlCrc();
 
             this->SelectRoot(); //be defensive: set defined start state
-            s32_Return = (u16_CrcCalc == u16_CrcFromFile) ? C_NO_ERR : C_CHECKSUM;
+            c_Return = (u16_CrcCalc == u16_CrcFromFile) ? Errc::success : Errc::checksum;
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -124,26 +124,26 @@ int32_t C_OscChecksummedXml::LoadFromFile(const std::string & orc_FileName)
    \param[in]   orc_FileName   path to XML file to write to
 
    \return
-   C_NO_ERR   data was written to file
-   C_NOACT    could not write data from file
+   Errc::success   data was written to file
+   Errc::noact     could not write data from file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscChecksummedXml::SaveToFile(const std::string & orc_FileName)
+std::error_code C_OscChecksummedXml::SaveToFile(const std::string & orc_FileName)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    const uint16_t u16_CrcCalc = this->m_CalcXmlCrc();
 
    if (this->SelectRoot() == "")
    {
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
    else
    {
       this->SetAttributeString(mc_NAME_CRC_ATTRIBUTE, "0x" + mh_IntToHex(u16_CrcCalc, 4));
 
-      s32_Return = C_OscXmlParser::SaveToFile(orc_FileName);
+      c_Return = C_OscXmlParser::SaveToFile(orc_FileName);
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

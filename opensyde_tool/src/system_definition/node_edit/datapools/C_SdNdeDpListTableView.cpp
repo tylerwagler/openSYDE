@@ -71,16 +71,16 @@ C_SdNdeDpListTableView::C_SdNdeDpListTableView(QWidget * const opc_Parent) :
    ms32_LastIndicatorSize(-1),
    mc_UndoManager(),
    mc_Delegate(),
-   mpc_ContextMenu(NULL),
-   mpc_ModelViewManager(NULL),
-   mpc_ActionMoveUp(NULL),
-   mpc_ActionMoveDown(NULL),
-   mpc_ActionAdd(NULL),
-   mpc_ActionCut(NULL),
-   mpc_ActionCopy(NULL),
-   mpc_ActionPaste(NULL),
-   mpc_ActionDelete(NULL),
-   mpc_ActionEditComment(NULL),
+   mpc_ContextMenu(nullptr),
+   mpc_ModelViewManager(nullptr),
+   mpc_ActionMoveUp(nullptr),
+   mpc_ActionMoveDown(nullptr),
+   mpc_ActionAdd(nullptr),
+   mpc_ActionCut(nullptr),
+   mpc_ActionCopy(nullptr),
+   mpc_ActionPaste(nullptr),
+   mpc_ActionDelete(nullptr),
+   mpc_ActionEditComment(nullptr),
    mq_AllowMoveUp(true),
    mq_AllowMoveDown(true),
    mq_AllowAdd(true)
@@ -150,23 +150,23 @@ C_SdNdeDpListTableView::C_SdNdeDpListTableView(QWidget * const opc_Parent) :
 C_SdNdeDpListTableView::~C_SdNdeDpListTableView(void)
 {
    m_HandleColumnStateSave();
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       this->mpc_ModelViewManager->UnRegisterElementView(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                         this->mu32_ListIndex, this);
    }
 
    //cleanup handled by Qt engine; just NULLing here
-   mpc_ContextMenu       = NULL;
-   mpc_ModelViewManager  = NULL;
-   mpc_ActionMoveUp      = NULL;
-   mpc_ActionMoveDown    = NULL;
-   mpc_ActionAdd         = NULL;
-   mpc_ActionCut         = NULL;
-   mpc_ActionCopy        = NULL;
-   mpc_ActionPaste       = NULL;
-   mpc_ActionDelete      = NULL;
-   mpc_ActionEditComment = NULL;
+   mpc_ContextMenu       = nullptr;
+   mpc_ModelViewManager  = nullptr;
+   mpc_ActionMoveUp      = nullptr;
+   mpc_ActionMoveDown    = nullptr;
+   mpc_ActionAdd         = nullptr;
+   mpc_ActionCut         = nullptr;
+   mpc_ActionCopy        = nullptr;
+   mpc_ActionPaste       = nullptr;
+   mpc_ActionDelete      = nullptr;
+   mpc_ActionEditComment = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -180,7 +180,7 @@ C_SdNdeDpListTableView::~C_SdNdeDpListTableView(void)
 void C_SdNdeDpListTableView::SetList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                      const uint32_t & oru32_ListIndex)
 {
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       this->mpc_ModelViewManager->UnRegisterElementView(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                         this->mu32_ListIndex, this);
@@ -229,7 +229,7 @@ void C_SdNdeDpListTableView::Copy(void) const
    const C_OscNodeDataPool * const pc_Datapool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(this->mu32_NodeIndex,
                                                                                                  this->mu32_DataPoolIndex);
 
-   if (pc_Datapool != NULL)
+   if (pc_Datapool != nullptr)
    {
       std::vector<C_OscNodeDataPoolListElement> c_OscContentVec;
       std::vector<C_PuiSdNodeDataPoolListElement> c_UiContentVec;
@@ -332,7 +332,7 @@ void C_SdNdeDpListTableView::m_EditCommentInEditor()
       this->model()->setData(c_CommentIndex, c_Data);
    }
 
-   if (c_Dialog != NULL)
+   if (c_Dialog != nullptr)
    {
       c_Dialog->HideOverlay();
       c_Dialog->deleteLater();
@@ -365,7 +365,7 @@ void C_SdNdeDpListTableView::Insert(const bool & orq_SetFocus)
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eERROR);
       const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex);
-      if (pc_DataPool != NULL)
+      if (pc_DataPool != nullptr)
       {
          c_Text = C_PuiSdHandlerNodeLogic::h_GetElementTypeName(pc_DataPool->e_Type) + "s";
       }
@@ -424,11 +424,11 @@ void C_SdNdeDpListTableView::DoMoveDown(void)
 {
    if (this->mq_AllowMoveDown == true)
    {
-      if (this->mpc_ModelViewManager != NULL)
+      if (this->mpc_ModelViewManager != nullptr)
       {
          const C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-         if (pc_Model != NULL)
+         if (pc_Model != nullptr)
          {
             bool q_AllowMove = true;
 
@@ -471,11 +471,11 @@ void C_SdNdeDpListTableView::EditInitial(void)
 
    if (c_Selection.size() == 1)
    {
-      if (this->mpc_ModelViewManager != NULL)
+      if (this->mpc_ModelViewManager != nullptr)
       {
          const C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-         if (pc_Model != NULL)
+         if (pc_Model != nullptr)
          {
             this->edit(this->model()->index(c_Selection[0], pc_Model->EnumToColumn(
                                                C_SdNdeDpListTableModel::eNAME)));
@@ -636,16 +636,16 @@ void C_SdNdeDpListTableView::dropEvent(QDropEvent * const opc_Event)
    C_SdNdeDpListTableView * const pc_SourceTable =
       dynamic_cast<C_SdNdeDpListTableView * const>(opc_Event->source());
 
-   if (pc_SourceTable != NULL)
+   if (pc_SourceTable != nullptr)
    {
       const QMimeData * const pc_MimeData = opc_Event->mimeData();
-      if (pc_MimeData != NULL)
+      if (pc_MimeData != nullptr)
       {
-         if (this->mpc_ModelViewManager != NULL)
+         if (this->mpc_ModelViewManager != nullptr)
          {
             const C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
                this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-            if (pc_Model != NULL)
+            if (pc_Model != nullptr)
             {
                if (pc_Model->mimeTypes().size() > 2)
                {
@@ -823,11 +823,11 @@ void C_SdNdeDpListTableView::UpdateSelectionForNewDataSetColumn(const int32_t os
 {
    const QModelIndexList c_SelectedIndices = this->selectedIndexes();
 
-   if ((c_SelectedIndices.size() > 0) && (this->mpc_ModelViewManager != NULL))
+   if ((c_SelectedIndices.size() > 0) && (this->mpc_ModelViewManager != nullptr))
    {
       C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          const int32_t s32_DataSetOffset = pc_Model->EnumToColumn(C_SdNdeDpListTableModel::eDATA_SET);
          std::vector<uint32_t> c_Rows;
@@ -870,16 +870,16 @@ void C_SdNdeDpListTableView::Reset(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableView::SetSelectedVariableNames(const std::vector<QString> & orc_VariableNames)
 {
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
 
-         if (pc_List != NULL)
+         if (pc_List != nullptr)
          {
             for (uint32_t u32_ItElement = 0; u32_ItElement < pc_List->c_Elements.size(); ++u32_ItElement)
             {
@@ -914,7 +914,7 @@ std::vector<QString> C_SdNdeDpListTableView::GetSelectedVariableNames(void) cons
    std::vector<QString> c_Retval;
    const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
       this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-   if (pc_List != NULL)
+   if (pc_List != nullptr)
    {
       const std::vector<uint32_t> c_Indices = this->m_GetSelectedIndices();
       c_Retval.reserve(c_Indices.size());
@@ -1050,11 +1050,11 @@ void C_SdNdeDpListTableView::m_OnCustomContextMenuRequested(const QPoint & orc_P
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableView::m_HandleColumnChange(void)
 {
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       const C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          C_OscNodeDataPool::E_Type e_DataPoolType;
          //Show all columns
@@ -1106,11 +1106,11 @@ void C_SdNdeDpListTableView::m_CheckActions(const std::vector<uint32_t> & orc_Se
       //Move down & up
       q_AllowMoveUp = true;
       q_AllowMoveDown = true;
-      if (this->mpc_ModelViewManager != NULL)
+      if (this->mpc_ModelViewManager != nullptr)
       {
          const C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-         if (pc_Model != NULL)
+         if (pc_Model != nullptr)
          {
             for (uint32_t u32_ItSelectedIndex = 0; u32_ItSelectedIndex < orc_SelectedIndices.size();
                  ++u32_ItSelectedIndex)
@@ -1128,30 +1128,30 @@ void C_SdNdeDpListTableView::m_CheckActions(const std::vector<uint32_t> & orc_Se
       }
       //Actions
       this->mq_AllowMoveDown = q_AllowMoveDown;
-      if (this->mpc_ActionMoveDown != NULL)
+      if (this->mpc_ActionMoveDown != nullptr)
       {
          this->mpc_ActionMoveDown->setEnabled(q_AllowMoveDown);
       }
       this->mq_AllowAdd = q_AllowAdd;
       this->mq_AllowMoveUp = q_AllowMoveUp;
-      if (this->mpc_ActionMoveUp != NULL)
+      if (this->mpc_ActionMoveUp != nullptr)
       {
          this->mpc_ActionMoveUp->setEnabled(q_AllowMoveUp);
       }
       //Simple Activation
-      if (this->mpc_ActionCut != NULL)
+      if (this->mpc_ActionCut != nullptr)
       {
          this->mpc_ActionCut->setEnabled(true);
       }
-      if (this->mpc_ActionCopy != NULL)
+      if (this->mpc_ActionCopy != nullptr)
       {
          this->mpc_ActionCopy->setEnabled(true);
       }
-      if (this->mpc_ActionPaste != NULL)
+      if (this->mpc_ActionPaste != nullptr)
       {
          this->mpc_ActionPaste->setEnabled(true);
       }
-      if (this->mpc_ActionDelete != NULL)
+      if (this->mpc_ActionDelete != nullptr)
       {
          this->mpc_ActionDelete->setEnabled(true);
       }
@@ -1161,29 +1161,29 @@ void C_SdNdeDpListTableView::m_CheckActions(const std::vector<uint32_t> & orc_Se
    else
    {
       //Simple Deactivation
-      if (this->mpc_ActionCut != NULL)
+      if (this->mpc_ActionCut != nullptr)
       {
          this->mpc_ActionCut->setEnabled(false);
       }
-      if (this->mpc_ActionCopy != NULL)
+      if (this->mpc_ActionCopy != nullptr)
       {
          this->mpc_ActionCopy->setEnabled(false);
       }
-      if (this->mpc_ActionPaste != NULL)
+      if (this->mpc_ActionPaste != nullptr)
       {
          this->mpc_ActionPaste->setEnabled(false);
       }
-      if (this->mpc_ActionDelete != NULL)
+      if (this->mpc_ActionDelete != nullptr)
       {
          this->mpc_ActionDelete->setEnabled(false);
       }
       this->mq_AllowMoveDown = false;
-      if (this->mpc_ActionMoveDown != NULL)
+      if (this->mpc_ActionMoveDown != nullptr)
       {
          this->mpc_ActionMoveDown->setEnabled(this->mq_AllowMoveDown);
       }
       this->mq_AllowMoveUp = false;
-      if (this->mpc_ActionMoveUp != NULL)
+      if (this->mpc_ActionMoveUp != nullptr)
       {
          this->mpc_ActionMoveUp->setEnabled(this->mq_AllowMoveUp);
       }
@@ -1198,12 +1198,12 @@ void C_SdNdeDpListTableView::m_CheckActions(const std::vector<uint32_t> & orc_Se
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableView::m_UpdateModelView(void)
 {
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex,
          this->mu32_ListIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          //Update necesssary!
          pc_Model->Reset();
@@ -1211,7 +1211,7 @@ void C_SdNdeDpListTableView::m_UpdateModelView(void)
          this->mc_Delegate.SetModel(pc_Model);
       }
    }
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       this->mpc_ModelViewManager->RegisterElementView(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                       this->mu32_ListIndex, this);
@@ -1228,15 +1228,15 @@ void C_SdNdeDpListTableView::m_HandleLinkClicked(const QModelIndex & orc_Index)
 {
    if (orc_Index.isValid() == true)
    {
-      tgl_assert(this->mpc_ModelViewManager != NULL);
-      if (this->mpc_ModelViewManager != NULL)
+      tgl_assert(this->mpc_ModelViewManager != nullptr);
+      if (this->mpc_ModelViewManager != nullptr)
       {
          //Model
          const C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
             this->mu32_NodeIndex,
             this->mu32_DataPoolIndex,
             this->mu32_ListIndex);
-         if (pc_Model != NULL)
+         if (pc_Model != nullptr)
          {
             int32_t s32_DataSetIndex = -1;
             C_SdNdeDpUtil::E_ArrayEditType e_ArrayEditType;
@@ -1279,7 +1279,7 @@ void C_SdNdeDpListTableView::m_HandleLinkClicked(const QModelIndex & orc_Index)
                {
                   //Register undo
                   QUndoCommand * const pc_UndoCommand = pc_ArrayEditWidget->TakeUndoCommand();
-                  if (pc_UndoCommand != NULL)
+                  if (pc_UndoCommand != nullptr)
                   {
                      //Undo all because push automatically redos
                      pc_UndoCommand->undo();
@@ -1288,7 +1288,7 @@ void C_SdNdeDpListTableView::m_HandleLinkClicked(const QModelIndex & orc_Index)
                }
                else
                {
-                  if (c_Dialog != NULL)
+                  if (c_Dialog != nullptr)
                   {
                      //Revert changes
                      C_PuiSdHandler::h_GetInstance()->SetDataPoolListElement(this->mu32_NodeIndex,
@@ -1298,7 +1298,7 @@ void C_SdNdeDpListTableView::m_HandleLinkClicked(const QModelIndex & orc_Index)
                   }
                }
             } //lint !e429  //no memory leak because of the parent of pc_ArrayEditWidget and the Qt memory management
-            if (c_Dialog != NULL)
+            if (c_Dialog != nullptr)
             {
                c_Dialog->HideOverlay();
                c_Dialog->deleteLater();
@@ -1314,14 +1314,14 @@ void C_SdNdeDpListTableView::m_HandleLinkClicked(const QModelIndex & orc_Index)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableView::m_CheckContextMenuText(void)
 {
-   if (this->mpc_ActionAdd != NULL)
+   if (this->mpc_ActionAdd != nullptr)
    {
       QString c_Text;
       const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
          this->mu32_NodeIndex,
          this->mu32_DataPoolIndex);
 
-      if (pc_DataPool != NULL)
+      if (pc_DataPool != nullptr)
       {
          c_Text = C_PuiSdHandlerNodeLogic::h_GetElementTypeName(pc_DataPool->e_Type);
       }
@@ -1342,15 +1342,15 @@ void C_SdNdeDpListTableView::m_CheckContextMenuText(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableView::m_OnColumnResize(void)
 {
-   tgl_assert(this->mpc_ModelViewManager != NULL);
-   if (this->mpc_ModelViewManager != NULL)
+   tgl_assert(this->mpc_ModelViewManager != nullptr);
+   if (this->mpc_ModelViewManager != nullptr)
    {
       //Model
       const C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
          this->mu32_NodeIndex,
          this->mu32_DataPoolIndex,
          this->mu32_ListIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          const int32_t s32_ColAuto =
             this->columnWidth(pc_Model->EnumToColumn(C_SdNdeDpListTableModel::eAUTO_MIN_MAX));
@@ -1395,12 +1395,12 @@ uint32_t C_SdNdeDpListTableView::m_GetOneAfterHighestSelected(void)
    }
    else
    {
-      if (this->mpc_ModelViewManager != NULL)
+      if (this->mpc_ModelViewManager != nullptr)
       {
          //Add at end
          const C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-         if (pc_Model != NULL)
+         if (pc_Model != nullptr)
          {
             const int32_t s32_RowCount = pc_Model->rowCount();
             if (s32_RowCount >= 0)
@@ -1419,7 +1419,7 @@ uint32_t C_SdNdeDpListTableView::m_GetOneAfterHighestSelected(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableView::m_HandleColumnStateSave(void) const
 {
-   if (this->model() != NULL)
+   if (this->model() != nullptr)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
       const C_OscNodeDataPool * const pc_NodeDataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
@@ -1427,7 +1427,7 @@ void C_SdNdeDpListTableView::m_HandleColumnStateSave(void) const
       const C_OscNodeDataPoolList * const pc_NodeDataPoolList = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
 
-      if (((pc_Node != NULL) && (pc_NodeDataPool != NULL)) && (pc_NodeDataPoolList != NULL))
+      if (((pc_Node != nullptr) && (pc_NodeDataPool != nullptr)) && (pc_NodeDataPoolList != nullptr))
       {
          const std::vector<int32_t> c_ColumnWidths = this->m_GetColumnWidths();
          C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolListColumnSizes(
@@ -1443,11 +1443,11 @@ void C_SdNdeDpListTableView::m_HandleColumnStateSave(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableView::m_HandleColumnStateRestore(void)
 {
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       const C_SdNdeDpListTableModel * const pc_Model = this->mpc_ModelViewManager->GetElementModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          bool q_UserSettingsApplied = false;
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
@@ -1456,7 +1456,7 @@ void C_SdNdeDpListTableView::m_HandleColumnStateRestore(void)
          const C_OscNodeDataPoolList * const pc_NodeDataPoolList = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
 
-         if (((pc_Node != NULL) && (pc_NodeDataPool != NULL)) && (pc_NodeDataPoolList != NULL))
+         if (((pc_Node != nullptr) && (pc_NodeDataPool != nullptr)) && (pc_NodeDataPoolList != nullptr))
          {
             const C_UsNode c_UserNode =
                C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());

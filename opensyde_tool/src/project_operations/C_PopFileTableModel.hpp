@@ -36,7 +36,7 @@ public:
       ePATH
    };
 
-   explicit C_PopFileTableModel(QObject * const opc_Parent = NULL);
+   explicit C_PopFileTableModel(QObject * const opc_Parent = nullptr);
    void UpdateData(const std::vector<QString> & orc_RecentFilePaths,
                    const std::vector<stw::opensyde_core::C_OscProject> & orc_RecentProjects);
 

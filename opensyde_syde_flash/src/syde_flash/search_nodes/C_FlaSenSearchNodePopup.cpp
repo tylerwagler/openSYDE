@@ -55,7 +55,7 @@ using namespace stw::errors;
 C_FlaSenSearchNodePopup::C_FlaSenSearchNodePopup(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_FlaSenSearchNodePopup),
-   mpc_DcSequences(NULL)
+   mpc_DcSequences(nullptr)
 {
    this->mpc_Ui->setupUi(this);
    this->setFocusPolicy(Qt::StrongFocus); // necessary for getting ESC key press event while searching
@@ -176,7 +176,7 @@ int32_t C_FlaSenSearchNodePopup::m_InitDcSequence(const QString & orc_CanChannel
 {
    int32_t s32_Return;
 
-   if (this->mpc_DcSequences == NULL)
+   if (this->mpc_DcSequences == nullptr)
    {
       this->mpc_DcSequences = new C_FlaSenDcBasicSequences();
 
@@ -212,7 +212,7 @@ int32_t C_FlaSenSearchNodePopup::m_InitDcSequence(const QString & orc_CanChannel
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaSenSearchNodePopup::m_CleanupDcSequence(void)
 {
-   if (this->mpc_DcSequences != NULL)
+   if (this->mpc_DcSequences != nullptr)
    {
       disconnect(mpc_DcSequences, &C_FlaSenDcBasicSequences::SigReportProgress,
                  this, &C_FlaSenSearchNodePopup::SigReportProgress);
@@ -221,7 +221,7 @@ void C_FlaSenSearchNodePopup::m_CleanupDcSequence(void)
    }
 
    delete this->mpc_DcSequences;
-   this->mpc_DcSequences = NULL;
+   this->mpc_DcSequences = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -345,7 +345,7 @@ void C_FlaSenSearchNodePopup::m_Timer(void)
    int32_t s32_ThreadResult = C_CONFIG;
    int32_t s32_SequenceResult = C_UNKNOWN_ERR;
 
-   if (this->mpc_DcSequences != NULL)
+   if (this->mpc_DcSequences != nullptr)
    {
       s32_ThreadResult = this->mpc_DcSequences->GetResults(s32_SequenceResult);
    }

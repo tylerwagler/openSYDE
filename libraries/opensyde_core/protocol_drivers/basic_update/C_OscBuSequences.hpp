@@ -11,11 +11,13 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <string>
+#include <system_error>
 #include "C_CanDispatcher.hpp"
 #include "C_OscProtocolDriverOsyTpCan.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
 #include "C_OscComFlashloaderInformation.hpp"
 #include "C_OscHexFile.hpp"
+#include "C_OscErrorCategory.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -31,16 +33,16 @@ class C_OscBuSequences
 public:
    C_OscBuSequences(void);
    virtual ~C_OscBuSequences(void);
-   int32_t Init(stw::can::C_CanDispatcher * const opc_CanDispatcher, const int32_t os32_CanBitrate,
-                const uint8_t ou8_NodeId);
-   int32_t ActivateFlashLoader(const uint32_t ou32_FlashloaderResetWaitTime);
-   int32_t ReadDeviceInformation(void);
-   int32_t UpdateNode(const std::string & orc_HexFilePath, const uint32_t ou32_RequestDownloadTimeout,
-                      const uint32_t ou32_TransferDataTimeout);
-   int32_t ResetSystem(void);
+   std::error_code Init(stw::can::C_CanDispatcher * const opc_CanDispatcher, const int32_t os32_CanBitrate,
+                        const uint8_t ou8_NodeId);
+   std::error_code ActivateFlashLoader(const uint32_t ou32_FlashloaderResetWaitTime);
+   std::error_code ReadDeviceInformation(void);
+   std::error_code UpdateNode(const std::string & orc_HexFilePath, const uint32_t ou32_RequestDownloadTimeout,
+                              const uint32_t ou32_TransferDataTimeout);
+   std::error_code ResetSystem(void);
 
-   static int32_t h_ReadHexFile(const std::string & orc_HexFilePath, C_OscHexFile & orc_HexFile,
-                                uint32_t & oru32_SignatureBlockAddress);
+   static std::error_code h_ReadHexFile(const std::string & orc_HexFilePath, C_OscHexFile & orc_HexFile,
+                                        uint32_t & oru32_SignatureBlockAddress);
 
    void PrepareForDestruction(void);
    static uint64_t h_GetAllHexFilesSize(const std::vector<std::string> & orc_HexFiles);

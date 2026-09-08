@@ -28,7 +28,7 @@ class C_GiSvTextElementBus :
 {
 public:
    C_GiSvTextElementBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
-                        QGraphicsItem * const opc_Parent = NULL);
+                        QGraphicsItem * const opc_Parent = nullptr);
    void GenerateHint(void) override;
 };
 

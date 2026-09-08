@@ -88,7 +88,7 @@ void C_SdNdeDpListCommentDialog::InitStaticNames(void) const
    const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
       this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
 
-   if (pc_List != NULL)
+   if (pc_List != nullptr)
    {
       mrc_ParentDialog.SetTitle(static_cast<QString>("List \"%1\"").arg(pc_List->c_Name.c_str()));
       this->mpc_Ui->pc_TextEditComment->setPlaceholderText("Add your comment here ...");

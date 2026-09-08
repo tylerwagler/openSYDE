@@ -31,7 +31,7 @@ class C_SdBueMlvEmptyItem :
    public C_SdBueMlvBaseItem
 {
 public:
-   C_SdBueMlvEmptyItem(const uint8_t ou8_Index = 0, QGraphicsItem * const opc_Parent = NULL);
+   C_SdBueMlvEmptyItem(const uint8_t ou8_Index = 0, QGraphicsItem * const opc_Parent = nullptr);
    ~C_SdBueMlvEmptyItem() override;
 
    void SetIndex(const uint8_t ou8_Index);

@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QObject>
 #include <set>
+#include <system_error>
 
 #include "stwtypes.hpp"
 
@@ -108,10 +109,11 @@ protected:
    bool m_GetRoutingMode(stw::opensyde_core::C_OscRoutingCalculation::E_Mode & ore_Mode) const override;
    uint8_t m_GetRoutingSessionId(void) const override;
    bool m_IsRoutingSpecificNecessary(const stw::opensyde_core::C_OscNode & orc_Node) const override;
-   int32_t m_StartRoutingSpecific(const uint32_t ou32_ActiveNode, const stw::opensyde_core::C_OscNode * const
-                                  opc_Node, const stw::opensyde_core::C_OscRoutingRoutePoint & orc_LastNodeOfRouting, stw::opensyde_core::C_OscProtocolDriverOsy * const
-                                  opc_ProtocolOsyOfLastNodeOfRouting,
-                                  stw::opensyde_core::C_OscCanDispatcherOsyRouter ** const oppc_RoutingDispatcher)
+   std::error_code m_StartRoutingSpecific(
+      const uint32_t ou32_ActiveNode, const stw::opensyde_core::C_OscNode * const opc_Node,
+      const stw::opensyde_core::C_OscRoutingRoutePoint & orc_LastNodeOfRouting,
+      stw::opensyde_core::C_OscProtocolDriverOsy * const opc_ProtocolOsyOfLastNodeOfRouting,
+      stw::opensyde_core::C_OscCanDispatcherOsyRouter ** const oppc_RoutingDispatcher)
    override;
 
    void m_StopRoutingSpecific(const uint32_t ou32_ActiveNode) override;
@@ -188,7 +190,7 @@ private:
                                      uint32_t & oru32_ServerDatapoolIndex,
                                      stw::opensyde_core::C_OscProtocolDriverOsy::C_DataPoolMetaData & orc_Metadata)
    const;
-   uint32_t m_GetActiveDiagIndex(const uint32_t ou32_NodeIndex, bool * const opq_Found = NULL) const;
+   uint32_t m_GetActiveDiagIndex(const uint32_t ou32_NodeIndex, bool * const opq_Found = nullptr) const;
    static int32_t mh_HandleDatapoolCrcVerification(const opensyde_core::C_OscNodeDataPool & orc_Datapool,
                                                    stw::opensyde_core::C_OscDiagProtocolOsy & orc_Protocol,
                                                    const uint32_t ou32_ServerDatapoolIndex, bool & orq_Match,

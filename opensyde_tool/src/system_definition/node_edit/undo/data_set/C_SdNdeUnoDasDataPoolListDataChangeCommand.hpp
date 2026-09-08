@@ -36,7 +36,7 @@ public:
                                               const uint32_t & oru32_DataPoolListDataSetIndex,
                                               const QVariant & orc_NewData,
                                               const C_SdNdeDpUtil::E_DataSetDataChangeType & ore_DataChangeType,
-                                              QUndoCommand * const opc_Parent = NULL);
+                                              QUndoCommand * const opc_Parent = nullptr);
    void redo(void) override;
    void undo(void) override;
 

@@ -11,8 +11,10 @@
 #include "precomp_headers.hpp"
 
 #include <set>
+#include <system_error>
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
 
 #include "C_OscRoutingCalculation.hpp"
@@ -55,7 +57,7 @@ C_OscRoutingCalculation::C_OscRoutingCalculation(const vector<C_OscNode> & orc_A
    mu32_StartBusIndex(ou32_StartBusIndex),
    mu32_TargetNodeIndex(ou32_TargetNodeIndex),
    me_Mode(oe_Mode),
-   ms32_ResultState(C_COM),
+   mc_ResultState(Errc::com),
    mq_PcBus(true),
    mrc_AllNodes(orc_AllNodes),
    mrc_ActiveNodes(orc_ActiveNodes)
@@ -96,7 +98,7 @@ const vector<C_OscRoutingRoute> * C_OscRoutingCalculation::GetRoutes(void) const
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscRoutingRoute * C_OscRoutingCalculation::GetBestRoute(void) const
 {
-   const C_OscRoutingRoute * pc_Result = NULL;
+   const C_OscRoutingRoute * pc_Result = nullptr;
 
    if (this->mc_RoutesToTarget.size() > 0)
    {
@@ -110,7 +112,7 @@ const C_OscRoutingRoute * C_OscRoutingCalculation::GetBestRoute(void) const
          {
             u32_CountHops = static_cast<uint32_t>(this->mc_RoutesToTarget[u32_Counter].c_VecRoutePoints.size());
 
-            if (pc_Result == NULL)
+            if (pc_Result == nullptr)
             {
                // Save as first result
                pc_Result = &this->mc_RoutesToTarget[u32_Counter];
@@ -149,16 +151,16 @@ const C_OscRoutingRoute * C_OscRoutingCalculation::GetBestRoute(void) const
 /*! \brief   Returns the result state of the calculation
 
    \return
-   C_NO_ERR    Routes were found
-   C_RANGE     Target node does not exist
-   C_COM       No routes were found
-   C_CONFIG    A route was removed due to not possible routing from CAN to Ethernet
-   C_NOACT     Target function (update or diagnostic) deactivated on all connected bus. No routing necessary.
+   Errc::success    Routes were found
+   Errc::range      Target node does not exist
+   Errc::com        No routes were found
+   Errc::config     A route was removed due to not possible routing from CAN to Ethernet
+   Errc::noact      Target function (update or diagnostic) deactivated on all connected bus. No routing necessary.
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscRoutingCalculation::GetState(void) const
+std::error_code C_OscRoutingCalculation::GetState(void) const
 {
-   return this->ms32_ResultState;
+   return this->mc_ResultState;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -237,45 +239,45 @@ void C_OscRoutingCalculation::m_SearchRoute(void)
    if (this->mu32_TargetNodeIndex < this->mrc_AllNodes.size())
    {
       // Is the node configured for update or diagnostic on its connected buses and is connected to a bus
-      int32_t s32_Result = this->m_CheckTargetNodeConfig();
-      if (s32_Result == C_NO_ERR)
+      std::error_code c_Result = this->m_CheckTargetNodeConfig();
+      if (c_Result == Errc::success)
       {
          // Start searching
          this->m_SearchRoutePointsOnBus(this->mu32_StartBusIndex);
          this->m_CalculateRoutes(this->mu32_StartBusIndex);
-         s32_Result = this->m_CheckRoutesForLimitations();
+         c_Result = this->m_CheckRoutesForLimitations();
 
          if (this->mc_RoutesToTarget.size() > 0)
          {
             // Minimum one valid route was found. Success
-            this->ms32_ResultState = C_NO_ERR;
+            this->mc_ResultState = Errc::success;
          }
-         else if (s32_Result != C_NO_ERR)
+         else if (c_Result != Errc::success)
          {
             osc_write_log_info("Routing calculation", "No valid route found (target node index: " +
                                std::to_string(this->mu32_TargetNodeIndex) +
                                "). CAN to Ethernet routing is not possible.");
             // A route was available, but was removed due to limitations. No valid routes are left
-            this->ms32_ResultState = s32_Result;
+            this->mc_ResultState = c_Result;
          }
          else
          {
             osc_write_log_info("Routing calculation", "No route found (target node index: " +
                                std::to_string(this->mu32_TargetNodeIndex) + ")");
             // No route available
-            this->ms32_ResultState = C_COM;
+            this->mc_ResultState = Errc::com;
          }
       }
       else
       {
-         this->ms32_ResultState = s32_Result;
+         this->mc_ResultState = c_Result;
       }
    }
    else
    {
       osc_write_log_error("Routing calculation", "Invalid node index");
       // Target is not valid
-      this->ms32_ResultState = C_RANGE;
+      this->mc_ResultState = Errc::range;
    }
 }
 
@@ -283,21 +285,21 @@ void C_OscRoutingCalculation::m_SearchRoute(void)
 /*! \brief   Checks the target node configuration for a routable setting
 
    \return
-   C_NO_ERR    Node is configured for correct routing
-   C_NOACT     Target node must not be routed, because the relevant function is deactivated on all connected buses
-   C_COM       No bus is connected to minimum one activated relevant function
+   Errc::success    Node is configured for correct routing
+   Errc::noact      Target node must not be routed, because the relevant function is deactivated on all connected buses
+   Errc::com        No bus is connected to minimum one activated relevant function
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscRoutingCalculation::m_CheckTargetNodeConfig(void) const
+std::error_code C_OscRoutingCalculation::m_CheckTargetNodeConfig(void) const
 {
    // Check if the target node must be routable
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    bool q_UsableBusFound = false;
    bool q_AtLeastOneFunctionActive = false;
    const C_OscNode * const pc_Node = &this->mrc_AllNodes[this->mu32_TargetNodeIndex];
 
-   tgl_assert(pc_Node->pc_DeviceDefinition != NULL);
-   if (pc_Node->pc_DeviceDefinition != NULL)
+   tgl_assert(pc_Node->pc_DeviceDefinition != nullptr);
+   if (pc_Node->pc_DeviceDefinition != nullptr)
    {
       tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
       if (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size())
@@ -379,7 +381,7 @@ int32_t C_OscRoutingCalculation::m_CheckTargetNodeConfig(void) const
    if (q_UsableBusFound == true)
    {
       // Function (diagnosis or update) is active and minimum one bus is connected to the matching interface
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
    else if (q_AtLeastOneFunctionActive == true)
    {
@@ -387,17 +389,17 @@ int32_t C_OscRoutingCalculation::m_CheckTargetNodeConfig(void) const
       // No routing possible
       osc_write_log_info("Routing calculation", "No connected bus found (target node index: " +
                          std::to_string(this->mu32_TargetNodeIndex) + ")");
-      s32_Return = C_COM;
+      c_Return = Errc::com;
    }
    else
    {
       // Target node must not be routed, because the relevant function is deactivated on all buses
       osc_write_log_info("Routing calculation", "No usable bus found (target node index: " +
                          std::to_string(this->mu32_TargetNodeIndex) + ")");
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -748,13 +750,13 @@ void C_OscRoutingCalculation::m_AddOneRouteToTarget(const C_OscRoutingRoute & or
 
    Routing from CAN as in and Ethernet as out is not supported. These routes are not usable.
 
-   \retval   C_NO_ERR    Route is valid and usable
-   \retval   C_CONFIG    A route was removed due to not possible routing from CAN to Ethernet
+   \retval   Errc::success    Route is valid and usable
+   \retval   Errc::config     A route was removed due to not possible routing from CAN to Ethernet
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscRoutingCalculation::m_CheckRoutesForLimitations(void)
+std::error_code C_OscRoutingCalculation::m_CheckRoutesForLimitations(void)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    std::vector<C_OscRoutingRoute>::iterator c_ItRoute;
 
@@ -777,7 +779,7 @@ int32_t C_OscRoutingCalculation::m_CheckRoutesForLimitations(void)
          {
             this->mc_RoutesToTarget.erase(c_ItRoute);
             q_Removed = true;
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
             break;
          }
       }
@@ -788,5 +790,5 @@ int32_t C_OscRoutingCalculation::m_CheckRoutesForLimitations(void)
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }

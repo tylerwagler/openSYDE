@@ -31,7 +31,7 @@ class C_SdNdeDalLogJobDataSelectionTableView :
    Q_OBJECT
 
 public:
-   C_SdNdeDalLogJobDataSelectionTableView(QWidget * const opc_Parent = NULL);
+   C_SdNdeDalLogJobDataSelectionTableView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDalLogJobDataSelectionTableView(void) override;
 
    void LoadUserSettings(const std::vector<int32_t> & orc_Values);

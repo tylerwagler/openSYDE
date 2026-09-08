@@ -15,6 +15,7 @@
 #include <QSpinBox>
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SdBueBusEditPropertiesWidget.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SdUtil.hpp"
@@ -199,9 +200,9 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
 {
    const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_BusIndex);
 
-   tgl_assert(pc_Bus != NULL);
+   tgl_assert(pc_Bus != nullptr);
 
-   if (pc_Bus != NULL)
+   if (pc_Bus != nullptr)
    {
       //disconnect RegisterChange
       disconnect(this->mpc_Ui->pc_LineEditBusName, &QLineEdit::editingFinished, this,
@@ -301,8 +302,8 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
             QString c_Content;
             const QString c_Heading = "Selected bitrate not supported by following connected nodes:";
             std::vector<QString> c_InvalidNodesForBitRate;
-            C_PuiSdHandler::h_GetInstance()->CheckBusConflictDetailed(this->mu32_BusIndex, NULL, NULL, NULL,
-                                                                      &c_InvalidNodesForBitRate, NULL);
+            C_PuiSdHandler::h_GetInstance()->CheckBusConflictDetailed(this->mu32_BusIndex, nullptr, nullptr, nullptr,
+                                                                      &c_InvalidNodesForBitRate, nullptr);
             for (uint32_t u32_ItNode = 0UL; (u32_ItNode < c_InvalidNodesForBitRate.size()) &&
                  (u32_ItNode < mu32_TOOL_TIP_MAXIMUM_ITEMS); ++u32_ItNode)
             {
@@ -354,8 +355,8 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
                   QString c_Content;
                   const QString c_Heading = "Selected bitrate not supported by following connected nodes:";
                   std::vector<QString> c_InvalidNodesForCanFdBitRate;
-                  C_PuiSdHandler::h_GetInstance()->CheckBusConflictDetailed(this->mu32_BusIndex, NULL, NULL, NULL,
-                                                                            &c_InvalidNodesForCanFdBitRate, NULL);
+                  C_PuiSdHandler::h_GetInstance()->CheckBusConflictDetailed(this->mu32_BusIndex, nullptr, nullptr, nullptr,
+                                                                            &c_InvalidNodesForCanFdBitRate, nullptr);
                   for (uint32_t u32_ItNode = 0UL; (u32_ItNode < c_InvalidNodesForCanFdBitRate.size()) &&
                        (u32_ItNode < mu32_TOOL_TIP_MAXIMUM_ITEMS); ++u32_ItNode)
                   {
@@ -598,8 +599,8 @@ void C_SdBueBusEditPropertiesWidget::SaveToData(void) const
 {
    const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_BusIndex);
 
-   tgl_assert(pc_Bus != NULL);
-   if (pc_Bus != NULL)
+   tgl_assert(pc_Bus != nullptr);
+   if (pc_Bus != nullptr)
    {
       //copy current bus
       C_OscSystemBus c_NewBus = *pc_Bus;
@@ -607,7 +608,7 @@ void C_SdBueBusEditPropertiesWidget::SaveToData(void) const
       //name
       //Only accept new name if not in conflict
       if (C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(
-             this->mpc_Ui->pc_LineEditBusName->text().toStdString().c_str(), &this->mu32_BusIndex, NULL))
+             this->mpc_Ui->pc_LineEditBusName->text().toStdString().c_str(), &this->mu32_BusIndex, nullptr))
       {
          c_NewBus.c_Name = this->mpc_Ui->pc_LineEditBusName->text().toStdString().c_str();
       }
@@ -688,7 +689,7 @@ void C_SdBueBusEditPropertiesWidget::m_CheckBusName(void)
 {
    const QString c_Text = this->mpc_Ui->pc_LineEditBusName->text();
    const bool q_NameIsUnique = C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(
-      c_Text.toStdString().c_str(), &this->mu32_BusIndex, NULL);
+      c_Text.toStdString().c_str(), &this->mu32_BusIndex, nullptr);
    const bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(
       this->mpc_Ui->pc_LineEditBusName->text().toStdString().c_str());
 
@@ -730,9 +731,9 @@ void C_SdBueBusEditPropertiesWidget::m_CheckBusId(void) const
 
    //check
    tgl_assert(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().CheckErrorBus(this->mu32_BusIndex,
-                                                                                           NULL,
-                                                                                           NULL, &q_IdIsValid,
-                                                                                           NULL) == C_NO_ERR);
+                                                                                           nullptr,
+                                                                                           nullptr, &q_IdIsValid,
+                                                                                           nullptr) == Errc::success);
    //Result signals error
    q_IdIsValid = !q_IdIsValid;
 
@@ -812,7 +813,7 @@ void C_SdBueBusEditPropertiesWidget::m_RegisterNameChange(void)
          //Restore previous name
          {
             const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_BusIndex);
-            if (pc_Bus != NULL)
+            if (pc_Bus != nullptr)
             {
                this->mpc_Ui->pc_LineEditBusName->setText(pc_Bus->c_Name.c_str());
             }

@@ -36,7 +36,7 @@ class C_CamMosFilterItemWidget :
 
 public:
    explicit C_CamMosFilterItemWidget(const stw::opensyde_gui_logic::C_CamProFilterData & orc_Filter,
-                                     QWidget * const opc_Parent = NULL);
+                                     QWidget * const opc_Parent = nullptr);
    ~C_CamMosFilterItemWidget(void) override;
 
    void SetAddFilterToExistingFilter(const QList<int32_t> oc_CanMsgId, const QList<uint8_t> oc_CanMsgXtd);

@@ -28,7 +28,7 @@ class C_SyvUpPacListNodeItemDatablockWidget :
 public:
    C_SyvUpPacListNodeItemDatablockWidget(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
                                          const QString & orc_DeviceName, const bool oq_FileBased,
-                                         QWidget * const opc_Parent = NULL);
+                                         QWidget * const opc_Parent = nullptr);
 
    uint32_t GetType(void) const override;
    bool IsFileIdentical(const QString & orc_AppName, const QString & orc_AppVersion, const QString & orc_AppBuildTime,

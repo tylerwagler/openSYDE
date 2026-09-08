@@ -18,6 +18,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanDispatcher.hpp"
+#include "C_OscErrorCategory.hpp"
 
 using namespace stw::errors;
 using namespace stw::can;
@@ -118,7 +119,7 @@ C_CanRxQueue::C_CanRxQueue(void)
 {
    //set a default that should be fine for many application cases:
    mu32_MaxSize = mu32_CAN_QUEUE_DEFAULT_MAX_SIZE;
-   ms32_Status = C_NO_ERR;
+   mc_Status = Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -129,18 +130,18 @@ C_CanRxQueue::C_CanRxQueue(void)
    \param[in]   orc_Message   message to add
 
    \return
-   C_NO_ERR    element added                                 \n
-   C_OVERFLOW  maximum configured size reached -> not added  \n
-   C_NOACT     could not add new element -> not added
+   Errc::success    element added                                 \n
+   Errc::overflow   maximum configured size reached -> not added  \n
+   Errc::noact      could not add new element -> not added
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanRxQueue::Push(const T_STWCAN_Msg_RX & orc_Message)
+std::error_code C_CanRxQueue::Push(const T_STWCAN_Msg_RX & orc_Message)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (mc_Messages.size() >= mu32_MaxSize)
    {
-      s32_Return = C_OVERFLOW;
+      c_Return = Errc::overflow;
    }
    else
    {
@@ -150,11 +151,11 @@ int32_t C_CanRxQueue::Push(const T_STWCAN_Msg_RX & orc_Message)
       }
       catch (...)
       {
-         s32_Return = C_NOACT; //probably out of memory
+         c_Return = Errc::noact; //probably out of memory
       }
    }
-   ms32_Status = s32_Return;
-   return s32_Return;
+   mc_Status = c_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -165,24 +166,24 @@ int32_t C_CanRxQueue::Push(const T_STWCAN_Msg_RX & orc_Message)
    \param[out]   orc_Message   read message
 
    \return
-   C_NO_ERR    element read                            \n
-   C_NOACT     no element available
+   Errc::success    element read                            \n
+   Errc::noact      no element available
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanRxQueue::Pop(T_STWCAN_Msg_RX & orc_Message)
+std::error_code C_CanRxQueue::Pop(T_STWCAN_Msg_RX & orc_Message)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (mc_Messages.size() < 1U)
    {
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
    else
    {
       orc_Message = mc_Messages.front(); //get element from queue
       mc_Messages.pop_front();           //delete element from queue
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -246,20 +247,20 @@ void C_CanRxQueue::Clear(void)
 /*! \brief   Get queue status
 
    Read queue status.
-   Will reset status to C_NO_ERR.
+   Will reset status to Errc::success.
 
    \return
-   C_NO_ERR   -> no problems          \n
-   C_OVERFLOW -> overflow in queue    \n
-   C_NOACT    -> internal problem (e.g. out of memory)
+   Errc::success   -> no problems          \n
+   Errc::overflow  -> overflow in queue    \n
+   Errc::noact     -> internal problem (e.g. out of memory)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanRxQueue::GetStatus(void)
+std::error_code C_CanRxQueue::GetStatus(void)
 {
-   const int32_t s32_Return = ms32_Status;
+   const std::error_code c_Return = mc_Status;
 
-   ms32_Status = C_NO_ERR;
-   return s32_Return;
+   mc_Status = Errc::success;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -316,21 +317,21 @@ C_CanDispatcher::~C_CanDispatcher(void)
 int32_t C_CanDispatcher::DispatchIncoming(void)
 {
    T_STWCAN_Msg_RX t_Msg;
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    int32_t s32_NumMessages = 0;
    int32_t s32_Loop;
 
-   while (s32_Return == C_NO_ERR)
+   while (c_Return == Errc::success)
    {
       // Need to lock the read of the message too, because of the order of pushing the messages in the queue
       // by at least two threads is not guaranteed if only the push is locked.
       // An older message could be pushed into the queue after a newer message.
-      mc_CriticalSection.Acquire();
-      s32_Return = m_CAN_Read_Msg(t_Msg);
-      if (s32_Return == C_NO_ERR)
+      mc_CriticalSection.lock();
+      c_Return = m_CAN_Read_Msg(t_Msg);
+      if (c_Return == Errc::success)
       {
          s32_NumMessages++;
-         for (s32_Loop = 0; s32_Loop < mc_InstalledClients.size(); s32_Loop++)
+         for (s32_Loop = 0; s32_Loop < static_cast<int32_t>(mc_InstalledClients.size()); s32_Loop++)
          {
             if (mc_InstalledClients[s32_Loop].c_RXFilter.DoesMessagePass(t_Msg) == true)
             {
@@ -338,7 +339,7 @@ int32_t C_CanDispatcher::DispatchIncoming(void)
             }
          }
       }
-      mc_CriticalSection.Release();
+      mc_CriticalSection.unlock();
    }
 
    return s32_NumMessages;
@@ -358,23 +359,23 @@ int32_t C_CanDispatcher::DispatchIncoming(void)
    \param[in]     oru32_BufferSize  size of buffer for this client
 
    \return
-   C_NO_ERR   -> installed (or reconfigured)
-   C_OVERFLOW -> too many clients installed
+   Errc::success    -> installed (or reconfigured)
+   Errc::overflow   -> too many clients installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::RegisterClient(uint16_t & oru16_Handle, const C_CanRxFilter * const opc_RXFilter,
-                                        const uint32_t & oru32_BufferSize)
+std::error_code C_CanDispatcher::RegisterClient(uint16_t & oru16_Handle, const C_CanRxFilter * const opc_RXFilter,
+                                                const uint32_t & oru32_BufferSize)
 {
    uint16_t u16_Handle;
    bool q_Found = false;
 
    if (mc_InstalledClients.size() >= 0xFFFF)
    {
-      return C_OVERFLOW;
+      return Errc::overflow;
    }
 
    mc_InstalledClients.emplace_back();
-   if (opc_RXFilter != NULL)
+   if (opc_RXFilter != nullptr)
    {
       mc_InstalledClients.back().c_RXFilter = *opc_RXFilter;
    }
@@ -387,7 +388,7 @@ int32_t C_CanDispatcher::RegisterClient(uint16_t & oru16_Handle, const C_CanRxFi
    //is there a free one ?
    for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.size(); u16_Handle++)
    {
-      if (mc_ClientsByHandle[u16_Handle] == NULL)
+      if (mc_ClientsByHandle[u16_Handle] == nullptr)
       {
          q_Found = true;
          break;
@@ -407,7 +408,7 @@ int32_t C_CanDispatcher::RegisterClient(uint16_t & oru16_Handle, const C_CanRxFi
 
    m_ResyncShortcutPointers();
    oru16_Handle = u16_Handle;
-   return C_NO_ERR;
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -418,22 +419,22 @@ int32_t C_CanDispatcher::RegisterClient(uint16_t & oru16_Handle, const C_CanRxFi
    \param[in]  ou16_Handle   Handle of the client to remove.
 
    \return
-   C_NO_ERR   -> reference to client removed      \n
-   C_NOACT    -> client not found -> not removed
+   Errc::success   -> reference to client removed      \n
+   Errc::noact     -> client not found -> not removed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::RemoveClient(const uint16_t ou16_Handle)
+std::error_code C_CanDispatcher::RemoveClient(const uint16_t ou16_Handle)
 {
    uint16_t u16_Index;
 
    if (ou16_Handle >= mc_ClientsByHandle.size())
    {
-      return C_NOACT;
+      return Errc::noact;
    }
-   if (mc_ClientsByHandle[ou16_Handle] == NULL)
+   if (mc_ClientsByHandle[ou16_Handle] == nullptr)
    {
       //nothing installed there ...
-      return C_NOACT;
+      return Errc::noact;
    }
 
    //find it in the list:
@@ -446,7 +447,7 @@ int32_t C_CanDispatcher::RemoveClient(const uint16_t ou16_Handle)
       }
    }
    m_ResyncShortcutPointers();
-   return C_NO_ERR;
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -477,7 +478,7 @@ void C_CanDispatcher::m_ResyncShortcutPointers(void)
    //preset all pointers to zero:
    for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.size(); u16_Handle++)
    {
-      mc_ClientsByHandle[u16_Handle] = NULL;
+      mc_ClientsByHandle[u16_Handle] = nullptr;
    }
 
    for (u16_Index = 0U; u16_Index < mc_InstalledClients.size(); u16_Index++)
@@ -502,28 +503,28 @@ void C_CanDispatcher::m_ResyncShortcutPointers(void)
    \param[out] orc_Message   new message
 
    \return
-   C_NO_ERR   -> reference message read      \n
-   C_RANGE    -> invalid ou16_Handle         \n
-   C_NOACT    -> no new message
+   Errc::success   -> reference message read      \n
+   Errc::range     -> invalid ou16_Handle         \n
+   Errc::noact     -> no new message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::ReadFromQueue(const uint16_t ou16_Handle, T_STWCAN_Msg_RX & orc_Message)
+std::error_code C_CanDispatcher::ReadFromQueue(const uint16_t ou16_Handle, T_STWCAN_Msg_RX & orc_Message)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (ou16_Handle >= mc_ClientsByHandle.size())
    {
-      return C_RANGE;
+      return Errc::range;
    }
-   if (mc_ClientsByHandle[ou16_Handle] == NULL)
+   if (mc_ClientsByHandle[ou16_Handle] == nullptr)
    {
-      return C_RANGE;
+      return Errc::range;
    }
 
-   mc_CriticalSection.Acquire();
-   s32_Return = mc_ClientsByHandle[ou16_Handle]->c_RXQueue.Pop(orc_Message);
-   mc_CriticalSection.Release();
-   return s32_Return;
+   mc_CriticalSection.lock();
+   c_Return = mc_ClientsByHandle[ou16_Handle]->c_RXQueue.Pop(orc_Message);
+   mc_CriticalSection.unlock();
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -534,23 +535,23 @@ int32_t C_CanDispatcher::ReadFromQueue(const uint16_t ou16_Handle, T_STWCAN_Msg_
    \param[in]  ou16_Handle   Handle of the client
 
    \return
-   C_NO_ERR   -> all queue elements dumped   \n
-   C_RANGE    -> invalid ou16_Handle
+   Errc::success   -> all queue elements dumped   \n
+   Errc::range     -> invalid ou16_Handle
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::ClearQueue(const uint16_t ou16_Handle)
+std::error_code C_CanDispatcher::ClearQueue(const uint16_t ou16_Handle)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if ((ou16_Handle < mc_ClientsByHandle.size()) &&
-       (mc_ClientsByHandle[ou16_Handle] != NULL))
+       (mc_ClientsByHandle[ou16_Handle] != nullptr))
    {
-      s32_Return = C_NO_ERR;
-      mc_CriticalSection.Acquire();
-      mc_ClientsByHandle[ou16_Handle]->c_RXQueue.clear();
-      mc_CriticalSection.Release();
+      c_Return = Errc::success;
+      mc_CriticalSection.lock();
+      mc_ClientsByHandle[ou16_Handle]->c_RXQueue.Clear();
+      mc_CriticalSection.unlock();
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -562,14 +563,14 @@ int32_t C_CanDispatcher::ClearQueue(const uint16_t ou16_Handle)
    \param[out] orc_Message   new message
 
    \return
-   C_NO_ERR   -> reference message read      \n
-   C_RANGE    -> invalid ou16_Handle         \n
-   C_WARN     -> no new message
+   Errc::success   -> reference message read      \n
+   Errc::range     -> invalid ou16_Handle         \n
+   Errc::noact     -> no new message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::CAN_Read_Msg(const uint16_t ou16_Handle, T_STWCAN_Msg_RX & orc_Message)
+std::error_code C_CanDispatcher::CAN_Read_Msg(const uint16_t ou16_Handle, T_STWCAN_Msg_RX & orc_Message)
 {
-   this->DispatchIncoming();
+   (void)this->DispatchIncoming();
    return ReadFromQueue(ou16_Handle, orc_Message);
 }
 
@@ -582,35 +583,35 @@ int32_t C_CanDispatcher::CAN_Read_Msg(const uint16_t ou16_Handle, T_STWCAN_Msg_R
    \param[out] orc_Message   new message
 
    \return
-   C_NO_ERR   -> reference message read      \n
-   C_WARN     -> no new message
+   Errc::success   -> reference message read      \n
+   Errc::warn      -> no new message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
+std::error_code C_CanDispatcher::CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    int32_t s32_Loop;
 
-   s32_Return = m_CAN_Read_Msg(orc_Message);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_CAN_Read_Msg(orc_Message);
+   if (c_Return == Errc::success)
    {
       //dispatch to installed clients:
-      for (s32_Loop = 0; s32_Loop < mc_InstalledClients.size(); s32_Loop++)
+      for (s32_Loop = 0; s32_Loop < static_cast<int32_t>(mc_InstalledClients.size()); s32_Loop++)
       {
          if (mc_InstalledClients[s32_Loop].c_RXFilter.DoesMessagePass(orc_Message) == true)
          {
-            mc_CriticalSection.Acquire();
+            mc_CriticalSection.lock();
             (void)mc_InstalledClients[s32_Loop].c_RXQueue.Push(orc_Message);
-            mc_CriticalSection.Release();
+            mc_CriticalSection.unlock();
          }
       }
    }
    else
    {
-      s32_Return = C_WARN;
+      c_Return = Errc::warn;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -623,21 +624,21 @@ int32_t C_CanDispatcher::CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
    \param[in]     orc_RXFilter  RX filter configuration (optional)
 
    \return
-   C_NO_ERR   -> installed (or reconfigured)
-   C_RANGE    -> invalid handle
+   Errc::success   -> installed (or reconfigured)
+   Errc::range     -> invalid handle
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::SetRXFilter(const uint16_t ou16_Handle, const C_CanRxFilter & orc_RXFilter)
+std::error_code C_CanDispatcher::SetRXFilter(const uint16_t ou16_Handle, const C_CanRxFilter & orc_RXFilter)
 {
    if (ou16_Handle >= mc_ClientsByHandle.size())
    {
-      return C_RANGE;
+      return Errc::range;
    }
-   if (mc_ClientsByHandle[ou16_Handle] == NULL)
+   if (mc_ClientsByHandle[ou16_Handle] == nullptr)
    {
-      return C_RANGE;
+      return Errc::range;
    }
 
    mc_ClientsByHandle[ou16_Handle]->c_RXFilter = orc_RXFilter;
-   return C_NO_ERR;
+   return Errc::success;
 }

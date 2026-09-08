@@ -32,7 +32,7 @@ class C_SdBueMlvBorderItem :
 {
 public:
    C_SdBueMlvBorderItem(const QString & orc_Title = "", const uint8_t ou8_Index = 0U,
-                        QGraphicsItem * const opc_Parent = NULL);
+                        QGraphicsItem * const opc_Parent = nullptr);
    ~C_SdBueMlvBorderItem() override;
 
    void SetIndex(const uint8_t ou8_Index);

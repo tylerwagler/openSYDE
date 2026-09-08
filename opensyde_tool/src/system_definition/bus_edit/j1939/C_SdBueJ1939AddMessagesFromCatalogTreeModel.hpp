@@ -36,7 +36,7 @@ public:
       eCOMMENT
    };
 
-   explicit C_SdBueJ1939AddMessagesFromCatalogTreeModel(QObject * const opc_Parent = NULL);
+   explicit C_SdBueJ1939AddMessagesFromCatalogTreeModel(QObject * const opc_Parent = nullptr);
    ~C_SdBueJ1939AddMessagesFromCatalogTreeModel() override;
 
    void UpdateData(const std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_MessagesImported);

@@ -15,7 +15,9 @@
 
 #include "TglFile.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
+#include <system_error>
 #include "C_OscUtils.hpp"
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscNodeCommFiler.hpp"
@@ -59,48 +61,48 @@ C_OscCanOpenManagerFiler::C_OscCanOpenManagerFiler()
    \param[in]      orc_BasePath  Base path
 
    \return
-   C_NO_ERR    data read
-   C_RANGE     specified system definition file does not exist
-   C_NOACT     specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG    system definition file content is invalid or incomplete
-               device definition file could not be loaded
+   Errc::success    data read
+   Errc::range      specified system definition file does not exist
+   Errc::noact      specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config     system definition file content is invalid or incomplete
+                    device definition file could not be loaded
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::h_LoadFile(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
-                                             const std::string & orc_Path, const std::string & orc_BasePath)
+std::error_code C_OscCanOpenManagerFiler::h_LoadFile(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+                                                     const std::string & orc_Path, const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_Path) == true)
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading CANopen manager data");
-      s32_Retval = ListLoadFromFile(c_XmlParser, orc_Path);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = c_XmlParser.LoadFromFile(orc_Path);
+      if (!c_Retval)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-can-open-managers-config")
          {
-            s32_Retval = h_LoadData(orc_Config, c_XmlParser, orc_BasePath);
+            c_Retval = h_LoadData(orc_Config, c_XmlParser, orc_BasePath);
          }
          else
          {
             osc_write_log_error("Loading CANopen manager data",
                                 "Could not find \"opensyde-can-open-managers-config\" node.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
       else
       {
          osc_write_log_error("Loading CANopen manager data", "File \"" + orc_Path + "\" could not be opened.");
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
       }
    }
    else
    {
       osc_write_log_error("Loading CANopen manager data", "File \"" + orc_Path + "\" does not exist.");
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -113,43 +115,42 @@ int32_t C_OscCanOpenManagerFiler::h_LoadFile(std::map<uint8_t, C_OscCanOpenManag
    \param[in]      orc_NodeIndicesToNameMap  Node indices to name map
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   data invalid
-   C_RD_WR    could not erase pre-existing file before saving
-   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   Errc::success    data saved
+   Errc::config     data invalid
+   Errc::rd_wr      could not erase pre-existing file before saving
+   Errc::rd_wr      could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::h_SaveFile(const std::map<uint8_t,
-                                                            C_OscCanOpenManagerInfo> & orc_Config,
-                                             const std::string & orc_Path, const std::string & orc_BasePath,
-                                             std::vector<std::string> * const opc_CreatedFiles, const std::map<uint32_t,
-                                                                                                               std::string> & orc_NodeIndicesToNameMap)
+std::error_code C_OscCanOpenManagerFiler::h_SaveFile(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+                                                     const std::string & orc_Path, const std::string & orc_BasePath,
+                                                     std::vector<std::string> * const opc_CreatedFiles,
+                                                     const std::map<uint32_t, std::string> & orc_NodeIndicesToNameMap)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
-                                                                    "opensyde-can-open-managers-config");
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
+                                                                          "opensyde-can-open-managers-config");
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       //node
-      s32_Retval = C_OscCanOpenManagerFiler::h_SaveData(orc_Config, c_XmlParser, orc_BasePath, opc_CreatedFiles,
-                                                        orc_NodeIndicesToNameMap);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = C_OscCanOpenManagerFiler::h_SaveData(orc_Config, c_XmlParser, orc_BasePath, opc_CreatedFiles,
+                                                      orc_NodeIndicesToNameMap);
+      if (!c_Retval)
       {
          //Don't forget to save!
-         if (ListSaveToFile(c_XmlParser, orc_Path) != C_NO_ERR)
+         if (c_XmlParser.SaveToFile(orc_Path))
          {
             osc_write_log_error("Saving CANopen manager data", "Could not create file for node.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
    }
    else
    {
       //More details are in log
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -160,21 +161,22 @@ int32_t C_OscCanOpenManagerFiler::h_SaveFile(const std::map<uint8_t,
    \param[in]      orc_BasePath     Base path
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    CANopen manager file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     CANopen manager file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::h_LoadData(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
-                                             C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath)
+std::error_code C_OscCanOpenManagerFiler::h_LoadData(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+                                                     C_OscXmlParserBase & orc_XmlParser,
+                                                     const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("can-open-managers");
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("can-open-managers");
 
    orc_Config.clear();
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       uint32_t u32_ExpectedSize;
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
+      if (!c_Retval)
       {
          std::string c_NodeName = orc_XmlParser.SelectNodeChild("can-open-manager");
          if (c_NodeName == "can-open-manager")
@@ -182,20 +184,20 @@ int32_t C_OscCanOpenManagerFiler::h_LoadData(std::map<uint8_t, C_OscCanOpenManag
             do
             {
                uint32_t u32_Interface;
-               s32_Retval = orc_XmlParser.GetAttributeUint32Error("interface", u32_Interface);
-               if (s32_Retval == C_NO_ERR)
+               c_Retval = orc_XmlParser.GetAttributeUint32Error("interface", u32_Interface);
+               if (!c_Retval)
                {
                   C_OscCanOpenManagerInfo c_CanOpenManager;
-                  s32_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerData(c_CanOpenManager, orc_XmlParser,
-                                                                            orc_BasePath);
-                  if (s32_Retval == C_NO_ERR)
+                  c_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerData(c_CanOpenManager, orc_XmlParser,
+                                                                          orc_BasePath);
+                  if (!c_Retval)
                   {
                      orc_Config[static_cast<uint8_t>(u32_Interface)] = c_CanOpenManager;
                   }
                }
                c_NodeName = orc_XmlParser.SelectNodeNext("can-open-manager");
             }
-            while ((c_NodeName == "can-open-manager") && (s32_Retval == C_NO_ERR));
+            while ((c_NodeName == "can-open-manager") && (!c_Retval));
             tgl_assert(orc_XmlParser.SelectNodeParent() == "can-open-managers");
          }
          if (u32_ExpectedSize != orc_Config.size())
@@ -208,7 +210,7 @@ int32_t C_OscCanOpenManagerFiler::h_LoadData(std::map<uint8_t, C_OscCanOpenManag
       }
       tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-can-open-managers-config");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -223,19 +225,19 @@ int32_t C_OscCanOpenManagerFiler::h_LoadData(std::map<uint8_t, C_OscCanOpenManag
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data saved
-   \retval   C_CONFIG   data invalid
-   \retval   C_RD_WR    could not erase pre-existing file before saving
-   \retval   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   \retval   Errc::success   data saved
+   \retval   Errc::config    data invalid
+   \retval   Errc::rd_wr     could not erase pre-existing file before saving
+   \retval   Errc::rd_wr     could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::h_SaveData(const std::map<uint8_t,
-                                                            C_OscCanOpenManagerInfo> & orc_Config,
-                                             C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
-                                             std::vector<std::string> * const opc_CreatedFiles, const std::map<uint32_t,
-                                                                                                               std::string> & orc_NodeIndicesToNameMap)
+std::error_code C_OscCanOpenManagerFiler::h_SaveData(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+                                                     C_OscXmlParserBase & orc_XmlParser,
+                                                     const std::string & orc_BasePath,
+                                                     std::vector<std::string> * const opc_CreatedFiles,
+                                                     const std::map<uint32_t, std::string> & orc_NodeIndicesToNameMap)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //File version
    tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
@@ -246,17 +248,17 @@ int32_t C_OscCanOpenManagerFiler::h_SaveData(const std::map<uint8_t,
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_Config.size()));
    for (std::map<uint8_t,
                  C_OscCanOpenManagerInfo>::const_iterator c_It = orc_Config.begin();
-        (c_It != orc_Config.end()) && (s32_Retval == C_NO_ERR); ++c_It)
+        (c_It != orc_Config.end()) && (!c_Retval); ++c_It)
    {
       tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("can-open-manager") == "can-open-manager");
       orc_XmlParser.SetAttributeUint32("interface", c_It->first);
-      s32_Retval = C_OscCanOpenManagerFiler::mh_SaveManagerData(c_It->second, orc_XmlParser, orc_BasePath,
-                                                                opc_CreatedFiles, orc_NodeIndicesToNameMap);
+      c_Retval = C_OscCanOpenManagerFiler::mh_SaveManagerData(c_It->second, orc_XmlParser, orc_BasePath,
+                                                              opc_CreatedFiles, orc_NodeIndicesToNameMap);
       tgl_assert(orc_XmlParser.SelectNodeParent() == "can-open-managers");
    }
    //Return
    orc_XmlParser.SelectNodeParent();
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -267,23 +269,23 @@ int32_t C_OscCanOpenManagerFiler::h_SaveData(const std::map<uint8_t,
    \param[in]      orc_BasePath     Base path
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    CANopen manager file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     CANopen manager file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_LoadManagerData(C_OscCanOpenManagerInfo & orc_Config,
-                                                     C_OscXmlParserBase & orc_XmlParser,
-                                                     const std::string & orc_BasePath)
+std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerData(C_OscCanOpenManagerInfo & orc_Config,
+                                                             C_OscXmlParserBase & orc_XmlParser,
+                                                             const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerProperties(orc_Config, orc_XmlParser);
+   std::error_code c_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerProperties(orc_Config, orc_XmlParser);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerSubDevices(orc_Config.c_CanOpenDevices, orc_XmlParser,
-                                                                      orc_BasePath);
+      c_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerSubDevices(orc_Config.c_CanOpenDevices, orc_XmlParser,
+                                                                    orc_BasePath);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -298,18 +300,18 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerData(C_OscCanOpenManagerInfo & o
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data saved
-   \retval   C_CONFIG   data invalid
-   \retval   C_RD_WR    could not erase pre-existing file before saving
-   \retval   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   \retval   Errc::success   data saved
+   \retval   Errc::config    data invalid
+   \retval   Errc::rd_wr     could not erase pre-existing file before saving
+   \retval   Errc::rd_wr     could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_SaveManagerData(const C_OscCanOpenManagerInfo & orc_Config,
-                                                     C_OscXmlParserBase & orc_XmlParser,
-                                                     const std::string & orc_BasePath,
-                                                     std::vector<std::string> * const opc_CreatedFiles,
-                                                     const std::map<uint32_t,
-                                                                    std::string> & orc_NodeIndicesToNameMap)
+std::error_code C_OscCanOpenManagerFiler::mh_SaveManagerData(const C_OscCanOpenManagerInfo & orc_Config,
+                                                             C_OscXmlParserBase & orc_XmlParser,
+                                                             const std::string & orc_BasePath,
+                                                             std::vector<std::string> * const opc_CreatedFiles,
+                                                             const std::map<uint32_t,
+                                                             std::string> & orc_NodeIndicesToNameMap)
 {
    C_OscCanOpenManagerFiler::mh_SaveManagerProperties(orc_Config, orc_XmlParser);
    return C_OscCanOpenManagerFiler::mh_SaveManagerSubDevices(orc_Config.c_CanOpenDevices, orc_XmlParser, orc_BasePath,
@@ -323,77 +325,75 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerData(const C_OscCanOpenManagerIn
    \param[in,out]  orc_XmlParser    XML parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    CANopen manager file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     CANopen manager file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_LoadManagerProperties(C_OscCanOpenManagerInfo & orc_Config,
-                                                           C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerProperties(C_OscCanOpenManagerInfo & orc_Config,
+                                                                   C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("properties");
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("properties");
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       uint32_t u32_Value;
-      s32_Retval = orc_XmlParser.GetAttributeBoolError("use-opensyde-id", orc_Config.q_UseOpenSydeNodeId);
+      c_Retval = orc_XmlParser.GetAttributeBoolError("use-opensyde-id", orc_Config.q_UseOpenSydeNodeId);
 
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("node-id-value", u32_Value);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("node-id-value", u32_Value);
+         if (!c_Retval)
          {
             orc_Config.u8_NodeIdValue = static_cast<uint8_t>(u32_Value);
          }
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("global-sdo-timeout-ms", u32_Value);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("global-sdo-timeout-ms", u32_Value);
+         if (!c_Retval)
          {
             orc_Config.u16_GlobalSdoTimeoutMs = static_cast<uint16_t>(u32_Value);
          }
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeBoolError("autostart-can-open-manager",
-                                                          orc_Config.q_AutostartCanOpenManager);
+         c_Retval = orc_XmlParser.GetAttributeBoolError("autostart-can-open-manager",
+                                                        orc_Config.q_AutostartCanOpenManager);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeBoolError("start-devices",
-                                                          orc_Config.q_StartDevices);
+         c_Retval = orc_XmlParser.GetAttributeBoolError("start-devices", orc_Config.q_StartDevices);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeBoolError("NMT-start-all",
-                                                          orc_Config.q_NmtStartAll);
+         c_Retval = orc_XmlParser.GetAttributeBoolError("NMT-start-all", orc_Config.q_NmtStartAll);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeBoolError("enable-heartbeat-producing",
-                                                          orc_Config.q_EnableHeartbeatProducing);
+         c_Retval = orc_XmlParser.GetAttributeBoolError("enable-heartbeat-producing",
+                                                        orc_Config.q_EnableHeartbeatProducing);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("heartbeat-producer-time-ms", u32_Value);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("heartbeat-producer-time-ms", u32_Value);
+         if (!c_Retval)
          {
             orc_Config.u16_HeartbeatProducerTimeMs = static_cast<uint16_t>(u32_Value);
          }
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerSyncProperties(orc_Config, orc_XmlParser);
+         c_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerSyncProperties(orc_Config, orc_XmlParser);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.SelectNodeChildError("nmt-error-behaviour");
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = orc_XmlParser.SelectNodeChildError("nmt-error-behaviour");
+         if (!c_Retval)
          {
             const std::string c_Text = orc_XmlParser.GetNodeContent();
-            s32_Retval = C_OscCanOpenManagerFiler::mh_StringToCanOpenManagerInfoType(c_Text,
-                                                                                     orc_Config.e_NmtErrorBehaviour);
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = C_OscCanOpenManagerFiler::mh_StringToCanOpenManagerInfoType(c_Text,
+                                                                                   orc_Config.e_NmtErrorBehaviour);
+            if (!c_Retval)
             {
                tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
             }
@@ -406,7 +406,7 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerProperties(C_OscCanOpenManagerIn
       }
       tgl_assert(orc_XmlParser.SelectNodeParent() == "can-open-manager");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -443,27 +443,27 @@ void C_OscCanOpenManagerFiler::mh_SaveManagerProperties(const C_OscCanOpenManage
    \param[in,out]  orc_XmlParser    XML parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    CANopen manager file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     CANopen manager file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSyncProperties(C_OscCanOpenManagerInfo & orc_Config,
-                                                               C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerSyncProperties(C_OscCanOpenManagerInfo & orc_Config,
+                                                                       C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("sync-message") == "sync-message")
    {
-      s32_Retval = orc_XmlParser.GetAttributeBoolError("produce", orc_Config.q_ProduceSyncMessage);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = orc_XmlParser.GetAttributeBoolError("produce", orc_Config.q_ProduceSyncMessage);
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("cycle-period-us", orc_Config.u32_SyncCyclePeriodUs);
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("cycle-period-us", orc_Config.u32_SyncCyclePeriodUs);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("window-length-us", orc_Config.u32_SyncWindowLengthUs);
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("window-length-us", orc_Config.u32_SyncWindowLengthUs);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
       }
@@ -474,7 +474,7 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSyncProperties(C_OscCanOpenManag
       orc_Config.u32_SyncCyclePeriodUs = 20000UL;
       orc_Config.u32_SyncWindowLengthUs = 10000UL;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -502,47 +502,47 @@ void C_OscCanOpenManagerFiler::mh_SaveManagerSyncProperties(const C_OscCanOpenMa
    \param[in]      orc_BasePath     Base path
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    CANopen manager file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     CANopen manager file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDevices(std::map<C_OscCanInterfaceId,
-                                                                    C_OscCanOpenManagerDeviceInfo> & orc_Config,
-                                                           C_OscXmlParserBase & orc_XmlParser,
-                                                           const std::string & orc_BasePath)
+std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerSubDevices(std::map<C_OscCanInterfaceId,
+                                                                   C_OscCanOpenManagerDeviceInfo> & orc_Config,
+                                                                   C_OscXmlParserBase & orc_XmlParser,
+                                                                   const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("can-open-devices");
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("can-open-devices");
 
    orc_Config.clear();
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       uint32_t u32_ExpectedSize;
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
+      if (!c_Retval)
       {
          std::string c_NodeName = orc_XmlParser.SelectNodeChild("can-open-device");
          if (c_NodeName == "can-open-device")
          {
             do
             {
-               s32_Retval = orc_XmlParser.SelectNodeChildError("interface-id");
-               if (s32_Retval == C_NO_ERR)
+               c_Retval = orc_XmlParser.SelectNodeChildError("interface-id");
+               if (!c_Retval)
                {
                   uint32_t u32_Value;
-                  s32_Retval = orc_XmlParser.GetAttributeUint32Error("node-index", u32_Value);
-                  if (s32_Retval == C_NO_ERR)
+                  c_Retval = orc_XmlParser.GetAttributeUint32Error("node-index", u32_Value);
+                  if (!c_Retval)
                   {
                      C_OscCanInterfaceId c_InterfaceId;
                      c_InterfaceId.u32_NodeIndex = u32_Value;
-                     s32_Retval = orc_XmlParser.GetAttributeUint32Error("interface-id", u32_Value);
-                     if (s32_Retval == C_NO_ERR)
+                     c_Retval = orc_XmlParser.GetAttributeUint32Error("interface-id", u32_Value);
+                     if (!c_Retval)
                      {
                         C_OscCanOpenManagerDeviceInfo c_DeviceInfo;
                         c_InterfaceId.u8_InterfaceNumber = static_cast<uint8_t>(u32_Value);
                         tgl_assert(orc_XmlParser.SelectNodeParent() == "can-open-device");
-                        s32_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerSubDevice(c_DeviceInfo, orc_XmlParser,
-                                                                                       orc_BasePath);
-                        if (s32_Retval == C_NO_ERR)
+                        c_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerSubDevice(c_DeviceInfo, orc_XmlParser,
+                                                                                     orc_BasePath);
+                        if (!c_Retval)
                         {
                            orc_Config[c_InterfaceId] = c_DeviceInfo;
                         }
@@ -551,7 +551,7 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDevices(std::map<C_OscCanInte
                }
                c_NodeName = orc_XmlParser.SelectNodeNext("can-open-device");
             }
-            while ((c_NodeName == "can-open-device") && (s32_Retval == C_NO_ERR));
+            while ((c_NodeName == "can-open-device") && (!c_Retval));
             tgl_assert(orc_XmlParser.SelectNodeParent() == "can-open-devices");
          }
          if (u32_ExpectedSize != orc_Config.size())
@@ -564,7 +564,7 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDevices(std::map<C_OscCanInte
       }
       tgl_assert(orc_XmlParser.SelectNodeParent() == "can-open-manager");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -579,27 +579,27 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDevices(std::map<C_OscCanInte
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data saved
-   \retval   C_CONFIG   data invalid
-   \retval   C_RD_WR    could not erase pre-existing file before saving
-   \retval   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   \retval   Errc::success   data saved
+   \retval   Errc::config    data invalid
+   \retval   Errc::rd_wr     could not erase pre-existing file before saving
+   \retval   Errc::rd_wr     could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDevices(const std::map<C_OscCanInterfaceId,
-                                                                          C_OscCanOpenManagerDeviceInfo> & orc_Config,
-                                                           C_OscXmlParserBase & orc_XmlParser,
-                                                           const std::string & orc_BasePath,
-                                                           std::vector<std::string> * const opc_CreatedFiles,
-                                                           const std::map<uint32_t,
-                                                                          std::string> & orc_NodeIndicesToNameMap)
+std::error_code C_OscCanOpenManagerFiler::mh_SaveManagerSubDevices(const std::map<C_OscCanInterfaceId,
+                                                                   C_OscCanOpenManagerDeviceInfo> & orc_Config,
+                                                                   C_OscXmlParserBase & orc_XmlParser,
+                                                                   const std::string & orc_BasePath,
+                                                                   std::vector<std::string> * const opc_CreatedFiles,
+                                                                   const std::map<uint32_t,
+                                                                   std::string> & orc_NodeIndicesToNameMap)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_XmlParser.CreateAndSelectNodeChild("can-open-devices");
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_Config.size()));
    for (std::map<C_OscCanInterfaceId,
                  C_OscCanOpenManagerDeviceInfo>::const_iterator c_It = orc_Config.begin();
-        (c_It != orc_Config.end()) && (s32_Retval == C_NO_ERR);
+        (c_It != orc_Config.end()) && (!c_Retval);
         ++c_It)
    {
       const std::map<uint32_t,
@@ -612,13 +612,13 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDevices(const std::map<C_OscC
       tgl_assert(orc_XmlParser.SelectNodeParent() == "can-open-device");
       if (c_FoundName != orc_NodeIndicesToNameMap.end())
       {
-         s32_Retval = C_OscCanOpenManagerFiler::mh_SaveManagerSubDevice(c_It->second, orc_XmlParser, orc_BasePath,
-                                                                        opc_CreatedFiles, c_FoundName->second,
-                                                                        c_It->first.u8_InterfaceNumber);
+         c_Retval = C_OscCanOpenManagerFiler::mh_SaveManagerSubDevice(c_It->second, orc_XmlParser, orc_BasePath,
+                                                                      opc_CreatedFiles, c_FoundName->second,
+                                                                      c_It->first.u8_InterfaceNumber);
       }
       else
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
          osc_write_log_error("saving canopen manager",
                              "could not find index " + std::to_string(
                                 c_It->first.u32_NodeIndex) + " in parameter orc_NodeIndicesToNameMap");
@@ -626,7 +626,7 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDevices(const std::map<C_OscC
       tgl_assert(orc_XmlParser.SelectNodeParent() == "can-open-devices");
    }
    tgl_assert(orc_XmlParser.SelectNodeParent() == "can-open-manager");
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -637,83 +637,79 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDevices(const std::map<C_OscC
    \param[in]      orc_BasePath     Base path
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    CANopen manager file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     CANopen manager file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDevice(C_OscCanOpenManagerDeviceInfo & orc_Config,
-                                                          C_OscXmlParserBase & orc_XmlParser,
-                                                          const std::string & orc_BasePath)
+std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerSubDevice(C_OscCanOpenManagerDeviceInfo & orc_Config,
+                                                                  C_OscXmlParserBase & orc_XmlParser,
+                                                                  const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("properties");
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("properties");
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       uint32_t u32_Value;
-      s32_Retval = orc_XmlParser.GetAttributeBoolError("device-optional", orc_Config.q_DeviceOptional);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = orc_XmlParser.GetAttributeBoolError("device-optional", orc_Config.q_DeviceOptional);
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeBoolError("no-initialization", orc_Config.q_NoInitialization);
+         c_Retval = orc_XmlParser.GetAttributeBoolError("no-initialization", orc_Config.q_NoInitialization);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval =
-            orc_XmlParser.GetAttributeBoolError("factory-settings-active", orc_Config.q_FactorySettingsActive);
+         c_Retval = orc_XmlParser.GetAttributeBoolError("factory-settings-active", orc_Config.q_FactorySettingsActive);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval =
-            orc_XmlParser.GetAttributeUint32Error("reset-node-object-dictionary-sub-index", u32_Value);
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("reset-node-object-dictionary-sub-index", u32_Value);
          orc_Config.u8_ResetNodeObjectDictionarySubIndex = static_cast<uint8_t>(u32_Value);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval =
-            orc_XmlParser.GetAttributeBoolError("enable-heartbeat-producing", orc_Config.q_EnableHeartbeatProducing);
+         c_Retval = orc_XmlParser.GetAttributeBoolError("enable-heartbeat-producing",
+                                                        orc_Config.q_EnableHeartbeatProducing);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("heartbeat-producer-time-ms", u32_Value);
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("heartbeat-producer-time-ms", u32_Value);
          orc_Config.u16_HeartbeatProducerTimeMs = static_cast<uint16_t>(u32_Value);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeBoolError("use-opensyde-id", orc_Config.q_UseOpenSydeNodeId);
+         c_Retval = orc_XmlParser.GetAttributeBoolError("use-opensyde-id", orc_Config.q_UseOpenSydeNodeId);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval =
-            orc_XmlParser.GetAttributeUint32Error("node-id-value", u32_Value);
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("node-id-value", u32_Value);
          orc_Config.u8_NodeIdValue = static_cast<uint8_t>(u32_Value);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval =
-            orc_XmlParser.GetAttributeBoolError("enable-heartbeat-consuming", orc_Config.q_EnableHeartbeatConsuming);
+         c_Retval = orc_XmlParser.GetAttributeBoolError("enable-heartbeat-consuming",
+                                                        orc_Config.q_EnableHeartbeatConsuming);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("heartbeat-consumer-time-ms", u32_Value);
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("heartbeat-consumer-time-ms", u32_Value);
          orc_Config.u16_HeartbeatConsumerTimeMs = static_cast<uint16_t>(u32_Value);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval =
-            orc_XmlParser.GetAttributeBoolError("enable-heartbeat-consuming-auto-calculation",
-                                                orc_Config.q_EnableHeartbeatConsumingAutoCalculation);
+         c_Retval = orc_XmlParser.GetAttributeBoolError("enable-heartbeat-consuming-auto-calculation",
+                                                        orc_Config.q_EnableHeartbeatConsumingAutoCalculation);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerSubDeviceEdsPart(orc_Config, orc_XmlParser, orc_BasePath);
+         c_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerSubDeviceEdsPart(orc_Config, orc_XmlParser, orc_BasePath);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignals(orc_Config.c_EdsFileMappableSignals,
-                                                                            orc_XmlParser);
+         c_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignals(orc_Config.c_EdsFileMappableSignals,
+                                                                          orc_XmlParser);
       }
       tgl_assert(orc_XmlParser.SelectNodeParent() == "can-open-device");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -729,19 +725,19 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDevice(C_OscCanOpenManagerDev
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data saved
-   \retval   C_RD_WR    could not erase pre-existing file before saving
-   \retval   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   \retval   Errc::success   data saved
+   \retval   Errc::rd_wr     could not erase pre-existing file before saving
+   \retval   Errc::rd_wr     could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDevice(const C_OscCanOpenManagerDeviceInfo & orc_Config,
-                                                          C_OscXmlParserBase & orc_XmlParser,
-                                                          const std::string & orc_BasePath,
-                                                          std::vector<std::string> * const opc_CreatedFiles,
-                                                          const std::string & orc_NodeName,
-                                                          const uint8_t ou8_InterfaceNumber)
+std::error_code C_OscCanOpenManagerFiler::mh_SaveManagerSubDevice(const C_OscCanOpenManagerDeviceInfo & orc_Config,
+                                                                  C_OscXmlParserBase & orc_XmlParser,
+                                                                  const std::string & orc_BasePath,
+                                                                  std::vector<std::string> * const opc_CreatedFiles,
+                                                                  const std::string & orc_NodeName,
+                                                                  const uint8_t ou8_InterfaceNumber)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
    orc_XmlParser.CreateAndSelectNodeChild("properties");
    orc_XmlParser.SetAttributeBool("device-optional", orc_Config.q_DeviceOptional);
@@ -760,12 +756,12 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDevice(const C_OscCanOpenMana
                                     static_cast<uint32_t>(orc_Config.u16_HeartbeatConsumerTimeMs));
    orc_XmlParser.SetAttributeBool("enable-heartbeat-consuming-auto-calculation",
                                   orc_Config.q_EnableHeartbeatConsumingAutoCalculation);
-   s32_Retval = C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(orc_Config, orc_XmlParser, orc_BasePath,
-                                                                         opc_CreatedFiles, orc_NodeName,
-                                                                         ou8_InterfaceNumber);
+   c_Retval = C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(orc_Config, orc_XmlParser, orc_BasePath,
+                                                                       opc_CreatedFiles, orc_NodeName,
+                                                                       ou8_InterfaceNumber);
    C_OscCanOpenManagerFiler::mh_SaveManagerMappedSignals(orc_Config.c_EdsFileMappableSignals, orc_XmlParser);
    tgl_assert(orc_XmlParser.SelectNodeParent() == "can-open-device");
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -776,27 +772,25 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDevice(const C_OscCanOpenMana
    \param[in]      orc_BasePath     Base path
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    CANopen manager file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     CANopen manager file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDeviceEdsPart(C_OscCanOpenManagerDeviceInfo & orc_Config,
-                                                                 C_OscXmlParserBase & orc_XmlParser,
-                                                                 const std::string & orc_BasePath)
+std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerSubDeviceEdsPart(C_OscCanOpenManagerDeviceInfo & orc_Config,
+                                                                         C_OscXmlParserBase & orc_XmlParser,
+                                                                         const std::string & orc_BasePath)
 {
-   int32_t s32_Retval =
-      orc_XmlParser.SelectNodeChildError("eds-file-name");
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("eds-file-name");
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       const std::string c_EdsFileName = orc_XmlParser.GetNodeContent();
       tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
 
       if (orc_BasePath.empty())
       {
-         s32_Retval =
-            orc_XmlParser.SelectNodeChildError("eds-file-content");
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = orc_XmlParser.SelectNodeChildError("eds-file-content");
+         if (!c_Retval)
          {
             //Load EDS from string: not implemented
             tgl_assert(false);
@@ -819,14 +813,13 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDeviceEdsPart(C_OscCanOpenMan
          }
       }
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval =
-         orc_XmlParser.SelectNodeChildError("eds-original-file-name");
+      c_Retval = orc_XmlParser.SelectNodeChildError("eds-original-file-name");
       orc_Config.c_OriginalEdsFileName = orc_XmlParser.GetNodeContent();
       tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -842,19 +835,17 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDeviceEdsPart(C_OscCanOpenMan
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data saved
-   \retval   C_RD_WR    could not erase pre-existing file before saving
-   \retval   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   \retval   Errc::success   data saved
+   \retval   Errc::rd_wr     could not erase pre-existing file before saving
+   \retval   Errc::rd_wr     could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(const C_OscCanOpenManagerDeviceInfo & orc_Config,
-                                                                 C_OscXmlParserBase & orc_XmlParser,
-                                                                 const std::string & orc_BasePath,
-                                                                 std::vector<std::string> * const opc_CreatedFiles,
-                                                                 const std::string & orc_NodeName,
-                                                                 const uint8_t ou8_InterfaceNumber)
+std::error_code C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(
+   const C_OscCanOpenManagerDeviceInfo & orc_Config, C_OscXmlParserBase & orc_XmlParser,
+   const std::string & orc_BasePath, std::vector<std::string> * const opc_CreatedFiles,
+   const std::string & orc_NodeName, const uint8_t ou8_InterfaceNumber)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    const std::string c_ItemPrefixUnprepared = orc_NodeName + "_can_" + std::to_string(ou8_InterfaceNumber) + "_";
    const std::string c_ItemPrefixPrepared = C_OscSystemFilerUtil::h_PrepareItemNameForFileName(c_ItemPrefixUnprepared);
    const std::string c_FileNameWithPrefix = c_ItemPrefixPrepared + orc_Config.c_OriginalEdsFileName;
@@ -886,17 +877,16 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(const C_OscCanO
          //* file was newly added to configuration
          const C_OscCanOpenObjectDictionary & rc_EdsFileContent = orc_Config.GetEdsFileContent();
          //only use "\n" as separator; SaveStringToFile will add an \r anyways
-         s32_Retval = C_OscSystemFilerUtil::h_SaveStringToFile(
-            ListGetText(rc_EdsFileContent.c_TextFileContent, "\n"), c_CompleteFileName,
-            "Saving CANopen manager data");
+         c_Retval = C_OscSystemFilerUtil::h_SaveStringToFile(ListGetText(rc_EdsFileContent.c_TextFileContent, "\n"),
+                                                             c_CompleteFileName, "Saving CANopen manager data");
       }
-      if (opc_CreatedFiles != NULL)
+      if (opc_CreatedFiles != nullptr)
       {
          opc_CreatedFiles->push_back(c_FileNameWithPrefix);
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -906,21 +896,21 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(const C_OscCanO
    \param[in,out]  orc_XmlParser    XML parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    CANopen manager file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     CANopen manager file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignals(
+std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignals(
    std::vector<C_OscCanOpenManagerMappableSignal> & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_Config.clear();
    if (orc_XmlParser.SelectNodeChild("mappable-signals") == "mappable-signals")
    {
       uint32_t u32_ExpectedSize;
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
+      if (!c_Retval)
       {
          std::string c_NodeName = orc_XmlParser.SelectNodeChild("mappable-signal");
          if (c_NodeName == "mappable-signal")
@@ -929,15 +919,15 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignals(
             do
             {
                C_OscCanOpenManagerMappableSignal c_Signal;
-               s32_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignal(c_Signal, orc_XmlParser);
-               if (s32_Retval == C_NO_ERR)
+               c_Retval = C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignal(c_Signal, orc_XmlParser);
+               if (!c_Retval)
                {
                   orc_Config.push_back(c_Signal);
                }
 
                c_NodeName = orc_XmlParser.SelectNodeNext("mappable-signal");
             }
-            while ((c_NodeName == "mappable-signal") && (s32_Retval == C_NO_ERR));
+            while ((c_NodeName == "mappable-signal") && (!c_Retval));
             tgl_assert(orc_XmlParser.SelectNodeParent() == "mappable-signals");
          }
          if (u32_ExpectedSize != orc_Config.size())
@@ -950,7 +940,7 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignals(
       }
       tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -983,34 +973,34 @@ void C_OscCanOpenManagerFiler::mh_SaveManagerMappedSignals(
    \param[in,out]  orc_XmlParser    XML parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    CANopen manager file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     CANopen manager file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignal(C_OscCanOpenManagerMappableSignal & orc_Config,
-                                                             C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignal(C_OscCanOpenManagerMappableSignal & orc_Config,
+                                                                     C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.GetAttributeBoolError("is-auto-min-max-used", orc_Config.q_AutoMinMaxUsed);
+   std::error_code c_Retval = orc_XmlParser.GetAttributeBoolError("is-auto-min-max-used", orc_Config.q_AutoMinMaxUsed);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("com-signal");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = orc_XmlParser.SelectNodeChildError("com-signal");
+      if (!c_Retval)
       {
-         s32_Retval = C_OscNodeCommFiler::h_LoadNodeComSignal(orc_Config.c_SignalData, orc_XmlParser, true);
+         c_Retval = C_OscNodeCommFiler::h_LoadNodeComSignal(orc_Config.c_SignalData, orc_XmlParser, true);
       }
       tgl_assert(orc_XmlParser.SelectNodeParent() == "mappable-signal");
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("data-element");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = orc_XmlParser.SelectNodeChildError("data-element");
+      if (!c_Retval)
       {
-         s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolElement(orc_Config.c_DatapoolData, orc_XmlParser);
+         c_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolElement(orc_Config.c_DatapoolData, orc_XmlParser);
       }
       tgl_assert(orc_XmlParser.SelectNodeParent() == "mappable-signal");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1071,14 +1061,14 @@ std::string C_OscCanOpenManagerFiler::mh_CanOpenManagerInfoTypeToString(
    \param[out]  ore_Type      Type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerFiler::mh_StringToCanOpenManagerInfoType(const std::string & orc_String,
-                                                                    C_OscCanOpenManagerInfo::E_NmtErrorBehaviourType & ore_Type)
+std::error_code C_OscCanOpenManagerFiler::mh_StringToCanOpenManagerInfoType(
+   const std::string & orc_String, C_OscCanOpenManagerInfo::E_NmtErrorBehaviourType & ore_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "restart all devices")
    {
@@ -1094,8 +1084,8 @@ int32_t C_OscCanOpenManagerFiler::mh_StringToCanOpenManagerInfoType(const std::s
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }

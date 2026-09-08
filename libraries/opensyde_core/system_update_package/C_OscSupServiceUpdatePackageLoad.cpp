@@ -17,6 +17,8 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include <string>
+#include <system_error>
+#include "C_OscErrorCategory.hpp"
 #include "C_OscSupServiceUpdatePackageLoad.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemDefinition.hpp"
@@ -98,20 +100,23 @@ using namespace stw::opensyde_core;
                                              e.g. {pem} or {pem1, pem2, pem3} for all or individual nodes
 
    \return
-   C_NO_ERR    success
-   C_CONFIG    could not find update package archive or update package directory
-   C_RD_WR     could not unzip update package from disk to target path
-   C_BUSY      could not erase pre-existing target path (note: can result in partially erased target path)
-   C_RANGE     error code of a called core function (should not occur for valid and compatible service update package)
-   C_NOACT     invalid signature or error code of a called core function
-               (should not occur for valid and compatible service update package)
-   C_OVERFLOW  error code of a called core function (should not occur for valid and compatible service update package)
-   C_DEFAULT   error code of a called core function (should not occur for valid and compatible service update package)
-   C_CHECKSUM  size of orc_EncryptNodes does not match system definition
-               or wrong password
+   Errc::success    success
+   Errc::config     could not find update package archive or update package directory
+   Errc::rd_wr      could not unzip update package from disk to target path
+   Errc::busy       could not erase pre-existing target path (note: can result in partially erased target path)
+   Errc::range      error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::noact      invalid signature or error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::overflow   error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::default_   error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::checksum   size of orc_EncryptNodes does not match system definition
+                    or wrong password
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const std::string & orc_PackagePath,
+std::error_code C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const std::string & orc_PackagePath,
                                                                         const std::string & orc_TargetUnzipPath,
                                                                         C_OscSystemDefinition & orc_SystemDefinition,
                                                                         uint32_t & oru32_ActiveBusIndex,
@@ -120,22 +125,22 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const st
                                                                         std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<std::string> & orc_DecryptNodesPassword,
                                                                         const std::vector<std::string> & orc_NodeSignaturePemFiles)
 {
-   int32_t s32_Retval;
-
    mh_Init();
 
    std::vector<std::vector<uint8_t> > c_NodeSignatureKeys;
    mh_GetPemFileContent(orc_NodeSignaturePemFiles,
                         c_NodeSignatureKeys);
-   s32_Retval = h_ProcessPackage(orc_PackagePath, orc_TargetUnzipPath, orc_SystemDefinition, oru32_ActiveBusIndex,
-                                 orc_ActiveNodes,
-                                 orc_NodesUpdateOrder, orc_ApplicationsToWrite, orc_WarningMessages,
-                                 orc_ErrorMessage, oq_IsZip, orc_DecryptNodes,
-                                 orc_DecryptNodesPassword, c_NodeSignatureKeys);
+   const std::error_code c_Retval = h_ProcessPackage(orc_PackagePath, orc_TargetUnzipPath, orc_SystemDefinition,
+                                                     oru32_ActiveBusIndex,
+                                                     orc_ActiveNodes,
+                                                     orc_NodesUpdateOrder, orc_ApplicationsToWrite,
+                                                     orc_WarningMessages,
+                                                     orc_ErrorMessage, oq_IsZip, orc_DecryptNodes,
+                                                     orc_DecryptNodesPassword, c_NodeSignatureKeys);
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -175,20 +180,24 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const st
    \param[in]   orc_NodeSignatureKeys     list of all nodes contains information which key to use for which node
 
    \return
-   C_NO_ERR    success
-   C_CONFIG    could not find update package archive or update package directory or package file version unknown
-   C_RD_WR     could not unzip update package from disk to target path or other file read issues
-   C_BUSY      could not erase pre-existing target path (note: can result in partially erased target path)
-   C_RANGE     error code of a called core function (should not occur for valid and compatible service update package)
-   C_NOACT     invalid signature or error code of a called core function
-               (should not occur for valid and compatible service update package)
-   C_OVERFLOW  error code of a called core function (should not occur for valid and compatible service update package)
-   C_DEFAULT   error code of a called core function (should not occur for valid and compatible service update package)
-   C_CHECKSUM  size of orc_EncryptNodes does not match system definition
-               or wrong password
+   Errc::success    success
+   Errc::config     could not find update package archive or update package directory
+                    or package file version unknown
+   Errc::rd_wr      could not unzip update package from disk to target path or other file read issues
+   Errc::busy       could not erase pre-existing target path (note: can result in partially erased target path)
+   Errc::range      error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::noact      invalid signature or error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::overflow   error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::default_   error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::checksum   size of orc_EncryptNodes does not match system definition
+                    or wrong password
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & orc_PackagePath,
+std::error_code C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & orc_PackagePath,
                                                            const std::string & orc_TargetUnzipPath,
                                                            C_OscSystemDefinition & orc_SystemDefinition,
                                                            uint32_t & oru32_ActiveBusIndex,
@@ -197,7 +206,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
                                                            vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<std::string> & orc_DecryptNodesPassword,
                                                            const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::string c_TargetUnzipPath = C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(orc_TargetUnzipPath);
 
@@ -208,30 +217,30 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
    orc_NodesUpdateOrder.clear();
    orc_ApplicationsToWrite.clear();
 
-   s32_Return = mh_CheckParamsToProcessPackage(orc_PackagePath, c_TargetUnzipPath, oq_IsZip);
+   c_Return = mh_CheckParamsToProcessPackage(orc_PackagePath, c_TargetUnzipPath, oq_IsZip);
 
    // load service update package definition
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       uint32_t u32_FileVersion;
       std::string c_FilePackagePath;
       std::vector<std::string> c_PackageFiles;
       std::vector<uint32_t> c_UpdatePosition;
 
-      s32_Return = C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(c_TargetUnzipPath, oq_IsZip, orc_PackagePath,
-                                                                       u32_FileVersion,
-                                                                       c_FilePackagePath,
-                                                                       oru32_ActiveBusIndex, orc_ActiveNodes,
-                                                                       c_UpdatePosition,
-                                                                       c_PackageFiles);
-      if (s32_Return == C_NO_ERR)
+      c_Return = C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(c_TargetUnzipPath, oq_IsZip, orc_PackagePath,
+                                                                     u32_FileVersion,
+                                                                     c_FilePackagePath,
+                                                                     oru32_ActiveBusIndex, orc_ActiveNodes,
+                                                                     c_UpdatePosition,
+                                                                     c_PackageFiles);
+      if (!c_Return)
       {
          if (u32_FileVersion == 1U)
          {
             mhc_ErrorMessage =
                "V1 service update packages are no longer supported. Re-create the package with a current openSYDE.";
             osc_write_log_error("Processing Update Package", mhc_ErrorMessage);
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
          else if ((u32_FileVersion == 2U) || (u32_FileVersion == 0x102U))
          {
@@ -239,7 +248,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
             {
                mhc_ErrorMessage = "Unsupported non zip format with v2 file version.";
                osc_write_log_error("Processing Update Package", mhc_ErrorMessage);
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
             }
             else
             {
@@ -247,16 +256,16 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
                // directory is itself the device-bundle root that the scanner walks.
                const std::string c_SysDefPath = c_TargetUnzipPath + mhc_SUP_SYSDEF;
 
-               s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(orc_SystemDefinition, c_SysDefPath,
-                                                                                   c_TargetUnzipPath, true, NULL,
-                                                                                   &orc_ActiveNodes,
-                                                                                   true); // skip content
-               if (s32_Return == C_NO_ERR)
+               c_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(orc_SystemDefinition, c_SysDefPath,
+                                                                                 c_TargetUnzipPath, true, nullptr,
+                                                                                 &orc_ActiveNodes, true); // skip
+                                                                                                          // content
+               if (!c_Return)
                {
-                  s32_Return = mh_UnpackAndLoadNodes(orc_SystemDefinition, c_PackageFiles, c_TargetUnzipPath,
-                                                     orc_ActiveNodes, c_UpdatePosition, orc_ApplicationsToWrite,
-                                                     orc_NodesUpdateOrder, orc_DecryptNodes, orc_DecryptNodesPassword,
-                                                     orc_NodeSignatureKeys, (u32_FileVersion == 0x102U));
+                  c_Return = mh_UnpackAndLoadNodes(orc_SystemDefinition, c_PackageFiles, c_TargetUnzipPath,
+                                                   orc_ActiveNodes, c_UpdatePosition, orc_ApplicationsToWrite,
+                                                   orc_NodesUpdateOrder, orc_DecryptNodes, orc_DecryptNodesPassword,
+                                                   orc_NodeSignatureKeys, (u32_FileVersion == 0x102U));
                }
             }
          }
@@ -265,7 +274,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
             //Unknown version
             mhc_ErrorMessage = "Unknown file version: " + std::to_string(u32_FileVersion) + ".";
             osc_write_log_error("Processing Update Package", mhc_ErrorMessage);
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
       }
       else
@@ -274,17 +283,17 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
          // would be better to add path of definition file to this error message, but what path is used is handled
          // by h_LoadUpdatePackageDefFile and therefore not known here
          osc_write_log_error("Processing Update Package", mhc_ErrorMessage);
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
 
    // get "other accepted names" for active nodes
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       for (uint8_t u8_Node = 0U; u8_Node < orc_SystemDefinition.c_Nodes.size(); u8_Node++)
       {
          if ((orc_ActiveNodes[u8_Node] == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) &&
-             (orc_SystemDefinition.c_Nodes[u8_Node].pc_DeviceDefinition != NULL))
+             (orc_SystemDefinition.c_Nodes[u8_Node].pc_DeviceDefinition != nullptr))
          {
             const C_OscNode & rc_CurNode = orc_SystemDefinition.c_Nodes[u8_Node];
             tgl_assert(rc_CurNode.u32_SubDeviceIndex < rc_CurNode.pc_DeviceDefinition->c_SubDevices.size());
@@ -297,7 +306,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -318,24 +327,25 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
 
    \param[in]  orc_PackagePath   path to unzipped package folder or plain directory
 
-   \retval   C_NO_ERR   directory contains all necessary files
-   \retval   C_DEFAULT  at least one file is missing in given directory
-                        (due to lack of alternatives C_DEFAULT was chosen to have a unique error to redirect to
-                         SYDEsup specific error codes in C_SYDEsup::Update)
+   \retval   Errc::success    directory contains all necessary files
+   \retval   Errc::default_   at least one file is missing in given directory
+                              (due to lack of alternatives C_DEFAULT was chosen to have a unique error to redirect to
+                               SYDEsup specific error codes in C_SYDEsup::Update)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageLoad::mh_CheckSupFiles(const std::string & orc_PackagePath)
+std::error_code C_OscSupServiceUpdatePackageLoad::mh_CheckSupFiles(const std::string & orc_PackagePath)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<std::string> c_NecessaryFiles; //those are the files we look for
 
    c_NecessaryFiles.push_back(C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF); //".syde_supdef"
    c_NecessaryFiles.push_back(mhc_SUP_SYSDEF);                                 //".syde_sysdef"
 
-   s32_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath, c_NecessaryFiles);
+   c_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath,
+                                                                                    c_NecessaryFiles);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -346,32 +356,33 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_CheckSupFiles(const std::string & o
    \param[in]      oq_IsZip               (see function h_ProcessPackage)
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   success
-   \retval   C_CONFIG   could not find update package archive or update package directory
-   \retval   C_BUSY     could not erase pre-existing target path (note: can result in partially erased target path)
-   \retval   C_RD_WR    could not unzip update package from disk to target path
+   \retval   Errc::success   success
+   \retval   Errc::config    could not find update package archive or update package directory
+   \retval   Errc::busy      could not erase pre-existing target path (note: can result in partially erased target path)
+   \retval   Errc::rd_wr     could not unzip update package from disk to target path
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageLoad::mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
-                                                                         std::string & orc_TargetUnzipPath,
-                                                                         const bool oq_IsZip)
+std::error_code C_OscSupServiceUpdatePackageLoad::mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
+                                                                                 std::string & orc_TargetUnzipPath,
+                                                                                 const bool oq_IsZip)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (oq_IsZip)
    {
-      s32_Return = C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(orc_PackagePath,
-                                                                                    orc_TargetUnzipPath,
-                                                                                    "Unpacking Update Package",
-                                                                                    mhc_ErrorMessage);
+      c_Return = C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(
+                                      orc_PackagePath,
+                                      orc_TargetUnzipPath,
+                                      "Unpacking Update Package",
+                                      mhc_ErrorMessage);
 
       //check if all files are present
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
-         s32_Return = mh_CheckSupFiles(orc_TargetUnzipPath);
-         if (s32_Return != C_NO_ERR)
+         c_Return = mh_CheckSupFiles(orc_TargetUnzipPath);
+         if (c_Return)
          {
             mhc_ErrorMessage = "Could not find necessary files within \"" + orc_TargetUnzipPath +
                                "\" for update package to be complete.";
@@ -388,8 +399,8 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_CheckParamsToProcessPackage(const s
          orc_TargetUnzipPath = TglFileIncludeTrailingDelimiter(orc_PackagePath);
 
          //check if necessary files are present
-         s32_Return = mh_CheckSupFiles(orc_PackagePath);
-         if (s32_Return != C_NO_ERR)
+         c_Return = mh_CheckSupFiles(orc_PackagePath);
+         if (c_Return)
          {
             mhc_ErrorMessage = "Could not find necessary files within \"" + orc_PackagePath +
                                "\" for update package to be complete.";
@@ -400,10 +411,10 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_CheckParamsToProcessPackage(const s
       {
          mhc_ErrorMessage = "Directory \"" + orc_PackagePath + "\" does not exist.";
          osc_write_log_error("Processing Update Package", mhc_ErrorMessage);
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -413,18 +424,18 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_CheckParamsToProcessPackage(const s
    \param[out]  orc_NodesUpdateOrder      update position is index and value is node position
 
    \return
-   C_NO_ERR   successful
-   C_WARN     contains no nodes for update order
+   Errc::success   successful
+   Errc::warn      contains no nodes for update order
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageLoad::mh_SetNodesUpdateOrder(const map<uint32_t, uint32_t> & orc_UpdateOrderByNodes,
-                                                                 vector<uint32_t> & orc_NodesUpdateOrder)
+std::error_code C_OscSupServiceUpdatePackageLoad::mh_SetNodesUpdateOrder(
+   const map<uint32_t, uint32_t> & orc_UpdateOrderByNodes, vector<uint32_t> & orc_NodesUpdateOrder)
 {
-   int32_t s32_Return = 0;
+   std::error_code c_Return = Errc::success;
 
    if (orc_UpdateOrderByNodes.size() == 0)
    {
-      s32_Return = C_WARN;
+      c_Return = Errc::warn;
    }
    else
    {
@@ -437,7 +448,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_SetNodesUpdateOrder(const map<uint3
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -456,42 +467,42 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_SetNodesUpdateOrder(const map<uint3
    \param[in]      oq_UseMinorVersion1       Use minor version 1
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR     successful
-   \retval   C_WARN       contains no nodes for update order
-   \retval   C_RD_WR      could not unpack archive to target path
-   \retval   C_NOACT      invalid signature of a sub-package
-   \retval   C_CHECKSUM   size of orc_EncryptNodes does not match system definition
-                          or wrong password
+   \retval   Errc::success    successful
+   \retval   Errc::warn       contains no nodes for update order
+   \retval   Errc::rd_wr      could not unpack archive to target path
+   \retval   Errc::noact      invalid signature of a sub-package
+   \retval   Errc::checksum   size of orc_EncryptNodes does not match system definition
+                              or wrong password
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackAndLoadNodes(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                                const std::vector<std::string> & orc_PackageFiles,
-                                                                const std::string & orc_TargetUnzipPath,
-                                                                const std::vector<uint8_t> & orc_ActiveNodes,
-                                                                const std::vector<uint32_t> & orc_UpdatePosition,
-                                                                std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::vector<uint32_t> & orc_NodesUpdateOrder, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<std::string> & orc_DecryptNodesPassword, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
-                                                                const bool oq_UseMinorVersion1)
+std::error_code C_OscSupServiceUpdatePackageLoad::mh_UnpackAndLoadNodes(
+   const C_OscSystemDefinition & orc_SystemDefinition, const std::vector<std::string> & orc_PackageFiles,
+   const std::string & orc_TargetUnzipPath, const std::vector<uint8_t> & orc_ActiveNodes,
+   const std::vector<uint32_t> & orc_UpdatePosition,
+   std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::vector<uint32_t> & orc_NodesUpdateOrder,
+   const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<std::string> & orc_DecryptNodesPassword,
+   const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys, const bool oq_UseMinorVersion1)
 {
-   int32_t s32_Return = mh_CheckCommonSecurityParameters(orc_DecryptNodes, orc_DecryptNodesPassword,
-                                                         orc_NodeSignatureKeys,
-                                                         static_cast<uint32_t>(orc_SystemDefinition.c_Nodes.size()), "decrypt",
-                                                         "Processing Update Package");
+   std::error_code c_Return = mh_CheckCommonSecurityParameters(orc_DecryptNodes, orc_DecryptNodesPassword,
+                                                               orc_NodeSignatureKeys,
+                                                               static_cast<uint32_t>(orc_SystemDefinition.c_Nodes.size()), "decrypt",
+                                                               "Processing Update Package");
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       std::vector<std::string> c_NodeFoldersRel;
       std::vector<std::string> c_NodeFoldersAbs;
 
       mh_GetNodeFolderNames(orc_SystemDefinition, orc_TargetUnzipPath, c_NodeFoldersAbs, c_NodeFoldersRel);
 
-      s32_Return =
+      c_Return =
          mh_UnpackNodes(orc_DecryptNodes, orc_DecryptNodesPassword,
                         static_cast<uint32_t>(orc_SystemDefinition.c_Nodes.size()),
                         orc_PackageFiles, orc_TargetUnzipPath, c_NodeFoldersAbs);
 
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
          std::map<uint32_t, uint32_t> c_UpdateOrderByNodes; // to store node update positions which are represented by
                                                             // index at
@@ -500,24 +511,24 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackAndLoadNodes(const C_OscSyste
          std::vector<std::string> c_Signatures;
          mh_GetSydeSecureDefFileNames(orc_SystemDefinition,
                                       orc_TargetUnzipPath, c_AbsFiles, c_RelFiles);
-         s32_Return = C_OscSupNodeDefinitionFiler::h_LoadNodes(c_AbsFiles, c_NodeFoldersAbs, orc_ActiveNodes,
-                                                               orc_ApplicationsToWrite, c_UpdateOrderByNodes,
-                                                               orc_UpdatePosition, c_Signatures, oq_UseMinorVersion1);
+         c_Return = C_OscSupNodeDefinitionFiler::h_LoadNodes(c_AbsFiles, c_NodeFoldersAbs, orc_ActiveNodes,
+                                                             orc_ApplicationsToWrite, c_UpdateOrderByNodes,
+                                                             orc_UpdatePosition, c_Signatures, oq_UseMinorVersion1);
 
-         if (s32_Return == C_NO_ERR)
+         if (!c_Return)
          {
-            s32_Return = mh_SetNodesUpdateOrder(c_UpdateOrderByNodes, orc_NodesUpdateOrder);
+            c_Return = mh_SetNodesUpdateOrder(c_UpdateOrderByNodes, orc_NodesUpdateOrder);
          }
 
-         if (s32_Return == C_NO_ERR)
+         if (!c_Return)
          {
-            s32_Return =
+            c_Return =
                mh_VerifySignatures(orc_ApplicationsToWrite, orc_ActiveNodes,
                                    orc_NodeSignatureKeys, c_Signatures, c_AbsFiles);
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -531,60 +542,66 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackAndLoadNodes(const C_OscSyste
    \param[in]  orc_NodeFoldersAbs         Node folders abs
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR    Encrypted zip file unpacked
-   \retval   C_RD_WR     input file does not exist or could not be loaded
-                         could not unpack archive to target path
-   \retval   C_BUSY      Problems with deleting the temporary file
-   \retval   C_CONFIG    input file size is not a multiple of 16
-   \retval   C_CHECKSUM  input file is invalid; PKCS#7 value is > 16 or > file size (checked after decryption)
-   \retval   C_NOACT     output file already exists or could not be written
+   \retval   Errc::success    Encrypted zip file unpacked
+   \retval   Errc::rd_wr      input file does not exist or could not be loaded
+                              could not unpack archive to target path
+   \retval   Errc::busy       Problems with deleting the temporary file
+   \retval   Errc::config     input file size is not a multiple of 16
+   \retval   Errc::checksum   input file is invalid; PKCS#7 value is > 16 or > file size (checked after decryption)
+   \retval   Errc::noact      output file already exists or could not be written
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackNodes(const std::vector<uint8_t> & orc_DecryptNodes,
-                                                         const std::vector<std::string> & orc_DecryptNodesPassword,
-                                                         const uint32_t ou32_NodeCount,
-                                                         const std::vector<std::string> & orc_PackageFiles,
-                                                         const std::string & orc_TargetUnzipPath,
-                                                         const std::vector<std::string> & orc_NodeFoldersAbs)
+std::error_code C_OscSupServiceUpdatePackageLoad::mh_UnpackNodes(const std::vector<uint8_t> & orc_DecryptNodes,
+                                                                 const std::vector<std::string> & orc_DecryptNodesPassword, const uint32_t ou32_NodeCount,
+                                                                 const std::vector<std::string> & orc_PackageFiles,
+                                                                 const std::string & orc_TargetUnzipPath,
+                                                                 const std::vector<std::string> & orc_NodeFoldersAbs)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_DecryptNodes;
    std::vector<std::string> c_DecryptNodesPassword;
    mh_AdaptEncryptionParameters(orc_DecryptNodes, orc_DecryptNodesPassword,
                                 ou32_NodeCount, c_DecryptNodes, c_DecryptNodesPassword);
-   for (uint32_t u32_ItPackage = 0UL; (u32_ItPackage < orc_PackageFiles.size()) && (s32_Return == C_NO_ERR);
+   for (uint32_t u32_ItPackage = 0UL; (u32_ItPackage < orc_PackageFiles.size()) && (!c_Return);
         ++u32_ItPackage)
    {
       if (!orc_PackageFiles[u32_ItPackage].empty())
       {
          const std::string c_FinalZipPath = orc_TargetUnzipPath + orc_PackageFiles[u32_ItPackage];
          const std::string c_TargetFolder = orc_NodeFoldersAbs[u32_ItPackage];
-         s32_Return = TglCreateDirectory(c_TargetFolder);
-         if (s32_Return == C_NO_ERR)
+         //TglCreateDirectory returns plain 0/non-zero, not an STW error code, so map it
+         //explicitly rather than bridging it as though it were one
+         if (TglCreateDirectory(c_TargetFolder) != 0)
+         {
+            osc_write_log_error("Unpacking package",
+                                "Could not create folder \"" + c_TargetFolder + "\".");
+            c_Return = Errc::rd_wr;
+         }
+         if (!c_Return)
          {
             if (c_DecryptNodes[u32_ItPackage] == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE)
             {
-               s32_Return = C_OscSecurityAesFile::h_UnpackEncryptedZipFile(c_FinalZipPath, c_TargetFolder,
-                                                                           c_DecryptNodesPassword[u32_ItPackage],
-                                                                           &mhc_ErrorMessage).value();
+               c_Return = C_OscSecurityAesFile::h_UnpackEncryptedZipFile(c_FinalZipPath, c_TargetFolder,
+                                                                         c_DecryptNodesPassword[u32_ItPackage],
+                                                                         &mhc_ErrorMessage);
             }
             else
             {
-               s32_Return = C_OscZipFile::h_UnpackZipFile(c_FinalZipPath, c_TargetFolder,
-                                                          &mhc_ErrorMessage);
+               c_Return = C_OscZipFile::h_UnpackZipFile(c_FinalZipPath, c_TargetFolder,
+                                                                          &mhc_ErrorMessage);
             }
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return)
    {
       mhc_ErrorMessage = "Could not unpack all files. Maybe wrong password or missing permissions?";
       osc_write_log_error("unpack all node files", mhc_ErrorMessage);
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -597,18 +614,18 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackNodes(const std::vector<uint8
    \param[in]  orc_AbsSydeSecureDefFileNames    Abs syde secure def file names
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR     No err
-   \retval   C_NOACT      invalid signature or signature check failed
+   \retval   Errc::success   No err
+   \retval   Errc::noact     invalid signature or signature check failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageLoad::mh_VerifySignatures(
+std::error_code C_OscSupServiceUpdatePackageLoad::mh_VerifySignatures(
    const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
    const std::vector<uint8_t> & orc_ActiveNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
    const std::vector<std::string> & orc_Signatures, const std::vector<std::string> & orc_AbsSydeSecureDefFileNames)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    std::vector<std::vector<uint8_t> > c_NodeSignatureKeys;
    mh_AdaptCommonSignatureParameters(orc_NodeSignatureKeys,
@@ -623,25 +640,25 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_VerifySignatures(
         (orc_ActiveNodes.size() == orc_ApplicationsToWrite.size())) &&
        (orc_ActiveNodes.size() == orc_AbsSydeSecureDefFileNames.size()))
    {
-      for (uint32_t u32_ItNode = 0UL; (u32_ItNode < orc_ApplicationsToWrite.size()) && (s32_Retval == C_NO_ERR);
+      for (uint32_t u32_ItNode = 0UL; (u32_ItNode < orc_ApplicationsToWrite.size()) && (!c_Retval);
            ++u32_ItNode)
       {
          if (orc_ActiveNodes[u32_ItNode] == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE)
          {
             if (orc_Signatures[u32_ItNode].empty() == false)
             {
-               s32_Retval = mh_VerifySignature(orc_ApplicationsToWrite[u32_ItNode], c_NodeSignatureKeys[u32_ItNode],
-                                               orc_Signatures[u32_ItNode], orc_AbsSydeSecureDefFileNames[u32_ItNode]);
+               c_Retval = mh_VerifySignature(orc_ApplicationsToWrite[u32_ItNode], c_NodeSignatureKeys[u32_ItNode],
+                                             orc_Signatures[u32_ItNode], orc_AbsSydeSecureDefFileNames[u32_ItNode]);
             }
          }
       }
    }
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       mhc_ErrorMessage = "Could not verify signature, or invalid signature. Maybe wrong pem file?";
       osc_write_log_error("verify signature for all nodes", mhc_ErrorMessage);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -653,23 +670,23 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_VerifySignatures(
    \param[in]  orc_AbsSydeSecureDefFileName  Abs syde secure def file name
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR     No err
-   \retval   C_NOACT      invalid signature or signature check failed
+   \retval   Errc::success   No err
+   \retval   Errc::noact     invalid signature or signature check failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageLoad::mh_VerifySignature(
+std::error_code C_OscSupServiceUpdatePackageLoad::mh_VerifySignature(
    const C_OscSuSequences::C_DoFlash & orc_ApplicationsToWrite, const std::vector<uint8_t> & orc_NodeSignatureKeys,
    const std::string & orc_Signature, const std::string & orc_AbsSydeSecureDefFileName)
 {
    C_OscSecurityEcdsa::C_Ecdsa256Signature c_Signature;
 
-   int32_t s32_Retval = c_Signature.SetFromDerString(orc_Signature);
+   std::error_code c_Retval = c_Signature.SetFromDerString(orc_Signature);
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
-      s32_Retval = C_NOACT;
+      c_Retval = Errc::noact;
    }
    else
    {
@@ -677,34 +694,35 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_VerifySignature(
       uint8_t au8_BinDigest[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH];
       mh_GetDigestFiles(orc_ApplicationsToWrite, orc_AbsSydeSecureDefFileName, c_Files);
 
-      s32_Retval = mh_CalcDigest("", c_Files, au8_BinDigest, true);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = mh_CalcDigest("", c_Files, au8_BinDigest, true);
+      if (!c_Retval)
       {
          std::string c_Log;
          uint8_t au8_PublicKey[C_OscSecurityEcdsa::hu32_SECP256R1_PUBLIC_KEY_LENGTH];
          mh_DigestToString(au8_BinDigest, c_Log);
          osc_write_log_info("Processing Update Package", "Calculated security digest: " + c_Log);
 
-         s32_Retval = C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(orc_NodeSignatureKeys, au8_PublicKey);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(orc_NodeSignatureKeys,
+                                                                              au8_PublicKey);
+         if (!c_Retval)
          {
             bool q_Valid;
-            s32_Retval = C_OscSecurityEcdsa::h_VerifyEcdsaSecp256r1Signature(au8_PublicKey, c_Signature,
-                                                                             au8_BinDigest, q_Valid);
-            if ((s32_Retval != C_NO_ERR) || (q_Valid == false))
+            c_Retval = C_OscSecurityEcdsa::h_VerifyEcdsaSecp256r1Signature(au8_PublicKey, c_Signature,
+                                                                           au8_BinDigest, q_Valid);
+            if ((c_Retval) || (q_Valid == false))
             {
                osc_write_log_error("Processing Update Package", "ECDSA signature check failed.");
-               s32_Retval = C_NOACT;
+               c_Retval = Errc::noact;
             }
          }
          else
          {
             osc_write_log_error("Processing Update Package", "Could not extract public EC key from certificate data.");
-            s32_Retval = C_NOACT;
+            c_Retval = Errc::noact;
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -750,8 +768,8 @@ void C_OscSupServiceUpdatePackageLoad::mh_GetPemFileContent(const std::vector<st
    {
       std::string c_Err;
       C_OscSecurityPemSecUpdate c_Pem;
-      const int32_t s32_Retval = ListLoadFromFile(c_Pem, orc_NodeSignaturePemFiles[u32_ItNode].c_str(), c_Err);
-      if (s32_Retval != C_NO_ERR)
+      const std::error_code c_Retval = c_Pem.LoadFromFile(orc_NodeSignaturePemFiles[u32_ItNode].c_str(), c_Err);
+      if (c_Retval)
       {
          osc_write_log_warning("Reading pem files", mhc_ErrorMessage);
       }

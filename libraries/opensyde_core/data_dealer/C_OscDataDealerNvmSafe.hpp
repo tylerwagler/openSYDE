@@ -13,7 +13,9 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <set>
+#include <system_error>
 
+#include "C_OscErrorCategory.hpp"
 #include "C_OscDataDealerNvm.hpp"
 #include "C_OscParamSetHandler.hpp"
 #include "C_OscParamSetRawNode.hpp"
@@ -42,34 +44,38 @@ public:
                           C_OscDiagProtocolBase * const opc_DiagProtocol);
    virtual ~C_OscDataDealerNvmSafe(void);
 
-   int32_t NvmSafeCheckCrcs(const C_OscNode & orc_Node) const;
-   int32_t NvmSafeWriteChangedValues(std::vector<C_OscNodeDataPoolListElementId> & orc_ChangedElements, const std::vector<C_OscNodeDataPoolListId> * const opc_AdditionalListsToUpdate =
-                                        NULL,
-                                     uint8_t * const opu8_NrCode = NULL);
-   int32_t NvmSafeReadValues(const C_OscNode * (&orpc_NodeCopy), uint8_t * const opu8_NrCode);
-   int32_t NvmSafeWriteCrcs(uint8_t * const opu8_NrCode);
+   std::error_code NvmSafeCheckCrcs(const C_OscNode & orc_Node) const;
+   std::error_code NvmSafeWriteChangedValues(
+      std::vector<C_OscNodeDataPoolListElementId> & orc_ChangedElements,
+      const std::vector<C_OscNodeDataPoolListId> * const opc_AdditionalListsToUpdate = nullptr,
+      uint8_t * const opu8_NrCode = nullptr);
+   std::error_code NvmSafeReadValues(const C_OscNode * (&orpc_NodeCopy), uint8_t * const opu8_NrCode);
+   std::error_code NvmSafeWriteCrcs(uint8_t * const opu8_NrCode);
 
    //Create file process
    void NvmSafeClearInternalContent(void);
-   int32_t NvmSafeReadParameterValues(const std::vector<C_OscNodeDataPoolListId> & orc_ListIds,
-                                      uint8_t * const opu8_NrCode);
-   int32_t NvmSafeCreateCleanFileWithoutCrc(const std::string & orc_Path, const stw::opensyde_core::C_OscParamSetInterpretedFileInfoData & orc_FileInfo =
-                                               stw::opensyde_core::C_OscParamSetInterpretedFileInfoData());
-   int32_t NvmSafeReadFileWithoutCrc(const std::string & orc_Path);
-   int32_t NvmSafeCheckParameterFileContents(const std::string & orc_Path,
-                                             std::vector<C_OscNodeDataPoolListId> & orc_DataPoolLists);
-   int32_t NvmSafeUpdateCrcForFile(const std::string & orc_Path);
+   std::error_code NvmSafeReadParameterValues(const std::vector<C_OscNodeDataPoolListId> & orc_ListIds,
+                                              uint8_t * const opu8_NrCode);
+   std::error_code NvmSafeCreateCleanFileWithoutCrc(
+      const std::string & orc_Path,
+      const stw::opensyde_core::C_OscParamSetInterpretedFileInfoData & orc_FileInfo =
+         stw::opensyde_core::C_OscParamSetInterpretedFileInfoData());
+   std::error_code NvmSafeReadFileWithoutCrc(const std::string & orc_Path);
+   std::error_code NvmSafeCheckParameterFileContents(const std::string & orc_Path,
+                                                     std::vector<C_OscNodeDataPoolListId> & orc_DataPoolLists);
+   std::error_code NvmSafeUpdateCrcForFile(const std::string & orc_Path);
 
    //Write file process
-   int32_t NvmSafeReadFileWithCrc(const std::string & orc_Path);
-   int32_t NvmSafeWriteParameterSetFile(const std::string & orc_Path, int32_t & ors32_ResultDetail);
+   std::error_code NvmSafeReadFileWithCrc(const std::string & orc_Path);
+   std::error_code NvmSafeWriteParameterSetFile(const std::string & orc_Path, int32_t & ors32_ResultDetail);
 
 private:
    static void mh_CreateInterpretedList(const C_OscNodeDataPoolList & orc_List,
                                         C_OscParamSetInterpretedList & orc_InterpretedList);
-   int32_t m_CheckParameterFileContent(const C_OscParamSetRawNode & orc_Node) const;
-   int32_t m_CreateRawEntryAndPrepareInterpretedData(C_OscNodeDataPoolList & orc_List,
-                                                     C_OscParamSetRawEntry & orc_Entry, uint8_t * const opu8_NrCode);
+   std::error_code m_CheckParameterFileContent(const C_OscParamSetRawNode & orc_Node) const;
+   std::error_code m_CreateRawEntryAndPrepareInterpretedData(C_OscNodeDataPoolList & orc_List,
+                                                             C_OscParamSetRawEntry & orc_Entry,
+                                                             uint8_t * const opu8_NrCode);
 
    enum E_CreateParameterSetFileState
    {

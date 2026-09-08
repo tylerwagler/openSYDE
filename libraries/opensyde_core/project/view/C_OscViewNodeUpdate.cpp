@@ -12,7 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglUtils.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscViewNodeUpdate.hpp"
@@ -249,14 +252,14 @@ void C_OscViewNodeUpdate::SetSkipUpdateOfPathsFlags(const std::vector<bool> & or
    \param[in]  ou32_LastKnownCrc    Last known CRC for this file
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewNodeUpdate::SetParamInfoContent(const uint32_t ou32_Index, const std::string & orc_FilePath,
-                                                 const uint32_t ou32_LastKnownCrc)
+std::error_code C_OscViewNodeUpdate::SetParamInfoContent(const uint32_t ou32_Index, const std::string & orc_FilePath,
+                                                         const uint32_t ou32_LastKnownCrc)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_Index < this->mc_ParamSetPaths.size())
    {
@@ -265,9 +268,9 @@ int32_t C_OscViewNodeUpdate::SetParamInfoContent(const uint32_t ou32_Index, cons
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -310,14 +313,14 @@ void C_OscViewNodeUpdate::AddParamInfo(const C_OscViewNodeUpdateParamInfo & orc_
    \param[in]  oe_Type     Selector for structure
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewNodeUpdate::SetPath(const uint32_t ou32_Index, const std::string & orc_Value,
-                                     const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
+std::error_code C_OscViewNodeUpdate::SetPath(const uint32_t ou32_Index, const std::string & orc_Value,
+                                             const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (oe_Type == eFTP_DATA_BLOCK)
    {
@@ -327,7 +330,7 @@ int32_t C_OscViewNodeUpdate::SetPath(const uint32_t ou32_Index, const std::strin
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
@@ -338,10 +341,10 @@ int32_t C_OscViewNodeUpdate::SetPath(const uint32_t ou32_Index, const std::strin
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -351,13 +354,14 @@ int32_t C_OscViewNodeUpdate::SetPath(const uint32_t ou32_Index, const std::strin
    \param[in]  orc_Value   New path
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewNodeUpdate::SetParamInfo(const uint32_t ou32_Index, const C_OscViewNodeUpdateParamInfo & orc_Value)
+std::error_code C_OscViewNodeUpdate::SetParamInfo(const uint32_t ou32_Index,
+                                                  const C_OscViewNodeUpdateParamInfo & orc_Value)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_Index < this->mc_ParamSetPaths.size())
    {
@@ -365,9 +369,9 @@ int32_t C_OscViewNodeUpdate::SetParamInfo(const uint32_t ou32_Index, const C_Osc
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -378,14 +382,14 @@ int32_t C_OscViewNodeUpdate::SetParamInfo(const uint32_t ou32_Index, const C_Osc
    \param[in]  oe_Type     Selector for structure
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewNodeUpdate::SetSkipUpdateOfPath(const uint32_t ou32_Index, const bool oq_SkipFile,
-                                                 const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
+std::error_code C_OscViewNodeUpdate::SetSkipUpdateOfPath(const uint32_t ou32_Index, const bool oq_SkipFile,
+                                                         const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    const int32_t s32_Type = static_cast<int32_t>(oe_Type);
 
    if (ou32_Index < this->mc_SkipUpdateOfFiles[s32_Type].size())
@@ -394,10 +398,10 @@ int32_t C_OscViewNodeUpdate::SetSkipUpdateOfPath(const uint32_t ou32_Index, cons
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -407,13 +411,13 @@ int32_t C_OscViewNodeUpdate::SetSkipUpdateOfPath(const uint32_t ou32_Index, cons
    \param[in]  oq_SkipFile Flag if file will be skipped when updating
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewNodeUpdate::SetSkipUpdateOfParamInfo(const uint32_t ou32_Index, const bool oq_SkipFile)
+std::error_code C_OscViewNodeUpdate::SetSkipUpdateOfParamInfo(const uint32_t ou32_Index, const bool oq_SkipFile)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_Index < this->mc_SkipUpdateOfFiles[mhs32_PARAMETER_SET_INDEX].size())
    {
@@ -421,9 +425,9 @@ int32_t C_OscViewNodeUpdate::SetSkipUpdateOfParamInfo(const uint32_t ou32_Index,
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -433,13 +437,14 @@ int32_t C_OscViewNodeUpdate::SetSkipUpdateOfParamInfo(const uint32_t ou32_Index,
    \param[in]  oe_Type     Selector for structure
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewNodeUpdate::RemovePath(const uint32_t ou32_Index, const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
+std::error_code C_OscViewNodeUpdate::RemovePath(const uint32_t ou32_Index,
+                                                const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (oe_Type == eFTP_DATA_BLOCK)
    {
@@ -449,7 +454,7 @@ int32_t C_OscViewNodeUpdate::RemovePath(const uint32_t ou32_Index, const C_OscVi
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
@@ -460,11 +465,11 @@ int32_t C_OscViewNodeUpdate::RemovePath(const uint32_t ou32_Index, const C_OscVi
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       const int32_t s32_Type = static_cast<int32_t>(oe_Type);
       if (ou32_Index < this->mc_SkipUpdateOfFiles[s32_Type].size())
@@ -473,11 +478,11 @@ int32_t C_OscViewNodeUpdate::RemovePath(const uint32_t ou32_Index, const C_OscVi
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -486,13 +491,13 @@ int32_t C_OscViewNodeUpdate::RemovePath(const uint32_t ou32_Index, const C_OscVi
    \param[in]  ou32_Index  Index to remove
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewNodeUpdate::RemoveParamInfo(const uint32_t ou32_Index)
+std::error_code C_OscViewNodeUpdate::RemoveParamInfo(const uint32_t ou32_Index)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_Index < this->mc_ParamSetPaths.size())
    {
@@ -500,10 +505,10 @@ int32_t C_OscViewNodeUpdate::RemoveParamInfo(const uint32_t ou32_Index)
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (ou32_Index < this->mc_SkipUpdateOfFiles[mhs32_PARAMETER_SET_INDEX].size())
       {
@@ -512,11 +517,11 @@ int32_t C_OscViewNodeUpdate::RemoveParamInfo(const uint32_t ou32_Index)
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

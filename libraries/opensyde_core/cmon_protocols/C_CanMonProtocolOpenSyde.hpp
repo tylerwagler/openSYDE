@@ -13,6 +13,9 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <system_error>
+#include "C_OscErrorCategory.hpp"
+
 #include "stwtypes.hpp"
 #include "C_CanMonProtocolBase.hpp"
 #include <string>
@@ -52,7 +55,7 @@ protected:
    const;
 
 private:
-   static int32_t mh_DisassembleCanId(const uint32_t ou32_CanId, T_CanAddressInformation & or_CanAddressInformation);
+   static std::error_code mh_DisassembleCanId(const uint32_t ou32_CanId, T_CanAddressInformation & or_CanAddressInformation);
 
    static std::string mh_ThreeByteVersionToString(const uint8_t * const opu8_Version);
    std::string m_RawDataToString(const uint8_t ou8_NumBytes, const uint8_t * const opu8_Data) const;

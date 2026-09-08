@@ -105,7 +105,7 @@ void C_SyvDcConnectedNodeList::EnableSerialNumber(const C_OscProtocolSerialNumbe
    {
       C_SyvDcConnectedNodeWidget * const pc_Widget =
          dynamic_cast<C_SyvDcConnectedNodeWidget * const>(this->itemWidget(this->item(s32_It)));
-      if ((pc_Widget != NULL) &&
+      if ((pc_Widget != nullptr) &&
           (pc_Widget->CompareSerialNumber(orc_SerialNumber) == true))
       {
          pc_Widget->setEnabled(true);
@@ -127,7 +127,7 @@ const
    {
       C_SyvDcConnectedNodeWidget * const pc_Widget =
          dynamic_cast<C_SyvDcConnectedNodeWidget * const>(this->itemWidget(this->item(s32_It)));
-      if ((pc_Widget != NULL) &&
+      if ((pc_Widget != nullptr) &&
           (pc_Widget->CompareSerialNumber(orc_SerialNumber) == true))
       {
          pc_Widget->setEnabled(false);
@@ -177,7 +177,7 @@ uint8_t C_SyvDcConnectedNodeList::GetSelectedNodeId(void) const
    uint8_t u8_NodeId = 0;
    QListWidgetItem * const pc_Item = this->currentItem();
 
-   if (pc_Item != NULL)
+   if (pc_Item != nullptr)
    {
       const C_SyvDcConnectedNodeWidget * const pc_Widget =
          dynamic_cast<C_SyvDcConnectedNodeWidget * const>(this->itemWidget(pc_Item));
@@ -216,7 +216,7 @@ void C_SyvDcConnectedNodeList::startDrag(const Qt::DropActions oc_Actions)
    C_SyvDcConnectedNodeWidget * const pc_Widget =
       dynamic_cast<C_SyvDcConnectedNodeWidget * const>(this->itemWidget(pc_Item));
 
-   if ((pc_Widget != NULL) && (pc_Widget->isEnabled() == true))
+   if ((pc_Widget != nullptr) && (pc_Widget->isEnabled() == true))
    {
       const QRect c_Rect = pc_Widget->rect();
       QList<QListWidgetItem *> c_Items;
@@ -259,13 +259,13 @@ QMimeData * C_SyvDcConnectedNodeList::mimeData(const QList<QListWidgetItem *> & 
 {
    QMimeData * const pc_Retval = QListWidget::mimeData(orc_Items);
 
-   if (pc_Retval != NULL)
+   if (pc_Retval != nullptr)
    {
       if (orc_Items.size() > 0)
       {
          const C_SyvDcConnectedNodeWidget * const pc_Widget =
             dynamic_cast<C_SyvDcConnectedNodeWidget * const>(this->itemWidget(orc_Items[0]));
-         if (pc_Widget != NULL)
+         if (pc_Widget != nullptr)
          {
             QString c_StringSubNodeIdsToOldNodeIds;
             const std::map<uint8_t, C_OscDcDeviceOldComConfig> c_SubNodeIdsToOldNodeIds =

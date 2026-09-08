@@ -12,9 +12,12 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscXcoLoad.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscXcoManifestFiler.hpp"
@@ -22,7 +25,6 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
-using namespace stw::scl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
@@ -65,22 +67,23 @@ const std::string C_OscXcoLoad::mhc_USE_CASE = "Unpacking X-Config Package";
    \param[out]     orc_ErrorMessage          error message in case of failure (empty string if no error)
 
    \return
-   C_NO_ERR    success
-   C_CONFIG    could not find package archive or package directory
-   C_RD_WR     could not unzip package from disk to target path
-   C_BUSY      could not erase pre-existing target path (note: can result in partially erased target path)
-   C_RANGE     error code of a called core function (should not occur for valid and compatible update package)
-   C_NOACT     error code of a called core function (should not occur for valid and compatible update package)
-   C_OVERFLOW  error code of a called core function (should not occur for valid and compatible update package)
-   C_DEFAULT   error code of a called core function (should not occur for valid and compatible update package)
+   Errc::success  success
+   Errc::config   could not find package archive or package directory
+   Errc::rd_wr    could not unzip package from disk to target path
+   Errc::busy     could not erase pre-existing target path (note: can result in partially erased target path)
+   Errc::range    error code of a called core function (should not occur for valid and compatible update package)
+   Errc::noact    error code of a called core function (should not occur for valid and compatible update package)
+   Errc::overflow error code of a called core function (should not occur for valid and compatible update package)
+   Errc::default_ error code of a called core function (should not occur for valid and compatible update package)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoLoad::h_ProcessPackage(const std::string & orc_PackagePath, const std::string & orc_TargetUnzipPath,
-                                       C_OscXcoManifest & orc_Manifest, std::string & orc_SystemDefinitionPath,
-                                       std::string & orc_DeviceDefinitionPath, std::vector<std::string> & orc_WarningMessages,
-                                       std::string & orc_ErrorMessage)
+std::error_code C_OscXcoLoad::h_ProcessPackage(const std::string & orc_PackagePath,
+                                               const std::string & orc_TargetUnzipPath, C_OscXcoManifest & orc_Manifest,
+                                               std::string & orc_SystemDefinitionPath,
+                                               std::string & orc_DeviceDefinitionPath,
+                                               std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    const std::string c_TargetUnzipPath = C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(
       orc_TargetUnzipPath);
@@ -88,8 +91,8 @@ int32_t C_OscXcoLoad::h_ProcessPackage(const std::string & orc_PackagePath, cons
    mh_Init();
 
    //check parameters and perform unzip action
-   s32_Return = mh_CheckParamsToProcessPackage(orc_PackagePath, c_TargetUnzipPath);
-   if (s32_Return == C_NO_ERR)
+   c_Return = mh_CheckParamsToProcessPackage(orc_PackagePath, c_TargetUnzipPath);
+   if (!c_Return)
    {
       // report system definition and device definition paths
       orc_SystemDefinitionPath = c_TargetUnzipPath + TglFileIncludeTrailingDelimiter(hc_XCFG_SYSDEF_FOLDER) +
@@ -98,12 +101,12 @@ int32_t C_OscXcoLoad::h_ProcessPackage(const std::string & orc_PackagePath, cons
       orc_DeviceDefinitionPath = c_TargetUnzipPath + TglFileIncludeTrailingDelimiter(hc_INI_DEV_FOLDER);
 
       const std::string c_ManifestPath = c_TargetUnzipPath + C_OscXcoManifestFiler::hc_FILE_NAME;
-      s32_Return = C_OscXcoManifestFiler::h_LoadFile(orc_Manifest, c_ManifestPath);
+      c_Return = C_OscXcoManifestFiler::h_LoadFile(orc_Manifest, c_ManifestPath);
    }
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -115,32 +118,30 @@ int32_t C_OscXcoLoad::h_ProcessPackage(const std::string & orc_PackagePath, cons
    \return
    STW error codes
 
-   \retval   C_NO_ERR   success
-   \retval   C_CONFIG   could not find update package archive or update package directory
-   \retval   C_BUSY     could not erase pre-existing target path (note: can result in partially erased target path)
-   \retval   C_RD_WR    could not unzip update package from disk to target path
+   \retval   Errc::success success
+   \retval   Errc::config could not find update package archive or update package directory
+   \retval   Errc::busy  could not erase pre-existing target path (note: can result in partially erased target path)
+   \retval   Errc::rd_wr could not unzip update package from disk to target path
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoLoad::mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
-                                                     const std::string & orc_TargetUnzipPath)
+std::error_code C_OscXcoLoad::mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
+                                                             const std::string & orc_TargetUnzipPath)
 {
-   int32_t s32_Return = C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(orc_PackagePath,
-                                                                                         orc_TargetUnzipPath,
-                                                                                         mhc_USE_CASE,
-                                                                                         mhc_ErrorMessage);
+   std::error_code c_Return = C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(orc_PackagePath, orc_TargetUnzipPath,
+                                                                      mhc_USE_CASE, mhc_ErrorMessage);
 
    //check if all files are present
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
-      s32_Return = mh_CheckXcfgFiles(orc_TargetUnzipPath);
-      if (s32_Return != C_NO_ERR)
+      c_Return = mh_CheckXcfgFiles(orc_TargetUnzipPath);
+      if (c_Return)
       {
          mhc_ErrorMessage = "Could not find necessary files within \"" + orc_TargetUnzipPath +
                             "\" for update package to be complete.";
          osc_write_log_error(mhc_USE_CASE, mhc_ErrorMessage);
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -161,15 +162,15 @@ int32_t C_OscXcoLoad::mh_CheckParamsToProcessPackage(const std::string & orc_Pac
 
    \param[in]  orc_PackagePath   path to unzipped package folder
 
-   \retval   C_NO_ERR   directory contains all necessary files
-   \retval   C_DEFAULT  at least one file is missing in given directory
+   \retval   Errc::success directory contains all necessary files
+   \retval   Errc::default_ at least one file is missing in given directory
                         (due to lack of alternatives C_DEFAULT was chosen to have a unique error to redirect to
                          tool specific error codes)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoLoad::mh_CheckXcfgFiles(const std::string & orc_PackagePath)
+std::error_code C_OscXcoLoad::mh_CheckXcfgFiles(const std::string & orc_PackagePath)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<std::string> c_NecessaryFilesTop;    //those are the files we look for
    std::vector<std::string> c_NecessaryFilesSysDef; //those are the files we look for
@@ -177,12 +178,12 @@ int32_t C_OscXcoLoad::mh_CheckXcfgFiles(const std::string & orc_PackagePath)
    c_NecessaryFilesTop.push_back(C_OscXcoManifestFiler::hc_FILE_NAME); //".syde_pkg"
    c_NecessaryFilesSysDef.push_back(hc_XCFG_SYSDEF);                   //".syde_sysdef"
 
-   s32_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath, c_NecessaryFilesTop);
-   if (s32_Return == C_NO_ERR)
+   c_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath, c_NecessaryFilesTop);
+   if (!c_Return)
    {
-      s32_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath + hc_XCFG_SYSDEF_FOLDER,
-                                                                       c_NecessaryFilesSysDef);
+      c_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath + hc_XCFG_SYSDEF_FOLDER,
+                                                            c_NecessaryFilesSysDef);
    }
 
-   return s32_Return;
+   return c_Return;
 }

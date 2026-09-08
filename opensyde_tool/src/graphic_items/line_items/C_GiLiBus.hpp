@@ -43,8 +43,8 @@ class C_GiLiBus :
 
 public:
    C_GiLiBus(const int32_t & ors32_Index, const uint64_t & oru64_Id, C_GiTextElementBus * const opc_TextElementName,
-             const bool oq_DoErrorCheck, const std::vector<QPointF> * const opc_Points = NULL,
-             const bool & orq_MiddleLine = false, QGraphicsItem * const opc_Parent = NULL);
+             const bool oq_DoErrorCheck, const std::vector<QPointF> * const opc_Points = nullptr,
+             const bool & orq_MiddleLine = false, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiLiBus() override;
 
    int32_t type() const override;

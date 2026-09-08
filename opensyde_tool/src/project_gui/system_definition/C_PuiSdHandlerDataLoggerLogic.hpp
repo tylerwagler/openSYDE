@@ -33,7 +33,7 @@ public:
       const uint32_t ou32_DataLoggerDataElementIndex) const;
 
    int32_t AddDataLogger(const uint32_t ou32_NodeIndex, const stw::opensyde_core::C_OscDataLoggerJob & orc_Data,
-                         const QString * const opc_Name = NULL);
+                         const QString * const opc_Name = nullptr);
    int32_t DeleteMultipleDataLoggers(const uint32_t ou32_NodeIndex,
                                      const std::vector<uint32_t> & orc_DataLoggerJobIndices);
    int32_t SetDataLoggerEnabled(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataLoggerJobIndex,

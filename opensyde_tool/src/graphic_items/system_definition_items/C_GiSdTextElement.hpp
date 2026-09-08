@@ -30,8 +30,8 @@ class C_GiSdTextElement :
 {
 public:
    C_GiSdTextElement(const int32_t & ors32_Index, const uint64_t & oru64_Id, const bool oq_Editable,
-                     QGraphicsItem * const opc_Parent = NULL);
-   C_GiSdTextElement(const int32_t & ors32_Index, const uint64_t & oru64_Id, QGraphicsItem * const opc_Parent = NULL);
+                     QGraphicsItem * const opc_Parent = nullptr);
+   C_GiSdTextElement(const int32_t & ors32_Index, const uint64_t & oru64_Id, QGraphicsItem * const opc_Parent = nullptr);
    void LoadData(void) override;
    void UpdateData(void) override;
    void DeleteData(void) override;

@@ -404,13 +404,13 @@ void C_SdNdeCoManagerIntfWidget::m_HandleSameAsOpensydeNodeIdState(void) const
    {
       //get current node ID of node interface
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNode(this->mu32_NodeIndex);
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          const C_OscNodeComInterfaceSettings * const pc_ComInterface = pc_Node->c_Properties.GetComInterface(
             C_OscSystemBus::eCAN, this->mu8_InterfaceId);
-         tgl_assert(pc_ComInterface != NULL);
-         if (pc_ComInterface != NULL)
+         tgl_assert(pc_ComInterface != nullptr);
+         if (pc_ComInterface != nullptr)
          {
             this->mpc_Ui->pc_SpinBoxCanOpenId->setValue(static_cast<int32_t>(pc_ComInterface->u8_NodeId));
          }
@@ -468,12 +468,12 @@ void C_SdNdeCoManagerIntfWidget::m_CheckCoNodeId(void) const
    const C_OscCanOpenManagerInfo * const pc_CanOpenManagerInfo = C_PuiSdHandler::h_GetInstance()->GetCanOpenManager(
       this->mu32_NodeIndex, this->mu8_InterfaceId);
 
-   if (pc_CanOpenManagerInfo != NULL)
+   if (pc_CanOpenManagerInfo != nullptr)
    {
       bool q_ManagerNodeIdInvalid;
       bool q_NodeIdConflict;
       bool q_NoConflict;
-      pc_CanOpenManagerInfo->CheckErrorManager(&q_NodeIdConflict, &q_ManagerNodeIdInvalid, NULL, NULL, false);
+      pc_CanOpenManagerInfo->CheckErrorManager(&q_NodeIdConflict, &q_ManagerNodeIdInvalid, nullptr, nullptr, false);
 
       q_NoConflict = (q_NodeIdConflict == false) && (q_ManagerNodeIdInvalid == false);
 
@@ -523,10 +523,10 @@ void C_SdNdeCoManagerIntfWidget::m_CheckHeartbeatProducerTime(void) const
    const C_OscCanOpenManagerInfo * const pc_CanOpenManagerInfo = C_PuiSdHandler::h_GetInstance()->GetCanOpenManager(
       this->mu32_NodeIndex, this->mu8_InterfaceId);
 
-   if (pc_CanOpenManagerInfo != NULL)
+   if (pc_CanOpenManagerInfo != nullptr)
    {
       bool q_TimeError;
-      pc_CanOpenManagerInfo->CheckErrorManager(NULL, NULL, NULL, &q_TimeError, false);
+      pc_CanOpenManagerInfo->CheckErrorManager(nullptr, nullptr, nullptr, &q_TimeError, false);
 
       C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_SpinBoxProducerTime, "Valid", (q_TimeError == false));
 
@@ -592,7 +592,7 @@ void C_SdNdeCoManagerIntfWidget::m_LoadFromData(void)
    disconnect(this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_OnPdoSyncEnableChanged);
 
-   if (pc_CanOpenManagerInfo != NULL)
+   if (pc_CanOpenManagerInfo != nullptr)
    {
       //Change range before setting value
       m_HandleNodeIdRange(pc_CanOpenManagerInfo->q_UseOpenSydeNodeId);

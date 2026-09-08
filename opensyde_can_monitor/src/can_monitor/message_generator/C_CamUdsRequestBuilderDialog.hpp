@@ -33,7 +33,7 @@ class C_CamUdsRequestBuilderDialog :
    Q_OBJECT
 
 public:
-   explicit C_CamUdsRequestBuilderDialog(QWidget * const opc_Parent = NULL);
+   explicit C_CamUdsRequestBuilderDialog(QWidget * const opc_Parent = nullptr);
    ~C_CamUdsRequestBuilderDialog(void) override;
 
    QByteArray GetGeneratedBytes(void) const;

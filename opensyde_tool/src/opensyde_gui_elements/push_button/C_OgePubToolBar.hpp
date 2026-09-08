@@ -31,7 +31,7 @@ class C_OgePubToolBar :
    Q_OBJECT
 
 public:
-   explicit C_OgePubToolBar(QWidget * const opc_Parent = NULL, const uint32_t ou32_Index = 0UL);
+   explicit C_OgePubToolBar(QWidget * const opc_Parent = nullptr, const uint32_t ou32_Index = 0UL);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

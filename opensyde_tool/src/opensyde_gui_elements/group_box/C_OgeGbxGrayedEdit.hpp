@@ -29,7 +29,7 @@ class C_OgeGbxGrayedEdit :
    Q_OBJECT
 
 public:
-   C_OgeGbxGrayedEdit(QWidget * const opc_Parent = NULL);
+   C_OgeGbxGrayedEdit(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

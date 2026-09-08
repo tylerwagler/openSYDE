@@ -211,7 +211,7 @@ void C_SdNdeDalTabContentWidget::m_UpdateUi()
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if (pc_Node->c_Properties.q_XappSupport == true)
       {
@@ -250,7 +250,7 @@ void C_SdNdeDalTabContentWidget::m_HandleNoDataLoggersLabel()
    bool q_DataValid = false;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if (pc_Node->c_DataLoggerJobs.size() > 0UL)
       {
@@ -275,7 +275,7 @@ void C_SdNdeDalTabContentWidget::m_ShowOverview(const bool oq_Show)
    const C_OscNode * const pc_Node =
       C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       std::vector<std::tuple<uint32_t, uint32_t, uint32_t> > c_AllLoggerJobElementsLocationCount;
       for (uint32_t u32_It = 0UL; u32_It < pc_Node->c_DataLoggerJobs.size(); ++u32_It)

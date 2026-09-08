@@ -253,16 +253,16 @@ void C_SyvSeDllConfigurationDialog::m_TestConnectionClicked(void) const
    c_MessageBox.SetHeading("PC CAN Interface configuration");
    c_MessageBox.SetCustomMinHeight(180, 180);
 
-   if (pc_Dispatcher == NULL)
+   if (pc_Dispatcher == nullptr)
    {
       c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eERROR);
       c_MessageBox.SetDescription(QString(c_Error.c_str()));
    }
    else
    {
-      const int32_t s32_Init =
+      const std::error_code c_Init =
          pc_Dispatcher->CAN_Init(static_cast<int32_t>(this->mu64_Bitrate > 0U ? this->mu64_Bitrate / 1000U : 0U));
-      if (s32_Init == C_NO_ERR)
+      if (c_Init == Errc::success)
       {
          c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eINFORMATION);
          c_MessageBox.SetDescription("Connection test successful. CAN Interface is ready for use.");

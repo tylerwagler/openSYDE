@@ -15,9 +15,11 @@
 //lint -estring(586,time)
 //lint -estring(586,localtime)
 #include <ctime>
+#include <system_error>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscComMessageLoggerFileAsc.hpp"
 #include "TglFile.hpp"
 #include "TglTime.hpp"
@@ -90,13 +92,13 @@ C_OscComMessageLoggerFileAsc::~C_OscComMessageLoggerFileAsc(void)
    An already opened file will be closed and deleted.
 
    \return
-   C_NO_ERR    File successfully opened and created
-   C_RD_WR     Error on creating file, folders or deleting old file
+   Errc::success    File successfully opened and created
+   Errc::rd_wr      Error on creating file, folders or deleting old file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLoggerFileAsc::OpenFile(void)
+std::error_code C_OscComMessageLoggerFileAsc::OpenFile(void)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (this->mc_File.is_open() == true)
    {
@@ -110,9 +112,9 @@ int32_t C_OscComMessageLoggerFileAsc::OpenFile(void)
       this->mc_FilePath += ".asc";
    }
 
-   s32_Return = C_OscComMessageLoggerFileBase::OpenFile();
+   c_Return = C_OscComMessageLoggerFileBase::OpenFile();
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
       this->mc_File.open(this->mc_FilePath.c_str(), std::ios::app);
 
@@ -123,11 +125,11 @@ int32_t C_OscComMessageLoggerFileAsc::OpenFile(void)
       if (TglFileExists(this->mc_FilePath) == false)
       {
          // File was not created
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -315,7 +317,7 @@ std::string C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
    std::string c_Temp;
 
    // Getting weekday
-   const std::time_t x_Time = std::time(NULL);      //lint !e8080 using type expected by the library for compatibility
+   const std::time_t x_Time = std::time(nullptr);      //lint !e8080 using type expected by the library for compatibility
    const std::tm c_Time = *std::localtime(&x_Time); //lint !e613 //documentation of localtime says "not NULL"
    const uint32_t u32_TimeMs = TglGetTickCount();
 

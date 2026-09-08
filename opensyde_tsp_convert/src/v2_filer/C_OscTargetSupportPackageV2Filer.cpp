@@ -14,11 +14,13 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscTargetSupportPackageV2Filer.hpp"
 #include "TglFile.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscXmlParser.hpp"
 #include <string>
+#include <system_error>
 #include "C_SclStringCompat.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 
@@ -50,40 +52,40 @@ using namespace stw::scl;
    \param[in]     orc_Path                   path to file
 
    \return
-   C_NO_ERR    data read
-   C_RANGE     specified target support package file does not exist
-   C_NOACT     specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG    in specified file is a XML node or attribute missing
+   Errc::success    data read
+   Errc::range      specified target support package file does not exist
+   Errc::noact      specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config     in specified file is a XML node or attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer::h_Load(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
-                                                 const std::string & orc_Path)
+std::error_code C_OscTargetSupportPackageV2Filer::h_Load(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
+                                                         const std::string & orc_Path)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (TglFileExists(orc_Path) == true)
    {
       C_OscXmlParser c_XmlParser;
 
-      s32_Return = ListLoadFromFile(c_XmlParser, orc_Path);
-      if (s32_Return == C_NO_ERR)
+      c_Return = c_XmlParser.LoadFromFile(orc_Path);
+      if (!c_Return)
       {
-         s32_Return = mh_Load(orc_TargetSupportPackage, c_XmlParser);
+         c_Return = mh_Load(orc_TargetSupportPackage, c_XmlParser);
       }
       else
       {
          osc_write_log_error("Loading Target Support Package",
                              "File \"" + orc_Path + "\" could not be opened.");
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
    else
    {
       osc_write_log_error("Loading Target Support Package", "File \"" + orc_Path + "\" does not exist.");
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -95,14 +97,14 @@ int32_t C_OscTargetSupportPackageV2Filer::h_Load(C_OscTargetSupportPackageV2 & o
    \param[in]     orc_XmlParser                 XML parser
 
    \return
-   C_NO_ERR    XML data read and placed into target support package instance
-   C_CONFIG    XML node or attribute missing
+   Errc::success    XML data read and placed into target support package instance
+   Errc::config     XML node or attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
-                                                  C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
+                                                          C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    std::string c_Text;
    std::string c_HalcIncluded;
 
@@ -115,7 +117,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
    if (c_Text != "opensyde-target-support-package")
    {
       osc_write_log_error("Loading target support package", "XML node \"opensyde-target-support-package\" not found.");
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -130,11 +132,11 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
          {
             osc_write_log_error("Loading target support package",
                                 "\"file-version\" could not be converted to a number.");
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
 
          //is the file version one we know ?
-         if (s32_Return == C_NO_ERR)
+         if (!c_Return)
          {
             osc_write_log_info("Loading target support package", "Value of \"file-version\": " +
                                IntToStrCompat(u16_FileVersion));
@@ -143,14 +145,14 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
             {
                osc_write_log_error("Loading target support package",
                                    "Version defined by \"file-version\" is not supported.");
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
             }
          }
       }
       else
       {
          osc_write_log_error("Loading target support package", "XML node \"file-version\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       //no special handling required yet based on version
       orc_XmlParser.SelectNodeParent(); //back to parent
@@ -167,13 +169,13 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
    orc_XmlParser.SelectNodeParent();
 
    // device name
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_Text = orc_XmlParser.SelectNodeChild("device-name");
       if (c_Text != "device-name")
       {
          osc_write_log_error("Loading target support package", "XML node \"device-name\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -183,13 +185,13 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
    }
 
    // TSP comment
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_Text = orc_XmlParser.SelectNodeChild("tsp-comment");
       if (c_Text != "tsp-comment")
       {
          osc_write_log_error("Loading target support package", "XML node \"tsp-comment\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -199,12 +201,12 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
    }
 
    //Code export settings
-   if ((orc_XmlParser.SelectNodeChild("code-export-settings") == "code-export-settings") && (s32_Return == C_NO_ERR))
+   if ((orc_XmlParser.SelectNodeChild("code-export-settings") == "code-export-settings") && (!c_Return))
    {
       if (orc_XmlParser.SelectNodeChild("scaling-support") == "scaling-support")
       {
-         s32_Return = C_OscSystemFilerUtil::h_StringToCodeExportScalingType(
-            orc_XmlParser.GetNodeContent(), orc_TargetSupportPackage.c_CodeExportSettings.e_ScalingSupport);
+         c_Return = C_OscSystemFilerUtil::h_StringToCodeExportScalingType(orc_XmlParser.GetNodeContent(
+            ), orc_TargetSupportPackage.c_CodeExportSettings.e_ScalingSupport);
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "code-export-settings");
       }
@@ -221,13 +223,13 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
    }
 
    //openSYDE server settings
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_Text = orc_XmlParser.SelectNodeChild("open-syde-server-settings");
       if (c_Text != "open-syde-server-settings")
       {
          osc_write_log_error("Loading target support package", "XML node \"open-syde-server-settings\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -240,9 +242,9 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
          {
             osc_write_log_error("Loading target support package", "XML attribute \"dpd-application-index\" not found "
                                 "in node \"open-syde-server-setting\".");
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
-         if ((s32_Return == C_NO_ERR) && (orc_XmlParser.AttributeExists("max-parallel-transmissions") == true))
+         if ((!c_Return) && (orc_XmlParser.AttributeExists("max-parallel-transmissions") == true))
          {
             orc_TargetSupportPackage.u8_MaxParallelTransmissions =
                static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("max-parallel-transmissions"));
@@ -251,9 +253,9 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
          {
             osc_write_log_error("Loading target support package", "XML attribute \"max-parallel-transmissions\" not found "
                                 "in node \"open-syde-server-setting\".");
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
-         if ((s32_Return == C_NO_ERR) && (orc_XmlParser.AttributeExists("max-tx-message-buffer") == true))
+         if ((!c_Return) && (orc_XmlParser.AttributeExists("max-tx-message-buffer") == true))
          {
             orc_TargetSupportPackage.u16_MaxMessageBufferTx =
                static_cast<uint16_t>(orc_XmlParser.GetAttributeUint32("max-tx-message-buffer"));
@@ -262,9 +264,9 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
          {
             osc_write_log_error("Loading target support package", "XML attribute \"max-tx-message-buffer\" not found "
                                 "in node \"open-syde-server-setting\".");
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
-         if ((s32_Return == C_NO_ERR) && (orc_XmlParser.AttributeExists("max-rx-routing-message-buffer") == true))
+         if ((!c_Return) && (orc_XmlParser.AttributeExists("max-rx-routing-message-buffer") == true))
          {
             orc_TargetSupportPackage.u16_MaxRoutingMessageBufferRx =
                static_cast<uint16_t>(orc_XmlParser.GetAttributeUint32("max-rx-routing-message-buffer"));
@@ -273,7 +275,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
          {
             osc_write_log_error("Loading target support package", "XML attribute \"max-rx-routing-message-buffer\" not found "
                                 "in node \"open-syde-server-setting\".");
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
       }
 
@@ -282,13 +284,13 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
    }
 
    // template project
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_Text = orc_XmlParser.SelectNodeChild("template-project");
       if (c_Text != "template-project")
       {
          osc_write_log_error("Loading target support package", "XML node \"template-project\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -297,7 +299,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
          if (c_Text != "template")
          {
             osc_write_log_error("Loading target support package", "No XML node \"template\" found.");
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
          else
          {
@@ -308,17 +310,17 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
    }
 
    // halc definition, only continue if there is a halc config in tsp file
-   if ((s32_Return == C_NO_ERR) && (c_HalcIncluded == "true"))
+   if ((!c_Return) && (c_HalcIncluded == "true"))
    {
       c_Text = orc_XmlParser.SelectNodeChild("halc-definition");
       if (c_Text != "halc-definition")
       {
          osc_write_log_error("Loading target support package", "XML node \"halc-definition\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
-         s32_Return = mh_ParseHalcSection(orc_TargetSupportPackage, orc_XmlParser);
+         c_Return = mh_ParseHalcSection(orc_TargetSupportPackage, orc_XmlParser);
       }
       // back to parent
       orc_XmlParser.SelectNodeParent();
@@ -331,27 +333,27 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
       orc_TargetSupportPackage.c_HalcComment = "";
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_Text = orc_XmlParser.SelectNodeChild("application");
       if (c_Text != "application")
       {
          osc_write_log_error("Loading target support package", "XML node \"application\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
          // parse this application
          do
          {
-            s32_Return = mh_ParseApplication(orc_TargetSupportPackage, orc_XmlParser);
+            c_Return = mh_ParseApplication(orc_TargetSupportPackage, orc_XmlParser);
             c_Text = orc_XmlParser.SelectNodeNext("application");
          }
-         while ((s32_Return == C_NO_ERR) && (c_Text == "application"));
+         while ((!c_Return) && (c_Text == "application"));
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -363,14 +365,14 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
    \param[in]  orc_XmlParser              XML parser
 
    \return
-   C_NO_ERR    application data read and placed into target support package instance
-   C_CONFIG    XML node or attribute missing
+   Errc::success    application data read and placed into target support package instance
+   Errc::config     XML node or attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
-                                                              C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscTargetSupportPackageV2Filer::mh_ParseApplication(
+   C_OscTargetSupportPackageV2 & orc_TargetSupportPackage, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    std::string c_Text;
    C_OscTspApplication c_Application;
 
@@ -378,7 +380,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    if (orc_XmlParser.AttributeExists("is-programmable") == false)
    {
       osc_write_log_error("Loading target support package", "XML attribute \"is-programmable\" not found.");
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -392,12 +394,12 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    }
 
    // process id (required if and only if programmable)
-   if ((s32_Return == C_NO_ERR) && (c_Application.q_IsProgrammable == true))
+   if ((!c_Return) && (c_Application.q_IsProgrammable == true))
    {
       if (orc_XmlParser.AttributeExists("process-id") == false)
       {
          osc_write_log_error("Loading target support package", "XML attribute \"process-id\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -406,13 +408,13 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    }
 
    // display name of application
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_Text = orc_XmlParser.SelectNodeChild("display-name");
       if (c_Text != "display-name")
       {
          osc_write_log_error("Loading target support package", "No XML node \"display-name\" found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -422,13 +424,13 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    }
 
    // comment
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_Text = orc_XmlParser.SelectNodeChild("comment");
       if (c_Text != "comment")
       {
          osc_write_log_error("Loading target support package", "No XML node \"comment\" found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -438,13 +440,13 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    }
 
    // IDE call
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_Text = orc_XmlParser.SelectNodeChild("ide-call");
       if (c_Text != "ide-call")
       {
          osc_write_log_error("Loading target support package", "XML node \"ide-call\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -454,14 +456,14 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    }
 
    // generate (required if and only if file generation is enabled)
-   if ((s32_Return == C_NO_ERR) &&
+   if ((!c_Return) &&
        ((c_Application.q_IsProgrammable == true) || (c_Application.q_GeneratesPsiFiles == true)))
    {
       c_Text = orc_XmlParser.SelectNodeChild("code-generation");
       if (c_Text != "code-generation")
       {
          osc_write_log_error("Loading target support package", "XML node \"code-generation\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -487,7 +489,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
          {
             osc_write_log_error("Loading target support package",
                                 "XML node \"code-generation\".\"type\" not found.");
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
          else
          {
@@ -495,7 +497,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
             {
                osc_write_log_error("Loading target support package",
                                    "XML attribute \"is-standard-opensyde\" not found.");
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
             }
             else
             {
@@ -505,14 +507,14 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
          orc_XmlParser.SelectNodeParent(); //back to parent
 
          // if the file generator is not standard, a path do the file generator is required
-         if ((s32_Return == C_NO_ERR) && (c_Application.q_IsStandardSydeCoderCe == false))
+         if ((!c_Return) && (c_Application.q_IsStandardSydeCoderCe == false))
          {
             c_Text = orc_XmlParser.SelectNodeChild("path");
             if (c_Text != "path")
             {
                osc_write_log_error("Loading target support package",
                                    "XML node \"code-generation\".\"path\" not found but required.");
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
             }
             else
             {
@@ -525,13 +527,13 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    }
 
    // project-folder
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_Text = orc_XmlParser.SelectNodeChild("project-folder");
       if (c_Text != "project-folder")
       {
          osc_write_log_error("Loading target support package", "No XML node \"project-folder\" found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -541,14 +543,14 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    }
 
    // generate (required if and only if file generation is enabled)
-   if ((s32_Return == C_NO_ERR) &&
+   if ((!c_Return) &&
        ((c_Application.q_IsProgrammable == true) || (c_Application.q_GeneratesPsiFiles == true)))
    {
       c_Text = orc_XmlParser.SelectNodeChild("generate");
       if (c_Text != "generate")
       {
          osc_write_log_error("Loading target support package", "No XML node \"generate\" found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -559,7 +561,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
 
    // result
    // old file version, do not throw error, so we maintain compatibility
-   if ((s32_Return == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("result") == "result"))
+   if ((!c_Return) && (orc_XmlParser.SelectNodeChild("result") == "result"))
    {
       c_Application.c_ResultPaths.resize(1);
       c_Application.c_ResultPaths[0] = orc_XmlParser.GetNodeContent();
@@ -567,13 +569,13 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
       orc_XmlParser.SelectNodeParent(); // back to application
    }
    // new file version
-   else if ((s32_Return == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("result-paths") == "result-paths"))
+   else if ((!c_Return) && (orc_XmlParser.SelectNodeChild("result-paths") == "result-paths"))
    {
       std::string c_CurrNode = orc_XmlParser.SelectNodeChild("output-file");
       if (c_CurrNode != "output-file")
       {
          osc_write_log_error("Loading target support package", "No XML node \"output-file\" found. ");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
          orc_XmlParser.SelectNodeParent(); //back to parent result-paths
          orc_XmlParser.SelectNodeParent(); //back to parent application
       }
@@ -598,14 +600,14 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    else
    {
       osc_write_log_error("Loading target support package", "No XML node \"result\" or \"result-paths\" found.");
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
       orc_XmlParser.SelectNodeParent(); // back to application
    }
 
    // add application
    orc_TargetSupportPackage.c_Applications.push_back(c_Application);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -617,21 +619,21 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    \param[in]  orc_XmlParser              XML parser
 
    \return
-   C_NO_ERR    halc data read and placed into target support package instance
-   C_CONFIG    XML node or attribute missing
+   Errc::success    halc data read and placed into target support package instance
+   Errc::config     XML node or attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer::mh_ParseHalcSection(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
-                                                              C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscTargetSupportPackageV2Filer::mh_ParseHalcSection(
+   C_OscTargetSupportPackageV2 & orc_TargetSupportPackage, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    std::string c_Text;
 
    c_Text = orc_XmlParser.SelectNodeChild("halc-path");
    if (c_Text != "halc-path")
    {
       osc_write_log_error("Loading target support package", "XML node \"halc-path\" not found.");
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -640,7 +642,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseHalcSection(C_OscTargetSupport
       if (c_Text != "halc-comment")
       {
          osc_write_log_error("Loading target support package", "XML node \"halc-comment\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -650,5 +652,5 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseHalcSection(C_OscTargetSupport
    // go back to "halc-definition"
    orc_XmlParser.SelectNodeParent();
 
-   return s32_Return;
+   return c_Return;
 }

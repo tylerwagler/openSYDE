@@ -13,12 +13,15 @@
 #include "precomp_headers.hpp"
 
 #include "TglFile.hpp"
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscZipFile.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSpaServicePackageLoadUtil.hpp"
+#include "C_OscErrorCategory.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -78,59 +81,60 @@ std::string C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(const std::string & o
    \retval   C_RD_WR    could not unzip X-Config package from disk to target path
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(const std::string & orc_PackagePath,
+std::error_code C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(const std::string & orc_PackagePath,
                                                                          const std::string & orc_TargetUnzipPath, const std::string & orc_UseCase,
                                                                          std::string & orc_ErrorMessage)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    // check if zip archive exists
    if (TglFileExists(orc_PackagePath) == false)
    {
       orc_ErrorMessage = "Zip archive \"" + orc_PackagePath + "\" does not exist.";
       osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
 
    //erase target path if it exists
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       if (TglDirectoryExists(orc_TargetUnzipPath) == true)
       {
-         s32_Return = TglRemoveDirectory(orc_TargetUnzipPath, false);
-         if (s32_Return != 0)
+         //TglRemoveDirectory reports a plain 0/non-zero status, not an STW error code
+         const int32_t s32_RemoveResult = TglRemoveDirectory(orc_TargetUnzipPath, false);
+         if (s32_RemoveResult != 0)
          {
             orc_ErrorMessage = "Could not remove folder \"" + orc_TargetUnzipPath +
                                "\" to extract contents of zip archive.";
             osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-            s32_Return = C_BUSY;
+            c_Return = Errc::busy;
          }
       }
    }
 
    // create target unzip path
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       //create target folder (from bottom-up if required):
-      s32_Return = C_OscUtils::h_CreateFolderRecursively(orc_TargetUnzipPath);
-      if (s32_Return != C_NO_ERR)
+      c_Return = C_OscUtils::h_CreateFolderRecursively(orc_TargetUnzipPath);
+      if (c_Return)
       {
          orc_ErrorMessage = "Could not create folder \"" + orc_TargetUnzipPath + "\" for zip archive.";
          osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
 
    // open zip file and unpack contents to target folder
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
-      s32_Return = C_OscZipFile::h_UnpackZipFile(orc_PackagePath, orc_TargetUnzipPath, &orc_ErrorMessage);
-      if (s32_Return != C_NO_ERR)
+      c_Return = C_OscZipFile::h_UnpackZipFile(orc_PackagePath, orc_TargetUnzipPath, &orc_ErrorMessage);
+      if (c_Return)
       {
          osc_write_log_error(orc_UseCase, orc_ErrorMessage);
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -145,16 +149,16 @@ int32_t C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(const s
                          tool specific error codes)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(const std::string & orc_PackagePath,
+std::error_code C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(const std::string & orc_PackagePath,
                                                             const std::vector<std::string> & orc_NecessaryFiles)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    std::vector<C_TglFileSearchRecord> c_Files; //storage for found files
 
    for (uint32_t u32_It = 0; u32_It < orc_NecessaryFiles.size(); ++u32_It)
    {
-      if (s32_Return == C_DEFAULT)
+      if (c_Return == Errc::default_)
       {
          break;
       }
@@ -172,15 +176,15 @@ int32_t C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(const std::string & 
          //if the correct amount of files is present, we need to have a match on the exact name, otherwise -> fail.
          if (c_Files[0].c_FileName != orc_NecessaryFiles[u32_It])
          {
-            s32_Return = C_DEFAULT;
+            c_Return = Errc::default_;
          }
       }
       else
       {
          //more than one file of the specified type, smells fishy -> abort
-         s32_Return = C_DEFAULT;
+         c_Return = Errc::default_;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }

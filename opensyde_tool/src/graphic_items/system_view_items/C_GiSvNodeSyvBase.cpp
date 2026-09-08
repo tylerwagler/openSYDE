@@ -83,7 +83,7 @@ void C_GiSvNodeSyvBase::LoadData(void)
    {
       const C_PuiSvData * const pc_SvData = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      if (pc_SvData != NULL)
+      if (pc_SvData != nullptr)
       {
          this->SetViewConnected(pc_SvData->GetNodeStatusDisplayedAsActive(static_cast<uint32_t>(this->ms32_Index)));
       }

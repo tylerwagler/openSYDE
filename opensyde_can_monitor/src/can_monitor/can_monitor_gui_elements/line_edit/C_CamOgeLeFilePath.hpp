@@ -29,7 +29,7 @@ class C_CamOgeLeFilePath :
    Q_OBJECT
 
 public:
-   explicit C_CamOgeLeFilePath(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgeLeFilePath(QWidget * const opc_Parent = nullptr);
 
 protected:
    QString m_ResolveVariables(const QString & orc_Path) override;

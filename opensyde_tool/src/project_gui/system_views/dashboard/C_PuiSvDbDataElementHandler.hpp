@@ -73,7 +73,7 @@ public:
                                 const C_PuiSvDbDataElementContent & orc_NewValue);
    QString GetUnscaledValueAsScaledString(const float64_t of64_Value, const uint32_t ou32_IndexElement = 0UL) const;
    QString GetUnscaledValueInRangeAsScaledString(const float64_t of64_Value, const uint32_t ou32_IndexElement = 0UL, float64_t * const opf64_Progress =
-                                                    NULL) const;
+                                                    nullptr) const;
    virtual void SetErrorForInvalidDlc(const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_ElementId,
                                       const uint8_t ou8_Dlc) = 0;
 
@@ -131,7 +131,7 @@ private:
 
       QString GetSingleValueContentFormatted(const C_PuiSvDbDataElementContent & orc_Value, const uint32_t ou32_Index,
                                              float64_t * const opf64_UnscaledValueAsFloat,
-                                             float64_t * const opf64_ScaledValueAsFloat = NULL) const;
+                                             float64_t * const opf64_ScaledValueAsFloat = nullptr) const;
       std::vector<QString> GetValuesContentFormatted(const C_PuiSvDbDataElementContent & orc_Value,
                                                      std::vector<float64_t> & orc_UnscaledValueAsFloat) const;
 

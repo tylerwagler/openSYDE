@@ -9,6 +9,8 @@
 #define C_OSCCANOPENEDSDEVICEINFOBLOCK_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include <string>
 #include "C_SclIniFile.hpp"
@@ -54,31 +56,31 @@ public:
    bool q_LssSupported;    ///< The value indicates information whether LSS functionality is supported.
 
    void CalcHash(uint32_t & oru32_HashValue) const;
-   int32_t LoadFromIni(stw::scl::C_SclIniFile & orc_File, std::string & orc_LastError);
+   std::error_code LoadFromIni(stw::scl::C_SclIniFile & orc_File, std::string & orc_LastError);
 
    uint8_t GetGranularity(void) const;
 
-   static int32_t h_LoadStringValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                               const std::string & orc_SectionName,
-                                               const std::string & orc_KeyName,
-                                               std::string & orc_OutputValue,
-                                               std::string & orc_ErrorMessage,
-                                               const std::string & orc_DefaultValue = "");
-   static int32_t h_LoadU8ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                           const std::string & orc_SectionName,
-                                           const std::string & orc_KeyName, uint8_t & oru8_OutputValue,
-                                           std::string & orc_ErrorMessage,
-                                           const uint8_t ou8_DefaultValue = 0);
-   static int32_t h_LoadU16ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                            const std::string & orc_SectionName,
-                                            const std::string & orc_KeyName, uint16_t & oru16_OutputValue,
-                                            std::string & orc_ErrorMessage,
-                                            const uint16_t ou16_DefaultValue = 0);
-   static int32_t h_LoadBoolValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                             const std::string & orc_SectionName,
-                                             const std::string & orc_KeyName, bool & orq_OutputValue,
-                                             std::string & orc_ErrorMessage,
-                                             const bool oq_DefaultValue = false);
+   static std::error_code h_LoadStringValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
+                                                       const std::string & orc_SectionName,
+                                                       const std::string & orc_KeyName,
+                                                       std::string & orc_OutputValue,
+                                                       std::string & orc_ErrorMessage,
+                                                       const std::string & orc_DefaultValue = "");
+   static std::error_code h_LoadU8ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
+                                                   const std::string & orc_SectionName,
+                                                   const std::string & orc_KeyName, uint8_t & oru8_OutputValue,
+                                                   std::string & orc_ErrorMessage,
+                                                   const uint8_t ou8_DefaultValue = 0);
+   static std::error_code h_LoadU16ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
+                                                    const std::string & orc_SectionName,
+                                                    const std::string & orc_KeyName, uint16_t & oru16_OutputValue,
+                                                    std::string & orc_ErrorMessage,
+                                                    const uint16_t ou16_DefaultValue = 0);
+   static std::error_code h_LoadBoolValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
+                                                     const std::string & orc_SectionName,
+                                                     const std::string & orc_KeyName, bool & orq_OutputValue,
+                                                     std::string & orc_ErrorMessage,
+                                                     const bool oq_DefaultValue = false);
    static void h_ReportMissingSectionError(const std::string & orc_SectionName,
                                            std::string & orc_ErrorMessage);
    static void h_ReportMissingKeyError(const std::string & orc_SectionName,

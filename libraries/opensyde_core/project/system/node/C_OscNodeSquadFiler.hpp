@@ -9,6 +9,7 @@
 #define C_OSCNODESQUADFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include "C_OscNodeSquad.hpp"
 #include "C_OscXmlParser.hpp"
 
@@ -26,8 +27,9 @@ class C_OscNodeSquadFiler
 public:
    C_OscNodeSquadFiler();
 
-   static int32_t h_LoadNodeGroups(std::vector<C_OscNodeSquad> & orc_NodeGroups, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadNodeGroup(C_OscNodeSquad & orc_NodeGroup, C_OscXmlParserBase & orc_XmlParser);
+   static std::error_code h_LoadNodeGroups(std::vector<C_OscNodeSquad> & orc_NodeGroups,
+                                           C_OscXmlParserBase & orc_XmlParser);
+   static std::error_code h_LoadNodeGroup(C_OscNodeSquad & orc_NodeGroup, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeGroups(const std::vector<C_OscNodeSquad> & orc_NodeGroups, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeGroup(const C_OscNodeSquad & orc_NodeGroup, C_OscXmlParserBase & orc_XmlParser);
 };

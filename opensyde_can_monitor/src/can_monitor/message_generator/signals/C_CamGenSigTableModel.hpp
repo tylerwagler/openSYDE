@@ -43,7 +43,7 @@ public:
       eUNIT
    };
 
-   C_CamGenSigTableModel(QObject * const opc_Parent = NULL);
+   C_CamGenSigTableModel(QObject * const opc_Parent = nullptr);
 
    void TriggerSignalReload(void);
    void SetMessage(const uint32_t ou32_Message);
@@ -76,9 +76,9 @@ private:
 
    bool m_CheckInterpretedMode(void) const;
    const stw::opensyde_core::C_OscCanMessage * m_GetMessageInterpretedOsy(
-      stw::opensyde_core::C_OscCanProtocol::E_Type * const ope_ProtocolType = NULL) const;
+      stw::opensyde_core::C_OscCanProtocol::E_Type * const ope_ProtocolType = nullptr) const;
    const stw::opensyde_core::C_OscCanSignal * m_GetSignalInterpretedOsy(const uint32_t ou32_Index,
-                                                                        stw::opensyde_core::C_OscCanProtocol::E_Type * const ope_ProtocolType = NULL)
+                                                                        stw::opensyde_core::C_OscCanProtocol::E_Type * const ope_ProtocolType = nullptr)
    const;
    const stw::opensyde_core::C_OscNodeDataPoolList * m_GetMessageListInterpreted(void) const;
    const stw::opensyde_core::C_OscNodeDataPoolListElement * m_GetSignalInterpretedOsyCommon(const uint32_t ou32_Index)

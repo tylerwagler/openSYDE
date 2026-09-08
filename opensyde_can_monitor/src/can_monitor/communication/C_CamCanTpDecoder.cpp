@@ -399,7 +399,7 @@ void C_CamCanTpDecoder::ProcessFrame(const stw::can::T_STWCAN_Msg_RX & orc_Msg,
    orc_Result.u8_SessionCount = static_cast<uint8_t>(this->mc_Sessions.size());
 
    C_CamCanTpSession * const pc_Session = this->m_FindOrCreateSession(u32_Key);
-   if (pc_Session == NULL)
+   if (pc_Session == nullptr)
    {
       orc_Result.q_Error = true;
       orc_Result.c_ErrorDescription = "Failed to create TP session";

@@ -45,7 +45,7 @@ C_GiSvgGraphicsItem::C_GiSvgGraphicsItem(const QString & orc_ImagePath, const fl
 {
    if (orc_ImagePath.compare("") == 0)
    {
-      this->mpc_SvgRenderer = NULL;
+      this->mpc_SvgRenderer = nullptr;
    }
    else
    {
@@ -78,7 +78,7 @@ void C_GiSvgGraphicsItem::SetSvg(const QString & orc_ImagePath)
       delete this->mpc_SvgRenderer;
       if (orc_ImagePath.compare("") == 0)
       {
-         this->mpc_SvgRenderer = NULL;
+         this->mpc_SvgRenderer = nullptr;
       }
       else
       {
@@ -124,7 +124,7 @@ void C_GiSvgGraphicsItem::Redraw(void)
 void C_GiSvgGraphicsItem::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
                                 QWidget * const opc_Widget)
 {
-   if (this->mpc_SvgRenderer != NULL)
+   if (this->mpc_SvgRenderer != nullptr)
    {
       //Icon
       this->mpc_SvgRenderer->render(opc_Painter, this->rect());

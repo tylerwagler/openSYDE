@@ -12,12 +12,12 @@
 #define C_OSCLOGGINGHANDLER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include <fstream>
 #include <map>
 #include <string>
 #include "TglUtils.hpp"
 #include "TglTime.hpp"
-#include "TglTasks.hpp"
 
 //PC-Lint suppressions: function-like macro is the only way to get file,func,line information into the text
 //lint -save -e9026
@@ -60,13 +60,13 @@ public:
 
     //Logging call
     static void h_WriteLogInfo(const std::string & orc_Activity, const std::string & orc_Message,
-                               const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                               const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
     static void h_WriteLogWarning(const std::string & orc_Activity, const std::string & orc_Message,
-                                  const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                                  const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
     static void h_WriteLogError(const std::string & orc_Activity, const std::string & orc_Message,
-                                const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                                const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
     static void h_WriteLogPerformance(const uint16_t ou16_TimerId, const std::string & orc_Message,
-                                      const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                                      const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
 
 
    static uint16_t h_StartPerformanceTimer(void);
@@ -87,13 +87,13 @@ private:
    static std::map<uint16_t, uint32_t> mhc_StartTimes; ///< first: Timer ID, second: start time
     static std::string mhc_FileName;
 
-   static stw::tgl::C_TglCriticalSection mhc_ConsoleCriticalSection;
-   static stw::tgl::C_TglCriticalSection mhc_FileCriticalSection;
+   static std::mutex mhc_ConsoleCriticalSection;
+   static std::mutex mhc_FileCriticalSection;
    static std::ofstream mhc_File;
 
     static void mh_WriteLog(const std::string & orc_Type, const std::string & orc_Activity,
-                            const std::string & orc_Message, const char_t * const opcn_Class = NULL,
-                            const char_t * const opcn_Function = NULL);
+                            const std::string & orc_Message, const char_t * const opcn_Class = nullptr,
+                            const char_t * const opcn_Function = nullptr);
 
    static void mh_OpenFile(void);
    //Avoid calling

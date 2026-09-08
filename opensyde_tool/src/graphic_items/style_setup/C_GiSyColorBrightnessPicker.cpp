@@ -44,7 +44,7 @@ C_GiSyColorBrightnessPicker::C_GiSyColorBrightnessPicker(QWidget * const opc_Par
    ms32_Hue(0),
    ms32_Sat(0),
    ms32_Value(0),
-   mpc_Pixmap(NULL)
+   mpc_Pixmap(nullptr)
 {
 }
 
@@ -72,7 +72,7 @@ void C_GiSyColorBrightnessPicker::SetColorWithHsv(const int32_t os32_Hue, const 
    this->ms32_Sat = os32_Sat;
    this->ms32_Value = os32_Value;
    delete this->mpc_Pixmap;
-   this->mpc_Pixmap = NULL;
+   this->mpc_Pixmap = nullptr;
    repaint();
 }
 
@@ -99,7 +99,7 @@ void C_GiSyColorBrightnessPicker::paintEvent(QPaintEvent * const opc_Event)
    Q_UNUSED(opc_Event)
 
    const QRect c_Rect(0, 0, width(), height());
-   if ((this->mpc_Pixmap == NULL) ||
+   if ((this->mpc_Pixmap == nullptr) ||
        (this->mpc_Pixmap->height() != c_Rect.height()) ||
        (this->mpc_Pixmap->width() != c_Rect.width()))
    {
@@ -119,7 +119,7 @@ void C_GiSyColorBrightnessPicker::paintEvent(QPaintEvent * const opc_Event)
       this->mpc_Pixmap = new QPixmap(QPixmap::fromImage(c_Image));
    }
 
-   if (this->mpc_Pixmap != NULL)
+   if (this->mpc_Pixmap != nullptr)
    {
       QPainter c_Painter(this);
       c_Painter.drawPixmap(1, 0, *this->mpc_Pixmap);
@@ -148,7 +148,7 @@ void C_GiSyColorBrightnessPicker::mouseMoveEvent(QMouseEvent * const opc_Event)
    {
       this->ms32_Value = qMax(0, qMin((255 - ((opc_Event->y() * 255) / (height() - 1))), 255));
       delete this->mpc_Pixmap;
-      this->mpc_Pixmap = NULL;
+      this->mpc_Pixmap = nullptr;
       repaint();
       Q_EMIT SigNewHsv(this->ms32_Hue, this->ms32_Sat, this->ms32_Value);
    }
@@ -166,7 +166,7 @@ void C_GiSyColorBrightnessPicker::mousePressEvent(QMouseEvent * const opc_Event)
    {
       this->ms32_Value = qMax(0, qMin((255 - ((opc_Event->y() * 255) / (height() - 1))), 255));
       delete this->mpc_Pixmap;
-      this->mpc_Pixmap = NULL;
+      this->mpc_Pixmap = nullptr;
       repaint();
       Q_EMIT SigNewHsv(this->ms32_Hue, this->ms32_Sat, this->ms32_Value);
    }

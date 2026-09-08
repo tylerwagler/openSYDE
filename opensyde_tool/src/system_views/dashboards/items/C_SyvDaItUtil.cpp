@@ -40,7 +40,7 @@ using namespace stw::opensyde_gui_logic;
 void C_SyvDaItUtil::h_CopyFontSize(const QLabel * const opc_SourceLabel, QLabel * const opc_TargetLabel,
                                    const float32_t of32_Factor)
 {
-   if ((opc_SourceLabel != NULL) && (opc_TargetLabel != NULL))
+   if ((opc_SourceLabel != nullptr) && (opc_TargetLabel != nullptr))
    {
       QFont c_Font;
       const float32_t f32_SourcePointSize = static_cast<float32_t>(opc_SourceLabel->font().pointSize());
@@ -65,16 +65,16 @@ void C_SyvDaItUtil::h_CopyFontSize(const QLabel * const opc_SourceLabel, QLabel 
 void C_SyvDaItUtil::h_SyncFontSize(QLabel * const opc_Label1, QLabel * const opc_Label2, QLabel * const opc_Label3,
                                    QLabel * const opc_Label4)
 {
-   if ((opc_Label1 != NULL) && (opc_Label2 != NULL))
+   if ((opc_Label1 != nullptr) && (opc_Label2 != nullptr))
    {
       QFont c_Font;
       int32_t s32_PointSize;
       s32_PointSize = std::min(opc_Label1->font().pointSize(), opc_Label2->font().pointSize());
-      if (opc_Label3 != NULL)
+      if (opc_Label3 != nullptr)
       {
          s32_PointSize = std::min(s32_PointSize, opc_Label3->font().pointSize());
       }
-      if (opc_Label4 != NULL)
+      if (opc_Label4 != nullptr)
       {
          s32_PointSize = std::min(s32_PointSize, opc_Label4->font().pointSize());
       }
@@ -92,7 +92,7 @@ void C_SyvDaItUtil::h_SyncFontSize(QLabel * const opc_Label1, QLabel * const opc
       opc_Label2->setFont(c_Font);
 
       //3
-      if (opc_Label3 != NULL)
+      if (opc_Label3 != nullptr)
       {
          c_Font = opc_Label3->font();
          c_Font.setPointSize(s32_PointSize);
@@ -100,7 +100,7 @@ void C_SyvDaItUtil::h_SyncFontSize(QLabel * const opc_Label1, QLabel * const opc
       }
 
       //4
-      if (opc_Label4 != NULL)
+      if (opc_Label4 != nullptr)
       {
          c_Font = opc_Label4->font();
          c_Font.setPointSize(s32_PointSize);

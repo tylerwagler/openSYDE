@@ -17,8 +17,10 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <list>
+#include <system_error>
 #include "tinyxml2.h"
 #include "stwtypes.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -62,14 +64,14 @@ public:
 
    // init node system - selects second node, if available; first node is declaration
    std::string SelectRoot(void);
-   virtual int32_t SelectRootError(const std::string & orc_Name);
+   virtual std::error_code SelectRootError(const std::string & orc_Name);
 
    // node navigation - returns current node
    // select first/next node (with name) after current node      (go forward)
    std::string SelectNodeNext(const std::string & orc_Name = "");
    // select first child node (with name) of current node        (go deeper)
    std::string SelectNodeChild(const std::string & orc_Name = "");
-   virtual int32_t SelectNodeChildError(const std::string & orc_Name);
+   virtual std::error_code SelectNodeChildError(const std::string & orc_Name);
    // select parent node of current node                         (go up)
    std::string SelectNodeParent(void);
 
@@ -113,15 +115,15 @@ public:
    float64_t GetAttributeFloat64(const std::string & orc_Name, const float64_t of64_Default = 0.0) const;
 
    // get attribute values (includes error check)
-   virtual int32_t GetAttributeStringError(const std::string & orc_Name,
-                                           std::string & orc_Value) const;
-   virtual int32_t GetAttributeSint32Error(const std::string & orc_Name, int32_t & ors32_Value) const;
-   virtual int32_t GetAttributeUint32Error(const std::string & orc_Name, uint32_t & oru32_Value) const;
-   virtual int32_t GetAttributeSint64Error(const std::string & orc_Name, int64_t & ors64_Value) const;
-   virtual int32_t GetAttributeUint64Error(const std::string & orc_Name, uint64_t & oru64_Value) const;
-   virtual int32_t GetAttributeBoolError(const std::string & orc_Name, bool & orq_Value) const;
-   virtual int32_t GetAttributeFloat32Error(const std::string & orc_Name, float32_t & orf32_Value) const;
-   virtual int32_t GetAttributeFloat64Error(const std::string & orc_Name, float64_t & orf64_Value) const;
+   virtual std::error_code GetAttributeStringError(const std::string & orc_Name,
+                                                   std::string & orc_Value) const;
+   virtual std::error_code GetAttributeSint32Error(const std::string & orc_Name, int32_t & ors32_Value) const;
+   virtual std::error_code GetAttributeUint32Error(const std::string & orc_Name, uint32_t & oru32_Value) const;
+   virtual std::error_code GetAttributeSint64Error(const std::string & orc_Name, int64_t & ors64_Value) const;
+   virtual std::error_code GetAttributeUint64Error(const std::string & orc_Name, uint64_t & oru64_Value) const;
+   virtual std::error_code GetAttributeBoolError(const std::string & orc_Name, bool & orq_Value) const;
+   virtual std::error_code GetAttributeFloat32Error(const std::string & orc_Name, float32_t & orf32_Value) const;
+   virtual std::error_code GetAttributeFloat64Error(const std::string & orc_Name, float64_t & orf64_Value) const;
 
    //Base reporting functions
    virtual void ReportErrorForNodeContentAppendXmlContext(const std::string & orc_ErrorMessage)
@@ -157,11 +159,11 @@ public:
    virtual ~C_OscXmlParser(void);
 
    // open xml file; create XML declaration
-   virtual int32_t LoadFromFile(const std::string & orc_FileName);
-   virtual int32_t SaveToFile(const std::string & orc_FileName);
+   virtual std::error_code LoadFromFile(const std::string & orc_FileName);
+   virtual std::error_code SaveToFile(const std::string & orc_FileName);
 
    // parse xml string; create XML declaration
-   int32_t LoadFromString(const std::string & orc_String);
+   std::error_code LoadFromString(const std::string & orc_String);
    void SaveToString(std::string & orc_String) const;
 };
 

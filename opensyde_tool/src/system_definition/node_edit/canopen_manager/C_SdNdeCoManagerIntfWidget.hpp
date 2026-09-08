@@ -33,7 +33,7 @@ class C_SdNdeCoManagerIntfWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeCoManagerIntfWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeCoManagerIntfWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeCoManagerIntfWidget(void) override;
 
    void InitStaticNames(void) const;

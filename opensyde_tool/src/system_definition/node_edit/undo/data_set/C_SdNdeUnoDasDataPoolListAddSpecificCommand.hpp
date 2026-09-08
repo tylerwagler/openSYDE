@@ -34,7 +34,7 @@ public:
                                                const std::vector<uint32_t> & orc_Indices,
                                                const std::vector<stw::opensyde_core::C_OscNodeDataPoolDataSet> & orc_OscNames,
                                                const std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> > & orc_OscDataSetValues,
-                                               QUndoCommand * const opc_Parent = NULL);
+                                               QUndoCommand * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

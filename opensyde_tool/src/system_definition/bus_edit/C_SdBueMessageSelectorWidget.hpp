@@ -36,7 +36,7 @@ class C_SdBueMessageSelectorWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdBueMessageSelectorWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueMessageSelectorWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdBueMessageSelectorWidget() override;
 
    void SetNodeId(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,

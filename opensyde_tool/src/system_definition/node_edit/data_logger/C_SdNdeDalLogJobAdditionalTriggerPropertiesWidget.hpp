@@ -35,7 +35,7 @@ class C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget(void) override;
 
    void Save(void);

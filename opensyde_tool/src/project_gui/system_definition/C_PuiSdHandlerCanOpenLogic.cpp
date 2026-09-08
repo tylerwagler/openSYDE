@@ -51,10 +51,10 @@ using namespace stw::opensyde_gui;
 const C_OscCanOpenManagerInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenManager(const uint32_t ou32_NodeIndex,
                                                                               const uint8_t ou8_InterfaceNumber) const
 {
-   const C_OscCanOpenManagerInfo * pc_Retval = NULL;
+   const C_OscCanOpenManagerInfo * pc_Retval = nullptr;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const std::map<uint8_t,
                      C_OscCanOpenManagerInfo>::const_iterator c_ItManager = pc_Node->c_CanOpenManagers.find(
@@ -80,14 +80,14 @@ const C_OscCanOpenManagerInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenManager(co
 const C_OscCanOpenManagerInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenManager(
    const C_OscCanMessageIdentificationIndices & orc_MessageId) const
 {
-   const C_OscCanOpenManagerInfo * pc_Manager = NULL;
+   const C_OscCanOpenManagerInfo * pc_Manager = nullptr;
 
    // The manager must be the only node associated by this message
    // If the message is not associated to CANopen no manager will be found
    const C_OscNode * const pc_Node = this->GetOscNodeConst(orc_MessageId.u32_NodeIndex);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager;
       tgl_assert(orc_MessageId.u32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size());
@@ -115,10 +115,10 @@ const C_OscCanOpenManagerInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenManager(
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNode * C_PuiSdHandlerCanOpenLogic::GetCanOpenManagerNodeOnBus(const uint32_t ou32_BusIndex) const
 {
-   const C_OscNode * pc_Retval = NULL;
+   const C_OscNode * pc_Retval = nullptr;
    uint32_t u32_NodeIndex;
 
-   if (this->GetCanOpenManagerNodeOnBus(ou32_BusIndex, u32_NodeIndex, NULL) == C_NO_ERR)
+   if (this->GetCanOpenManagerNodeOnBus(ou32_BusIndex, u32_NodeIndex, nullptr) == C_NO_ERR)
    {
       pc_Retval = &this->mc_CoreDefinition.c_Nodes[u32_NodeIndex];
    }
@@ -168,7 +168,7 @@ int32_t C_PuiSdHandlerCanOpenLogic::GetCanOpenManagerNodeOnBus(const uint32_t ou
                {
                   // CANopen manager on this bus found
                   oru32_ManagerNodeIndex = u32_NodeCounter;
-                  if (opu8_ManagerIntfNumber != NULL)
+                  if (opu8_ManagerIntfNumber != nullptr)
                   {
                      *opu8_ManagerIntfNumber = rc_Intf.u8_InterfaceNumber;
                   }
@@ -205,10 +205,10 @@ const C_OscCanOpenManagerDeviceInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenMana
                                                                                           const C_OscCanInterfaceId & orc_DeviceId)
 const
 {
-   const C_OscCanOpenManagerDeviceInfo * pc_Retval = NULL;
+   const C_OscCanOpenManagerDeviceInfo * pc_Retval = nullptr;
    const C_OscCanOpenManagerInfo * const pc_Manager = this->GetCanOpenManager(ou32_NodeIndex, ou8_InterfaceNumber);
 
-   if (pc_Manager != NULL)
+   if (pc_Manager != nullptr)
    {
       const std::map<C_OscCanInterfaceId,
                      C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice = pc_Manager->c_CanOpenDevices.find(
@@ -235,17 +235,17 @@ const
 const C_OscCanOpenManagerDeviceInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenManagerDevice(
    const C_OscCanMessageIdentificationIndices & orc_MessageId) const
 {
-   const C_OscCanOpenManagerDeviceInfo * pc_Device = NULL;
+   const C_OscCanOpenManagerDeviceInfo * pc_Device = nullptr;
    const C_OscCanOpenManagerInfo * const pc_CoManagerInfo = this->GetCanOpenManager(orc_MessageId);
 
    // The manager must be the only node associated by this message
    // If the message is not associated to CANopen no manager will be found
-   if (pc_CoManagerInfo != NULL)
+   if (pc_CoManagerInfo != nullptr)
    {
       const C_OscCanMessage * const pc_Message = this->GetCanMessage(orc_MessageId);
 
-      tgl_assert(pc_Message != NULL);
-      if (pc_Message != NULL)
+      tgl_assert(pc_Message != nullptr);
+      if (pc_Message != nullptr)
       {
          const std::map<C_OscCanInterfaceId,
                         C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
@@ -309,15 +309,15 @@ const
             {
                if (c_ItDevice->first.u32_NodeIndex == ou32_DeviceNodeIndex)
                {
-                  if (opu32_ManagerNodeIndex != NULL)
+                  if (opu32_ManagerNodeIndex != nullptr)
                   {
                      *opu32_ManagerNodeIndex = u32_NodeCounter;
                   }
-                  if (opc_DeviceNodeId != NULL)
+                  if (opc_DeviceNodeId != nullptr)
                   {
                      *opc_DeviceNodeId = c_ItDevice->first;
                   }
-                  if (opu8_ManagerInterfaceNumber != NULL)
+                  if (opu8_ManagerInterfaceNumber != nullptr)
                   {
                      *opu8_ManagerInterfaceNumber = c_ItManager->first;
                   }
@@ -345,14 +345,14 @@ const
 const C_OscCanOpenManagerDeviceInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenManagerDeviceForAnyManager(
    const uint32_t ou32_ManagerNodeIndex, const C_OscCanInterfaceId & orc_DeviceId) const
 {
-   const C_OscCanOpenManagerDeviceInfo * pc_Retval = NULL;
+   const C_OscCanOpenManagerDeviceInfo * pc_Retval = nullptr;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_ManagerNodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
               pc_Node->c_CanOpenManagers.cbegin();
-           (c_ItManager != pc_Node->c_CanOpenManagers.cend()) && (pc_Retval == NULL); ++c_ItManager)
+           (c_ItManager != pc_Node->c_CanOpenManagers.cend()) && (pc_Retval == nullptr); ++c_ItManager)
       {
          const std::map<C_OscCanInterfaceId,
                         C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
@@ -399,7 +399,7 @@ const QString C_PuiSdHandlerCanOpenLogic::GetBusNameOfConnectedDevice(const uint
             GetOscBus(rc_Interface.u32_BusIndex);
 
          //get bus name
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             c_BusName = pc_Bus->c_Name.c_str();
          }
@@ -1039,7 +1039,7 @@ int32_t C_PuiSdHandlerCanOpenLogic::DeleteCanOpenManagerMessages(const uint32_t 
    if (this->TranslateCanInterfaceNumberToIndex(ou32_NodeIndex, ou8_InterfaceNumber, u32_InterfaceIndex) == C_NO_ERR)
    {
       const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          for (uint32_t u32_ItProt = 0UL; (u32_ItProt < pc_Node->c_ComProtocols.size()) && (s32_Retval == C_NO_ERR);
               ++u32_ItProt)
@@ -1096,7 +1096,7 @@ int32_t C_PuiSdHandlerCanOpenLogic::TranslateCanInterfaceIndexToId(const uint32_
    int32_t s32_Retval = C_NO_ERR;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if (ou32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size())
       {
@@ -1138,7 +1138,7 @@ int32_t C_PuiSdHandlerCanOpenLogic::TranslateCanInterfaceNumberToIndex(const uin
    int32_t s32_Retval = C_NO_ERR;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_Index = 0; u32_Index < pc_Node->c_Properties.c_ComInterfaces.size(); ++u32_Index)
       {
@@ -1310,8 +1310,8 @@ bool C_PuiSdHandlerCanOpenLogic::m_HandleCleanUpCanOpenDatapool(const uint32_t o
    {
       const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
 
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          for (uint32_t u32_ItProt = 0UL; u32_ItProt < pc_Node->c_ComProtocols.size(); ++u32_ItProt)
          {
@@ -1350,8 +1350,8 @@ bool C_PuiSdHandlerCanOpenLogic::m_CheckCleanUpCanOpenDatapoolPossible(const uin
    bool q_Retval = false;
    const C_OscNode * const pc_Node =  this->GetOscNodeConst(ou32_NodeIndex);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       q_Retval = pc_Node->c_CanOpenManagers.size() == 0UL;
    }
@@ -2264,7 +2264,7 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleNodeIdChangeForCanOpenMessages(const ui
       const C_OscCanOpenManagerDeviceInfo * const pc_FoundDevice = this->GetCanOpenManagerDeviceForAnyManager(
          u32_ItNode,
          c_DeviceId);
-      if (pc_FoundDevice != NULL)
+      if (pc_FoundDevice != nullptr)
       {
          C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[u32_ItNode];
          for (uint32_t u32_ItProt = 0UL; u32_ItProt < rc_Node.c_ComProtocols.size(); ++u32_ItProt)

@@ -355,7 +355,7 @@ void C_OgeWiHover::m_SearchChanged(const QString & orc_Text)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeWiHover::m_UpdateParentSize(void)
 {
-   if (this->mpc_ContainerWidget != NULL)
+   if (this->mpc_ContainerWidget != nullptr)
    {
       this->mc_ParentWidgetSize = this->mpc_ContainerWidget->size();
       this->mc_ParentWidgetSize =
@@ -370,7 +370,7 @@ void C_OgeWiHover::m_UpdateParentSize(void)
    else
    {
       const QScreen * const pc_Desktop = QApplication::primaryScreen();
-      if (pc_Desktop != NULL)
+      if (pc_Desktop != nullptr)
       {
          this->mc_ParentWidgetSize = pc_Desktop->size();
          this->mc_ParentWidgetTopLeft = pc_Desktop->geometry().topLeft();

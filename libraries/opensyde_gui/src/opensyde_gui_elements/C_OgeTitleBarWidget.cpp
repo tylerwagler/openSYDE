@@ -73,7 +73,7 @@ QString C_OgeTitleBarWidget::m_GetAboutExtraCredits(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeTitleBarWidget::m_LoadStwLogo(QLabel * const opc_Label) const
 {
-   if (opc_Label != NULL)
+   if (opc_Label != nullptr)
    {
       QPixmap c_ImgLogo;
       c_ImgLogo.load("://images/STW_Logo_Dark.png");
@@ -109,7 +109,7 @@ void C_OgeTitleBarWidget::m_ShowAbout(void)
 
    c_New->exec();
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
    }

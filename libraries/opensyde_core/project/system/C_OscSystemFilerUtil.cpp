@@ -14,9 +14,11 @@
 #include "C_SclStringCompat.hpp"
 
 #include <cstdio>
+#include <system_error>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglFile.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscSystemFilerUtil.hpp"
@@ -71,14 +73,14 @@ std::string C_OscSystemFilerUtil::h_BusTypeEnumToString(const C_OscSystemBus::E_
    \param[out]  ore_Type   Enum corresponding to type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_BusTypeStringToEnum(const std::string & orc_Type,
-                                                    C_OscSystemBus::E_Type & ore_Type)
+std::error_code C_OscSystemFilerUtil::h_BusTypeStringToEnum(const std::string & orc_Type,
+                                                            C_OscSystemBus::E_Type & ore_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Type == "ethernet")
    {
@@ -91,9 +93,9 @@ int32_t C_OscSystemFilerUtil::h_BusTypeStringToEnum(const std::string & orc_Type
    else
    {
       osc_write_log_error("Loading System Definition", "Invalid value for bus.\"type\":" + orc_Type);
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -106,25 +108,26 @@ int32_t C_OscSystemFilerUtil::h_BusTypeStringToEnum(const std::string & orc_Type
    \param[in]      orc_RootNode        Root node name
 
    \return
-   C_NO_ERR   data was read from file
-   C_NOACT    could not read data from file
-   C_RANGE    file not found
-   C_CONFIG   root node not found
+   Errc::success    data was read from file
+   Errc::noact      could not read data from file
+   Errc::range      file not found
+   Errc::config     root node not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_GetParserForExistingFile(C_OscXmlParser & orc_FileXmlParser,
-                                                         const std::string & orc_Path, const std::string & orc_RootNode)
+std::error_code C_OscSystemFilerUtil::h_GetParserForExistingFile(C_OscXmlParser & orc_FileXmlParser,
+                                                                 const std::string & orc_Path,
+                                                                 const std::string & orc_RootNode)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_Path))
    {
-      s32_Retval = ListLoadFromFile(orc_FileXmlParser, orc_Path);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = orc_FileXmlParser.LoadFromFile(orc_Path);
+      if (!c_Retval)
       {
          if (orc_FileXmlParser.SelectRoot() != orc_RootNode)
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
             osc_write_log_error("Loading files", "Unexpected content for file \"" + orc_Path + "\"");
          }
       }
@@ -136,9 +139,9 @@ int32_t C_OscSystemFilerUtil::h_GetParserForExistingFile(C_OscXmlParser & orc_Fi
    else
    {
       osc_write_log_error("Loading files", "Missing file \"" + orc_Path + "\"");
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -151,29 +154,30 @@ int32_t C_OscSystemFilerUtil::h_GetParserForExistingFile(C_OscXmlParser & orc_Fi
    \param[in]      orc_RootNode        Root node name
 
    \return
-   C_NO_ERR   XML handle was created
-   C_NOACT    existing file could not be deleted
+   Errc::success    XML handle was created
+   Errc::noact      existing file could not be deleted
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_GetParserForNewFile(C_OscXmlParser & orc_FileXmlParser, const std::string & orc_Path,
-                                                    const std::string & orc_RootNode)
+std::error_code C_OscSystemFilerUtil::h_GetParserForNewFile(C_OscXmlParser & orc_FileXmlParser,
+                                                            const std::string & orc_Path,
+                                                            const std::string & orc_RootNode)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_Path))
    {
       if (std::remove(orc_Path.c_str()) == 0)
       {
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
       }
       else
       {
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
          osc_write_log_error("Saving files", "Could not delete file \"" + orc_Path + "\"");
       }
    }
    orc_FileXmlParser.CreateAndSelectNodeChild(orc_RootNode);
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -184,32 +188,32 @@ int32_t C_OscSystemFilerUtil::h_GetParserForNewFile(C_OscXmlParser & orc_FileXml
    \param[in]  orc_Path    Folder path
 
    \return
-   C_NO_ERR   XML handle was created
-   C_NOACT    folder could not be created
+   Errc::success    XML handle was created
+   Errc::noact      folder could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_CreateFolder(const std::string & orc_Path)
+std::error_code C_OscSystemFilerUtil::h_CreateFolder(const std::string & orc_Path)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
    if (TglDirectoryExists(orc_Path))
    {
-      s32_Retval = C_NO_ERR;
+      c_Retval = Errc::success;
    }
    else
    {
       if (TglCreateDirectory(orc_Path) == 0)
       {
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
       }
       else
       {
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
          osc_write_log_error("Saving files", "Could not create directory \"" + orc_Path + "\"");
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -256,16 +260,16 @@ std::string C_OscSystemFilerUtil::h_CombinePaths(const std::string & orc_BasePat
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data saved
-   \retval   C_RD_WR    could not erase pre-existing file before saving
-   \retval   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   \retval   Errc::success   data saved
+   \retval   Errc::rd_wr     could not erase pre-existing file before saving
+   \retval   Errc::rd_wr     could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_SaveStringToFile(const std::string & orc_CompleteFileAsString,
-                                                 const std::string & orc_CompleteFilePath,
-                                                 const std::string & orc_LogHeading)
+std::error_code C_OscSystemFilerUtil::h_SaveStringToFile(const std::string & orc_CompleteFileAsString,
+                                                         const std::string & orc_CompleteFilePath,
+                                                         const std::string & orc_LogHeading)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    const std::string c_Folder = TglExtractFilePath(orc_CompleteFilePath);
 
@@ -274,11 +278,11 @@ int32_t C_OscSystemFilerUtil::h_SaveStringToFile(const std::string & orc_Complet
       if (TglCreateDirectory(c_Folder) != 0)
       {
          osc_write_log_error(orc_LogHeading, "Could not create folder \"" + c_Folder + "\".");
-         s32_Retval = C_RD_WR;
+         c_Retval = Errc::rd_wr;
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       //Write (erase if file exists)
       std::ofstream c_File;
@@ -294,17 +298,17 @@ int32_t C_OscSystemFilerUtil::h_SaveStringToFile(const std::string & orc_Complet
          {
             osc_write_log_error(orc_LogHeading,
                                 "Could not create or overwrite file \"" + orc_CompleteFilePath + "\".");
-            s32_Retval = C_RD_WR;
+            c_Retval = Errc::rd_wr;
          }
       }
       else
       {
          osc_write_log_error(orc_LogHeading,
                              "Could not write to file \"" + orc_CompleteFilePath + "\".");
-         s32_Retval = C_RD_WR;
+         c_Retval = Errc::rd_wr;
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -375,14 +379,14 @@ std::string C_OscSystemFilerUtil::h_CodeExportScalingTypeToString(
    \param[out]  ore_Scaling   Scaling support type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_StringToCodeExportScalingType(const std::string & orc_String,
-                                                              C_OscNodeCodeExportSettings::E_Scaling & ore_Scaling)
+std::error_code C_OscSystemFilerUtil::h_StringToCodeExportScalingType(
+   const std::string & orc_String, C_OscNodeCodeExportSettings::E_Scaling & ore_Scaling)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "float32")
    {
@@ -401,10 +405,10 @@ int32_t C_OscSystemFilerUtil::h_StringToCodeExportScalingType(const std::string 
       osc_write_log_error("Loading node definition",
                           "Invalid value for \"properties\".\"code-export-settings\".\"scaling-support\": " +
                           orc_String);
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -416,18 +420,18 @@ int32_t C_OscSystemFilerUtil::h_StringToCodeExportScalingType(const std::string 
    \param[in]      orc_UseCase               Use case
 
    \return
-   C_NO_ERR   no error
-   C_CONFIG   Version error
+   Errc::success    no error
+   Errc::config     Version error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_CheckVersion(C_OscXmlParserBase & orc_XmlParser,
-                                             const uint16_t ou16_ExpectedFileVersion, const std::string & orc_TagName,
-                                             const std::string & orc_UseCase)
+std::error_code C_OscSystemFilerUtil::h_CheckVersion(C_OscXmlParserBase & orc_XmlParser,
+                                                     const uint16_t ou16_ExpectedFileVersion,
+                                                     const std::string & orc_TagName, const std::string & orc_UseCase)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError(orc_TagName);
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError(orc_TagName);
 
    //File version
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       uint16_t u16_FileVersion = 0U;
       try
@@ -437,11 +441,11 @@ int32_t C_OscSystemFilerUtil::h_CheckVersion(C_OscXmlParserBase & orc_XmlParser,
       catch (...)
       {
          orc_XmlParser.ReportErrorForNodeContentStartingWithXmlContext("could not be converted to a number");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
 
       //is the file version one we know ?
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          osc_write_log_info(orc_UseCase, "Value of \"" + orc_TagName + "\": " +
                             std::to_string(u16_FileVersion));
@@ -449,12 +453,12 @@ int32_t C_OscSystemFilerUtil::h_CheckVersion(C_OscXmlParserBase & orc_XmlParser,
          if (u16_FileVersion != ou16_ExpectedFileVersion)
          {
             orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext(orc_TagName, "Unsupported version defined");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
 
       //Return
       orc_XmlParser.SelectNodeParent();
    }
-   return s32_Retval;
+   return c_Retval;
 }

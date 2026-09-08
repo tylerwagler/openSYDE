@@ -152,7 +152,7 @@ void C_OgeLabFrameError::m_OnSizeChange(const QSize * const opc_SizeToUse)
    const QFontMetrics c_Metrics = mh_GetFontMetrics();
    QString c_DisplayedString;
 
-   if (opc_SizeToUse != NULL)
+   if (opc_SizeToUse != nullptr)
    {
       c_DisplayedString =
          C_Uti::h_AdaptStringToSize(this->mc_Text, c_Metrics, static_cast<float64_t>(opc_SizeToUse->width()));

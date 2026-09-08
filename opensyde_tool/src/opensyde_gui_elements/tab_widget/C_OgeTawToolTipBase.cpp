@@ -42,7 +42,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeTawToolTipBase::C_OgeTawToolTipBase(QWidget * const opc_Parent) :
    QTabWidget(opc_Parent),
-   mpc_ToolTip(NULL),
+   mpc_ToolTip(nullptr),
    ms32_CurrentHoveredIndex(-1)
 {
 }
@@ -54,7 +54,7 @@ C_OgeTawToolTipBase::C_OgeTawToolTipBase(QWidget * const opc_Parent) :
 C_OgeTawToolTipBase::~C_OgeTawToolTipBase()
 {
    delete mpc_ToolTip;
-   mpc_ToolTip = NULL;
+   mpc_ToolTip = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ bool C_OgeTawToolTipBase::event(QEvent * const opc_Event)
    if (opc_Event->type() == QEvent::ToolTip)
    {
       //show tooltip
-      if (mpc_ToolTip == NULL)
+      if (mpc_ToolTip == nullptr)
       {
          mpc_ToolTip = new stw::opensyde_gui::C_NagToolTip();
       }
@@ -117,7 +117,7 @@ bool C_OgeTawToolTipBase::event(QEvent * const opc_Event)
       {
          QHelpEvent * const pc_HelpEvent = dynamic_cast<QHelpEvent * const>(opc_Event);
 
-         if (pc_HelpEvent != NULL)
+         if (pc_HelpEvent != nullptr)
          {
             const int32_t s32_TabIndex =
                this->tabBar()->tabAt(this->tabBar()->mapFromGlobal(pc_HelpEvent->globalPos()));
@@ -187,7 +187,7 @@ bool C_OgeTawToolTipBase::event(QEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeTawToolTipBase::m_HideToolTip()
 {
-   if (this->mpc_ToolTip != NULL)
+   if (this->mpc_ToolTip != nullptr)
    {
       this->mpc_ToolTip->hide();
    }

@@ -15,6 +15,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
 #include <iostream>
 #include <getopt.h> //note: as we use getopt.h this application is not portable to all compilers
 
@@ -58,8 +59,8 @@ using namespace stw::can;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SydeSup::C_SydeSup(void) :
-   mpc_CanDispatcher(NULL),
-   mpc_EthDispatcher(NULL),
+   mpc_CanDispatcher(nullptr),
+   mpc_EthDispatcher(nullptr),
    mq_Quiet(false),
    mq_OnlyNecessaryFiles(false),
    me_OperationMode(eMODE_UPDATE),
@@ -84,7 +85,7 @@ C_SydeSup::C_SydeSup(void) :
 C_SydeSup::~C_SydeSup(void)
 {
    this->m_CloseCan();
-   mpc_EthDispatcher = NULL;
+   mpc_EthDispatcher = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -107,7 +108,7 @@ C_SydeSup::E_Result C_SydeSup::m_OpenCan(const std::string & orc_CanDriver, cons
 {
    C_SydeSup::E_Result e_Result = eOK;
 
-   if (mpc_CanDispatcher != NULL)
+   if (mpc_CanDispatcher != nullptr)
    {
       this->m_CloseCan();
    }
@@ -126,18 +127,18 @@ C_SydeSup::E_Result C_SydeSup::m_OpenCan(const std::string & orc_CanDriver, cons
 
    std::string c_Error;
    mpc_CanDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
-   if (mpc_CanDispatcher == NULL)
+   if (mpc_CanDispatcher == nullptr)
    {
       h_WriteLog("OpenCan", "Could not create CAN adapter: " + c_Error, true);
       e_Result = eERR_CAN_IF_LOAD_FAILED;
    }
    else
    {
-      const int32_t s32_Return = mpc_CanDispatcher->CAN_Init(static_cast<int32_t>(ou64_BitrateBps / 1000ULL));
-      if (s32_Return != C_NO_ERR)
+      const std::error_code c_Return = mpc_CanDispatcher->CAN_Init(static_cast<int32_t>(ou64_BitrateBps / 1000ULL));
+      if (c_Return != Errc::success)
       {
          delete mpc_CanDispatcher;
-         mpc_CanDispatcher = NULL;
+         mpc_CanDispatcher = nullptr;
          e_Result = eERR_SEQUENCE_CAN_INIT;
       }
    }
@@ -148,11 +149,11 @@ C_SydeSup::E_Result C_SydeSup::m_OpenCan(const std::string & orc_CanDriver, cons
 //----------------------------------------------------------------------------------------------------------------------
 void C_SydeSup::m_CloseCan(void)
 {
-   if (mpc_CanDispatcher != NULL)
+   if (mpc_CanDispatcher != nullptr)
    {
       (void)mpc_CanDispatcher->CAN_Exit();
       delete mpc_CanDispatcher;
-      mpc_CanDispatcher = NULL;
+      mpc_CanDispatcher = nullptr;
    }
 }
 
@@ -205,55 +206,55 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t 
    {
       /* name, has_arg, flag, val */
       {
-         "help",              no_argument,         NULL,    'h'
+         "help",              no_argument,         nullptr,    'h'
       },
       {
-         "man",               no_argument,         NULL,    'm'
+         "man",               no_argument,         nullptr,    'm'
       },
       {
-         "version",           no_argument,         NULL,    'v'
+         "version",           no_argument,         nullptr,    'v'
       },
       {
-         "quiet",             no_argument,         NULL,    'q'
+         "quiet",             no_argument,         nullptr,    'q'
       },
       {
-         "necessaryfiles",    no_argument,         NULL,    'n'
+         "necessaryfiles",    no_argument,         nullptr,    'n'
       },
       {
-         "operationmode",     required_argument,   NULL,    'o'
+         "operationmode",     required_argument,   nullptr,    'o'
       },
       {
-         "packagefile",       required_argument,   NULL,    'p'
+         "packagefile",       required_argument,   nullptr,    'p'
       },
       {
-         "caninterface",      required_argument,   NULL,    'i'
+         "caninterface",      required_argument,   nullptr,    'i'
       },
       {
-         "unzipdir",          required_argument,   NULL,    'z'
+         "unzipdir",          required_argument,   nullptr,    'z'
       },
       {
-         "logdir",            required_argument,   NULL,    'l'
+         "logdir",            required_argument,   nullptr,    'l'
       },
       {
-         "certificatesdir",   required_argument,   NULL,    'c'
+         "certificatesdir",   required_argument,   nullptr,    'c'
       },
       {
-         "opensydeproject",   required_argument,   NULL,    's'
+         "opensydeproject",   required_argument,   nullptr,    's'
       },
       {
-         "devicedefinition",  required_argument,   NULL,    'd'
+         "devicedefinition",  required_argument,   nullptr,    'd'
       },
       {
-         "systemview",        required_argument,   NULL,    'w'
+         "systemview",        required_argument,   nullptr,    'w'
       },
       {
-         "pemfile",           required_argument,   NULL,    'k'
+         "pemfile",           required_argument,   nullptr,    'k'
       },
       {
-         "password",          required_argument,   NULL,    'x'
+         "password",          required_argument,   nullptr,    'x'
       },
       {
-         NULL,                0,                   NULL,    0
+         nullptr,                0,                   nullptr,    0
       }
    };
 
@@ -560,6 +561,8 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
       //the engine below will handle if an empty password was given
       c_PasswordsForDecryption.push_back(mc_Password);
 
+      //h_ProcessPackageUsingPemFiles reports std::error_code; this function threads the legacy int32_t
+      //through a dozen steps, so convert once at the boundary rather than half-migrating it
       s32_Return = C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(mc_SupFilePath, mc_UnzipPath,
                                                                                    c_SystemDefinition,
                                                                                    u32_ActiveBusIndex,
@@ -568,7 +571,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
                                                                                    c_WarningMessages, c_ErrorMessage,
                                                                                    q_PackageIsZip, c_DecryptNodes,
                                                                                    c_PasswordsForDecryption,
-                                                                                   c_PemFilesForNodes);
+                                                                                   c_PemFilesForNodes).value();
 
       // report success or translate errors
       switch (s32_Return) // here s32_Return is result of h_ProcessPackageUsingPemFiles
@@ -632,7 +635,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
             if (e_Result == eOK)
             {
                h_WriteLog("Open CAN", "CAN driver initialized.");
-               tgl_assert(mpc_CanDispatcher != NULL);
+               tgl_assert(mpc_CanDispatcher != nullptr);
             }
          }
          else if (c_SystemDefinition.c_Buses[u32_ActiveBusIndex].e_Type == C_OscSystemBus::eETHERNET)
@@ -641,7 +644,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
             if (e_Result == eOK)
             {
                h_WriteLog("Open Ethernet", "Ethernet driver initialized.");
-               tgl_assert(mpc_EthDispatcher != NULL);
+               tgl_assert(mpc_EthDispatcher != nullptr);
             }
          }
          else
@@ -659,7 +662,9 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
          //parse pem database if cmd line parameter is not empty
          if (mc_CertFolderPath != "")
          {
-            s32_Return = mc_PemDatabase.ParseFolder(mc_CertFolderPath.c_str());
+            //ParseFolder returns std::error_code; this function threads the legacy int32_t through
+            //a dozen steps, so convert once at the boundary rather than half-migrating it
+            s32_Return = mc_PemDatabase.ParseFolder(mc_CertFolderPath.c_str()).value();
 
             if (s32_Return != C_NO_ERR)
             {
@@ -678,8 +683,9 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
       if (s32_Return == C_NO_ERR)
       {
          // initialize sequence
+         //boundary: the callee now reports std::error_code
          s32_Return = c_Sequence.Init(c_SystemDefinition, u32_ActiveBusIndex, c_ActiveNodes, mpc_CanDispatcher,
-                                      mpc_EthDispatcher, &this->mc_PemDatabase);
+                                      mpc_EthDispatcher, &this->mc_PemDatabase).value();
          // tell report methods to not print to console
          c_Sequence.SetQuiet(mq_Quiet);
       }
@@ -693,7 +699,8 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
       case C_NO_ERR:
          h_WriteLog("Setup Sequence", "Sequence initialized.");
          // activate Flashloader
-         s32_Return = c_Sequence.ActivateFlashloader();
+         //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+         s32_Return = c_Sequence.ActivateFlashloader().value();
          break;
       case C_RANGE:
          e_Result = eERR_SEQUENCE_ROUTING;
@@ -1375,7 +1382,8 @@ void C_SydeSup::m_Conclude(C_SupSuSequences & orc_Sequence, const bool & orq_Res
    // reset system (if Flashloader activation failed or system update succeeded)
    if (orq_ResetSystem == true)
    {
-      s32_Result = orc_Sequence.ResetSystem();
+      //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Result = orc_Sequence.ResetSystem().value();
       if (s32_Result == C_NO_ERR)
       {
          h_WriteLog("Reset System", "System reset successful.", false, mq_Quiet);
@@ -1430,7 +1438,8 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
       c_NodeApplicationsHelperStruct.resize(orc_ActiveNodes.size());
 
       orc_Sequence.ClearActiveDeviceInformation();
-      s32_Result = orc_Sequence.ReadDeviceInformation();
+      //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Result = orc_Sequence.ReadDeviceInformation().value();
 
       if (s32_Result == C_NO_ERR)
       {
@@ -1485,11 +1494,13 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
 
                   C_OscHexFile c_HexFile;
 
-                  const uint32_t u32_Result = ListLoadFromFile(c_HexFile, c_Path.c_str());
-                  if (u32_Result == stw::hex_file::NO_ERR)
+                  const std::error_code c_Result = c_HexFile.LoadFromFile(c_Path.c_str());
+                  if (!c_Result)
                   {
                      stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
-                     s32_Result = c_HexFile.ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo);
+                     //boundary: s32_Result is threaded through the rest of this function as an integer
+                     s32_Result =
+                        c_HexFile.ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo).value();
                      if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
                      {
                         C_OscSuSequences::C_ApplicationProperties c_Temp;
@@ -1507,7 +1518,7 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
                   {
                      const std::string c_Text = "Could not open HEX file \"" +
                                                 c_Path + "\" Details: " +
-                                                c_HexFile.ErrorCodeToErrorText(u32_Result);
+                                                c_HexFile.ErrorCodeToErrorText(c_Result);
                      osc_write_log_warning("X-Check feature", c_Text);
                      s32_Result = C_WARN;
                      break;
@@ -1592,7 +1603,8 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
 
    if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
    {
-      s32_Result = orc_Sequence.UpdateSystem(orc_ApplicationsToWrite, orc_NodesUpdateOrder);
+      //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Result = orc_Sequence.UpdateSystem(orc_ApplicationsToWrite, orc_NodesUpdateOrder).value();
    }
    return s32_Result;
 }
@@ -1629,8 +1641,8 @@ std::vector<uint8_t> C_SydeSup::m_GetActiveNodeTypes(const C_OscSystemDefinition
          const C_OscDeviceDefinition * const pc_DeviceDefinition =
             orc_SystemDefinition.c_Nodes[u16_Node].pc_DeviceDefinition;
 
-         tgl_assert(pc_DeviceDefinition != NULL);
-         if (pc_DeviceDefinition != NULL)
+         tgl_assert(pc_DeviceDefinition != nullptr);
+         if (pc_DeviceDefinition != nullptr)
          {
             const uint32_t u32_SubDeviceIndex = orc_SystemDefinition.c_Nodes[u16_Node].u32_SubDeviceIndex;
             //Do we have one of the Flashloader types that support version checking ?

@@ -30,7 +30,7 @@ class C_SyvDaUnoAddDeleteBaseCommand :
 {
 public:
    C_SyvDaUnoAddDeleteBaseCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                                  const QString & orc_Text, QUndoCommand * const opc_Parent = NULL, const C_SyvDaDashboardSnapshot & orc_InitialSnapshotData =
+                                  const QString & orc_Text, QUndoCommand * const opc_Parent = nullptr, const C_SyvDaDashboardSnapshot & orc_InitialSnapshotData =
                                      C_SyvDaDashboardSnapshot());
 
 protected:

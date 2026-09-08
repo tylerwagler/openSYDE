@@ -29,7 +29,7 @@ class C_SdNdeSingleHeaderView :
    Q_OBJECT
 
 public:
-   C_SdNdeSingleHeaderView(const Qt::Orientation & ore_Orientation, QWidget * const opc_Parent = NULL);
+   C_SdNdeSingleHeaderView(const Qt::Orientation & ore_Orientation, QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

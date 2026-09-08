@@ -40,7 +40,7 @@ class C_SyvHandlerWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvHandlerWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvHandlerWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvHandlerWidget(void) override;
 
    void UserInputFunc(const uint32_t ou32_FuncNumber) override;

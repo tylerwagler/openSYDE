@@ -33,7 +33,7 @@ class C_SdNdeDalLogJobsWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDalLogJobsWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDalLogJobsWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDalLogJobsWidget(void) override;
 
    void InitStaticNames(void) const;

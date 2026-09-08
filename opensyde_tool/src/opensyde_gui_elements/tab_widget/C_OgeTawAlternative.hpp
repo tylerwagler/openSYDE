@@ -30,7 +30,7 @@ class C_OgeTawAlternative :
    Q_OBJECT
 
 public:
-   C_OgeTawAlternative(QWidget * const opc_Parent = NULL);
+   C_OgeTawAlternative(QWidget * const opc_Parent = nullptr);
    ~C_OgeTawAlternative(void) override;
 
 private:

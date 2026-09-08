@@ -74,7 +74,7 @@ void C_SdManUnoTopologyAddSnapshotCommand::m_AddNew(void)
 {
    C_SdTopologyScene * const pc_Scene = dynamic_cast<C_SdTopologyScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       QMap<C_PuiBsTemporaryDataId, uint64_t> c_IdMap;
       const C_SdTopologyDataSnapshot c_InitialData = this->GetDataBackup();

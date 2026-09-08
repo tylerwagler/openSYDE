@@ -32,7 +32,7 @@ public:
    static const std::string hc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
 
 protected:
-   static stw::scl::std::vector<std::string> mhc_WarningMessages; // global warnings e.g. if update position of active node is
+   static std::vector<std::string> mhc_WarningMessages; // global warnings e.g. if update position of active node is
                                                          // not available
    static std::string mhc_ErrorMessage;        // description of error which caused the service update package
                                                          // to fail
@@ -40,7 +40,7 @@ protected:
    static const std::string mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER;
 
    static void mh_Init(void);
-   static void mh_GetWarningsAndErrors(stw::scl::std::vector<std::string> & orc_WarningMessages,
+   static void mh_GetWarningsAndErrors(std::vector<std::string> & orc_WarningMessages,
                                        std::string & orc_ErrorMessage);
 };
 

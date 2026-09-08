@@ -194,7 +194,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
       {
          // get parameter data (of parameter itself or of parameter element)
          const C_OscHalcConfigParameter * const pc_ParameterElement = m_GetParameterElement(orc_Index);
-         if (pc_ParameterElement != NULL)
+         if (pc_ParameterElement != nullptr)
          {
             const std::vector<std::pair<std::string, C_OscNodeDataPoolContent> > & rc_EnumItems =
                pc_ParameterElement->c_Value.GetEnumItems();
@@ -246,7 +246,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
                case C_OscHalcDefContent::eCT_STRING:
                   {
                      std::string c_String;
-                     if (pc_ParameterElement->c_Value.GetStringValue(c_String) == C_NO_ERR)
+                     if (!pc_ParameterElement->c_Value.GetStringValue(c_String))
                      {
                         c_Retval = c_String.c_str();
                      }
@@ -269,7 +269,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
       else if ((os32_Role == ms32_USER_ROLE_INTERACTION_GENERIC_SPIN_BOX_PARAMETERS_LIST) && (e_Col == eVALUE))
       {
          const C_OscHalcDefElement * const pc_DefElement = this->m_GetDefParameterElement(orc_Index);
-         if (pc_DefElement != NULL)
+         if (pc_DefElement != nullptr)
          {
             // Set generic spin box parameters
             QStringList c_List;
@@ -294,7 +294,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
       {
          // get parameter data (of parameter itself or of parameter element)
          const C_OscHalcConfigParameter * const pc_ParameterElement = m_GetParameterElement(orc_Index);
-         if (pc_ParameterElement != NULL)
+         if (pc_ParameterElement != nullptr)
          {
             c_Retval = mh_ConvertBitmasksToStringList(pc_ParameterElement->c_Value);
          }
@@ -303,7 +303,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
       {
          // get parameter data (of parameter itself or of parameter element)
          const C_OscHalcConfigParameter * const pc_ParameterElement = m_GetParameterElement(orc_Index);
-         if (pc_ParameterElement != NULL)
+         if (pc_ParameterElement != nullptr)
          {
             c_Retval = mh_ConvertEnumsToStringList(pc_ParameterElement->c_Value);
          }
@@ -312,7 +312,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
       {
          // get parameter data (of parameter itself or of parameter element)
          const C_OscHalcConfigParameter * const pc_ParameterElement = m_GetParameterElement(orc_Index);
-         if (pc_ParameterElement != NULL)
+         if (pc_ParameterElement != nullptr)
          {
             // use edit field depending on complex type
             switch (pc_ParameterElement->c_Value.GetComplexType())
@@ -340,7 +340,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
       {
          // in HALC case strings are not hex numbers, so do not use min or max values
          const C_OscHalcConfigParameter * const pc_ParameterElement = m_GetParameterElement(orc_Index);
-         if (pc_ParameterElement != NULL)
+         if (pc_ParameterElement != nullptr)
          {
             if (pc_ParameterElement->c_Value.GetComplexType() == C_OscHalcDefContent::eCT_STRING)
             {
@@ -351,7 +351,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
       else if ((os32_Role == ms32_USER_ROLE_INTERACTION_USE_STR_LENGTH) && (e_Col == eVALUE))
       {
          const C_OscHalcConfigParameter * const pc_ParameterElement = m_GetParameterElement(orc_Index);
-         if (pc_ParameterElement != NULL)
+         if (pc_ParameterElement != nullptr)
          {
             if (pc_ParameterElement->c_Value.GetComplexType() == C_OscHalcDefContent::eCT_STRING)
             {
@@ -362,7 +362,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
       else if ((os32_Role == ms32_USER_ROLE_INTERACTION_STR_LENGTH) && (e_Col == eVALUE))
       {
          const C_OscHalcConfigParameter * const pc_ParameterElement = m_GetParameterElement(orc_Index);
-         if (pc_ParameterElement != NULL)
+         if (pc_ParameterElement != nullptr)
          {
             if ((pc_ParameterElement->c_Value.GetComplexType() == C_OscHalcDefContent::eCT_STRING) &&
                 (pc_ParameterElement->c_Value.GetArray() == true)) // just to make sure, should be true if eCT_STRING
@@ -413,11 +413,11 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
       std::vector<uint32_t> c_LinkedChannels;
       if (C_PuiSdHandler::h_GetInstance()->CheckHalcDomainChannelLinked(this->mu32_NodeIndex, this->mu32_DomainIndex,
                                                                         this->mu32_ChannelIndex, this->mq_ChannelCase,
-                                                                        q_Tmp, NULL, &c_LinkedChannels) == C_NO_ERR)
+                                                                        q_Tmp, nullptr, &c_LinkedChannels) == C_NO_ERR)
       {
          // get parameter data (of parameter itself or of parameter element)
          const C_OscHalcConfigParameter * const pc_ParameterElement = m_GetParameterElement(orc_Index);
-         if (pc_ParameterElement != NULL)
+         if (pc_ParameterElement != nullptr)
          {
             uint32_t u32_ParameterIndex;
             uint32_t u32_ParameterElementIndex;
@@ -631,7 +631,7 @@ void C_SdNdeHalcConfigTreeModel::SetHalcChannelUseCase(const uint32_t ou32_Domai
 
    // insert model data
    this->beginResetModel();
-   if (this->mpc_InvisibleRootItem == NULL)
+   if (this->mpc_InvisibleRootItem == nullptr)
    {
       this->mpc_InvisibleRootItem = new C_TblTreItem();
    }
@@ -640,7 +640,7 @@ void C_SdNdeHalcConfigTreeModel::SetHalcChannelUseCase(const uint32_t ou32_Domai
    const C_OscHalcConfigDomain * const pc_Domain =
       C_PuiSdHandler::h_GetInstance()->GetHalcDomainConfigDataConst(mu32_NodeIndex, mu32_DomainIndex);
 
-   if (pc_Domain != NULL)
+   if (pc_Domain != nullptr)
    {
       const std::vector<C_OscHalcDefStruct> & rc_Parameters =
          mq_ChannelCase ? pc_Domain->c_ChannelValues.c_Parameters : pc_Domain->c_DomainValues.c_Parameters;
@@ -690,7 +690,7 @@ void C_SdNdeHalcConfigTreeModel::SetHalcChannelUseCase(const uint32_t ou32_Domai
          }
 
          // finally add to tree
-         if ((this->mpc_InvisibleRootItem != NULL) &&
+         if ((this->mpc_InvisibleRootItem != nullptr) &&
              (q_AddParameterToTree == true))
          {
             this->mpc_InvisibleRootItem->AddChild(pc_ParameterTreeItem);
@@ -711,7 +711,7 @@ void C_SdNdeHalcConfigTreeModel::SetHalcChannelUseCase(const uint32_t ou32_Domai
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcConfigTreeModel::Clear(void)
 {
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       std::vector<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
 
@@ -721,7 +721,7 @@ void C_SdNdeHalcConfigTreeModel::Clear(void)
       for (c_ItChildren = this->mpc_InvisibleRootItem->c_Children.begin();
            c_ItChildren != this->mpc_InvisibleRootItem->c_Children.end(); ++c_ItChildren)
       {
-         if (*c_ItChildren != NULL)
+         if (*c_ItChildren != nullptr)
          {
             (*c_ItChildren)->ClearChildren();
          }
@@ -759,10 +759,10 @@ bool C_SdNdeHalcConfigTreeModel::mh_GetParameterElementIndexe(const QModelIndex 
       // Decode model index: parent or child?
       //lint -e{9079}  Result of Qt interface restrictions, set by index function
       const C_TblTreItem * const pc_CurrentItem = static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
-      if (pc_CurrentItem != NULL)
+      if (pc_CurrentItem != nullptr)
       {
          const C_TblTreItem * const pc_Parent = dynamic_cast<const C_TblTreItem * const>(pc_CurrentItem->pc_Parent);
-         if ((pc_Parent != NULL) && (pc_Parent->pc_Parent != NULL))
+         if ((pc_Parent != nullptr) && (pc_Parent->pc_Parent != nullptr))
          {
             q_IsParent = false;
             oru32_ParameterIndex = pc_Parent->u32_Index;
@@ -797,7 +797,7 @@ bool C_SdNdeHalcConfigTreeModel::mh_GetParameterElementIndexe(const QModelIndex 
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscHalcConfigParameter * C_SdNdeHalcConfigTreeModel::m_GetParameterElement(const QModelIndex & orc_Index) const
 {
-   const C_OscHalcConfigParameter * pc_Return = NULL;
+   const C_OscHalcConfigParameter * pc_Return = nullptr;
 
    uint32_t u32_ParameterIndex;
    uint32_t u32_ParameterElementIndex = 0U;
@@ -809,7 +809,7 @@ const C_OscHalcConfigParameter * C_SdNdeHalcConfigTreeModel::m_GetParameterEleme
                                                                                      u32_ParameterIndex,
                                                                                      mq_ChannelCase);
 
-   if (pc_Parameter != NULL)
+   if (pc_Parameter != nullptr)
    {
       if (q_IsParameterElement == true)
       {
@@ -850,7 +850,7 @@ const C_OscHalcConfigParameter * C_SdNdeHalcConfigTreeModel::m_GetParameterEleme
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscHalcDefElement * C_SdNdeHalcConfigTreeModel::m_GetDefParameterElement(const QModelIndex & orc_Index) const
 {
-   const C_OscHalcDefElement * pc_Return = NULL;
+   const C_OscHalcDefElement * pc_Return = nullptr;
 
    uint32_t u32_ParameterIndex;
    uint32_t u32_ParameterElementIndex = 0U;
@@ -861,7 +861,7 @@ const C_OscHalcDefElement * C_SdNdeHalcConfigTreeModel::m_GetDefParameterElement
                                                                      C_OscHalcDefDomain::eVA_PARAM,
                                                                      u32_ParameterIndex);
 
-   if (pc_DefElement != NULL)
+   if (pc_DefElement != nullptr)
    {
       if (q_IsParameterElement == true)
       {
@@ -961,7 +961,7 @@ QStringList C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToStringList(const C_O
 {
    std::vector<std::string> c_Display;
    QStringList c_Retval;
-   orc_Value.GetBitmaskStatusValues(&c_Display, NULL);
+   orc_Value.GetBitmaskStatusValues(&c_Display, nullptr);
    c_Retval.reserve(c_Display.size());
    for (uint32_t u32_It = 0UL; u32_It < c_Display.size(); ++u32_It)
    {
@@ -1029,7 +1029,7 @@ QBitArray C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToBitArray(const C_OscHa
 {
    std::vector<bool> c_Values;
    QBitArray c_Retval;
-   orc_Value.GetBitmaskStatusValues(NULL, &c_Values);
+   orc_Value.GetBitmaskStatusValues(nullptr, &c_Values);
    c_Retval.resize(c_Values.size());
    for (uint32_t u32_It = 0UL; u32_It < c_Values.size(); ++u32_It)
    {

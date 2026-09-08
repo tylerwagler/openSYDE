@@ -9,6 +9,8 @@
 #define C_OSCHALCCONFIGSTANDALONEFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "C_OscXmlParser.hpp"
 #include "C_OscHalcConfigStandalone.hpp"
 
@@ -26,12 +28,13 @@ class C_OscHalcConfigStandaloneFiler
 public:
    C_OscHalcConfigStandaloneFiler(void);
 
-   static int32_t h_LoadFileStandalone(C_OscHalcConfigStandalone & orc_IoData, const std::string & orc_Path);
-   static int32_t h_SaveFileStandalone(const C_OscHalcConfigStandalone & orc_IoData,
-                                       const std::string & orc_Path);
-   static int32_t h_LoadDataStandalone(C_OscHalcConfigStandalone & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_SaveDataStandalone(const C_OscHalcConfigStandalone & orc_IoData,
-                                       C_OscXmlParserBase & orc_XmlParser);
+   static std::error_code h_LoadFileStandalone(C_OscHalcConfigStandalone & orc_IoData, const std::string & orc_Path);
+   static std::error_code h_SaveFileStandalone(const C_OscHalcConfigStandalone & orc_IoData,
+                                               const std::string & orc_Path);
+   static std::error_code h_LoadDataStandalone(C_OscHalcConfigStandalone & orc_IoData,
+                                               C_OscXmlParserBase & orc_XmlParser);
+   static std::error_code h_SaveDataStandalone(const C_OscHalcConfigStandalone & orc_IoData,
+                                               C_OscXmlParserBase & orc_XmlParser);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

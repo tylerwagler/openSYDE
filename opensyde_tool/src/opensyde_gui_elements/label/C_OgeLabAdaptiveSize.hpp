@@ -28,7 +28,7 @@ class C_OgeLabAdaptiveSize :
    public QLabel
 {
 public:
-   C_OgeLabAdaptiveSize(QWidget * const opc_Parent = NULL);
+   C_OgeLabAdaptiveSize(QWidget * const opc_Parent = nullptr);
 
    void ResetFont(void);
 

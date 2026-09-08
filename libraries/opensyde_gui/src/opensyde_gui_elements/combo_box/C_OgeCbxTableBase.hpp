@@ -26,7 +26,7 @@ class C_OgeCbxTableBase :
    public C_OgeCbxResizingView
 {
 public:
-   C_OgeCbxTableBase(QWidget * const opc_Parent = NULL);
+   C_OgeCbxTableBase(QWidget * const opc_Parent = nullptr);
 
    void InitFromStringList(const QStringList & orc_Strings, const QStringList & orc_Values = QStringList());
    void InitMinMaxAndScaling(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Min,

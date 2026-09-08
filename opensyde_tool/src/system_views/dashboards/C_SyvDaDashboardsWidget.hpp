@@ -43,7 +43,7 @@ class C_SyvDaDashboardsWidget :
 
 public:
    explicit C_SyvDaDashboardsWidget(const uint32_t ou32_ViewIndex, QWidget * const opc_ToolboxParent,
-                                    QWidget * const opc_Parent = NULL);
+                                    QWidget * const opc_Parent = nullptr);
    ~C_SyvDaDashboardsWidget(void) override;
 
    void InitText() const;

@@ -28,7 +28,7 @@ class C_SebUnoMoveCommandGroup :
    public QUndoCommand
 {
 public:
-   C_SebUnoMoveCommandGroup(QUndoCommand * const opc_Parent = NULL);
+   C_SebUnoMoveCommandGroup(QUndoCommand * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

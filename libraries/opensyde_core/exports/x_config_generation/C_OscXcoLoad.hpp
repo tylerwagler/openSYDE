@@ -9,6 +9,8 @@
 #define C_OSCXCOLOAD_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "C_OscXcoBase.hpp"
 #include "C_OscXcoManifest.hpp"
 
@@ -25,19 +27,19 @@ class C_OscXcoLoad :
    public C_OscXcoBase
 {
 public:
-   static int32_t h_ProcessPackage(const std::string & orc_PackagePath,
-                                   const std::string & orc_TargetUnzipPath, C_OscXcoManifest & orc_Manifest,
-                                   std::string & orc_SystemDefinitionPath,
-                                   std::string & orc_DeviceDefinitionPath,
-                                   stw::scl::std::vector<std::string> & orc_WarningMessages,
-                                   std::string & orc_ErrorMessage);
+   static std::error_code h_ProcessPackage(const std::string & orc_PackagePath,
+                                           const std::string & orc_TargetUnzipPath, C_OscXcoManifest & orc_Manifest,
+                                           std::string & orc_SystemDefinitionPath,
+                                           std::string & orc_DeviceDefinitionPath,
+                                           std::vector<std::string> & orc_WarningMessages,
+                                           std::string & orc_ErrorMessage);
 
 private:
    static const std::string mhc_USE_CASE;
 
-   static int32_t mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
-                                                 const std::string & orc_TargetUnzipPath);
-   static int32_t mh_CheckXcfgFiles(const std::string & orc_PackagePath);
+   static std::error_code mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
+                                                         const std::string & orc_TargetUnzipPath);
+   static std::error_code mh_CheckXcfgFiles(const std::string & orc_PackagePath);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

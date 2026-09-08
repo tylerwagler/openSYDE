@@ -1,0 +1,48 @@
+# Line ending policy
+#
+# This tree is ~76% CRLF (1665 files) and ~24% LF (527), because it began as a
+# Windows codebase and the Linux work since has added LF files. Upstream
+# (github.com/openSYDE/openSYDE) is CRLF throughout, and this fork still merges
+# releases from it.
+#
+# Policy: git does NOT convert line endings. Files keep exactly the bytes they
+# have. This is deliberate.
+#
+# `text=auto` was tried and rejected: it renormalises every file the moment git
+# touches it, which turned a 45-file repair into a 30052-line rewrite. Doing
+# that across all 2192 files would poison `git blame` for the whole codebase and
+# conflict with every in-flight branch and every future upstream merge, since
+# upstream's blobs stay CRLF.
+#
+# `-text` also makes behaviour identical for everyone regardless of their
+# personal core.autocrlf setting, which is the other way this used to bite.
+#
+# What this does NOT do is stop editing tools from injecting the wrong ending
+# into a file. That is a tooling discipline problem: read and write with the
+# file's existing endings preserved (in Python, open with newline=""). 52 files
+# had been damaged that way and were repaired in the commit that added this file.
+#
+# If a full normalisation is ever wanted, do it as one deliberate commit and use
+#     git merge -Xrenormalize upstream/master
+# for subsequent upstream merges.
+
+* -text
+
+# Binaries: never touch, and never try to diff as text.
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.pdf    binary
+*.zip    binary
+*.a      binary
+*.so     binary
+*.dll    binary
+*.exe    binary
+*.lib    binary
+*.chm    binary
+*.syde   binary
+
+# Firmware images are records of what was flashed; keep them byte exact.
+*.hex    binary

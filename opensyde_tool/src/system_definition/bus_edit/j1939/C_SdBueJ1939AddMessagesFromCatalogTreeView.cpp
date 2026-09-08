@@ -68,7 +68,7 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeDelegate::paint(QPainter * const opc_
 
    // Add space only for child items
    // That means, orc_Index refers to an an item having a valid parent and having no further child items
-   if ((orc_Index.parent().isValid()) && ((orc_Index.model() == NULL) || (orc_Index.model()->rowCount(orc_Index) == 0)))
+   if ((orc_Index.parent().isValid()) && ((orc_Index.model() == nullptr) || (orc_Index.model()->rowCount(orc_Index) == 0)))
    {
       c_Option.rect.adjust(20, 0, 0, 0);
    }

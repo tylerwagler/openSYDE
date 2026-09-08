@@ -24,7 +24,7 @@ namespace opensyde_core
 class C_OscSpaServicePackageCreateUtil
 {
 public:
-   static int32_t h_CheckPackagePathParam(const std::string & orc_PackagePath,
+   static std::error_code h_CheckPackagePathParam(const std::string & orc_PackagePath,
                                           const std::string & orc_UseCase,
                                           const std::string & orc_PackageExtension,
                                           const std::string & orc_PackageExtensionTmp,
@@ -36,7 +36,7 @@ public:
                                    const std::string & orc_PackageExtension,
                                    const std::string & orc_TemporaryPackageExtension,
                                    std::string & orc_UsedTempPath);
-   static int32_t h_CreateTempFolderAndSubFolders(const std::string & orc_PackagePath,
+   static std::error_code h_CreateTempFolderAndSubFolders(const std::string & orc_PackagePath,
                                                   const std::string & orc_TemporaryDirectory,
                                                   const std::string & orc_UseCase,
                                                   const std::string & orc_PackageExtension,
@@ -44,25 +44,25 @@ public:
                                                   const std::vector<std::string> & orc_AllStaticSubFolders,
                                                   std::string & orc_UsedTempPath,
                                                   std::string & orc_ErrorMessage);
-   static int32_t h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
+   static std::error_code h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
                                          const std::string & orc_SystemDefinitionFileName,
                                          const std::string & orc_UseCase,
                                          const std::string & orc_UsedTempPath,
                                          const std::string & orc_OutFilePrefix,
                                          std::set<std::string> & orc_AllCreatedFiles,
                                          std::string & orc_ErrorMessage);
-   static int32_t h_SaveDeviceDefinitionsAndIni(const C_OscSystemDefinition & orc_SystemDefinition,
+   static std::error_code h_SaveDeviceDefinitionsAndIni(const C_OscSystemDefinition & orc_SystemDefinition,
                                                 const std::string & orc_UseCase,
                                                 const std::string & orc_UsedTempPath,
                                                 const std::string & orc_OutFilePrefix,
                                                 std::set<std::string> & orc_AllCreatedFiles,
                                                 std::string & orc_ErrorMessage);
-   static int32_t h_CreateZip(const std::string & orc_UseCase, const std::string & orc_UsedTempPath,
+   static std::error_code h_CreateZip(const std::string & orc_UseCase, const std::string & orc_UsedTempPath,
                               const std::string & orc_ZipFilePath,
                               const std::set<std::string> & orc_AllCreatedFiles,
                               std::string & orc_ErrorMessage);
    static void h_CleanUpTempFolder(const std::string & orc_UseCase,
-                                   const std::string & orc_UsedTempPath, int32_t & ors32_ErrVal,
+                                   const std::string & orc_UsedTempPath, std::error_code & orc_ErrVal,
                                    std::string & orc_ErrorMessage);
 
 private:

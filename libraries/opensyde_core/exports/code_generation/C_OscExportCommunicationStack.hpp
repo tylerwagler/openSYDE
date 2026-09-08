@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <system_error>
 
 #include "stwtypes.hpp"
 
@@ -38,58 +39,59 @@ public:
                                               const C_OscCanProtocol::E_Type & ore_ProtocolType);
    static std::string h_GetConfigurationName(const uint8_t ou8_InterfaceIndex,
                                                        const C_OscCanProtocol::E_Type & ore_ProtocolType);
-   static int32_t h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
-                                     const uint16_t ou16_ApplicationIndex, const uint8_t ou8_InterfaceIndex,
-                                     const uint32_t ou32_DatapoolIndex, const C_OscCanProtocol::E_Type & ore_Protocol,
-                                     const std::string & orc_ExportToolInfo = "");
+   static std::error_code h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
+                                             const uint16_t ou16_ApplicationIndex, const uint8_t ou8_InterfaceIndex,
+                                             const uint32_t ou32_DatapoolIndex,
+                                             const C_OscCanProtocol::E_Type & ore_Protocol,
+                                             const std::string & orc_ExportToolInfo = "");
    static uint16_t h_ConvertOverallCodeVersion(const uint16_t ou16_GenCodeVersion);
 
 protected:
    static const bool mhq_IS_HEADER_FILE = false;
    static const bool mhq_IS_IMPLEMENTATION_FILE = true;
 
-   static int32_t mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
-                                      const std::string & orc_Path,
-                                      const C_OscNodeApplication & orc_Applicaton,
-                                      const C_OscCanProtocol & orc_ComProtocol, const uint8_t ou8_InterfaceIndex,
-                                      const std::string & orc_ProjectId);
-   static int32_t mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
-                                              const std::string & orc_Path,
+   static std::error_code mh_CreateHeaderFile(const std::string & orc_ExportToolInfo, const std::string & orc_Path,
                                               const C_OscNodeApplication & orc_Applicaton,
                                               const C_OscCanProtocol & orc_ComProtocol,
-                                              const C_OscNodeDataPool & orc_DataPool, const uint8_t ou8_InterfaceIndex,
-                                              const std::string & orc_ProjectId);
+                                              const uint8_t ou8_InterfaceIndex, const std::string & orc_ProjectId);
+   static std::error_code mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
+                                                      const std::string & orc_Path,
+                                                      const C_OscNodeApplication & orc_Applicaton,
+                                                      const C_OscCanProtocol & orc_ComProtocol,
+                                                      const C_OscNodeDataPool & orc_DataPool,
+                                                      const uint8_t ou8_InterfaceIndex,
+                                                      const std::string & orc_ProjectId);
 
-   static void mh_AddHeader(const std::string & orc_ExportToolInfo, stw::scl::std::vector<std::string> & orc_Data,
+   static void mh_AddHeader(const std::string & orc_ExportToolInfo, std::vector<std::string> & orc_Data,
                             const uint8_t ou8_InterfaceIndex, const C_OscCanProtocol::E_Type & ore_Protocol,
                             const bool oq_FileType);
-   static void mh_AddCeIncludes(stw::scl::std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_DataPool,
+   static void mh_AddCeIncludes(std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_DataPool,
                                 const uint8_t ou8_InterfaceIndex, const C_OscCanProtocol::E_Type & ore_Protocol,
                                 const bool oq_NullRequired);
-   static void mh_AddDefines(stw::scl::std::vector<std::string> & orc_Data, const C_OscCanMessageContainer & orc_ComMessage,
+   static void mh_AddDefines(std::vector<std::string> & orc_Data, const C_OscCanMessageContainer & orc_ComMessage,
                              const uint8_t ou8_InterfaceIndex, const C_OscCanProtocol::E_Type & ore_Protocol,
                              const std::string & orc_ProjectId, const uint16_t ou16_GenCodeVersion,
                              const bool oq_FileType);
-   static void mh_AddCeModuleGlobal(stw::scl::std::vector<std::string> & orc_Data, const bool oq_SafeData,
+   static void mh_AddCeModuleGlobal(std::vector<std::string> & orc_Data, const bool oq_SafeData,
                                     const C_OscCanMessageContainer & orc_ComMessage, const uint8_t ou8_InterfaceIndex,
                                     const C_OscCanProtocol::E_Type & ore_Protocol, const uint16_t ou16_GenCodeVersion,
                                     const uint32_t ou32_TxListIndex, const uint32_t ou32_RxListIndex);
-   static void mh_AddCeGlobalVariables(stw::scl::std::vector<std::string> & orc_Data,
+   static void mh_AddCeGlobalVariables(std::vector<std::string> & orc_Data,
                                        const std::string & orc_DataPoolName, const uint8_t ou8_InterfaceIndex,
                                        const C_OscCanProtocol::E_Type & ore_Protocol, const bool oq_TxMessagesPresent,
                                        const bool oq_RxMessagesPresent);
-   static void mh_AddSignalDefinitions(stw::scl::std::vector<std::string> & orc_Data, const uint32_t ou32_SignalListIndex,
+   static void mh_AddSignalDefinitions(std::vector<std::string> & orc_Data, const uint32_t ou32_SignalListIndex,
                                        const std::vector<C_OscCanMessage> & orc_Messages,
                                        const uint16_t ou16_GenCodeVersion);
-   static void mh_AddMessageMuxDefinitions(stw::scl::std::vector<std::string> & orc_Data,
+   static void mh_AddMessageMuxDefinitions(std::vector<std::string> & orc_Data,
                                            const std::vector<C_OscCanMessage> & orc_Messages,
                                            const std::string & orc_TxRxString);
-   static void mh_AddMessageDefinitions(stw::scl::std::vector<std::string> & orc_Data, const uint8_t ou8_InterfaceIndex,
+   static void mh_AddMessageDefinitions(std::vector<std::string> & orc_Data, const uint8_t ou8_InterfaceIndex,
                                         const C_OscCanProtocol::E_Type & ore_Protocol,
                                         const std::vector<C_OscCanMessage> & orc_Messages,
                                         const uint16_t ou16_GenCodeVersion, const bool oq_Tx);
    static uint32_t mh_CountMuxMessages(const std::vector<C_OscCanMessage> & orc_Messages);
-   static void mh_ConvertSignalsToStrings(stw::scl::std::vector<std::string> & orc_Data,
+   static void mh_ConvertSignalsToStrings(std::vector<std::string> & orc_Data,
                                           const std::vector<C_OscCanSignal> & orc_Signals,
                                           const uint32_t ou32_SignalListIndex, const bool oq_RemoveLastComma);
    static void mh_GroupSignalsByMuxValue(const C_OscCanMessage & orc_Message, const uint32_t ou32_MultiplexerIndex,

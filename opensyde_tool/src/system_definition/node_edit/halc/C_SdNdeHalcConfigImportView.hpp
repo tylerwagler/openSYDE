@@ -33,7 +33,7 @@ class C_SdNdeHalcConfigImportView :
    Q_OBJECT
 
 public:
-   C_SdNdeHalcConfigImportView(QWidget * const opc_Parent = NULL);
+   C_SdNdeHalcConfigImportView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeHalcConfigImportView(void) override;
 
    int32_t Init(const stw::opensyde_core::C_OscHalcConfig & orc_Config,

@@ -120,7 +120,7 @@ void C_SdBueUnoSignalAddCommand::SetInitialData(const std::vector<C_OscCanSignal
                   this->mc_Signal[u32_ItStep],
                   this->mc_OscSignalCommon[this->mc_Signal[u32_ItStep].u32_ComDataElementIndex],
                   this->mc_UiSignalCommon[this->mc_Signal[u32_ItStep].u32_ComDataElementIndex],
-                  orc_ProtocolType[u32_ItStep], NULL);
+                  orc_ProtocolType[u32_ItStep], nullptr);
             }
          }
       }

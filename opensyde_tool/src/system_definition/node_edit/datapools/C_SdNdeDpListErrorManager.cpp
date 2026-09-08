@@ -58,9 +58,9 @@ void C_SdNdeDpListErrorManager::Init(const uint32_t & oru32_NodeIndex, const uin
    this->mu32_NodeIndex = oru32_NodeIndex;
    this->mu32_DataPoolIndex = oru32_DataPoolIndex;
    pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
-      pc_Node->CheckErrorDataPool(this->mu32_DataPoolIndex, NULL, NULL, &this->mq_ErrorInList, NULL, NULL, NULL);
+      pc_Node->CheckErrorDataPool(this->mu32_DataPoolIndex, nullptr, nullptr, &this->mq_ErrorInList, nullptr, nullptr, nullptr);
    }
 }
 
@@ -73,9 +73,9 @@ void C_SdNdeDpListErrorManager::OnErrorChange(void)
    const bool q_PreviousErrorState = this->mq_ErrorInList;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
-      pc_Node->CheckErrorDataPool(this->mu32_DataPoolIndex, NULL, NULL, &this->mq_ErrorInList, NULL, NULL, NULL);
+      pc_Node->CheckErrorDataPool(this->mu32_DataPoolIndex, nullptr, nullptr, &this->mq_ErrorInList, nullptr, nullptr, nullptr);
    }
    if (q_PreviousErrorState != this->mq_ErrorInList)
    {

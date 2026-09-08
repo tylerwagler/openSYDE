@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscExportParamSet.hpp"
 
 #include "C_SclChecksums.hpp"
@@ -90,25 +93,25 @@ std::string C_OscExportParamSet::h_GetFileName(const C_OscNodeApplication & orc_
    \param[in]   orc_ExportToolVersion  Version of calling executable
 
    \return
-   C_NO_ERR    Success
-   C_RD_WR     Problems accessing file system
-   C_CONFIG    Internal data invalid (e.g. incorrect number of lists or datasets in HALC NVM Datapool)
+   Errc::success  Success
+   Errc::rd_wr    Problems accessing file system
+   Errc::config   Internal data invalid (e.g. incorrect number of lists or datasets in HALC NVM Datapool)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportParamSet::h_CreateParameterSetImage(const std::string & orc_Path, const C_OscNode & orc_Node,
-                                                       const uint16_t ou16_ApplicationIndex,
-                                                       std::vector<std::string> & orc_Files,
-                                                       const std::string & orc_ExportToolName,
-                                                       const std::string & orc_ExportToolVersion)
+std::error_code C_OscExportParamSet::h_CreateParameterSetImage(const std::string & orc_Path, const C_OscNode & orc_Node,
+                                                               const uint16_t ou16_ApplicationIndex,
+                                                               std::vector<std::string> & orc_Files,
+                                                               const std::string & orc_ExportToolName,
+                                                               const std::string & orc_ExportToolVersion)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    const C_OscNodeApplication & rc_Application = orc_Node.c_Applications[ou16_ApplicationIndex];
 
    // make sure version is known
    if (rc_Application.u16_GenCodeVersion > C_OscNodeApplication::hu16_HIGHEST_KNOWN_CODE_VERSION)
    {
-      s32_Retval = C_NOACT;
+      c_Retval = Errc::noact;
       osc_write_log_error("Creating PSI file",
                           "Did not generate code for HALC configuration because file format version is unknown.");
    }
@@ -119,25 +122,25 @@ int32_t C_OscExportParamSet::h_CreateParameterSetImage(const std::string & orc_P
    {
       if (rc_Application.c_ResultPaths.size() != 2)
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
       if (rc_Application.c_ResultPaths.size() != 1)
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       osc_write_log_error("Creating PSI file",
                           "Could not generate files because number of output files is not correctly configured.");
    }
 
    // safe part
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_Node.c_HalcConfig.e_SafetyMode != C_OscHalcDefBase::eONE_LEVEL_ALL_NON_SAFE)
       {
@@ -145,19 +148,19 @@ int32_t C_OscExportParamSet::h_CreateParameterSetImage(const std::string & orc_P
          C_OscParamSetRawNode c_RawNodeSafe;
          C_OscParamSetInterpretedNode c_IntNodeSafe;
 
-         s32_Retval = mh_FillPsiStructure(orc_Node, q_IS_SAFE, ou16_ApplicationIndex, c_RawNodeSafe, c_IntNodeSafe);
+         c_Retval = mh_FillPsiStructure(orc_Node, q_IS_SAFE, ou16_ApplicationIndex, c_RawNodeSafe, c_IntNodeSafe);
 
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
-            s32_Retval = C_OscExportParamSet::mh_WriteParameterSetImage(
-               c_RawNodeSafe, c_IntNodeSafe, q_IS_SAFE, rc_Application, orc_Path, orc_Files,
-               orc_ExportToolName, orc_ExportToolVersion);
+            c_Retval = C_OscExportParamSet::mh_WriteParameterSetImage(
+             c_RawNodeSafe, c_IntNodeSafe, q_IS_SAFE, rc_Application, orc_Path, orc_Files,
+             orc_ExportToolName, orc_ExportToolVersion);
          }
       }
    }
 
    // non safe part
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_Node.c_HalcConfig.e_SafetyMode != C_OscHalcDefBase::eONE_LEVEL_ALL_SAFE)
       {
@@ -165,19 +168,19 @@ int32_t C_OscExportParamSet::h_CreateParameterSetImage(const std::string & orc_P
          C_OscParamSetRawNode c_RawNodeNonSafe;
          C_OscParamSetInterpretedNode c_IntNodeNonSafe;
 
-         s32_Retval =
+         c_Retval =
             mh_FillPsiStructure(orc_Node, q_IS_SAFE, ou16_ApplicationIndex, c_RawNodeNonSafe, c_IntNodeNonSafe);
 
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
-            s32_Retval = C_OscExportParamSet::mh_WriteParameterSetImage(
-               c_RawNodeNonSafe, c_IntNodeNonSafe, q_IS_SAFE, rc_Application, orc_Path, orc_Files,
-               orc_ExportToolName, orc_ExportToolVersion);
+            c_Retval = C_OscExportParamSet::mh_WriteParameterSetImage(
+             c_RawNodeNonSafe, c_IntNodeNonSafe, q_IS_SAFE, rc_Application, orc_Path, orc_Files,
+             orc_ExportToolName, orc_ExportToolVersion);
          }
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -190,16 +193,16 @@ int32_t C_OscExportParamSet::h_CreateParameterSetImage(const std::string & orc_P
    \param[out]  orc_IntNode            Interpreted data structure
 
    \return
-   C_NO_ERR    Success
-   C_CONFIG    Internal data invalid (e.g. incorrect number of lists or datasets in HALC NVM Datapool)
+   Errc::success  Success
+   Errc::config   Internal data invalid (e.g. incorrect number of lists or datasets in HALC NVM Datapool)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportParamSet::mh_FillPsiStructure(const C_OscNode & orc_Node, const bool oq_IsSafe,
-                                                 const uint16_t ou16_ApplicationIndex,
-                                                 C_OscParamSetRawNode & orc_RawNode,
-                                                 C_OscParamSetInterpretedNode & orc_IntNode)
+std::error_code C_OscExportParamSet::mh_FillPsiStructure(const C_OscNode & orc_Node, const bool oq_IsSafe,
+                                                         const uint16_t ou16_ApplicationIndex,
+                                                         C_OscParamSetRawNode & orc_RawNode,
+                                                         C_OscParamSetInterpretedNode & orc_IntNode)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    bool q_DatapoolFound = false;
 
    orc_RawNode.c_Name = orc_Node.c_Properties.c_Name;
@@ -207,13 +210,13 @@ int32_t C_OscExportParamSet::mh_FillPsiStructure(const C_OscNode & orc_Node, con
 
    const C_OscNodeDataPool * const pc_FirstDataPool = orc_Node.GetHalDataPoolConst(oq_IsSafe);
 
-   if (pc_FirstDataPool != NULL)
+   if (pc_FirstDataPool != nullptr)
    {
       // get raw data (data from only dataset of list "configuration" of first Datapool)
       std::vector<uint8_t> c_ConfigRawBytes;
-      s32_Retval = mh_GetConfigurationRawBytes(*pc_FirstDataPool, c_ConfigRawBytes);
+      c_Retval = mh_GetConfigurationRawBytes(*pc_FirstDataPool, c_ConfigRawBytes);
 
-      if (s32_Retval != C_NO_ERR)
+      if (c_Retval)
       {
          osc_write_log_error("Creating PSI file",
                              "Could not generate files because of unexpected number of lists or datasets or list "
@@ -221,7 +224,7 @@ int32_t C_OscExportParamSet::mh_FillPsiStructure(const C_OscNode & orc_Node, con
       }
 
       // add data of all Datapools of specified safety
-      for (uint32_t u32_ItDataPool = 0U; (u32_ItDataPool < orc_Node.c_DataPools.size()) && (s32_Retval == C_NO_ERR);
+      for (uint32_t u32_ItDataPool = 0U; (u32_ItDataPool < orc_Node.c_DataPools.size()) && (!c_Retval);
            ++u32_ItDataPool)
       {
          const C_OscNodeDataPool & rc_SdDataPool = orc_Node.c_DataPools[u32_ItDataPool];
@@ -241,10 +244,10 @@ int32_t C_OscExportParamSet::mh_FillPsiStructure(const C_OscNode & orc_Node, con
             orc_RawNode.c_DataPools.push_back(c_IntDatapool.c_DataPoolInfo);
 
             // fill raw entries
-            s32_Retval = mh_FillRawEntries(rc_SdDataPool, c_ConfigRawBytes, orc_RawNode.c_Entries);
+            c_Retval = mh_FillRawEntries(rc_SdDataPool, c_ConfigRawBytes, orc_RawNode.c_Entries);
          }
 
-         if (s32_Retval != C_NO_ERR)
+         if (c_Retval)
          {
             osc_write_log_error("Creating PSI file",
                                 "Could not generate files because of unexpected number of lists or unexpected NVM "
@@ -255,12 +258,12 @@ int32_t C_OscExportParamSet::mh_FillPsiStructure(const C_OscNode & orc_Node, con
 
    if (q_DatapoolFound == false)
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       osc_write_log_error("Creating PSI file",
                           "Datapool missing for specified safety mode of HALC definition.");
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -315,19 +318,19 @@ void C_OscExportParamSet::mh_FillInterpretedDatapool(const C_OscNodeDataPool & o
    \param[in,out]  orc_Entries         Raw entries to be filled with data
 
    \return
-   C_NO_ERR    Success
-   C_CONFIG    number of Datapool lists or datasets or list elements not as expected
+   Errc::success  Success
+   Errc::config   number of Datapool lists or datasets or list elements not as expected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportParamSet::mh_FillRawEntries(const C_OscNodeDataPool & orc_SdDataPool,
-                                               const std::vector<uint8_t> & orc_ConfigRawBytes,
-                                               std::vector<C_OscParamSetRawEntry> & orc_Entries)
+std::error_code C_OscExportParamSet::mh_FillRawEntries(const C_OscNodeDataPool & orc_SdDataPool,
+                                                       const std::vector<uint8_t> & orc_ConfigRawBytes,
+                                                       std::vector<C_OscParamSetRawEntry> & orc_Entries)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_SdDataPool.c_Lists.size() == 4) // exactly 4 expected: configuration, inputs, outputs, statuses
    {
-      for (uint16_t u16_ListIndex = 0U; (u16_ListIndex < orc_SdDataPool.c_Lists.size()) && (s32_Retval == C_NO_ERR);
+      for (uint16_t u16_ListIndex = 0U; (u16_ListIndex < orc_SdDataPool.c_Lists.size()) && (!c_Retval);
            u16_ListIndex++)
       {
          C_OscParamSetRawEntry c_RawEntry;
@@ -345,16 +348,16 @@ int32_t C_OscExportParamSet::mh_FillRawEntries(const C_OscNodeDataPool & orc_SdD
             c_RawEntry.c_Bytes.resize(orc_SdDataPool.c_Lists[u16_ListIndex].u32_NvmSize, 0);
          }
 
-         s32_Retval = mh_InsertCrc16(c_RawEntry.c_Bytes);
+         c_Retval = mh_InsertCrc16(c_RawEntry.c_Bytes);
          orc_Entries.push_back(c_RawEntry);
       }
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -401,20 +404,21 @@ C_OscParamSetInterpretedFileInfoData C_OscExportParamSet::mh_GetFileInfo(const s
    \param[in]      orc_ExportToolVersion  Version of calling executable
 
    \return
-   C_NO_ERR    Operation success
-   C_CONFIG    Internal data invalid (e.g. incorrect number of lists or datasets in HALC NVM Datapool)
-   C_RD_WR     Problems accessing file system
+   Errc::success  Operation success
+   Errc::config   Internal data invalid (e.g. incorrect number of lists or datasets in HALC NVM Datapool)
+   Errc::rd_wr    Problems accessing file system
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportParamSet::mh_WriteParameterSetImage(const C_OscParamSetRawNode & orc_RawNode,
-                                                       const C_OscParamSetInterpretedNode & orc_IntNode,
-                                                       const bool oq_IsSafe, const C_OscNodeApplication & orc_DataBlock,
-                                                       const std::string & orc_Path,
-                                                       std::vector<std::string> & orc_Files,
-                                                       const std::string & orc_ExportToolName,
-                                                       const std::string & orc_ExportToolVersion)
+std::error_code C_OscExportParamSet::mh_WriteParameterSetImage(const C_OscParamSetRawNode & orc_RawNode,
+                                                               const C_OscParamSetInterpretedNode & orc_IntNode,
+                                                               const bool oq_IsSafe,
+                                                               const C_OscNodeApplication & orc_DataBlock,
+                                                               const std::string & orc_Path,
+                                                               std::vector<std::string> & orc_Files,
+                                                               const std::string & orc_ExportToolName,
+                                                               const std::string & orc_ExportToolVersion)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
    const std::string c_Path = TglFileIncludeTrailingDelimiter(orc_Path) +
                               h_GetFileName(orc_DataBlock, oq_IsSafe);
@@ -423,16 +427,16 @@ int32_t C_OscExportParamSet::mh_WriteParameterSetImage(const C_OscParamSetRawNod
    C_OscParamSetHandler c_DataHandler;
 
    // Add raw & interpreted data
-   s32_Retval = c_DataHandler.AddInterpretedDataForNode(orc_IntNode);
+   c_Retval = c_DataHandler.AddInterpretedDataForNode(orc_IntNode);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = c_DataHandler.AddRawDataForNode(orc_RawNode);
+      c_Retval = c_DataHandler.AddRawDataForNode(orc_RawNode);
    }
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       osc_write_log_error("Creating PSI file",
                           "Could not generate files because of invalid internal structure.");
    }
@@ -446,37 +450,37 @@ int32_t C_OscExportParamSet::mh_WriteParameterSetImage(const C_OscParamSetRawNod
          if (x_Return != 0)
          {
             osc_write_log_error("Creating PSI file", "Could not erase pre-existing file \"" + c_Path + "\".");
-            s32_Retval = C_RD_WR;
+            c_Retval = Errc::rd_wr;
          }
       }
 
       // Add file info data and write the file
       c_DataHandler.AddInterpretedFileData(c_FileInfo);
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = c_DataHandler.CreateCleanFileWithoutCrc(c_Path);
+         c_Retval = c_DataHandler.CreateCleanFileWithoutCrc(c_Path);
       }
 
       // Add file CRC
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = C_OscParamSetHandler::h_UpdateCrcForFile(c_Path);
+         c_Retval = C_OscParamSetHandler::h_UpdateCrcForFile(c_Path);
       }
 
       // Handle file names
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          C_OscExportUti::h_CollectFilePaths(orc_Files, orc_Path,
                                             C_OscExportParamSet::h_GetFileName(orc_DataBlock, oq_IsSafe), false);
       }
       else
       {
-         s32_Retval = C_RD_WR;
+         c_Retval = Errc::rd_wr;
          osc_write_log_error("Writing PSI file", "Could not write to file \"" + c_Path + "\".");
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -488,13 +492,13 @@ int32_t C_OscExportParamSet::mh_WriteParameterSetImage(const C_OscParamSetRawNod
    \param[in,out]  orc_Bytes  Bytes
 
    \return
-   C_NO_ERR    everything okay
-   C_CONFIG    number of Datapool list elements not as expected
+   Errc::success  everything okay
+   Errc::config   number of Datapool list elements not as expected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportParamSet::mh_InsertCrc16(std::vector<uint8_t> & orc_Bytes)
+std::error_code C_OscExportParamSet::mh_InsertCrc16(std::vector<uint8_t> & orc_Bytes)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Bytes.size() > 2)
    {
@@ -505,10 +509,10 @@ int32_t C_OscExportParamSet::mh_InsertCrc16(std::vector<uint8_t> & orc_Bytes)
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -521,14 +525,14 @@ int32_t C_OscExportParamSet::mh_InsertCrc16(std::vector<uint8_t> & orc_Bytes)
    \param[out]  orc_Bytes        Bytes to be filled with configuration data
 
    \return
-   C_NO_ERR    everything okay
-   C_CONFIG    number of Datapool lists or datasets not as expected
+   Errc::success  everything okay
+   Errc::config   number of Datapool lists or datasets not as expected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportParamSet::mh_GetConfigurationRawBytes(const C_OscNodeDataPool & orc_SdDataPool,
-                                                         std::vector<uint8_t> & orc_Bytes)
+std::error_code C_OscExportParamSet::mh_GetConfigurationRawBytes(const C_OscNodeDataPool & orc_SdDataPool,
+                                                                 std::vector<uint8_t> & orc_Bytes)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_SdDataPool.c_Lists.size() > 0)
    {
@@ -543,7 +547,7 @@ int32_t C_OscExportParamSet::mh_GetConfigurationRawBytes(const C_OscNodeDataPool
 
       // insert configured data
       for (uint32_t u32_ItElement = 0U;
-           (u32_ItElement < orc_SdDataPool.c_Lists[0].c_Elements.size()) && (s32_Retval == C_NO_ERR);
+           (u32_ItElement < orc_SdDataPool.c_Lists[0].c_Elements.size()) && (!c_Retval);
            ++u32_ItElement)
       {
          const C_OscNodeDataPoolListElement & rc_Element = orc_SdDataPool.c_Lists[0].c_Elements[u32_ItElement];
@@ -555,7 +559,7 @@ int32_t C_OscExportParamSet::mh_GetConfigurationRawBytes(const C_OscNodeDataPool
          }
          else
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
 
@@ -564,8 +568,8 @@ int32_t C_OscExportParamSet::mh_GetConfigurationRawBytes(const C_OscNodeDataPool
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }

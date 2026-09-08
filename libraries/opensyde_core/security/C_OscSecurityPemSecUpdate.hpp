@@ -9,6 +9,8 @@
 #define C_OSCSECURITYPEMSECUPDATE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "C_OscSecurityPemBase.hpp"
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -25,10 +27,11 @@ class C_OscSecurityPemSecUpdate :
 public:
    C_OscSecurityPemSecUpdate();
 
-   virtual int32_t LoadFromFile(const std::string & orc_FileName, std::string & orc_ErrorMessage);
+   virtual std::error_code LoadFromFile(const std::string & orc_FileName, std::string & orc_ErrorMessage);
 
 protected:
-   virtual int32_t m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent, std::string & orc_ErrorMessage);
+   virtual std::error_code m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent,
+                                            std::string & orc_ErrorMessage);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

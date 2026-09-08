@@ -111,7 +111,7 @@ void C_SdManUnoTopologyAddCommand::m_AddNew(void)
 {
    C_SdTopologyScene * const pc_Scene = dynamic_cast<C_SdTopologyScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       const std::vector<uint64_t> c_Ids = this->m_GetIds();
       if (c_Ids.size() > 0)
@@ -167,7 +167,7 @@ void C_SdManUnoTopologyAddCommand::m_AddNew(void)
             pc_Node = dynamic_cast<C_GiNode *>(m_GetSceneItem(this->mu64_BusConnectorNodeId));
 
             pc_Bus = dynamic_cast<C_GiLiBus *>(m_GetSceneItem(this->mu64_BusConnectorBusId));
-            if ((pc_Node != NULL) && (pc_Bus != NULL))
+            if ((pc_Node != nullptr) && (pc_Bus != nullptr))
             {
                if (pc_Node->CheckInterfaceAvailable(pc_Bus->GetType(), this->mu8_InterfaceNumber) == true)
                {

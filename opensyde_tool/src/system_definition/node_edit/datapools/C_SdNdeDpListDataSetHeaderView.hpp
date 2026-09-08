@@ -29,7 +29,7 @@ class C_SdNdeDpListDataSetHeaderView :
    Q_OBJECT
 
 public:
-   C_SdNdeDpListDataSetHeaderView(const Qt::Orientation & ore_Orientation, QWidget * const opc_Parent = NULL);
+   C_SdNdeDpListDataSetHeaderView(const Qt::Orientation & ore_Orientation, QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

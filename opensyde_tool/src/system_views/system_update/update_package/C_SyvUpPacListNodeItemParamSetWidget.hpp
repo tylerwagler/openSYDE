@@ -28,7 +28,7 @@ class C_SyvUpPacListNodeItemParamSetWidget :
 public:
    C_SyvUpPacListNodeItemParamSetWidget(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
                                         const QString & orc_DeviceName, const bool oq_FileBased,
-                                        QWidget * const opc_Parent = NULL);
+                                        QWidget * const opc_Parent = nullptr);
 
    void SetParamInfo(const opensyde_core::C_OscViewNodeUpdateParamInfo & orc_ParamInfo);
 

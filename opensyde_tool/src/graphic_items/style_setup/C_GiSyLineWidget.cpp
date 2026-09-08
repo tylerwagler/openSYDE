@@ -491,7 +491,7 @@ void C_GiSyLineWidget::m_ColorClicked(void)
       }
    }
 
-   if (c_Popup != NULL)
+   if (c_Popup != nullptr)
    {
       c_Popup->HideOverlay();
       c_Popup->deleteLater();
@@ -533,7 +533,7 @@ void C_GiSyLineWidget::m_ColorInnerClicked(void)
       }
    }
 
-   if (c_Popup != NULL)
+   if (c_Popup != nullptr)
    {
       c_Popup->HideOverlay();
       c_Popup->deleteLater();
@@ -558,7 +558,7 @@ void C_GiSyLineWidget::m_ValueChanged(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyLineWidget::mh_InitArrow(C_OgeCbxIconOnly * const opc_ComboBox, const bool & orq_Rotate)
 {
-   if (opc_ComboBox != NULL)
+   if (opc_ComboBox != nullptr)
    {
       QPixmap c_Img1(":/images/graphic_items/LineArrowHeadType1.png");
       QPixmap c_Img3(":/images/graphic_items/LineArrowHeadType2.png");

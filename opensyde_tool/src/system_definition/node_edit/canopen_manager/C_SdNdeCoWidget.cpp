@@ -207,8 +207,8 @@ void C_SdNdeCoWidget::SetNode(const uint32_t ou32_NodeIndex)
    // Check if node is already a CANopen device for a CANopen Manager
    s32_Return = C_PuiSdHandler::h_GetInstance()->GetCanOpenManagerOfDeviceAndId(this->mu32_NodeIndex,
                                                                                 &u32_ManagerNodeIndex,
-                                                                                NULL,
-                                                                                NULL);
+                                                                                nullptr,
+                                                                                nullptr);
    // C_RANGE should not happen
    tgl_assert(s32_Return != C_RANGE);
    q_IsDevice = (s32_Return == C_NO_ERR);
@@ -219,11 +219,11 @@ void C_SdNdeCoWidget::SetNode(const uint32_t ou32_NodeIndex)
       // Check if the node can be a CANopen Manager
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
-         tgl_assert(pc_Node->pc_DeviceDefinition != NULL);
-         if ((pc_Node->pc_DeviceDefinition != NULL) &&
+         tgl_assert(pc_Node->pc_DeviceDefinition != nullptr);
+         if ((pc_Node->pc_DeviceDefinition != nullptr) &&
              (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()))
          {
             q_IsManagerSupported =
@@ -251,8 +251,8 @@ void C_SdNdeCoWidget::SetNode(const uint32_t ou32_NodeIndex)
       this->mpc_Ui->pc_HintToManagerLabel->setText("Device is handled by CANopen Manager:");
       this->mpc_Ui->pc_LinkToManagerLabel->setVisible(true);
 
-      tgl_assert(pc_ManagerNode != NULL);
-      if (pc_ManagerNode != NULL)
+      tgl_assert(pc_ManagerNode != nullptr);
+      if (pc_ManagerNode != nullptr)
       {
          this->mpc_Ui->pc_LinkToManagerLabel->setText(
             C_Uti::h_GetLink(static_cast<QString>(pc_ManagerNode->c_Properties.c_Name.c_str()),
@@ -390,8 +390,8 @@ void C_SdNdeCoWidget::m_OnLinkSwitchToManager(const QString & orc_Link) const
    if (q_Valid == true)
    {
       const C_OscNode * const pc_ManagerNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ManagerNodeIndex);
-      tgl_assert(pc_ManagerNode != NULL);
-      if (pc_ManagerNode != NULL)
+      tgl_assert(pc_ManagerNode != nullptr);
+      if (pc_ManagerNode != nullptr)
       {
          Q_EMIT (this->SigSwitchToDeviceNodeInCoManager(u32_ManagerNodeIndex,
                                                         static_cast<QString>(pc_ManagerNode->c_Properties.c_Name.c_str()),

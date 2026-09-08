@@ -30,7 +30,7 @@ class C_SebUnoTopResizeLineCommand :
 public:
    C_SebUnoTopResizeLineCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
                                 const int32_t & ors32_InteractionPointId, const QPointF & orc_PositionDifference,
-                                QUndoCommand * const opc_Parent = NULL);
+                                QUndoCommand * const opc_Parent = nullptr);
    ~C_SebUnoTopResizeLineCommand() override;
    void undo(void) override;
    void redo(void) override;

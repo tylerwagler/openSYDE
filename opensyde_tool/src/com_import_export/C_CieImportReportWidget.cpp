@@ -321,7 +321,7 @@ void C_CieImportReportWidget::m_OkClicked(void)
                   C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(rc_CurData.u32_OsyNodeIndex);
 
                // get datapool index of the corresponding datapool
-               if (pc_Node != NULL)
+               if (pc_Node != nullptr)
                {
                   for (uint32_t u32_ItDatapool = 0; u32_ItDatapool < pc_Node->c_DataPools.size(); ++u32_ItDatapool)
                   {
@@ -359,7 +359,7 @@ void C_CieImportReportWidget::m_OkClicked(void)
                   q_Continue = false;
                }
 
-               if (c_Popup != NULL)
+               if (c_Popup != nullptr)
                {
                   c_Popup->HideOverlay();
                   c_Popup->deleteLater();
@@ -682,7 +682,7 @@ int32_t C_CieImportReportWidget::m_GetMessageOverrideInfo(C_OscCanMessage & orc_
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_OsyNodeIndex);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          if ((orc_Suffix == "EDS") || (orc_Suffix == "DCF"))
          {
@@ -703,7 +703,7 @@ int32_t C_CieImportReportWidget::m_GetMessageOverrideInfo(C_OscCanMessage & orc_
             for (c_ProtocolIt = c_Protocols.begin(); c_ProtocolIt != c_Protocols.end(); ++c_ProtocolIt)
             {
                const C_OscCanProtocol * const pc_Protocol = *c_ProtocolIt;
-               if (pc_Protocol != NULL)
+               if (pc_Protocol != nullptr)
                {
                   if (ou32_OsyInterfaceIndex < pc_Protocol->c_ComMessages.size())
                   {
@@ -938,7 +938,7 @@ QString C_CieImportReportWidget::mh_GetMessageEntry(const uint32_t ou32_Index, c
       if (oq_ReplaceMessageNames)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             c_MessageName = C_CieUtil::h_GetMessageName(*pc_Node, oq_IsTx, ou32_MessageIndex,
                                                         oe_ProtocolType,

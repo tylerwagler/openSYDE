@@ -13,8 +13,10 @@
 #include "precomp_headers.hpp"
 
 #include <iostream>
+#include <system_error>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include <string>
 
@@ -149,26 +151,26 @@ bool C_OscProtocolDriverOsyNode::operator <(const C_OscProtocolDriverOsyNode & o
    \param[in] orc_Service         service to add to queue
 
    \return
-   C_NO_ERR    service added
-   C_RANGE     service size out of range (maximum: 4095 bytes)
-   C_OVERFLOW  Tx queue is already full
-   C_NOACT     could not add to queue (out of memory; should not happen in real life)
+   Errc::success    service added
+   Errc::range      service size out of range (maximum: 4095 bytes)
+   Errc::overflow   Tx queue is already full
+   Errc::noact      could not add to queue (out of memory; should not happen in real life)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpBase::m_AddToTxQueue(const C_OscProtocolDriverOsyService & orc_Service)
+std::error_code C_OscProtocolDriverOsyTpBase::m_AddToTxQueue(const C_OscProtocolDriverOsyService & orc_Service)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (orc_Service.c_Data.size() > hu16_OSY_MAXIMUM_SERVICE_SIZE)
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
-      mc_CsTxQueue.Acquire();
+      mc_CsTxQueue.lock();
       if (mc_TxQueue.size() >= mu16_MaxServiceQueueSize)
       {
-         s32_Return = C_OVERFLOW;
+         c_Return = Errc::overflow;
       }
       else
       {
@@ -178,12 +180,12 @@ int32_t C_OscProtocolDriverOsyTpBase::m_AddToTxQueue(const C_OscProtocolDriverOs
          }
          catch (...)
          {
-            s32_Return = C_NOACT; //probably out of memory
+            c_Return = Errc::noact; //probably out of memory
          }
       }
-      mc_CsTxQueue.Release();
+      mc_CsTxQueue.unlock();
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -195,26 +197,26 @@ int32_t C_OscProtocolDriverOsyTpBase::m_AddToTxQueue(const C_OscProtocolDriverOs
    \param[in] orc_Service         service to add to queue
 
    \return
-   C_NO_ERR    service added
-   C_RANGE     service size out of range
-   C_OVERFLOW  Rx queue is already full
-   C_NOACT     could not add to queue (out of memory; should not happen in real life)
+   Errc::success    service added
+   Errc::range      service size out of range
+   Errc::overflow   Rx queue is already full
+   Errc::noact      could not add to queue (out of memory; should not happen in real life)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpBase::m_AddToRxQueue(const C_OscProtocolDriverOsyService & orc_Service)
+std::error_code C_OscProtocolDriverOsyTpBase::m_AddToRxQueue(const C_OscProtocolDriverOsyService & orc_Service)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (orc_Service.c_Data.size() > hu16_OSY_MAXIMUM_SERVICE_SIZE)
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
-      mc_CsRxQueue.Acquire();
+      mc_CsRxQueue.lock();
       if (mc_RxQueue.size() >= mu16_MaxServiceQueueSize)
       {
-         s32_Return = C_OVERFLOW;
+         c_Return = Errc::overflow;
       }
       else
       {
@@ -224,12 +226,12 @@ int32_t C_OscProtocolDriverOsyTpBase::m_AddToRxQueue(const C_OscProtocolDriverOs
          }
          catch (...)
          {
-            s32_Return = C_NOACT; //probably out of memory
+            c_Return = Errc::noact; //probably out of memory
          }
       }
-      mc_CsRxQueue.Release();
+      mc_CsRxQueue.unlock();
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -241,26 +243,26 @@ int32_t C_OscProtocolDriverOsyTpBase::m_AddToRxQueue(const C_OscProtocolDriverOs
    \param[out] orc_Service         read service
 
    \return
-   C_NO_ERR    service read; data in orc_Service
-   C_NOACT     queue is empty
+   Errc::success   service read; data in orc_Service
+   Errc::noact     queue is empty
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpBase::m_GetFromTxQueue(C_OscProtocolDriverOsyService & orc_Service)
+std::error_code C_OscProtocolDriverOsyTpBase::m_GetFromTxQueue(C_OscProtocolDriverOsyService & orc_Service)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
-   mc_CsTxQueue.Acquire();
+   mc_CsTxQueue.lock();
    if (mc_TxQueue.size() < 1U)
    {
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
    else
    {
       orc_Service = mc_TxQueue.front(); //get element from queue
       mc_TxQueue.pop_front();           //delete element from queue
    }
-   mc_CsTxQueue.Release();
-   return s32_Return;
+   mc_CsTxQueue.unlock();
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -272,26 +274,26 @@ int32_t C_OscProtocolDriverOsyTpBase::m_GetFromTxQueue(C_OscProtocolDriverOsySer
    \param[out] orc_Service         read service
 
    \return
-   C_NO_ERR    service read; data in orc_Service
-   C_NOACT     queue is empty
+   Errc::success   service read; data in orc_Service
+   Errc::noact     queue is empty
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpBase::m_GetFromRxQueue(C_OscProtocolDriverOsyService & orc_Service)
+std::error_code C_OscProtocolDriverOsyTpBase::m_GetFromRxQueue(C_OscProtocolDriverOsyService & orc_Service)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
-   mc_CsRxQueue.Acquire();
+   mc_CsRxQueue.lock();
    if (mc_RxQueue.size() < 1U)
    {
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
    else
    {
       orc_Service = mc_RxQueue.front(); //get element from queue
       mc_RxQueue.pop_front();           //delete element from queue
    }
-   mc_CsRxQueue.Release();
-   return s32_Return;
+   mc_CsRxQueue.unlock();
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -303,12 +305,12 @@ int32_t C_OscProtocolDriverOsyTpBase::m_GetFromRxQueue(C_OscProtocolDriverOsySer
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsyTpBase::ClearServiceQueues(void)
 {
-   mc_CsRxQueue.Acquire();
+   mc_CsRxQueue.lock();
    mc_RxQueue.clear();
-   mc_CsRxQueue.Release();
-   mc_CsTxQueue.Acquire();
+   mc_CsRxQueue.unlock();
+   mc_CsTxQueue.lock();
    mc_TxQueue.clear();
-   mc_CsTxQueue.Release();
+   mc_CsTxQueue.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -352,13 +354,13 @@ C_OscProtocolDriverOsyTpBase::~C_OscProtocolDriverOsyTpBase(void)
 /*! \brief   Checks the connection of the TCP socket
 
    \return
-   C_NO_ERR   is connected
-   C_NOACT    is not connected
+   Errc::success   is connected
+   Errc::noact     is not connected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpBase::IsConnected(void)
+std::error_code C_OscProtocolDriverOsyTpBase::IsConnected(void)
 {
-   return C_NO_ERR;
+   return make_error_code(Errc::success);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -369,26 +371,26 @@ int32_t C_OscProtocolDriverOsyTpBase::IsConnected(void)
    No action required for connection-less protocols (e.g. CAN)
 
    \return
-   C_NO_ERR    re-connection established (or not required)
-   C_BUSY      re-connection failed
+   Errc::success   re-connection established (or not required)
+   Errc::busy      re-connection failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpBase::ReConnect(void)
+std::error_code C_OscProtocolDriverOsyTpBase::ReConnect(void)
 {
-   return C_NO_ERR;
+   return make_error_code(Errc::success);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Disconnect from server
 
    \return
-   C_NO_ERR    disconnect established (or not required)
-   C_NOACT     disconnect failed
+   Errc::success   disconnect established (or not required)
+   Errc::noact     disconnect failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpBase::Disconnect(void)
+std::error_code C_OscProtocolDriverOsyTpBase::Disconnect(void)
 {
-   return C_NO_ERR;
+   return make_error_code(Errc::success);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -400,13 +402,13 @@ int32_t C_OscProtocolDriverOsyTpBase::Disconnect(void)
    \param[in]     orc_Request      service request to add to queue
 
    \return
-   C_NO_ERR    service added
-   C_RANGE     service size out of range
-   C_OVERFLOW  Tx queue is already full
-   C_NOACT     could not add to queue (out of memory; should not happen in real life)
+   Errc::success    service added
+   Errc::range      service size out of range
+   Errc::overflow   Tx queue is already full
+   Errc::noact      could not add to queue (out of memory; should not happen in real life)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpBase::SendRequest(const C_OscProtocolDriverOsyService & orc_Request)
+std::error_code C_OscProtocolDriverOsyTpBase::SendRequest(const C_OscProtocolDriverOsyService & orc_Request)
 {
    return m_AddToTxQueue(orc_Request);
 }
@@ -420,11 +422,11 @@ int32_t C_OscProtocolDriverOsyTpBase::SendRequest(const C_OscProtocolDriverOsySe
    \param[out]     orc_Response      incoming service response
 
    \return
-   C_NO_ERR    service read; date in orc_Service
-   C_NOACT     queue is empty
+   Errc::success   service read; date in orc_Service
+   Errc::noact     queue is empty
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpBase::ReadResponse(C_OscProtocolDriverOsyService & orc_Response)
+std::error_code C_OscProtocolDriverOsyTpBase::ReadResponse(C_OscProtocolDriverOsyService & orc_Response)
 {
    return m_GetFromRxQueue(orc_Response);
 }
@@ -443,14 +445,14 @@ int32_t C_OscProtocolDriverOsyTpBase::ReadResponse(C_OscProtocolDriverOsyService
    \param[in]  orc_ServerIdentifier   new server identifier
 
    \return
-   C_NO_ERR   no problems
-   C_RANGE    client and/or server identifier out of range
+   Errc::success   no problems
+   Errc::range     client and/or server identifier out of range
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpBase::SetNodeIdentifiers(const C_OscProtocolDriverOsyNode & orc_ClientIdentifier,
-                                                         const C_OscProtocolDriverOsyNode & orc_ServerIdentifier)
+std::error_code C_OscProtocolDriverOsyTpBase::SetNodeIdentifiers(
+   const C_OscProtocolDriverOsyNode & orc_ClientIdentifier, const C_OscProtocolDriverOsyNode & orc_ServerIdentifier)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    //valid range ?
    if ((orc_ClientIdentifier.u8_BusIdentifier > C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) ||
@@ -458,7 +460,7 @@ int32_t C_OscProtocolDriverOsyTpBase::SetNodeIdentifiers(const C_OscProtocolDriv
        (orc_ServerIdentifier.u8_BusIdentifier > C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) ||
        (orc_ServerIdentifier.u8_NodeIdentifier > C_OscProtocolDriverOsyNode::mhu8_MAX_NODE))
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -466,7 +468,7 @@ int32_t C_OscProtocolDriverOsyTpBase::SetNodeIdentifiers(const C_OscProtocolDriv
       mc_ServerId = orc_ServerIdentifier;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

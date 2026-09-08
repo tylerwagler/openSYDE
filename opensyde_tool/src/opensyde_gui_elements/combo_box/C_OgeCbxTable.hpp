@@ -29,7 +29,7 @@ class C_OgeCbxTable :
    Q_OBJECT
 
 public:
-   C_OgeCbxTable(QWidget * const opc_Parent = NULL);
+   C_OgeCbxTable(QWidget * const opc_Parent = nullptr);
    ~C_OgeCbxTable(void) override;
 
 protected:

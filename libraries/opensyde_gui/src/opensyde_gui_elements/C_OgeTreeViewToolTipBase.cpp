@@ -86,8 +86,8 @@ bool C_OgeTreeViewToolTipBaseDelegate::editorEvent(QEvent * const opc_Event, QAb
 
             QMouseEvent * const pc_MouseEvent = dynamic_cast<QMouseEvent *>(opc_Event);
 
-            tgl_assert(pc_MouseEvent != NULL);
-            if (pc_MouseEvent != NULL)
+            tgl_assert(pc_MouseEvent != nullptr);
+            if (pc_MouseEvent != nullptr)
             {
                this->initStyleOption(&c_ViewOpt, orc_Index);
 
@@ -112,8 +112,8 @@ bool C_OgeTreeViewToolTipBaseDelegate::editorEvent(QEvent * const opc_Event, QAb
          {
             QKeyEvent * const pc_KeyEvent = dynamic_cast<QKeyEvent *>(opc_Event);
 
-            tgl_assert(pc_KeyEvent != NULL);
-            if (pc_KeyEvent != NULL)
+            tgl_assert(pc_KeyEvent != nullptr);
+            if (pc_KeyEvent != nullptr)
             {
                if ((pc_KeyEvent->key() != static_cast<int32_t>(Qt::Key_Space)) &&
                    (pc_KeyEvent->key() != static_cast<int32_t>(Qt::Key_Select)))

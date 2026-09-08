@@ -29,7 +29,7 @@ class C_CamOgeCbxTableSmall :
    Q_OBJECT
 
 public:
-   explicit C_CamOgeCbxTableSmall(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgeCbxTableSmall(QWidget * const opc_Parent = nullptr);
    ~C_CamOgeCbxTableSmall(void) override;
 
    void showPopup(void) override;

@@ -30,7 +30,7 @@ public:
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiSvNodeSyvBase(const uint32_t ou32_ViewIndex, const int32_t & ors32_NodeIndex, const uint64_t & oru64_Id,
                      const float64_t & orf64_Width = mhf64_MIN_WIDTH_NODE,
-                     const float64_t & orf64_Height = mhf64_MIN_HEIGHT_NODE, QGraphicsItem * const opc_Parent = NULL);
+                     const float64_t & orf64_Height = mhf64_MIN_HEIGHT_NODE, QGraphicsItem * const opc_Parent = nullptr);
 
    virtual void SetViewConnected(const bool oq_Connected);
 

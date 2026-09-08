@@ -32,7 +32,7 @@ class C_OgeTransparentScrollArea :
    Q_OBJECT
 
 public:
-   C_OgeTransparentScrollArea(QWidget * const opc_Parent = NULL);
+   C_OgeTransparentScrollArea(QWidget * const opc_Parent = nullptr);
 
    void DeactivateScrollbarResize(void);
 

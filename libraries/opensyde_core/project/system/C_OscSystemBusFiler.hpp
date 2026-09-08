@@ -12,6 +12,7 @@
 #define C_OSCSYSTEMBUSFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include "stwtypes.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscSystemBus.hpp"
@@ -28,11 +29,11 @@ namespace opensyde_core
 class C_OscSystemBusFiler
 {
 public:
-   static int32_t h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
+   static std::error_code h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveBus(const C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
 
 private:
-   static int32_t mh_LoadCanFdProperties(C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
+   static std::error_code mh_LoadCanFdProperties(C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveCanFdProperties(const C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
 };
 

@@ -73,9 +73,9 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
-   QMainWindow(NULL),
+   QMainWindow(nullptr),
    mpc_Ui(new Ui::C_NagMainWindow),
-   mpc_ActiveWidget(NULL),
+   mpc_ActiveWidget(nullptr),
    mq_InitialProjectLoaded(false),
    mq_BlockDragAndDrop(false),
    mq_StartView(true),
@@ -239,7 +239,7 @@ void C_NagMainWindow::m_ShowStartView()
 {
    bool q_Continue;
 
-   if (this->mpc_ActiveWidget != NULL)
+   if (this->mpc_ActiveWidget != nullptr)
    {
       // a change of mode or submode will happen
       // is a change possible at the moment?
@@ -252,7 +252,7 @@ void C_NagMainWindow::m_ShowStartView()
    if (q_Continue)
    {
       //Store user settings (only if useful!)
-      if ((this->mpc_MainWidget == NULL) || (this->mpc_MainWidget->isVisible() == false))
+      if ((this->mpc_MainWidget == nullptr) || (this->mpc_MainWidget->isVisible() == false))
       {
          this->mpc_Ui->pc_Splitter->StoreUserSettings();
          this->mpc_Ui->pc_NaviBar->SaveUserSettings();
@@ -313,7 +313,7 @@ void C_NagMainWindow::m_OpenDetail(const int32_t os32_Index, const int32_t os32_
                                    const int32_t os32_SubSubIndex, const int32_t os32_SubSubSubIndex,
                                    const int32_t os32_Flag)
 {
-   if (this->mpc_ActiveWidget != NULL)
+   if (this->mpc_ActiveWidget != nullptr)
    {
       this->mpc_ActiveWidget->OpenDetail(os32_Index, os32_SubIndex, os32_SubSubIndex, os32_SubSubSubIndex, os32_Flag);
    }
@@ -363,7 +363,7 @@ void C_NagMainWindow::keyPressEvent(QKeyEvent * const opc_KeyEvent)
          C_SdHandlerWidget * const pc_Handler = dynamic_cast<C_SdHandlerWidget *>(this->mpc_ActiveWidget);
 
          //SD is active
-         if (pc_Handler != NULL)
+         if (pc_Handler != nullptr)
          {
             pc_Handler->CallHelp();
          }
@@ -371,7 +371,7 @@ void C_NagMainWindow::keyPressEvent(QKeyEvent * const opc_KeyEvent)
          C_SyvHandlerWidget * const pc_HandlerSv = dynamic_cast<C_SyvHandlerWidget *>(this->mpc_ActiveWidget);
 
          //SV is active
-         if (pc_HandlerSv != NULL)
+         if (pc_HandlerSv != nullptr)
          {
             pc_HandlerSv->CallHelp();
          }
@@ -384,7 +384,7 @@ void C_NagMainWindow::keyPressEvent(QKeyEvent * const opc_KeyEvent)
    }
 
    //Give widget the option to handle global key event
-   if (this->mpc_ActiveWidget != NULL)
+   if (this->mpc_ActiveWidget != nullptr)
    {
       q_ToolTipHidden1 = this->mpc_ActiveWidget->GlobalUserKeyPress(opc_KeyEvent);
    }
@@ -452,7 +452,7 @@ void C_NagMainWindow::keyPressEvent(QKeyEvent * const opc_KeyEvent)
          case ms32_SUBMODE_SYSDEF_TOPOLOGY:
             //One higher
             //Check if already at main screen?
-            if ((this->mpc_MainWidget == NULL) || (this->mpc_MainWidget->isVisible() == false))
+            if ((this->mpc_MainWidget == nullptr) || (this->mpc_MainWidget->isVisible() == false))
             {
                m_ShowStartView();
             }
@@ -465,7 +465,7 @@ void C_NagMainWindow::keyPressEvent(QKeyEvent * const opc_KeyEvent)
       case ms32_MODE_SYSVIEW:
          //One higher
          //Check if already at main screen?
-         if ((this->mpc_MainWidget == NULL) || (this->mpc_MainWidget->isVisible() == false))
+         if ((this->mpc_MainWidget == nullptr) || (this->mpc_MainWidget->isVisible() == false))
          {
             m_ShowStartView();
          }
@@ -491,7 +491,7 @@ void C_NagMainWindow::closeEvent(QCloseEvent * const opc_Event)
 
    C_PuiProject::h_HandlePendingEvents();
 
-   if (this->mpc_ActiveWidget != NULL)
+   if (this->mpc_ActiveWidget != nullptr)
    {
       q_Continue = this->mpc_ActiveWidget->PrepareToClose();
    }
@@ -593,7 +593,7 @@ void C_NagMainWindow::dropEvent(QDropEvent * const opc_Event)
       //Change view
       this->m_ShowStartView();
 
-      if (this->mpc_ActiveWidget != NULL)
+      if (this->mpc_ActiveWidget != nullptr)
       {
          q_CallCloseEvent = this->mpc_ActiveWidget->PrepareToClose();
 
@@ -739,7 +739,7 @@ void C_NagMainWindow::m_RemoveUseCaseWidget(void)
 {
    this->mpc_Ui->pc_TopToolBar->ResetButtons();
    this->mpc_UseCaseWidget->RemoveUseCaseWidget();
-   if (this->mpc_ActiveWidget != NULL)
+   if (this->mpc_ActiveWidget != nullptr)
    {
       disconnect(this->mpc_ActiveWidget, &C_NagUseCaseWidget::SigChangeMode,
                  this, &C_NagMainWindow::m_ChangeMode);
@@ -760,7 +760,7 @@ void C_NagMainWindow::m_RemoveUseCaseWidget(void)
       disconnect(this->mpc_ActiveWidget, &C_NagUseCaseWidget::SigBlockDragAndDrop,
                  this, &C_NagMainWindow::m_BlockDragAndDrop);
       delete this->mpc_ActiveWidget;
-      this->mpc_ActiveWidget = NULL;
+      this->mpc_ActiveWidget = nullptr;
    }
 }
 
@@ -829,7 +829,7 @@ void C_NagMainWindow::mh_GetHeadingNames(const int32_t os32_Mode, const int32_t 
       {
          const stw::opensyde_core::C_OscNode * const pc_Node =
             C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_Index);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             orc_SubSubMode = pc_Node->c_Properties.c_Name.c_str();
          }
@@ -843,7 +843,7 @@ void C_NagMainWindow::mh_GetHeadingNames(const int32_t os32_Mode, const int32_t 
       {
          const stw::opensyde_core::C_OscSystemBus * const pc_Bus =
             C_PuiSdHandler::h_GetInstance()->GetOscBus(ou32_Index);
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             orc_SubSubMode = pc_Bus->c_Name.c_str();
          }
@@ -893,11 +893,11 @@ void C_NagMainWindow::m_ShowSysDefItem(const int32_t os32_SubMode, const uint32_
       this->mu32_SdFlag = ou32_Flag;
    }
 
-   if (pc_Handler == NULL)
+   if (pc_Handler == nullptr)
    {
       // Sd Handler was not active yet
       this->m_PrepareForSpecificWidget();
-      pc_Handler = new C_SdHandlerWidget(NULL);
+      pc_Handler = new C_SdHandlerWidget(nullptr);
       this->mpc_ActiveWidget = pc_Handler;
       this->m_SetNewSpecificWidget(ms32_MODE_SYSDEF, os32_SubMode, orc_Name, orc_SubName, ou32_Index);
    }
@@ -956,11 +956,11 @@ void C_NagMainWindow::m_ShowSysViewItem(int32_t & ors32_SubMode, const uint32_t 
       this->mu32_SvFlag = ou32_Flag;
    }
 
-   if (pc_Handler == NULL)
+   if (pc_Handler == nullptr)
    {
       // Sd Handler was not active yet
       this->m_PrepareForSpecificWidget();
-      pc_Handler = new C_SyvHandlerWidget(NULL);
+      pc_Handler = new C_SyvHandlerWidget(nullptr);
       this->mpc_ActiveWidget = pc_Handler;
       //Do system view switch specific actions
       C_PuiSvHandler::h_GetInstance()->UpdateSystemDefintionErrors();
@@ -995,7 +995,7 @@ void C_NagMainWindow::m_SaveUserSettings(void)
    this->m_SaveScreenProperties();
    // splitter / navi state are only meaningful when a use case view is active;
    // skip the push when the start view is showing so we don't overwrite with defaults
-   if ((this->mpc_MainWidget == NULL) || (this->mpc_MainWidget->isVisible() == false))
+   if ((this->mpc_MainWidget == nullptr) || (this->mpc_MainWidget->isVisible() == false))
    {
       this->mpc_Ui->pc_Splitter->StoreUserSettings();
       this->mpc_Ui->pc_NaviBar->SaveUserSettings();
@@ -1017,7 +1017,7 @@ bool C_NagMainWindow::mh_CheckMime(const QMimeData * const opc_Mime, QString * c
 {
    bool q_Retval = false;
 
-   if (opc_Mime != NULL)
+   if (opc_Mime != nullptr)
    {
       if (opc_Mime->hasUrls() == true)
       {
@@ -1039,7 +1039,7 @@ bool C_NagMainWindow::mh_CheckMime(const QMimeData * const opc_Mime, QString * c
                    (c_File.suffix().compare("syde_sp") == 0))
                {
                   q_Retval = true;
-                  if (opc_FilePath != NULL)
+                  if (opc_FilePath != nullptr)
                   {
                      *opc_FilePath = c_PathList[0];
                   }
@@ -1127,7 +1127,7 @@ void C_NagMainWindow::m_ProjectLoaded(const bool & orq_SwitchToLastKnownMode)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_SvIndex);
 
-      if (pc_View == NULL)
+      if (pc_View == nullptr)
       {
          this->ms32_SvSubMode = ms32_SUBMODE_SYSVIEW_SETUP;
          this->mu32_SvIndex = 0U;
@@ -1154,7 +1154,7 @@ void C_NagMainWindow::m_ProjectLoaded(const bool & orq_SwitchToLastKnownMode)
          //Service mode: only allow switch to available view
          if (C_PuiSvHandler::h_GetInstance()->GetServiceModeActive())
          {
-            if ((this->ms32_Mode != ms32_MODE_SYSVIEW) || (pc_View == NULL) ||
+            if ((this->ms32_Mode != ms32_MODE_SYSVIEW) || (pc_View == nullptr) ||
                 (pc_View->GetServiceModeActive() == false))
             {
                this->ms32_Mode = ms32_MODE_NONE;
@@ -1236,7 +1236,7 @@ void C_NagMainWindow::m_ProjectLoaded(const bool & orq_SwitchToLastKnownMode)
 void C_NagMainWindow::m_CloseAndPrepareProjectLoad(void)
 {
    // close active project
-   if (this->mpc_ActiveWidget != NULL)
+   if (this->mpc_ActiveWidget != nullptr)
    {
       tgl_assert(this->mpc_ActiveWidget->PrepareToClose() == true);
       this->m_RemoveUseCaseWidget();
@@ -1254,7 +1254,7 @@ void C_NagMainWindow::m_CloseAndPrepareProjectLoad(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagMainWindow::m_SetInteractionWidget(QWidget * const opc_Widget)
 {
-   if (this->mpc_UseCaseWidget != NULL)
+   if (this->mpc_UseCaseWidget != nullptr)
    {
       this->mpc_UseCaseWidget->SetInteractionWidget(opc_Widget);
    }
@@ -1268,7 +1268,7 @@ void C_NagMainWindow::m_HandleAddViewRequest(void)
 {
    bool q_Continue;
 
-   if (this->mpc_ActiveWidget != NULL)
+   if (this->mpc_ActiveWidget != nullptr)
    {
       q_Continue = this->mpc_ActiveWidget->PrepareToClose();
    }
@@ -1324,7 +1324,7 @@ void C_NagMainWindow::m_HandleMoveViewRequest(const uint32_t ou32_StartIndex, co
 {
    bool q_Continue;
 
-   if (this->mpc_ActiveWidget != NULL)
+   if (this->mpc_ActiveWidget != nullptr)
    {
       q_Continue = this->mpc_ActiveWidget->PrepareToClose();
    }
@@ -1352,7 +1352,7 @@ void C_NagMainWindow::m_HandleDeleteSysViewRequest(const uint32_t ou32_Index, co
    bool q_Continue;
 
    //Only prepare to delete if: not last view, deleting view before current view & active widget valid
-   if (this->mpc_ActiveWidget != NULL)
+   if (this->mpc_ActiveWidget != nullptr)
    {
       q_Continue = this->mpc_ActiveWidget->PrepareToClose();
    }
@@ -1377,7 +1377,7 @@ void C_NagMainWindow::m_HandleDuplicateSysViewRequest(const uint32_t ou32_Index)
 {
    bool q_Continue;
 
-   if (this->mpc_ActiveWidget != NULL)
+   if (this->mpc_ActiveWidget != nullptr)
    {
       q_Continue = this->mpc_ActiveWidget->PrepareToClose();
    }
@@ -1408,7 +1408,7 @@ void C_NagMainWindow::m_HandleServiceMode(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagMainWindow::m_CloseActiveWidget()
 {
-   if (this->mpc_ActiveWidget != NULL)
+   if (this->mpc_ActiveWidget != nullptr)
    {
       this->m_RemoveUseCaseWidget();
       this->mpc_Ui->pc_NaviBar->UpdateNodesAndBusesNames();
@@ -1437,7 +1437,7 @@ bool C_NagMainWindow::m_ChangeMode(const int32_t os32_Mode, const int32_t os32_S
         (u32_Index != this->mu32_Index)) || (this->mq_StartView == true))
    {
       //Flag values of 1 indicate the prepare to close event was already handled
-      if ((this->mpc_ActiveWidget != NULL) && ((os32_Mode != ms32_MODE_SYSVIEW) || (ou32_Flag != 1UL)))
+      if ((this->mpc_ActiveWidget != nullptr) && ((os32_Mode != ms32_MODE_SYSVIEW) || (ou32_Flag != 1UL)))
       {
          // a change of mode or submode will happen
          // is a change possible at the moment?
@@ -1449,7 +1449,7 @@ bool C_NagMainWindow::m_ChangeMode(const int32_t os32_Mode, const int32_t os32_S
          q_Continue = true;
       }
    }
-   else if ((this->mpc_ActiveWidget != NULL) && ((os32_Mode == ms32_MODE_SYSVIEW) && (ou32_Flag == 1UL)))
+   else if ((this->mpc_ActiveWidget != nullptr) && ((os32_Mode == ms32_MODE_SYSVIEW) && (ou32_Flag == 1UL)))
    {
       //Special case, force reload "same" view (new content)
       q_Continue = true;
@@ -1464,7 +1464,7 @@ bool C_NagMainWindow::m_ChangeMode(const int32_t os32_Mode, const int32_t os32_S
    {
       //We will restore the last known splitter config after change of mode so store the current config (only if
       // useful!)
-      if ((this->mpc_MainWidget == NULL) || (this->mpc_MainWidget->isVisible() == false))
+      if ((this->mpc_MainWidget == nullptr) || (this->mpc_MainWidget->isVisible() == false))
       {
          this->mpc_Ui->pc_Splitter->StoreUserSettings();
          this->mpc_Ui->pc_NaviBar->SaveUserSettings();

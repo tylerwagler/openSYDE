@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <QFileInfo>
+#include <system_error>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -58,7 +59,7 @@ C_SyvUpPacPemFileInfoPopUp::C_SyvUpPacPemFileInfoPopUp(stw::opensyde_gui_element
    C_OscSecurityPem c_Pem;
 
    std::string c_ErrorMessage;
-   const int32_t s32_Result = ListLoadFromFile(c_Pem, orc_Path.toStdString(), c_ErrorMessage);
+   const std::error_code c_Result = c_Pem.LoadFromFile(orc_Path.toStdString(), c_ErrorMessage);
 
    this->mpc_Ui->setupUi(this);
 
@@ -66,7 +67,7 @@ C_SyvUpPacPemFileInfoPopUp::C_SyvUpPacPemFileInfoPopUp(stw::opensyde_gui_element
 
    this->mrc_ParentDialog.SetSubTitle(QFileInfo(orc_Path).fileName());
 
-   if (s32_Result == C_NO_ERR)
+   if (!c_Result)
    {
       c_DisplayText += c_Pem.GetMetaInfos().c_str();
    }

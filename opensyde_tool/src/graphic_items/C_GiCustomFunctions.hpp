@@ -36,10 +36,10 @@ public:
    };
 
    static QVariant h_ItemChange(const QGraphicsItem::GraphicsItemChange oe_Change, const QVariant & orc_Value,
-                                const QGraphicsItem * const opc_GraphicsItem, bool * const opq_Changed = NULL,
+                                const QGraphicsItem * const opc_GraphicsItem, bool * const opq_Changed = nullptr,
                                 const QPointF & orc_Offset = QPointF(0.0, 0.0));
    static void h_AdaptMouseRangePos(QPointF & orc_Pos, const QPointF & orc_Offset = QPointF(0.0, 0.0),
-                                    bool * const opq_Changed = NULL);
+                                    bool * const opq_Changed = nullptr);
    static QPointF h_AdaptDeltaForAspectRatio(const float64_t of64_AspectRatio,
                                              const E_AspectRatioMovement oe_AspectRatioMovement,
                                              const QPointF & orc_Delta);

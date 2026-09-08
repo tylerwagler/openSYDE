@@ -32,7 +32,7 @@ public:
    C_GiRectBaseGroup(const int32_t & ors32_Index, const C_PuiSdDataElement::E_Type & ore_Type,
                      const uint64_t & oru64_Id, const float64_t of64_MinWidth, const float64_t of64_MinHeight,
                      const float64_t of64_ActionPointOffset, const bool oq_KeepAspectRatio,
-                     QGraphicsItem * const opc_Parent = NULL);
+                     QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiRectBaseGroup(void) override;
 
    //GI base

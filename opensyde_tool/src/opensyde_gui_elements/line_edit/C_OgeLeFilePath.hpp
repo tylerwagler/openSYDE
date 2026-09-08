@@ -29,7 +29,7 @@ class C_OgeLeFilePath :
    Q_OBJECT
 
 public:
-   explicit C_OgeLeFilePath(QWidget * const opc_Parent = NULL);
+   explicit C_OgeLeFilePath(QWidget * const opc_Parent = nullptr);
 
    void SetDbProjectPath(const QString & orc_DbPath);
 

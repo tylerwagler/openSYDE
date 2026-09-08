@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include "precomp_headers.hpp"
 
 #include <QFileInfo>
@@ -33,7 +34,7 @@ using namespace stw::errors;
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-C_UsHandler * C_UsHandler::mhpc_Singleton = NULL;
+C_UsHandler * C_UsHandler::mhpc_Singleton = nullptr;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -48,10 +49,16 @@ C_UsHandler * C_UsHandler::mhpc_Singleton = NULL;
 //----------------------------------------------------------------------------------------------------------------------
 C_UsHandler * C_UsHandler::h_GetInstance(void)
 {
-   if (C_UsHandler::mhpc_Singleton == NULL)
+   //Guard the lazy construction: the previous check-then-new was a data race
+   //if two threads reached it at once. Destruction stays explicit via h_Destroy()
+   //so shutdown ordering is preserved.
+   static std::once_flag hc_OnceFlag;
+
+   std::call_once(hc_OnceFlag, []
    {
       C_UsHandler::mhpc_Singleton = new C_UsHandler();
-   }
+   });
+
    return C_UsHandler::mhpc_Singleton;
 }
 
@@ -61,10 +68,10 @@ C_UsHandler * C_UsHandler::h_GetInstance(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::h_Destroy(void)
 {
-   if (C_UsHandler::mhpc_Singleton != NULL)
+   if (C_UsHandler::mhpc_Singleton != nullptr)
    {
       delete (C_UsHandler::mhpc_Singleton);
-      C_UsHandler::mhpc_Singleton = NULL;
+      C_UsHandler::mhpc_Singleton = nullptr;
    }
 }
 

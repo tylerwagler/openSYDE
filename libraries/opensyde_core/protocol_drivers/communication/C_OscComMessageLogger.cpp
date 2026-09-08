@@ -17,10 +17,12 @@
 
 #include <algorithm>
 #include <string>
+#include <system_error>
 #include <sstream>
 #include <iomanip>
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "TglTime.hpp"
 #include "TglFile.hpp"
@@ -113,8 +115,8 @@ bool C_OscComMessageLoggerFilter::operator ==(const C_OscComMessageLoggerFilter 
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscComMessageLogger::C_OscComMessageLogger(void) :
-   mpc_OsySysDefMessage(NULL),
-   mpc_OsySysDefDataPoolList(NULL),
+   mpc_OsySysDefMessage(nullptr),
+   mpc_OsySysDefDataPoolList(nullptr),
    me_Protocol(stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE),
    mq_Paused(false),
    mu64_FirstTimeStampStart(0U),
@@ -143,11 +145,11 @@ C_OscComMessageLogger::~C_OscComMessageLogger(void)
    catch (...)
    {
    }
-   mpc_OsySysDefMessage = NULL;
-   mpc_OsySysDefDataPoolList = NULL;
+   mpc_OsySysDefMessage = nullptr;
+   mpc_OsySysDefDataPoolList = nullptr;
 
    delete this->mpc_AutoSupportProtocol;
-   this->mpc_AutoSupportProtocol = NULL;
+   this->mpc_AutoSupportProtocol = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -252,17 +254,17 @@ void C_OscComMessageLogger::SetProtocol(const e_CanMonL7Protocols oe_Protocol)
    \param[out] orc_Buses                All CAN buses of system definition
 
    \return
-   C_NO_ERR    data read
-   C_RANGE     specified system definition file does not exist or has a wrong extension
-   C_NOACT     specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG    system definition file content is invalid or incomplete
-               device definition file could not be loaded
-   C_OVERFLOW  node in system definition references a device not part of the device definitions
-   C_COM       no CAN bus in system definition
+   Errc::success     data read
+   Errc::range       specified system definition file does not exist or has a wrong extension
+   Errc::noact       specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config      system definition file content is invalid or incomplete
+                     device definition file could not be loaded
+   Errc::overflow    node in system definition references a device not part of the device definitions
+   Errc::com         no CAN bus in system definition
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::AddOsySysDef(const std::string & orc_PathSystemDefinition,
-                                            std::vector<C_OscSystemBus> & orc_Buses)
+std::error_code C_OscComMessageLogger::AddOsySysDef(const std::string & orc_PathSystemDefinition,
+                                                    std::vector<C_OscSystemBus> & orc_Buses)
 {
    return this->AddOsySysDef(orc_PathSystemDefinition, 0xFFFFFFFFUL, orc_Buses);
 }
@@ -275,21 +277,22 @@ int32_t C_OscComMessageLogger::AddOsySysDef(const std::string & orc_PathSystemDe
    \param[out] orc_Buses               All CAN buses of system definition
 
    \return
-   C_NO_ERR    data read
-   C_RANGE     specified system definition file does not exist or has a wrong extension
-   C_NOACT     specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG    system definition file content is invalid or incomplete
-               device definition file could not be loaded
-   C_OVERFLOW  node in system definition references a device not part of the device definitions
-   C_COM       no CAN bus in system definition
-   C_WARN      specified bus index was not found or is no CAN bus
+   Errc::success     data read
+   Errc::range       specified system definition file does not exist or has a wrong extension
+   Errc::noact       specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config      system definition file content is invalid or incomplete
+                     device definition file could not be loaded
+   Errc::overflow    node in system definition references a device not part of the device definitions
+   Errc::com         no CAN bus in system definition
+   Errc::warn        specified bus index was not found or is no CAN bus
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::AddOsySysDef(const std::string & orc_PathSystemDefinition, const uint32_t ou32_BusIndex,
-                                            std::vector<C_OscSystemBus> & orc_Buses)
+std::error_code C_OscComMessageLogger::AddOsySysDef(const std::string & orc_PathSystemDefinition,
+                                                    const uint32_t ou32_BusIndex,
+                                                    std::vector<C_OscSystemBus> & orc_Buses)
 {
    const std::string c_FileExtension = LowerCaseCompat(stw::tgl::TglExtractFileExtension(orc_PathSystemDefinition));
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (c_FileExtension == ".syde_sysdef")
    {
@@ -297,9 +300,9 @@ int32_t C_OscComMessageLogger::AddOsySysDef(const std::string & orc_PathSystemDe
       // Load without device definitions
       // Optional parameters to skip contents of h_LoadSystemDefinitionFile are not used,
       // because we are not in SYDEsup or SYDE Coder C context (#61996) and we want all system definition data here.
-      s32_Return =
-         C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(c_SysDef, orc_PathSystemDefinition, "", false);
-      if (s32_Return == C_NO_ERR)
+      // h_LoadSystemDefinitionFile is still on the STW integer convention (wave C)
+      c_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(c_SysDef, orc_PathSystemDefinition, "", false);
+      if (c_Return == Errc::success)
       {
          uint32_t u32_BusCounter;
          uint32_t u32_FirstBusIndex = 0U;
@@ -344,7 +347,7 @@ int32_t C_OscComMessageLogger::AddOsySysDef(const std::string & orc_PathSystemDe
                if (ou32_BusIndex != 0xFFFFFFFFUL)
                {
                   // An concrete bus index was set, but not found
-                  s32_Return = C_WARN;
+                  c_Return = Errc::warn;
                }
 
                // Use the first found CAN bus instead
@@ -358,18 +361,18 @@ int32_t C_OscComMessageLogger::AddOsySysDef(const std::string & orc_PathSystemDe
          }
          else
          {
-            s32_Return = C_COM;
+            c_Return = Errc::com;
          }
       }
    }
 
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       osc_write_log_error("Loading System Definition", "Could not load System Definition. Error code: " +
-                          std::to_string(s32_Return));
+                          std::to_string(c_Return.value()));
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -379,15 +382,15 @@ int32_t C_OscComMessageLogger::AddOsySysDef(const std::string & orc_PathSystemDe
    \param[in] ou32_BusIndex            Bus index of CAN bus of system definition for monitoring
 
    \return
-   C_NO_ERR    Bus index for this system definition adapted
-   C_NOACT     No system definition found with this path
-   C_WARN      specified bus index was not found or is no CAN bus
+   Errc::success    Bus index for this system definition adapted
+   Errc::noact      No system definition found with this path
+   Errc::warn       specified bus index was not found or is no CAN bus
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
-                                               const uint32_t ou32_BusIndex)
+std::error_code C_OscComMessageLogger::SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
+                                                       const uint32_t ou32_BusIndex)
 {
-   int32_t s32_Return = C_NOACT;
+   std::error_code c_Return = Errc::noact;
 
    const std::map<std::string,
                   C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef = this->mc_OsySysDefs.find(
@@ -400,15 +403,15 @@ int32_t C_OscComMessageLogger::SetOsySysDefBus(const std::string & orc_PathSyste
           (c_ItSysDef->second.c_OsySysDef.c_Buses[ou32_BusIndex].e_Type == C_OscSystemBus::eCAN))
       {
          c_ItSysDef->second.u32_BusIndex = ou32_BusIndex;
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
       }
       else
       {
-         s32_Return = C_WARN;
+         c_Return = Errc::warn;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -418,14 +421,14 @@ int32_t C_OscComMessageLogger::SetOsySysDefBus(const std::string & orc_PathSyste
    \param[out] orc_SystemDefinition     Loaded system definition
 
    \return
-   C_NO_ERR    openSYDE system definition returned
-   C_RANGE     openSYDE system definition not found
+   Errc::success    openSYDE system definition returned
+   Errc::range      openSYDE system definition not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::GetOsySysDef(const std::string & orc_PathSystemDefinition,
-                                            C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition)
+std::error_code C_OscComMessageLogger::GetOsySysDef(const std::string & orc_PathSystemDefinition,
+                                                    C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    std::map<std::string, C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef;
 
@@ -434,10 +437,10 @@ int32_t C_OscComMessageLogger::GetOsySysDef(const std::string & orc_PathSystemDe
    {
       // Copy the DBC definition
       orc_SystemDefinition = c_ItSysDef->second;
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -446,13 +449,13 @@ int32_t C_OscComMessageLogger::GetOsySysDef(const std::string & orc_PathSystemDe
    \param[in] orc_Path Path and filename of database file
 
    \return
-   C_NO_ERR    Database removed
-   C_NOACT     No database found with this path
+   Errc::success    Database removed
+   Errc::noact      No database found with this path
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::RemoveDatabase(const std::string & orc_Path)
+std::error_code C_OscComMessageLogger::RemoveDatabase(const std::string & orc_Path)
 {
-   int32_t s32_Return = C_NOACT;
+   std::error_code c_Return = Errc::noact;
 
    const std::map<std::string,
                   C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef = this->mc_OsySysDefs.find(
@@ -466,10 +469,10 @@ int32_t C_OscComMessageLogger::RemoveDatabase(const std::string & orc_Path)
       // Remove the entry
       this->mc_OsySysDefs.erase(c_ItSysDef);
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -479,13 +482,13 @@ int32_t C_OscComMessageLogger::RemoveDatabase(const std::string & orc_Path)
    \param[in] oq_Active Flag if database is active
 
    \return
-   C_NO_ERR    Database removed
-   C_NOACT     No database found with this path
+   Errc::success    Database removed
+   Errc::noact      No database found with this path
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::ActivateDatabase(const std::string & orc_Path, const bool oq_Active)
+std::error_code C_OscComMessageLogger::ActivateDatabase(const std::string & orc_Path, const bool oq_Active)
 {
-   int32_t s32_Return = C_NOACT;
+   std::error_code c_Return = Errc::noact;
 
    const std::map<std::string, bool>::iterator c_ItFlag = this->mc_DatabaseActiveFlags.find(orc_Path);
 
@@ -495,7 +498,7 @@ int32_t C_OscComMessageLogger::ActivateDatabase(const std::string & orc_Path, co
          this->mc_OsySysDefs.find(orc_Path);
 
       c_ItFlag->second = oq_Active;
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
 
       // Check if it is an openSYDE System Definition
       if (c_ItSysDef != this->mc_OsySysDefs.end())
@@ -514,7 +517,7 @@ int32_t C_OscComMessageLogger::ActivateDatabase(const std::string & orc_Path, co
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -525,24 +528,24 @@ int32_t C_OscComMessageLogger::ActivateDatabase(const std::string & orc_Path, co
    \param[in] oq_RelativeTimeStampActive Mode for writing CAN timestamp (relative or absolute)
 
    \return
-   C_NO_ERR    File added successfully
+   Errc::success    File added successfully
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
-                                             const bool oq_RelativeTimeStampActive)
+std::error_code C_OscComMessageLogger::AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
+                                                     const bool oq_RelativeTimeStampActive)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscComMessageLoggerFileAsc * pc_File;
    std::string c_ProtocolName;
 
    this->mc_ProtocolDec.GetProtocolName(this->me_Protocol, c_ProtocolName);
    pc_File = new C_OscComMessageLoggerFileAsc(orc_FilePath, c_ProtocolName, oq_HexActive, oq_RelativeTimeStampActive);
-   s32_Return = pc_File->OpenFile();
+   c_Return = pc_File->OpenFile();
 
    this->mc_LoggingFiles.insert(std::pair<std::string,
                                           C_OscComMessageLoggerFileBase * const>(orc_FilePath, pc_File));
 
-   return s32_Return; //lint !e429  //no memory leak of pc_File because of handling of instance in map mc_LoggingFiles
+   return c_Return; //lint !e429  //no memory leak of pc_File because of handling of instance in map mc_LoggingFiles
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -553,13 +556,13 @@ int32_t C_OscComMessageLogger::AddLogFileAsc(const std::string & orc_FilePath, c
    \param[in] orc_FilePath Path with file name. File extension must be .asc
 
    \return
-   C_NO_ERR    File removed
-   C_NOACT     No file with this path registered
+   Errc::success    File removed
+   Errc::noact      No file with this path registered
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::RemoveLogFile(const std::string & orc_FilePath)
+std::error_code C_OscComMessageLogger::RemoveLogFile(const std::string & orc_FilePath)
 {
-   int32_t s32_Return = C_NOACT;
+   std::error_code c_Return = Errc::noact;
 
    std::map<std::string, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
 
@@ -567,13 +570,13 @@ int32_t C_OscComMessageLogger::RemoveLogFile(const std::string & orc_FilePath)
 
    if (c_ItFile != this->mc_LoggingFiles.end())
    {
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
 
       delete c_ItFile->second;
       this->mc_LoggingFiles.erase(c_ItFile);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -661,14 +664,14 @@ uint32_t C_OscComMessageLogger::GetFilteredMessages(void) const
    \param[in] oq_IsTx Message was sent of this application itself
 
    \return
-   C_NO_ERR    CAN message logged
-   C_NOACT     CAN message not relevant
-   C_BUSY      Logger is paused
+   Errc::success    CAN message logged
+   Errc::noact      CAN message not relevant
+   Errc::busy       Logger is paused
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg, const bool oq_IsTx)
+std::error_code C_OscComMessageLogger::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg, const bool oq_IsTx)
 {
-   int32_t s32_Return = C_BUSY;
+   std::error_code c_Return = Errc::busy;
 
    if (this->mq_Paused == false)
    {
@@ -728,16 +731,16 @@ int32_t C_OscComMessageLogger::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
             c_ItFileLogger->second->AddMessageToFile(this->mc_HandledCanMessage);
          }
 
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
       }
       else
       {
          // Message is not relevant for this logger because of filter configuration
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -984,8 +987,8 @@ bool C_OscComMessageLogger::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
 
    std::map<std::string, C_OscComMessageLoggerOsySysDefConfig>::const_iterator c_ItSysDef;
 
-   this->mpc_OsySysDefMessage = NULL;
-   this->mpc_OsySysDefDataPoolList = NULL;
+   this->mpc_OsySysDefMessage = nullptr;
+   this->mpc_OsySysDefDataPoolList = nullptr;
 
    for (c_ItSysDef = this->mc_OsySysDefs.begin(); c_ItSysDef != this->mc_OsySysDefs.end(); ++c_ItSysDef)
    {
@@ -1051,7 +1054,7 @@ bool C_OscComMessageLogger::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
                               this->mpc_OsySysDefDataPoolList =
                                  C_OscCanProtocol::h_GetComListConst(rc_Node.c_DataPools[rc_CanProt.u32_DataPoolIndex],
                                                                      u32_IntfCounter, true);
-                              tgl_assert(this->mpc_OsySysDefDataPoolList != NULL);
+                              tgl_assert(this->mpc_OsySysDefDataPoolList != nullptr);
 
                               q_Return = true;
                            }
@@ -1090,7 +1093,7 @@ bool C_OscComMessageLogger::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
                                     C_OscCanProtocol::h_GetComListConst(
                                        rc_Node.c_DataPools[rc_CanProt.u32_DataPoolIndex],
                                        u32_IntfCounter, false);
-                                 tgl_assert(this->mpc_OsySysDefDataPoolList != NULL);
+                                 tgl_assert(this->mpc_OsySysDefDataPoolList != nullptr);
 
                                  q_Return = true;
                               }
@@ -1101,20 +1104,20 @@ bool C_OscComMessageLogger::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
                      }
                   }
 
-                  if (this->mpc_OsySysDefMessage != NULL)
+                  if (this->mpc_OsySysDefMessage != nullptr)
                   {
                      break;
                   }
                }
             }
 
-            if (this->mpc_OsySysDefMessage != NULL)
+            if (this->mpc_OsySysDefMessage != nullptr)
             {
                break;
             }
          }
 
-         if (this->mpc_OsySysDefMessage != NULL)
+         if (this->mpc_OsySysDefMessage != nullptr)
          {
             break;
          }
@@ -1138,8 +1141,8 @@ bool C_OscComMessageLogger::m_InterpretSysDef(C_OscComMessageLoggerData & orc_Me
 {
    bool q_Return = false;
 
-   if ((this->mpc_OsySysDefMessage != NULL) &&
-       (this->mpc_OsySysDefDataPoolList != NULL))
+   if ((this->mpc_OsySysDefMessage != nullptr) &&
+       (this->mpc_OsySysDefDataPoolList != nullptr))
    {
       uint32_t u32_Counter;
       bool q_MultiplexerFound = false;
@@ -1228,8 +1231,8 @@ std::string C_OscComMessageLogger::m_GetOsySysDefStringHex(void) const
 {
    std::string c_Return = "";
 
-   if ((this->mpc_OsySysDefDataPoolList != NULL) &&
-       (this->mpc_OsySysDefMessage != NULL))
+   if ((this->mpc_OsySysDefDataPoolList != nullptr) &&
+       (this->mpc_OsySysDefMessage != nullptr))
    {
       // TODO for logging
       c_Return = this->mpc_OsySysDefMessage->c_Name;
@@ -1253,8 +1256,8 @@ std::string C_OscComMessageLogger::m_GetOsySysDefStringDec(void) const
 {
    std::string c_Return = "";
 
-   if ((this->mpc_OsySysDefDataPoolList != NULL) &&
-       (this->mpc_OsySysDefMessage != NULL))
+   if ((this->mpc_OsySysDefDataPoolList != nullptr) &&
+       (this->mpc_OsySysDefMessage != nullptr))
    {
       // TODO for logging
       c_Return = this->mpc_OsySysDefMessage->c_Name;
@@ -1530,7 +1533,7 @@ void C_OscComMessageLogger::m_ConvertCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
 void C_OscComMessageLogger::m_InterpretSysDefCanSignal(C_OscComMessageLoggerData & orc_MessageData,
                                                        const C_OscCanSignal & orc_OscSignal) const
 {
-   if ((this->mpc_OsySysDefDataPoolList != NULL) &&
+   if ((this->mpc_OsySysDefDataPoolList != nullptr) &&
        (orc_OscSignal.u32_ComDataElementIndex < this->mpc_OsySysDefDataPoolList->c_Elements.size()))
    {
       C_OscComMessageLoggerDataSignal c_Signal;
@@ -1659,15 +1662,14 @@ void C_OscComMessageLogger::mh_AddSpecialEcesSignals(C_OscNode & orc_Node,
    c_ChecksumElement.c_Comment = "Automatically generated signal to represent CRC checksum signal of the ECeS Message.";
 
    // insert signals
-   int32_t s32_Result;
-   s32_Result = orc_Node.InsertSignal(orc_Id.e_ComProtocol, orc_Id.u32_InterfaceIndex, orc_Id.u32_DatapoolIndex,
-                                      orc_Id.q_MessageIsTx, orc_Id.u32_MessageIndex, ou32_SignalIndex,
-                                      c_MessageCounterSig, c_MessageCounterElement);
-   tgl_assert(s32_Result == C_NO_ERR);
-   s32_Result = orc_Node.InsertSignal(orc_Id.e_ComProtocol, orc_Id.u32_InterfaceIndex, orc_Id.u32_DatapoolIndex,
-                                      orc_Id.q_MessageIsTx, orc_Id.u32_MessageIndex, ou32_SignalIndex + 1,
-                                      c_ChecksumSig, c_ChecksumElement);
-   tgl_assert(s32_Result == C_NO_ERR);
+   std::error_code c_Result = orc_Node.InsertSignal(orc_Id.e_ComProtocol, orc_Id.u32_InterfaceIndex, orc_Id.u32_DatapoolIndex,
+                                    orc_Id.q_MessageIsTx, orc_Id.u32_MessageIndex, ou32_SignalIndex,
+                                    c_MessageCounterSig, c_MessageCounterElement);
+   tgl_assert(!c_Result);
+   c_Result = orc_Node.InsertSignal(orc_Id.e_ComProtocol, orc_Id.u32_InterfaceIndex, orc_Id.u32_DatapoolIndex,
+                                    orc_Id.q_MessageIsTx, orc_Id.u32_MessageIndex, ou32_SignalIndex + 1,
+                                    c_ChecksumSig, c_ChecksumElement);
+   tgl_assert(!c_Result);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

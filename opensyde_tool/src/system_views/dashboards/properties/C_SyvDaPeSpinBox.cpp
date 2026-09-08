@@ -177,7 +177,7 @@ void C_SyvDaPeSpinBox::m_UpdatePreview(void)
    //Also include the fix offset to the right
    const float64_t f64_IconOffset = C_SyvDaPeBase::h_GetFixIconOffset();
    const QSize c_ViewSize = C_SyvDaPeBase::h_GetSceneViewSize();
-   C_GiSvDaSpinBoxBase * const pc_Item = new C_GiSvDaSpinBoxBase(0UL, 0UL, -1L, 0ULL, NULL);
+   C_GiSvDaSpinBoxBase * const pc_Item = new C_GiSvDaSpinBoxBase(0UL, 0UL, -1L, 0ULL, nullptr);
    const QSizeF c_ItemSize(static_cast<float64_t>(c_ViewSize.width()) / 1.5,
                            static_cast<float64_t>(c_ViewSize.height()) / 3.0);
    // 10 =  Vertical center adjustment

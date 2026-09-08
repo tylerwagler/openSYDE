@@ -81,7 +81,7 @@ bool C_SdNdeUnoDataPoolListPasteCommand::InitialSetup(const uint32_t & oru32_Fir
       //Check type
       const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex);
-      if (pc_DataPool != NULL)
+      if (pc_DataPool != nullptr)
       {
          if (pc_DataPool->e_Type == e_Type)
          {

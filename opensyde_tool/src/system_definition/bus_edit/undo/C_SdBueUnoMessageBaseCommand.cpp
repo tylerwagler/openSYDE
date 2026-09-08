@@ -52,7 +52,7 @@ C_SdBueUnoMessageBaseCommand::C_SdBueUnoMessageBaseCommand(
    mpc_MessageSyncManager(opc_MessageSyncManager),
    mpc_MessageTreeWidget(opc_MessageTreeWidget)
 {
-   if (this->mpc_MessageSyncManager != NULL)
+   if (this->mpc_MessageSyncManager != nullptr)
    {
       this->mc_UniqueId.reserve(orc_MessageId.size());
       for (uint32_t u32_It = 0UL; u32_It < orc_MessageId.size(); ++u32_It)
@@ -99,8 +99,8 @@ bool C_SdBueUnoMessageBaseCommand::m_CheckMessagesSortedAscendingWithDirection(c
 {
    bool q_Sorted = true;
 
-   tgl_assert(this->mpc_MessageSyncManager != NULL);
-   if (this->mpc_MessageSyncManager != NULL)
+   tgl_assert(this->mpc_MessageSyncManager != nullptr);
+   if (this->mpc_MessageSyncManager != nullptr)
    {
       C_OscCanMessageIdentificationIndices c_PrevId;
       bool q_PrevIdValid = false;

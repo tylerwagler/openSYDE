@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include "precomp_headers.hpp"
 
 #include "C_PuiSdHandler.hpp"
@@ -24,7 +25,7 @@ using namespace stw::opensyde_gui_logic;
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-C_PuiSdHandler * C_PuiSdHandler::mhpc_Singleton = NULL;
+C_PuiSdHandler * C_PuiSdHandler::mhpc_Singleton = nullptr;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -39,10 +40,16 @@ C_PuiSdHandler * C_PuiSdHandler::mhpc_Singleton = NULL;
 //----------------------------------------------------------------------------------------------------------------------
 C_PuiSdHandler * C_PuiSdHandler::h_GetInstance(void)
 {
-   if (C_PuiSdHandler::mhpc_Singleton == NULL)
+   //Guard the lazy construction: the previous check-then-new was a data race
+   //if two threads reached it at once. Destruction stays explicit via h_Destroy()
+   //so shutdown ordering is preserved.
+   static std::once_flag hc_OnceFlag;
+
+   std::call_once(hc_OnceFlag, []
    {
       C_PuiSdHandler::mhpc_Singleton = new C_PuiSdHandler();
-   }
+   });
+
    return C_PuiSdHandler::mhpc_Singleton;
 }
 
@@ -53,7 +60,7 @@ C_PuiSdHandler * C_PuiSdHandler::h_GetInstance(void)
 void C_PuiSdHandler::h_Destroy(void)
 {
    delete C_PuiSdHandler::mhpc_Singleton;
-   C_PuiSdHandler::mhpc_Singleton = NULL;
+   C_PuiSdHandler::mhpc_Singleton = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

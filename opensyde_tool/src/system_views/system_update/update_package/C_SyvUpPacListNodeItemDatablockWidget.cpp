@@ -25,6 +25,7 @@
 #include "ui_C_SyvUpPacListNodeItemWidget.h"
 
 #include "C_PuiSvHandler.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscHexFile.hpp"
 #include "C_SclStringCompat.hpp"
 #include "C_SyvUpPacHexFileView.hpp"
@@ -144,7 +145,7 @@ void C_SyvUpPacListNodeItemDatablockWidget::ViewFileInfo(void)
          //No confirmation
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();
@@ -198,15 +199,16 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
          C_OscHexFile * const pc_HexFile = new C_OscHexFile();
 
          // File information
-         if (pc_HexFile->LoadFromFile(this->mc_AbsoluteFilePath.toStdString().c_str()) == stw::hex_file::NO_ERR)
+         if (!pc_HexFile->LoadFromFile(this->mc_AbsoluteFilePath.toStdString().c_str()))
          {
             stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
-            const int32_t s32_Result = pc_HexFile->ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo);
+            const std::error_code c_ScanResult =
+               pc_HexFile->ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo);
 
-            if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
+            if ((!c_ScanResult) || (c_ScanResult == Errc::warn))
             {
                this->mc_AppDeviceType = UpperCaseCompat(TrimCompat(c_FileApplicationInfo.GetDeviceID())).c_str();
-               if (s32_Result == C_WARN)
+               if (c_ScanResult == Errc::warn)
                {
                   // Hex file has multiple application blocks so information is ambiguous
                   this->mc_ProjectName = "ambiguous";
@@ -251,7 +253,7 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                      bool q_FileIsOk = false;
                      const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                         this->mu32_NodeIndex);
-                     if ((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL) &&
+                     if ((pc_Node != nullptr) && (pc_Node->pc_DeviceDefinition != nullptr) &&
                          (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()))
                      {
                         for (uint32_t u32_ItName = 0UL;
@@ -291,7 +293,7 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                // HEX file application block information is invalid
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
                c_Message.SetHeading("Update Package Configuration");
-               if (s32_Result == C_OVERFLOW)
+               if (c_ScanResult == Errc::overflow)
                {
                   c_Message.SetDescription("HEX file has multiple application information "
                                                                   "blocks with non-equal device names!");

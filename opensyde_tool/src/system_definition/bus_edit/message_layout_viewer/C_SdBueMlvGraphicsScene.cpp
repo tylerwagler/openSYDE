@@ -133,8 +133,8 @@ const C_SdBueMlvSignalManager::C_SignalItemColors C_SdBueMlvGraphicsScene::mhac_
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueMlvGraphicsScene::C_SdBueMlvGraphicsScene(QObject * const opc_Parent) :
    QGraphicsScene(opc_Parent),
-   mpc_ContextMenu(NULL),
-   mpc_MessageSyncManager(NULL),
+   mpc_ContextMenu(nullptr),
+   mpc_MessageSyncManager(nullptr),
    me_Protocol(C_OscCanProtocol::eLAYER2),
    mc_MessageId(),
    mq_MultiplexedMessage(false),
@@ -142,8 +142,8 @@ C_SdBueMlvGraphicsScene::C_SdBueMlvGraphicsScene(QObject * const opc_Parent) :
    mu16_MaximumCountBits(64U),
    mf64_SingleItemWidth(50.0),
    mf64_SingleItemHeight(50.0),
-   mpc_HoveredSignal(NULL),
-   mpc_ActualSignal(NULL),
+   mpc_HoveredSignal(nullptr),
+   mpc_ActualSignal(nullptr),
    me_InteractionMode(C_SdBueMlvSignalManager::eIAM_NONE),
    mc_LastMousePos(0.0, 0.0),
    ms32_LastGridIndex(-1),
@@ -221,8 +221,8 @@ void C_SdBueMlvGraphicsScene::SetMessage(const C_OscCanMessageIdentificationIndi
    const C_OscCanMessage * const pc_Message =
       stw::opensyde_gui_logic::C_PuiSdHandler::h_GetInstance()->GetCanMessage(orc_MessageId);
 
-   tgl_assert(pc_Message != NULL);
-   if (pc_Message != NULL)
+   tgl_assert(pc_Message != nullptr);
+   if (pc_Message != nullptr)
    {
       uint16_t u16_Counter;
       uint32_t u32_Counter;
@@ -394,11 +394,11 @@ void C_SdBueMlvGraphicsScene::DisplayToolTip(const QPointF & orc_ScenePos)
 {
    //Check if item is hovered
    int32_t s32_Counter;
-   C_SdBueMlvSignalManager * pc_HoveredItem = NULL;
+   C_SdBueMlvSignalManager * pc_HoveredItem = nullptr;
 
    for (s32_Counter = 0U; s32_Counter < this->mc_VecSignals.size(); ++s32_Counter)
    {
-      if ((this->mc_VecSignals[s32_Counter] != NULL) &&
+      if ((this->mc_VecSignals[s32_Counter] != nullptr) &&
           (this->mc_VecSignals[s32_Counter]->IsHovered() == true))
       {
          pc_HoveredItem = this->mc_VecSignals[s32_Counter];
@@ -407,7 +407,7 @@ void C_SdBueMlvGraphicsScene::DisplayToolTip(const QPointF & orc_ScenePos)
    }
 
    //Do not reopen tool tip if there already is an active tool tip
-   if (pc_HoveredItem != NULL)
+   if (pc_HoveredItem != nullptr)
    {
       const int32_t s32_GridIndex = this->m_GetGridIndex(orc_ScenePos);
 
@@ -490,7 +490,7 @@ void C_SdBueMlvGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent * const o
    {
       this->m_SearchClickedItem(this->mc_LastMousePos);
 
-      if (this->mpc_ActualSignal != NULL)
+      if (this->mpc_ActualSignal != nullptr)
       {
          this->me_InteractionMode = this->mpc_ActualSignal->GetInteractionMode(this->mc_LastMousePos);
 
@@ -532,7 +532,7 @@ void C_SdBueMlvGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent * const op
    const int32_t s32_ActGridIndex = this->m_GetGridIndex(opc_Event->scenePos());
 
    if ((s32_ActGridIndex >= 0) &&
-       (this->mpc_ActualSignal != NULL) &&
+       (this->mpc_ActualSignal != nullptr) &&
        (s32_ActGridIndex != this->ms32_LastGridIndex))
    {
       const uint16_t u16_StartBit = this->mpc_ActualSignal->GetStartBit();
@@ -705,7 +705,7 @@ void C_SdBueMlvGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent * const op
 void C_SdBueMlvGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * const opc_Event)
 {
    if ((this->mq_SignalChanged == true) &&
-       (this->mpc_ActualSignal != NULL))
+       (this->mpc_ActualSignal != nullptr))
    {
       // signal was changed. save the changes and send the information about the change
       this->mpc_ActualSignal->SaveSignal();
@@ -713,13 +713,13 @@ void C_SdBueMlvGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * const
       this->mq_SignalChanged = false;
    }
 
-   if (this->mpc_ActualSignal != NULL)
+   if (this->mpc_ActualSignal != nullptr)
    {
       Q_EMIT (this->SigSignalActivated(this->mpc_ActualSignal->GetSignalIndex()));
    }
 
    // reset the configuration
-   this->mpc_ActualSignal = NULL;
+   this->mpc_ActualSignal = nullptr;
    this->me_InteractionMode = C_SdBueMlvSignalManager::eIAM_NONE;
    this->ms32_LastGridIndex = -1;
 
@@ -822,11 +822,11 @@ void C_SdBueMlvGraphicsScene::m_CoLoadEdsRestrictions(void)
       const C_OscCanOpenManagerDeviceInfo * const pc_Manager =
          C_PuiSdHandler::h_GetInstance()->GetCanOpenManagerDevice(this->mc_MessageId);
 
-      tgl_assert(pc_Manager != NULL);
-      if (pc_Manager != NULL)
+      tgl_assert(pc_Manager != nullptr);
+      if (pc_Manager != nullptr)
       {
          const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(this->mc_MessageId);
-         if (pc_Message != NULL)
+         if (pc_Message != nullptr)
          {
             // Message Tx flag is relative to the device, not the manager when using the EDS file content
             // PDO Mapping
@@ -852,8 +852,8 @@ void C_SdBueMlvGraphicsScene::m_AddSignal(const uint32_t ou32_SignalIndex)
       stw::opensyde_gui_logic::C_PuiSdHandler::h_GetInstance()->GetUiCanSignal(this->mc_MessageId,
                                                                                ou32_SignalIndex);
 
-   tgl_assert(pc_SignalUiItem != NULL);
-   if (pc_SignalUiItem != NULL)
+   tgl_assert(pc_SignalUiItem != nullptr);
+   if (pc_SignalUiItem != nullptr)
    {
       if (pc_SignalUiItem->u8_ColorIndex == 0U)
       {
@@ -886,7 +886,7 @@ void C_SdBueMlvGraphicsScene::m_AddSignal(const uint32_t ou32_SignalIndex)
    // Special case: CANopen signals have a constant size
    pc_Item->LoadSignal(ou32_SignalIndex, c_ColorConfig, this->mq_ResizingEnabled);
 
-   if (pc_SignalUiItem != NULL)
+   if (pc_SignalUiItem != nullptr)
    {
       if (pc_SignalUiItem->u8_ColorIndex == 0U)
       {
@@ -936,7 +936,7 @@ void C_SdBueMlvGraphicsScene::m_RemoveSignal(const uint32_t ou32_SignalIndex)
          // clear the sub items separate
          pc_Item->ClearItems();
          // delete the item
-         pc_Item->setParent(NULL);
+         pc_Item->setParent(nullptr);
          delete pc_Item;
 
          break;
@@ -1053,12 +1053,12 @@ void C_SdBueMlvGraphicsScene::m_UpdateProtocolItems(void)
    c_Size.setWidth((8.0 * this->mf64_SingleItemWidth) + (7.0 * mhf64_SPACE));
 
    // set the size
-   if (this->mapc_EcesHints[0] != NULL)
+   if (this->mapc_EcesHints[0] != nullptr)
    {
       this->mapc_EcesHints[0]->SetSize(c_Size);
       this->mapc_EcesHints[0]->setPos(this->mc_VecEmptyItems[55]->pos());
    }
-   if (this->mapc_EcesHints[1] != NULL)
+   if (this->mapc_EcesHints[1] != nullptr)
    {
       this->mapc_EcesHints[1]->SetSize(c_Size);
       this->mapc_EcesHints[1]->setPos(this->mc_VecEmptyItems[63]->pos());
@@ -1469,7 +1469,7 @@ void C_SdBueMlvGraphicsScene::m_SearchClickedItem(const QPointF & orc_Pos)
 {
    const int32_t s32_Counter = this->m_GetGridIndex(orc_Pos);
 
-   this->mpc_ActualSignal = NULL;
+   this->mpc_ActualSignal = nullptr;
    this->ms32_LastGridIndex = -1;
 
    if ((s32_Counter >= 0) && (s32_Counter < mhu8_MAX_NUM_BITS))
@@ -1515,7 +1515,7 @@ void C_SdBueMlvGraphicsScene::m_BringActualSignalToTop(void)
    }
 
    // set the actual item on top
-   if (this->mpc_ActualSignal != NULL)
+   if (this->mpc_ActualSignal != nullptr)
    {
       this->mpc_ActualSignal->SetZeOrder(mhf64_Z_ORDER_INTERACTION);
    }
@@ -1560,7 +1560,7 @@ int32_t C_SdBueMlvGraphicsScene::m_GetGridIndex(const QPointF & orc_Pos) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvGraphicsScene::m_HandleHideToolTip(void)
 {
-   this->mpc_HoveredSignal = NULL;
+   this->mpc_HoveredSignal = nullptr;
    Q_EMIT (this->SigHideToolTip());
 }
 
@@ -1606,7 +1606,7 @@ void C_SdBueMlvGraphicsScene::m_OnCustomContextMenuRequested(const QGraphicsScen
    this->mc_LastMousePos = opc_Event->scenePos();
    this->m_SearchClickedItem(this->mc_LastMousePos);
 
-   if (this->mpc_ActualSignal != NULL)
+   if (this->mpc_ActualSignal != nullptr)
    {
       // an item was clicked and is not a CANopen signal
       q_Enabled = true;
@@ -1662,7 +1662,7 @@ void C_SdBueMlvGraphicsScene::m_ActionAddMultiplexed(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvGraphicsScene::m_ActionCopy(void)
 {
-   if (this->mpc_ActualSignal != NULL)
+   if (this->mpc_ActualSignal != nullptr)
    {
       Q_EMIT (this->SigCopySignal(this->mc_MessageId, this->mpc_ActualSignal->GetSignalIndex()));
    }
@@ -1687,7 +1687,7 @@ void C_SdBueMlvGraphicsScene::m_ActionPaste(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvGraphicsScene::m_ActionCut(void)
 {
-   if (this->mpc_ActualSignal != NULL)
+   if (this->mpc_ActualSignal != nullptr)
    {
       Q_EMIT (this->SigCutSignal(this->mc_MessageId, this->mpc_ActualSignal->GetSignalIndex()));
    }
@@ -1696,7 +1696,7 @@ void C_SdBueMlvGraphicsScene::m_ActionCut(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvGraphicsScene::m_ActionDelete(void)
 {
-   if (this->mpc_ActualSignal != NULL)
+   if (this->mpc_ActualSignal != nullptr)
    {
       Q_EMIT (this->SigDeleteSignal(this->mc_MessageId, this->mpc_ActualSignal->GetSignalIndex()));
    }

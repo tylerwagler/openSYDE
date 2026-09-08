@@ -29,7 +29,7 @@ class C_GiLiSimpleLine :
    public QGraphicsLineItem
 {
 public:
-   C_GiLiSimpleLine(QGraphicsItem * const opc_Parent = NULL);
+   C_GiLiSimpleLine(QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiLiSimpleLine() override;
 
    int32_t type() const override;

@@ -71,7 +71,7 @@ C_SyvUpPieChart::C_SyvUpPieChart(QWidget * const opc_Parent) :
 C_SyvUpPieChart::~C_SyvUpPieChart(void)
 {
    delete (mpc_Movie);
-   mpc_Movie = NULL;
+   mpc_Movie = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ void C_SyvUpPieChart::SetProgress100(const uint16_t ou16_Progress100, const bool
 {
    this->mu16_ValueInPercent = ou16_Progress100;
    this->mq_FinishedAnimation = oq_Finished;
-   if ((this->mq_FinishedAnimation == true) && (this->mpc_Movie != NULL))
+   if ((this->mq_FinishedAnimation == true) && (this->mpc_Movie != nullptr))
    {
       this->mpc_Movie->start();
    }
@@ -122,7 +122,7 @@ void C_SyvUpPieChart::paintEvent(QPaintEvent * const opc_Event)
                          ((static_cast<int32_t>(c_CompleteRect.height()) - s32_Height) / 2);
    QPainter c_Painter(this);
 
-   if ((this->mq_FinishedAnimation == true) && (this->mpc_Movie != NULL))
+   if ((this->mq_FinishedAnimation == true) && (this->mpc_Movie != nullptr))
    {
       c_Painter.drawPixmap(QRect(s32_X, s32_Y, s32_Height, s32_Height),
                            this->mpc_Movie->currentPixmap().scaled(s32_Height, s32_Height, Qt::KeepAspectRatio,

@@ -38,7 +38,7 @@ class C_SdNdeUnoDataPoolManager :
    Q_OBJECT
 
 public:
-   C_SdNdeUnoDataPoolManager(QObject * const opc_Parent = NULL);
+   C_SdNdeUnoDataPoolManager(QObject * const opc_Parent = nullptr);
    ~C_SdNdeUnoDataPoolManager(void) override;
 
    void DoMoveList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,

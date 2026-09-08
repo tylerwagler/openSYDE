@@ -30,7 +30,7 @@ class C_OgeTebContextMenuBase :
    Q_OBJECT
 
 public:
-   C_OgeTebContextMenuBase(QWidget * const opc_Parent = NULL);
+   C_OgeTebContextMenuBase(QWidget * const opc_Parent = nullptr);
 
    void SetLinkOnly(void);
 

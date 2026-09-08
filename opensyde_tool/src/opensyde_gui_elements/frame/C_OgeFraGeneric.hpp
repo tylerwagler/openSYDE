@@ -27,7 +27,7 @@ class C_OgeFraGeneric :
    Q_OBJECT
 
 public:
-   explicit C_OgeFraGeneric(QWidget * const opc_Parent = NULL);
+   explicit C_OgeFraGeneric(QWidget * const opc_Parent = nullptr);
 
    void SetBorderColor(const int32_t os32_Value);
    void SetBackgroundColor(const int32_t os32_Value);

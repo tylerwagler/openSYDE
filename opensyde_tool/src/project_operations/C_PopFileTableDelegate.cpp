@@ -43,7 +43,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_PopFileTableDelegate::C_PopFileTableDelegate(QObject * const opc_Parent) :
    QStyledItemDelegate(opc_Parent),
-   mpc_Model(NULL),
+   mpc_Model(nullptr),
    ms32_HoveredRow(-1),
    ms32_ClickedRow(-1)
 {

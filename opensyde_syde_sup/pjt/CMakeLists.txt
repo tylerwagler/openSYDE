@@ -58,7 +58,6 @@ set(SYDESUP_LINUX_SOURCES
 
 set(SYDESUP_LINUX_LIB_SOURCES
    ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglFile.cpp
-   ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglTasks.cpp
    ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglTime.cpp
    ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglUtils.cpp
    ${PROJECT_ROOT}/../libraries/opensyde_core/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.cpp
@@ -101,7 +100,14 @@ else()
    set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET   1)
 endif()
 
-add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
+# Only pull in our own copy of opensyde_core when nothing has provided it already.
+# Building this tool on its own (the historical path, and what build.sh does) takes
+# this branch and is unchanged. The root CMakeLists.txt adds one core configured with
+# every subsystem enabled before adding the tools, so a whole-repo build shares a
+# single core archive instead of compiling it once per tool.
+if(NOT TARGET opensyde_core)
+   add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
+endif()
 
 # SET LIBRARIES
 set(SYDESUP_LINK_LIBRARIES_WINDOWS
@@ -182,4 +188,29 @@ if (${INSTALL_SYDESUP_LIB})
    install(TARGETS sydesuplib DESTINATION ${INSTALL_DIR}/sydesup_lib)
    install(FILES ${SYDESUP_API_HEADERS} DESTINATION ${INSTALL_DIR}/sydesup_lib)
    install(FILES ${SYDESUP_API_HEADERS_STWTYPES} DESTINATION ${INSTALL_DIR}/sydesup_lib/stwtypes)
+endif()
+
+# --- WARNINGS AS ERRORS -----------------------------------------------------------------------------------------------
+# opensyde_core has built with -Wall -Wextra -Werror and zero diagnostics since the
+# core warning sweep. These trees already compiled with -Wall -Wextra -Wpedantic but
+# without -Werror, and every line we own here is warning-free -- so this only pins
+# what is already true.
+#
+# It matters because the -Wparentheses that would have caught C_OscViewFiler's nine
+# inverted security-option comparisons was emitted by *these* builds, and read by
+# nobody.
+#
+# Deliberately target-scoped rather than appended to CMAKE_CXX_FLAGS or
+# add_compile_options: those are directory-scoped and propagate into
+# add_subdirectory targets, including the vendored can-libraries submodule, whose
+# flex-generated Vector_DBC/Scanner.cpp emits two -Woverloaded-virtual warnings we
+# neither own nor can fix. Target scope keeps -Werror on our sources only.
+#
+# if(TARGET ...) because some of these are defined conditionally.
+if(NOT MSVC)
+   foreach(OSY_WERROR_TARGET sydesuplib SYDEsup)
+      if(TARGET ${OSY_WERROR_TARGET})
+         target_compile_options(${OSY_WERROR_TARGET} PRIVATE -Werror)
+      endif()
+   endforeach()
 endif()

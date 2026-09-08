@@ -335,8 +335,9 @@ void C_CamMetWidget::SetDatabaseOsySysDefBus(const QString & orc_PathSystemDefin
 
    Q_UNUSED(orc_OrgPath)
 
+   //boundary: the callee now reports std::error_code; the Qt signal below carries the integer
    s32_Return = this->mpc_Ui->pc_TraceView->SetOsySysDefBus(orc_PathSystemDefinition.toStdString().c_str(),
-                                                            ou32_BusIndex);
+                                                            ou32_BusIndex).value();
    Q_EMIT (this->SigDatabaseSetOsySysDefBusResult(orc_PathSystemDefinition, s32_Return));
 }
 
@@ -348,10 +349,11 @@ void C_CamMetWidget::SetDatabaseOsySysDefBus(const QString & orc_PathSystemDefin
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetWidget::AddLogFileAsc(const QString & orc_FilePath)
 {
+   //boundary: the callee now reports std::error_code; the Qt signal below carries the integer
    const int32_t s32_Result =
       this->mpc_Ui->pc_TraceView->AddLogFileAsc(orc_FilePath.toStdString().c_str(),
                                                 this->mpc_Ui->pc_TraceView->GetDisplayAsHex(),
-                                                this->mpc_Ui->pc_TraceView->GetDisplayTimestampRelative());
+                                                this->mpc_Ui->pc_TraceView->GetDisplayTimestampRelative()).value();
 
    Q_EMIT (this->SigLogFileAddResult(s32_Result));
 }

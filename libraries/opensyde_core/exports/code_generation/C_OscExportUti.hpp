@@ -10,8 +10,9 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <string>
-#include <string>
 #include <vector>
+#include <system_error>
+
 #include "C_OscNodeDataPool.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -29,14 +30,14 @@ public:
    static std::string h_GetSectionSeparator(const std::string & orc_SectionName);
    static std::string h_GetHeaderSeparator(void);
    static std::string h_GetCreationToolInfo(const std::string & orc_ExportToolInfo);
-   static void h_AddExternCeStart(stw::scl::std::vector<std::string> & orc_Data);
-   static void h_AddExternCeEnd(stw::scl::std::vector<std::string> & orc_Data);
-   static void h_AddProjectIdDef(stw::scl::std::vector<std::string> & orc_Data, const std::string & orc_MagicName,
+   static void h_AddExternCeStart(std::vector<std::string> & orc_Data);
+   static void h_AddExternCeEnd(std::vector<std::string> & orc_Data);
+   static void h_AddProjectIdDef(std::vector<std::string> & orc_Data, const std::string & orc_MagicName,
                                  const bool oq_HeaderFile);
-   static void h_AddProjIdFunctionPrototype(stw::scl::std::vector<std::string> & orc_Data,
+   static void h_AddProjIdFunctionPrototype(std::vector<std::string> & orc_Data,
                                             const std::string & orc_MagicName);
-   static int32_t h_SaveToFile(stw::scl::std::vector<std::string> & orc_Data, const std::string & orc_Path,
-                               const std::string & orc_FileName, const bool oq_HeaderFile);
+   static std::error_code h_SaveToFile(std::vector<std::string> & orc_Data, const std::string & orc_Path,
+                                       const std::string & orc_FileName, const bool oq_HeaderFile);
    static void h_CollectFilePaths(std::vector<std::string> & orc_FilePaths,
                                   const std::string & orc_Path, const std::string & orc_FileName,
                                   const bool oq_SourceCode);
@@ -47,8 +48,8 @@ public:
                                                    const C_OscNodeDataPoolContent::E_Type oe_Type,
                                                    const std::string & orc_ArrayPos = "0");
 
-   static std::string h_FloatToStrGe(const float32_t of32_Value,  bool * const opq_InfOrNan = NULL);
-   static std::string h_FloatToStrGe(const float64_t of64_Value, bool * const opq_InfOrNan = NULL);
+   static std::string h_FloatToStrGe(const float32_t of32_Value,  bool * const opq_InfOrNan = nullptr);
+   static std::string h_FloatToStrGe(const float64_t of64_Value, bool * const opq_InfOrNan = nullptr);
    static bool h_CheckInfOrNan(const std::string & orc_String);
    static void h_AddDecimalPointIfNone(std::string & orc_FloatString);
 };

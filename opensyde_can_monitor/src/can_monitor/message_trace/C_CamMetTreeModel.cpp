@@ -273,7 +273,7 @@ void C_CamMetTreeModel::SetSelection(const int32_t os32_SelectedParentRow, const
    {
       const C_CamMetTreeLoggerData * const pc_CurMessage = GetMessageData(os32_SelectedParentRow);
 
-      if (pc_CurMessage != NULL)
+      if (pc_CurMessage != nullptr)
       {
          //Check which child/signal should be selected
          const uint32_t u32_ChildIndex = static_cast<uint32_t>(os32_SelectedChildIndex);
@@ -796,7 +796,7 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
          if (orc_Index.parent().isValid() == false)
          {
             const C_CamMetTreeLoggerData * const pc_CurMessage = GetMessageData(orc_Index.row());
-            if (pc_CurMessage != NULL)
+            if (pc_CurMessage != nullptr)
             {
                QString c_Text;
                const E_Columns e_Col = h_ColumnToEnum(orc_Index.column());
@@ -936,7 +936,7 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
             const C_CamMetTreeLoggerData * const pc_CurMessage = GetMessageData(
                orc_Index.parent().parent().isValid() ? orc_Index.parent().parent().row() : orc_Index.parent().row());
 
-            if (pc_CurMessage != NULL)
+            if (pc_CurMessage != nullptr)
             {
                if ((os32_Role == ms32_USER_ROLE_TABLE_ALL_STRINGS_DYNAMIC_COL_1) ||
                    (os32_Role == ms32_USER_ROLE_TABLE_ALL_STRINGS_DYNAMIC_COL_2))
@@ -1009,7 +1009,7 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
             const C_CamMetTreeLoggerData * const pc_CurMessage = GetMessageData(orc_Index.row());
 
             // if text is interpreted do not return anything
-             if ((pc_CurMessage != NULL) && (pc_CurMessage->c_ProtocolTextDec == ""))
+             if ((pc_CurMessage != nullptr) && (pc_CurMessage->c_ProtocolTextDec == ""))
              {
                 QBitArray c_Array;
                  //Check if there is an active selection
@@ -1042,7 +1042,7 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
          {
             const C_CamMetTreeLoggerData * const pc_CurMessage = GetMessageData(orc_Index.row());
 
-            if (pc_CurMessage != NULL)
+            if (pc_CurMessage != nullptr)
             {
                QByteArray c_Array;
                //Convert to QVariant compatible format
@@ -1064,7 +1064,7 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
          if (orc_Index.parent().isValid() == false)
          {
             const C_CamMetTreeLoggerData * const pc_CurMessage = GetMessageData(orc_Index.row());
-            if (pc_CurMessage != NULL)
+            if (pc_CurMessage != nullptr)
             {
                const E_Columns e_Col = h_ColumnToEnum(orc_Index.column());
                if (e_Col == eCAN_DLC)
@@ -1114,7 +1114,7 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
             const int32_t s32_MessageRow = static_cast<int32_t>(
                orc_Index.parent().parent().isValid() ? orc_Index.parent().parent().row() : orc_Index.parent().row());
             const C_CamMetTreeLoggerData * const pc_CurMessage = GetMessageData(s32_MessageRow);
-            if (pc_CurMessage != NULL)
+            if (pc_CurMessage != nullptr)
             {
                const uint32_t u32_SignalIndex = this->TranslateTreeRowsToSignalIndex(orc_Index);
                if (u32_SignalIndex < pc_CurMessage->c_Signals.size())
@@ -1384,7 +1384,7 @@ QString C_CamMetTreeModel::mh_GetTpInfoString(const C_CamMetTreeLoggerData & orc
 //----------------------------------------------------------------------------------------------------------------------
 const C_CamMetTreeLoggerData * C_CamMetTreeModel::GetMessageData(const int32_t os32_Row) const
 {
-   const C_CamMetTreeLoggerData * pc_Retval = NULL;
+   const C_CamMetTreeLoggerData * pc_Retval = nullptr;
 
    if (this->mq_UniqueMessageMode == false)
    {
@@ -1563,7 +1563,7 @@ int32_t C_CamMetTreeModel::SearchMessageData(const QString & orc_SearchString, c
 
          pc_Data = this->GetMessageData(u32_Row);
 
-         if (pc_Data != NULL)
+         if (pc_Data != nullptr)
          {
             bool q_SearchMessageResult;
 
@@ -1701,7 +1701,7 @@ uint32_t C_CamMetTreeModel::TranslateTreeRowsToSignalIndex(const int32_t os32_Me
    uint32_t u32_Retval = 0UL;
    const C_CamMetTreeLoggerData * const pc_Message = this->GetMessageData(os32_MessageIndex);
 
-   if (pc_Message != NULL)
+   if (pc_Message != nullptr)
    {
       u32_Retval = C_CamMetTreeModel::mh_TranslateTreeRowsToSignalIndex(pc_Message->c_Signals, os32_SignalIndex,
                                                                         os32_SignalIndexL2);
@@ -2411,7 +2411,7 @@ void C_CamMetTreeModel::m_UpdateTreeItemBasedOnMessage(C_TblTreSimpleItem * cons
       for (uint32_t u32_ItChild = 0UL; u32_ItChild < opc_Item->c_Children.size(); ++u32_ItChild)
       {
          const C_TblTreSimpleItem * const pc_Child = opc_Item->c_Children[u32_ItChild];
-         if (pc_Child != NULL)
+         if (pc_Child != nullptr)
          {
             c_Current.push_back(static_cast<uint32_t>(pc_Child->c_Children.size()));
          }

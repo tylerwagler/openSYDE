@@ -30,7 +30,7 @@ class C_OgeLeSearch :
    Q_OBJECT
 
 public:
-   C_OgeLeSearch(QWidget * const opc_Parent = NULL);
+   C_OgeLeSearch(QWidget * const opc_Parent = nullptr);
    void SetDarkTheme(void);
    void SetLightTheme(void);
 };

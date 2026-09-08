@@ -319,7 +319,7 @@ QVariant C_SyvDaPeUpdateModeTableModel::data(const QModelIndex & orc_Index, cons
                                                                              rc_CurId.u32_DataPoolIndex,
                                                                              rc_CurId.u32_ListIndex,
                                                                              rc_CurId.u32_ElementIndex);
-               if (pc_OscElement != NULL)
+               if (pc_OscElement != nullptr)
                {
                   if (pc_OscElement->q_InterpretAsString == true)
                   {
@@ -349,7 +349,7 @@ QVariant C_SyvDaPeUpdateModeTableModel::data(const QModelIndex & orc_Index, cons
             case eDATA_POOL:
                pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(rc_CurId.u32_NodeIndex,
                                                                              rc_CurId.u32_DataPoolIndex);
-               if (pc_DataPool != NULL)
+               if (pc_DataPool != nullptr)
                {
                   c_Retval = pc_DataPool->c_Name.c_str();
                }
@@ -473,7 +473,7 @@ QVariant C_SyvDaPeUpdateModeTableModel::data(const QModelIndex & orc_Index, cons
                         const C_OscHalcDefDomain * const pc_Domain =
                            C_PuiSdHandler::h_GetInstance()->GetHalcDomainFileDataConst(rc_CurId.u32_NodeIndex,
                                                                                        u32_DomainIndex);
-                        if (pc_Domain != NULL)
+                        if (pc_Domain != nullptr)
                         {
                            switch (pc_Domain->e_Category)
                            {
@@ -691,7 +691,7 @@ Qt::ItemFlags C_SyvDaPeUpdateModeTableModel::flags(const QModelIndex & orc_Index
             break;
          case eTRANSMISSION_MODE:
             pc_Id = this->GetIndex(orc_Index.row());
-            if (pc_Id != NULL)
+            if (pc_Id != nullptr)
             {
                const C_OscNodeDataPoolListElement * const pc_Element =
                   C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(pc_Id->u32_NodeIndex,
@@ -847,7 +847,7 @@ int32_t C_SyvDaPeUpdateModeTableModel::h_EnumToColumn(const E_Columns oe_Value)
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolListElementId * C_SyvDaPeUpdateModeTableModel::GetIndex(const int32_t os32_Index) const
 {
-   const C_OscNodeDataPoolListElementId * pc_Retval = NULL;
+   const C_OscNodeDataPoolListElementId * pc_Retval = nullptr;
 
    if (os32_Index >= 0)
    {
@@ -873,7 +873,7 @@ void C_SyvDaPeUpdateModeTableModel::m_Init(const uint32_t ou32_NodeIndex)
    this->beginResetModel();
    this->mc_UniqueDataElementIds.clear();
    this->mc_DataElementConfigurations.clear();
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const QMap<C_OscNodeDataPoolListElementId,
                  C_PuiSvReadDataConfiguration> & rc_AllReadRailAssignments = pc_View->GetReadRailAssignments();
@@ -899,7 +899,7 @@ void C_SyvDaPeUpdateModeTableModel::m_Init(const uint32_t ou32_NodeIndex)
       for (uint32_t u32_ItDashboard = 0; u32_ItDashboard < rc_Dashboards.size(); ++u32_ItDashboard)
       {
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(u32_ItDashboard);
-         if (pc_Dashboard != NULL)
+         if (pc_Dashboard != nullptr)
          {
             std::vector<uint32_t> c_Count;
             std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
@@ -912,8 +912,8 @@ void C_SyvDaPeUpdateModeTableModel::m_Init(const uint32_t ou32_NodeIndex)
             {
                const C_PuiSvDbWidgetBase * const pc_CurWidget = c_Widgets[u32_ItWidget];
 
-               if (((pc_CurWidget != NULL) && (pc_CurWidget->IsReadElement() == true)) &&
-                   (dynamic_cast<const C_PuiSvDbParam * const>(pc_CurWidget) == NULL))
+               if (((pc_CurWidget != nullptr) && (pc_CurWidget->IsReadElement() == true)) &&
+                   (dynamic_cast<const C_PuiSvDbParam * const>(pc_CurWidget) == nullptr))
                {
                   //All data elements in widget
                   for (uint32_t u32_ItConfig = 0; u32_ItConfig < pc_CurWidget->c_DataPoolElementsConfig.size();
@@ -1001,8 +1001,8 @@ QString C_SyvDaPeUpdateModeTableModel::m_RailIndexToString(const uint8_t ou8_Rai
    QString c_Retval;
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   tgl_assert(pc_View != NULL);
-   if (pc_View != NULL)
+   tgl_assert(pc_View != nullptr);
+   if (pc_View != nullptr)
    {
       switch (ou8_RailIndex)
       {

@@ -30,7 +30,7 @@ class C_OgeDashboardProgressBar :
    Q_OBJECT
 
 public:
-   C_OgeDashboardProgressBar(QWidget * const opc_Parent = NULL);
+   C_OgeDashboardProgressBar(QWidget * const opc_Parent = nullptr);
 
    void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style);
 

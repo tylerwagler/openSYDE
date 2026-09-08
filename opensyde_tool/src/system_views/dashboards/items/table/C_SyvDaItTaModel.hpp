@@ -43,7 +43,7 @@ public:
    };
 
    explicit C_SyvDaItTaModel(stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const opc_Data,
-                             QObject * const opc_Parent = NULL);
+                             QObject * const opc_Parent = nullptr);
 
    void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style);
 

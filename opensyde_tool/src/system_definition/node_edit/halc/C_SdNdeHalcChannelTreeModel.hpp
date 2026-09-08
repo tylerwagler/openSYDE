@@ -27,7 +27,7 @@ class C_SdNdeHalcChannelTreeModel :
    Q_OBJECT
 
 public:
-   C_SdNdeHalcChannelTreeModel(QObject * const opc_Parent = NULL);
+   C_SdNdeHalcChannelTreeModel(QObject * const opc_Parent = nullptr);
    ~C_SdNdeHalcChannelTreeModel(void) override;
 
    int32_t columnCount(const QModelIndex & orc_Parent = QModelIndex()) const override;

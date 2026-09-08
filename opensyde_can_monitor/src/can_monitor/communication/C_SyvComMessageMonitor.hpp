@@ -12,6 +12,8 @@
 #define C_SYVCOMMESSAGEMONITOR_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include <QString>
 #include <QList>
 #include <QVector>
@@ -59,10 +61,10 @@ public:
    int32_t StartAddOsySysDef(const std::string & orc_PathSystemDefinition);
    int32_t StartAddOsySysDef(const std::string & orc_PathSystemDefinition, const uint32_t ou32_BusIndex);
 
-   int32_t SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
-                           const uint32_t ou32_BusIndex) override;
-   int32_t GetOsySysDef(const std::string & orc_PathSystemDefinition,
-                        stw::opensyde_core::C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition)
+   std::error_code SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
+                                   const uint32_t ou32_BusIndex) override;
+   std::error_code GetOsySysDef(const std::string & orc_PathSystemDefinition,
+                                stw::opensyde_core::C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition)
    override;
 
    // DBC handling
@@ -71,14 +73,14 @@ public:
                       C_CieConverter::C_CieCommDefinition & orc_DbcDefinition);
 
    // Generic database handling
-   int32_t RemoveDatabase(const std::string & orc_Path) override;
-   int32_t ActivateDatabase(const std::string & orc_Path, const bool oq_Active) override;
+   std::error_code RemoveDatabase(const std::string & orc_Path) override;
+   std::error_code ActivateDatabase(const std::string & orc_Path, const bool oq_Active) override;
 
    // Logging handling
-   int32_t AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
-                         const bool oq_RelativeTimeStampActive) override;
+   std::error_code AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
+                                 const bool oq_RelativeTimeStampActive) override;
    virtual int32_t AddLogFileBlf(const std::string & orc_FilePath);
-   int32_t RemoveLogFile(const std::string & orc_FilePath) override;
+   std::error_code RemoveLogFile(const std::string & orc_FilePath) override;
    void RemoveAllLogFiles(void) override;
 
    // Filter handling
@@ -88,7 +90,7 @@ public:
    uint32_t GetFilteredMessages(void) const override;
 
    // CAN bus handling
-   int32_t HandleCanMessage(const stw::can::T_STWCAN_Msg_RX & orc_Msg, const bool oq_IsTx) override;
+   std::error_code HandleCanMessage(const stw::can::T_STWCAN_Msg_RX & orc_Msg, const bool oq_IsTx) override;
    void ResetCounter(void) override;
    void UpdateBusLoad(const uint8_t ou8_BusLoad) override;
    void UpdateTxCounter(const uint32_t ou32_TxCount) override;

@@ -29,7 +29,7 @@ class C_OgeLeToolTipBase :
    public C_OgeToolTipBase
 {
 public:
-   C_OgeLeToolTipBase(QWidget * const opc_Parent = NULL);
+   C_OgeLeToolTipBase(QWidget * const opc_Parent = nullptr);
 
    bool event(QEvent * const opc_Event) override;
 };

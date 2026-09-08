@@ -430,7 +430,7 @@ void C_SdNdeHalcChannelWidget::m_SetLinkedSymbolAndChannel(const bool oq_IsLinke
       const C_OscHalcConfigDomain * const pc_Domain =
          C_PuiSdHandler::h_GetInstance()->GetHalcDomainConfigDataConst(this->mu32_NodeIndex, this->mu32_DomainIndex);
 
-      if ((pc_LinkedChannel != NULL) && (pc_Domain != NULL) && (u32_LinkedChannelIndex < pc_Domain->c_Channels.size()))
+      if ((pc_LinkedChannel != nullptr) && (pc_Domain != nullptr) && (u32_LinkedChannelIndex < pc_Domain->c_Channels.size()))
       {
          c_LinkText = static_cast<QString>("%1 (%2)").arg(pc_LinkedChannel->c_Name.c_str(),
                                                           pc_Domain->c_Channels[u32_LinkedChannelIndex].c_Name.c_str());
@@ -489,7 +489,7 @@ void C_SdNdeHalcChannelWidget::m_OnViewDatapoolDetailsClicked(void)
 
    c_New->exec();
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -508,7 +508,7 @@ void C_SdNdeHalcChannelWidget::m_LoadChannelData(void)
    const C_OscHalcConfigDomain * const pc_Domain =
       C_PuiSdHandler::h_GetInstance()->GetHalcDomainConfigDataConst(this->mu32_NodeIndex, this->mu32_DomainIndex);
 
-   if (pc_Domain != NULL)
+   if (pc_Domain != nullptr)
    {
       // handle domain without channels
       this->mq_UseChannelIndex = !(pc_Domain->c_Channels.empty());
@@ -519,7 +519,7 @@ void C_SdNdeHalcChannelWidget::m_LoadChannelData(void)
                                                                          this->mu32_ChannelIndex,
                                                                          this->mq_UseChannelIndex);
 
-      if (pc_Channel != NULL)
+      if (pc_Channel != nullptr)
       {
          bool q_IsLinked = false;
          int32_t s32_SelectedUseCaseCbxIndex = -1;
@@ -754,7 +754,7 @@ bool C_SdNdeHalcChannelWidget::m_AskUserToContinueLinkingIfNecessary(const bool 
          C_PuiSdHandler::h_GetInstance()->GetHalcDomainFileUseCaseData(this->mu32_NodeIndex,
                                                                        this->mu32_DomainIndex,
                                                                        ou32_NewUseCaseIndex);
-      if (pc_UseCase != NULL)
+      if (pc_UseCase != nullptr)
       {
          const std::vector<QString> & rc_LinkedChannelNames =
             (oq_IsLinkedNew == true) ? orc_LinkedChannelNamesNew : orc_LinkedChannelNamesOld;

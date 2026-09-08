@@ -36,14 +36,14 @@ class C_CamGenWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamGenWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamGenWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamGenWidget(void) override;
 
    void LoadUserSettings(void);
    void SaveUserSettings(void) const;
 
    void TriggerSignalReload(void) const;
-   void RemoveMessagesForFile(const QString & orc_File, const std::vector<uint32_t> * const opc_Indices = NULL) const;
+   void RemoveMessagesForFile(const QString & orc_File, const std::vector<uint32_t> * const opc_Indices = nullptr) const;
    void SetCommunicationStarted(const bool oq_Online) const;
    bool CheckAndHandleKey(const QString & orc_Input) const;
 

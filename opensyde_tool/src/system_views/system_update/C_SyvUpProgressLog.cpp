@@ -51,8 +51,8 @@ using namespace stw::opensyde_gui_elements;
 C_SyvUpProgressLog::C_SyvUpProgressLog(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SyvUpProgressLog),
-   mpc_LogHyperlink(NULL),
-   mpc_ContextMenu(NULL)
+   mpc_LogHyperlink(nullptr),
+   mpc_ContextMenu(nullptr)
 {
    this->mpc_Ui->setupUi(this);
    this->mpc_Ui->pc_ScrollArea->DeactivateScrollbarResize();
@@ -91,7 +91,7 @@ void C_SyvUpProgressLog::Clear(void)
    for (uint32_t u32_ItEntry = 0; u32_ItEntry < this->mc_ConnectEntries.size(); ++u32_ItEntry)
    {
       C_SyvUpProgressLogEntry * const pc_Entry = this->mc_ConnectEntries[u32_ItEntry];
-      if (pc_Entry != NULL)
+      if (pc_Entry != nullptr)
       {
          this->mpc_Ui->pc_VerticalLayoutDynamic->removeWidget(pc_Entry);
          delete (pc_Entry);
@@ -102,7 +102,7 @@ void C_SyvUpProgressLog::Clear(void)
    for (uint32_t u32_ItEntry = 0; u32_ItEntry < this->mc_SpacerEntries.size(); ++u32_ItEntry)
    {
       C_SyvUpProgressLogEntry * const pc_Entry = this->mc_SpacerEntries[u32_ItEntry];
-      if (pc_Entry != NULL)
+      if (pc_Entry != nullptr)
       {
          this->mpc_Ui->pc_VerticalLayoutDynamic->removeWidget(pc_Entry);
          delete (pc_Entry);
@@ -113,7 +113,7 @@ void C_SyvUpProgressLog::Clear(void)
    for (uint32_t u32_ItEntry = 0; u32_ItEntry < this->mc_UpdateEntries.size(); ++u32_ItEntry)
    {
       C_SyvUpProgressLogEntry * const pc_Entry = this->mc_UpdateEntries[u32_ItEntry];
-      if (pc_Entry != NULL)
+      if (pc_Entry != nullptr)
       {
          this->mpc_Ui->pc_VerticalLayoutDynamic->removeWidget(pc_Entry);
          delete (pc_Entry);
@@ -124,7 +124,7 @@ void C_SyvUpProgressLog::Clear(void)
    for (uint32_t u32_ItEntry = 0; u32_ItEntry < this->mc_ProcessEntries.size(); ++u32_ItEntry)
    {
       QLabel * const pc_Entry = this->mc_ProcessEntries[u32_ItEntry];
-      if (pc_Entry != NULL)
+      if (pc_Entry != nullptr)
       {
          this->mpc_Ui->pc_VerticalLayoutDynamic->removeWidget(pc_Entry);
          delete (pc_Entry);
@@ -133,7 +133,7 @@ void C_SyvUpProgressLog::Clear(void)
    this->mc_ProcessEntries.clear();
    //Hyperlink
    delete (this->mpc_LogHyperlink);
-   this->mpc_LogHyperlink = NULL;
+   this->mpc_LogHyperlink = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -196,7 +196,7 @@ void C_SyvUpProgressLog::AddEntry(const uint32_t ou32_NodeIndex, const QString &
    }
 
    //Add
-   if (this->mpc_LogHyperlink == NULL)
+   if (this->mpc_LogHyperlink == nullptr)
    {
       //Insert before spacer
       this->mpc_Ui->pc_VerticalLayoutDynamic->insertWidget(
@@ -252,7 +252,7 @@ void C_SyvUpProgressLog::UpdateStatus(const uint32_t ou32_NodeIndex, const QStri
    for (uint32_t u32_ItEntry = 0; u32_ItEntry < pc_Entries->size(); ++u32_ItEntry)
    {
       const C_SyvUpProgressLogEntry * const pc_Entry = pc_Entries->at(u32_ItEntry);
-      if ((pc_Entry != NULL) && (pc_Entry->DoesIndexMatch(ou32_NodeIndex) == true))
+      if ((pc_Entry != nullptr) && (pc_Entry->DoesIndexMatch(ou32_NodeIndex) == true))
       {
          pc_Entry->SetEntryStatus(orc_Value);
       }
@@ -267,7 +267,7 @@ void C_SyvUpProgressLog::AddLogHyperlink(void)
 {
    const QString c_LogFilePath = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
 
-   if (this->mpc_LogHyperlink == NULL)
+   if (this->mpc_LogHyperlink == nullptr)
    {
       //Spacer
       this->AddSpacer();
@@ -316,7 +316,7 @@ std::vector<uint32_t> C_SyvUpProgressLog::GetConnectNodeEntryIndices(void)
    for (uint32_t u32_ItEntry = 0; u32_ItEntry < mc_ConnectEntries.size(); ++u32_ItEntry)
    {
       const C_SyvUpProgressLogEntry * const pc_Entry = mc_ConnectEntries.at(u32_ItEntry);
-      if (pc_Entry != NULL)
+      if (pc_Entry != nullptr)
       {
          c_Retval.push_back(pc_Entry->GetNodeIndex());
       }
@@ -402,7 +402,7 @@ void C_SyvUpProgressLog::m_CopyHyperLink() const
 
    QClipboard * const pc_Clipboard = QApplication::clipboard();
 
-   if (pc_Clipboard != NULL)
+   if (pc_Clipboard != nullptr)
    {
       //Copy to clipboard
       pc_Clipboard->clear();

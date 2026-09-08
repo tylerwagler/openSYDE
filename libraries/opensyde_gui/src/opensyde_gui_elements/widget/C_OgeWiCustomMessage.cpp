@@ -413,14 +413,14 @@ C_OgeWiCustomMessage::E_Outputs C_OgeWiCustomMessage::Execute(void)
    // store recent override cursor shape
    int32_t s32_CursorShape = -1;
 
-   if (QApplication::overrideCursor() != NULL)
+   if (QApplication::overrideCursor() != nullptr)
    {
       s32_CursorShape = static_cast<int32_t>(QApplication::overrideCursor()->shape());
       QApplication::restoreOverrideCursor();
    }
 
    //Center dialog
-   if (pc_TopWidget != NULL)
+   if (pc_TopWidget != nullptr)
    {
       const QPoint c_DialogCenter = mapToGlobal(this->rect().center());
       const QPoint c_ParentWindowCenter = pc_TopWidget->window()->mapToGlobal(pc_TopWidget->window()->rect().center());

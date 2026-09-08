@@ -105,14 +105,14 @@ void C_SdNdeHalcChannelTreeModel::SetNode(const uint32_t ou32_NodeIndex)
 
    this->mu32_NodeIndex = ou32_NodeIndex;
 
-   if (pc_HalcConfig != NULL)
+   if (pc_HalcConfig != nullptr)
    {
       // clear
       this->Clear();
 
       // insert model data
       this->beginResetModel();
-      if (this->mpc_InvisibleRootItem == NULL)
+      if (this->mpc_InvisibleRootItem == nullptr)
       {
          this->mpc_InvisibleRootItem = new C_TblTreItem();
       }
@@ -121,7 +121,7 @@ void C_SdNdeHalcChannelTreeModel::SetNode(const uint32_t ou32_NodeIndex)
       {
          // create tree items for domains and its channels
          const C_OscHalcConfigDomain * const pc_Domain = pc_HalcConfig->GetDomainConfigDataConst(u32_DomainIt);
-         if (pc_Domain != NULL)
+         if (pc_Domain != nullptr)
          {
             C_TblTreItem * const pc_DomainTreeItem = new C_TblTreItem();
 
@@ -169,7 +169,7 @@ void C_SdNdeHalcChannelTreeModel::SetNode(const uint32_t ou32_NodeIndex)
                }
             }
 
-            if (this->mpc_InvisibleRootItem != NULL)
+            if (this->mpc_InvisibleRootItem != nullptr)
             {
                // add to tree
                this->mpc_InvisibleRootItem->AddChild(pc_DomainTreeItem);
@@ -200,12 +200,12 @@ void C_SdNdeHalcChannelTreeModel::SetNode(const uint32_t ou32_NodeIndex)
 void C_SdNdeHalcChannelTreeModel::UpdateChannelText(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
                                                     const bool oq_UseChannelIndex)
 {
-   if ((this->mpc_InvisibleRootItem != NULL) && (ou32_DomainIndex < this->mpc_InvisibleRootItem->c_Children.size()))
+   if ((this->mpc_InvisibleRootItem != nullptr) && (ou32_DomainIndex < this->mpc_InvisibleRootItem->c_Children.size()))
    {
       C_TblTreItem * const pc_DomainItem =
          dynamic_cast<C_TblTreItem *>(this->mpc_InvisibleRootItem->c_Children[ou32_DomainIndex]);
 
-      if (pc_DomainItem != NULL)
+      if (pc_DomainItem != nullptr)
       {
          const C_OscHalcConfigDomain * const pc_Domain =
             C_PuiSdHandler::h_GetInstance()->GetHalcDomainConfigDataConst(this->mu32_NodeIndex, ou32_DomainIndex);
@@ -215,7 +215,7 @@ void C_SdNdeHalcChannelTreeModel::UpdateChannelText(const uint32_t ou32_DomainIn
          C_TblTreItem * const pc_ChannelItem =
             (oq_UseChannelIndex == true) ? pc_DomainItem->GetItem(ou32_ChannelIndex) : pc_DomainItem;
 
-         if ((pc_Domain != NULL) && (pc_ChannelItem != NULL))
+         if ((pc_Domain != nullptr) && (pc_ChannelItem != nullptr))
          {
             // name and comment
             if (ou32_ChannelIndex < pc_Domain->c_Channels.size())
@@ -249,7 +249,7 @@ void C_SdNdeHalcChannelTreeModel::UpdateChannelText(const uint32_t ou32_DomainIn
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcChannelTreeModel::Clear(void)
 {
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       std::vector<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
 
@@ -259,7 +259,7 @@ void C_SdNdeHalcChannelTreeModel::Clear(void)
       for (c_ItChildren = this->mpc_InvisibleRootItem->c_Children.begin();
            c_ItChildren != this->mpc_InvisibleRootItem->c_Children.end(); ++c_ItChildren)
       {
-         if (*c_ItChildren != NULL)
+         if (*c_ItChildren != nullptr)
          {
             (*c_ItChildren)->ClearChildren();
          }
@@ -329,7 +329,7 @@ void C_SdNdeHalcChannelTreeModel::Reset(const QModelIndexList & orc_Indexes)
 
       // first: reset use case of all linked channels
       C_PuiSdHandler::h_GetInstance()->CheckHalcDomainChannelLinked(this->mu32_NodeIndex, u32_DomainIndex,
-                                                                    u32_ChannelIndex, q_ChannelCase, q_IsLinked, NULL,
+                                                                    u32_ChannelIndex, q_ChannelCase, q_IsLinked, nullptr,
                                                                     &c_LinkedChannelIndices);
       if (q_IsLinked == true)
       {
@@ -369,14 +369,14 @@ void C_SdNdeHalcChannelTreeModel::CheckError(const uint32_t ou32_DomainIndex)
    const C_OscHalcConfigDomain * const pc_Domain =
       C_PuiSdHandler::h_GetInstance()->GetHalcDomainConfigDataConst(this->mu32_NodeIndex, ou32_DomainIndex);
 
-   if (pc_Domain != NULL)
+   if (pc_Domain != nullptr)
    {
-      if ((this->mpc_InvisibleRootItem != NULL) && (ou32_DomainIndex < this->mpc_InvisibleRootItem->c_Children.size()))
+      if ((this->mpc_InvisibleRootItem != nullptr) && (ou32_DomainIndex < this->mpc_InvisibleRootItem->c_Children.size()))
       {
          C_TblTreItem * const pc_DomainItem =
             dynamic_cast<C_TblTreItem *>(this->mpc_InvisibleRootItem->c_Children[ou32_DomainIndex]);
 
-         if (pc_DomainItem != NULL)
+         if (pc_DomainItem != nullptr)
          {
             bool q_AtLeastOneChannelInvalid = false;
             bool q_DomainNameInvalid;
@@ -504,7 +504,7 @@ QModelIndex C_SdNdeHalcChannelTreeModel::GetModelIndexFromIndexes(const uint32_t
 void C_SdNdeHalcChannelTreeModel::mh_SetChannelText(C_TblTreItem * const opc_Item, const QString & orc_ChannelName,
                                                     const QString & orc_ChannelId, const QString & orc_Comment)
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       opc_Item->c_Name = static_cast<QString>("%1  %2").arg(orc_ChannelId, orc_ChannelName);
       opc_Item->c_ToolTipHeading = static_cast<QString>("%1 (%2)").arg(orc_ChannelName, orc_ChannelId);

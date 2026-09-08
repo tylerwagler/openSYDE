@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include <string>
+#include <system_error>
 #include "C_OscTargetSupportPackage.hpp"
 #include "C_OscXmlParser.hpp"
 
@@ -26,12 +27,12 @@ namespace opensyde_core
 class C_OscTargetSupportPackageFiler
 {
 public:
-   static int32_t h_Load(stw::opensyde_core::C_OscTargetSupportPackage & orc_TargetSupportPackage,
-                         std::string & orc_NodePath, const std::string & orc_Path);
+   static std::error_code h_Load(stw::opensyde_core::C_OscTargetSupportPackage & orc_TargetSupportPackage,
+                                 std::string & orc_NodePath, const std::string & orc_Path);
 
 private:
-   static int32_t mh_Load(C_OscTargetSupportPackage & orc_TargetSupportPackage, std::string & orc_NodePath,
-                          C_OscXmlParserBase & orc_XmlParser);
+   static std::error_code mh_Load(C_OscTargetSupportPackage & orc_TargetSupportPackage, std::string & orc_NodePath,
+                                  C_OscXmlParserBase & orc_XmlParser);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -55,7 +55,7 @@ const std::string C_CieExportDbc::mhc_MSG_SEND_TYPE = "GenMsgSendType";
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
-stw::scl::std::vector<std::string> C_CieExportDbc::mhc_WarningMessages;         // global warnings e.g. why some messages could
+std::vector<std::string> C_CieExportDbc::mhc_WarningMessages;         // global warnings e.g. why some messages could
                                                                        // not be exported
 std::string C_CieExportDbc::mhc_ErrorMessage;                // description of error which caused the export
                                                                        // to fail
@@ -97,7 +97,7 @@ C_CieExportDbc::C_ExportStatistic C_CieExportDbc::mhc_ExportStatistic; // for pu
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieExportDbc::h_ExportNetwork(const std::string & orc_File,
                                         const C_CieConverter::C_CieCommDefinition & orc_Definition,
-                                        stw::scl::std::vector<std::string> & orc_WarningMessages,
+                                        std::vector<std::string> & orc_WarningMessages,
                                         std::string & orc_ErrorMessage)
 {
    int32_t s32_Return = C_NO_ERR;

@@ -34,7 +34,7 @@ public:
                                 const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
                                            C_PuiSvReadDataConfiguration> & orc_RestoredRails,
                                 const QPointF & orc_NewPos, const float64_t of64_HighestUsedZetValue,
-                                QUndoCommand * const opc_Parent = NULL);
+                                QUndoCommand * const opc_Parent = nullptr);
    ~C_SyvDaUnoAddSnapshotCommand(void) override;
 
 protected:

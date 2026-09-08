@@ -30,7 +30,7 @@ class C_OgeLabContextMenuBase :
    Q_OBJECT
 
 public:
-   explicit C_OgeLabContextMenuBase(QWidget * const opc_Parent = NULL);
+   explicit C_OgeLabContextMenuBase(QWidget * const opc_Parent = nullptr);
 
 private:
    stw::opensyde_gui_elements::C_OgeContextMenu * mpc_ContextMenu;

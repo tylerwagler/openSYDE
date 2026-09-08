@@ -60,7 +60,7 @@ public:
    C_OscDcDeviceOldComConfig & operator =(const C_OscDcDeviceOldComConfig & orc_Source);
 
    void SetContent(const uint8_t ou8_OldNodeId, const bool oq_OldIpAddressValid,
-                   const uint8_t * const opu8_OldIpAddress = NULL);
+                   const uint8_t * const opu8_OldIpAddress = nullptr);
 
    // Old node id which was used and detected by getting serial number
    uint8_t u8_OldNodeId;

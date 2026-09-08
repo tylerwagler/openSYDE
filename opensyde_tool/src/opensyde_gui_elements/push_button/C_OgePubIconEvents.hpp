@@ -31,7 +31,7 @@ class C_OgePubIconEvents :
    Q_OBJECT
 
 public:
-   explicit C_OgePubIconEvents(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubIconEvents(QWidget * const opc_Parent = nullptr);
 
 protected:
    void mousePressEvent(QMouseEvent * const opc_Event) override;

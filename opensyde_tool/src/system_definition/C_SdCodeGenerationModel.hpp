@@ -30,7 +30,7 @@ class C_SdCodeGenerationModel :
    Q_OBJECT
 
 public:
-   explicit C_SdCodeGenerationModel(QObject * const opc_Parent = NULL);
+   explicit C_SdCodeGenerationModel(QObject * const opc_Parent = nullptr);
    ~C_SdCodeGenerationModel() override;
 
    int32_t Init(const std::vector<uint32_t> & orc_ElementIndices) override;

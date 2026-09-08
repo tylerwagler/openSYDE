@@ -14,8 +14,10 @@
 
 #include <limits>
 #include <sstream>
+#include <system_error>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
 #include "C_SclStringCompat.hpp"
@@ -56,16 +58,16 @@ C_OscNodeDataPoolFiler::C_OscNodeDataPoolFiler(void)
    \param[in]   orc_FilePath        File path
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool & orc_NodeDataPool,
-                                                   const std::string & orc_FilePath)
+std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool & orc_NodeDataPool,
+                                                           const std::string & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_FilePath,
-                                                                         "opensyde-dp-core-definition");
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_FilePath,
+                                                                               "opensyde-dp-core-definition");
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -78,11 +80,11 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool & orc_NodeD
       catch (...)
       {
          osc_write_log_error("Loading Datapool", "\"file-version\" could not be converted to a number.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
 
       //is the file version one we know ?
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          osc_write_log_info("Loading Datapool", "Value of \"file-version\": " +
                             std::to_string(u16_FileVersion));
@@ -91,7 +93,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool & orc_NodeD
          {
             osc_write_log_error("Loading Datapool",
                                 "Version defined by \"file-version\" is not supported.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
 
@@ -101,26 +103,26 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool & orc_NodeD
    else
    {
       osc_write_log_error("Loading Datapool", "Could not find \"file-version\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (c_XmlParser.SelectNodeChild("data-pool") == "data-pool")
       {
-         s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPool(orc_NodeDataPool, c_XmlParser);
+         c_Retval = C_OscNodeDataPoolFiler::h_LoadDataPool(orc_NodeDataPool, c_XmlParser);
       }
       else
       {
          osc_write_log_error("Loading Datapool", "Could not find \"data-pool\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
       //More details are in log
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -134,13 +136,14 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool & orc_NodeD
    \param[in,out]  orc_XmlParser       XML with data-pool active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPool(C_OscNodeDataPool & orc_NodeDataPool, C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeDataPoolFiler::h_LoadDataPool(C_OscNodeDataPool & orc_NodeDataPool,
+                                                       C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Related application
    if (orc_XmlParser.AttributeExists("related-application-index") == true)
@@ -174,8 +177,8 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPool(C_OscNodeDataPool & orc_NodeDataP
    orc_NodeDataPool.u32_NvmSize = orc_XmlParser.GetAttributeUint32("nvm-size");
    if (orc_XmlParser.SelectNodeChild("type") == "type")
    {
-      s32_Retval = h_StringToDataPool(orc_XmlParser.GetNodeContent(), orc_NodeDataPool.e_Type);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = h_StringToDataPool(orc_XmlParser.GetNodeContent(), orc_NodeDataPool.e_Type);
+      if (!c_Retval)
       {
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "data-pool");
@@ -184,7 +187,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPool(C_OscNodeDataPool & orc_NodeDataP
    else
    {
       osc_write_log_error("Loading Datapool", "Could not find \"type\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
    if (orc_XmlParser.SelectNodeChild("name") == "name")
    {
@@ -195,7 +198,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPool(C_OscNodeDataPool & orc_NodeDataP
    else
    {
       osc_write_log_error("Loading Datapool", "Could not find \"name\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
    if (orc_XmlParser.SelectNodeChild("version") == "version")
    {
@@ -208,7 +211,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPool(C_OscNodeDataPool & orc_NodeDataP
    else
    {
       osc_write_log_error("Loading Datapool", "Could not find \"version\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
    if (orc_XmlParser.SelectNodeChild("comment") == "comment")
    {
@@ -219,13 +222,13 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPool(C_OscNodeDataPool & orc_NodeDataP
    else
    {
       osc_write_log_error("Loading Datapool", "Could not find \"comment\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   if ((orc_XmlParser.SelectNodeChild("lists") == "lists") && (s32_Retval == C_NO_ERR))
+   if ((orc_XmlParser.SelectNodeChild("lists") == "lists") && (!c_Retval))
    {
-      s32_Retval = h_LoadDataPoolLists(orc_NodeDataPool.c_Lists, orc_XmlParser);
+      c_Retval = h_LoadDataPoolLists(orc_NodeDataPool.c_Lists, orc_XmlParser);
 
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "data-pool");
@@ -234,10 +237,10 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPool(C_OscNodeDataPool & orc_NodeDataP
    else
    {
       osc_write_log_error("Loading Datapool", "Could not find \"lists\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
    //Export settings to be defined
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -293,14 +296,14 @@ void C_OscNodeDataPoolFiler::h_SaveDataPool(const C_OscNodeDataPool & orc_NodeDa
    \param[in,out]  orc_XmlParser          XML with data-pool active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolList(C_OscNodeDataPoolList & orc_NodeDataPoolList,
-                                                   C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolList(C_OscNodeDataPoolList & orc_NodeDataPoolList,
+                                                           C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_NodeDataPoolList.q_NvmCrcActive = orc_XmlParser.GetAttributeBool("nvm-crc-active");
    orc_NodeDataPoolList.u32_NvmCrc = orc_XmlParser.GetAttributeUint32("nvm-crc");
@@ -315,7 +318,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolList(C_OscNodeDataPoolList & orc_N
    else
    {
       osc_write_log_error("Loading Datapool", "Could not find \"lists\".\"list\".\"name\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
    if (orc_XmlParser.SelectNodeChild("comment") == "comment")
    {
@@ -326,15 +329,15 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolList(C_OscNodeDataPoolList & orc_N
    else
    {
       osc_write_log_error("Loading Datapool", "Could not find \"lists\".\"list\".\"comment\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
    //Data elements
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("data-elements") == "data-elements")
       {
-         s32_Retval = h_LoadDataPoolListElements(orc_NodeDataPoolList.c_Elements, orc_XmlParser);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = h_LoadDataPoolListElements(orc_NodeDataPoolList.c_Elements, orc_XmlParser);
+         if (!c_Retval)
          {
             //Return
             tgl_assert(orc_XmlParser.SelectNodeParent() == "list");
@@ -343,14 +346,14 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolList(C_OscNodeDataPoolList & orc_N
       else
       {
          osc_write_log_error("Loading Datapool", "Could not find \"lists\".\"list\".\"data-elements\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    //Data sets
-   if ((orc_XmlParser.SelectNodeChild("data-sets") == "data-sets") && (s32_Retval == C_NO_ERR))
+   if ((orc_XmlParser.SelectNodeChild("data-sets") == "data-sets") && (!c_Retval))
    {
-      s32_Retval = h_LoadDataPoolListDataSets(orc_NodeDataPoolList.c_DataSets, orc_XmlParser);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = h_LoadDataPoolListDataSets(orc_NodeDataPoolList.c_DataSets, orc_XmlParser);
+      if (!c_Retval)
       {
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "list");
@@ -359,9 +362,9 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolList(C_OscNodeDataPoolList & orc_N
    else
    {
       osc_write_log_error("Loading Datapool", "Could not find \"lists\".\"list\".\"data-sets\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -412,14 +415,14 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolList(const C_OscNodeDataPoolList & or
    \param[in,out]  orc_XmlParser                XML with list active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElement(C_OscNodeDataPoolListElement & orc_NodeDataPoolListElement,
-                                                      C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolElement(
+   C_OscNodeDataPoolListElement & orc_NodeDataPoolListElement, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_NodeDataPoolListElement.f64_Factor = orc_XmlParser.GetAttributeFloat64("factor");
    orc_NodeDataPoolListElement.f64_Offset = orc_XmlParser.GetAttributeFloat64("offset");
@@ -435,20 +438,20 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElement(C_OscNodeDataPoolListEleme
    else
    {
       osc_write_log_error("Loading data element", "Could not find \"name\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = h_LoadDataPoolElementType(orc_NodeDataPoolListElement.c_Value, orc_XmlParser);
+      c_Retval = h_LoadDataPoolElementType(orc_NodeDataPoolListElement.c_Value, orc_XmlParser);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("min-value") == "min-value")
       {
          //copy over value so we have the correct type:
          orc_NodeDataPoolListElement.c_MinValue = orc_NodeDataPoolListElement.c_Value;
 
-         s32_Retval = h_LoadDataPoolElementValue(orc_NodeDataPoolListElement.c_MinValue, orc_XmlParser, false);
+         c_Retval = h_LoadDataPoolElementValue(orc_NodeDataPoolListElement.c_MinValue, orc_XmlParser, false);
          // Use minimum value as init value for value and NVM value
          orc_NodeDataPoolListElement.c_NvmValue = orc_NodeDataPoolListElement.c_MinValue;
          orc_NodeDataPoolListElement.c_Value = orc_NodeDataPoolListElement.c_MinValue;
@@ -458,29 +461,29 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElement(C_OscNodeDataPoolListEleme
       else
       {
          osc_write_log_error("Loading data element", "Could not find \"min-value\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("max-value") == "max-value")
       {
          //copy over value so we have the correct type:
          orc_NodeDataPoolListElement.c_MaxValue = orc_NodeDataPoolListElement.c_Value;
 
-         s32_Retval = h_LoadDataPoolElementValue(orc_NodeDataPoolListElement.c_MaxValue, orc_XmlParser, false);
+         c_Retval = h_LoadDataPoolElementValue(orc_NodeDataPoolListElement.c_MaxValue, orc_XmlParser, false);
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "data-element");
       }
       else
       {
          osc_write_log_error("Loading data element", "Could not find \"max-value\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("comment") == "comment")
       {
@@ -491,11 +494,11 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElement(C_OscNodeDataPoolListEleme
       else
       {
          osc_write_log_error("Loading data element", "Could not find \"comment\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("unit") == "unit")
       {
@@ -506,45 +509,44 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElement(C_OscNodeDataPoolListEleme
       else
       {
          osc_write_log_error("Loading data element", "Could not find \"unit\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("access") == "access")
       {
-         s32_Retval =
-            mh_StringToNodeDataPoolElementAccess(orc_XmlParser.GetNodeContent(), orc_NodeDataPoolListElement.e_Access);
+         c_Retval = mh_StringToNodeDataPoolElementAccess(orc_XmlParser.GetNodeContent(),
+                                                         orc_NodeDataPoolListElement.e_Access);
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "data-element");
       }
       else
       {
          osc_write_log_error("Loading data element", "Could not find \"access\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("data-set-values") == "data-set-values")
       {
-         s32_Retval = h_LoadDataPoolListElementDataSetValues(orc_NodeDataPoolListElement.c_Value,
-                                                             orc_NodeDataPoolListElement.c_DataSetValues,
-                                                             orc_XmlParser);
+         c_Retval = h_LoadDataPoolListElementDataSetValues(orc_NodeDataPoolListElement.c_Value,
+                                                           orc_NodeDataPoolListElement.c_DataSetValues, orc_XmlParser);
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "data-element");
       }
       else
       {
          osc_write_log_error("Loading data element", "Could not find \"data-set-values\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
    //Optional: value descriptions (DBC value tables). Absent in pre-feature projects -> empty map, no error.
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("value-descriptions") == "value-descriptions")
       {
@@ -565,7 +567,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElement(C_OscNodeDataPoolListEleme
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -639,14 +641,14 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolElement(const C_OscNodeDataPoolListEl
    \param[in,out]  orc_XmlParser          XML with data-pool active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolLists(std::vector<C_OscNodeDataPoolList> & orc_NodeDataPoolLists,
-                                                    C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolLists(std::vector<C_OscNodeDataPoolList> & orc_NodeDataPoolLists,
+                                                            C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    std::string c_CurNodeList;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
@@ -668,9 +670,9 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolLists(std::vector<C_OscNodeDataPoo
       {
          C_OscNodeDataPoolList c_CurList;
 
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
-            s32_Retval = h_LoadDataPoolList(c_CurList, orc_XmlParser);
+            c_Retval = h_LoadDataPoolList(c_CurList, orc_XmlParser);
          }
 
          orc_NodeDataPoolLists.push_back(c_CurList);
@@ -679,14 +681,14 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolLists(std::vector<C_OscNodeDataPoo
       }
       while (c_CurNodeList == "list");
 
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "lists");
       }
    }
    //Compare length
-   if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true))
+   if ((!c_Retval) && (q_ExpectedSizeHere == true))
    {
       if (u32_ExpectedSize != orc_NodeDataPoolLists.size())
       {
@@ -696,7 +698,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolLists(std::vector<C_OscNodeDataPoo
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -736,14 +738,14 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolLists(const std::vector<C_OscNodeData
    \param[in,out]  orc_XmlParser                   XML with list active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(
+std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(
    std::vector<C_OscNodeDataPoolListElement> & orc_NodeDataPoolListElements, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    std::string c_CurNodeDataElement;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
@@ -765,9 +767,9 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(
       {
          C_OscNodeDataPoolListElement c_CurDataElement;
 
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
-            s32_Retval = h_LoadDataPoolElement(c_CurDataElement, orc_XmlParser);
+            c_Retval = h_LoadDataPoolElement(c_CurDataElement, orc_XmlParser);
          }
 
          //Append
@@ -781,7 +783,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(
       tgl_assert(orc_XmlParser.SelectNodeParent() == "data-elements");
    }
    //Compare length
-   if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true))
+   if ((!c_Retval) && (q_ExpectedSizeHere == true))
    {
       if (u32_ExpectedSize != orc_NodeDataPoolListElements.size())
       {
@@ -791,7 +793,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -835,15 +837,15 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolListElements(
    \param[in,out]  orc_XmlParser                               XML with list active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElementDataSetValues(const C_OscNodeDataPoolContent & orc_ContentType,
-                                                                       std::vector<C_OscNodeDataPoolContent> & orc_NodeDataPoolListElementDataSetValues,
-                                                                       C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolListElementDataSetValues(
+   const C_OscNodeDataPoolContent & orc_ContentType,
+   std::vector<C_OscNodeDataPoolContent> & orc_NodeDataPoolListElementDataSetValues, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    std::string c_CurNodeDataSetValue = orc_XmlParser.SelectNodeChild("data-set-value");
 
    if (c_CurNodeDataSetValue == "data-set-value")
@@ -852,9 +854,9 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElementDataSetValues(const C_O
       {
          C_OscNodeDataPoolContent c_CurDataSetValue = orc_ContentType; //pre set content type
 
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
-            s32_Retval = h_LoadDataPoolElementValue(c_CurDataSetValue, orc_XmlParser, false);
+            c_Retval = h_LoadDataPoolElementValue(c_CurDataSetValue, orc_XmlParser, false);
          }
 
          //Append
@@ -867,7 +869,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElementDataSetValues(const C_O
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "data-set-values");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -905,14 +907,14 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolListElementDataSetValues(
    \param[in,out]  orc_XmlParser                   XML with list active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(
+std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(
    std::vector<C_OscNodeDataPoolDataSet> & orc_NodeDataPoolListDataSets, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    std::string c_CurNodeDataSet = orc_XmlParser.SelectNodeChild("data-set");
 
    orc_NodeDataPoolListDataSets.clear();
@@ -930,7 +932,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(
          }
          else
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
 
          if (orc_XmlParser.SelectNodeChild("comment") == "comment")
@@ -941,7 +943,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(
          }
          else
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
 
          //Append
@@ -954,7 +956,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "data-sets");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1027,13 +1029,14 @@ std::string C_OscNodeDataPoolFiler::h_DataPoolToString(const C_OscNodeDataPool::
    \param[out]  ore_Type      Data pool type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_StringToDataPool(const std::string & orc_String, C_OscNodeDataPool::E_Type & ore_Type)
+std::error_code C_OscNodeDataPoolFiler::h_StringToDataPool(const std::string & orc_String,
+                                                           C_OscNodeDataPool::E_Type & ore_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "com")
    {
@@ -1058,10 +1061,10 @@ int32_t C_OscNodeDataPoolFiler::h_StringToDataPool(const std::string & orc_Strin
    else
    {
       osc_write_log_error("Loading Datapool", "Invalid Datapool type:" + orc_String);
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1076,20 +1079,20 @@ int32_t C_OscNodeDataPoolFiler::h_StringToDataPool(const std::string & orc_Strin
    \param[in,out]  orc_XmlParser             XML with unknown (Node to store data pool variable) active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElementType(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
-                                                          C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolElementType(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
+                                                                  C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_CONFIG;
+   std::error_code c_Retval = Errc::config;
 
    if (orc_XmlParser.SelectNodeChild("type") == "type")
    {
       C_OscNodeDataPoolContent::E_Type e_Type;
-      s32_Retval = mh_StringToNodeDataPoolContent(orc_XmlParser.GetAttributeString("base-type"), e_Type);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = mh_StringToNodeDataPoolContent(orc_XmlParser.GetAttributeString("base-type"), e_Type);
+      if (!c_Retval)
       {
          orc_NodeDataPoolContent.SetType(e_Type);
          orc_NodeDataPoolContent.SetArray(orc_XmlParser.GetAttributeBool("is-array"));
@@ -1105,7 +1108,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElementType(C_OscNodeDataPoolConte
    {
       osc_write_log_error("Loading Datapool element", "Could not find \"type\" node.");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1148,25 +1151,26 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolElementType(const C_OscNodeDataPoolCo
    \param[in,out]  opc_CheckDataTypeErrorDetails   Check data type error details
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
-                                                           C_OscXmlParserBase & orc_XmlParser,
-                                                           const bool oq_CheckDataType,
-                                                           std::string * const opc_CheckDataTypeErrorDetails)
+std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
+                                                                   C_OscXmlParserBase & orc_XmlParser,
+                                                                   const bool oq_CheckDataType,
+                                                                   std::string * const opc_CheckDataTypeErrorDetails)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_NodeDataPoolContent.GetArray() == false)
    {
       if (oq_CheckDataType)
       {
-         s32_Retval = C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
-            orc_NodeDataPoolContent.GetType(), orc_XmlParser, opc_CheckDataTypeErrorDetails);
+         c_Retval = C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(orc_NodeDataPoolContent.GetType(),
+                                                                            orc_XmlParser,
+                                                                            opc_CheckDataTypeErrorDetails);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          //Single
          switch (orc_NodeDataPoolContent.GetType())
@@ -1222,8 +1226,9 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(C_OscNodeDataPoolCont
 
             if (oq_CheckDataType)
             {
-               s32_Retval = C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
-                  orc_NodeDataPoolContent.GetType(), orc_XmlParser, opc_CheckDataTypeErrorDetails);
+               c_Retval = C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(orc_NodeDataPoolContent.GetType(),
+                                                                                  orc_XmlParser,
+                                                                                  opc_CheckDataTypeErrorDetails);
             }
             switch (orc_NodeDataPoolContent.GetType())
             {
@@ -1272,20 +1277,20 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(C_OscNodeDataPoolCont
             u32_CurIndex++; //next element
             c_CurNode = orc_XmlParser.SelectNodeNext("element");
          }
-         while ((c_CurNode == "element") && (s32_Retval == C_NO_ERR));
+         while ((c_CurNode == "element") && (!c_Retval));
 
          //check whether we have the correct number of elements:
          if (u32_CurIndex != orc_NodeDataPoolContent.GetArraySize())
          {
             osc_write_log_error("Loading Datapool", "Incorrect size of value for array value.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
       //Return
       orc_XmlParser.SelectNodeParent();
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1543,15 +1548,15 @@ std::string C_OscNodeDataPoolFiler::h_GetFileName(const std::string & orc_Datapo
    \param[in,out]  opc_CheckDataTypeErrorDetails   Check data type error details
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeDataPoolContent::E_Type oe_ContentType,
-                                                                const C_OscXmlParserBase & orc_XmlParser,
-                                                                std::string * const opc_CheckDataTypeErrorDetails)
+std::error_code C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
+   const C_OscNodeDataPoolContent::E_Type oe_ContentType, const C_OscXmlParserBase & orc_XmlParser,
+   std::string * const opc_CheckDataTypeErrorDetails)
 {
-   int32_t s32_Retval = C_CONFIG;
+   std::error_code c_Retval = Errc::config;
 
    //Load value
    const uint64_t u64_Val = orc_XmlParser.GetAttributeUint64("value");
@@ -1567,7 +1572,7 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
           (((f64_Val >= static_cast<float64_t>(std::numeric_limits<uint8_t>::min())) &&
             (f64_Val <= static_cast<float64_t>(std::numeric_limits<uint8_t>::max())))))
       {
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
       }
       break;
    case C_OscNodeDataPoolContent::eUINT16:
@@ -1577,7 +1582,7 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
           ((f64_Val >= static_cast<float64_t>(std::numeric_limits<uint16_t>::min())) &&
            (f64_Val <= static_cast<float64_t>(std::numeric_limits<uint16_t>::max()))))
       {
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
       }
       break;
    case C_OscNodeDataPoolContent::eUINT32:
@@ -1587,7 +1592,7 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
           ((f64_Val >= static_cast<float64_t>(std::numeric_limits<uint32_t>::min())) &&
            (f64_Val <= static_cast<float64_t>(std::numeric_limits<uint32_t>::max()))))
       {
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
       }
       break;
    case C_OscNodeDataPoolContent::eUINT64:
@@ -1596,7 +1601,7 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
       if (((f64_Val >= static_cast<float64_t>(std::numeric_limits<uint64_t>::min())) &&
            (f64_Val <= static_cast<float64_t>(std::numeric_limits<uint64_t>::max()))))
       {
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
       }
       break;
    case C_OscNodeDataPoolContent::eSINT8:
@@ -1607,7 +1612,7 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
           ((f64_Val >= static_cast<float64_t>(std::numeric_limits<int8_t>::min())) &&
            (f64_Val <= static_cast<float64_t>(std::numeric_limits<int8_t>::max()))))
       {
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
       }
       break;
    case C_OscNodeDataPoolContent::eSINT16:
@@ -1618,7 +1623,7 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
           ((f64_Val >= static_cast<float64_t>(std::numeric_limits<int16_t>::min())) &&
            (f64_Val <= static_cast<float64_t>(std::numeric_limits<int16_t>::max()))))
       {
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
       }
       break;
    case C_OscNodeDataPoolContent::eSINT32:
@@ -1629,7 +1634,7 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
           ((f64_Val >= static_cast<float64_t>(std::numeric_limits<int32_t>::min())) &&
            (f64_Val <= static_cast<float64_t>(std::numeric_limits<int32_t>::max()))))
       {
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
       }
       break;
    case C_OscNodeDataPoolContent::eSINT64:
@@ -1638,20 +1643,20 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
       if ((f64_Val >= static_cast<float64_t>(std::numeric_limits<int64_t>::min())) &&
           (f64_Val <= static_cast<float64_t>(std::numeric_limits<int64_t>::max())))
       {
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
       }
       break;
    case C_OscNodeDataPoolContent::eFLOAT32:
    case C_OscNodeDataPoolContent::eFLOAT64:
       //No range error or wrong type error possible for uint64 or sint64
-      s32_Retval = C_NO_ERR;
+      c_Retval = Errc::success;
       break;
    default:
       break;
    }
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
-      if (opc_CheckDataTypeErrorDetails != NULL)
+      if (opc_CheckDataTypeErrorDetails != nullptr)
       {
          const std::string c_Val = orc_XmlParser.GetAttributeString("value");
          const std::string c_DataType =
@@ -1660,7 +1665,7 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
          *opc_CheckDataTypeErrorDetails = "\"" + c_Val + "\" not in range of data type " + c_DataType;
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1674,26 +1679,26 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
    \param[in,out]  orc_XmlParser             XML with unknown (Node to store data pool variable) active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
-                                                        C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
+                                                                C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("type") == "type")
    {
       C_OscNodeDataPoolContent::E_Type e_Type;
-      s32_Retval = mh_StringToNodeDataPoolContent(orc_XmlParser.GetNodeContent(), e_Type);
+      c_Retval = mh_StringToNodeDataPoolContent(orc_XmlParser.GetNodeContent(), e_Type);
       orc_NodeDataPoolContent.SetType(e_Type);
       //Return
       orc_XmlParser.SelectNodeParent();
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
    orc_NodeDataPoolContent.SetArray(orc_XmlParser.GetAttributeBool("array"));
 
@@ -1774,10 +1779,10 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(C_OscNodeDataPoolContent
       else
       {
          osc_write_log_error("Loading data element", "Could not find \"array\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1789,18 +1794,18 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(C_OscNodeDataPoolContent
    \param[in,out]  orc_FilePath        File path for xml
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   file could not be created
+   Errc::success    data saved
+   Errc::config     file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_SaveDataPoolFile(const C_OscNodeDataPool & orc_NodeDataPool,
-                                                   const std::string & orc_FilePath)
+std::error_code C_OscNodeDataPoolFiler::h_SaveDataPoolFile(const C_OscNodeDataPool & orc_NodeDataPool,
+                                                           const std::string & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath,
-                                                                    "opensyde-dp-core-definition");
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath,
+                                                                          "opensyde-dp-core-definition");
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       //Version
       c_XmlParser.CreateNodeChild("file-version", "1");
@@ -1808,18 +1813,18 @@ int32_t C_OscNodeDataPoolFiler::h_SaveDataPoolFile(const C_OscNodeDataPool & orc
       //node
       C_OscNodeDataPoolFiler::h_SaveDataPool(orc_NodeDataPool, c_XmlParser);
       //Don't forget to save!
-      if (ListSaveToFile(c_XmlParser, orc_FilePath) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath))
       {
          osc_write_log_error("Saving node definition", "Could not create file for node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
       //More details are in log
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1882,14 +1887,14 @@ std::string C_OscNodeDataPoolFiler::mh_NodeDataPoolContentToString(
    \param[out]  ore_Type      Node data pool content type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolContent(const std::string & orc_String,
-                                                               C_OscNodeDataPoolContent::E_Type & ore_Type)
+std::error_code C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolContent(const std::string & orc_String,
+                                                                       C_OscNodeDataPoolContent::E_Type & ore_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "uint8")
    {
@@ -1934,10 +1939,10 @@ int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolContent(const std::string
    else
    {
       osc_write_log_error("Loading data element", "Invalid \"type\": " + orc_String);
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1976,14 +1981,14 @@ std::string C_OscNodeDataPoolFiler::mh_NodeDataPoolElementAccessToString(
    \param[out]  ore_Type      Node data pool element access type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolElementAccess(const std::string & orc_String,
-                                                                     C_OscNodeDataPoolListElement::E_Access & ore_Type)
+std::error_code C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolElementAccess(
+   const std::string & orc_String, C_OscNodeDataPoolListElement::E_Access & ore_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "read-write")
    {
@@ -1997,8 +2002,8 @@ int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolElementAccess(const std::
    {
       osc_write_log_error("Loading data element", "Invalid \"access\": " + orc_String);
 
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }

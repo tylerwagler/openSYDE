@@ -48,6 +48,8 @@ public:
    void MoveList(const uint32_t & oru32_Start, const uint32_t & oru32_Target);
    void RecalculateAddress(void);
    uint32_t GetNumBytesUsed(void) const;
+   ///< Returns a byte count, not a status: negative means the Datapool overflows its NvM size.
+   ///< Intentionally left on int32_t during the std::error_code migration.
    int32_t GetFreeBytes(void) const;
    uint32_t GetListsSize(void) const;
    void CheckErrorList(const uint32_t & oru32_ListIndex, bool * const opq_NameConflict, bool * const opq_NameInvalid,

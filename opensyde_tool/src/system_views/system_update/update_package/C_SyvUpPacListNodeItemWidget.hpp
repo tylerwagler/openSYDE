@@ -40,7 +40,7 @@ class C_SyvUpPacListNodeItemWidget :
 public:
    explicit C_SyvUpPacListNodeItemWidget(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
                                          const QString & orc_DeviceName, const bool oq_FileBased,
-                                         QWidget * const opc_Parent = NULL);
+                                         QWidget * const opc_Parent = nullptr);
    ~C_SyvUpPacListNodeItemWidget() override;
 
    QWidget * GetListParent(void);

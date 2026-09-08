@@ -15,9 +15,11 @@
 #include <algorithm> //for sort
 #include <sstream>
 #include <iomanip>
+#include <system_error>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscExportCanOpenConfig.hpp"
 #include "C_OscExportUti.hpp"
 #include "C_OscExportDataPool.hpp"
@@ -314,21 +316,21 @@ uint16_t C_OscExportCanOpenConfig::h_ConvertOverallCodeVersion(const uint16_t ou
    \param[in]       orc_ExportToolInfo       information about calling executable (name + version)
 
    \return
-   C_NO_ERR    success
-   C_NOACT     application is not of type ePROGRAMMABLE_APPLICATION or has unknown code structure version
-   C_RD_WR     failure: cannot store files
-   C_CONFIG    protocol or Datapool not available in node for interface or application index out of range
-   C_RANGE     application index out of range
+   Errc::success  success
+   Errc::noact    application is not of type ePROGRAMMABLE_APPLICATION or has unknown code structure version
+   Errc::rd_wr    failure: cannot store files
+   Errc::config   protocol or Datapool not available in node for interface or application index out of range
+   Errc::range    application index out of range
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
-                                                     const uint16_t ou16_ApplicationIndex,
-                                                     const uint8_t ou8_InterfaceIndex,
-                                                     const uint32_t ou32_DatapoolIndex,
-                                                     const std::string & orc_ExportToolInfo)
+std::error_code C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
+                                                             const uint16_t ou16_ApplicationIndex,
+                                                             const uint8_t ou8_InterfaceIndex,
+                                                             const uint32_t ou32_DatapoolIndex,
+                                                             const std::string & orc_ExportToolInfo)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    C_OscNodeApplication c_Application;
 
    if (ou16_ApplicationIndex < orc_Node.c_Applications.size())
@@ -339,10 +341,10 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
    {
       osc_write_log_error("Creating source code", "Application index " + std::to_string(
                              ou16_ApplicationIndex) + "out of range.");
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       //make sure application is programmable
       if (c_Application.e_Type != C_OscNodeApplication::ePROGRAMMABLE_APPLICATION)
@@ -350,7 +352,7 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
          osc_write_log_error("Creating source code",
                              "Did not generate code for application \"" + c_Application.c_Name +
                              "\" because application is not programmable.");
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
@@ -361,12 +363,12 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
                                 "Did not generate code for application \"" + c_Application.c_Name +
                                 "\" because code format version \"" +
                                 std::to_string(c_Application.u16_GenCodeVersion) + "\" is unknown.");
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
          }
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       const C_OscCanProtocol * const pc_Protocol = orc_Node.GetCanProtocolConst(C_OscCanProtocol::eCAN_OPEN,
                                                                                 ou32_DatapoolIndex);
@@ -374,7 +376,7 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
                                                                                  ou32_DatapoolIndex);
 
       //even if we have no signals there should be an "empty" DP
-      if (pc_DataPool != NULL)
+      if (pc_DataPool != nullptr)
       {
          const C_OscCanMessageContainer & rc_Messages = pc_Protocol->c_ComMessages[ou8_InterfaceIndex];
          uint32_t u32_HashValue = 0U;
@@ -384,26 +386,26 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
          const std::string c_ProjectId = std::to_string(u32_HashValue);
 
          //create header file
-         s32_Return = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, orc_Node, rc_Messages,
-                                          c_Application, ou8_InterfaceIndex, c_ProjectId);
+         c_Return = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, orc_Node, rc_Messages,
+                                        c_Application, ou8_InterfaceIndex, c_ProjectId);
 
-         if (s32_Return == C_NO_ERR)
+         if (!c_Return)
          {
             //create implementation file
-            s32_Return = mh_CreateImplementationFile(orc_ExportToolInfo, orc_Path, orc_Node, rc_Messages,
-                                                     c_Application, *pc_DataPool, ou8_InterfaceIndex,
-                                                     c_ProjectId);
+            c_Return = mh_CreateImplementationFile(orc_ExportToolInfo, orc_Path, orc_Node, rc_Messages,
+                                                   c_Application, *pc_DataPool, ou8_InterfaceIndex,
+                                                   c_ProjectId);
          }
       }
       else
       {
          osc_write_log_error("Creating source code",
                              "Datapool does not exist for specified communication protocol CANopen");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -418,18 +420,19 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
    \param[in]       orc_ProjectId         project id for consistency check
 
    \return
-   C_NO_ERR    success
-   C_RD_WR     cannot store file
+   Errc::success  success
+   Errc::rd_wr    cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenConfig::mh_CreateHeaderFile(const std::string & orc_ExportInfoTool,
-                                                      const std::string & orc_Path, const C_OscNode & orc_Node,
-                                                      const C_OscCanMessageContainer & orc_MsgContainer,
-                                                      const C_OscNodeApplication & orc_Application,
-                                                      const uint8_t ou8_InterfaceIndex,
-                                                      const std::string & orc_ProjectId)
+std::error_code C_OscExportCanOpenConfig::mh_CreateHeaderFile(const std::string & orc_ExportInfoTool,
+                                                              const std::string & orc_Path, const C_OscNode & orc_Node,
+                                                              const C_OscCanMessageContainer & orc_MsgContainer,
+                                                              const C_OscNodeApplication & orc_Application,
+                                                              const uint8_t ou8_InterfaceIndex,
+                                                              const std::string & orc_ProjectId)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
+
    std::vector<std::string> c_Data;
 
    c_Data.clear();
@@ -467,9 +470,9 @@ int32_t C_OscExportCanOpenConfig::mh_CreateHeaderFile(const std::string & orc_Ex
    c_Data.push_back("#endif");
 
    //save all this
-   s32_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(ou8_InterfaceIndex), true);
+   c_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(ou8_InterfaceIndex), true);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -485,20 +488,21 @@ int32_t C_OscExportCanOpenConfig::mh_CreateHeaderFile(const std::string & orc_Ex
    \param[in]       orc_ProjectId         project id for consistency check
 
    \return
-   C_NO_ERR    success
-   C_CONFIG    invalid configuration, aborted
-   C_RD_WR     cannot store file
+   Errc::success  success
+   Errc::config   invalid configuration, aborted
+   Errc::rd_wr    cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenConfig::mh_CreateImplementationFile(const std::string & orc_ExportInfoTool,
-                                                              const std::string & orc_Path, const C_OscNode & orc_Node,
-                                                              const C_OscCanMessageContainer & orc_MsgContainer,
-                                                              const C_OscNodeApplication & orc_Application,
-                                                              const C_OscNodeDataPool & orc_Datapool,
-                                                              const uint8_t ou8_InterfaceIndex,
-                                                              const std::string & orc_ProjectId)
+std::error_code C_OscExportCanOpenConfig::mh_CreateImplementationFile(const std::string & orc_ExportInfoTool,
+                                                                      const std::string & orc_Path,
+                                                                      const C_OscNode & orc_Node,
+                                                                      const C_OscCanMessageContainer & orc_MsgContainer,
+                                                                      const C_OscNodeApplication & orc_Application,
+                                                                      const C_OscNodeDataPool & orc_Datapool,
+                                                                      const uint8_t ou8_InterfaceIndex,
+                                                                      const std::string & orc_ProjectId)
 {
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
    std::vector<std::string> c_Data;
 
@@ -506,8 +510,8 @@ int32_t C_OscExportCanOpenConfig::mh_CreateImplementationFile(const std::string 
    uint32_t u32_RxListIndex;
 
    //the signals lists are expected to exist even if there are no signals defined
-   if ((C_OscCanProtocol::h_GetComListIndex(orc_Datapool, ou8_InterfaceIndex, true, u32_TxListIndex) == C_NO_ERR) &&
-       (C_OscCanProtocol::h_GetComListIndex(orc_Datapool, ou8_InterfaceIndex, false, u32_RxListIndex) == C_NO_ERR))
+   if ((!C_OscCanProtocol::h_GetComListIndex(orc_Datapool, ou8_InterfaceIndex, true, u32_TxListIndex)) &&
+       (!C_OscCanProtocol::h_GetComListIndex(orc_Datapool, ou8_InterfaceIndex, false, u32_RxListIndex)))
    {
       c_Data.clear();
       const C_OscNodeDataPoolList rc_DatapoolTxList = orc_Datapool.c_Lists[u32_TxListIndex];
@@ -546,14 +550,14 @@ int32_t C_OscExportCanOpenConfig::mh_CreateImplementationFile(const std::string 
       c_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Implementation"));
 
       //save all this
-      s32_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(ou8_InterfaceIndex), false);
+      c_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(ou8_InterfaceIndex), false);
    }
    else
    {
       osc_write_log_error("Creating source code",
                           "Datapool RX or TX signal list does not exist for specified communication protocol CANopen");
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1261,7 +1265,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
    pc_OdObject = rc_Od.GetCanOpenObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_SYNC);
 
    //write if the objects exists and is writable:
-   if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+   if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
    {
       const uint32_t u32_VALUE = 0x80U;
       c_Entry.SetConciseEntry(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_SYNC, 0x00U, u32_VALUE, "SYNC Message");
@@ -1272,7 +1276,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
    pc_OdObject = rc_Od.GetCanOpenObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_CYCLE_PERIOD);
 
    //write if the objects exists and is writable:
-   if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+   if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
    {
       c_Entry.SetConciseEntry(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_CYCLE_PERIOD, 0x00U, ou32_CyclePeriod,
                               "Communication Cycle Period in us");
@@ -1283,7 +1287,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
    pc_OdObject = rc_Od.GetCanOpenObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_SYNC_WINDOW_LENGTH);
 
    //write if the objects exists and is writable:
-   if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+   if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
    {
       c_Entry.SetConciseEntry(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_SYNC_WINDOW_LENGTH, 0x00U, ou32_WindowLength,
                               "Sync Window Length in us");
@@ -1294,7 +1298,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
    pc_OdObject = rc_Od.GetCanOpenObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_EMCY);
 
    //write if the objects exists and is writable:
-   if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+   if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
    {
       c_Entry.SetConciseEntry(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_EMCY, 0x00U,
                               static_cast<uint32_t>(orc_DeviceInfo.u8_NodeIdValue) + 0x80U,
@@ -1310,7 +1314,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
       {
          pc_OdObject = rc_Od.GetCanOpenSubIndexObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_HEARTBEAT_CONSUMER,
                                                       u8_It);
-         if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+         if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
          {
             uint32_t u32_Value;
 
@@ -1338,7 +1342,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
    if (rc_Od.IsHeartbeatProducerSupported() == true)
    {
       pc_OdObject = rc_Od.GetCanOpenObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_HEARTBEAT_PRODUCER);
-      if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+      if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
       {
          uint16_t u16_Value;
 
@@ -1387,7 +1391,7 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
       if (rc_CurrentPdo.c_CanOpenManagerOwnerNodeIndex.u32_NodeIndex == ou32_NodeIndex)
       {
          uint16_t u16_ObjectIndex;
-         int32_t s32_Return;
+         std::error_code c_Return = Errc::success;
          std::string c_PdoCommentText;
          const C_OscCanOpenObjectDictionary & rc_Od = orc_DeviceInfo.GetEdsFileContent();
          C_OscExportCanOpenConciseEntry c_Entry = C_OscExportCanOpenConciseEntry();
@@ -1409,8 +1413,8 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
             std::to_string(static_cast<uint32_t>(rc_CurrentPdo.u16_CanOpenManagerPdoIndex) + 1U);
 
          //check if COB-ID is missing or RO
-         s32_Return = rc_Od.IsCobIdRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_CobIdIsRo);
-         if (s32_Return != C_NO_ERR)
+         c_Return = rc_Od.IsCobIdRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_CobIdIsRo);
+         if (c_Return)
          {
             //if there is no entry we cannot assume it is writable
             q_CobIdIsRo = true;
@@ -1442,10 +1446,10 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
          {
             bool q_SectionRo;
             //check if transmission type is missing or RO
-            s32_Return = rc_Od.IsTransmissionTypeRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
+            c_Return = rc_Od.IsTransmissionTypeRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
 
             // _525
-            if ((s32_Return == C_NO_ERR) && (q_SectionRo == false))
+            if ((!c_Return) && (q_SectionRo == false))
             {
                uint8_t u8_TxMethodType = 0U;
                switch (rc_CurrentPdo.e_TxMethod)
@@ -1480,9 +1484,9 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
             }
 
             //check if inhibit time is missing or RO
-            s32_Return = rc_Od.IsInhibitTimeRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
+            c_Return = rc_Od.IsInhibitTimeRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
 
-            if ((s32_Return == C_NO_ERR) && (q_SectionRo == false))
+            if ((!c_Return) && (q_SectionRo == false))
             {
                //resolution of 100 micro second is needed for CANopen stack
                const uint16_t u16_InhibitTimeMicro = static_cast<uint16_t>(rc_CurrentPdo.u16_DelayTimeMs * 10U);
@@ -1495,9 +1499,9 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
             }
 
             //check if event time is missing or RO
-            s32_Return = rc_Od.IsEventTimerRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
+            c_Return = rc_Od.IsEventTimerRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
 
-            if ((s32_Return == C_NO_ERR) && (q_SectionRo == false))
+            if ((!c_Return) && (q_SectionRo == false))
             {
                uint16_t u16_EventTime;
 
@@ -1525,9 +1529,9 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
             if (oq_IsTx)
             {
                //check if sync start value is missing or RO (_525)
-               s32_Return = rc_Od.IsSyncStartRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
+               c_Return = rc_Od.IsSyncStartRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
 
-               if ((s32_Return == C_NO_ERR) && (q_SectionRo == false))
+               if ((!c_Return) && (q_SectionRo == false))
                {
                   //explicitly write "0" if the device does support sub06
                   const uint8_t u8_SYNC_START_VALUE = 0U;
@@ -1549,11 +1553,11 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
             u16_ObjectIndex += rc_CurrentPdo.u16_CanOpenManagerPdoIndex;
 
             //check if PDO mapping is missing or RO
-            s32_Return = rc_Od.IsPdoMappingRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
+            c_Return = rc_Od.IsPdoMappingRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
 
             //mapping can only be changed if the COB-ID is writable; otherwise the PDO is still active and cannot be
             // remapped
-            if ((s32_Return == C_NO_ERR) && (q_SectionRo == false) && (q_CobIdIsRo == false))
+            if ((!c_Return) && (q_SectionRo == false) && (q_CobIdIsRo == false))
             {
                //Clear PDO mapping
                c_Entry.SetConciseEntry(u16_ObjectIndex, 0x00U, static_cast<uint8_t>(0x0U),

@@ -10,6 +10,7 @@
 #define C_OSCNODESQUAD_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include <vector>
 
 #include "stwtypes.hpp"
@@ -34,10 +35,10 @@ public:
 
    static std::string h_CombineNames(const std::string & orc_MainDeviceName,
                                                const std::string & orc_SubDeviceName);
-   int32_t SetBaseName(std::vector<C_OscNode> & orc_Nodes, const std::string & orc_NodeBaseName);
+   std::error_code SetBaseName(std::vector<C_OscNode> & orc_Nodes, const std::string & orc_NodeBaseName);
    static bool h_CheckIsMultiDevice(const uint32_t ou32_NodeIndex,
                                     const std::vector<stw::opensyde_core::C_OscNodeSquad> & orc_AvailableGroups,
-                                    uint32_t * const opu32_GroupIndex = NULL);
+                                    uint32_t * const opu32_GroupIndex = nullptr);
 
    static const std::string hc_SEPARATOR; ///< Default separator for GUI and device type checks
    std::string c_BaseName;                ///< Base name for all sub nodes

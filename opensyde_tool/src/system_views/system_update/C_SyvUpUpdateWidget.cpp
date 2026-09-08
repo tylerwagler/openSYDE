@@ -68,12 +68,12 @@ C_SyvUpUpdateWidget::C_SyvUpUpdateWidget(const uint32_t ou32_ViewIndex, QWidget 
    mpc_Ui(new Ui::C_SyvUpUpdateWidget),
    mu32_ViewIndex(ou32_ViewIndex),
    mu32_ApplicationIndex(0U),
-   mpc_Scene(NULL),
-   mpc_ProgressLog(NULL),
-   mpc_FixMinimizedProgressLog(NULL),
+   mpc_Scene(nullptr),
+   mpc_ProgressLog(nullptr),
+   mpc_FixMinimizedProgressLog(nullptr),
    mpc_ProgressLogParent(opc_ProgressLogParent),
-   mpc_ProgressLogContent(NULL),
-   mpc_UpSequences(NULL),
+   mpc_ProgressLogContent(nullptr),
+   mpc_UpSequences(nullptr),
    me_Step(C_SyvUpSequences::eNOT_ACTIVE),
    mq_Connected(false),
    mq_ClearProgressLog(true),
@@ -113,7 +113,7 @@ C_SyvUpUpdateWidget::C_SyvUpUpdateWidget(const uint32_t ou32_ViewIndex, QWidget 
    this->mpc_Ui->pc_GraphicsView->SetDrawingBackground(false);
 
    //Update all items with initial zoom & pos value
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       c_Name = pc_View->GetName().c_str();
    }
@@ -183,7 +183,7 @@ C_SyvUpUpdateWidget::~C_SyvUpUpdateWidget()
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
    // store configuration of the view
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       //Splitter
       const QList<int32_t> c_Sizes = this->mpc_Ui->pc_SplitterHori->sizes();
@@ -201,12 +201,12 @@ C_SyvUpUpdateWidget::~C_SyvUpUpdateWidget()
    }
    m_CleanUpProgressLog();
 
-   if (this->mpc_ProgressLog != NULL)
+   if (this->mpc_ProgressLog != nullptr)
    {
       this->mpc_ProgressLog->hide();
    }
 
-   if (this->mpc_FixMinimizedProgressLog != NULL)
+   if (this->mpc_FixMinimizedProgressLog != nullptr)
    {
       this->mpc_FixMinimizedProgressLog->hide();
    }
@@ -214,7 +214,7 @@ C_SyvUpUpdateWidget::~C_SyvUpUpdateWidget()
    this->m_CleanUpSequence();
 
    delete mpc_Ui;
-   mpc_Ui = NULL;
+   mpc_Ui = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -256,7 +256,7 @@ bool C_SyvUpUpdateWidget::PrepareToClose(void)
 {
    bool q_Return = true;
 
-   if (this->mpc_UpSequences != NULL)
+   if (this->mpc_UpSequences != nullptr)
    {
       bool q_Disconnect = false;
 
@@ -343,7 +343,7 @@ bool C_SyvUpUpdateWidget::PrepareToClose(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::LoadScene(void)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->Load();
 
@@ -364,7 +364,7 @@ void C_SyvUpUpdateWidget::showEvent(QShowEvent * const opc_Event)
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
    // store configuration of the view
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_UsSystemView c_UserView = C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName().c_str());
       int32_t s32_LastSegmentWidth = c_UserView.GetUpdateHorizontalSplitterVertical();
@@ -404,7 +404,7 @@ void C_SyvUpUpdateWidget::hideEvent(QHideEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::resizeEvent(QResizeEvent * const opc_Event)
 {
-   if (this->mpc_ProgressLog != NULL)
+   if (this->mpc_ProgressLog != nullptr)
    {
       Q_UNUSED(opc_Event)
 
@@ -418,7 +418,7 @@ void C_SyvUpUpdateWidget::resizeEvent(QResizeEvent * const opc_Event)
 
       QWidget * pc_Widget = this->mpc_ProgressLogParent;
 
-      if (pc_Widget == NULL)
+      if (pc_Widget == nullptr)
       {
          // if no parent exist use this widget
          pc_Widget = this;
@@ -521,13 +521,13 @@ int32_t C_SyvUpUpdateWidget::m_InitSequence(void)
    //Check if ethernet
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       if (pc_View->GetOscPcData().GetConnected())
       {
          const C_OscSystemBus * const pc_Bus =
             C_PuiSdHandler::h_GetInstance()->GetOscBus(pc_View->GetOscPcData().GetBusIndex());
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             if (pc_Bus->e_Type == C_OscSystemBus::eETHERNET)
             {
@@ -539,7 +539,7 @@ int32_t C_SyvUpUpdateWidget::m_InitSequence(void)
 
    // Sequence initialization
 
-   if (this->mpc_UpSequences == NULL)
+   if (this->mpc_UpSequences == nullptr)
    {
       this->mpc_UpSequences = new C_SyvUpSequences();
 
@@ -647,7 +647,7 @@ int32_t C_SyvUpUpdateWidget::m_InitSequence(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_CleanUpSequence(void)
 {
-   if (this->mpc_UpSequences != NULL)
+   if (this->mpc_UpSequences != nullptr)
    {
       this->mpc_UpSequences->CloseDispatcher();
 
@@ -659,7 +659,7 @@ void C_SyvUpUpdateWidget::m_CleanUpSequence(void)
                  &C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead);
 
       delete mpc_UpSequences;
-      this->mpc_UpSequences = NULL;
+      this->mpc_UpSequences = nullptr;
    }
 }
 
@@ -687,7 +687,7 @@ void C_SyvUpUpdateWidget::m_UpdatePackageState(const int32_t os32_State)
       Q_EMIT this->SigInvalidView();
    }
    //Update scene as well
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->CheckUpdateDisabledState();
    }
@@ -712,7 +712,7 @@ void C_SyvUpUpdateWidget::m_ReportProgress(const uint32_t ou32_Step, const int32
    //Stop animation
    if (e_Step == C_OscSuSequences::eUPDATE_SYSTEM_FINISHED)
    {
-      if (this->mpc_Scene != NULL)
+      if (this->mpc_Scene != nullptr)
       {
          this->mpc_Scene->StopProgressAnimation(false, 0, true);
       }
@@ -722,7 +722,7 @@ void C_SyvUpUpdateWidget::m_ReportProgress(const uint32_t ou32_Step, const int32
       this->mpc_Ui->pc_WiUpdateInformation->StopElapsedTimer();
       this->mpc_Ui->pc_WiUpdateInformation->UpdateProgress(100, true);
       //Signal progress log
-      if (this->mpc_ProgressLogContent != NULL)
+      if (this->mpc_ProgressLogContent != nullptr)
       {
          this->mpc_ProgressLogContent->AddSubHeading("System Update successful!");
       }
@@ -773,23 +773,23 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
          //Signal progress
          this->mpc_Ui->pc_WiUpdateInformation->SetUpdateNodeStarted(u32_NodeIndex);
          //Signal scene
-         if (this->mpc_Scene != NULL)
+         if (this->mpc_Scene != nullptr)
          {
             // Stop the previous animation first
             this->mpc_Scene->StopProgressAnimation(false, 0, false);
             this->mpc_Scene->StartProgressAnimation(u32_NodeIndex);
          }
          //Scroll scene
-         if (pc_UiNode != NULL)
+         if (pc_UiNode != nullptr)
          {
             this->mpc_Ui->pc_GraphicsView->ScrollTo(pc_UiNode->c_UiPosition,
                                                     QSizeF(pc_UiNode->f64_Width, pc_UiNode->f64_Height));
          }
          //Signal progress log
-         if (this->mpc_ProgressLogContent != NULL)
+         if (this->mpc_ProgressLogContent != nullptr)
          {
             const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
-            if (pc_Node != NULL)
+            if (pc_Node != nullptr)
             {
                const QString c_Text = static_cast<QString>("Update %1...").arg(
                   pc_Node->c_Properties.c_Name.c_str());
@@ -800,12 +800,12 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
       else if (C_SyvUpUpdateWidget::mh_IsConnectionFailure(e_Step) == true)
       {
          //Signal progress log
-         if (this->mpc_ProgressLogContent != NULL)
+         if (this->mpc_ProgressLogContent != nullptr)
          {
             this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, "FAIL", false);
          }
          //Signal scene
-         if (this->mpc_Scene != NULL)
+         if (this->mpc_Scene != nullptr)
          {
             this->mpc_Scene->SetNodeError(u32_NodeIndex);
          }
@@ -813,7 +813,7 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
       else if (C_SyvUpUpdateWidget::mh_IsConnectionSuccess(e_Step) == true)
       {
          //Signal progress log
-         if (this->mpc_ProgressLogContent != NULL)
+         if (this->mpc_ProgressLogContent != nullptr)
          {
             this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, "OK", false);
          }
@@ -823,12 +823,12 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
          //Signal other widgets (signals might be missing)
          this->mpc_Ui->pc_WiUpdateInformation->SetUpdateApplicationError(u32_NodeIndex);
          //Signal progress log
-         if (this->mpc_ProgressLogContent != NULL)
+         if (this->mpc_ProgressLogContent != nullptr)
          {
             this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, "FAIL", true);
          }
          //Signal scene
-         if (this->mpc_Scene != NULL)
+         if (this->mpc_Scene != nullptr)
          {
             this->mpc_Scene->SetNodeError(u32_NodeIndex);
             this->mpc_Scene->StopProgressAnimation(true, this->mu32_ApplicationIndex, true);
@@ -838,12 +838,12 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
       {
          this->mpc_Ui->pc_WiUpdateInformation->SetUpdateApplicationError(u32_NodeIndex);
          //Signal progress log
-         if (this->mpc_ProgressLogContent != NULL)
+         if (this->mpc_ProgressLogContent != nullptr)
          {
             this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, "USER CANCELED", true);
          }
          //Signal scene
-         if (this->mpc_Scene != NULL)
+         if (this->mpc_Scene != nullptr)
          {
             this->mpc_Scene->StopProgressAnimation(true, this->mu32_ApplicationIndex, true);
          }
@@ -862,7 +862,7 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
          //Signal progress
          this->mpc_Ui->pc_WiUpdateInformation->SetUpdateNodeSuccess(u32_NodeIndex);
          //Signal progress log
-         if (this->mpc_ProgressLogContent != NULL)
+         if (this->mpc_ProgressLogContent != nullptr)
          {
             this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, "OK", true);
          }
@@ -898,7 +898,7 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead(void)
 {
-   if (this->mpc_UpSequences != NULL)
+   if (this->mpc_UpSequences != nullptr)
    {
       std::vector<uint32_t> c_NodeIndexes;
       std::vector<C_OscSuSequences::C_OsyDeviceInformation> c_DeviceInformation;
@@ -1060,7 +1060,7 @@ void C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead(void)
       this->m_CheckOpenSydeFlashloaderInformation(c_NodeIndexes, c_DeviceInformation);
 
       //Signal scene
-      if (this->mpc_Scene != NULL)
+      if (this->mpc_Scene != nullptr)
       {
          this->mpc_Scene->UpdateDeviceInformation(c_NodeIndexes, c_Devices);
       }
@@ -1103,7 +1103,7 @@ void C_SyvUpUpdateWidget::m_CheckOpenSydeFlashloaderInformation(const std::vecto
                C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodesPackageCounter);
             std::string c_NodeName;
 
-            if (pc_Node != NULL)
+            if (pc_Node != nullptr)
             {
                c_NodeName = pc_Node->c_Properties.c_Name;
             }
@@ -1213,7 +1213,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
    this->mpc_Ui->pc_PbConnect->setEnabled(false);
    this->mpc_Ui->pc_PbUpdate->setEnabled(false);
 
-   if (this->mpc_ProgressLogContent != NULL)
+   if (this->mpc_ProgressLogContent != nullptr)
    {
       this->mpc_ProgressLogContent->Clear();
 
@@ -1247,7 +1247,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
       //Signal summary
       this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", "Entering update mode...");
       //Signal scene
-      if (this->mpc_Scene != NULL)
+      if (this->mpc_Scene != nullptr)
       {
          //Reset connected status (required if in system disconnected state due to no node response)
          this->mpc_Scene->SetConnected(false);
@@ -1401,7 +1401,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
          if (s32_Return == C_NO_ERR)
          {
             //Signal progress log
-            if (this->mpc_ProgressLogContent != NULL)
+            if (this->mpc_ProgressLogContent != nullptr)
             {
                // The thread was started, the communication is running...
                this->mpc_ProgressLogContent->AddSubHeading("Entering update mode...");
@@ -1412,7 +1412,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
             //Timer
             this->mc_Timer.start();
             //Signal scene
-            if (this->mpc_Scene != NULL)
+            if (this->mpc_Scene != nullptr)
             {
                this->mpc_Scene->SetConnecting(true);
             }
@@ -1436,7 +1436,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
          this->mpc_Ui->pc_WiUpdateInformation->SetDisconnected();
 
          //Signal scene
-         if (this->mpc_Scene != NULL)
+         if (this->mpc_Scene != nullptr)
          {
             // Stop the previous animation first
             this->mpc_Scene->StopProgressAnimation(false, 0, true);
@@ -1453,7 +1453,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
    if (s32_Return != C_NO_ERR)
    {
       //Signal progress log
-      if (this->mpc_ProgressLogContent != NULL)
+      if (this->mpc_ProgressLogContent != nullptr)
       {
          this->mpc_ProgressLogContent->AddSubHeading("Enter Update Mode failed!");
          this->mpc_ProgressLogContent->AddLogHyperlink();
@@ -1493,11 +1493,11 @@ void C_SyvUpUpdateWidget::m_Update(void)
          // Reset summary
          this->mpc_Ui->pc_WiUpdateInformation->ResetSummary();
          this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", "Update mode active!");
-         if (this->mpc_UpSequences != NULL)
+         if (this->mpc_UpSequences != nullptr)
          {
             QApplication::setOverrideCursor(Qt::WaitCursor);
 
-            if (pc_View != NULL)
+            if (pc_View != nullptr)
             {
                int32_t s32_Return;
 
@@ -1555,7 +1555,7 @@ void C_SyvUpUpdateWidget::m_Update(void)
                      this->mpc_Ui->pc_PbCancel->setEnabled(true);
                      this->mc_Timer.start();
                      //Signal scene
-                     if (this->mpc_Scene != NULL)
+                     if (this->mpc_Scene != nullptr)
                      {
                         this->mpc_Scene->SetUpdating(true);
                      }
@@ -1563,13 +1563,13 @@ void C_SyvUpUpdateWidget::m_Update(void)
                      this->mpc_Ui->pc_WiUpdateInformation->SetUpdateStarted();
 
                      //Signal progress log
-                     if (this->mpc_ProgressLogContent != NULL)
+                     if (this->mpc_ProgressLogContent != nullptr)
                      {
                         this->mpc_ProgressLogContent->SetHeading("System Update");
                      }
                      if (this->mq_ClearProgressLog == true)
                      {
-                        if (this->mpc_ProgressLogContent != NULL)
+                        if (this->mpc_ProgressLogContent != nullptr)
                         {
                            this->mpc_ProgressLogContent->Clear();
                         }
@@ -1577,12 +1577,12 @@ void C_SyvUpUpdateWidget::m_Update(void)
                      else
                      {
                         this->mq_ClearProgressLog = true;
-                        if (this->mpc_ProgressLogContent != NULL)
+                        if (this->mpc_ProgressLogContent != nullptr)
                         {
                            this->mpc_ProgressLogContent->AddSpacer();
                         }
                      }
-                     if (this->mpc_ProgressLogContent != NULL)
+                     if (this->mpc_ProgressLogContent != nullptr)
                      {
                         this->mpc_ProgressLogContent->AddSubHeading("Updating System...");
                      }
@@ -1616,7 +1616,7 @@ void C_SyvUpUpdateWidget::m_Update(void)
       else
       {
          //Signal progress log
-         if (this->mpc_ProgressLogContent != NULL)
+         if (this->mpc_ProgressLogContent != nullptr)
          {
             this->mpc_ProgressLogContent->SetHeading("System Update");
          }
@@ -1646,7 +1646,7 @@ void C_SyvUpUpdateWidget::m_Disconnect(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_DisconnectAction(void)
 {
-   if (this->mpc_UpSequences != NULL)
+   if (this->mpc_UpSequences != nullptr)
    {
       int32_t s32_Return;
 
@@ -1666,12 +1666,12 @@ void C_SyvUpUpdateWidget::m_DisconnectAction(void)
          this->m_UpdateReportText("Disconnect: Start");
 
          //Signal scene
-         if (this->mpc_Scene != NULL)
+         if (this->mpc_Scene != nullptr)
          {
             this->mpc_Scene->SetConnected(false);
          }
          //Signal log
-         if (this->mpc_ProgressLogContent != NULL)
+         if (this->mpc_ProgressLogContent != nullptr)
          {
             this->mpc_ProgressLogContent->Clear();
          }
@@ -1694,7 +1694,7 @@ void C_SyvUpUpdateWidget::m_DisconnectAction(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_Cancel(void)
 {
-   if (this->mpc_UpSequences != NULL)
+   if (this->mpc_UpSequences != nullptr)
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
 
@@ -1722,7 +1722,7 @@ void C_SyvUpUpdateWidget::m_Timer(void)
    int32_t s32_SequenceResult = C_UNKNOWN_ERR;
    QString c_Message = "";
 
-   if (this->mpc_UpSequences != NULL)
+   if (this->mpc_UpSequences != nullptr)
    {
       s32_Result = this->mpc_UpSequences->GetResults(s32_SequenceResult);
    }
@@ -1770,7 +1770,8 @@ void C_SyvUpUpdateWidget::m_Timer(void)
             this->mpc_Ui->pc_PbConnect->setEnabled(true);
 
             // Get the connect status of the nodes
-            tgl_assert(this->mpc_UpSequences->GetConnectStates(c_NodeStates) == C_NO_ERR);
+            //boundary: C_SyvUpSequences reports std::error_code, this class keeps the int32_t flow
+            tgl_assert(this->mpc_UpSequences->GetConnectStates(c_NodeStates).value() == C_NO_ERR);
             Q_EMIT (this->SigNodeConnectStates(c_NodeStates, this->mc_NodePreconditionErrors));
 
             m_HandleConnectionFailure();
@@ -1783,7 +1784,8 @@ void C_SyvUpUpdateWidget::m_Timer(void)
             // Get the connect status of the nodes and inform the UI
             std::vector<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> c_NodeStates;
 
-            tgl_assert(this->mpc_UpSequences->GetConnectStates(c_NodeStates) == C_NO_ERR);
+            //boundary: C_SyvUpSequences reports std::error_code, this class keeps the int32_t flow
+            tgl_assert(this->mpc_UpSequences->GetConnectStates(c_NodeStates).value() == C_NO_ERR);
             Q_EMIT (this->SigNodeConnectStates(c_NodeStates, this->mc_NodePreconditionErrors));
          }
 
@@ -1801,14 +1803,14 @@ void C_SyvUpUpdateWidget::m_Timer(void)
             //Signal summary
             this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", "Update mode active!");
             //Signal scene
-            if (this->mpc_Scene != NULL)
+            if (this->mpc_Scene != nullptr)
             {
                // Stop the previous animation first
                this->mpc_Scene->StopProgressAnimation(false, 0, true);
             }
 
             //Signal progress log
-            if (this->mpc_ProgressLogContent != NULL)
+            if (this->mpc_ProgressLogContent != nullptr)
             {
                this->mpc_ProgressLogContent->AddSubHeading("\nUpdate mode activated.");
             }
@@ -1925,7 +1927,8 @@ void C_SyvUpUpdateWidget::m_Timer(void)
             // Get the connect status of the nodes and inform the UI
             std::vector<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> c_NodeStates;
 
-            tgl_assert(this->mpc_UpSequences->GetUpdateStates(c_NodeStates) == C_NO_ERR);
+            //boundary: C_SyvUpSequences reports std::error_code, this class keeps the int32_t flow
+            tgl_assert(this->mpc_UpSequences->GetUpdateStates(c_NodeStates).value() == C_NO_ERR);
             Q_EMIT (this->SigNodeUpdateStates(c_NodeStates));
          }
 
@@ -2023,12 +2026,12 @@ void C_SyvUpUpdateWidget::m_Timer(void)
             //Signal other widgets (signals might be missing)
             this->mpc_Ui->pc_WiUpdateInformation->SetUpdateApplicationError(u32_ErrorNodeIndex);
             //Signal progress log
-            if (this->mpc_ProgressLogContent != NULL)
+            if (this->mpc_ProgressLogContent != nullptr)
             {
                this->mpc_ProgressLogContent->UpdateStatus(u32_ErrorNodeIndex, "FAIL", true);
             }
             //Signal scene
-            if (this->mpc_Scene != NULL)
+            if (this->mpc_Scene != nullptr)
             {
                this->mpc_Scene->SetNodeError(u32_ErrorNodeIndex);
                this->mpc_Scene->StopProgressAnimation(true, this->mu32_ApplicationIndex, true);
@@ -2144,7 +2147,7 @@ void C_SyvUpUpdateWidget::m_HandleNodePreconditionError(QString & orc_ErrorText,
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
       ou32_ErrorNodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       orc_ErrorText += "- ";
       orc_ErrorText += pc_Node->c_Properties.c_Name.c_str();
@@ -2152,12 +2155,12 @@ void C_SyvUpUpdateWidget::m_HandleNodePreconditionError(QString & orc_ErrorText,
    }
 
    //Signal progress log
-   if (this->mpc_ProgressLogContent != NULL)
+   if (this->mpc_ProgressLogContent != nullptr)
    {
       this->mpc_ProgressLogContent->UpdateStatus(ou32_ErrorNodeIndex, "FAIL", false);
    }
    //Signal scene
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->SetNodeError(ou32_ErrorNodeIndex);
    }
@@ -2189,18 +2192,18 @@ void C_SyvUpUpdateWidget::m_HandleConnectionFailure(const bool oq_SuppressMessag
                                                        "Update mode active. Nodes not capable!");
    }
    //Signal progress log
-   if (this->mpc_ProgressLogContent != NULL)
+   if (this->mpc_ProgressLogContent != nullptr)
    {
       this->mpc_ProgressLogContent->AddLogHyperlink();
    }
    //Signal scene
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       // Stop the previous animation first
       this->mpc_Scene->StopProgressAnimation(false, 0, true);
    }
 
-   if ((this->mpc_Scene != NULL) && (this->mpc_ProgressLogContent != NULL))
+   if ((this->mpc_Scene != nullptr) && (this->mpc_ProgressLogContent != nullptr))
    {
       //All nodes with any response
       const std::vector<uint32_t> c_RespondedNodes = this->mpc_ProgressLogContent->GetConnectNodeEntryIndices();
@@ -2222,7 +2225,7 @@ void C_SyvUpUpdateWidget::m_HandleConnectionFailure(const bool oq_SuppressMessag
          const C_OscRoutingRoute * const pc_Route = c_Calc.GetBestRoute();
          //Directly required
          c_NodeIndicesWhichRequireResponse.push_back(c_ActiveNoneThirdPartyNodeIndices[u32_ItNoneThirdPartyNode]);
-         if (pc_Route != NULL)
+         if (pc_Route != nullptr)
          {
             for (uint32_t u32_ItRoute = 0; u32_ItRoute < pc_Route->c_VecRoutePoints.size(); ++u32_ItRoute)
             {
@@ -2292,7 +2295,7 @@ void C_SyvUpUpdateWidget::m_HandleUpdateFailure(void)
                                                     "System Update failed!", true, false);
    this->mpc_Ui->pc_WiUpdateInformation->StopElapsedTimer();
    //Signal progress log
-   if (this->mpc_ProgressLogContent != NULL)
+   if (this->mpc_ProgressLogContent != nullptr)
    {
       this->mpc_ProgressLogContent->AddLogHyperlink();
    }
@@ -2324,14 +2327,14 @@ void C_SyvUpUpdateWidget::m_InitProgressLog(void)
    C_UsSystemView c_ViewSettings;
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       c_ViewName = pc_View->GetName().c_str();
    }
    c_ViewSettings = C_UsHandler::h_GetInstance()->GetProjSvSetupView(c_ViewName);
 
    // create toolbox
-   if (this->mpc_ProgressLog == NULL)
+   if (this->mpc_ProgressLog == nullptr)
    {
       mpc_ProgressLogContent = new C_SyvUpProgressLog();
       mpc_ProgressLog = new C_OgeWiHover(*mpc_ProgressLogContent, "PROGRESS LOG",
@@ -2340,7 +2343,7 @@ void C_SyvUpUpdateWidget::m_InitProgressLog(void)
    }
 
    // create fix minimized progress log
-   if (this->mpc_FixMinimizedProgressLog == NULL)
+   if (this->mpc_FixMinimizedProgressLog == nullptr)
    {
       this->mpc_FixMinimizedProgressLog = new C_OgeWiFixPosition("PROGRESS LOG",
                                                                  ":images/system_views/IconProgressLog.svg",
@@ -2350,7 +2353,7 @@ void C_SyvUpUpdateWidget::m_InitProgressLog(void)
    // check for saved default values for toolbox
    if (c_ViewSettings.GetUpdateProgressLogPos().x() < 0)
    {
-      if (this->mpc_ProgressLogParent == NULL)
+      if (this->mpc_ProgressLogParent == nullptr)
       {
          // default value in this error case
          this->mpc_ProgressLog->move(mhs32_WIDGET_BORDER, mhs32_TOOLBOX_INIT_POS_Y);
@@ -2396,10 +2399,10 @@ void C_SyvUpUpdateWidget::m_InitProgressLog(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_CleanUpProgressLog(void)
 {
-   if (this->mpc_ProgressLog != NULL)
+   if (this->mpc_ProgressLog != nullptr)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          QSize c_Size;
          // save position, size and state of toolbox
@@ -2420,10 +2423,10 @@ void C_SyvUpUpdateWidget::m_CleanUpProgressLog(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_AddProgressLogConnectEntry(const uint32_t ou32_NodeIndex)
 {
-   if (this->mpc_ProgressLogContent != NULL)
+   if (this->mpc_ProgressLogContent != nullptr)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          const QString c_Text = static_cast<QString>("Get status from %1...").arg(
             pc_Node->c_Properties.c_Name.c_str());
@@ -2548,7 +2551,7 @@ std::vector<bool> C_SyvUpUpdateWidget::m_GetIsFileBasedFlagForEach(void) const
          if (c_NodeActiveFlags[u32_ItActiveNode] == 1U)
          {
             const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItActiveNode);
-            if ((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL) &&
+            if ((pc_Node != nullptr) && (pc_Node->pc_DeviceDefinition != nullptr) &&
                 (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()))
             {
                if (pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].

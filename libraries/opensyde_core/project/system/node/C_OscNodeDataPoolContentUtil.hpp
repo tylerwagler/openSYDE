@@ -9,6 +9,7 @@
 #define C_OSCNODEDATAPOOLCONTENTUTIL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include "stwtypes.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
 
@@ -45,7 +46,7 @@ public:
                                    stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
                                    const uint32_t ou32_ArrayIndex = 0U);
    // set a value in min and max range
-   static int32_t h_SetValueInMinMaxRange(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Min,
+   static std::error_code h_SetValueInMinMaxRange(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Min,
                                           const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Max,
                                           stw::opensyde_core::C_OscNodeDataPoolContent & orc_Value,
                                           C_OscNodeDataPoolContentUtil::E_ValueChangedTo & ore_ValueChangedTo, const C_OscNodeDataPoolContentUtil::E_SetValue oe_SetValue =

@@ -356,7 +356,7 @@ void C_SdNdeDpListTableWidget::m_OnButtonChange(const bool & orq_AddActive, cons
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableWidget::m_OnCrcOptionChange(const bool & orq_Value)
 {
-   if (this->mpc_UndoStack != NULL)
+   if (this->mpc_UndoStack != nullptr)
    {
       this->mpc_UndoStack->DoChangeListData(this->mu32_NodeIndex,
                                             this->mu32_DataPoolIndex,
@@ -377,7 +377,7 @@ void C_SdNdeDpListTableWidget::m_InitCrcOption(void)
                                                                                                  this->mu32_DataPoolIndex);
 
    m_SetCrcVisibility(false);
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
       if (pc_DataPool->e_Type == C_OscNodeDataPool::eNVM)
       {
@@ -386,7 +386,7 @@ void C_SdNdeDpListTableWidget::m_InitCrcOption(void)
             this->mu32_DataPoolIndex,
             this->mu32_ListIndex);
 
-         if (pc_List != NULL)
+         if (pc_List != nullptr)
          {
             disconnect(this->mpc_Ui->pc_CheckBoxCrc, &QCheckBox::toggled, this,
                        &C_SdNdeDpListTableWidget::m_OnCrcOptionChange);
@@ -428,7 +428,7 @@ void C_SdNdeDpListTableWidget::m_SetCrcVisibility(const bool & orq_Visible) cons
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableWidget::m_AdjustToItems(const bool & orq_Initial)
 {
-   if ((this->mpc_TreeWidget != NULL) && (this->mq_PopUp == false))
+   if ((this->mpc_TreeWidget != nullptr) && (this->mq_PopUp == false))
    {
       //Configure
       const int32_t s32_Height = C_SdNdeDpUtil::h_GetTableSize(this->mu32_NodeIndex, this->mu32_DataPoolIndex,

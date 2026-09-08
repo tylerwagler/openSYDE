@@ -13,9 +13,11 @@
 #include "precomp_headers.hpp"
 
 #include <string>
+#include <system_error>
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscHalcConfigFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -55,47 +57,47 @@ C_OscHalcConfigStandaloneFiler::C_OscHalcConfigStandaloneFiler(void)
    \param[in]   orc_Path      Path to IO description
 
    \return
-   C_NO_ERR    data read
-   C_RANGE     specified file does not exist
-   C_NOACT     specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG    HALC configuration content is invalid or incomplete
+   Errc::success    data read
+   Errc::range      specified file does not exist
+   Errc::noact      specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config     HALC configuration content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(C_OscHalcConfigStandalone & orc_IoData,
-                                                             const std::string & orc_Path)
+std::error_code C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(C_OscHalcConfigStandalone & orc_IoData,
+                                                                     const std::string & orc_Path)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_Path) == true)
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading IO standalone data");
-      s32_Retval = ListLoadFromFile(c_XmlParser, orc_Path);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = c_XmlParser.LoadFromFile(orc_Path);
+      if (!c_Retval)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-node-io-config-standalone")
          {
-            s32_Retval = h_LoadDataStandalone(orc_IoData, c_XmlParser);
+            c_Retval = h_LoadDataStandalone(orc_IoData, c_XmlParser);
          }
          else
          {
             osc_write_log_error("Loading IO standalone data",
                                 "Could not find \"opensyde-node-io-config-standalone\" node.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
       else
       {
          osc_write_log_error("Loading IO standalone data", "File \"" + orc_Path + "\" could not be opened.");
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
       }
    }
    else
    {
       osc_write_log_error("Loading IO standalone data", "File \"" + orc_Path + "\" does not exist.");
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -108,34 +110,34 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(C_OscHalcConfigStan
    \param[in]  orc_Path    Path of file
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   data invalid
-   C_RD_WR    could not erase pre-existing file before saving
-   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   Errc::success    data saved
+   Errc::config     data invalid
+   Errc::rd_wr      could not erase pre-existing file before saving
+   Errc::rd_wr      could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(const C_OscHalcConfigStandalone & orc_IoData,
-                                                             const std::string & orc_Path)
+std::error_code C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(const C_OscHalcConfigStandalone & orc_IoData,
+                                                                     const std::string & orc_Path)
 {
-   int32_t s32_Retval = C_OscHalcConfigFiler::h_PrepareForFile(orc_Path);
+   std::error_code c_Retval = C_OscHalcConfigFiler::h_PrepareForFile(orc_Path);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       C_OscXmlParser c_XmlParser;
       c_XmlParser.CreateNodeChild("opensyde-node-io-config-standalone");
       tgl_assert(c_XmlParser.SelectRoot() == "opensyde-node-io-config-standalone");
-      s32_Retval = h_SaveDataStandalone(orc_IoData, c_XmlParser);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = h_SaveDataStandalone(orc_IoData, c_XmlParser);
+      if (!c_Retval)
       {
-         s32_Retval = ListSaveToFile(c_XmlParser, orc_Path);
-         if (s32_Retval != C_NO_ERR)
+         c_Retval = c_XmlParser.SaveToFile(orc_Path);
+         if (c_Retval)
          {
             osc_write_log_error("Saving IO standalone data", "Could not write to file \"" + orc_Path + "\".");
-            s32_Retval = C_RD_WR;
+            c_Retval = Errc::rd_wr;
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -145,14 +147,14 @@ int32_t C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(const C_OscHalcConf
    \param[in,out]  orc_XmlParser    XML with default state
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    HALC configuration content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     HALC configuration content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStandalone & orc_IoData,
-                                                             C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStandalone & orc_IoData,
+                                                                     C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    // Device Type
    if (orc_XmlParser.SelectNodeChild("definition-content-version") == "definition-content-version")
@@ -166,16 +168,16 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
       }
       catch (...)
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
    // Definition content version
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("device-type") == "device-type")
       {
@@ -185,23 +187,23 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
       }
       else
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       // Domains
       if (orc_XmlParser.SelectNodeChild("domains") == "domains")
       {
          std::string c_NodeDomain = orc_XmlParser.SelectNodeChild("domain");
 
-         while ((c_NodeDomain == "domain") && (s32_Retval == C_NO_ERR))
+         while ((c_NodeDomain == "domain") && (!c_Retval))
          {
             C_OscHalcConfigStandaloneDomain c_Domain;
 
             // The not stand alone part
-            s32_Retval = C_OscHalcConfigFiler::h_LoadIoDomain(c_Domain, orc_XmlParser);
+            c_Retval = C_OscHalcConfigFiler::h_LoadIoDomain(c_Domain, orc_XmlParser);
 
             // Domain Id
             if (orc_XmlParser.SelectNodeChild("domain-id") == "domain-id")
@@ -212,10 +214,10 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
             }
             else
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
 
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
                c_Domain.c_Channels.reserve(c_Domain.c_ChannelConfigs.size());
 
@@ -225,7 +227,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
                   std::string c_NodeChannelId = orc_XmlParser.SelectNodeChild("channel-name");
                   bool q_AtLeastOneChannelId = false;
 
-                  while ((c_NodeChannelId == "channel-name") && (s32_Retval == C_NO_ERR))
+                  while ((c_NodeChannelId == "channel-name") && (!c_Retval))
                   {
                      C_OscHalcConfigStandaloneChannel c_ChannelId;
 
@@ -244,11 +246,11 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
                      }
                      else
                      {
-                        s32_Retval = C_CONFIG;
+                        c_Retval = Errc::config;
                      }
 
                      // Parameter Ids
-                     if (s32_Retval == C_NO_ERR)
+                     if (!c_Retval)
                      {
                         if (orc_XmlParser.SelectNodeChild("parameter-ids") == "parameter-ids")
                         {
@@ -297,7 +299,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
                }
             }
 
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
                orc_IoData.c_Domains.push_back(c_Domain);
 
@@ -310,7 +312,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
             }
          }
 
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
             //Return "domains"
             orc_XmlParser.SelectNodeParent();
@@ -318,11 +320,11 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
       }
       else
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -332,14 +334,14 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
    \param[in,out]  orc_XmlParser    XML with default state
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   data invalid
+   Errc::success    data saved
+   Errc::config     data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigStandaloneFiler::h_SaveDataStandalone(const C_OscHalcConfigStandalone & orc_IoData,
-                                                             C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscHalcConfigStandaloneFiler::h_SaveDataStandalone(const C_OscHalcConfigStandalone & orc_IoData,
+                                                                     C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    uint32_t u32_DomainCounter;
 
    // Device Type
@@ -366,7 +368,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_SaveDataStandalone(const C_OscHalcConf
       tgl_assert(rc_Domain.c_Channels.size() == rc_Domain.c_StandaloneChannels.size());
 
       // Save the default not stand alone part
-      s32_Retval = C_OscHalcConfigFiler::h_SaveIoDomain(rc_Domain, orc_XmlParser);
+      c_Retval = C_OscHalcConfigFiler::h_SaveIoDomain(rc_Domain, orc_XmlParser);
       // Still in "domain"
 
       // Save the stand alone part of domain
@@ -375,7 +377,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_SaveDataStandalone(const C_OscHalcConf
       //Return
       orc_XmlParser.SelectNodeParent();
 
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          // Save the channel ids as stand alone part
          uint32_t u32_ChannelCounter;
@@ -417,5 +419,5 @@ int32_t C_OscHalcConfigStandaloneFiler::h_SaveDataStandalone(const C_OscHalcConf
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }

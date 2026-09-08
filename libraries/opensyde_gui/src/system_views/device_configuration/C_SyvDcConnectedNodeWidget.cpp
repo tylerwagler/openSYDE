@@ -268,7 +268,7 @@ void C_SyvDcConnectedNodeWidget::m_Init(void)
    this->setMaximumHeight(mhs32_HEIGHT);
    this->setMinimumWidth(mhs32_WIDTH);
    this->setMaximumWidth(mhs32_WIDTH);
-   if (this->mpc_ListWidgetItem != NULL)
+   if (this->mpc_ListWidgetItem != nullptr)
    {
       this->mpc_ListWidgetItem->setSizeHint(QSize(mhs32_WIDTH, mhs32_HEIGHT));
    }
@@ -290,7 +290,7 @@ void C_SyvDcConnectedNodeWidget::m_Init(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcConnectedNodeWidget::SetWidth(const int32_t os32_WidgetWidth)
 {
-   if (this->mpc_ListWidgetItem != NULL)
+   if (this->mpc_ListWidgetItem != nullptr)
    {
       this->setMaximumWidth(os32_WidgetWidth - mhs32_SCROLLBAR_WIDTH);
       this->mpc_ListWidgetItem->setSizeHint(QSize(os32_WidgetWidth - mhs32_SCROLLBAR_WIDTH, mhs32_HEIGHT));

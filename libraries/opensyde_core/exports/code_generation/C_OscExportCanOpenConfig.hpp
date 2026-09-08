@@ -13,6 +13,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <string>
 #include <vector>
+#include <system_error>
+
 #include "C_OscNode.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -56,57 +58,58 @@ class C_OscExportCanOpenConfig
 public:
    static std::string h_GetFileName(const uint8_t ou8_InterfaceIndex);
    static uint16_t h_ConvertOverallCodeVersion(const uint16_t ou16_GenCodeVersion);
-   static int32_t h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
-                                     const uint16_t ou16_ApplicationIndex, const uint8_t ou8_InterfaceIndex,
-                                     const uint32_t ou32_DatapoolIndex,
-                                     const std::string & orc_ExportToolInfo);
+   static std::error_code h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
+                                             const uint16_t ou16_ApplicationIndex, const uint8_t ou8_InterfaceIndex,
+                                             const uint32_t ou32_DatapoolIndex,
+                                             const std::string & orc_ExportToolInfo);
 
 protected:
    static const bool mhq_IS_HEADER_FILE = false;
    static const bool mhq_IS_IMPLEMENTATION_FILE = true;
 
-   static int32_t mh_CreateHeaderFile(const std::string & orc_ExportInfoTool,
-                                      const std::string & orc_Path, const C_OscNode & orc_Node,
-                                      const C_OscCanMessageContainer & orc_MsgContainer,
-                                      const C_OscNodeApplication & orc_Application, const uint8_t ou8_InterfaceIndex,
-                                      const std::string & orc_ProjectId);
-
-   static int32_t mh_CreateImplementationFile(const std::string & orc_ExportInfoTool,
-                                              const std::string & orc_Path, const C_OscNode & orc_Node,
+   static std::error_code mh_CreateHeaderFile(const std::string & orc_ExportInfoTool, const std::string & orc_Path,
+                                              const C_OscNode & orc_Node,
                                               const C_OscCanMessageContainer & orc_MsgContainer,
                                               const C_OscNodeApplication & orc_Application,
-                                              const C_OscNodeDataPool & orc_Datapool, const uint8_t ou8_InterfaceIndex,
-                                              const std::string & orc_ProjectId);
+                                              const uint8_t ou8_InterfaceIndex, const std::string & orc_ProjectId);
 
-   static void mh_AddHeader(const std::string & orc_ExportToolInfo, stw::scl::std::vector<std::string> & orc_Data,
+   static std::error_code mh_CreateImplementationFile(const std::string & orc_ExportInfoTool,
+                                                      const std::string & orc_Path, const C_OscNode & orc_Node,
+                                                      const C_OscCanMessageContainer & orc_MsgContainer,
+                                                      const C_OscNodeApplication & orc_Application,
+                                                      const C_OscNodeDataPool & orc_Datapool,
+                                                      const uint8_t ou8_InterfaceIndex,
+                                                      const std::string & orc_ProjectId);
+
+   static void mh_AddHeader(const std::string & orc_ExportToolInfo, std::vector<std::string> & orc_Data,
                             const uint8_t ou8_InterfaceIndex, const bool oq_FileType);
-   static void mh_AddIncludes(stw::scl::std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_Datapool,
+   static void mh_AddIncludes(std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_Datapool,
                               const uint8_t ou8_InterfaceIndex, const bool oq_IncludeDataPool);
-   static void mh_AddDefines(stw::scl::std::vector<std::string> & orc_Data, const C_OscNode & orc_Node,
+   static void mh_AddDefines(std::vector<std::string> & orc_Data, const C_OscNode & orc_Node,
                              const C_OscCanMessageContainer & orc_MsgContainer, const uint8_t ou8_InterfaceIndex,
                              const std::string & orc_ProjectId, const uint16_t ou16_GenCodeVersion,
                              const bool oq_FileType);
-   static void mh_AddGlobalVariables(stw::scl::std::vector<std::string> & orc_Data,
+   static void mh_AddGlobalVariables(std::vector<std::string> & orc_Data,
                                      const std::string & orc_DatapoolName, const C_OscNode & orc_Node,
                                      const C_OscCanMessageContainer & orc_MsgContainer,
                                      const uint8_t ou8_InterfaceIndex, const C_OscNodeDataPoolList & orc_DatapoolTxList,
                                      const C_OscNodeDataPoolList & orc_DatapoolRxList, const uint32_t ou32_TxListIndex,
                                      const uint32_t ou32_RxListIndex, const uint16_t ou16_GenCodeVersion);
-   static void mh_AddSignalDefinitions(stw::scl::std::vector<std::string> & orc_Data,
+   static void mh_AddSignalDefinitions(std::vector<std::string> & orc_Data,
                                        const C_OscNodeDataPoolList & orc_DatapoolList,
                                        const uint32_t ou32_SignalListIndex,
                                        const std::vector<C_OscCanMessage> & orc_Messages);
-   static void mh_AddPdoDefinitions(stw::scl::std::vector<std::string> & orc_Data,
+   static void mh_AddPdoDefinitions(std::vector<std::string> & orc_Data,
                                     const std::vector<C_OscCanMessage> & orc_Messages, const uint8_t ou8_InterfaceIndex,
                                     const bool oq_IsTx, const bool oq_RemoveLastComma);
-   static std::vector<uint32_t> mh_AddDeviceSpecificConciseData(stw::scl::std::vector<std::string> & orc_Data,
+   static std::vector<uint32_t> mh_AddDeviceSpecificConciseData(std::vector<std::string> & orc_Data,
                                                                 const C_OscNode & orc_Node,
                                                                 const C_OscCanMessageContainer & orc_MsgContainer,
                                                                 const uint8_t ou8_InterfaceIndex);
-   static void mh_AddDeviceSettings(stw::scl::std::vector<std::string> & orc_Data, const std::vector<uint32_t> & orc_ConcSizes,
+   static void mh_AddDeviceSettings(std::vector<std::string> & orc_Data, const std::vector<uint32_t> & orc_ConcSizes,
                                     const C_OscCanOpenManagerInfo & orc_ManInfo, const uint8_t ou8_InterfaceIndex,
                                     const uint16_t ou16_GenCodeVersion);
-   static void mh_AddManagerConfig(stw::scl::std::vector<std::string> & orc_Data, const std::string & orc_DatapoolName,
+   static void mh_AddManagerConfig(std::vector<std::string> & orc_Data, const std::string & orc_DatapoolName,
                                    const C_OscCanOpenManagerInfo & orc_ManInfo, const uint32_t ou32_ManInstance,
                                    const uint8_t ou8_InterfaceIndex, const bool oq_TxExists, const bool oq_RxExists,
                                    const bool oq_ReferenceDataPool, const uint16_t ou16_GenCodeVersion);
@@ -118,12 +121,12 @@ protected:
                                         const C_OscCanOpenManagerDeviceInfo & orc_DeviceInfo,
                                         const uint32_t ou32_NodeIndex,
                                         const C_OscCanMessageContainer & orc_MsgContainer, const bool oq_IsTx);
-   static void mh_CreateManSettings(stw::scl::std::vector<std::string> & orc_Data, const C_OscCanOpenManagerInfo & orc_ManInfo,
+   static void mh_CreateManSettings(std::vector<std::string> & orc_Data, const C_OscCanOpenManagerInfo & orc_ManInfo,
                                     const uint16_t ou16_GenCodeVersion);
-   static void mh_CreatePdoConfig(stw::scl::std::vector<std::string> & orc_Data, const std::string & orc_DatapoolName,
+   static void mh_CreatePdoConfig(std::vector<std::string> & orc_Data, const std::string & orc_DatapoolName,
                                   const uint8_t ou8_InterfaceIndex, const bool oq_TxExists, const bool oq_RxExists,
                                   const bool oq_ReferenceDataPool);
-   static void mh_ConvertSignalsToStrings(stw::scl::std::vector<std::string> & orc_Data,
+   static void mh_ConvertSignalsToStrings(std::vector<std::string> & orc_Data,
                                           const C_OscNodeDataPoolList & orc_DatapoolList,
                                           const std::vector<C_OscCanSignal> & orc_Signals,
                                           const uint32_t ou32_SignalListIndex, const bool oq_RemoveLastComma);

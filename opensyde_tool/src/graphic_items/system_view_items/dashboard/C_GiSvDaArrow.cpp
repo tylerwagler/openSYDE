@@ -51,20 +51,20 @@ C_GiSvDaArrow::C_GiSvDaArrow(const uint32_t & oru32_ViewIndex, const uint32_t & 
    C_GiBiArrow(oru64_Id, opc_Points, opc_Parent),
    C_PuiSvDbDataElement(oru32_ViewIndex, oru32_DashboardIndex, ors32_DataIndex, C_PuiSvDbDataElement::eLINE_ARROW)
 {
-   if (opc_Points == NULL)
+   if (opc_Points == nullptr)
    {
       if (this->ms32_Index >= 0)
       {
          const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-            if (pc_Dashboard != NULL)
+            if (pc_Dashboard != nullptr)
             {
                const C_PuiBsLineArrow * const pc_Item =
                   pc_Dashboard->GetLineArrow(static_cast<uint32_t>(this->ms32_Index));
-               if (pc_Item != NULL)
+               if (pc_Item != nullptr)
                {
                   m_Init(pc_Item->c_UiInteractionPoints);
                   this->C_GiSvDaArrow::LoadData();
@@ -87,14 +87,14 @@ void C_GiSvDaArrow::LoadData(void)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-         if (pc_Dashboard != NULL)
+         if (pc_Dashboard != nullptr)
          {
             const C_PuiBsLineArrow * const pc_Item =
                pc_Dashboard->GetLineArrow(static_cast<uint32_t>(this->ms32_Index));
-            if (pc_Item != NULL)
+            if (pc_Item != nullptr)
             {
                m_LoadFromData(*pc_Item);
             }
@@ -113,14 +113,14 @@ void C_GiSvDaArrow::UpdateData(void)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-         if (pc_Dashboard != NULL)
+         if (pc_Dashboard != nullptr)
          {
             const C_PuiBsLineArrow * const pc_Item =
                pc_Dashboard->GetLineArrow(static_cast<uint32_t>(this->ms32_Index));
-            if (pc_Item != NULL)
+            if (pc_Item != nullptr)
             {
                C_PuiBsLineArrow c_Item = *pc_Item;
 

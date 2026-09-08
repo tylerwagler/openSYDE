@@ -34,7 +34,7 @@ class C_CieExportDbc
 public:
    static int32_t h_ExportNetwork(const std::string & orc_File,
                                   const C_CieConverter::C_CieCommDefinition & orc_Definition,
-                                  stw::scl::std::vector<std::string> & orc_WarningMessages,
+                                  std::vector<std::string> & orc_WarningMessages,
                                   std::string & orc_ErrorMessage);
 
    static int32_t h_GetNodeMapping(std::map<std::string, std::string> & orc_NodeMapping);
@@ -49,7 +49,7 @@ public:
    static int32_t h_GetExportStatistic(C_ExportStatistic & orc_ExportStatistic);
 
 private:
-   static stw::scl::std::vector<std::string> mhc_WarningMessages; // global warnings e.g. why some messages could not be exported
+   static std::vector<std::string> mhc_WarningMessages; // global warnings e.g. why some messages could not be exported
    static std::string mhc_ErrorMessage;        // description of error which caused the export to fail
 
    static int32_t mh_SetNodes(const std::vector<C_CieConverter::C_CieNode> & orc_CieNodes, std::map<std::string,

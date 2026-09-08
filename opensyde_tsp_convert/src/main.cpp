@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
 #include <cstdio>
 #include <fstream>
 #include <iostream>
@@ -171,7 +172,7 @@ static C_OscNode mh_BuildNodeFromV2(const C_OscTargetSupportPackageV2 & orc_V2,
    // Pad c_ComInterfaces to match the device's CAN+ETH count (default IPs/node-IDs).
    // mh_KeepTspProperties asserts size equality before copying bus connections; without this the
    // V3 importer drops every existing bus wiring on import.
-   if (opc_DeviceDef != NULL)
+   if (opc_DeviceDef != nullptr)
    {
       c_Node.c_Properties.CreateComInterfaces(*opc_DeviceDef, 0U);
 
@@ -251,7 +252,8 @@ static int32_t mh_WriteEmptyUiNodeXml(const std::string & orc_FilePath)
       tgl_assert(c_XmlParser.SelectNodeParent() == "node");
    }
 
-   return ListSaveToFile(c_XmlParser, orc_FilePath);
+   //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+   return c_XmlParser.SaveToFile(orc_FilePath).value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -283,7 +285,8 @@ static int32_t mh_WriteWrapperXml(const std::string & orc_OutputTspPath, const s
       tgl_assert(c_XmlParser.SelectNodeParent() == "opensyde-target-support-package");
    }
 
-   return ListSaveToFile(c_XmlParser, orc_OutputTspPath);
+   //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+   return c_XmlParser.SaveToFile(orc_OutputTspPath).value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -308,7 +311,7 @@ int main(const int argc, char_t * const opacn_Argv[])
    std::string c_DeviceLibPath;
    {
       const char_t * const pcn_Home = std::getenv("HOME");
-      if (pcn_Home != NULL)
+      if (pcn_Home != nullptr)
       {
          c_DeviceLibPath = std::string(pcn_Home) + "/.local/opt/openSYDE/devices";
       }
@@ -358,7 +361,8 @@ int main(const int argc, char_t * const opacn_Argv[])
 
    // --- 1) Load V2 TSP --------------------------------------------------------------------------------------------
    C_OscTargetSupportPackageV2 c_V2;
-   int32_t s32_Retval = C_OscTargetSupportPackageV2Filer::h_Load(c_V2, c_InputPath);
+   //the filer reports std::error_code now; this tool still runs on the STW int32_t convention
+   int32_t s32_Retval = C_OscTargetSupportPackageV2Filer::h_Load(c_V2, c_InputPath).value();
    if (s32_Retval != C_NO_ERR)
    {
       std::cerr << mhc_TOOL_NAME.c_str() << ": failed to load V2 TSP (rc=" << s32_Retval << ")\n";
@@ -368,18 +372,19 @@ int main(const int argc, char_t * const opacn_Argv[])
    // --- 2) Look up the device definition (best-effort) ------------------------------------------------------------
    // Without it the synthesized node ships zero com-interfaces, which makes the V3 importer drop bus wiring.
    C_OscDeviceManager c_DeviceManager;
-   const C_OscDeviceDefinition * pc_DeviceDef = NULL;
+   const C_OscDeviceDefinition * pc_DeviceDef = nullptr;
    uint32_t u32_SubDeviceIndex = 0U;
    if (TglDirectoryExists(c_DeviceLibPath))
    {
       std::vector<std::string> c_Roots;
       c_Roots.push_back(c_DeviceLibPath);
-      const int32_t s32_LoadRc = c_DeviceManager.LoadFromPaths(c_Roots);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      const int32_t s32_LoadRc = c_DeviceManager.LoadFromPaths(c_Roots).value();
       if (s32_LoadRc == C_NO_ERR)
       {
          pc_DeviceDef = c_DeviceManager.LookForDevice(c_V2.c_DeviceName, "", u32_SubDeviceIndex);
       }
-      if (pc_DeviceDef == NULL)
+      if (pc_DeviceDef == nullptr)
       {
          std::cerr << mhc_TOOL_NAME.c_str() << ": warning: device \"" << c_V2.c_DeviceName.c_str()
                    << "\" not found under " << c_DeviceLibPath.c_str()
@@ -413,7 +418,8 @@ int main(const int argc, char_t * const opacn_Argv[])
 
    std::vector<std::string> c_CreatedFiles;
    const std::map<uint32_t, std::string> c_EmptyNodeMap;
-   s32_Retval = C_OscNodeFiler::h_SaveNodeFile(c_Node, c_OscNodePath, &c_CreatedFiles, c_EmptyNodeMap);
+   //likewise: convert at the boundary, the local stays on the STW int32_t convention
+   s32_Retval = C_OscNodeFiler::h_SaveNodeFile(c_Node, c_OscNodePath, &c_CreatedFiles, c_EmptyNodeMap).value();
    if (s32_Retval != C_NO_ERR)
    {
       std::cerr << mhc_TOOL_NAME.c_str() << ": h_SaveNodeFile failed (rc=" << s32_Retval << ")\n";
@@ -445,7 +451,9 @@ int main(const int argc, char_t * const opacn_Argv[])
    }
 
    std::string c_ZipError;
-   s32_Retval = C_OscZipFile::h_CreateZipFile(c_StageDirWithSep, c_FilesToZip, c_NodeZipPath, &c_ZipError);
+   //C_OscZipFile now reports std::error_code; this local is shared with unmigrated calls
+   s32_Retval = C_OscZipFile::h_CreateZipFile(c_StageDirWithSep, c_FilesToZip, c_NodeZipPath,
+                                              &c_ZipError).value();
    if (s32_Retval != C_NO_ERR)
    {
       std::cerr << mhc_TOOL_NAME.c_str() << ": zip creation failed (rc=" << s32_Retval << "): "

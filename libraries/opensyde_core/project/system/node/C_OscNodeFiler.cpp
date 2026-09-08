@@ -15,7 +15,9 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
+#include <system_error>
 #include "TglUtils.hpp"
 #include "C_OscNodeFiler.hpp"
 #include "C_OscNodeCommFiler.hpp"
@@ -54,16 +56,16 @@ using namespace stw::opensyde_core;
                                  (default = false)
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode & orc_Node, const std::string & orc_FilePath,
-                                       const bool oq_SkipContent)
+std::error_code C_OscNodeFiler::h_LoadNodeFile(C_OscNode & orc_Node, const std::string & orc_FilePath,
+                                               const bool oq_SkipContent)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_FilePath,
-                                                                         "opensyde-node-core-definition");
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_FilePath,
+                                                                               "opensyde-node-core-definition");
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -76,11 +78,11 @@ int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode & orc_Node, const std::string &
       catch (...)
       {
          osc_write_log_error("Loading node definition", "\"file-version\" could not be converted to a number.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
 
       //is the file version one we know ?
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          osc_write_log_info("Loading node definition", "Value of \"file-version\": " +
                             std::to_string(u16_FileVersion));
@@ -89,7 +91,7 @@ int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode & orc_Node, const std::string &
          {
             osc_write_log_error("Loading node definition",
                                 "Version defined by \"file-version\" is not supported.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
 
@@ -99,26 +101,26 @@ int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode & orc_Node, const std::string &
    else
    {
       osc_write_log_error("Loading node definition", "Could not find \"file-version\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (c_XmlParser.SelectNodeChild("node") == "node")
       {
-         s32_Retval = C_OscNodeFiler::h_LoadNode(orc_Node, c_XmlParser, orc_FilePath, oq_SkipContent);
+         c_Retval = C_OscNodeFiler::h_LoadNode(orc_Node, c_XmlParser, orc_FilePath, oq_SkipContent);
       }
       else
       {
          osc_write_log_error("Loading node definition", "Could not find \"node\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
       //More details are in log
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -135,14 +137,14 @@ int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode & orc_Node, const std::string &
                                     (default = false)
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_LoadNode(C_OscNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
-                                   const std::string & orc_BasePath, const bool oq_SkipContent)
+std::error_code C_OscNodeFiler::h_LoadNode(C_OscNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
+                                           const std::string & orc_BasePath, const bool oq_SkipContent)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
    bool q_AutoNvmStartAddressHere;
 
    orc_Node.Initialize();
@@ -162,35 +164,35 @@ int32_t C_OscNodeFiler::h_LoadNode(C_OscNode & orc_Node, C_OscXmlParserBase & or
       orc_XmlParser.SelectNodeParent(); //back up to node
    }
 
-   s32_Retval = mh_LoadProperties(orc_Node.c_Properties, orc_XmlParser);
-   if (s32_Retval == C_NO_ERR)
+   c_Retval = mh_LoadProperties(orc_Node.c_Properties, orc_XmlParser);
+   if (!c_Retval)
    {
-      s32_Retval = mh_LoadApplications(orc_Node.c_Applications, orc_XmlParser);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = mh_LoadApplications(orc_Node.c_Applications, orc_XmlParser);
+      if (!c_Retval)
       {
          if (oq_SkipContent == false)
          {
-            s32_Retval = mh_LoadDataPools(orc_Node, orc_XmlParser, orc_BasePath);
+            c_Retval = mh_LoadDataPools(orc_Node, orc_XmlParser, orc_BasePath);
 
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
-               s32_Retval = mh_LoadHalc(orc_Node.c_HalcConfig, orc_XmlParser, orc_BasePath);
+               c_Retval = mh_LoadHalc(orc_Node.c_HalcConfig, orc_XmlParser, orc_BasePath);
                //AFTER loading the datapools
-               if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("com-protocols") == "com-protocols"))
+               if ((!c_Retval) && (orc_XmlParser.SelectNodeChild("com-protocols") == "com-protocols"))
                {
-                  s32_Retval = h_LoadNodeComProtocols(orc_Node.c_ComProtocols, orc_Node.c_DataPools, orc_XmlParser,
-                                                      orc_BasePath);
-                  if (s32_Retval == C_NO_ERR)
+                  c_Retval = h_LoadNodeComProtocols(orc_Node.c_ComProtocols, orc_Node.c_DataPools, orc_XmlParser,
+                                                    orc_BasePath);
+                  if (!c_Retval)
                   {
                      //Return
                      tgl_assert(orc_XmlParser.SelectNodeParent() == "node"); //back up to node
-                     s32_Retval = mh_LoadCanOpenManagers(orc_Node.c_CanOpenManagers, orc_XmlParser, orc_BasePath);
-                     if (s32_Retval == C_NO_ERR)
+                     c_Retval = mh_LoadCanOpenManagers(orc_Node.c_CanOpenManagers, orc_XmlParser, orc_BasePath);
+                     if (!c_Retval)
                      {
-                        s32_Retval = mh_LoadDataLoggers(orc_Node.c_DataLoggerJobs, orc_XmlParser, orc_BasePath);
-                        if (s32_Retval == C_NO_ERR)
+                        c_Retval = mh_LoadDataLoggers(orc_Node.c_DataLoggerJobs, orc_XmlParser, orc_BasePath);
+                        if (!c_Retval)
                         {
-                           s32_Retval = mh_LoadXappProperties(orc_Node.c_XappProperties, orc_XmlParser, orc_BasePath);
+                           c_Retval = mh_LoadXappProperties(orc_Node.c_XappProperties, orc_XmlParser, orc_BasePath);
                         }
                      }
                   }
@@ -198,13 +200,13 @@ int32_t C_OscNodeFiler::h_LoadNode(C_OscNode & orc_Node, C_OscXmlParserBase & or
                else
                {
                   osc_write_log_error("Loading node definition", "Could not find \"com-protocols\" node.");
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
             }
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -218,39 +220,39 @@ int32_t C_OscNodeFiler::h_LoadNode(C_OscNode & orc_Node, C_OscXmlParserBase & or
    \param[in]      orc_NodeIndicesToNameMap  Node indices to name map
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   file could not be created
+   Errc::success    data saved
+   Errc::config     file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_SaveNodeFile(const C_OscNode & orc_Node, const std::string & orc_FilePath,
-                                       std::vector<std::string> * const opc_CreatedFiles, const std::map<uint32_t,
-                                                                                                         std::string> & orc_NodeIndicesToNameMap)
+std::error_code C_OscNodeFiler::h_SaveNodeFile(const C_OscNode & orc_Node, const std::string & orc_FilePath,
+                                               std::vector<std::string> * const opc_CreatedFiles,
+                                               const std::map<uint32_t, std::string> & orc_NodeIndicesToNameMap)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath,
-                                                                    "opensyde-node-core-definition");
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath,
+                                                                          "opensyde-node-core-definition");
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       //Version
       c_XmlParser.CreateNodeChild("file-version", "1");
       tgl_assert(c_XmlParser.CreateAndSelectNodeChild("node") == "node");
       //node
-      s32_Retval = C_OscNodeFiler::h_SaveNode(orc_Node, c_XmlParser, orc_FilePath, opc_CreatedFiles,
-                                              orc_NodeIndicesToNameMap);
+      c_Retval = C_OscNodeFiler::h_SaveNode(orc_Node, c_XmlParser, orc_FilePath, opc_CreatedFiles,
+                                            orc_NodeIndicesToNameMap);
       //Don't forget to save!
-      if (ListSaveToFile(c_XmlParser, orc_FilePath) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath))
       {
          osc_write_log_error("Saving node definition", "Could not create file for node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
       //More details are in log
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -267,16 +269,16 @@ int32_t C_OscNodeFiler::h_SaveNodeFile(const C_OscNode & orc_Node, const std::st
    \param[in]      orc_NodeIndicesToNameMap  Node indices to name map
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   file could not be created
+   Errc::success    data saved
+   Errc::config     file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_SaveNode(const C_OscNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
-                                   const std::string & orc_BasePath,
-                                   std::vector<std::string> * const opc_CreatedFiles, const std::map<uint32_t,
-                                                                                                     std::string> & orc_NodeIndicesToNameMap)
+std::error_code C_OscNodeFiler::h_SaveNode(const C_OscNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
+                                           const std::string & orc_BasePath,
+                                           std::vector<std::string> * const opc_CreatedFiles, const std::map<uint32_t,
+                                           std::string> & orc_NodeIndicesToNameMap)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
    orc_XmlParser.SetAttributeBool("datapool-auto-nvm-start-address", orc_Node.q_DatapoolAutoNvmStartAddress);
    //Type
@@ -284,32 +286,32 @@ int32_t C_OscNodeFiler::h_SaveNode(const C_OscNode & orc_Node, C_OscXmlParserBas
    mh_SaveProperties(orc_Node.c_Properties, orc_XmlParser);
    mh_SaveApplications(orc_Node.c_Applications, orc_XmlParser);
    orc_XmlParser.CreateAndSelectNodeChild("com-protocols");
-   s32_Retval = h_SaveNodeComProtocols(orc_Node.c_ComProtocols, orc_Node.c_DataPools, orc_XmlParser, orc_BasePath,
-                                       opc_CreatedFiles);
-   if (s32_Retval == C_NO_ERR)
+   c_Retval = h_SaveNodeComProtocols(orc_Node.c_ComProtocols, orc_Node.c_DataPools, orc_XmlParser, orc_BasePath,
+                                     opc_CreatedFiles);
+   if (!c_Retval)
    {
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
-      s32_Retval = mh_SaveDataPools(orc_Node.c_DataPools, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
+      c_Retval = mh_SaveDataPools(orc_Node.c_DataPools, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_SaveHalc(orc_Node.c_HalcConfig, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
+      c_Retval = mh_SaveHalc(orc_Node.c_HalcConfig, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_SaveCanOpenManagers(orc_Node.c_CanOpenManagers, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
-                                          orc_NodeIndicesToNameMap);
+      c_Retval = mh_SaveCanOpenManagers(orc_Node.c_CanOpenManagers, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
+                                        orc_NodeIndicesToNameMap);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_SaveDataLoggers(orc_Node.c_DataLoggerJobs, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
+      c_Retval = mh_SaveDataLoggers(orc_Node.c_DataLoggerJobs, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_SaveXappProperties(orc_Node, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
+      c_Retval = mh_SaveXappProperties(orc_Node, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -325,16 +327,16 @@ int32_t C_OscNodeFiler::h_SaveNode(const C_OscNode & orc_Node, C_OscXmlParserBas
    \param[in]      orc_BasePath           Base path
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & orc_NodeComProtocols,
-                                               const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
-                                               C_OscXmlParserBase & orc_XmlParser,
-                                               const std::string & orc_BasePath)
+std::error_code C_OscNodeFiler::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & orc_NodeComProtocols,
+                                                       const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
+                                                       C_OscXmlParserBase & orc_XmlParser,
+                                                       const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    std::string c_CurNodeComProtocol;
    uint32_t u32_ExpectedSize = 0UL;
@@ -356,20 +358,19 @@ int32_t C_OscNodeFiler::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & o
       do
       {
          C_OscCanProtocol c_CurComProtocol;
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
             if (orc_BasePath.empty())
             {
-               s32_Retval = C_OscNodeCommFiler::h_LoadNodeComProtocol(c_CurComProtocol, orc_XmlParser,
-                                                                      orc_NodeDataPools);
+               c_Retval = C_OscNodeCommFiler::h_LoadNodeComProtocol(c_CurComProtocol, orc_XmlParser, orc_NodeDataPools);
             }
             else
             {
-               s32_Retval = C_OscNodeCommFiler::h_LoadNodeComProtocolFile(c_CurComProtocol,
-                                                                          C_OscSystemFilerUtil::h_CombinePaths(
-                                                                             orc_BasePath,
-                                                                             orc_XmlParser.GetNodeContent()),
-                                                                          orc_NodeDataPools);
+               c_Retval = C_OscNodeCommFiler::h_LoadNodeComProtocolFile(c_CurComProtocol,
+                                                                        C_OscSystemFilerUtil::h_CombinePaths(
+                                                                           orc_BasePath,
+                                                                           orc_XmlParser.GetNodeContent(
+                                                                              )), orc_NodeDataPools);
             }
          }
 
@@ -384,7 +385,7 @@ int32_t C_OscNodeFiler::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & o
       tgl_assert(orc_XmlParser.SelectNodeParent() == "com-protocols");
    }
    //Compare length
-   if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true))
+   if ((!c_Retval) && (q_ExpectedSizeHere == true))
    {
       if (u32_ExpectedSize != orc_NodeComProtocols.size())
       {
@@ -394,7 +395,7 @@ int32_t C_OscNodeFiler::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & o
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -411,20 +412,20 @@ int32_t C_OscNodeFiler::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & o
    \param[in,out]  opc_CreatedFiles       Optional storage for history of all created files
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   file could not be created
+   Errc::success    data saved
+   Errc::config     file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_SaveNodeComProtocols(const std::vector<C_OscCanProtocol> & orc_NodeComProtocols,
-                                               const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
-                                               C_OscXmlParserBase & orc_XmlParser,
-                                               const std::string & orc_BasePath,
-                                               std::vector<std::string> * const opc_CreatedFiles)
+std::error_code C_OscNodeFiler::h_SaveNodeComProtocols(const std::vector<C_OscCanProtocol> & orc_NodeComProtocols,
+                                                       const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
+                                                       C_OscXmlParserBase & orc_XmlParser,
+                                                       const std::string & orc_BasePath,
+                                                       std::vector<std::string> * const opc_CreatedFiles)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_NodeComProtocols.size()));
-   for (uint32_t u32_ItComProtocol = 0; (u32_ItComProtocol < orc_NodeComProtocols.size()) && (s32_Retval == C_NO_ERR);
+   for (uint32_t u32_ItComProtocol = 0; (u32_ItComProtocol < orc_NodeComProtocols.size()) && (!c_Retval);
         ++u32_ItComProtocol)
    {
       const C_OscCanProtocol & rc_CurProtocol = orc_NodeComProtocols[u32_ItComProtocol];
@@ -443,13 +444,12 @@ int32_t C_OscNodeFiler::h_SaveNodeComProtocols(const std::vector<C_OscCanProtoco
             const std::string c_FileName = C_OscNodeCommFiler::h_GetFileName(rc_CurDatapool.c_Name);
             const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
             //Save comm definition file
-            s32_Retval = C_OscNodeCommFiler::h_SaveNodeComProtocolFile(orc_NodeComProtocols[u32_ItComProtocol],
-                                                                       c_CombinedFileName,
-                                                                       rc_CurDatapool.c_Name);
+            c_Retval = C_OscNodeCommFiler::h_SaveNodeComProtocolFile(orc_NodeComProtocols[u32_ItComProtocol],
+                                                                     c_CombinedFileName, rc_CurDatapool.c_Name);
             //Set file reference
             orc_XmlParser.SetNodeContent(c_FileName);
             //Store if necessary
-            if (opc_CreatedFiles != NULL)
+            if (opc_CreatedFiles != nullptr)
             {
                opc_CreatedFiles->push_back(c_FileName);
             }
@@ -457,7 +457,7 @@ int32_t C_OscNodeFiler::h_SaveNodeComProtocols(const std::vector<C_OscCanProtoco
       }
       else
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
          osc_write_log_error("Saving system definition",
                              "Invalid index " + std::to_string(
                                 rc_CurProtocol.u32_DataPoolIndex) + " for comm protocol");
@@ -465,7 +465,7 @@ int32_t C_OscNodeFiler::h_SaveNodeComProtocols(const std::vector<C_OscCanProtoco
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "com-protocols");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -505,13 +505,14 @@ std::string C_OscNodeFiler::h_GetFileName(void)
    \param[in,out]  orc_XmlParser       XML with core active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadProperties(C_OscNodeProperties & orc_NodeProperties, C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeFiler::mh_LoadProperties(C_OscNodeProperties & orc_NodeProperties,
+                                                  C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("properties") == "properties")
    {
@@ -527,7 +528,7 @@ int32_t C_OscNodeFiler::mh_LoadProperties(C_OscNodeProperties & orc_NodeProperti
       else
       {
          osc_write_log_error("Loading node definition", "Could not find \"properties\".\"name\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
       //Comment
       if (orc_XmlParser.SelectNodeChild("comment") == "comment")
@@ -537,46 +538,45 @@ int32_t C_OscNodeFiler::mh_LoadProperties(C_OscNodeProperties & orc_NodeProperti
          tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
       }
       //Diagnostic server
-      if ((orc_XmlParser.SelectNodeChild("diagnostic-server") == "diagnostic-server") && (s32_Retval == C_NO_ERR))
+      if ((orc_XmlParser.SelectNodeChild("diagnostic-server") == "diagnostic-server") && (!c_Retval))
       {
-         s32_Retval =
-            mh_StringToDiagnosticServer(orc_XmlParser.GetNodeContent(), orc_NodeProperties.e_DiagnosticServer);
+         c_Retval = mh_StringToDiagnosticServer(orc_XmlParser.GetNodeContent(), orc_NodeProperties.e_DiagnosticServer);
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
       }
       else
       {
          osc_write_log_error("Loading node definition", "Could not find \"properties\".\"diagnostic-server\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
       //Flash loader
-      if ((orc_XmlParser.SelectNodeChild("flash-loader") == "flash-loader") && (s32_Retval == C_NO_ERR))
+      if ((orc_XmlParser.SelectNodeChild("flash-loader") == "flash-loader") && (!c_Retval))
       {
-         s32_Retval = mh_StringToFlashLoader(orc_XmlParser.GetNodeContent(), orc_NodeProperties.e_FlashLoader);
+         c_Retval = mh_StringToFlashLoader(orc_XmlParser.GetNodeContent(), orc_NodeProperties.e_FlashLoader);
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
       }
       else
       {
          osc_write_log_error("Loading node definition", "Could not find \"properties\".\"flash-loader\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
 
       //Communication interfaces
       if ((orc_XmlParser.SelectNodeChild("communication-interfaces") == "communication-interfaces") &&
-          (s32_Retval == C_NO_ERR))
+          (!c_Retval))
       {
-         s32_Retval = mh_LoadComInterface(orc_NodeProperties.c_ComInterfaces, orc_XmlParser);
+         c_Retval = mh_LoadComInterface(orc_NodeProperties.c_ComInterfaces, orc_XmlParser);
       }
 
       //openSYDE server settings
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = mh_LoadOsyServerSettings(orc_NodeProperties.c_OpenSydeServerSettings, orc_XmlParser);
+         c_Retval = mh_LoadOsyServerSettings(orc_NodeProperties.c_OpenSydeServerSettings, orc_XmlParser);
       }
 
       //Flashloader settings (legacy STW Flashloader; ignore if present in old projects)
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          if (orc_XmlParser.SelectNodeChild("stw-flashloader-settings") == "stw-flashloader-settings")
          {
@@ -585,12 +585,12 @@ int32_t C_OscNodeFiler::mh_LoadProperties(C_OscNodeProperties & orc_NodeProperti
       }
 
       //Code export settings
-      if ((orc_XmlParser.SelectNodeChild("code-export-settings") == "code-export-settings") && (s32_Retval == C_NO_ERR))
+      if ((orc_XmlParser.SelectNodeChild("code-export-settings") == "code-export-settings") && (!c_Retval))
       {
          if (orc_XmlParser.SelectNodeChild("scaling-support") == "scaling-support")
          {
-            s32_Retval = C_OscSystemFilerUtil::h_StringToCodeExportScalingType(
-               orc_XmlParser.GetNodeContent(), orc_NodeProperties.c_CodeExportSettings.e_ScalingSupport);
+            c_Retval = C_OscSystemFilerUtil::h_StringToCodeExportScalingType(orc_XmlParser.GetNodeContent(
+               ), orc_NodeProperties.c_CodeExportSettings.e_ScalingSupport);
             //Return
             tgl_assert(orc_XmlParser.SelectNodeParent() == "code-export-settings");
          }
@@ -613,10 +613,10 @@ int32_t C_OscNodeFiler::mh_LoadProperties(C_OscNodeProperties & orc_NodeProperti
    else
    {
       osc_write_log_error("Loading node definition", "Could not find \"properties\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -671,14 +671,14 @@ void C_OscNodeFiler::mh_SaveProperties(const C_OscNodeProperties & orc_NodePrope
    \param[in,out]  orc_XmlParser       XML with core active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSettings> & orc_ComInterfaces,
-                                            C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSettings> & orc_ComInterfaces,
+                                                    C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    std::string c_CurNode = orc_XmlParser.SelectNodeChild("communication-interface");
 
    if (c_CurNode == "communication-interface")
@@ -687,12 +687,12 @@ int32_t C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSet
       {
          C_OscNodeComInterfaceSettings c_ComInterface;
 
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
-            s32_Retval = C_OscXappPropertiesFiler::h_LoadCommInterfaceId(c_ComInterface.e_InterfaceType,
-                                                                         c_ComInterface.u8_InterfaceNumber,
-                                                                         orc_XmlParser, "communication-interface",
-                                                                         "Loading node definition");
+            c_Retval = C_OscXappPropertiesFiler::h_LoadCommInterfaceId(c_ComInterface.e_InterfaceType,
+                                                                       c_ComInterface.u8_InterfaceNumber, orc_XmlParser,
+                                                                       "communication-interface",
+                                                                       "Loading node definition");
          }
 
          c_ComInterface.u8_NodeId = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("node-id"));
@@ -716,7 +716,7 @@ int32_t C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSet
          }
 
          //IP address
-         if ((orc_XmlParser.SelectNodeChild("ip-address") == "ip-address") && (s32_Retval == C_NO_ERR))
+         if ((orc_XmlParser.SelectNodeChild("ip-address") == "ip-address") && (!c_Retval))
          {
             c_ComInterface.c_Ip.au8_IpAddress[0] = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte1"));
             c_ComInterface.c_Ip.au8_IpAddress[1] = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte2"));
@@ -734,7 +734,7 @@ int32_t C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSet
          }
 
          //net mask
-         if ((orc_XmlParser.SelectNodeChild("net-mask") == "net-mask") && (s32_Retval == C_NO_ERR))
+         if ((orc_XmlParser.SelectNodeChild("net-mask") == "net-mask") && (!c_Retval))
          {
             c_ComInterface.c_Ip.au8_NetMask[0] = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte1"));
             c_ComInterface.c_Ip.au8_NetMask[1] = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte2"));
@@ -752,7 +752,7 @@ int32_t C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSet
          }
 
          //default gateway
-         if ((orc_XmlParser.SelectNodeChild("default-gateway") == "default-gateway") && (s32_Retval == C_NO_ERR))
+         if ((orc_XmlParser.SelectNodeChild("default-gateway") == "default-gateway") && (!c_Retval))
          {
             c_ComInterface.c_Ip.au8_DefaultGateway[0] =
                static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte1"));
@@ -792,7 +792,7 @@ int32_t C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSet
          {
             osc_write_log_error("Loading node definition",
                                 "Could not find \"communication-interface\".\"bus\" node.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
          orc_ComInterfaces.push_back(c_ComInterface);
          c_CurNode = orc_XmlParser.SelectNodeNext("communication-interface");
@@ -804,7 +804,7 @@ int32_t C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSet
    //Return
    tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -901,14 +901,14 @@ void C_OscNodeFiler::mh_SaveComInterface(const std::vector<C_OscNodeComInterface
    \param[in,out]  orc_XmlParser          XML with core active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & orc_NodeApplications,
-                                            C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & orc_NodeApplications,
+                                                    C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("applications") == "applications")
    {
@@ -936,7 +936,7 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
             }
             else
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
 
             if (orc_XmlParser.AttributeExists("process-id") == true)
@@ -960,7 +960,7 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
             }
 
             //Type
-            if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("type") == "type"))
+            if ((!c_Retval) && (orc_XmlParser.SelectNodeChild("type") == "type"))
             {
                C_OscNodeApplication::h_StringToApplication(orc_XmlParser.GetNodeContent(), c_CurApplication.e_Type);
                //Return
@@ -968,10 +968,10 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
             }
             else
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
             //Name
-            if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("name") == "name"))
+            if ((!c_Retval) && (orc_XmlParser.SelectNodeChild("name") == "name"))
             {
                c_CurApplication.c_Name = orc_XmlParser.GetNodeContent();
                //Return
@@ -979,11 +979,11 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
             }
             else
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
 
             //Comment
-            if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("comment") == "comment"))
+            if ((!c_Retval) && (orc_XmlParser.SelectNodeChild("comment") == "comment"))
             {
                c_CurApplication.c_Comment = orc_XmlParser.GetNodeContent();
                //Return
@@ -991,10 +991,10 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
             }
             else
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
 
-            if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("project-path") == "project-path"))
+            if ((!c_Retval) && (orc_XmlParser.SelectNodeChild("project-path") == "project-path"))
             {
                c_CurApplication.c_ProjectPath = orc_XmlParser.GetNodeContent();
                //Return
@@ -1006,7 +1006,7 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
                c_CurApplication.c_ProjectPath = "";
             }
 
-            if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("ide-call") == "ide-call"))
+            if ((!c_Retval) && (orc_XmlParser.SelectNodeChild("ide-call") == "ide-call"))
             {
                c_CurApplication.c_IdeCall = orc_XmlParser.GetNodeContent();
                //Return
@@ -1018,7 +1018,7 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
                c_CurApplication.c_IdeCall = "";
             }
 
-            if ((s32_Retval == C_NO_ERR) &&
+            if ((!c_Retval) &&
                 (orc_XmlParser.SelectNodeChild("code-generator-path") == "code-generator-path"))
             {
                c_CurApplication.c_CodeGeneratorPath = orc_XmlParser.GetNodeContent();
@@ -1031,7 +1031,7 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
                c_CurApplication.c_CodeGeneratorPath = "";
             }
 
-            if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("generate-path") == "generate-path"))
+            if ((!c_Retval) && (orc_XmlParser.SelectNodeChild("generate-path") == "generate-path"))
             {
                c_CurApplication.c_GeneratePath = orc_XmlParser.GetNodeContent();
                //Return
@@ -1043,14 +1043,14 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
                c_CurApplication.c_GeneratePath = "";
             }
 
-            if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("result-path") == "result-path"))
+            if ((!c_Retval) && (orc_XmlParser.SelectNodeChild("result-path") == "result-path"))
             {
                c_CurApplication.c_ResultPaths.resize(1);
                c_CurApplication.c_ResultPaths[0] = orc_XmlParser.GetNodeContent();
                //Return
                tgl_assert(orc_XmlParser.SelectNodeParent() == "application");
             }
-            else if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("result") == "result"))
+            else if ((!c_Retval) && (orc_XmlParser.SelectNodeChild("result") == "result"))
             {
                uint32_t u32_ExpectedOutputfileNumber = 0UL;
                const bool q_ExpectedSizeForOutputFiles = orc_XmlParser.AttributeExists("length");
@@ -1094,7 +1094,7 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
                else
                {
                   // At least one output file must be provided in list
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
             }
             else
@@ -1107,12 +1107,12 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
             orc_NodeApplications.push_back(c_CurApplication);
             c_CurNode = orc_XmlParser.SelectNodeNext("application");
          }
-         while ((c_CurNode == "application") && (s32_Retval == C_NO_ERR));
+         while ((c_CurNode == "application") && (!c_Retval));
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "applications");
       }
       //Compare length
-      if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true))
+      if ((!c_Retval) && (q_ExpectedSizeHere == true))
       {
          if (u32_ExpectedSize != orc_NodeApplications.size())
          {
@@ -1127,10 +1127,10 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1191,14 +1191,14 @@ void C_OscNodeFiler::mh_SaveApplications(const std::vector<C_OscNodeApplication>
    \param[in]      orc_BasePath     Base path
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
-                                         const std::string & orc_BasePath)
+std::error_code C_OscNodeFiler::mh_LoadDataPools(C_OscNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
+                                                 const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Clear
    orc_Node.c_DataPools.clear();
@@ -1223,17 +1223,15 @@ int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode & orc_Node, C_OscXmlParserBas
             C_OscNodeDataPool c_CurDataPool;
             if (orc_BasePath.empty())
             {
-               s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPool(c_CurDataPool, orc_XmlParser);
+               c_Retval = C_OscNodeDataPoolFiler::h_LoadDataPool(c_CurDataPool, orc_XmlParser);
             }
             else
             {
-               s32_Retval =
-                  C_OscNodeDataPoolFiler::h_LoadDataPoolFile(c_CurDataPool,
-                                                             C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
-                                                                                                  orc_XmlParser.
-                                                                                                  GetNodeContent()));
+               c_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolFile(c_CurDataPool,
+                                                                     C_OscSystemFilerUtil::h_CombinePaths(
+                                                                        orc_BasePath, orc_XmlParser.GetNodeContent()));
             }
-            if (s32_Retval != C_NO_ERR)
+            if (c_Retval)
             {
                break;
             }
@@ -1242,13 +1240,13 @@ int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode & orc_Node, C_OscXmlParserBas
          }
          while (c_CurNode == "data-pool");
 
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
             //Return
             tgl_assert(orc_XmlParser.SelectNodeParent() == "data-pools");
          }
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          if (q_ExpectedSizeHere == true)
          {
@@ -1267,10 +1265,10 @@ int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode & orc_Node, C_OscXmlParserBas
    else
    {
       osc_write_log_error("Loading Datapools", "Could not find \"data-pools\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1286,19 +1284,19 @@ int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode & orc_Node, C_OscXmlParserBas
    \param[in,out]  opc_CreatedFiles    Optional storage for history of all created files
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   file could not be created
+   Errc::success    data saved
+   Errc::config     file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
-                                         C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
-                                         std::vector<std::string> * const opc_CreatedFiles)
+std::error_code C_OscNodeFiler::mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
+                                                 C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
+                                                 std::vector<std::string> * const opc_CreatedFiles)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_XmlParser.CreateAndSelectNodeChild("data-pools");
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_NodeDataPools.size()));
-   for (uint32_t u32_ItDataPool = 0; (u32_ItDataPool < orc_NodeDataPools.size()) && (s32_Retval == C_NO_ERR);
+   for (uint32_t u32_ItDataPool = 0; (u32_ItDataPool < orc_NodeDataPools.size()) && (!c_Retval);
         ++u32_ItDataPool)
    {
       const C_OscNodeDataPool & rc_CurDatapool = orc_NodeDataPools[u32_ItDataPool];
@@ -1313,11 +1311,11 @@ int32_t C_OscNodeFiler::mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & 
          const std::string c_FileName = C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
          const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Save datapool file
-         s32_Retval = C_OscNodeDataPoolFiler::h_SaveDataPoolFile(rc_CurDatapool, c_CombinedFileName);
+         c_Retval = C_OscNodeDataPoolFiler::h_SaveDataPoolFile(rc_CurDatapool, c_CombinedFileName);
          //Set file reference
          orc_XmlParser.SetNodeContent(c_FileName);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_FileName);
          }
@@ -1327,7 +1325,7 @@ int32_t C_OscNodeFiler::mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & 
    }
    //Return
    tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1338,31 +1336,30 @@ int32_t C_OscNodeFiler::mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & 
    \param[in]      orc_BasePath     Base path
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig & orc_Config, C_OscXmlParserBase & orc_XmlParser,
-                                    const std::string & orc_BasePath)
+std::error_code C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig & orc_Config, C_OscXmlParserBase & orc_XmlParser,
+                                            const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Clear
-   orc_Config.clear();
+   orc_Config.Clear();
    if (orc_XmlParser.SelectNodeChild("halc-file") == "halc-file")
    {
       if (orc_BasePath.empty())
       {
          //From string
-         s32_Retval = C_OscHalcConfigFiler::h_LoadData(orc_Config, orc_XmlParser, orc_BasePath);
+         c_Retval = C_OscHalcConfigFiler::h_LoadData(orc_Config, orc_XmlParser, orc_BasePath);
       }
       else
       {
-         s32_Retval =
-            C_OscHalcConfigFiler::h_LoadFile(orc_Config,
-                                             C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
-                                                                                  orc_XmlParser.
-                                                                                  GetNodeContent()), orc_BasePath);
+         c_Retval = C_OscHalcConfigFiler::h_LoadFile(orc_Config,
+                                                     C_OscSystemFilerUtil::h_CombinePaths(
+                                                        orc_BasePath, orc_XmlParser.GetNodeContent()),
+                                                     orc_BasePath);
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
@@ -1372,7 +1369,7 @@ int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig & orc_Config, C_OscXmlParser
       //Ignore
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1384,14 +1381,15 @@ int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig & orc_Config, C_OscXmlParser
    \param[in,out]  opc_CreatedFiles    Created files
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   file could not be created
+   Errc::success    data saved
+   Errc::config     file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXmlParserBase & orc_XmlParser,
-                                    const std::string & orc_BasePath, std::vector<std::string> * const opc_CreatedFiles)
+std::error_code C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXmlParserBase & orc_XmlParser,
+                                            const std::string & orc_BasePath,
+                                            std::vector<std::string> * const opc_CreatedFiles)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (!orc_Config.c_FileString.empty())
    {
@@ -1399,7 +1397,7 @@ int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXml
       if (orc_BasePath.empty())
       {
          //To string
-         s32_Retval = C_OscHalcConfigFiler::h_SaveData(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
+         c_Retval = C_OscHalcConfigFiler::h_SaveData(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
       }
       else
       {
@@ -1408,12 +1406,12 @@ int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXml
          const std::string c_FileName = "halc.xml";
          const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Save datapool file
-         s32_Retval = C_OscHalcConfigFiler::h_SaveFile(orc_Config, c_CombinedFileName, orc_BasePath,
-                                                       opc_CreatedFiles);
+         c_Retval = C_OscHalcConfigFiler::h_SaveFile(orc_Config, c_CombinedFileName, orc_BasePath,
+                                                     opc_CreatedFiles);
          //Set file reference
          orc_XmlParser.SetNodeContent(c_FileName);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_FileName);
          }
@@ -1421,7 +1419,7 @@ int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXml
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1434,14 +1432,15 @@ int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXml
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data read
-   \retval   C_CONFIG   content of file is invalid or incomplete
+   \retval   Errc::success   data read
+   \retval   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
-                                               C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath)
+std::error_code C_OscNodeFiler::mh_LoadCanOpenManagers(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+                                                       C_OscXmlParserBase & orc_XmlParser,
+                                                       const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Clear
    orc_Config.clear();
@@ -1450,15 +1449,14 @@ int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(std::map<uint8_t, C_OscCanOpenMan
       if (orc_BasePath.empty())
       {
          //From string
-         s32_Retval = C_OscCanOpenManagerFiler::h_LoadData(orc_Config, orc_XmlParser, orc_BasePath);
+         c_Retval = C_OscCanOpenManagerFiler::h_LoadData(orc_Config, orc_XmlParser, orc_BasePath);
       }
       else
       {
-         s32_Retval =
-            C_OscCanOpenManagerFiler::h_LoadFile(orc_Config,
-                                                 C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
-                                                                                      orc_XmlParser.
-                                                                                      GetNodeContent()), orc_BasePath);
+         c_Retval = C_OscCanOpenManagerFiler::h_LoadFile(orc_Config,
+                                                         C_OscSystemFilerUtil::h_CombinePaths(
+                                                            orc_BasePath,
+                                                            orc_XmlParser.GetNodeContent()), orc_BasePath);
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
@@ -1468,7 +1466,7 @@ int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(std::map<uint8_t, C_OscCanOpenMan
       //Ignore
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1483,17 +1481,17 @@ int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(std::map<uint8_t, C_OscCanOpenMan
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data saved
-   \retval   C_CONFIG   file could not be created
+   \retval   Errc::success   data saved
+   \retval   Errc::config    file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
-                                               C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
-                                               std::vector<std::string> * const opc_CreatedFiles,
-                                               const std::map<uint32_t,
-                                                              std::string> & orc_NodeIndicesToNameMap)
+std::error_code C_OscNodeFiler::mh_SaveCanOpenManagers(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+                                                       C_OscXmlParserBase & orc_XmlParser,
+                                                       const std::string & orc_BasePath,
+                                                       std::vector<std::string> * const opc_CreatedFiles,
+                                                       const std::map<uint32_t, std::string> & orc_NodeIndicesToNameMap)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Config.size() > 0)
    {
@@ -1511,12 +1509,12 @@ int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(const std::map<uint8_t, C_OscCanO
          const std::string c_FileName = "can_open_managers.xml";
          const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Save datapool file
-         s32_Retval = C_OscCanOpenManagerFiler::h_SaveFile(orc_Config, c_CombinedFileName, orc_BasePath,
-                                                           opc_CreatedFiles, orc_NodeIndicesToNameMap);
+         c_Retval = C_OscCanOpenManagerFiler::h_SaveFile(orc_Config, c_CombinedFileName, orc_BasePath, opc_CreatedFiles,
+                                                         orc_NodeIndicesToNameMap);
          //Set file reference
          orc_XmlParser.SetNodeContent(c_FileName);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_FileName);
          }
@@ -1525,7 +1523,7 @@ int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(const std::map<uint8_t, C_OscCanO
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1538,14 +1536,14 @@ int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(const std::map<uint8_t, C_OscCanO
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data read
-   \retval   C_CONFIG   content of file is invalid or incomplete
+   \retval   Errc::success   data read
+   \retval   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadDataLoggers(std::vector<C_OscDataLoggerJob> & orc_Config,
-                                           C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath)
+std::error_code C_OscNodeFiler::mh_LoadDataLoggers(std::vector<C_OscDataLoggerJob> & orc_Config,
+                                                   C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Clear
    orc_Config.clear();
@@ -1554,21 +1552,19 @@ int32_t C_OscNodeFiler::mh_LoadDataLoggers(std::vector<C_OscDataLoggerJob> & orc
       if (orc_BasePath.empty())
       {
          //From string
-         s32_Retval = C_OscDataLoggerJobFiler::h_LoadData(orc_Config, orc_XmlParser);
+         c_Retval = C_OscDataLoggerJobFiler::h_LoadData(orc_Config, orc_XmlParser);
       }
       else
       {
-         s32_Retval =
-            C_OscDataLoggerJobFiler::h_LoadFile(orc_Config,
-                                                C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
-                                                                                     orc_XmlParser.
-                                                                                     GetNodeContent()));
+         c_Retval = C_OscDataLoggerJobFiler::h_LoadFile(orc_Config,
+                                                        C_OscSystemFilerUtil::h_CombinePaths(
+                                                           orc_BasePath, orc_XmlParser.GetNodeContent()));
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1582,15 +1578,15 @@ int32_t C_OscNodeFiler::mh_LoadDataLoggers(std::vector<C_OscDataLoggerJob> & orc
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data saved
-   \retval   C_CONFIG   file could not be created
+   \retval   Errc::success   data saved
+   \retval   Errc::config    file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_SaveDataLoggers(const std::vector<C_OscDataLoggerJob> & orc_Config,
-                                           C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
-                                           std::vector<std::string> * const opc_CreatedFiles)
+std::error_code C_OscNodeFiler::mh_SaveDataLoggers(const std::vector<C_OscDataLoggerJob> & orc_Config,
+                                                   C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
+                                                   std::vector<std::string> * const opc_CreatedFiles)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Config.size() > 0)
    {
@@ -1607,11 +1603,11 @@ int32_t C_OscNodeFiler::mh_SaveDataLoggers(const std::vector<C_OscDataLoggerJob>
          const std::string c_FileName = "data_loggers.xml";
          const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Save datapool file
-         s32_Retval = C_OscDataLoggerJobFiler::h_SaveFile(orc_Config, c_CombinedFileName);
+         c_Retval = C_OscDataLoggerJobFiler::h_SaveFile(orc_Config, c_CombinedFileName);
          //Set file reference
          orc_XmlParser.SetNodeContent(c_FileName);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_FileName);
          }
@@ -1620,7 +1616,7 @@ int32_t C_OscNodeFiler::mh_SaveDataLoggers(const std::vector<C_OscDataLoggerJob>
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1633,14 +1629,15 @@ int32_t C_OscNodeFiler::mh_SaveDataLoggers(const std::vector<C_OscDataLoggerJob>
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data read
-   \retval   C_CONFIG   content of file is invalid or incomplete
+   \retval   Errc::success   data read
+   \retval   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadXappProperties(C_OscXappProperties & orc_Config, C_OscXmlParserBase & orc_XmlParser,
-                                              const std::string & orc_BasePath)
+std::error_code C_OscNodeFiler::mh_LoadXappProperties(C_OscXappProperties & orc_Config,
+                                                      C_OscXmlParserBase & orc_XmlParser,
+                                                      const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Clear
    orc_Config.Initialize();
@@ -1649,21 +1646,20 @@ int32_t C_OscNodeFiler::mh_LoadXappProperties(C_OscXappProperties & orc_Config, 
       if (orc_BasePath.empty())
       {
          //From string
-         s32_Retval = C_OscXappPropertiesFiler::h_LoadXappProperties(orc_Config, orc_XmlParser);
+         c_Retval = C_OscXappPropertiesFiler::h_LoadXappProperties(orc_Config, orc_XmlParser);
       }
       else
       {
-         s32_Retval =
-            C_OscXappPropertiesFiler::h_LoadXappPropertiesFile(orc_Config,
-                                                               C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
-                                                                                                    orc_XmlParser.
-                                                                                                    GetNodeContent()));
+         c_Retval = C_OscXappPropertiesFiler::h_LoadXappPropertiesFile(orc_Config,
+                                                                       C_OscSystemFilerUtil::h_CombinePaths(
+                                                                          orc_BasePath,
+                                                                          orc_XmlParser.GetNodeContent()));
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1675,14 +1671,14 @@ int32_t C_OscNodeFiler::mh_LoadXappProperties(C_OscXappProperties & orc_Config, 
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data read
-   \retval   C_CONFIG   content of file is invalid or incomplete
+   \retval   Errc::success   data read
+   \retval   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadOsyServerSettings(C_OscNodeOpenSydeServerSettings & orc_Config,
-                                                 C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeFiler::mh_LoadOsyServerSettings(C_OscNodeOpenSydeServerSettings & orc_Config,
+                                                         C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("open-syde-server-settings") == "open-syde-server-settings")
    {
@@ -1742,8 +1738,7 @@ int32_t C_OscNodeFiler::mh_LoadOsyServerSettings(C_OscNodeOpenSydeServerSettings
       }
       if (orc_XmlParser.SelectNodeChild("max-service-size-mode") == "max-service-size-mode")
       {
-         s32_Retval =
-            mh_StringToMaxServiceSizeModeType(orc_XmlParser.GetNodeContent(), orc_Config.e_MaxServiceSizeMode);
+         c_Retval = mh_StringToMaxServiceSizeModeType(orc_XmlParser.GetNodeContent(), orc_Config.e_MaxServiceSizeMode);
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "open-syde-server-settings");
       }
@@ -1760,7 +1755,7 @@ int32_t C_OscNodeFiler::mh_LoadOsyServerSettings(C_OscNodeOpenSydeServerSettings
       orc_Config.Initialize();
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1802,15 +1797,15 @@ void C_OscNodeFiler::mh_SaveOsyServerSettings(const C_OscNodeOpenSydeServerSetti
    \return
    STW error codes
 
-   \retval   C_NO_ERR   data saved
-   \retval   C_CONFIG   file could not be created
+   \retval   Errc::success   data saved
+   \retval   Errc::config    file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_SaveXappProperties(const C_OscNode & orc_Config, C_OscXmlParserBase & orc_XmlParser,
-                                              const std::string & orc_BasePath,
-                                              std::vector<std::string> * const opc_CreatedFiles)
+std::error_code C_OscNodeFiler::mh_SaveXappProperties(const C_OscNode & orc_Config, C_OscXmlParserBase & orc_XmlParser,
+                                                      const std::string & orc_BasePath,
+                                                      std::vector<std::string> * const opc_CreatedFiles)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Config.c_Properties.q_XappSupport)
    {
@@ -1827,12 +1822,11 @@ int32_t C_OscNodeFiler::mh_SaveXappProperties(const C_OscNode & orc_Config, C_Os
          const std::string c_FileName = C_OscXappPropertiesFiler::h_GetFileName();
          const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Save datapool file
-         s32_Retval =
-            C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(orc_Config.c_XappProperties, c_CombinedFileName);
+         c_Retval = C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(orc_Config.c_XappProperties, c_CombinedFileName);
          //Set file reference
          orc_XmlParser.SetNodeContent(c_FileName);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_FileName);
          }
@@ -1841,7 +1835,7 @@ int32_t C_OscNodeFiler::mh_SaveXappProperties(const C_OscNode & orc_Config, C_Os
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1880,14 +1874,14 @@ std::string C_OscNodeFiler::mh_DiagnosticServerToString(
    \param[out]  ore_Type      Diagnostic server type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_StringToDiagnosticServer(const std::string & orc_String,
-                                                    C_OscNodeProperties::E_DiagnosticServerProtocol & ore_Type)
+std::error_code C_OscNodeFiler::mh_StringToDiagnosticServer(const std::string & orc_String,
+                                                            C_OscNodeProperties::E_DiagnosticServerProtocol & ore_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "open-syde")
    {
@@ -1906,10 +1900,10 @@ int32_t C_OscNodeFiler::mh_StringToDiagnosticServer(const std::string & orc_Stri
    {
       osc_write_log_error("Loading node definition", "Invalid value for \"properties\".\"diagnostic-server\": " +
                           orc_String);
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1947,14 +1941,14 @@ std::string C_OscNodeFiler::mh_FlashLoaderToString(const C_OscNodeProperties::E_
    \param[out]  ore_Type      Flash loader type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_StringToFlashLoader(const std::string & orc_String,
-                                               C_OscNodeProperties::E_FlashLoaderProtocol & ore_Type)
+std::error_code C_OscNodeFiler::mh_StringToFlashLoader(const std::string & orc_String,
+                                                       C_OscNodeProperties::E_FlashLoaderProtocol & ore_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "stw")
    {
@@ -1973,10 +1967,10 @@ int32_t C_OscNodeFiler::mh_StringToFlashLoader(const std::string & orc_String,
    {
       osc_write_log_error("Loading node definition",
                           "Invalid value for \"properties\".\"flash-loader\": " + orc_String);
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2015,14 +2009,14 @@ std::string C_OscNodeFiler::mh_MaxServiceSizeModeTypeToString(
    \param[out]  ore_Type      Max service size mode type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_StringToMaxServiceSizeModeType(const std::string & orc_String,
-                                                          C_OscNodeOpenSydeServerSettings::E_MaxServiceSizeModeType & ore_Type)
+std::error_code C_OscNodeFiler::mh_StringToMaxServiceSizeModeType(
+   const std::string & orc_String, C_OscNodeOpenSydeServerSettings::E_MaxServiceSizeModeType & ore_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "manual")
    {
@@ -2037,8 +2031,8 @@ int32_t C_OscNodeFiler::mh_StringToMaxServiceSizeModeType(const std::string & or
       osc_write_log_error("Loading node definition",
                           "Invalid value for \"properties\".\"open-syde-server-settings\".\"max-service-size-mode\": " +
                           orc_String);
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }

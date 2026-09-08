@@ -48,7 +48,7 @@ class C_SyvUpPacNodeWidget :
 public:
    explicit C_SyvUpPacNodeWidget(const uint32_t ou32_ViewIndex, const uint32_t ou32_PositionNumber,
                                  const uint32_t ou32_NodeIndex, const QString & orc_NodeName,
-                                 QWidget * const opc_Parent = NULL);
+                                 QWidget * const opc_Parent = nullptr);
    ~C_SyvUpPacNodeWidget(void) override;
 
    void SetConnected(void);
@@ -73,14 +73,14 @@ public:
    void PrepareExportConfig(stw::opensyde_gui_logic::C_SyvUpPacConfigNode & orc_NodeConfig) const;
    void LoadImportConfig(const stw::opensyde_gui_logic::C_SyvUpPacConfig & orc_Config);
 
-   int32_t CheckAllFiles(uint32_t & oru32_CountFiles, QStringList * const opc_FlashwareWarningsApps = NULL,
-                         QStringList * const opc_MissingApps = NULL, QStringList * const opc_MissingParamFiles = NULL,
-                         QStringList * const opc_MissingFiles = NULL) const;
+   int32_t CheckAllFiles(uint32_t & oru32_CountFiles, QStringList * const opc_FlashwareWarningsApps = nullptr,
+                         QStringList * const opc_MissingApps = nullptr, QStringList * const opc_MissingParamFiles = nullptr,
+                         QStringList * const opc_MissingFiles = nullptr) const;
    bool CheckSecuritySettingsChanged(void) const;
 
    C_SyvUpPacSectionNodeWidget * GetSectionList(const QPoint & orc_Pos) const;
    C_SyvUpPacListNodeItemWidget * GetAndSelectApplication(const QPoint & orc_Pos) const;
-   C_SyvUpPacListNodeItemWidget * GetApplication(const QPoint & orc_Pos, uint32_t * const opu32_Number = NULL) const;
+   C_SyvUpPacListNodeItemWidget * GetApplication(const QPoint & orc_Pos, uint32_t * const opu32_Number = nullptr) const;
 
    uint32_t GetNodeIndex(void) const;
    uint32_t GetViewIndex(void) const;
@@ -147,11 +147,11 @@ private:
    void m_CheckForMultipleSecurityCertificatePackages(const QString & orc_File);
    void m_AskForAuthFlagAdaption(void);
    bool m_CheckMime(const QMimeData * const opc_Mime, const QPoint & orc_Pos,
-                    QStringList * const opc_FilePathsDatablocks = NULL,
-                    QStringList * const opc_FilePathsParamsets = NULL,
-                    QStringList * const opc_FilePathsFileBased = NULL,
-                    QStringList * const opc_RelevantPemFilePaths = NULL,
-                    C_SyvUpPacListNodeItemWidget ** const oppc_App = NULL) const;
+                    QStringList * const opc_FilePathsDatablocks = nullptr,
+                    QStringList * const opc_FilePathsParamsets = nullptr,
+                    QStringList * const opc_FilePathsFileBased = nullptr,
+                    QStringList * const opc_RelevantPemFilePaths = nullptr,
+                    C_SyvUpPacListNodeItemWidget ** const oppc_App = nullptr) const;
    void m_AddSecurityCertificatePackage(void);
    void m_OnCreatePackage(const QString & orc_PublicKeyPath, const QString & orc_Password,
                           const std::vector<std::string> & orc_CertificatesPath,

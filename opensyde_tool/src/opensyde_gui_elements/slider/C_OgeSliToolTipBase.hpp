@@ -32,7 +32,7 @@ class C_OgeSliToolTipBase :
    public C_OgeToolTipBase
 {
 public:
-   C_OgeSliToolTipBase(QWidget * const opc_Parent = NULL);
+   C_OgeSliToolTipBase(QWidget * const opc_Parent = nullptr);
 
    void SetValueCustom(const int32_t os32_Value);
    void SetToolTipParameters(const float64_t of64_ToolTipSliderRangeValueFactor,

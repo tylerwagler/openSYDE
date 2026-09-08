@@ -43,8 +43,8 @@ using namespace stw::opensyde_gui_elements;
 C_SyvDaDashboardToolbox::C_SyvDaDashboardToolbox(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SyvDaDashboardToolbox),
-   mpc_FrameSeparatorReadingWidgets(NULL),
-   mpc_FrameSeparatorWritingWidgets(NULL)
+   mpc_FrameSeparatorReadingWidgets(nullptr),
+   mpc_FrameSeparatorWritingWidgets(nullptr)
 {
    this->mpc_Ui->setupUi(this);
 

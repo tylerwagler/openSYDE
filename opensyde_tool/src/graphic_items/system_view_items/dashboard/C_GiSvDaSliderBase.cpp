@@ -18,6 +18,7 @@
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_GiSvDaSliderBase.hpp"
@@ -114,11 +115,11 @@ void C_GiSvDaSliderBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_S
    {
       const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-      if (pc_Dashboard != NULL)
+      if (pc_Dashboard != nullptr)
       {
          const C_PuiSvDbSlider * const pc_Box = pc_Dashboard->GetSlider(static_cast<uint32_t>(this->ms32_Index));
-         tgl_assert(pc_Box != NULL);
-         if (pc_Box != NULL)
+         tgl_assert(pc_Box != nullptr);
+         if (pc_Box != nullptr)
          {
             this->mpc_SliderWidget->SetDisplayStyle(pc_Box->e_Type);
             this->m_UpdateStaticValues();
@@ -133,7 +134,7 @@ void C_GiSvDaSliderBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_S
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSliderBase::ReInitializeSize(void)
 {
-   if (this->mpc_SliderWidget != NULL)
+   if (this->mpc_SliderWidget != nullptr)
    {
       this->mpc_SliderWidget->AdjustFontToSize();
    }
@@ -147,14 +148,14 @@ void C_GiSvDaSliderBase::LoadData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbSlider * const pc_Box = pc_Dashboard->GetSlider(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          this->LoadSvBasicData(*pc_Box);
-         if (this->mpc_SliderWidget != NULL)
+         if (this->mpc_SliderWidget != nullptr)
          {
             this->mpc_SliderWidget->SetDisplayStyle(pc_Box->e_Type);
             this->mpc_SliderWidget->SetShowMinMax(pc_Box->q_ShowMinMax);
@@ -172,15 +173,15 @@ void C_GiSvDaSliderBase::UpdateData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbSlider * const pc_Box = pc_Dashboard->GetSlider(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          C_PuiSvDbSlider c_Box = *pc_Box;
          this->UpdateSvBasicData(c_Box);
-         if (this->mpc_SliderWidget != NULL)
+         if (this->mpc_SliderWidget != nullptr)
          {
             const float64_t f64_Value = this->m_GetCurrentUnscaledValue();
             C_OscNodeDataPoolContentUtil::h_SetValueInContent(f64_Value, c_Box.c_Value);
@@ -219,7 +220,7 @@ void C_GiSvDaSliderBase::UpdateShowValue(void)
    {
       QString c_Value;
       float64_t f64_UnscaledValue;
-      if (this->m_GetLastValue(0UL, c_Value, &f64_UnscaledValue, NULL) == C_NO_ERR)
+      if (this->m_GetLastValue(0UL, c_Value, &f64_UnscaledValue, nullptr) == C_NO_ERR)
       {
          this->m_SetUnscaledValueToSliderWidget(f64_UnscaledValue);
          this->mq_ManualReadStarted = false;
@@ -244,7 +245,7 @@ void C_GiSvDaSliderBase::ConnectionActiveChanged(const bool oq_Active, const QMa
       const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
       const C_PuiSvDbSlider * const pc_Box = pc_Dashboard->GetSlider(static_cast<uint32_t>(this->ms32_Index));
 
-      if ((pc_Box != NULL) &&
+      if ((pc_Box != nullptr) &&
           (pc_Box->e_InitialValueMode == C_PuiSvDbWriteWidgetBase::eIVM_SET_CONSTANT_VALUE))
       {
          // Special case: Defined constant value as start value is set
@@ -279,7 +280,7 @@ void C_GiSvDaSliderBase::ConnectionActiveChanged(const bool oq_Active, const QMa
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSliderBase::SendCurrentValue(void)
 {
-   if (this->mpc_SliderWidget != NULL)
+   if (this->mpc_SliderWidget != nullptr)
    {
       C_PuiSvDbDataElementScaling c_Scaling;
       tgl_assert(this->GetDataPoolElementScaling(0, c_Scaling) == C_NO_ERR);
@@ -305,11 +306,11 @@ bool C_GiSvDaSliderBase::CallProperties(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbSlider * const pc_Box = pc_Dashboard->GetSlider(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          C_PuiSvDbNodeDataPoolListElementId c_ElementId;
          C_PuiSvDbDataElementScaling c_Scaling;
@@ -370,15 +371,15 @@ bool C_GiSvDaSliderBase::CallProperties(void)
                                                                        ::h_GetInstance()->GetOscDataPoolListElement(
                   c_Tmp.c_ElementId);
                c_Box.c_DataPoolElementsConfig.push_back(c_Tmp);
-               tgl_assert(pc_Element != NULL);
-               if (pc_Element != NULL)
+               tgl_assert(pc_Element != nullptr);
+               if (pc_Element != nullptr)
                {
                   C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_Tmp;
                   c_Box.c_Value = pc_Element->c_MinValue;
                   C_OscNodeDataPoolContentUtil::h_ZeroContent(c_Box.c_Value);
                   tgl_assert(C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(pc_Element->c_MinValue,
                                                                                    pc_Element->c_MaxValue,
-                                                                                   c_Box.c_Value, e_Tmp) == C_NO_ERR);
+                                                                                   c_Box.c_Value, e_Tmp) == Errc::success);
                }
             }
             c_Box.e_ElementWriteMode = pc_Dialog->GetWriteMode();
@@ -414,7 +415,7 @@ bool C_GiSvDaSliderBase::CallProperties(void)
             }
          }
          Q_EMIT this->SigTriggerUpdateTransmissionConfiguration();
-         if (c_New != NULL)
+         if (c_New != nullptr)
          {
             c_New->HideOverlay();
             c_New->deleteLater();
@@ -435,7 +436,7 @@ bool C_GiSvDaSliderBase::CallProperties(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSliderBase::UpdateTypePe(const C_PuiSvDbSlider::E_Type oe_Type, const bool oq_ShowMinMax)
 {
-   if (this->mpc_SliderWidget != NULL)
+   if (this->mpc_SliderWidget != nullptr)
    {
       this->mpc_SliderWidget->SetDisplayStyle(oe_Type);
       this->mpc_SliderWidget->SetShowMinMax(oq_ShowMinMax);
@@ -454,7 +455,7 @@ void C_GiSvDaSliderBase::UpdateTypePe(const C_PuiSvDbSlider::E_Type oe_Type, con
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSliderBase::SetValuePe(const int32_t os32_Value, const int32_t os32_Min, const int32_t os32_Max)
 {
-   if (this->mpc_SliderWidget != NULL)
+   if (this->mpc_SliderWidget != nullptr)
    {
       this->mpc_SliderWidget->SetMinMax(os32_Min, QString::number(os32_Min), os32_Max, QString::number(os32_Max));
       this->mpc_SliderWidget->SetValue(os32_Value);
@@ -480,11 +481,11 @@ void C_GiSvDaSliderBase::m_UpdateStaticValues(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbSlider * const pc_Box = pc_Dashboard->GetSlider(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          if (pc_Box->c_DataPoolElementsConfig.size() > 0)
          {
@@ -496,8 +497,8 @@ void C_GiSvDaSliderBase::m_UpdateStaticValues(void)
                                                                              rc_Config.c_ElementId.u32_DataPoolIndex,
                                                                              rc_Config.c_ElementId.u32_ListIndex,
                                                                              rc_Config.c_ElementId.u32_ElementIndex);
-               if ((pc_Element != NULL) &&
-                   (this->mpc_SliderWidget != NULL))
+               if ((pc_Element != nullptr) &&
+                   (this->mpc_SliderWidget != nullptr))
                {
                   uint64_t u64_Steps;
                   float64_t f64_UnscaledMax;
@@ -615,11 +616,11 @@ bool C_GiSvDaSliderBase::m_IsOnChange(void) const
    bool q_Retval = false;
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbSlider * const pc_Box = pc_Dashboard->GetSlider(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          if (pc_Box->e_ElementWriteMode == C_PuiSvDbWriteWidgetBase::eWM_ON_CHANGE)
          {
@@ -638,7 +639,7 @@ bool C_GiSvDaSliderBase::m_IsOnChange(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSliderBase::m_SetUnscaledValueToSliderWidget(const float64_t of64_NewValue) const
 {
-   if (this->mpc_SliderWidget != NULL)
+   if (this->mpc_SliderWidget != nullptr)
    {
       //Scale value to slider range
       const float64_t f64_SliderValue = ((of64_NewValue - this->mf64_UnscaledMinValue) /

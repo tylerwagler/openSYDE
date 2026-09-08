@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
 #include <iostream>
 
 #include "stwtypes.hpp"
@@ -81,11 +82,11 @@ C_OsyCodeExportBase::E_ResultCode C_CodeExport::m_CreateApplicationCode(const C_
 {
    const std::string c_SYDE_CODER_C_VERSION = mc_ExeVersion + ", MD5-Checksum: " +
                                               stw::opensyde_core::C_OscUtilBinaryHash::h_CreateBinaryHash();
-   const int32_t s32_Return =
+   const std::error_code c_Return =
       C_OscExportNode::h_CreateSourceCode(orc_Node, ou16_ApplicationIndex, orc_OutputPath, orc_CreatedFiles,
                                           stw::tgl::TglExtractFileName(mc_ExeName), c_SYDE_CODER_C_VERSION);
 
-   return (s32_Return == C_NO_ERR) ? eRESULT_OK : eRESULT_CODE_GENERATION_ERROR;
+   return (!c_Return) ? eRESULT_OK : eRESULT_CODE_GENERATION_ERROR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

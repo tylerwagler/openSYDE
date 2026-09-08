@@ -83,8 +83,8 @@ C_SyvDaPeUpdateModeNodeHeader::C_SyvDaPeUpdateModeNodeHeader(const uint32_t ou32
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LabelCount, "Valid", true);
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LabelCountNumber, "Valid", true);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       //Translation: 1: Node name
       this->mpc_Ui->pc_LabelListName->setText(static_cast<QString>("Node - %1").arg(pc_Node->
@@ -136,8 +136,8 @@ void C_SyvDaPeUpdateModeNodeHeader::UpdateCount(const int32_t os32_Count) const
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   tgl_assert(pc_View != NULL);
-   if (pc_View != NULL)
+   tgl_assert(pc_View != nullptr);
+   if (pc_View != nullptr)
    {
       uint32_t u32_Cur;
       if (os32_Count >= 0)

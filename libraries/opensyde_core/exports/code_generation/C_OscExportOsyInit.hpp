@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <string>
 #include <vector>
+#include <system_error>
 
 #include "stwtypes.hpp"
 
@@ -34,9 +35,9 @@ class C_OscExportOsyInit
 {
 public:
    static std::string h_GetFileName(void);
-   static int32_t h_CreateSourceCode(const std::string & orc_FilePath, const C_OscNode & orc_Node,
-                                     const bool oq_RunsDpd, const uint16_t ou16_ApplicationIndex,
-                                     const std::string & orc_ExportToolInfo = "");
+   static std::error_code h_CreateSourceCode(const std::string & orc_FilePath, const C_OscNode & orc_Node,
+                                             const bool oq_RunsDpd, const uint16_t ou16_ApplicationIndex,
+                                             const std::string & orc_ExportToolInfo = "");
 
 protected:
    static bool mh_IsDpdInitRequired(const C_OscNodeComInterfaceSettings & orc_Settings);

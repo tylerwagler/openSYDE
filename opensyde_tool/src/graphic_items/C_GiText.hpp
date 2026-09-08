@@ -31,7 +31,7 @@ class C_GiText :
    Q_OBJECT
 
 public:
-   C_GiText(const QRectF & orc_Rect, const bool oq_Editable, QGraphicsItem * const opc_Parent = NULL);
+   C_GiText(const QRectF & orc_Rect, const bool oq_Editable, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiText(void) override;
 
    int32_t type(void) const override;

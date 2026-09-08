@@ -75,7 +75,7 @@ public:
    static bool h_CheckXappNodeReachable(const uint32_t ou32_SdNodeIndex, const uint32_t ou32_TargetNodeIndex);
    static bool h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeIndex, const std::string & orc_Name,
                                                   const uint32_t * const opu32_DataLoggerJobIndexToSkip,
-                                                  std::vector<std::string> * const opc_ExistingNames = NULL);
+                                                  std::vector<std::string> * const opc_ExistingNames = nullptr);
 
 private:
    C_PuiSdUtil(void);

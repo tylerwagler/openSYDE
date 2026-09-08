@@ -11,9 +11,11 @@
 #include "precomp_headers.hpp"
 
 #include <cstdio>
+#include <system_error>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglFile.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscComMessageLoggerFileBase.hpp"
@@ -64,31 +66,30 @@ C_OscComMessageLoggerFileBase::~C_OscComMessageLoggerFileBase(void)
    Base implementation only creates the folders and deletes an already existing file
 
    \return
-   C_NO_ERR    No errors
-   C_RD_WR     Error on creating folders or deleting old file
+   Errc::success    No errors
+   Errc::rd_wr      Error on creating folders or deleting old file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLoggerFileBase::OpenFile(void)
+std::error_code C_OscComMessageLoggerFileBase::OpenFile(void)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    const std::string c_FolderPath = TglExtractFilePath(this->mc_FilePath);
 
    // Check and create folder
    if (TglDirectoryExists(c_FolderPath) == false)
    {
-      s32_Return = C_OscUtils::h_CreateFolderRecursively(c_FolderPath);
-
-      if (s32_Return != C_NO_ERR)
+      if (C_OscUtils::h_CreateFolderRecursively(c_FolderPath))
       {
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
    else if (TglFileExists(this->mc_FilePath) == true)
    {
       // Delete the old file
+      // remove() is the C library function: returns 0 on success, non-zero on failure (not an STW code)
       if (remove(this->mc_FilePath.c_str()) != 0)
       {
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
    else
@@ -96,7 +97,7 @@ int32_t C_OscComMessageLoggerFileBase::OpenFile(void)
       // Nothing to do
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

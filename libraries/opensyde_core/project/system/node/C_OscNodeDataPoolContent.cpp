@@ -18,13 +18,16 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include "precomp_headers.hpp"
 
 #include <cstring>
+#include <system_error>
 #include <sstream>
 #include <limits>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
 #include "C_SclStringCompat.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
@@ -227,10 +230,10 @@ template <typename T> void C_OscNodeDataPoolContent::m_SetValue(const T & orc_Va
    {
       if (this->me_Type == oe_Type)
       {
-         this->mc_CriticalSection.Acquire();
+         this->mc_CriticalSection.lock();
          //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
          (void)std::memcpy(&this->mc_Data[0], &orc_Value, sizeof(orc_Value));
-         this->mc_CriticalSection.Release();
+         this->mc_CriticalSection.unlock();
       }
       else
       {
@@ -260,10 +263,10 @@ template <typename T> void C_OscNodeDataPoolContent::m_GetValue(const E_Type oe_
    {
       if (this->me_Type == oe_Type)
       {
-         this->mc_CriticalSection.Acquire();
+         this->mc_CriticalSection.lock();
          //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
          (void)std::memcpy(&orc_Value, &this->mc_Data[0], sizeof(orc_Value));
-         this->mc_CriticalSection.Release();
+         this->mc_CriticalSection.unlock();
       }
       else
       {
@@ -768,11 +771,11 @@ template <typename T> void C_OscNodeDataPoolContent::m_SetValueArray(const T & o
    {
       if (this->me_Type == oe_Type)
       {
-         this->mc_CriticalSection.Acquire();
+         this->mc_CriticalSection.lock();
          mc_Data.resize(orc_Value.size() * sizeof(orc_Value[0]));
          //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
          (void)std::memcpy(&this->mc_Data[0], &orc_Value[0], this->mc_Data.size());
-         this->mc_CriticalSection.Release();
+         this->mc_CriticalSection.unlock();
       }
       else
       {
@@ -809,11 +812,11 @@ template <typename T> void C_OscNodeDataPoolContent::m_SetValueArrayElement(cons
       {
          if (this->GetArraySize() > ou32_Index)
          {
-            this->mc_CriticalSection.Acquire();
+            this->mc_CriticalSection.lock();
             //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
             //lint -e{9114} //range of parameter is safe for sizeof result to fit in
             (void)std::memcpy(&this->mc_Data[ou32_Index * (sizeof(orc_Value))], &orc_Value, sizeof(orc_Value));
-            this->mc_CriticalSection.Release();
+            this->mc_CriticalSection.unlock();
          }
          else
          {
@@ -847,11 +850,11 @@ template <typename T> void C_OscNodeDataPoolContent::m_GetValueArray(const E_Typ
    {
       if (this->me_Type == oe_Type)
       {
-         this->mc_CriticalSection.Acquire();
+         this->mc_CriticalSection.lock();
          orc_Result.resize(this->mc_Data.size() / sizeof(orc_Result[0]));
          //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
          (void)std::memcpy(&orc_Result[0], &this->mc_Data[0], this->mc_Data.size());
-         this->mc_CriticalSection.Release();
+         this->mc_CriticalSection.unlock();
       }
       else
       {
@@ -888,11 +891,11 @@ template <typename T> void C_OscNodeDataPoolContent::m_GetValueArrayElement(cons
       {
          if (this->GetArraySize() > ou32_Index)
          {
-            this->mc_CriticalSection.Acquire();
+            this->mc_CriticalSection.lock();
             //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
             //lint -e{9114} //range of parameter is safe for sizeof result to fit in
             (void)std::memcpy(&orc_Result, &this->mc_Data[ou32_Index * sizeof(orc_Result)], sizeof(orc_Result));
-            this->mc_CriticalSection.Release();
+            this->mc_CriticalSection.unlock();
          }
          else
          {
@@ -3096,9 +3099,9 @@ void C_OscNodeDataPoolContent::GetAnyValueAsFloat64(float64_t & orf64_Output, co
 */
 //----------------------------------------------------------------------------------------------------------------------
 const std::vector<uint8_t> * stw::opensyde_core::C_OscNodeDataPoolContent::GetDataAccessConst(
-   stw::tgl::C_TglCriticalSection ** const oppc_CriticalSection) const
+   std::mutex ** const oppc_CriticalSection) const
 {
-   if (oppc_CriticalSection != NULL)
+   if (oppc_CriticalSection != nullptr)
    {
       *oppc_CriticalSection = &this->mc_CriticalSection;
    }
@@ -3118,9 +3121,9 @@ const std::vector<uint8_t> * stw::opensyde_core::C_OscNodeDataPoolContent::GetDa
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::vector<uint8_t> * stw::opensyde_core::C_OscNodeDataPoolContent::GetDataAccess(
-   stw::tgl::C_TglCriticalSection ** const oppc_CriticalSection)
+   std::mutex ** const oppc_CriticalSection)
 {
-   if (oppc_CriticalSection != NULL)
+   if (oppc_CriticalSection != nullptr)
    {
       *oppc_CriticalSection = &this->mc_CriticalSection;
    }
@@ -3368,13 +3371,13 @@ void C_OscNodeDataPoolContent::m_GetBaseTypeArray(const uint32_t & oru32_Index, 
    \param[in]  orc_Data    data to set
 
    \return
-   C_NO_ERR   value set
-   C_CONFIG   size of orc_Data does not match our size
+   Errc::success   value set
+   Errc::config    size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<uint8_t> & orc_Data)
+std::error_code C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    //using unions is not nice but more portable than reinterpret_casting
    //lint -e{9018}  //cf. comment above
    union U_Union32
@@ -3393,7 +3396,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
    //is size correct ?
    if (this->GetSizeByte() != orc_Data.size())
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -3551,7 +3554,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3563,13 +3566,13 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
    \param[in]  orc_Data    data to set
 
    \return
-   C_NO_ERR   value set
-   C_CONFIG   size of orc_Data does not match our size
+   Errc::success   value set
+   Errc::config    size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data)
+std::error_code C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    //using unions is not nice but more portable than reinterpret_casting
    //lint -e{9018}  //cf. comment above
@@ -3589,7 +3592,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
    //is size correct ?
    if (this->GetSizeByte() != orc_Data.size())
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -3750,7 +3753,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

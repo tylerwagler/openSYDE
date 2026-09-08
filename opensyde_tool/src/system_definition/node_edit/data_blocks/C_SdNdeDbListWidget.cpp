@@ -105,7 +105,7 @@ void C_SdNdeDbListWidget::SetIndex(const uint32_t ou32_NodeIndex)
 void C_SdNdeDbListWidget::AddApplication(const uint32_t ou32_NodeIndex, const uint32_t ou32_ApplicationIndex)
 {
    QListWidgetItem * const pc_Item =
-      new QListWidgetItem(NULL, static_cast<int32_t>(QListWidgetItem::ItemType::UserType));
+      new QListWidgetItem(nullptr, static_cast<int32_t>(QListWidgetItem::ItemType::UserType));
    C_SdNdeDbWidget * const pc_ItemWidget = new C_SdNdeDbWidget(ou32_NodeIndex, ou32_ApplicationIndex, this);
 
    //signal to handle "there are no data blocks declared..." label, data block count and button visibility
@@ -143,7 +143,7 @@ void C_SdNdeDbListWidget::UpdateApplications(void) const
 
       C_SdNdeDbWidget * const pc_WidgetItem =
          dynamic_cast<C_SdNdeDbWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          pc_WidgetItem->UpdateApplication();
       }
@@ -272,7 +272,7 @@ void C_SdNdeDbListWidget::m_UpdateApplicationIndexes(void) const
 
       C_SdNdeDbWidget * const pc_WidgetItem =
          dynamic_cast<C_SdNdeDbWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          pc_WidgetItem->UpdateApplicationIndex(static_cast<uint32_t>(s32_Counter));
       }
@@ -292,7 +292,7 @@ void C_SdNdeDbListWidget::m_CheckNodeId(void) const
 
       const C_SdNdeDbWidget * const pc_WidgetItem =
          dynamic_cast<const C_SdNdeDbWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          pc_WidgetItem->CheckProcessIdError();
       }

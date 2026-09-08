@@ -23,6 +23,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscDeviceManager.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscDeviceDefinitionFiler.hpp"
@@ -78,12 +79,12 @@ const C_OscDeviceDefinition * C_OscDeviceManager::LookForDevice(const std::strin
                                                                 const std::string & orc_MainDeviceName,
                                                                 uint32_t & oru32_SubDeviceIndex) const
 {
-   const C_OscDeviceDefinition * pc_Device = NULL;
+   const C_OscDeviceDefinition * pc_Device = nullptr;
 
    for (uint32_t u32_ItDevice = 0U; u32_ItDevice < this->mc_DeviceGroups.size(); ++u32_ItDevice)
    {
       pc_Device = this->mc_DeviceGroups[u32_ItDevice].LookForDevice(orc_Name, orc_MainDeviceName, oru32_SubDeviceIndex);
-      if (pc_Device != NULL)
+      if (pc_Device != nullptr)
       {
          break;
       }
@@ -134,10 +135,10 @@ bool C_OscDeviceManager::WasLoaded(void) const
    \param[in]  orc_RootPaths   Root directories to scan, in priority order
 
    \return
-   C_NO_ERR  Scan completed (with or without devices found)
+   Errc::success  Scan completed (with or without devices found)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<std::string> & orc_RootPaths)
+std::error_code C_OscDeviceManager::LoadFromPaths(const std::vector<std::string> & orc_RootPaths)
 {
    namespace fs = std::filesystem;
 
@@ -209,8 +210,8 @@ int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<std::string> & orc_R
 
          C_OscDeviceDefinition c_Device;
          const std::string c_ManifestStr(c_ManifestPath.string().c_str());
-         const int32_t s32_LoadResult = C_OscDeviceDefinitionFiler::h_Load(c_Device, c_ManifestStr);
-         if (s32_LoadResult != C_NO_ERR)
+         const std::error_code c_LoadResult = C_OscDeviceDefinitionFiler::h_Load(c_Device, c_ManifestStr);
+         if (c_LoadResult)
          {
             osc_write_log_error("Loading device definitions",
                                 "Failed to parse manifest \"" + c_ManifestStr + "\".");
@@ -244,5 +245,5 @@ int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<std::string> & orc_R
    }
 
    this->mq_WasLoaded = true;
-   return C_NO_ERR;
+   return Errc::success;
 }

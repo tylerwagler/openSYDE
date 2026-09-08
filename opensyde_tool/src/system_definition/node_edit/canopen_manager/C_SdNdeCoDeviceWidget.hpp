@@ -36,7 +36,7 @@ class C_SdNdeCoDeviceWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeCoDeviceWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeCoDeviceWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeCoDeviceWidget(void) override;
 
    void LoadUserSettings() const;

@@ -180,7 +180,7 @@ void C_NagToolTipWithImage::DoMove(const QPoint & orc_GlobalPos)
    // get available space of monitor where tool-tip was requested (e.g. subtract windows task bar from whole monitor)
    const QScreen * const pc_Screen = QGuiApplication::screenAt(orc_GlobalPos);
 
-   if (pc_Screen != NULL)
+   if (pc_Screen != nullptr)
    {
       const QRect c_RectMonitor = pc_Screen->availableGeometry();
 

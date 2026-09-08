@@ -30,7 +30,7 @@ class C_OgePubDashboard :
    Q_OBJECT
 
 public:
-   C_OgePubDashboard(QWidget * const opc_Parent = NULL);
+   C_OgePubDashboard(QWidget * const opc_Parent = nullptr);
    ~C_OgePubDashboard(void) override;
 
    void SetFiles(const QString & orc_SvgActivated, const QString & orc_SvgDeactivated);

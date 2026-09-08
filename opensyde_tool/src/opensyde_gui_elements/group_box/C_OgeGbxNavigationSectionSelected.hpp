@@ -26,7 +26,7 @@ class C_OgeGbxNavigationSectionSelected :
    Q_OBJECT
 
 public:
-   explicit C_OgeGbxNavigationSectionSelected(QWidget * const opc_Parent = NULL);
+   explicit C_OgeGbxNavigationSectionSelected(QWidget * const opc_Parent = nullptr);
 
    void SetActive(const bool oq_Active);
 };

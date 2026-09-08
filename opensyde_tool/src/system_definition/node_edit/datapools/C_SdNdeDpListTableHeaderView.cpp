@@ -110,7 +110,7 @@ void C_SdNdeDpListTableHeaderView::paintSection(QPainter * const opc_Painter, co
 {
    QHeaderView::paintSection(opc_Painter, orc_Rect, os32_LogicalIndex);
    //You can draw anything here, it is not shown as long as you do call the original function
-   if (this->model() != NULL)
+   if (this->model() != nullptr)
    {
       //Check if icon set
       const QVariant c_Variant =

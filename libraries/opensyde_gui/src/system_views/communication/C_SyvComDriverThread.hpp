@@ -32,7 +32,7 @@ public:
    typedef void (* PR_ThreadFunction)(void * const opv_Instance);
 
    C_SyvComDriverThread(const PR_ThreadFunction opr_ThreadFunc, void * const opv_Instance,
-                        QObject * const opc_Parent = NULL);
+                        QObject * const opc_Parent = nullptr);
 
 protected:
    void run(void) override;

@@ -33,8 +33,8 @@ class C_SebUnoBaseCommand :
 {
 public:
    C_SebUnoBaseCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                       const QString & orc_Text, QUndoCommand * const opc_Parent = NULL);
-   C_SebUnoBaseCommand(const C_SebUnoBaseCommand * const opc_Prev, QUndoCommand * const opc_Parent = NULL);
+                       const QString & orc_Text, QUndoCommand * const opc_Parent = nullptr);
+   C_SebUnoBaseCommand(const C_SebUnoBaseCommand * const opc_Prev, QUndoCommand * const opc_Parent = nullptr);
    ~C_SebUnoBaseCommand(void) override;
    void undo(void) override = 0; //lint !e9170 //we do want to force children to implement this functions
    void redo(void) override = 0; //lint !e9170 //we do want to force children to implement this functions

@@ -77,8 +77,8 @@ QWidget * C_SdNdeComIfSettingsTableDelegate::createEditor(QWidget * const opc_Pa
                                                           const QModelIndex & orc_Index) const
 {
    Q_UNUSED(orc_Option)
-   QWidget * pc_Retval = NULL;
-   C_OgeSpxToolTipBase * pc_SpinBox = NULL;
+   QWidget * pc_Retval = nullptr;
+   C_OgeSpxToolTipBase * pc_SpinBox = nullptr;
    const uint8_t u8_Maximum = C_SdUtil::h_GetNodeIdMaximum(this->mu32_NodeIndex);
 
    if (orc_Index.isValid() == true)
@@ -113,13 +113,13 @@ QWidget * C_SdNdeComIfSettingsTableDelegate::createEditor(QWidget * const opc_Pa
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeComIfSettingsTableDelegate::setEditorData(QWidget * const opc_Editor, const QModelIndex & orc_Index) const
 {
-   if ((opc_Editor != NULL) && (orc_Index.isValid() == true))
+   if ((opc_Editor != nullptr) && (orc_Index.isValid() == true))
    {
       QSpinBox * const pc_SpinBoxInt = dynamic_cast<QSpinBox * const>(opc_Editor);
 
       if (static_cast<E_Columns>(orc_Index.column()) == E_Columns::eNODEID)
       {
-         if (pc_SpinBoxInt != NULL)
+         if (pc_SpinBoxInt != nullptr)
          {
             //pc_SpinBoxInt->setAlignment(Qt::AlignCenter);
             pc_SpinBoxInt->setValue(orc_Index.data().toInt());
@@ -145,13 +145,13 @@ void C_SdNdeComIfSettingsTableDelegate::setEditorData(QWidget * const opc_Editor
 void C_SdNdeComIfSettingsTableDelegate::setModelData(QWidget * const opc_Editor, QAbstractItemModel * const opc_Model,
                                                      const QModelIndex & orc_Index) const
 {
-   if (((opc_Editor != NULL) && (opc_Model != NULL)) && (orc_Index.isValid() == true))
+   if (((opc_Editor != nullptr) && (opc_Model != nullptr)) && (orc_Index.isValid() == true))
    {
       QSpinBox * const pc_SpinBoxInt = dynamic_cast<QSpinBox * const>(opc_Editor);
 
       if (static_cast<E_Columns>(orc_Index.column()) == E_Columns::eNODEID)
       {
-         if (pc_SpinBoxInt != NULL)
+         if (pc_SpinBoxInt != nullptr)
          {
             opc_Model->setData(orc_Index, pc_SpinBoxInt->value());
          }
@@ -173,7 +173,7 @@ void C_SdNdeComIfSettingsTableDelegate::m_CheckValue(const int32_t & ors32_Value
 {
    C_OgeSpxToolTipBase * const pc_Widget = dynamic_cast<C_OgeSpxToolTipBase * const>(this->sender());
 
-   if (pc_Widget != NULL)
+   if (pc_Widget != nullptr)
    {
       const bool q_IdIsValid =
          C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().CheckInterfaceIsAvailable(this->mu32_NodeIndex,

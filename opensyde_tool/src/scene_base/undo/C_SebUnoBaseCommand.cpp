@@ -84,7 +84,7 @@ C_SebUnoBaseCommand::~C_SebUnoBaseCommand(void)
 vector<QGraphicsItem *> C_SebUnoBaseCommand::m_GetSceneItems(void) const
 {
    vector<QGraphicsItem *> c_Retval;
-   c_Retval.resize(this->mc_Ids.size(), NULL);
+   c_Retval.resize(this->mc_Ids.size(), nullptr);
    for (uint32_t u32_ItId = 0; u32_ItId < this->mc_Ids.size(); ++u32_ItId)
    {
       c_Retval[u32_ItId] = m_GetSceneItem(this->mc_Ids[u32_ItId]);
@@ -109,13 +109,13 @@ QGraphicsItem * C_SebUnoBaseCommand::m_GetSceneItem(const uint64_t & oru64_Id) c
    const stw::opensyde_gui::C_SebScene * const pc_DetailedScene =
       dynamic_cast<const stw::opensyde_gui::C_SebScene * const>(mpc_Scene);
 
-   if (pc_DetailedScene != NULL)
+   if (pc_DetailedScene != nullptr)
    {
       pc_Retval = pc_DetailedScene->GetItemById(oru64_Id);
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }

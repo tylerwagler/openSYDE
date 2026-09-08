@@ -45,7 +45,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeUnoLeDataPoolListManager::C_SdNdeUnoLeDataPoolListManager(void) :
-   mpc_UndoStack(NULL)
+   mpc_UndoStack(nullptr)
 {
 }
 
@@ -108,13 +108,13 @@ void C_SdNdeUnoLeDataPoolListManager::DoDeleteElements(const uint32_t & oru32_No
             orc_Indices);
 
       //Check if last element(s) -> add replacement, so we never encounter zero data elements
-      if (opc_DataPoolListModelViewManager != NULL)
+      if (opc_DataPoolListModelViewManager != nullptr)
       {
          C_SdNdeDpListTableModel * const pc_Model = opc_DataPoolListModelViewManager->GetElementModel(
             oru32_NodeIndex,
             oru32_DataPoolIndex,
             oru32_DataPoolListIndex);
-         if (pc_Model != NULL)
+         if (pc_Model != nullptr)
          {
             if (static_cast<uint32_t>(pc_Model->rowCount()) == orc_Indices.size())
             {
@@ -273,9 +273,9 @@ void C_SdNdeUnoLeDataPoolListManager::SetUndoStack(C_UtiUndoStack * const opc_Va
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoLeDataPoolListManager::DoPush(QUndoCommand * const opc_Command)
 {
-   if (opc_Command != NULL)
+   if (opc_Command != nullptr)
    {
-      if (mpc_UndoStack != NULL)
+      if (mpc_UndoStack != nullptr)
       {
          this->mpc_UndoStack->DoPush(opc_Command);
       }

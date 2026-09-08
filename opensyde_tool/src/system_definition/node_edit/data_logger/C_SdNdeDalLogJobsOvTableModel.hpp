@@ -23,7 +23,7 @@ class C_SdNdeDalLogJobsOvTableModel :
    public QAbstractTableModel
 {
 public:
-   C_SdNdeDalLogJobsOvTableModel(QObject * const opc_Parent = NULL);
+   C_SdNdeDalLogJobsOvTableModel(QObject * const opc_Parent = nullptr);
 
    enum E_Columns
    {

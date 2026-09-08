@@ -12,6 +12,8 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
+#include <system_error>
 #include <string>
 #include "C_SclStringCompat.hpp"
 #include "TglUtils.hpp"
@@ -71,7 +73,7 @@ C_GiSvSubNodeData::C_GiSvSubNodeData(const uint32_t ou32_ViewIndex, const uint32
 //----------------------------------------------------------------------------------------------------------------------
 C_GiSvSubNodeData::~C_GiSvSubNodeData(void) noexcept
 {
-   if (this->mc_DeviceInfo.pc_OpenSydeDevice != NULL)
+   if (this->mc_DeviceInfo.pc_OpenSydeDevice != nullptr)
    {
       delete mc_DeviceInfo.pc_OpenSydeDevice;
    }
@@ -103,10 +105,10 @@ void C_GiSvSubNodeData::SetConnected(const bool oq_Active)
       this->mc_ParamFileInfos.clear();
       this->mc_FileInfos.clear();
       this->mc_PemFileInfo = "";
-      if (this->mc_DeviceInfo.pc_OpenSydeDevice != NULL)
+      if (this->mc_DeviceInfo.pc_OpenSydeDevice != nullptr)
       {
          delete (mc_DeviceInfo.pc_OpenSydeDevice);
-         this->mc_DeviceInfo.pc_OpenSydeDevice = NULL;
+         this->mc_DeviceInfo.pc_OpenSydeDevice = nullptr;
       }
 
       this->mq_ConnectStatesSet = false;
@@ -245,14 +247,14 @@ void C_GiSvSubNodeData::UpdateInitialPackageStatus(const C_SyvUpDeviceInfo & orc
    this->mc_ParamFileInfos.clear();
    this->mc_FileInfos.clear();
    this->mc_PemFileInfo = "";
-   if (this->mc_DeviceInfo.pc_OpenSydeDevice != NULL)
+   if (this->mc_DeviceInfo.pc_OpenSydeDevice != nullptr)
    {
       delete (mc_DeviceInfo.pc_OpenSydeDevice);
-      this->mc_DeviceInfo.pc_OpenSydeDevice = NULL;
+      this->mc_DeviceInfo.pc_OpenSydeDevice = nullptr;
    }
 
    //COPY current info
-   if (orc_DeviceApplicationInfos.pc_OpenSydeDevice != NULL)
+   if (orc_DeviceApplicationInfos.pc_OpenSydeDevice != nullptr)
    {
       this->mc_DeviceInfo.pc_OpenSydeDevice =
          new C_OscSuSequences::C_OsyDeviceInformation(*orc_DeviceApplicationInfos.pc_OpenSydeDevice);
@@ -261,13 +263,13 @@ void C_GiSvSubNodeData::UpdateInitialPackageStatus(const C_SyvUpDeviceInfo & orc
    if (this->CheckUpdateDisabledState() == false)
    {
       this->me_InitialStatus = C_SyvUtil::eI_UNKNOWN;
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_OscNode * const pc_Node =
             C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
          const C_OscViewNodeUpdate * const pc_UpdateInformation =
             pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex);
-         if ((pc_UpdateInformation != NULL) && (pc_Node != NULL))
+         if ((pc_UpdateInformation != nullptr) && (pc_Node != nullptr))
 
          {
             this->m_InitPackageData(*pc_Node, *pc_UpdateInformation);
@@ -292,7 +294,7 @@ bool C_GiSvSubNodeData::CheckUpdateDisabledState(void) const
    if (q_Retval == true)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-      if ((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL))
+      if ((pc_Node != nullptr) && (pc_Node->pc_DeviceDefinition != nullptr))
       {
          if (pc_Node->IsAnyUpdateAvailable() == false)
          {
@@ -310,11 +312,11 @@ bool C_GiSvSubNodeData::CheckUpdateDisabledState(void) const
                tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
                {
                   const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-                  if (pc_View != NULL)
+                  if (pc_View != nullptr)
                   {
                      const C_OscViewNodeUpdate * const pc_UpdateInfo =
                         pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex);
-                     if (pc_UpdateInfo != NULL)
+                     if (pc_UpdateInfo != nullptr)
                      {
                         if (((pc_UpdateInfo->GetParamInfos().size() == 0UL) &&
                              (pc_UpdateInfo->GetPemFilePath().empty() == true)) &&
@@ -387,8 +389,8 @@ bool C_GiSvSubNodeData::CheckAlwaysUpdate(void) const
    const C_OscNode * const pc_Node =
       C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if ((pc_View != NULL) && (pc_Node != NULL) &&
-       (pc_Node->pc_DeviceDefinition != NULL) &&
+   if ((pc_View != nullptr) && (pc_Node != nullptr) &&
+       (pc_Node->pc_DeviceDefinition != nullptr) &&
        (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()))
    {
       const C_OscViewNodeUpdate * const pc_UpdateInformation = pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex);
@@ -476,9 +478,9 @@ void C_GiSvSubNodeData::CopyUpdateStatus(C_GiSvSubNodeData & orc_NodeData) const
 void C_GiSvSubNodeData::CopyOpenSydeDeviceInfo(C_GiSvSubNodeData & orc_NodeData) const
 {
    // We need a real copy of the element
-   stw::opensyde_core::C_OscSuSequences::C_OsyDeviceInformation * pc_Copy = NULL;
+   stw::opensyde_core::C_OscSuSequences::C_OsyDeviceInformation * pc_Copy = nullptr;
 
-   if (this->mc_DeviceInfo.pc_OpenSydeDevice != NULL)
+   if (this->mc_DeviceInfo.pc_OpenSydeDevice != nullptr)
    {
       pc_Copy = new stw::opensyde_core::C_OscSuSequences::C_OsyDeviceInformation();
       *pc_Copy = *this->mc_DeviceInfo.pc_OpenSydeDevice;
@@ -645,7 +647,7 @@ uint32_t C_GiSvSubNodeData::GetFailedApplicationIndex() const
 //----------------------------------------------------------------------------------------------------------------------
 const stw::opensyde_core::C_OscApplicationInfoBlock * C_GiSvSubNodeData::GetHexFileInfo(const uint32_t ou32_ApplicationIndex) const
 {
-   const stw::opensyde_core::C_OscApplicationInfoBlock * pc_Retval = NULL;
+   const stw::opensyde_core::C_OscApplicationInfoBlock * pc_Retval = nullptr;
 
    if (ou32_ApplicationIndex < this->mc_HexFileInfos.size())
    {
@@ -818,12 +820,12 @@ void C_GiSvSubNodeData::m_CheckThirdParty(void)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const C_OscDeviceDefinition * const pc_Device = pc_Node->pc_DeviceDefinition;
       const uint32_t u32_SubDeviceIndex = pc_Node->u32_SubDeviceIndex;
-      tgl_assert(pc_Device != NULL);
-      if (pc_Device != NULL)
+      tgl_assert(pc_Device != nullptr);
+      if (pc_Device != nullptr)
       {
          tgl_assert(u32_SubDeviceIndex < pc_Device->c_SubDevices.size());
          if (u32_SubDeviceIndex < pc_Device->c_SubDevices.size())
@@ -929,25 +931,24 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
       const std::string c_Path = orc_FinalFilePaths[u32_ItFile].toStdString().c_str();
       // c_Path is already absolute and placeholder variables got resolved!
       C_OscHexFile c_HexFile;
-      uint32_t u32_Result;
 
-      u32_Result = ListLoadFromFile(c_HexFile, c_Path.c_str());
-      if (u32_Result == stw::hex_file::NO_ERR)
+      const std::error_code c_Result = c_HexFile.LoadFromFile(c_Path.c_str());
+      if (!c_Result)
       {
          stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
-         const int32_t s32_Result = c_HexFile.ScanApplicationInformationBlockFromHexFile(
+         const std::error_code c_ScanResult = c_HexFile.ScanApplicationInformationBlockFromHexFile(
             c_FileApplicationInfo);
-         if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
+         if ((!c_ScanResult) || (c_ScanResult == Errc::warn))
          {
             this->mc_HexFileInfos.push_back(c_FileApplicationInfo);
-            this->mc_HexAppInfoAmbiguous.push_back(s32_Result == C_WARN);
+            this->mc_HexAppInfoAmbiguous.push_back(c_ScanResult == Errc::warn);
          }
       }
       else
       {
          const std::string c_Text = "Could not open HEX file \"" +
                                               c_Path + "\" Details: " +
-                                              c_HexFile.ErrorCodeToErrorText(u32_Result);
+                                              c_HexFile.ErrorCodeToErrorText(c_Result);
          osc_write_log_error("Preparing Flashloader Information", c_Text);
       }
    }
@@ -995,7 +996,7 @@ void C_GiSvSubNodeData::m_InitStatusFromPackage(
    const stw::opensyde_gui_logic::C_SyvUpDeviceInfo & orc_DeviceApplicationInfos, const C_OscNode & orc_Node)
 {
    if ((orc_Node.c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_OPEN_SYDE) &&
-       (orc_DeviceApplicationInfos.pc_OpenSydeDevice != NULL))
+       (orc_DeviceApplicationInfos.pc_OpenSydeDevice != nullptr))
    {
       //Always update if there is at least one parameter file
       if (this->CheckAlwaysUpdate())

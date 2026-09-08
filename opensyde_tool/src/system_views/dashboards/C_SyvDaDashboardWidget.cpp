@@ -63,12 +63,12 @@ C_SyvDaDashboardWidget::C_SyvDaDashboardWidget(const uint32_t ou32_ViewIndex, co
 
    this->mpc_Ui->setupUi(this);
 
-   tgl_assert(pc_View != NULL);
-   if (pc_View != NULL)
+   tgl_assert(pc_View != nullptr);
+   if (pc_View != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-      tgl_assert(pc_Dashboard != NULL);
-      if (pc_Dashboard != NULL)
+      tgl_assert(pc_Dashboard != nullptr);
+      if (pc_Dashboard != nullptr)
       {
          if (pc_Dashboard->GetType() == C_PuiSvDashboard::eCHART)
          {
@@ -222,11 +222,11 @@ void C_SyvDaDashboardWidget::RegisterWidgets(C_SyvComDriverDiag & orc_ComDriver)
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
 
-      if ((pc_Dashboard != NULL) && (pc_Dashboard->GetActive() == true))
+      if ((pc_Dashboard != nullptr) && (pc_Dashboard->GetActive() == true))
       {
          this->mpc_Content->RegisterWidgets(orc_ComDriver);
       }

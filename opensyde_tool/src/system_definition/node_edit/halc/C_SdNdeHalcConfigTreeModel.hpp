@@ -35,7 +35,7 @@ public:
       eDESCRIPTION
    };
 
-   C_SdNdeHalcConfigTreeModel(QObject * const opc_Parent = NULL);
+   C_SdNdeHalcConfigTreeModel(QObject * const opc_Parent = nullptr);
    ~C_SdNdeHalcConfigTreeModel(void) override;
 
    int32_t columnCount(const QModelIndex & orc_Parent = QModelIndex()) const override;

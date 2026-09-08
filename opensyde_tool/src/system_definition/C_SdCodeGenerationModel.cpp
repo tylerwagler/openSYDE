@@ -240,7 +240,7 @@ void C_SdCodeGenerationModel::GetCheckedItems(std::vector<uint32_t> & orc_Elemen
    {
       const C_TblTreeModelCheckableItem * const pc_VisibleRootItem =
          dynamic_cast<C_TblTreeModelCheckableItem *>(c_InvisibleRootChildren.at(u32_ItInvisibleRootChild));
-      if (pc_VisibleRootItem != NULL)
+      if (pc_VisibleRootItem != nullptr)
       {
          const std::vector<C_TblTreSimpleItem *> c_VisibleRootChildren = pc_VisibleRootItem->c_Children;
          for (uint32_t u32_ItVisibleRootChild = 0;
@@ -248,7 +248,7 @@ void C_SdCodeGenerationModel::GetCheckedItems(std::vector<uint32_t> & orc_Elemen
          {
             const C_TblTreeModelCheckableItem * const pc_NodeItem =
                dynamic_cast<C_TblTreeModelCheckableItem *>(c_VisibleRootChildren.at(u32_ItVisibleRootChild));
-            if (pc_NodeItem != NULL)
+            if (pc_NodeItem != nullptr)
             {
                const std::vector<C_TblTreSimpleItem *> c_NodeChildren = pc_NodeItem->c_Children;
                std::vector<uint32_t> c_AppIndices;
@@ -256,7 +256,7 @@ void C_SdCodeGenerationModel::GetCheckedItems(std::vector<uint32_t> & orc_Elemen
                {
                   const C_TblTreeModelCheckableItem * const pc_AppItem =
                      dynamic_cast<C_TblTreeModelCheckableItem *>(c_NodeChildren.at(u32_ItNodeChild));
-                  if ((pc_AppItem != NULL) && (pc_AppItem->e_CheckState == Qt::Checked))
+                  if ((pc_AppItem != nullptr) && (pc_AppItem->e_CheckState == Qt::Checked))
                   {
                      c_AppIndices.push_back(pc_AppItem->u32_Index);
                   }
@@ -291,7 +291,7 @@ void C_SdCodeGenerationModel::m_CheckInitItems(C_TblTreeModelCheckableItem & orc
    {
       C_TblTreeModelCheckableItem * const pc_NodeItem =
          dynamic_cast<C_TblTreeModelCheckableItem *>(orc_VisibleRootItem.c_Children.at(u32_ItRootChildren));
-      if (pc_NodeItem != NULL)
+      if (pc_NodeItem != nullptr)
       {
          for (uint32_t u32_ItNodeIndices = 0; u32_ItNodeIndices < orc_NodeIndices.size(); u32_ItNodeIndices++)
          {
@@ -302,7 +302,7 @@ void C_SdCodeGenerationModel::m_CheckInitItems(C_TblTreeModelCheckableItem & orc
                {
                   C_TblTreeModelCheckableItem * const pc_AppItem =
                      dynamic_cast<C_TblTreeModelCheckableItem *>(pc_NodeItem->c_Children.at(u32_ItNodeChildren));
-                  if (pc_AppItem != NULL)
+                  if (pc_AppItem != nullptr)
                   {
                      pc_AppItem->e_CheckState = Qt::Checked;
                   }

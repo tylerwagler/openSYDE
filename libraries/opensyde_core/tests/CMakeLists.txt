@@ -8,6 +8,9 @@
 # Required explicitly for CMake < 3.18; harmless for newer versions.
 include(GoogleTest)
 
+# The security suites exercise OpenSSL-backed code paths.
+find_package(OpenSSL QUIET)
+
 # Individual test executables --- one per source file ------------------------
 
 function(add_osc_test TEST_NAME TEST_SOURCE)
@@ -18,6 +21,12 @@ function(add_osc_test TEST_NAME TEST_SOURCE)
          GTest::gtest
          GTest::gtest_main
    )
+   # opensyde_core deliberately does not link OpenSSL — applications provide it
+   # (see the note at the top of the core CMakeLists). Test executables are the
+   # application here, so they must link it themselves for the security suites.
+   if(TARGET OpenSSL::Crypto)
+      target_link_libraries(${TEST_NAME} PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+   endif()
    # Do not propagate the core library's precompiled headers to test targets
    target_precompile_headers(${TEST_NAME} REUSE_FROM opensyde_core)
    # Let GTest list tests at runtime so add_test works without enumerating
@@ -37,3 +46,13 @@ add_osc_test(test_opensyde_core_xml_parser     test_xml_parser.cpp)
 add_osc_test(test_opensyde_core_dynamic_array  test_dynamic_array.cpp)
 add_osc_test(test_opensyde_core_scl_string     test_scl_string.cpp)
 add_osc_test(test_opensyde_core_logging        test_logging.cpp)
+add_osc_test(test_opensyde_core_hex_parsing    test_hex_string_parsing.cpp)
+add_osc_test(test_opensyde_core_aes_file       test_security_aes_file.cpp)
+add_osc_test(test_opensyde_core_hex_file       test_hex_file.cpp)
+add_osc_test(test_opensyde_core_serial_number  test_protocol_serial_number.cpp)
+add_osc_test(test_opensyde_core_app_info        test_application_info_block.cpp)
+add_osc_test(test_opensyde_core_tp_base        test_protocol_driver_base.cpp)
+add_osc_test(test_opensyde_core_dp_content     test_node_datapool_content.cpp)
+add_osc_test(test_opensyde_core_dp_util        test_datapool_content_util.cpp)
+add_osc_test(test_opensyde_core_project_meta   test_project_metadata.cpp)
+add_osc_test(test_opensyde_core_view_security test_view_security_options.cpp)

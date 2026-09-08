@@ -13,8 +13,10 @@
 #include "precomp_headers.hpp"
 
 #include <sstream>
+#include <system_error>
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscHalcDefContentBitmaskItem.hpp"
 #include "C_SclStringCompat.hpp"
@@ -61,11 +63,11 @@ C_OscHalcDefContentBitmaskItem::~C_OscHalcDefContentBitmaskItem()
    \param[in]  orc_Item    Mask string
 
    \return
-   C_NO_ERR All fine
-   C_RANGE  String invalid
+   Errc::success    All fine
+   Errc::range      String invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefContentBitmaskItem::SetValueByString(const std::string & orc_Item)
+std::error_code C_OscHalcDefContentBitmaskItem::SetValueByString(const std::string & orc_Item)
 {
    return C_OscHalcDefContentBitmaskItem::mh_ParseUintFromString(orc_Item, this->u64_Value);
 }
@@ -108,14 +110,14 @@ void C_OscHalcDefContentBitmaskItem::CalcHashStructure(uint32_t & oru32_HashValu
    \param[in]  oru64_Value    Value to set
 
    \return
-   C_NO_ERR All fine
-   C_RANGE  String invalid
+   Errc::success    All fine
+   Errc::range      String invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefContentBitmaskItem::mh_ParseUintFromString(const std::string & orc_Item,
-                                                               uint64_t & oru64_Value)
+std::error_code C_OscHalcDefContentBitmaskItem::mh_ParseUintFromString(const std::string & orc_Item,
+                                                                       uint64_t & oru64_Value)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (LowerCaseCompat(orc_Item) == "true")
    {
@@ -134,7 +136,7 @@ int32_t C_OscHalcDefContentBitmaskItem::mh_ParseUintFromString(const std::string
          (c_Stream >> std::hex) >> oru64_Value;
          if (c_Stream.fail())
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -143,9 +145,9 @@ int32_t C_OscHalcDefContentBitmaskItem::mh_ParseUintFromString(const std::string
          c_Stream >> oru64_Value;
          if (c_Stream.fail())
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }

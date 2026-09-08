@@ -26,7 +26,7 @@ class C_SdNdeCoPdoTableDelegate :
    public QStyledItemDelegate
 {
 public:
-   C_SdNdeCoPdoTableDelegate(QObject * const opc_Parent = NULL);
+   C_SdNdeCoPdoTableDelegate(QObject * const opc_Parent = nullptr);
 
    void paint(QPainter * const opc_Painter, const QStyleOptionViewItem & orc_Option,
               const QModelIndex & orc_Index) const override;

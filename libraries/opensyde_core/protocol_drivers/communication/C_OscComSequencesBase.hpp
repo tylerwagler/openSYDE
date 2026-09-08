@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <system_error>
 
 #include "stwtypes.hpp"
 
@@ -36,10 +37,11 @@ public:
    explicit C_OscComSequencesBase(const bool oq_RoutingActive, const bool oq_UpdateRoutingMode);
    virtual ~C_OscComSequencesBase(void);
 
-   virtual int32_t Init(C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex,
-                        const std::vector<uint8_t> & orc_ActiveNodes,
-                        stw::can::C_CanDispatcher * const opc_CanDispatcher, C_OscIpDispatcher * const opc_IpDispatcher,
-                        C_OscSecurityPemDatabase * const opc_SecurityPemDb);
+   virtual std::error_code Init(C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex,
+                                const std::vector<uint8_t> & orc_ActiveNodes,
+                                stw::can::C_CanDispatcher * const opc_CanDispatcher,
+                                C_OscIpDispatcher * const opc_IpDispatcher,
+                                C_OscSecurityPemDatabase * const opc_SecurityPemDb);
 
    bool IsInitialized(void) const;
 
@@ -51,9 +53,9 @@ public:
    bool IsEthToEthRoutingNecessary(const uint32_t ou32_RouterNodeIndex) const;
    uint32_t GetMinimumFlashloaderResetWaitTime(const C_OscComDriverFlash::E_MinimumFlashloaderResetWaitTimeType oe_Type)
    const;
-   int32_t GetMinimumFlashloaderResetWaitTime(const C_OscComDriverFlash::E_MinimumFlashloaderResetWaitTimeType oe_Type,
-                                              const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                              uint32_t & oru32_TimeValue) const;
+   std::error_code GetMinimumFlashloaderResetWaitTime(
+      const C_OscComDriverFlash::E_MinimumFlashloaderResetWaitTimeType oe_Type,
+      const C_OscProtocolDriverOsyNode & orc_ServerId, uint32_t & oru32_TimeValue) const;
 
 protected:
    C_OscComDriverFlash * const mpc_ComDriver;

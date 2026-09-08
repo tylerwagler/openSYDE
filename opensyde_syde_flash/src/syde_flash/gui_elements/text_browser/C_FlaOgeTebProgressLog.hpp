@@ -29,7 +29,7 @@ class C_FlaOgeTebProgressLog :
    Q_OBJECT
 
 public:
-   C_FlaOgeTebProgressLog(QWidget * const opc_Parent = NULL);
+   C_FlaOgeTebProgressLog(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

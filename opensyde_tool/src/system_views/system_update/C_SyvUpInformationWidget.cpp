@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include <QFileInfo>
 
 #include "stwerrors.hpp"
@@ -365,8 +366,8 @@ void C_SyvUpInformationWidget::InitUpdatePackage(
                {
                   //Do the address based byte count stuff
                   C_OscHexFile c_HexFile;
-                  const uint32_t u32_Result = ListLoadFromFile(c_HexFile, rc_File.c_str());
-                  if (u32_Result == stw::hex_file::NO_ERR)
+                  const std::error_code c_Result = c_HexFile.LoadFromFile(rc_File.c_str());
+                  if (!c_Result)
                   {
                      q_UseFileSize = false;
                      c_Files.push_back(static_cast<uint64_t>(c_HexFile.ByteCount()));
@@ -392,7 +393,7 @@ void C_SyvUpInformationWidget::InitUpdatePackage(
             {
                const std::string & rc_File = rc_Device.c_FilesToWriteToNvm[u32_ItFile];
                C_OscParamSetHandler c_FileHandler;
-               if (c_FileHandler.ReadFile(rc_File, false, true, NULL) == C_NO_ERR)
+               if (!c_FileHandler.ReadFile(rc_File, false, true, nullptr))
                {
                   const C_OscParamSetInterpretedData & rc_InterpretedData = c_FileHandler.GetInterpretedData();
                   if (rc_InterpretedData.c_InterpretedNodes.size() >= 1UL)
@@ -876,7 +877,7 @@ void C_SyvUpInformationWidget::m_LoadUserSettings()
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
    // restore configuration of the view
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_UsSystemView c_UserView = C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName().c_str());
 
@@ -912,7 +913,7 @@ void C_SyvUpInformationWidget::m_SaveUserSettings() const
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
    // store configuration of the view
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       // splitter
       const QList<int32_t> c_Sizes = this->mpc_Ui->pc_SplitterVert->sizes();

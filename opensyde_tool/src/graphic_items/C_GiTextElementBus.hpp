@@ -37,7 +37,7 @@ class C_GiTextElementBus :
    Q_OBJECT
 
 public:
-   C_GiTextElementBus(const int32_t & ors32_Index, const uint64_t & oru64_Id, QGraphicsItem * const opc_Parent = NULL);
+   C_GiTextElementBus(const int32_t & ors32_Index, const uint64_t & oru64_Id, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiTextElementBus() override;
 
    void SetBusIndex(const uint32_t ou32_BusIndex);
@@ -57,7 +57,7 @@ public:
    void SetDisabledLook(const bool oq_Disabled);
 
    void paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-              QWidget * const opc_Widget = NULL) override;
+              QWidget * const opc_Widget = nullptr) override;
 
    void HandleMouseMoveToolTip(const QPointF & orc_ScenePos);
 

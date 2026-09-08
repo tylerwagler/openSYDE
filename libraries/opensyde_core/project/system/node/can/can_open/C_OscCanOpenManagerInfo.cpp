@@ -12,7 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglUtils.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscCanOpenManagerInfo.hpp"
@@ -108,7 +111,7 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
 {
    std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice;
 
-   if (opq_CoManagerNodeIdInvalid != NULL)
+   if (opq_CoManagerNodeIdInvalid != nullptr)
    {
       // Check for the valid range of the manager itself
       if ((this->u8_NodeIdValue > 0U) &&
@@ -123,20 +126,20 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
    }
 
    // Check the devices related errors
-   if ((opq_CoNodeIdConflict != NULL) || (opq_CoDevicesNodeIdInvalid != NULL))
+   if ((opq_CoNodeIdConflict != nullptr) || (opq_CoDevicesNodeIdInvalid != nullptr))
    {
       bool q_TempCoNodeIdConflict = false;
       bool q_TempCoDevicesNodeIdInvalid = false;
-      bool * pq_TempCoNodeIdConflict = NULL;
-      bool * pq_TempCoDevicesNodeIdInvalid = NULL;
+      bool * pq_TempCoNodeIdConflict = nullptr;
+      bool * pq_TempCoDevicesNodeIdInvalid = nullptr;
 
       // Using temporary pointers to beware the optional character of the output parameters
-      if (opq_CoNodeIdConflict != NULL)
+      if (opq_CoNodeIdConflict != nullptr)
       {
          pq_TempCoNodeIdConflict = &q_TempCoNodeIdConflict;
          *opq_CoNodeIdConflict = false;
       }
-      if (opq_CoDevicesNodeIdInvalid != NULL)
+      if (opq_CoDevicesNodeIdInvalid != nullptr)
       {
          pq_TempCoDevicesNodeIdInvalid = &q_TempCoDevicesNodeIdInvalid;
          *opq_CoDevicesNodeIdInvalid = false;
@@ -145,17 +148,17 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
       // Check all devices
       for (c_ItDevice = this->c_CanOpenDevices.begin(); c_ItDevice != this->c_CanOpenDevices.end(); ++c_ItDevice)
       {
-         tgl_assert(this->CheckErrorDeviceCoNodeId(c_ItDevice->first, pq_TempCoNodeIdConflict,
-                                                   pq_TempCoDevicesNodeIdInvalid,
-                                                   oq_CheckDeviceToDeviceErrors) == C_NO_ERR);
+         tgl_assert(!this->CheckErrorDeviceCoNodeId(c_ItDevice->first, pq_TempCoNodeIdConflict,
+                                                    pq_TempCoDevicesNodeIdInvalid,
+                                                    oq_CheckDeviceToDeviceErrors));
 
          // Transfer to the output pointer only true result to not overwrite previous detections
-         if ((opq_CoNodeIdConflict != NULL) &&
+         if ((opq_CoNodeIdConflict != nullptr) &&
              (q_TempCoNodeIdConflict == true))
          {
             *opq_CoNodeIdConflict = q_TempCoNodeIdConflict;
          }
-         if ((opq_CoDevicesNodeIdInvalid != NULL) &&
+         if ((opq_CoDevicesNodeIdInvalid != nullptr) &&
              (q_TempCoDevicesNodeIdInvalid == true))
          {
             *opq_CoDevicesNodeIdInvalid = q_TempCoDevicesNodeIdInvalid;
@@ -163,14 +166,14 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
       }
    }
 
-   if (opq_HearbeatTimeInvalid != NULL)
+   if (opq_HearbeatTimeInvalid != nullptr)
    {
       *opq_HearbeatTimeInvalid = false;
 
       // Check all devices
       for (c_ItDevice = this->c_CanOpenDevices.begin(); c_ItDevice != this->c_CanOpenDevices.end(); ++c_ItDevice)
       {
-         tgl_assert(this->CheckErrorDeviceHeartbeat(c_ItDevice->first, opq_HearbeatTimeInvalid) == C_NO_ERR);
+         tgl_assert(!this->CheckErrorDeviceHeartbeat(c_ItDevice->first, opq_HearbeatTimeInvalid));
 
          if (*opq_HearbeatTimeInvalid == true)
          {
@@ -190,16 +193,16 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
    \param[in]      oq_CheckDeviceToDeviceErrors   true: run error checks between devices and between manager and devices
                                                   false: run error checks between manager and device only
 
-   \retval   C_NO_ERR   Error check successful
-   \retval   C_RANGE    Parameters invalid, error check not executed
+   \retval   Errc::success   Error check successful
+   \retval   Errc::range     Parameters invalid, error check not executed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfaceId & orc_DeviceId,
+std::error_code C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfaceId & orc_DeviceId,
                                                           bool * const opq_CoNodeIdConflict,
                                                           bool * const opq_CoNodeIdInvalid,
                                                           const bool oq_CheckDeviceToDeviceErrors) const
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    const std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
       this->c_CanOpenDevices.find(orc_DeviceId);
@@ -208,9 +211,9 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfac
    {
       const C_OscCanOpenManagerDeviceInfo & rc_DevInfo = c_ItDevice->second;
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
 
-      if (opq_CoNodeIdConflict != NULL)
+      if (opq_CoNodeIdConflict != nullptr)
       {
          *opq_CoNodeIdConflict = false;
 
@@ -246,7 +249,7 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfac
          }
       }
 
-      if (opq_CoNodeIdInvalid != NULL)
+      if (opq_CoNodeIdInvalid != nullptr)
       {
          // Check for the valid range
          if ((rc_DevInfo.u8_NodeIdValue > 0U) &&
@@ -261,7 +264,7 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfac
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -270,24 +273,24 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfac
    \param[in]       orc_DeviceId              CANopen device ID
    \param[out]      opq_HearbeatTimeInvalid   Error with Hearbeat time of Manager detected
 
-   \retval   C_NO_ERR   Error check successful
-   \retval   C_RANGE    Parameters invalid, error check not executed
+   \retval   Errc::success   Error check successful
+   \retval   Errc::range     Parameters invalid, error check not executed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceHeartbeat(const C_OscCanInterfaceId & orc_DeviceId,
+std::error_code C_OscCanOpenManagerInfo::CheckErrorDeviceHeartbeat(const C_OscCanInterfaceId & orc_DeviceId,
                                                            bool * const opq_HearbeatTimeInvalid) const
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    const std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
       this->c_CanOpenDevices.find(orc_DeviceId);
 
    if ((c_ItDevice != this->c_CanOpenDevices.end()) &&
-       (opq_HearbeatTimeInvalid != NULL))
+       (opq_HearbeatTimeInvalid != nullptr))
    {
       const C_OscCanOpenManagerDeviceInfo & rc_DevInfo = c_ItDevice->second;
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
 
       *opq_HearbeatTimeInvalid = false;
 
@@ -301,5 +304,5 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceHeartbeat(const C_OscCanInterfa
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }

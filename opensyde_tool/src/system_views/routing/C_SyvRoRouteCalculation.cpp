@@ -126,7 +126,8 @@ bool C_SyvRoRouteCalculation::CheckItfNumberForRouting(const uint32_t ou32_Targe
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvRoRouteCalculation::GetState(void) const
 {
-   return this->mpc_Calculation->GetState();
+   // C_OscRoutingCalculation reports std::error_code; this wrapper keeps the int32_t flow
+   return this->mpc_Calculation->GetState().value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

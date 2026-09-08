@@ -39,12 +39,12 @@ class C_GiLiLineGroup :
    Q_OBJECT
 
 public:
-   C_GiLiLineGroup(const std::vector<QPointF> * const opc_Points = NULL, const bool & orq_MiddleLine = false,
-                   QGraphicsItem * const opc_Parent = NULL);
+   C_GiLiLineGroup(const std::vector<QPointF> * const opc_Points = nullptr, const bool & orq_MiddleLine = false,
+                   QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiLiLineGroup(void) override;
 
-   int32_t BendLine(const QPointF & orc_ScenePos, const int32_t * const ops32_Index = NULL);
-   int32_t RemoveBend(const QPointF & orc_ScenePos, const int32_t * const ops32_Index = NULL);
+   int32_t BendLine(const QPointF & orc_ScenePos, const int32_t * const ops32_Index = nullptr);
+   int32_t RemoveBend(const QPointF & orc_ScenePos, const int32_t * const ops32_Index = nullptr);
    virtual void OnPointChange(const int32_t & ors32_PointIndex);
    QRectF boundingRect() const override;
    void RestoreDefaultCursor(void) override;

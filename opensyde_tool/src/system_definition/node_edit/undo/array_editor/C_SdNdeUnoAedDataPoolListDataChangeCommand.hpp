@@ -37,7 +37,7 @@ public:
                                               const uint32_t & oru32_DataSetIndex,
                                               const uint32_t & oru32_ArrayElementIndex, const QVariant & orc_NewData,
                                               C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                                              QUndoCommand * const opc_Parent = NULL);
+                                              QUndoCommand * const opc_Parent = nullptr);
    void redo(void) override;
    void undo(void) override;
 

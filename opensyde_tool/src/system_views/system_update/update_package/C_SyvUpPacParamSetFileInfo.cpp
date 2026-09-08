@@ -72,7 +72,7 @@ int32_t C_SyvUpPacParamSetFileInfo::ReadFile(void)
    C_OscParamSetHandler c_FileHandler;
 
    const int32_t s32_Retval = c_FileHandler.ReadFile(
-      this->mc_Path.toStdString().c_str(), false, true, &u16_FileCrc, &q_OptionlContentMissing);
+      this->mc_Path.toStdString().c_str(), false, true, &u16_FileCrc, &q_OptionlContentMissing).value();
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -132,7 +132,7 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if ((pc_Node != NULL) && (this->mc_InterpretedFileInfo.c_InterpretedNodes.size() > 0UL))
+   if ((pc_Node != nullptr) && (this->mc_InterpretedFileInfo.c_InterpretedNodes.size() > 0UL))
    {
       const C_OscParamSetInterpretedNode & rc_InterpretedNode = this->mc_InterpretedFileInfo.c_InterpretedNodes[0UL];
       //Node

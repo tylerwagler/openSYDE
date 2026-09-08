@@ -128,7 +128,7 @@ std::vector<C_OscCanOpenManagerMappableSignal> C_SdBueCoAddSignalsView::GetSelec
       {
          const C_OscCanOpenManagerMappableSignal * const pc_Entry = this->mc_Model.GetDataForIndex(c_ItTopLevel->first,
                                                                                                    *c_ItSignal);
-         if (pc_Entry != NULL)
+         if (pc_Entry != nullptr)
          {
             c_Retval.push_back(*pc_Entry);
          }

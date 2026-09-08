@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <map>
+#include <system_error>
 #include <vector>
 #include "stwtypes.hpp"
 #include <string>
@@ -69,8 +70,8 @@ public:
    C_OscNodeDataPoolContent::E_Type GetType(void) const;
    bool GetArray(void) const;
    uint32_t GetArraySize(void) const;
-   int32_t CheckValueRange(void) const;
-   int32_t CheckNvmValueRange(void) const;
+   std::error_code CheckValueRange(void) const;
+   std::error_code CheckNvmValueRange(void) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

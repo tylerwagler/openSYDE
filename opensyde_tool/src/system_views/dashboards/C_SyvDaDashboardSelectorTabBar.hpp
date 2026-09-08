@@ -31,7 +31,7 @@ class C_SyvDaDashboardSelectorTabBar :
    Q_OBJECT
 
 public:
-   C_SyvDaDashboardSelectorTabBar(QWidget * const opc_Parent = NULL);
+   C_SyvDaDashboardSelectorTabBar(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaDashboardSelectorTabBar() override;
 
    void SetScreenshot(const QPixmap & orc_Screenshot);

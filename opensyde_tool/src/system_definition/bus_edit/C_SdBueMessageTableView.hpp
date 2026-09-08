@@ -33,7 +33,7 @@ class C_SdBueMessageTableView :
    Q_OBJECT
 
 public:
-   C_SdBueMessageTableView(QWidget * const opc_Parent = NULL);
+   C_SdBueMessageTableView(QWidget * const opc_Parent = nullptr);
    ~C_SdBueMessageTableView(void) override;
 
    void LoadUserSettings(const std::vector<int32_t> & orc_Values);

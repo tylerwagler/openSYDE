@@ -32,7 +32,7 @@ class C_SdBueMlvBaseItem :
 {
 public:
    C_SdBueMlvBaseItem(const QColor & orc_BackgroundColor, const QColor & orc_FontColor, const QFont & orc_Font,
-                      const QString & orc_Text, const bool oq_DrawText, QGraphicsItem * const opc_Parent = NULL);
+                      const QString & orc_Text, const bool oq_DrawText, QGraphicsItem * const opc_Parent = nullptr);
    ~C_SdBueMlvBaseItem() override;
 
    void SetText(const QString & orc_Text);

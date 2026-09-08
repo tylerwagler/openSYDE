@@ -16,9 +16,12 @@
 #include <cctype>
 #include <sstream>
 #include <iomanip>
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolOpenSyde.hpp"
+#include "C_OscErrorCategory.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -291,14 +294,14 @@ const
    \param[out]     or_CanAddressInformation    store decoded CAN configuration
 
    \return
-   C_NO_ERR    disassembly successful
-   C_CONFIG    invalid addressing/routing configuration
+   Errc::success    disassembly successful
+   Errc::config    invalid addressing/routing configuration
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanMonProtocolOpenSyde::mh_DisassembleCanId(const uint32_t ou32_CanId,
+std::error_code C_CanMonProtocolOpenSyde::mh_DisassembleCanId(const uint32_t ou32_CanId,
                                                       T_CanAddressInformation & or_CanAddressInformation)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    /*      |   P   | R  | DP |    PF    |   PS   |   SA   |
       bit  | 28-26 | 25 | 24 |   23-16  |  15-8  |   7-0  |
@@ -337,7 +340,7 @@ int32_t C_CanMonProtocolOpenSyde::mh_DisassembleCanId(const uint32_t ou32_CanId,
       // unsupported
       else
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
 
       or_CanAddressInformation.t_NodeIdTarget.u8_NodeId = static_cast<uint8_t>((ou32_CanId >> 8U) & 0xFFU);
@@ -349,10 +352,10 @@ int32_t C_CanMonProtocolOpenSyde::mh_DisassembleCanId(const uint32_t ou32_CanId,
    // unsupported
    else
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1932,12 +1935,12 @@ std::string C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
 
    if (orc_Msg.u8_XTD == 1U) //29bit ID ?
    {
-      int32_t s32_Return;
+      std::error_code c_Return = Errc::success;
       uint16_t u16_NumBytes;
       T_CanAddressInformation t_Address;
       //decode ID:
-      s32_Return = C_CanMonProtocolOpenSyde::mh_DisassembleCanId(orc_Msg.u32_ID, t_Address);
-      if (s32_Return == C_NO_ERR)
+      c_Return = C_CanMonProtocolOpenSyde::mh_DisassembleCanId(orc_Msg.u32_ID, t_Address);
+      if (!c_Return)
       {
          c_Text = this->m_AddressInformationToText(t_Address);
 

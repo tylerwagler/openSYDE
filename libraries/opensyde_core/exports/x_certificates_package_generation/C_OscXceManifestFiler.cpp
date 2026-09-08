@@ -14,8 +14,11 @@
 #include "C_SclStringCompat.hpp"
 
 #include "TglFile.hpp"
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
@@ -53,47 +56,48 @@ const uint16_t C_OscXceManifestFiler::mhu16_PACKAGE_VERSION_1 = 1;
    \param[in]      orc_Path      Path
 
    \return
-   C_NO_ERR    data read
-   C_RANGE     specified manifest file does not exist
-   C_NOACT     specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG    manifest file content is invalid or incomplete
-               manifest file could not be loaded
+   Errc::success  data read
+   Errc::range    specified manifest file does not exist
+   Errc::noact    specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config   manifest file content is invalid or incomplete
+                  manifest file could not be loaded
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const std::string & orc_Path)
+std::error_code C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const std::string & orc_Path)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_Path) == true)
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading manifest data");
-      s32_Retval = ListLoadFromFile(c_XmlParser, orc_Path);
-      if (s32_Retval == C_NO_ERR)
+      //the XML parser still reports the STW int32_t error convention
+      c_Retval = c_XmlParser.LoadFromFile(orc_Path);
+      if (!c_Retval)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-update-package-manifest")
          {
-            s32_Retval = h_LoadData(orc_Config, c_XmlParser);
+            c_Retval = h_LoadData(orc_Config, c_XmlParser);
          }
          else
          {
             osc_write_log_error("Loading manifest data",
                                 "Could not find \"opensyde-update-package-manifest\" node.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
       else
       {
          osc_write_log_error("Loading manifest data", "File \"" + orc_Path + "\" could not be opened.");
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
       }
    }
    else
    {
       osc_write_log_error("Loading manifest data", "File \"" + orc_Path + "\" does not exist.");
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -103,33 +107,33 @@ int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const s
    \param[in]  orc_Path    Path
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   data invalid
+   Errc::success  data saved
+   Errc::config   data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, const std::string & orc_Path)
+std::error_code C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, const std::string & orc_Path)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
-                                                                    "opensyde-update-package-manifest");
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
+                                                                          "opensyde-update-package-manifest");
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       //node
       C_OscXceManifestFiler::h_SaveData(orc_Config, c_XmlParser);
       //Don't forget to save!
-      if (ListSaveToFile(c_XmlParser, orc_Path) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_Path))
       {
          osc_write_log_error("Saving manifest data", "Could not create file.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
       //More details are in log
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -139,59 +143,60 @@ int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, c
    \param[in,out]  orc_XmlParser    XML parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    manifest file content is invalid or incomplete
+   Errc::success  data read
+   Errc::config   manifest file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
    std::string c_Types;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
-                                                             "Loading manifest data");
+   //the XML parser and the filer utilities still report the STW int32_t error convention
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
+                                                                   "Loading manifest data");
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("package");
+      c_Retval = orc_XmlParser.SelectNodeChildError("package");
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.GetAttributeStringError("types", c_Types);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = orc_XmlParser.GetAttributeStringError("types", c_Types);
+      if (!c_Retval)
       {
          if (c_Types != "x-app-security-certificates")
          {
             orc_XmlParser.ReportErrorForAttributeContentStartingWithXmlContext("types",
                                                                                "expecting content to be \"x-app-security-certificates\"");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
          orc_XmlParser.SelectNodeParent();
       }
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("x-app-security-certificates");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = orc_XmlParser.SelectNodeChildError("x-app-security-certificates");
+      if (!c_Retval)
       {
-         s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_PACKAGE_VERSION_1, "package-version",
-                                                           "Loading manifest data");
+         c_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_PACKAGE_VERSION_1, "package-version",
+                                                         "Loading manifest data");
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.SelectNodeChildError("secure-authentication");
+         c_Retval = orc_XmlParser.SelectNodeChildError("secure-authentication");
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeStringError("certificates-path", orc_Config.c_CertificatesPath);
+         c_Retval = orc_XmlParser.GetAttributeStringError("certificates-path", orc_Config.c_CertificatesPath);
          orc_XmlParser.SelectNodeParent();
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(orc_Config.c_UpdatePackageParameters,
-                                                                            orc_XmlParser);
+         c_Retval = C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(orc_Config.c_UpdatePackageParameters,
+                                                                          orc_XmlParser);
       }
       orc_XmlParser.SelectNodeParent();
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -235,23 +240,24 @@ void C_OscXceManifestFiler::h_SaveData(const C_OscXceManifest & orc_Config, C_Os
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    manifest file content is invalid or incomplete
+   Errc::success  data read
+   Errc::config   manifest file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscXceUpdatePackageParameters> & orc_Config,
-                                                              C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(
+   std::vector<C_OscXceUpdatePackageParameters> & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("secure-update");
+   //the XML parser still reports the STW int32_t error convention
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("secure-update");
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("update-package-parameters-list");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = orc_XmlParser.SelectNodeChildError("update-package-parameters-list");
+      if (!c_Retval)
       {
          uint32_t u32_ExpectedCount;
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("num-parameters", u32_ExpectedCount);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("num-parameters", u32_ExpectedCount);
+         if (!c_Retval)
          {
             uint32_t u32_ActualCount = 0UL;
             std::string c_NodeUpdatePackageParameters = orc_XmlParser.SelectNodeChild(
@@ -263,8 +269,8 @@ int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscX
                do
                {
                   C_OscXceUpdatePackageParameters c_UpdatePackageParameters;
-                  s32_Retval = mh_LoadUpdatePackageParameter(c_UpdatePackageParameters, orc_XmlParser);
-                  if (s32_Retval == C_NO_ERR)
+                  c_Retval = mh_LoadUpdatePackageParameter(c_UpdatePackageParameters, orc_XmlParser);
+                  if (!c_Retval)
                   {
                      orc_Config.push_back(c_UpdatePackageParameters);
                      //Count
@@ -273,8 +279,8 @@ int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscX
                      c_NodeUpdatePackageParameters = orc_XmlParser.SelectNodeNext("update-package-parameters");
                   }
                }
-               while ((c_NodeUpdatePackageParameters == "update-package-parameters") && (s32_Retval == C_NO_ERR));
-               if (s32_Retval == C_NO_ERR)
+               while ((c_NodeUpdatePackageParameters == "update-package-parameters") && (!c_Retval));
+               if (!c_Retval)
                {
                   //Return
                   tgl_assert(orc_XmlParser.SelectNodeParent() == "update-package-parameters-list");
@@ -295,7 +301,7 @@ int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscX
       //Return
       orc_XmlParser.SelectNodeParent();
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -329,20 +335,21 @@ void C_OscXceManifestFiler::mh_SaveUpdatePackageParameters(
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    manifest file content is invalid or incomplete
+   Errc::success  data read
+   Errc::config   manifest file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameter(C_OscXceUpdatePackageParameters & orc_Config,
-                                                             const C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscXceManifestFiler::mh_LoadUpdatePackageParameter(C_OscXceUpdatePackageParameters & orc_Config,
+                                                                     const C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.GetAttributeStringError("password", orc_Config.c_Password);
+   //the XML parser still reports the STW int32_t error convention
+   std::error_code c_Retval = orc_XmlParser.GetAttributeStringError("password", orc_Config.c_Password);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.GetAttributeStringError("authentication_key", orc_Config.c_AuthenticationKeyPath);
+      c_Retval = orc_XmlParser.GetAttributeStringError("authentication_key", orc_Config.c_AuthenticationKeyPath);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

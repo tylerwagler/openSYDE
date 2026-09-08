@@ -106,12 +106,12 @@ void C_GiSvDaToggleBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_S
    {
       const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-      if (pc_Dashboard != NULL)
+      if (pc_Dashboard != nullptr)
       {
          const C_PuiSvDbToggle * const pc_Box =
             pc_Dashboard->GetToggle(static_cast<uint32_t>(this->ms32_Index));
-         tgl_assert(pc_Box != NULL);
-         if (pc_Box != NULL)
+         tgl_assert(pc_Box != nullptr);
+         if (pc_Box != nullptr)
          {
             this->UpdateType(pc_Box->e_Type);
          }
@@ -136,15 +136,15 @@ void C_GiSvDaToggleBase::LoadData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbToggle * const pc_Box = pc_Dashboard->GetToggle(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          this->LoadSvBasicData(*pc_Box);
          this->UpdateType(pc_Box->e_Type);
-         if (this->mpc_CheckBoxWidget != NULL)
+         if (this->mpc_CheckBoxWidget != nullptr)
          {
             this->mpc_CheckBoxWidget->setChecked(pc_Box->q_State);
          }
@@ -160,15 +160,15 @@ void C_GiSvDaToggleBase::UpdateData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbToggle * const pc_Box = pc_Dashboard->GetToggle(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          C_PuiSvDbToggle c_Box = *pc_Box;
          this->UpdateSvBasicData(c_Box);
-         if (this->mpc_CheckBoxWidget != NULL)
+         if (this->mpc_CheckBoxWidget != nullptr)
          {
             c_Box.q_State = this->mpc_CheckBoxWidget->isChecked();
          }
@@ -202,14 +202,14 @@ void C_GiSvDaToggleBase::DeleteData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaToggleBase::UpdateShowValue(void)
 {
-   if (this->mpc_CheckBoxWidget != NULL)
+   if (this->mpc_CheckBoxWidget != nullptr)
    {
       // Poll only when something is expected
       if (this->mq_ManualReadStarted == true)
       {
          QString c_Value;
          float64_t f64_UnscaledValue;
-         if (this->m_GetLastValue(0UL, c_Value, &f64_UnscaledValue, NULL) == C_NO_ERR)
+         if (this->m_GetLastValue(0UL, c_Value, &f64_UnscaledValue, nullptr) == C_NO_ERR)
          {
             this->mpc_CheckBoxWidget->setChecked(static_cast<bool>(f64_UnscaledValue));
             this->mq_ManualReadStarted = false;
@@ -226,7 +226,7 @@ void C_GiSvDaToggleBase::UpdateShowValue(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaToggleBase::SendCurrentValue(void)
 {
-   if (this->mpc_CheckBoxWidget != NULL)
+   if (this->mpc_CheckBoxWidget != nullptr)
    {
       C_PuiSvDbDataElementScaling c_Scaling;
       tgl_assert(this->GetDataPoolElementScaling(0, c_Scaling) == C_NO_ERR);
@@ -255,11 +255,11 @@ bool C_GiSvDaToggleBase::CallProperties(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbToggle * const pc_Box = pc_Dashboard->GetToggle(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          int32_t s32_Return = C_NO_ERR;
          C_PuiSvDbNodeDataPoolListElementId c_ElementId;
@@ -355,7 +355,7 @@ bool C_GiSvDaToggleBase::CallProperties(void)
                                                                               &c_Box, this->me_Type) == C_NO_ERR);
             }
             Q_EMIT this->SigTriggerUpdateTransmissionConfiguration();
-            if (c_New != NULL)
+            if (c_New != nullptr)
             {
                c_New->HideOverlay();
                c_New->deleteLater();
@@ -378,10 +378,10 @@ void C_GiSvDaToggleBase::ConnectionActiveChanged(const bool oq_Active, const QMa
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbToggle * const pc_Box = pc_Dashboard->GetToggle(static_cast<uint32_t>(this->ms32_Index));
-      if (pc_Box != NULL)
+      if (pc_Box != nullptr)
       {
          if ((oq_Active == true) &&
              (this->GetWidgetDataPoolElementCount() > 0U) &&
@@ -429,7 +429,7 @@ void C_GiSvDaToggleBase::ConnectionActiveChanged(const bool oq_Active, const QMa
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaToggleBase::UpdateType(const C_PuiSvDbToggle::E_Type oe_Type)
 {
-   if (this->mpc_CheckBoxWidget != NULL)
+   if (this->mpc_CheckBoxWidget != nullptr)
    {
       QString c_SvgUrlUnchecked;
       QString c_SvgUrlChecked;
@@ -558,7 +558,7 @@ bool C_GiSvDaToggleBase::m_CheckHasValidElements(QString & orc_FirstInvalidEleme
                                                                              c_ElementId.u32_DataPoolIndex,
                                                                              c_ElementId.u32_ListIndex,
                                                                              c_ElementId.u32_ElementIndex);
-               if ((pc_Element != NULL) && (this->GetDataPoolElementScaling(u32_Index, c_Scaling) == C_NO_ERR))
+               if ((pc_Element != nullptr) && (this->GetDataPoolElementScaling(u32_Index, c_Scaling) == C_NO_ERR))
                {
                   std::vector<float64_t> c_Min;
                   std::vector<float64_t> c_Max;

@@ -15,6 +15,7 @@
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SclStringCompat.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -107,11 +108,11 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeNameAvailable(const std::string & orc_Nam
 
    //Either end on error or continue if all node names are requested
    for (uint32_t u32_ItNode = 0;
-        (u32_ItNode < this->mc_CoreDefinition.c_Nodes.size()) && ((q_Retval == true) || (opc_ExistingNames != NULL));
+        (u32_ItNode < this->mc_CoreDefinition.c_Nodes.size()) && ((q_Retval == true) || (opc_ExistingNames != nullptr));
         ++u32_ItNode)
    {
       bool q_Skip = false;
-      if (opu32_NodeIndexToSkip != NULL)
+      if (opu32_NodeIndexToSkip != nullptr)
       {
          q_Skip = this->CheckNodeIndexAssociatedWithAnotherNodeIndex(*opu32_NodeIndexToSkip, u32_ItNode);
       }
@@ -124,7 +125,7 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeNameAvailable(const std::string & orc_Nam
             q_Retval = false;
          }
          //Store other (not checked) node name
-         if (opc_ExistingNames != NULL)
+         if (opc_ExistingNames != nullptr)
          {
             bool q_Exists = false;
             for (uint32_t u32_It = 0UL; u32_It < opc_ExistingNames->size(); ++u32_It)
@@ -209,7 +210,7 @@ const C_PuiSdNode * C_PuiSdHandlerNodeLogic::GetUiNode(const uint32_t & oru32_In
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -236,7 +237,7 @@ const C_OscNodeSquad * C_PuiSdHandlerNodeLogic::GetOscNodeSquadConst(const uint3
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -263,7 +264,7 @@ const C_OscNode * C_PuiSdHandlerNodeLogic::GetOscNodeConst(const uint32_t & oru3
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -336,7 +337,7 @@ C_OscNode * C_PuiSdHandlerNodeLogic::GetOscNode(const uint32_t & oru32_Index)
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -364,7 +365,7 @@ C_OscNodeSquad * C_PuiSdHandlerNodeLogic::GetOscNodeSquad(const uint32_t & oru32
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -588,7 +589,7 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeAndSort(C_OscNode & orc_OscNode, const 
    const uint32_t u32_Index = mc_CoreDefinition.c_Nodes.size();
    //Extract device name if the device was already set
    const std::string c_DeviceName = (orc_OscNode.pc_DeviceDefinition !=
-                                     NULL) ? orc_OscNode.pc_DeviceDefinition->GetDisplayName() : "";
+                                     nullptr) ? orc_OscNode.pc_DeviceDefinition->GetDisplayName() : "";
    const std::string c_DefaultDeviceName =
       C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName.c_str()).toStdString().c_str();
 
@@ -653,7 +654,7 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
       C_OscNode & rc_OscNode = orc_OscNodes[0];
       //Extract device name if the device was already set
       const std::string c_DeviceName = (rc_OscNode.pc_DeviceDefinition !=
-                                        NULL) ? rc_OscNode.pc_DeviceDefinition->GetDisplayName() : "";
+                                        nullptr) ? rc_OscNode.pc_DeviceDefinition->GetDisplayName() : "";
       const std::string c_DefaultDeviceName =
          C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName.c_str()).toStdString().c_str();
       c_Name = orc_NameProposal.isEmpty() ? c_DefaultDeviceName : orc_NameProposal.toStdString().c_str();
@@ -712,7 +713,7 @@ void C_PuiSdHandlerNodeLogic::RemoveNode(const uint32_t ou32_NodeIndex)
       this->m_HandleSyncNodeAboutToBeDeleted(c_AllNodeIndexToRemove[static_cast<uint32_t>(s32_NodeIndexCounter)]);
    }
 
-   tgl_assert(this->mc_CoreDefinition.DeleteNode(ou32_NodeIndex) == C_NO_ERR);
+   tgl_assert(this->mc_CoreDefinition.DeleteNode(ou32_NodeIndex) == Errc::success);
 
    for (s32_NodeIndexCounter = (static_cast<int32_t>(c_AllNodeIndexToRemove.size()) - 1); s32_NodeIndexCounter >= 0;
         --s32_NodeIndexCounter)
@@ -768,7 +769,7 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeConflict(const uint32_t & oru32_NodeIndex
                                                  &q_CommMinSignalCountInvalid,
                                                  &q_CommMaxSignalCountInvalid, &q_CoPdoCountInvalid,
                                                  &q_CoNodeIdInvalid, &q_CoHeartbeatInvalid,
-                                                 true, NULL, NULL, NULL, NULL, NULL) == C_NO_ERR)
+                                                 true, nullptr, nullptr, nullptr, nullptr, nullptr) == Errc::success)
       {
          const bool q_NvmSizeConflict = this->CheckNodeNvmDataPoolsSizeConflict(oru32_NodeIndex);
          if ((q_NameConflict == true) || (q_NodeIdInvalid == true) || (q_IpInvalid == true) ||
@@ -813,9 +814,9 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeConflict(const uint32_t & oru32_NodeIndex
       bool q_NodeIdInvalid;
       bool q_IpInvalid;
 
-      if (this->mc_CoreDefinition.CheckErrorNode(oru32_NodeIndex, &q_NameConflict, NULL, &q_NodeIdInvalid, &q_IpInvalid,
-                                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                                                 NULL, true, NULL, NULL, NULL, NULL, NULL) == C_NO_ERR)
+      if (this->mc_CoreDefinition.CheckErrorNode(oru32_NodeIndex, &q_NameConflict, nullptr, &q_NodeIdInvalid, &q_IpInvalid,
+                                                 nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+                                                 nullptr, true, nullptr, nullptr, nullptr, nullptr, nullptr) == Errc::success)
       {
          if ((q_NameConflict == true) || (q_NodeIdInvalid == true) || (q_IpInvalid == true))
          {
@@ -864,12 +865,12 @@ void C_PuiSdHandlerNodeLogic::GetSupportedCanBitrates(const std::vector<uint32_t
    {
       const C_OscNode * const pc_Node = this->GetOscNodeConst(orc_Nodes[u32_NodeCounter]);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          uint32_t u32_SupportedBitrateCounter;
          std::vector<uint32_t> c_TempBitrates;
 
-         tgl_assert(pc_Node->pc_DeviceDefinition != NULL);
+         tgl_assert(pc_Node->pc_DeviceDefinition != nullptr);
 
          // Search common bitrates by comparing previously found bitrates with the bitrates of the current device
          for (u32_SupportedBitrateCounter = 0U; u32_SupportedBitrateCounter < orc_Bitrates.size();
@@ -935,12 +936,12 @@ void C_PuiSdHandlerNodeLogic::GetSupportedCanFdBitrates(const std::vector<uint32
    {
       const C_OscNode * const pc_Node = this->GetOscNodeConst(orc_Nodes[u32_NodeCounter]);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          uint32_t u32_SupportedBitrateCounter;
          std::vector<uint32_t> c_TempBitrates;
 
-         tgl_assert(pc_Node->pc_DeviceDefinition != NULL);
+         tgl_assert(pc_Node->pc_DeviceDefinition != nullptr);
 
          // Search common bitrates by comparing previously found bitrates with the bitrates of the current device
          for (u32_SupportedBitrateCounter = 0U; u32_SupportedBitrateCounter < orc_Bitrates.size();
@@ -1000,7 +1001,7 @@ bool C_PuiSdHandlerNodeLogic::NodeSupportsCanFd(const std::vector<uint32_t> & or
    {
       const C_OscNode * const pc_Node = this->GetOscNodeConst(orc_Nodes[u32_NodeCounter]);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          if (pc_Node->pc_DeviceDefinition->c_SupportedCanFeatures.empty())
          {
@@ -1111,7 +1112,8 @@ std::vector<uint32_t> C_PuiSdHandlerNodeLogic::GetAllNodeGroupIndicesUsingNodeIn
 int32_t C_PuiSdHandlerNodeLogic::GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex,
                                                                 uint32_t & oru32_NodeSquadIndex) const
 {
-   return this->mc_CoreDefinition.GetNodeSquadIndexWithNodeIndex(ou32_NodeIndex, oru32_NodeSquadIndex);
+   //the core class reports std::error_code now; this class keeps the STW int32_t convention
+   return this->mc_CoreDefinition.GetNodeSquadIndexWithNodeIndex(ou32_NodeIndex, oru32_NodeSquadIndex).value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1138,7 +1140,7 @@ void C_PuiSdHandlerNodeLogic::GetNodeToNodeSquadMapping(std::vector<int32_t> & o
    for (u32_NodeCounter = 0U; u32_NodeCounter < this->mc_CoreDefinition.c_Nodes.size(); ++u32_NodeCounter)
    {
       uint32_t u32_NodeSquadIndex = 0U;
-      if (this->mc_CoreDefinition.GetNodeSquadIndexWithNodeIndex(u32_NodeCounter, u32_NodeSquadIndex) == C_NO_ERR)
+      if (this->mc_CoreDefinition.GetNodeSquadIndexWithNodeIndex(u32_NodeCounter, u32_NodeSquadIndex) == Errc::success)
       {
          // Node is part of an node squad
          orc_Mapping[u32_NodeCounter] = static_cast<int32_t>(u32_NodeSquadIndex);
@@ -1188,7 +1190,7 @@ const
       if (q_ErrorDetected == true)
       {
          q_Retval = true;
-         if (opc_CriticalNodeNames != NULL)
+         if (opc_CriticalNodeNames != nullptr)
          {
             opc_CriticalNodeNames->emplace_back(rc_CheckedNode.c_Properties.c_Name.c_str());
          }
@@ -1216,7 +1218,7 @@ const
          if (q_ErrorDetected == true)
          {
             q_Retval = true;
-            if (opc_CriticalDatapoolNamespaceNames != NULL)
+            if (opc_CriticalDatapoolNamespaceNames != nullptr)
             {
                const QString c_Combined =
                   static_cast<QString>("%1::%2").arg(rc_CheckedNode.c_Properties.c_Name.c_str()).arg(
@@ -1247,7 +1249,7 @@ const
       if (q_ErrorDetected == true)
       {
          q_Retval = true;
-         if (opc_CriticalBusNames != NULL)
+         if (opc_CriticalBusNames != nullptr)
          {
             opc_CriticalBusNames->emplace_back(rc_CheckedBus.c_Name.c_str());
          }
@@ -1275,8 +1277,8 @@ int32_t C_PuiSdHandlerNodeLogic::MapNodeNameToIndex(const QString & orc_NodeName
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < this->GetOscNodesSize(); ++u32_ItNode)
    {
       const C_OscNode * const pc_Node = this->GetOscNodeConst(u32_ItNode);
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          if (orc_NodeName.compare(pc_Node->c_Properties.c_Name.c_str()) == 0)
          {
@@ -1305,7 +1307,7 @@ int32_t C_PuiSdHandlerNodeLogic::MapNodeIndexToName(const uint32_t ou32_NodeInde
    int32_t s32_Retval = C_NO_ERR;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       orc_NodeName = pc_Node->c_Properties.c_Name.c_str();
    }
@@ -1333,12 +1335,12 @@ bool C_PuiSdHandlerNodeLogic::HasNodeAnAvailableFlashloader(const uint32_t ou32_
 
    const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const C_OscDeviceDefinition * const pc_Device = pc_Node->pc_DeviceDefinition;
       const uint32_t u32_SubDeviceIndex = pc_Node->u32_SubDeviceIndex;
-      tgl_assert(pc_Device != NULL);
-      if (pc_Device != NULL)
+      tgl_assert(pc_Device != nullptr);
+      if (pc_Device != nullptr)
       {
          tgl_assert(u32_SubDeviceIndex < pc_Device->c_SubDevices.size());
          if (u32_SubDeviceIndex < pc_Device->c_SubDevices.size())
@@ -1649,7 +1651,8 @@ int32_t C_PuiSdHandlerNodeLogic::RemoveDataPool(const uint32_t & oru32_NodeIndex
          //Handle COMM
          m_CleanUpComDataPool(oru32_NodeIndex, oru32_DataPoolIndex);
          rc_UiNode.c_UiDataPools.erase(rc_UiNode.c_UiDataPools.begin() + oru32_DataPoolIndex);
-         s32_Retval = rc_OscNode.DeleteDataPool(oru32_DataPoolIndex);
+         //the core class reports std::error_code now; this class keeps the STW int32_t convention
+         s32_Retval = rc_OscNode.DeleteDataPool(oru32_DataPoolIndex).value();
          //Handle NVM
          rc_OscNode.RecalculateAddress();
 
@@ -1897,7 +1900,7 @@ int32_t C_PuiSdHandlerNodeLogic::GetDataPool(const uint32_t & oru32_NodeIndex, c
    const C_PuiSdNodeDataPool * const pc_UiDataPool = GetUiDataPool(oru32_NodeIndex,
                                                                    oru32_DataPoolIndex);
 
-   if ((pc_OscDataPool != NULL) && (pc_UiDataPool != NULL))
+   if ((pc_OscDataPool != nullptr) && (pc_UiDataPool != nullptr))
    {
       orc_UiContent = *pc_UiDataPool;
       orc_OscContent = *pc_OscDataPool;
@@ -1941,7 +1944,7 @@ std::string C_PuiSdHandlerNodeLogic::GetUniqueDataPoolName(const uint32_t & oru3
 const C_OscNodeDataPool * C_PuiSdHandlerNodeLogic::GetOscDataPool(const uint32_t & oru32_NodeIndex,
                                                                   const uint32_t & oru32_DataPoolIndex) const
 {
-   const C_OscNodeDataPool * pc_Retval = NULL;
+   const C_OscNodeDataPool * pc_Retval = nullptr;
 
    //Check size & consistency
    if (oru32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
@@ -1970,7 +1973,7 @@ const C_OscNodeDataPool * C_PuiSdHandlerNodeLogic::GetOscDataPool(const uint32_t
 const C_PuiSdNodeDataPool * C_PuiSdHandlerNodeLogic::GetUiDataPool(const uint32_t & oru32_NodeIndex,
                                                                    const uint32_t & oru32_DataPoolIndex) const
 {
-   const C_PuiSdNodeDataPool * pc_Retval = NULL;
+   const C_PuiSdNodeDataPool * pc_Retval = nullptr;
 
    //Check size & consistency
    if (oru32_NodeIndex < this->mc_UiNodes.size())
@@ -2050,7 +2053,8 @@ int32_t C_PuiSdHandlerNodeLogic::MoveDataPool(const uint32_t ou32_NodeIndex, con
           (ou32_TargetIndex < rc_UiNode.c_UiDataPools.size()))
       {
          // adapt core node
-         s32_Retval = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex].MoveDataPool(ou32_SourceIndex, ou32_TargetIndex);
+         //the core class reports std::error_code now; this class keeps the STW int32_t convention
+         s32_Retval = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex].MoveDataPool(ou32_SourceIndex, ou32_TargetIndex).value();
 
          // adapt ui node
          if (s32_Retval == C_NO_ERR)
@@ -2186,12 +2190,12 @@ const
       const C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[oru32_NodeIndex];
       //Don't stop on error if the existing datapool names are relevant
       for (uint32_t u32_ItDataPool = 0;
-           (u32_ItDataPool < rc_Node.c_DataPools.size()) && ((q_Retval == true) || (opc_ExistingDatapoolNames != NULL));
+           (u32_ItDataPool < rc_Node.c_DataPools.size()) && ((q_Retval == true) || (opc_ExistingDatapoolNames != nullptr));
            ++u32_ItDataPool)
       {
          bool q_Skip = false;
          //Check for datapool to skip
-         if (opu32_DataPoolIndexToSkip != NULL)
+         if (opu32_DataPoolIndexToSkip != nullptr)
          {
             if (*opu32_DataPoolIndexToSkip == u32_ItDataPool)
             {
@@ -2205,7 +2209,7 @@ const
             {
                q_Retval = false;
             }
-            if (opc_ExistingDatapoolNames != NULL)
+            if (opc_ExistingDatapoolNames != nullptr)
             {
                opc_ExistingDatapoolNames->push_back(rc_DataPool.c_Name);
             }
@@ -2328,16 +2332,16 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeNvmDataPoolsSizeConflict(const uint32_t o
    bool q_Return = true;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
 
-   if (opq_SizeConflict != NULL)
+   if (opq_SizeConflict != nullptr)
    {
       *opq_SizeConflict = false;
    }
-   if (opq_OverlapConflict != NULL)
+   if (opq_OverlapConflict != nullptr)
    {
       *opq_OverlapConflict = false;
    }
 
-   if ((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL) &&
+   if ((pc_Node != nullptr) && (pc_Node->pc_DeviceDefinition != nullptr) &&
        (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()))
    {
       std::vector<C_PuiSdHandlerNodeLogicNvmArea> c_Areas;
@@ -2375,14 +2379,14 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeNvmDataPoolsSizeConflict(const uint32_t o
          else
          {
             // Return detailed information about the error when needed
-            if (opq_SizeConflict != NULL)
+            if (opq_SizeConflict != nullptr)
             {
                *opq_SizeConflict =
                   (u32_SizeUsedAreas >
                    pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].u32_UserEepromSizeBytes) ||
                   q_OutOfRange;
             }
-            if (opq_OverlapConflict != NULL)
+            if (opq_OverlapConflict != nullptr)
             {
                *opq_OverlapConflict = q_OverlapDetected;
             }
@@ -2426,7 +2430,7 @@ const
    {
       const C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
 
-      if (rc_Node.pc_DeviceDefinition != NULL)
+      if (rc_Node.pc_DeviceDefinition != nullptr)
       {
          C_PuiSdHandlerNodeLogic::mh_GetNodeNvmDataPoolAreas(rc_Node, orc_Areas);
       }
@@ -2621,7 +2625,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetApplication(const uint32_t ou32_NodeIndex, c
 const C_OscNodeApplication * C_PuiSdHandlerNodeLogic::GetApplication(const uint32_t ou32_NodeIndex,
                                                                      const uint32_t ou32_ApplicationIndex) const
 {
-   const C_OscNodeApplication * pc_Retval = NULL;
+   const C_OscNodeApplication * pc_Retval = nullptr;
 
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
@@ -2776,7 +2780,7 @@ int32_t C_PuiSdHandlerNodeLogic::GetNextProgrammableApplicationIndex(const uint3
    int32_t s32_Retval = C_NO_ERR;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       //Check if current is valid
       if (ors32_ApplicationIndex >= 0)
@@ -2846,7 +2850,7 @@ int32_t C_PuiSdHandlerNodeLogic::CheckApplicationName(const uint32_t ou32_NodeIn
       {
          const C_OscNodeApplication & rc_Application = rc_Node.c_Applications[u32_ItApplication];
          bool q_Skip = false;
-         if (opu32_SkipApplication != NULL)
+         if (opu32_SkipApplication != nullptr)
          {
             if (*opu32_SkipApplication == u32_ItApplication)
             {
@@ -3566,7 +3570,7 @@ int32_t C_PuiSdHandlerNodeLogic::GetDataPoolList(const uint32_t & oru32_NodeInde
                                                                        oru32_DataPoolIndex,
                                                                        oru32_DataPoolListIndex);
 
-   if ((pc_OscList != NULL) && (pc_UiList != NULL))
+   if ((pc_OscList != nullptr) && (pc_UiList != nullptr))
    {
       orc_UiContent = *pc_UiList;
       orc_OscContent = *pc_OscList;
@@ -3606,7 +3610,7 @@ int32_t C_PuiSdHandlerNodeLogic::GetDataPoolListDataSet(const uint32_t & oru32_N
                                                                        oru32_DataPoolIndex,
                                                                        oru32_DataPoolListIndex);
 
-   if (pc_OscList != NULL)
+   if (pc_OscList != nullptr)
    {
       if (oru32_DataPoolListDataSetIndex < pc_OscList->c_DataSets.size())
       {
@@ -3657,11 +3661,11 @@ const C_OscNodeDataPoolDataSet * C_PuiSdHandlerNodeLogic::GetOscDataPoolListData
                                                                                     const uint32_t & oru32_DataPoolListDataSetIndex)
 const
 {
-   const C_OscNodeDataPoolDataSet * pc_Retval = NULL;
+   const C_OscNodeDataPoolDataSet * pc_Retval = nullptr;
    const C_OscNodeDataPoolList * const pc_OscList = this->GetOscDataPoolList(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                              oru32_DataPoolListIndex);
 
-   if (pc_OscList != NULL)
+   if (pc_OscList != nullptr)
    {
       if (oru32_DataPoolListDataSetIndex < pc_OscList->c_DataSets.size())
       {
@@ -4130,10 +4134,10 @@ const C_OscNodeDataPoolList * C_PuiSdHandlerNodeLogic::GetOscDataPoolList(const 
                                                                           const uint32_t & oru32_DataPoolListIndex)
 const
 {
-   const C_OscNodeDataPoolList * pc_Retval = NULL;
+   const C_OscNodeDataPoolList * pc_Retval = nullptr;
    const C_OscNodeDataPool * const pc_OscDataPool = this->GetOscDataPool(oru32_NodeIndex, oru32_DataPoolIndex);
 
-   if (pc_OscDataPool != NULL)
+   if (pc_OscDataPool != nullptr)
    {
       if (oru32_DataPoolListIndex < pc_OscDataPool->c_Lists.size())
       {
@@ -4161,10 +4165,10 @@ const C_PuiSdNodeDataPoolList * C_PuiSdHandlerNodeLogic::GetUiDataPoolList(const
                                                                            const uint32_t & oru32_DataPoolListIndex)
 const
 {
-   const C_PuiSdNodeDataPoolList * pc_Retval = NULL;
+   const C_PuiSdNodeDataPoolList * pc_Retval = nullptr;
    const C_PuiSdNodeDataPool * const pc_UiDataPool = this->GetUiDataPool(oru32_NodeIndex, oru32_DataPoolIndex);
 
-   if (pc_UiDataPool != NULL)
+   if (pc_UiDataPool != nullptr)
    {
       if (oru32_DataPoolListIndex < pc_UiDataPool->c_DataPoolLists.size())
       {
@@ -4282,13 +4286,13 @@ const
    bool q_Retval = true;
    const C_OscNodeDataPool * const pc_DataPool = this->GetOscDataPool(oru32_NodeIndex, oru32_DataPoolIndex);
 
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
       for (uint32_t u32_ItList = 0; (u32_ItList < pc_DataPool->c_Lists.size()) && (q_Retval == true);
            ++u32_ItList)
       {
          bool q_Skip = false;
-         if (opu32_DataPoolListIndexToSkip != NULL)
+         if (opu32_DataPoolListIndexToSkip != nullptr)
          {
             if (*opu32_DataPoolListIndexToSkip == u32_ItList)
             {
@@ -4335,13 +4339,13 @@ const
    const C_OscNodeDataPoolList * const pc_DataPoolList = this->GetOscDataPoolList(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                                   oru32_ListIndex);
 
-   if (pc_DataPoolList != NULL)
+   if (pc_DataPoolList != nullptr)
    {
       for (uint32_t u32_ItDataSet = 0; (u32_ItDataSet < pc_DataPoolList->c_DataSets.size()) && (q_Retval == true);
            ++u32_ItDataSet)
       {
          bool q_Skip = false;
-         if (opu32_DataPoolListDataSetIndexToSkip != NULL)
+         if (opu32_DataPoolListDataSetIndexToSkip != nullptr)
          {
             if (*opu32_DataPoolListDataSetIndexToSkip == u32_ItDataSet)
             {
@@ -4841,7 +4845,7 @@ int32_t C_PuiSdHandlerNodeLogic::GetDataPoolListElement(const uint32_t & oru32_N
                                                                                             oru32_DataPoolListIndex,
                                                                                             oru32_DataPoolListElementIndex);
 
-   if ((pc_OscListElement != NULL) && (pc_UiListElement != NULL))
+   if ((pc_OscListElement != nullptr) && (pc_UiListElement != nullptr))
    {
       orc_UiContent = *pc_UiListElement;
       orc_OscContent = *pc_OscListElement;
@@ -5511,11 +5515,11 @@ const C_OscNodeDataPoolListElement * C_PuiSdHandlerNodeLogic::GetOscDataPoolList
    const uint32_t & oru32_DataPoolListElementIndex)
 const
 {
-   const C_OscNodeDataPoolListElement * pc_Retval = NULL;
+   const C_OscNodeDataPoolListElement * pc_Retval = nullptr;
    const C_OscNodeDataPoolList * const pc_OscList = this->GetOscDataPoolList(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                              oru32_DataPoolListIndex);
 
-   if (pc_OscList != NULL)
+   if (pc_OscList != nullptr)
    {
       if (oru32_DataPoolListElementIndex < pc_OscList->c_Elements.size())
       {
@@ -5561,11 +5565,11 @@ const C_PuiSdNodeDataPoolListElement * C_PuiSdHandlerNodeLogic::GetUiDataPoolLis
    const uint32_t & oru32_DataPoolListElementIndex)
 const
 {
-   const C_PuiSdNodeDataPoolListElement * pc_Retval = NULL;
+   const C_PuiSdNodeDataPoolListElement * pc_Retval = nullptr;
    const C_PuiSdNodeDataPoolList * const pc_UiList = this->GetUiDataPoolList(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                              oru32_DataPoolListIndex);
 
-   if (pc_UiList != NULL)
+   if (pc_UiList != nullptr)
    {
       if (oru32_DataPoolListElementIndex < pc_UiList->c_DataPoolListElements.size())
       {
@@ -5714,13 +5718,13 @@ const
    const C_OscNodeDataPoolList * const pc_DataPoolList = this->GetOscDataPoolList(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                                   oru32_ListIndex);
 
-   if (pc_DataPoolList != NULL)
+   if (pc_DataPoolList != nullptr)
    {
       for (uint32_t u32_ItElement = 0; (u32_ItElement < pc_DataPoolList->c_Elements.size()) && (q_Retval == true);
            ++u32_ItElement)
       {
          bool q_Skip = false;
-         if (opu32_DataPoolListElementIndexToSkip != NULL)
+         if (opu32_DataPoolListElementIndexToSkip != nullptr)
          {
             if (*opu32_DataPoolListElementIndexToSkip == u32_ItElement)
             {
@@ -5812,7 +5816,7 @@ std::map<std::string,
 {
    std::map<std::string, bool> c_Retval;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(oru32_NodeIndex);
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_ItApplication = 0; u32_ItApplication < pc_Node->c_Applications.size(); ++u32_ItApplication)
       {
@@ -5836,7 +5840,7 @@ std::map<std::string,
 {
    std::map<std::string, bool> c_Retval;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(oru32_NodeIndex);
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_ItDataPool = 0; u32_ItDataPool < pc_Node->c_DataPools.size(); ++u32_ItDataPool)
       {
@@ -5862,7 +5866,7 @@ const
 {
    std::map<std::string, bool> c_Retval;
    const C_OscNodeDataPool * const pc_NodeDataPool = this->GetOscDataPool(oru32_NodeIndex, oru32_DataPoolIndex);
-   if (pc_NodeDataPool != NULL)
+   if (pc_NodeDataPool != nullptr)
    {
       for (uint32_t u32_ItDataPoolList = 0; u32_ItDataPoolList < pc_NodeDataPool->c_Lists.size(); ++u32_ItDataPoolList)
       {
@@ -5891,7 +5895,7 @@ const
    const C_OscNodeDataPoolList * const pc_NodeDataPoolList = this->GetOscDataPoolList(oru32_NodeIndex,
                                                                                       oru32_DataPoolIndex,
                                                                                       oru32_DataPoolListIndex);
-   if (pc_NodeDataPoolList != NULL)
+   if (pc_NodeDataPoolList != nullptr)
    {
       for (uint32_t u32_ItDataPoolListElement = 0; u32_ItDataPoolListElement < pc_NodeDataPoolList->c_DataSets.size();
            ++u32_ItDataPoolListElement)
@@ -5921,7 +5925,7 @@ const
    const C_OscNodeDataPoolList * const pc_NodeDataPoolList = this->GetOscDataPoolList(oru32_NodeIndex,
                                                                                       oru32_DataPoolIndex,
                                                                                       oru32_DataPoolListIndex);
-   if (pc_NodeDataPoolList != NULL)
+   if (pc_NodeDataPoolList != nullptr)
    {
       for (uint32_t u32_ItDataPoolListElement = 0; u32_ItDataPoolListElement < pc_NodeDataPoolList->c_Elements.size();
            ++u32_ItDataPoolListElement)
@@ -6145,7 +6149,7 @@ int32_t C_PuiSdHandlerNodeLogic::m_HandleNodeAutomatedProgrammableApplicationUpd
    int32_t s32_Retval;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       int32_t s32_TmpIndex = static_cast<int32_t>(pc_Node->c_Properties.c_OpenSydeServerSettings.s16_DpdDataBlockIndex);
       s32_Retval = GetNextProgrammableApplicationIndex(ou32_NodeIndex, s32_TmpIndex);
@@ -6671,7 +6675,7 @@ void C_PuiSdHandlerNodeLogic::m_SetDataPoolListSharedSync(const uint32_t & oru32
                                                             c_SharedDatapools) == true)
    {
       const C_OscNodeDataPool * const pc_DatapoolOrg = this->GetOscDataPool(oru32_NodeIndex, oru32_DataPoolIndex);
-      if (pc_DatapoolOrg != NULL)
+      if (pc_DatapoolOrg != nullptr)
       {
          uint32_t u32_SharedDpCounter;
 
@@ -6685,8 +6689,8 @@ void C_PuiSdHandlerNodeLogic::m_SetDataPoolListSharedSync(const uint32_t & oru32
             const C_OscNodeDataPoolList * const pc_List = this->GetOscDataPoolList(rc_DpId.u32_NodeIndex,
                                                                                    rc_DpId.u32_DataPoolIndex,
                                                                                    oru32_DataPoolListIndex);
-            tgl_assert((pc_Datapool != NULL) && (pc_List != NULL));
-            if ((pc_Datapool != NULL) && (pc_List != NULL))
+            tgl_assert((pc_Datapool != nullptr) && (pc_List != nullptr));
+            if ((pc_Datapool != nullptr) && (pc_List != nullptr))
             {
                C_OscNodeDataPoolList c_NewValue = orc_OscContent;
                //Keep original values
@@ -6770,7 +6774,7 @@ void C_PuiSdHandlerNodeLogic::m_SetDataPoolListElementSharedSync(const uint32_t 
                                                             c_SharedDatapools) == true)
    {
       const C_OscNodeDataPool * const pc_DatapoolOrg = this->GetOscDataPool(oru32_NodeIndex, oru32_DataPoolIndex);
-      if (pc_DatapoolOrg != NULL)
+      if (pc_DatapoolOrg != nullptr)
       {
          uint32_t u32_SharedDpCounter;
 
@@ -6785,8 +6789,8 @@ void C_PuiSdHandlerNodeLogic::m_SetDataPoolListElementSharedSync(const uint32_t 
                rc_DpId.u32_NodeIndex,
                rc_DpId.u32_DataPoolIndex, oru32_DataPoolListIndex,
                oru32_DataPoolListElementIndex);
-            tgl_assert((pc_Datapool != NULL) && (pc_Element != NULL));
-            if ((pc_Datapool != NULL) && (pc_Element != NULL))
+            tgl_assert((pc_Datapool != nullptr) && (pc_Element != nullptr));
+            if ((pc_Datapool != nullptr) && (pc_Element != nullptr))
             {
                C_OscNodeDataPoolListElement c_NewElement = orc_OscContent;
                //Keep original values

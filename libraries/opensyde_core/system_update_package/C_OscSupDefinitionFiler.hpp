@@ -12,6 +12,7 @@
 #include <map>
 
 #include <string>
+#include <system_error>
 #include "C_OscXmlParser.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscSupDefinition.hpp"
@@ -28,16 +29,17 @@ namespace opensyde_core
 class C_OscSupDefinitionFiler
 {
 public:
-   static int32_t h_CreateUpdatePackageDefFile(const std::string & orc_Path,
-                                               const C_OscSupDefinition & orc_SupDefContent,
-                                               const std::vector<std::string> & orc_Files,
-                                               const bool oq_UseMinorVersion1);
-   static int32_t h_LoadUpdatePackageDefFile(const std::string & orc_TargetUnzipPath, const bool oq_IsZip,
-                                             const std::string & orc_PackagePath,
-                                             uint32_t & oru32_FileVersion, std::string & orc_FilePackagePath,
-                                             uint32_t & oru32_ActiveBusIndex, std::vector<uint8_t> & orc_ActiveNodes,
-                                             std::vector<uint32_t> & orc_UpdatePosition,
-                                             std::vector<std::string> & orc_PackageFiles);
+   static std::error_code h_CreateUpdatePackageDefFile(const std::string & orc_Path,
+                                                       const C_OscSupDefinition & orc_SupDefContent,
+                                                       const std::vector<std::string> & orc_Files,
+                                                       const bool oq_UseMinorVersion1);
+   static std::error_code h_LoadUpdatePackageDefFile(const std::string & orc_TargetUnzipPath, const bool oq_IsZip,
+                                                     const std::string & orc_PackagePath,
+                                                     uint32_t & oru32_FileVersion, std::string & orc_FilePackagePath,
+                                                     uint32_t & oru32_ActiveBusIndex,
+                                                     std::vector<uint8_t> & orc_ActiveNodes,
+                                                     std::vector<uint32_t> & orc_UpdatePosition,
+                                                     std::vector<std::string> & orc_PackageFiles);
 
    static const std::string hc_PACKAGE_UPDATE_DEF;
 

@@ -48,7 +48,7 @@ using namespace stw::tgl;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeUnoDasDataPoolListManager::C_SdNdeUnoDasDataPoolListManager(void) :
-   mpc_UndoCommand(NULL)
+   mpc_UndoCommand(nullptr)
 {
 }
 
@@ -264,7 +264,7 @@ QUndoCommand * C_SdNdeUnoDasDataPoolListManager::TakeUndoCommand(void)
 {
    QUndoCommand * const pc_Retval = this->mpc_UndoCommand;
 
-   this->mpc_UndoCommand = NULL;
+   this->mpc_UndoCommand = nullptr;
    return pc_Retval;
 }
 
@@ -274,7 +274,7 @@ QUndoCommand * C_SdNdeUnoDasDataPoolListManager::TakeUndoCommand(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoDasDataPoolListManager::m_InitUndoCommand(void)
 {
-   if (this->mpc_UndoCommand == NULL)
+   if (this->mpc_UndoCommand == nullptr)
    {
       this->mpc_UndoCommand = new QUndoCommand("Change Datasets");
    }

@@ -31,8 +31,8 @@ class C_GiLiCanBus :
 {
 public:
    C_GiLiCanBus(const int32_t & ors32_Index, const uint64_t & oru64_Id, C_GiTextElementBus * const opc_TextElementName,
-                const bool oq_DoErrorCheck, const std::vector<QPointF> * const opc_Points = NULL,
-                QGraphicsItem * const opc_Parent = NULL);
+                const bool oq_DoErrorCheck, const std::vector<QPointF> * const opc_Points = nullptr,
+                QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiLiCanBus() override;
 
    int32_t type() const override;

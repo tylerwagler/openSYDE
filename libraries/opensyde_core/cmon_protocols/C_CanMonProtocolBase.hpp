@@ -9,6 +9,10 @@
 #ifndef CCMONPROTOCOLBASEHPP
 #define CCMONPROTOCOLBASEHPP
 
+#include <system_error>
+
+#include "C_OscErrorCategory.hpp"
+
 #include "stwtypes.hpp"
 #include "stw_can.hpp"
 #include <string>
@@ -73,8 +77,8 @@ public:
    virtual void SetDecimal(const bool oq_Decimal);
 
    //overload if we have something to save (use protocol abbreviation as prefix for directives !)
-   virtual int32_t SaveParamsToIni(stw::scl::C_SclIniFile & orc_IniFile, const std::string & orc_Section);
-   virtual int32_t LoadParamsFromIni(stw::scl::C_SclIniFile & orc_IniFile, const std::string & orc_Section);
+   virtual std::error_code SaveParamsToIni(stw::scl::C_SclIniFile & orc_IniFile, const std::string & orc_Section);
+   virtual std::error_code LoadParamsFromIni(stw::scl::C_SclIniFile & orc_IniFile, const std::string & orc_Section);
 };
 
 //----------------------------------------------------------------------------------------------------------------------

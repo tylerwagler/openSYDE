@@ -24,6 +24,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscSpaServicePackageCreateUtil.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -61,14 +62,14 @@ using namespace stw::opensyde_core;
                invalid package name with no package extension
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const std::string & orc_PackagePath,
+std::error_code C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const std::string & orc_PackagePath,
                                                                   const std::string & orc_UseCase,
                                                                   const std::string & orc_PackageExtension,
                                                                   const std::string & orc_PackageExtensionTmp,
                                                                   std::string & orc_ErrorMessage,
                                                                   const bool oq_CheckFileExist)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    // does package already exist ?
    const bool q_FileExists = TglFileExists(orc_PackagePath);
@@ -78,11 +79,11 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const std::str
    {
       orc_ErrorMessage = "Update Package \"" + orc_PackagePath + "\" exists already.";
       osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
 
    // does target directory for package exist ?
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       const std::string c_TargetDir = TglExtractFilePath(orc_PackagePath);
 
@@ -92,12 +93,12 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const std::str
       {
          orc_ErrorMessage = "Target directory \"" + c_TargetDir + "\" does not exist.";
          osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
    }
 
    // valid package name? Only relevant if we save SUP as file
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       // package name must contain ".syde_sup" and ".syde_sup" must be the last characters of the given path
       if ((PosCompat(orc_PackagePath, orc_PackageExtension) == 0) ||
@@ -106,12 +107,12 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const std::str
       {
          orc_ErrorMessage = "Package name must have extension \"" + orc_PackageExtension + "\".";
          osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
    }
 
    // does temporary result folder exist ? (would be really strange, but who knows)
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
        std::string c_TmpPackagePath = SubStringCompat(orc_PackagePath, 1, PosCompat(orc_PackagePath, orc_PackageExtension) - 1) +
                                       orc_PackageExtensionTmp;
@@ -122,10 +123,10 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const std::str
          orc_ErrorMessage = "Temporary result folder \"" + c_TmpPackagePath +
                             "\" to create zip archive already exists.";
          osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -187,14 +188,14 @@ void C_OscSpaServicePackageCreateUtil::h_GetTempFolderName(const std::string & o
    \retval   C_RD_WR    could not create temporary folders
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(const std::string & orc_PackagePath,
+std::error_code C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(const std::string & orc_PackagePath,
                                                                           const std::string & orc_TemporaryDirectory,
                                                                           const std::string & orc_UseCase,
                                                                           const std::string & orc_PackageExtension,
                                                                           const std::string & orc_TemporaryPackageExtension, const std::vector<std::string> & orc_AllStaticSubFolders, std::string & orc_UsedTempPath,
                                                                           std::string & orc_ErrorMessage)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    std::string c_ErrorPath;
    C_OscSpaServicePackageCreateUtil::h_GetTempFolderName(orc_PackagePath, orc_TemporaryDirectory,
@@ -204,34 +205,42 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(const 
    //erase target path if it exists:
    if (TglDirectoryExists(orc_UsedTempPath) == true)
    {
-      s32_Return = TglRemoveDirectory(orc_UsedTempPath, false);
+      //TglRemoveDirectory reports a plain 0/non-zero status, not an STW error code.
+      //The pre-migration code propagated it directly, which happened to work only
+      //because both "success" values are 0. Map it explicitly instead, matching how
+      //C_OscSpaServicePackageLoadUtil treats the same failure.
+      const int32_t s32_RemoveResult = TglRemoveDirectory(orc_UsedTempPath, false);
+      if (s32_RemoveResult != 0)
+      {
+         c_Return = Errc::busy;
+      }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_ErrorPath = orc_UsedTempPath;
       //create target folder (from bottom-up if required):
-      s32_Return = C_OscUtils::h_CreateFolderRecursively(c_ErrorPath);
+      c_Return = C_OscUtils::h_CreateFolderRecursively(c_ErrorPath);
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
-      for (uint32_t u32_It = 0UL; (u32_It < orc_AllStaticSubFolders.size()) && (s32_Return == C_NO_ERR); ++u32_It)
+      for (uint32_t u32_It = 0UL; (u32_It < orc_AllStaticSubFolders.size()) && (!c_Return); ++u32_It)
       {
          c_ErrorPath = orc_UsedTempPath + orc_AllStaticSubFolders[u32_It];
          //create target folder (from bottom-up if required):
-         s32_Return = C_OscUtils::h_CreateFolderRecursively(c_ErrorPath);
+         c_Return = C_OscUtils::h_CreateFolderRecursively(c_ErrorPath);
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return)
    {
       // very strange! normally the precondition check should
       // guarantee a correct behavior of h_CreateTemporaryFolder
       orc_ErrorMessage = "Could not create temporary folder \"" +
                          c_ErrorPath + "\".";
       osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-      s32_Return = C_RD_WR; // redefine because we only have a few error codes
+      c_Return = Errc::rd_wr; // redefine because we only have a few error codes
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -252,7 +261,7 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(const 
    \retval   C_RD_WR    could not save system definition file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
+std::error_code C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
                                                                  const std::string & orc_SystemDefinitionFileName,
                                                                  const std::string & orc_UseCase,
                                                                  const std::string & orc_UsedTempPath,
@@ -264,9 +273,10 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(const C_OscSyst
    const std::string c_SysDefPath = orc_UsedTempPath + orc_SystemDefinitionFileName;
 
    std::vector<std::string> c_AdditionalFiles;
-   int32_t s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(orc_SystemDefinition,
-                                                                               c_SysDefPath, &c_AdditionalFiles);
-   if (s32_Return == C_NO_ERR)
+   //C_OscSystemDefinitionFiler still reports the STW int32_t convention
+   std::error_code c_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(orc_SystemDefinition, c_SysDefPath,
+                                                                                     &c_AdditionalFiles);
+   if (!c_Return)
    {
       //Add files to pack
       for (uint32_t u32_ItFile = 0UL; u32_ItFile < c_AdditionalFiles.size(); ++u32_ItFile)
@@ -275,14 +285,14 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(const C_OscSyst
       }
    }
 
-   if (s32_Return != C_NO_ERR)
+   if (c_Return)
    {
       // write log
       orc_ErrorMessage = "Could not save System Definition file to path \"" + orc_UsedTempPath + "\".";
       osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-      s32_Return = C_RD_WR;
+      c_Return = Errc::rd_wr;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -302,13 +312,13 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(const C_OscSyst
    \retval   C_RD_WR    could not save device definitions and ini file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
+std::error_code C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
    const C_OscSystemDefinition & orc_SystemDefinition, const std::string & orc_UseCase,
    const std::string & orc_UsedTempPath, const std::string & orc_OutFilePrefix,
    std::set<std::string> & orc_AllCreatedFiles, std::string & orc_ErrorMessage)
 {
    namespace fs = std::filesystem;
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    // Collect unique device manifests, keyed by source file path so duplicate uses across
    // multiple nodes only produce one bundle. Value is the device's canonical name, which
@@ -318,8 +328,8 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
    {
       const C_OscDeviceDefinition * const pc_DeviceDefinition =
          orc_SystemDefinition.c_Nodes[u32_Pos].pc_DeviceDefinition;
-      tgl_assert(pc_DeviceDefinition != NULL);
-      if (pc_DeviceDefinition != NULL)
+      tgl_assert(pc_DeviceDefinition != nullptr);
+      if (pc_DeviceDefinition != nullptr)
       {
          c_DevicesByPath[pc_DeviceDefinition->c_FilePath] = pc_DeviceDefinition->c_DeviceName;
       }
@@ -329,7 +339,7 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
 
    // For each unique device, write a folder bundle: <device_name>/device.syd
    for (std::map<std::string, std::string>::const_iterator c_It = c_DevicesByPath.begin();
-        (c_It != c_DevicesByPath.end()) && (s32_Return == C_NO_ERR);
+        (c_It != c_DevicesByPath.end()) && (!c_Return);
         ++c_It)
    {
       const std::string & rc_SrcPath = c_It->first;
@@ -338,31 +348,31 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
       const std::string c_TargetDir = c_TempPathTrailing + rc_DeviceName;
       const std::string c_TargetFile = c_TargetDir + "/device.syd";
 
-      std::error_code c_Ec;
+      std::error_code c_Ec = Errc::success;
       fs::create_directories(fs::path(c_TargetDir.c_str()), c_Ec);
       if (c_Ec)
       {
          orc_ErrorMessage = "Could not create device-bundle folder \"" + c_TargetDir +
                             "\": " + std::string(c_Ec.message().c_str());
          osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
          continue;
       }
 
-      s32_Return = C_OscUtils::h_CopyFile(rc_SrcPath, c_TargetFile, NULL, &orc_ErrorMessage);
-      if (s32_Return != C_NO_ERR)
+      c_Return = C_OscUtils::h_CopyFile(rc_SrcPath, c_TargetFile, nullptr, &orc_ErrorMessage);
+      if (c_Return)
       {
          orc_ErrorMessage = "Could not save device manifest for \"" + rc_DeviceName +
                             "\" from \"" + rc_SrcPath + "\" to \"" + c_TargetFile + "\".";
          osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
          continue;
       }
 
       orc_AllCreatedFiles.insert(orc_OutFilePrefix + rc_DeviceName + "/device.syd");
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -383,20 +393,20 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
    \retval   C_NOACT     could not add data to zip file (does the path to the file exist ?)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageCreateUtil::h_CreateZip(const std::string & orc_UseCase,
+std::error_code C_OscSpaServicePackageCreateUtil::h_CreateZip(const std::string & orc_UseCase,
                                                       const std::string & orc_UsedTempPath,
                                                       const std::string & orc_ZipFilePath,
                                                       const std::set<std::string> & orc_AllCreatedFiles,
                                                       std::string & orc_ErrorMessage)
 {
-   const int32_t s32_Return =
+   const std::error_code c_Return =
       C_OscZipFile::h_CreateZipFile(orc_UsedTempPath, orc_AllCreatedFiles, orc_ZipFilePath, &orc_ErrorMessage);
 
-   if (s32_Return != C_NO_ERR)
+   if (c_Return)
    {
       osc_write_log_error(orc_UseCase, orc_ErrorMessage);
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -404,12 +414,12 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CreateZip(const std::string & orc_Us
 
    \param[in]      orc_UseCase         Use case
    \param[in]      orc_UsedTempPath    Used temp path
-   \param[out]     ors32_ErrVal        Err val
+   \param[out]     orc_ErrVal        Err val
    \param[in,out]  orc_ErrorMessage    Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder(const std::string & orc_UseCase,
-                                                           const std::string & orc_UsedTempPath, int32_t & ors32_ErrVal,
+                                                           const std::string & orc_UsedTempPath, std::error_code & orc_ErrVal,
                                                            std::string & orc_ErrorMessage)
 {
    const int32_t s32_Tmp = TglRemoveDirectory(orc_UsedTempPath, false);
@@ -418,12 +428,12 @@ void C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder(const std::string & o
    {
       const std::string c_Message = "Could not delete temporary result folder \"" + orc_UsedTempPath + "\".";
       osc_write_log_error(orc_UseCase, c_Message);
-      if ((ors32_ErrVal == C_NO_ERR) || (ors32_ErrVal == C_WARN)) // do not redefine error in case we had even a
+      if ((!orc_ErrVal) || (orc_ErrVal == Errc::warn)) // do not redefine error in case we had even a
       // problem
       // earlier
       {
          orc_ErrorMessage = c_Message;
-         ors32_ErrVal = C_BUSY;
+         orc_ErrVal = Errc::busy;
       }
    }
 }

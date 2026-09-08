@@ -40,7 +40,7 @@ private:
    static const std::string mhc_INITIAL_VALUE;
    static float32_t mhf32_DefaultInitialValue;
    static bool mhq_DefaultValueDefined;
-   static stw::scl::std::vector<std::string> mhc_WarningMessages; // global warnings e.g. why some messages could not be imported
+   static std::vector<std::string> mhc_WarningMessages; // global warnings e.g. why some messages could not be imported
    static std::string mhc_ErrorMessage;        // description of error which caused the import to fail
 
    static int32_t mh_ReadFile(const std::string & orc_File, Vector::DBC::Network & orc_Network);
@@ -62,7 +62,7 @@ private:
    static int32_t mh_GetSignalValues(const Vector::DBC::Network & orc_DbcNetwork,
                                      const Vector::DBC::Signal & orc_DbcSignal, const bool oq_MultiplexerSignal,
                                      bool & orq_SignalAdapted, C_CieConverter::C_CieDataPoolElement & orc_Element,
-                                     stw::scl::std::vector<std::string> & orc_WarningMessages);
+                                     std::vector<std::string> & orc_WarningMessages);
    static int32_t mh_GetAttributeDefinitions(const Vector::DBC::Network & orc_DbcNetwork);
    static void mh_GetTransmission(const Vector::DBC::Network & orc_DbcNetwork,
                                   const Vector::DBC::Message & orc_DbcMessage,
@@ -74,7 +74,7 @@ private:
 public:
    static int32_t h_ImportNetwork(const std::string & orc_File,
                                   C_CieConverter::C_CieCommDefinition & orc_Definition,
-                                  stw::scl::std::vector<std::string> & orc_WarningMessages,
+                                  std::vector<std::string> & orc_WarningMessages,
                                   std::string & orc_ErrorMessage, const bool oq_AddUnmappedMessages);
 };
 

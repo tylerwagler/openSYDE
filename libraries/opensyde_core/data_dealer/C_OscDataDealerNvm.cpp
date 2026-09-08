@@ -11,9 +11,12 @@
 #include "precomp_headers.hpp"
 
 #include <cstring>
+#include <system_error>
+
 #include "stwtypes.hpp"
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscDataDealerNvm.hpp"
 #include "C_SclChecksums.hpp"
 
@@ -84,7 +87,7 @@ uint16_t C_OscDataDealerNvm::NvmCalcCrc(const C_OscNodeDataPoolList & orc_List) 
 {
    uint16_t u16_Crc = 0x1D0FU;
 
-   if (this->mpc_DiagProtocol != NULL)
+   if (this->mpc_DiagProtocol != nullptr)
    {
       uint32_t u32_Counter;
       const uint8_t u8_Endianness = this->mpc_DiagProtocol->GetEndianness();
@@ -121,28 +124,28 @@ uint16_t C_OscDataDealerNvm::NvmCalcCrc(const C_OscNodeDataPoolList & orc_List) 
    \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    Reading of list successful
-   C_CONFIG    no node or diagnostic protocol are known (was this class properly Initialize()d ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_RANGE     Input parameter invalid
-   C_OVERFLOW  List has no elements. Nothing to read
-   C_RD_WR     Datapool element size configuration does not match with count of read bytes
-   C_CHECKSUM  Checksum of read datapool list is invalid
-   C_TIMEOUT   Expected response not received within timeout
-   C_NOACT     Could not send request (e.g. Tx buffer full)
-   C_WARN      Error response or malformed protocol response
-   C_COM       Pre-requisites not correct; e.g. driver not initialized or
-               parameter out of range (checked by client side)
+   Errc::success    Reading of list successful
+   Errc::config     no node or diagnostic protocol are known (was this class properly Initialize()d ?)
+                    protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::range      Input parameter invalid
+   Errc::overflow   List has no elements. Nothing to read
+   Errc::rd_wr      Datapool element size configuration does not match with count of read bytes
+   Errc::checksum   Checksum of read datapool list is invalid
+   Errc::timeout    Expected response not received within timeout
+   Errc::noact      Could not send request (e.g. Tx buffer full)
+   Errc::warn       Error response or malformed protocol response
+   Errc::com        Pre-requisites not correct; e.g. driver not initialized or
+                    parameter out of range (checked by client side)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvm::NvmReadList(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex,
-                                        uint8_t * const opu8_NrCode)
+std::error_code C_OscDataDealerNvm::NvmReadList(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex,
+                                                uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   if ((mpc_Node == NULL) || (mpc_DiagProtocol == NULL))
+   if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else if ((this->mpc_Node->c_DataPools.size() > ou32_DataPoolIndex) &&
             (this->mpc_Node->c_DataPools[ou32_DataPoolIndex].c_Lists.size() > ou32_ListIndex))
@@ -150,19 +153,19 @@ int32_t C_OscDataDealerNvm::NvmReadList(const uint32_t ou32_DataPoolIndex, const
       std::vector<uint8_t> c_Values;
       C_OscNodeDataPoolList & rc_List = this->mpc_Node->c_DataPools[ou32_DataPoolIndex].c_Lists[ou32_ListIndex];
 
-      s32_Return = this->m_NvmReadListRaw(rc_List, c_Values, opu8_NrCode);
+      c_Return = this->m_NvmReadListRaw(rc_List, c_Values, opu8_NrCode);
 
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
-         s32_Return = this->m_SaveDumpToList(c_Values, rc_List);
+         c_Return = this->m_SaveDumpToList(c_Values, rc_List);
       }
    }
    else
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -175,32 +178,33 @@ int32_t C_OscDataDealerNvm::NvmReadList(const uint32_t ou32_DataPoolIndex, const
    \param[out]    opu8_NrCode                   if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   Request sent, positive response received
-   C_CONFIG   no node or diagnostic protocol are known (was this class properly Initialize()d ?)
-              protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_TIMEOUT  Expected server response not received within timeout
-   C_NOACT    Could not send request (e.g. Tx buffer full)
-   C_WARN     Server sent error response
-   C_RD_WR    unexpected content in server response (here: wrong data pool index)
-   C_COM      communication driver reported error
+   Errc::success    Request sent, positive response received
+   Errc::config     no node or diagnostic protocol are known (was this class properly Initialize()d ?)
+                    protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::timeout    Expected server response not received within timeout
+   Errc::noact      Could not send request (e.g. Tx buffer full)
+   Errc::warn       Server sent error response
+   Errc::rd_wr      unexpected content in server response (here: wrong data pool index)
+   Errc::com        communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvm::NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
-                                               bool & orq_ApplicationAcknowledge, uint8_t * const opu8_NrCode)
+std::error_code C_OscDataDealerNvm::NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
+                                                       bool & orq_ApplicationAcknowledge,
+                                                       uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   if ((mpc_Node == NULL) || (mpc_DiagProtocol == NULL))
+   if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
-      s32_Return = this->mpc_DiagProtocol->NvmNotifyOfChanges(ou8_DataPoolIndex, ou8_ListIndex,
-                                                              orq_ApplicationAcknowledge, opu8_NrCode);
+      c_Return = this->mpc_DiagProtocol->NvmNotifyOfChanges(ou8_DataPoolIndex, ou8_ListIndex,
+                                                            orq_ApplicationAcknowledge, opu8_NrCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -211,20 +215,21 @@ int32_t C_OscDataDealerNvm::NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, 
    \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   Request sent, positive response received
-   C_OVERFLOW List has no elements. Nothing to read
-   C_TIMEOUT  Expected response not received within timeout
-   C_NOACT    Could not send request (e.g. Tx buffer full)
-   C_WARN     Error response
-   C_CONFIG   Pre-requisites not correct; e.g. driver not initialized or
-              parameter out of range (checked by client side)
-   C_COM      expected server response not received because of communication error
+   Errc::success    Request sent, positive response received
+   Errc::overflow   List has no elements. Nothing to read
+   Errc::timeout    Expected response not received within timeout
+   Errc::noact      Could not send request (e.g. Tx buffer full)
+   Errc::warn       Error response
+   Errc::config     Pre-requisites not correct; e.g. driver not initialized or
+                    parameter out of range (checked by client side)
+   Errc::com        expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvm::m_NvmReadListRaw(const C_OscNodeDataPoolList & orc_List, std::vector<uint8_t> & orc_Values,
-                                             uint8_t * const opu8_NrCode)
+std::error_code C_OscDataDealerNvm::m_NvmReadListRaw(const C_OscNodeDataPoolList & orc_List,
+                                                     std::vector<uint8_t> & orc_Values,
+                                                     uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    // If CRC is active, at least 2 byte are necessary for the CRC
    if ((orc_List.u32_NvmSize > 2U) ||
@@ -235,17 +240,18 @@ int32_t C_OscDataDealerNvm::m_NvmReadListRaw(const C_OscNodeDataPoolList & orc_L
       orc_Values.resize(u32_NumBytesToRead);
 
       // Read the entire list
-      s32_Return = this->mpc_DiagProtocol->NvmRead(orc_List.u32_NvmStartAddress, orc_Values, opu8_NrCode);
+      const std::error_code c_ProtReturn = this->mpc_DiagProtocol->NvmRead(orc_List.u32_NvmStartAddress, orc_Values,
+                                                                           opu8_NrCode);
 
       // Adapt return value
-      s32_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(s32_Return);
+      c_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(c_ProtReturn);
    }
    else
    {
-      s32_Return = C_OVERFLOW;
+      c_Return = Errc::overflow;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -257,17 +263,17 @@ int32_t C_OscDataDealerNvm::m_NvmReadListRaw(const C_OscNodeDataPoolList & orc_L
    \param[in,out] orc_List       List for filling up
 
    \return
-   C_NO_ERR    Filling of list successful
-   C_RD_WR     Datapool element size configuration does not match with count of read bytes
-   C_CHECKSUM  Checksum of read datapool list is invalid
+   Errc::success    Filling of list successful
+   Errc::rd_wr      Datapool element size configuration does not match with count of read bytes
+   Errc::checksum   Checksum of read datapool list is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvm::m_SaveDumpToList(const std::vector<uint8_t> & orc_Values,
-                                             C_OscNodeDataPoolList & orc_List) const
+std::error_code C_OscDataDealerNvm::m_SaveDumpToList(const std::vector<uint8_t> & orc_Values,
+                                                     C_OscNodeDataPoolList & orc_List) const
 {
-   int32_t s32_Return = this->m_SaveDumpValuesToListValues(orc_Values, orc_List);
+   std::error_code c_Return = this->m_SaveDumpValuesToListValues(orc_Values, orc_List);
 
-   if ((orc_List.q_NvmCrcActive == true) && (s32_Return == C_NO_ERR))
+   if ((orc_List.q_NvmCrcActive == true) && (!c_Return))
    {
       if (orc_Values.size() >= 2)
       {
@@ -291,16 +297,16 @@ int32_t C_OscDataDealerNvm::m_SaveDumpToList(const std::vector<uint8_t> & orc_Va
          u16_CalcCrc = this->NvmCalcCrc(orc_List);
          if (u16_CalcCrc != orc_List.u32_NvmCrc)
          {
-            s32_Return = C_CHECKSUM;
+            c_Return = Errc::checksum;
          }
       }
       else
       {
-         s32_Return = C_CHECKSUM;
+         c_Return = Errc::checksum;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -313,14 +319,14 @@ int32_t C_OscDataDealerNvm::m_SaveDumpToList(const std::vector<uint8_t> & orc_Va
    \param[in,out] orc_List       List for filling up
 
    \return
-   C_NO_ERR    Filling of list successful
-   C_RD_WR     Datapool element size configuration does not match with count of read bytes
+   Errc::success    Filling of list successful
+   Errc::rd_wr      Datapool element size configuration does not match with count of read bytes
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvm::m_SaveDumpValuesToListValues(const std::vector<uint8_t> & orc_Values,
-                                                         C_OscNodeDataPoolList & orc_List) const
+std::error_code C_OscDataDealerNvm::m_SaveDumpValuesToListValues(const std::vector<uint8_t> & orc_Values,
+                                                                 C_OscNodeDataPoolList & orc_List) const
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    uint32_t u32_Counter;
 
    for (u32_Counter = 0U; u32_Counter < orc_List.c_Elements.size(); ++u32_Counter)
@@ -353,12 +359,12 @@ int32_t C_OscDataDealerNvm::m_SaveDumpValuesToListValues(const std::vector<uint8
       }
       else
       {
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
          break;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -367,37 +373,35 @@ int32_t C_OscDataDealerNvm::m_SaveDumpValuesToListValues(const std::vector<uint8
    \param[in]     os32_ProtReturnValue   Return value of diag protocol base function
 
    \return
-   C_NO_ERR   Request sent, positive response received
-   C_TIMEOUT  Expected response not received within timeout
-   C_NOACT    Could not send request (e.g. Tx buffer full)
-   C_WARN     Error response or malformed protocol response
-   C_COM      Expected server response not received because of communication error
-   C_CONFIG   Pre-requisites not correct; e.g. driver not initialized or
-              parameter out of range (checked by client side)
+   Errc::success    Request sent, positive response received
+   Errc::timeout    Expected response not received within timeout
+   Errc::noact      Could not send request (e.g. Tx buffer full)
+   Errc::warn       Error response or malformed protocol response
+   Errc::com        Expected server response not received because of communication error
+   Errc::config     Pre-requisites not correct; e.g. driver not initialized or
+                    parameter out of range (checked by client side)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(const int32_t os32_ProtReturnValue)
+std::error_code C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(const std::error_code & orc_ProtReturnValue)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   switch (os32_ProtReturnValue)
+   if ((orc_ProtReturnValue == Errc::success) || (orc_ProtReturnValue == Errc::timeout) ||
+       (orc_ProtReturnValue == Errc::warn) || (orc_ProtReturnValue == Errc::noact) ||
+       (orc_ProtReturnValue == Errc::com))
    {
-   case C_NO_ERR:  // No adaptation necessary
-   case C_TIMEOUT: // No adaptation necessary
-   case C_WARN:    // No adaptation necessary
-   case C_NOACT:   // No adaptation necessary
-   case C_COM:     // No adaptation necessary
       // Nothing to adapt
-      s32_Return = os32_ProtReturnValue;
-      break;
-   case C_RD_WR:
-      s32_Return = C_WARN;
-      break;
-   default:
+      c_Return = orc_ProtReturnValue;
+   }
+   else if (orc_ProtReturnValue == Errc::rd_wr)
+   {
+      c_Return = Errc::warn;
+   }
+   else
+   {
       // All other errors
-      s32_Return = C_CONFIG;
-      break;
+      c_Return = Errc::config;
    }
 
-   return s32_Return;
+   return c_Return;
 }

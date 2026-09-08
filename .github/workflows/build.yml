@@ -1,7 +1,27 @@
 # openSYDE CI — Build & Test
 #
-# Builds the opensyde_core library and runs unit tests on Ubuntu with Qt6.
-# Triggered on pushes and pull requests to main branches.
+# Builds the opensyde_core library, runs its unit tests, and smoke-builds all
+# eight tools on Ubuntu with Qt6.
+#
+# Runner target: resolute (26.04 LTS), the distro this fork develops against.
+#
+# Older releases are deliberately NOT targeted. Package names diverge across
+# them — jammy (22.04) calls the Qt6 SVG development package libqt6svg6-dev,
+# whereas noble (24.04) onward call it qt6-svg-dev — so supporting a range
+# would mean per-release package selection for no benefit to a fork that only
+# ships against one distro.
+#
+# Both jobs build with resolute's default g++ (GCC 15). Nothing is pinned: the
+# core job previously pinned g++-12 and g++-13, inherited from a Phase 0 matrix
+# that targeted jammy and noble, so it was compiling core with two versions
+# nobody ships while build.sh built the tools with the default. Core and the
+# GUI tools now agree on one compiler, and it is the one resolute users get.
+#
+# ubuntu-26.04 is still a preview runner image. It is NOT marked
+# continue-on-error: as the only target it has to gate, or CI stops meaning
+# anything. The tradeoff is that preview-image flakiness will show up as a red
+# build; if that becomes noisy, add a second GA runner back rather than
+# reinstating continue-on-error.
 
 name: Build & Test
 
@@ -17,29 +37,32 @@ env:
 
 jobs:
   core-library:
-    name: Core Library (Ubuntu ${{ matrix.os }})
+    name: Core Library (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-        compiler: [g++-12, g++-13]
+        os: [ubuntu-26.04]
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive
 
+      # flex and bison generate the Vector_DBC scanner/parser, and opensyde_core
+      # links CanLibraries::dbc, so they are required for configure to succeed.
+      # FlexLexer.h ships in libfl-dev, NOT in flex itself — without libfl-dev
+      # CMake leaves FLEX_INCLUDE_DIR unset and Vector_DBC fails to generate.
       - name: Install system dependencies
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq \
-            cmake ninja-build \
-            ${{ matrix.compiler }} \
+            cmake ninja-build g++ \
             qt6-base-dev \
             libgl1-mesa-dev \
-            libssl-dev
+            libssl-dev \
+            flex bison libfl-dev
 
       # Compile every subsystem (security, protocol drivers, zipping,
       # imports, code generation, project handling, param set, system package
@@ -53,7 +76,6 @@ jobs:
           -B build/core
           -G Ninja
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
-          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
           -DOPENSYDE_CORE_BUILD_TESTS=ON
           -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON
           -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
@@ -65,23 +87,82 @@ jobs:
         run: ctest --test-dir build/core --output-on-failure -j $(nproc)
 
   gui-tools:
-    name: GUI Tools (Ubuntu 22.04)
-    runs-on: ubuntu-22.04
+    name: GUI Tools (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-26.04]
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive
 
+      # build.sh requires plain `g++` (it never pins a version), so install the
+      # default metapackage rather than a numbered compiler. libssl-dev, flex,
+      # bison and libfl-dev are needed for the same reasons as the core job.
+      #
+      # libqcustomplot-dev is required by the openSYDE tool: on Linux it links
+      # the system QCustomPlot (libraries/qcustomplot/ holds only a
+      # QT_NO_KEYWORDS compatibility wrapper around the system header, not a
+      # vendored library). The package ships libQCustomPlotQt6.so, which is the
+      # Qt6 variant the project's find_library() call looks for.
       - name: Install system dependencies
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq \
-            cmake ninja-build g++-12 \
+            cmake ninja-build g++ ccache \
             qt6-base-dev qt6-svg-dev qt6-tools-dev \
-            libgl1-mesa-dev
+            libgl1-mesa-dev \
+            libssl-dev \
+            flex bison libfl-dev \
+            libqcustomplot-dev
+
+      # build.sh now drives the root CMakeLists: opensyde_core is compiled once
+      # and every tool links that archive. The old reason for ccache here --
+      # collapsing eight duplicate core builds within a single run -- is gone,
+      # and a clean `all` dropped from 1,139 core objects across eight archives
+      # to 220 in one.
+      #
+      # ccache is kept because it still collapses work *across* runs via the
+      # restore-key below, which is the larger win on CI.
+      #
+      # CCACHE_SLOPPINESS is still required: every target uses
+      # target_precompile_headers and ccache refuses PCH builds without it. The
+      # first run measured 2240 of 2445 calls (91.6%) UNCACHEABLE with a 0.49%
+      # hit rate for exactly that reason. CCACHE_BASEDIR rewrites absolute paths
+      # relative to the workspace so a cached object still matches when the
+      # workspace path differs between runs.
+      - name: Restore ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-gui-${{ matrix.os }}-${{ github.sha }}
+          restore-keys: |
+            ccache-gui-${{ matrix.os }}-
 
       - name: Build all tools (smoke test)
-        run: |
-          ./build.sh -b Debug all
+        env:
+          CCACHE_SLOPPINESS: pch_defines,time_macros,include_file_mtime,include_file_ctime
+          CCACHE_BASEDIR: ${{ github.workspace }}
+        run: ./build.sh -b Debug all
+
+      - name: ccache statistics
+        if: always()
+        run: ccache --show-stats
+
+      # build.sh no longer exercises the per-tool path, but each tool's own
+      # pjt/CMakeLists.txt is still expected to configure standalone -- it guards
+      # its core add_subdirectory with if(NOT TARGET opensyde_core) and falls back
+      # to building its own core with its own SKIP_* set. Nothing else tests that
+      # now, so it would rot silently. Configure only: this catches a broken guard
+      # or a missing variable in seconds, without paying for a second core build.
+      - name: Verify a tool still configures standalone
+        run: >
+          cmake
+          -S opensyde_tsp_convert/pjt
+          -B build/standalone-check
+          -G Ninja
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}

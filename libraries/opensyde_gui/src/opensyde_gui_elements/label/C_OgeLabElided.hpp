@@ -26,7 +26,7 @@ class C_OgeLabElided :
    Q_OBJECT
 
 public:
-   explicit C_OgeLabElided(QWidget * const opc_Parent = NULL);
+   explicit C_OgeLabElided(QWidget * const opc_Parent = nullptr);
    void SetCompleteText(const QString & orc_Text);
    QString GetCompleteText(void) const;
    void SetFontForEliding(const QFont & orc_Font);

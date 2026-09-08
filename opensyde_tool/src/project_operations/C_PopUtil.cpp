@@ -106,7 +106,7 @@ bool C_PopUtil::h_AskUserToContinue(QWidget * const opc_Parent, const bool oq_Al
                q_Return = true;
                // TODO trigger update of window title...
             }
-            if (c_New != NULL)
+            if (c_New != nullptr)
             {
                pc_Dialog->SaveUserSettings();
                c_New->HideOverlay();

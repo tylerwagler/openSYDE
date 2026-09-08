@@ -156,7 +156,7 @@ void C_SyvDcExistingNodeDropAreaWidget::GetContent(stw::opensyde_core::C_OscProt
 const
 {
    orc_PureSerialNumber = this->mc_PureSerialNumber;
-   if (opc_SubNodeIdsToOldNodeIds != NULL)
+   if (opc_SubNodeIdsToOldNodeIds != nullptr)
    {
       *opc_SubNodeIdsToOldNodeIds = this->mc_SubNodeIdsToOldNodeIds;
    }

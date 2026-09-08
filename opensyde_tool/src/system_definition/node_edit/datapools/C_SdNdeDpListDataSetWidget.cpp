@@ -53,14 +53,14 @@ C_SdNdeDpListDataSetWidget::C_SdNdeDpListDataSetWidget(stw::opensyde_gui_element
                                                        const uint32_t & oru32_ListIndex) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeDpListDataSetWidget),
-   mpc_ContextMenu(NULL),
-   mpc_ActionAdd(NULL),
-   mpc_ActionDelete(NULL),
-   mpc_ActionCopy(NULL),
-   mpc_ActionPaste(NULL),
-   mpc_ActionCut(NULL),
-   mpc_ActionMoveLeft(NULL),
-   mpc_ActionMoveRight(NULL),
+   mpc_ContextMenu(nullptr),
+   mpc_ActionAdd(nullptr),
+   mpc_ActionDelete(nullptr),
+   mpc_ActionCopy(nullptr),
+   mpc_ActionPaste(nullptr),
+   mpc_ActionCut(nullptr),
+   mpc_ActionMoveLeft(nullptr),
+   mpc_ActionMoveRight(nullptr),
    mu32_NodeIndex(oru32_NodeIndex),
    mu32_DataPoolIndex(oru32_DataPoolIndex),
    mu32_ListIndex(oru32_ListIndex)
@@ -85,7 +85,7 @@ C_SdNdeDpListDataSetWidget::C_SdNdeDpListDataSetWidget(stw::opensyde_gui_element
    m_InitButtonIcons();
 
    //Initial display
-   if (pc_List != NULL)
+   if (pc_List != nullptr)
    {
       m_OnDataSetCountChange(static_cast<uint32_t>(pc_List->c_DataSets.size()));
    }
@@ -141,7 +141,7 @@ void C_SdNdeDpListDataSetWidget::InitStaticNames(void) const
    const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
       this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
 
-   if (pc_List != NULL)
+   if (pc_List != nullptr)
    {
       mrc_ParentDialog.SetTitle(static_cast<QString>("List %1").arg(pc_List->c_Name.c_str()));
    }
@@ -383,37 +383,37 @@ void C_SdNdeDpListDataSetWidget::m_HandleButtonChange(const bool & orq_AddActive
                                                       const bool & orq_MoveRightActive)
 {
    this->mpc_Ui->pc_PushButtonAdd->setEnabled(orq_AddActive);
-   if (this->mpc_ActionAdd != NULL)
+   if (this->mpc_ActionAdd != nullptr)
    {
       this->mpc_ActionAdd->setEnabled(orq_AddActive);
    }
    this->mpc_Ui->pc_PushButtonCut->setEnabled(orq_CutActive);
-   if (this->mpc_ActionCut != NULL)
+   if (this->mpc_ActionCut != nullptr)
    {
       this->mpc_ActionCut->setEnabled(orq_CutActive);
    }
    this->mpc_Ui->pc_PushButtonCopy->setEnabled(orq_CopyActive);
-   if (this->mpc_ActionCopy != NULL)
+   if (this->mpc_ActionCopy != nullptr)
    {
       this->mpc_ActionCopy->setEnabled(orq_CopyActive);
    }
    this->mpc_Ui->pc_PushButtonPaste->setEnabled(orq_PasteActive);
-   if (this->mpc_ActionPaste != NULL)
+   if (this->mpc_ActionPaste != nullptr)
    {
       this->mpc_ActionPaste->setEnabled(orq_PasteActive);
    }
    this->mpc_Ui->pc_PushButtonDelete->setEnabled(orq_DeleteActive);
-   if (this->mpc_ActionDelete != NULL)
+   if (this->mpc_ActionDelete != nullptr)
    {
       this->mpc_ActionDelete->setEnabled(orq_DeleteActive);
    }
    this->mpc_Ui->pc_PushButtonMoveLeft->setEnabled(orq_MoveLeftActive);
-   if (this->mpc_ActionMoveLeft != NULL)
+   if (this->mpc_ActionMoveLeft != nullptr)
    {
       this->mpc_ActionMoveLeft->setEnabled(orq_MoveLeftActive);
    }
    this->mpc_Ui->pc_PushButtonMoveRight->setEnabled(orq_MoveRightActive);
-   if (this->mpc_ActionMoveRight != NULL)
+   if (this->mpc_ActionMoveRight != nullptr)
    {
       this->mpc_ActionMoveRight->setEnabled(orq_MoveRightActive);
    }

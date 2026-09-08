@@ -37,7 +37,7 @@ class C_SdBueMlvSignalItem :
 public:
    C_SdBueMlvSignalItem(const QColor & orc_BackgroundColor, const QColor & orc_FontColor,
                         const QColor & orc_ResizeItemColor, const QString & orc_Name, const float64_t of64_Space,
-                        QGraphicsItem * const opc_Parent = NULL);
+                        QGraphicsItem * const opc_Parent = nullptr);
    ~C_SdBueMlvSignalItem() override;
 
    void Update(const float64_t of64_SingleItemWidth, const float64_t of64_SingleItemHeight);

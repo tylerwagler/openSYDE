@@ -15,6 +15,7 @@
 #include "TglUtils.hpp"
 #include "C_SdUtil.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -116,7 +117,7 @@ void C_TblTreDataElementModel::InitSd(const uint32_t ou32_NodeIndex, const int32
    pc_NodeItem->c_Icon = QIcon(C_TblTreDataElementModel::mhc_ICON_NODE);
 
    //Node
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       //Data pool type nodes
       C_TblTreItem * const pc_DiagItem = new C_TblTreItem();
@@ -372,7 +373,7 @@ void C_TblTreDataElementModel::InitSv(const uint32_t ou32_ViewIndex, const E_Mod
          this->mpc_InvisibleRootItem = rc_It.pc_Tree;
          C_TblTreDataElementModel::mh_UpdateDatapoolElement(oq_ShowOnlyWriteElements, oq_ShowArrayElements,
                                                             oq_ShowArrayIndexElements,
-                                                            oq_Show64BitValues, NULL,
+                                                            oq_Show64BitValues, nullptr,
                                                             this->mpc_InvisibleRootItem, oq_ShowStringElements);
       }
       else
@@ -535,7 +536,7 @@ QModelIndex C_TblTreDataElementModel::GetIndexForItem(const std::vector<uint32_t
             //lint -e{9079}  Result of Qt interface restrictions, set by index function
             const C_TblTreItem * const pc_TreeItem =
                static_cast<const C_TblTreItem *>(c_Tmp.internalPointer());
-            if (pc_TreeItem != NULL)
+            if (pc_TreeItem != nullptr)
             {
                if (pc_TreeItem->u32_Index == orc_ItemIndices[u32_Counter])
                {
@@ -575,7 +576,7 @@ const
    {
       //lint -e{9079}  Result of Qt interface restrictions, set by index function
       const C_TblTreItem * const pc_TreeItem = static_cast<const C_TblTreItem *>(c_CurItem.internalPointer());
-      if (pc_TreeItem != NULL)
+      if (pc_TreeItem != nullptr)
       {
          c_Retval.insert(c_Retval.begin(), pc_TreeItem->u32_Index);
          c_CurItem = c_CurItem.parent();
@@ -607,7 +608,7 @@ C_TblTreDataElementModel::C_TblTreDataElementModelState::C_TblTreDataElementMode
 void C_TblTreDataElementModel::C_TblTreDataElementModelState::CleanUp(void)
 {
    delete (this->pc_Tree);
-   this->pc_Tree = NULL;
+   this->pc_Tree = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -618,7 +619,7 @@ void C_TblTreDataElementModel::C_TblTreDataElementModelState::CleanUp(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblTreDataElementModel::CleanUpLastModel(void)
 {
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       //Check if current model is stored, only discard if not stored
       if (mh_Contains(C_TblTreDataElementModel::mhc_ViewSetupsBs, this->mpc_InvisibleRootItem) == false)
@@ -634,7 +635,7 @@ void C_TblTreDataElementModel::CleanUpLastModel(void)
       // Setting always to NULL. The saved items for each case will be assigned again when necessary.
       // But it could be that the pointer will get invalid, if a new dialog will replace the saved item and delete
       // the old one.
-      this->mpc_InvisibleRootItem = NULL;
+      this->mpc_InvisibleRootItem = nullptr;
    }
 }
 
@@ -660,11 +661,11 @@ C_PuiSvDbNodeDataPoolListElementId C_TblTreDataElementModel::mh_Translate(
    const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscCanDataPool(
       orc_Indices.u32_NodeIndex, orc_Indices.e_ComProtocol, orc_Indices.u32_DatapoolIndex);
 
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
       uint32_t u32_ListIndex;
       if (C_OscCanProtocol::h_GetComListIndex(*pc_DataPool, orc_Indices.u32_InterfaceIndex, orc_Indices.q_MessageIsTx,
-                                              u32_ListIndex) == C_NO_ERR)
+                                              u32_ListIndex) == Errc::success)
       {
          const C_OscCanMessageContainer * const pc_Container =
             C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainer(orc_Indices.u32_NodeIndex,
@@ -675,7 +676,7 @@ C_PuiSvDbNodeDataPoolListElementId C_TblTreDataElementModel::mh_Translate(
          const C_OscCanProtocol * const pc_Protocol = C_PuiSdHandler::h_GetInstance()->GetCanProtocol(
             orc_Indices.u32_NodeIndex, orc_Indices.e_ComProtocol, orc_Indices.u32_DatapoolIndex);
 
-         if ((pc_Container != NULL) && (pc_Protocol != NULL))
+         if ((pc_Container != nullptr) && (pc_Protocol != nullptr))
          {
             const uint32_t u32_SignalDataStartIndex = pc_Container->GetMessageSignalDataStartIndex(
                orc_Indices.q_MessageIsTx,
@@ -711,7 +712,7 @@ void C_TblTreDataElementModel::m_InitBusSignal(const uint32_t ou32_ViewIndex,  c
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-   if ((pc_View != NULL) && (pc_View->GetOscPcData().GetConnected() == true))
+   if ((pc_View != nullptr) && (pc_View->GetOscPcData().GetConnected() == true))
    {
       //Init sync managers
       //Busses
@@ -723,7 +724,7 @@ void C_TblTreDataElementModel::m_InitBusSignal(const uint32_t ou32_ViewIndex,  c
             C_PuiSdHandler::h_GetInstance()->GetOscBus(pc_View->GetOscPcData().GetBusIndex());
          bool q_BusValid = false;
          //Node
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             //Init current node
             pc_BusItem->u32_Index = pc_View->GetOscPcData().GetBusIndex();
@@ -882,7 +883,7 @@ void C_TblTreDataElementModel::m_InitDatapoolElements(const uint32_t ou32_ViewIn
             //Static
             pc_NodeItem->c_Icon = QIcon(C_TblTreDataElementModel::mhc_ICON_NODE);
             //Node
-            if ((pc_Node != NULL) && (pc_Node->c_Properties.e_DiagnosticServer == C_OscNodeProperties::eDS_OPEN_SYDE))
+            if ((pc_Node != nullptr) && (pc_Node->c_Properties.e_DiagnosticServer == C_OscNodeProperties::eDS_OPEN_SYDE))
             {
                //Data pool type nodes
                C_TblTreItem * const pc_DiagItem = new C_TblTreItem();
@@ -1170,7 +1171,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalc(C_TblTreItem * const 
                                                            const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements,
                                                            const bool oq_ShowStringElements)
 {
-   if ((opc_DpItem != NULL) &&
+   if ((opc_DpItem != nullptr) &&
        ((orc_Dp.e_Type == C_OscNodeDataPool::eHALC) || (orc_Dp.e_Type == C_OscNodeDataPool::eHALC_NVM)))
    {
       const C_OscHalcMagicianDatapoolListHandler c_DpHandler(orc_Node.c_HalcConfig, C_OscHalcDefDomain::eVA_PARAM,
@@ -1192,7 +1193,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalc(C_TblTreItem * const 
          const C_OscHalcDefDomain * const pc_DomainDef = orc_Node.c_HalcConfig.GetDomainDefDataConst(u32_ItDomain);
          const C_OscHalcConfigDomain * const pc_DomainConfig = orc_Node.c_HalcConfig.GetDomainConfigDataConst(
             u32_ItDomain);
-         if ((pc_DomainConfig != NULL) && (pc_DomainDef != NULL))
+         if ((pc_DomainConfig != nullptr) && (pc_DomainDef != nullptr))
          {
             const uint32_t u32_RelevantChannels = c_DpHandler.CountRelevantItems(
                pc_DomainConfig->c_ChannelConfigs, pc_DomainConfig->c_DomainConfig);
@@ -1790,7 +1791,7 @@ void C_TblTreDataElementModel::mh_AddHalcTreeItem(C_TblTreItem * const opc_ListI
    const C_OscNodeDataPoolListElement * const pc_OscElement =
       C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(orc_Id);
 
-   if (pc_OscElement != NULL)
+   if (pc_OscElement != nullptr)
    {
       C_TblTreDataElementItem * const pc_ElementItem =
          new C_TblTreDataElementItem(oq_IsArray && (!oq_IsString), oq_IsArray, orc_Name,
@@ -1840,7 +1841,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsComm(C_TblTreItem * const 
                                                            const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements,
                                                            const bool oq_ShowStringElement)
 {
-   if ((opc_DpItem != NULL) && (orc_Dp.e_Type == C_OscNodeDataPool::eCOM))
+   if ((opc_DpItem != nullptr) && (orc_Dp.e_Type == C_OscNodeDataPool::eCOM))
    {
       std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> c_MessageIds;
       C_OscCanProtocol::E_Type e_Protocol = C_OscCanProtocol::eLAYER2;
@@ -1862,7 +1863,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsComm(C_TblTreItem * const 
                  c_It != c_Containers.end(); ++c_It)
             {
                const C_OscCanMessageContainer * const pc_Container = *c_It;
-               if (pc_Container != NULL)
+               if (pc_Container != nullptr)
                {
                   // Add Tx message identification indices
                   for (uint32_t u32_ItTxMessage = 0; u32_ItTxMessage < pc_Container->c_TxMessages.size();
@@ -1928,7 +1929,7 @@ bool C_TblTreDataElementModel::mh_AddCommMessageItems(C_TblTreItem * const opc_B
 {
    bool q_Valid = false;
 
-   if (opc_BaseItem != NULL)
+   if (opc_BaseItem != nullptr)
    {
       opc_BaseItem->ReserveChildrenSpace(static_cast<uint32_t>(orc_MessageIds.size()));
       for (uint32_t u32_ItMessage = 0U; u32_ItMessage < orc_MessageIds.size(); ++u32_ItMessage)
@@ -1938,7 +1939,7 @@ bool C_TblTreDataElementModel::mh_AddCommMessageItems(C_TblTreItem * const opc_B
             orc_MessageIds[u32_ItMessage]);
          //Flag
          bool q_MessageValid = false;
-         if (pc_Message != NULL)
+         if (pc_Message != nullptr)
          {
             //Init current node
             pc_MessageItem->u32_Index = u32_ItMessage;
@@ -1957,7 +1958,7 @@ bool C_TblTreDataElementModel::mh_AddCommMessageItems(C_TblTreItem * const opc_B
                const C_OscNodeDataPoolListElement * const pc_Element =
                   C_PuiSdHandler::h_GetInstance()->GetOscCanDataPoolListElement(orc_MessageIds[u32_ItMessage],
                                                                                 u32_ItSignal);
-               if (pc_Element != NULL)
+               if (pc_Element != nullptr)
                {
                   C_TblTreDataElementItem * const pc_ElementItem =
                      new C_TblTreDataElementItem(false, false, pc_Element->c_Name.c_str(),
@@ -2014,10 +2015,10 @@ void C_TblTreDataElementModel::mh_UpdateDatapoolElement(const bool oq_ShowOnlyWr
                                                         const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements, C_TblTreSimpleItem * const opc_Tree,
                                                         const bool oq_ShowStringElement)
 {
-   if (opc_Tree != NULL)
+   if (opc_Tree != nullptr)
    {
       C_TblTreDataElementItem * const pc_AdaptableItem = dynamic_cast<C_TblTreDataElementItem * const>(opc_Tree);
-      if (pc_AdaptableItem != NULL)
+      if (pc_AdaptableItem != nullptr)
       {
          pc_AdaptableItem->ConfigureDynamicName(oq_ShowOnlyWriteElements, oq_ShowArrayElements,
                                                 oq_ShowArrayIndexElements, oq_Show64BitValues, opc_AlreasyUsedElements,
@@ -2060,7 +2061,7 @@ void C_TblTreDataElementModel::mh_CreateArrayElementNodes(const bool oq_ShowOnly
                                                           const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements,
                                                           const bool oq_ShowStringElement)
 {
-   if (opc_ElementItem != NULL)
+   if (opc_ElementItem != nullptr)
    {
       if ((orc_Element.GetArray()) && (oq_IsStringElement == false))
       {
@@ -2116,7 +2117,7 @@ void C_TblTreDataElementModel::m_InitNvmList(const uint32_t ou32_ViewIndex)
       ou32_ViewIndex,
       c_NodeActiveFlags);
 
-   if ((pc_View != NULL) &&
+   if ((pc_View != nullptr) &&
        (s32_Retval == C_NO_ERR))
    {
       bool q_NodeValid;
@@ -2140,7 +2141,7 @@ void C_TblTreDataElementModel::m_InitNvmList(const uint32_t ou32_ViewIndex)
             //Static
             pc_NodeItem->c_Icon = QIcon(C_TblTreDataElementModel::mhc_ICON_NODE);
             //Node
-            if ((pc_Node != NULL) && (pc_Node->c_Properties.e_DiagnosticServer == C_OscNodeProperties::eDS_OPEN_SYDE))
+            if ((pc_Node != nullptr) && (pc_Node->c_Properties.e_DiagnosticServer == C_OscNodeProperties::eDS_OPEN_SYDE))
             {
                //Data pool type nodes
                C_TblTreItem * const pc_DiagItem = new C_TblTreItem();
@@ -2336,18 +2337,18 @@ const
    const C_TblTreItem * const pc_TreeItem =
       static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
 
-   if (pc_TreeItem != NULL)
+   if (pc_TreeItem != nullptr)
    {
       const C_TblTreItem * const pc_FirstParent = dynamic_cast<const C_TblTreItem * const>(pc_TreeItem->pc_Parent);
-      if ((pc_FirstParent != NULL) && (pc_FirstParent->pc_Parent != NULL))
+      if ((pc_FirstParent != nullptr) && (pc_FirstParent->pc_Parent != nullptr))
       {
          const C_TblTreItem * const pc_SecondParent =
             dynamic_cast<const C_TblTreItem * const>(pc_FirstParent->pc_Parent);
-         if ((pc_SecondParent != NULL) && (pc_SecondParent->pc_Parent != NULL))
+         if ((pc_SecondParent != nullptr) && (pc_SecondParent->pc_Parent != nullptr))
          {
             const C_TblTreItem * const pc_ThirdParent =
                dynamic_cast<const C_TblTreItem * const>(pc_SecondParent->pc_Parent);
-            if ((pc_ThirdParent != NULL) && (pc_ThirdParent->pc_Parent != NULL))
+            if ((pc_ThirdParent != nullptr) && (pc_ThirdParent->pc_Parent != nullptr))
             {
                //Should not happen
                tgl_assert(false);
@@ -2398,11 +2399,11 @@ std::vector<C_PuiSvDbNodeDataPoolListElementId> C_TblTreDataElementModel::m_GetA
    const C_TblTreItem * const pc_TreeItem =
       static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
 
-   if (pc_TreeItem != NULL)
+   if (pc_TreeItem != nullptr)
    {
       const C_TblTreDataElementItem * const pc_DataElementItem =
          dynamic_cast<const C_TblTreDataElementItem * const>(pc_TreeItem);
-      if (pc_DataElementItem != NULL)
+      if (pc_DataElementItem != nullptr)
       {
          c_Retval.push_back(pc_DataElementItem->GetId());
       }
@@ -2431,22 +2432,22 @@ const
    const C_TblTreItem * const pc_TreeItem =
       static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
 
-   if (pc_TreeItem != NULL)
+   if (pc_TreeItem != nullptr)
    {
       const C_TblTreItem * const pc_FirstParent = dynamic_cast<const C_TblTreItem * const>(pc_TreeItem->pc_Parent);
-      if ((pc_FirstParent != NULL) && (pc_FirstParent->pc_Parent != NULL))
+      if ((pc_FirstParent != nullptr) && (pc_FirstParent->pc_Parent != nullptr))
       {
          const C_TblTreItem * const pc_SecondParent =
             dynamic_cast<const C_TblTreItem * const>(pc_FirstParent->pc_Parent);
-         if ((pc_SecondParent != NULL) && (pc_SecondParent->pc_Parent != NULL))
+         if ((pc_SecondParent != nullptr) && (pc_SecondParent->pc_Parent != nullptr))
          {
             const C_TblTreItem * const pc_ThirdParent =
                dynamic_cast<const C_TblTreItem * const>(pc_SecondParent->pc_Parent);
-            if ((pc_ThirdParent != NULL) && (pc_ThirdParent->pc_Parent != NULL))
+            if ((pc_ThirdParent != nullptr) && (pc_ThirdParent->pc_Parent != nullptr))
             {
                const C_TblTreItem * const pc_FourthParent =
                   dynamic_cast<const C_TblTreItem * const>(pc_ThirdParent->pc_Parent);
-               if ((pc_FourthParent != NULL) && (pc_FourthParent->pc_Parent != NULL))
+               if ((pc_FourthParent != nullptr) && (pc_FourthParent->pc_Parent != nullptr))
                {
                   //Should not happen
                   tgl_assert(false);
@@ -2463,7 +2464,7 @@ const
                   const uint32_t u32_ListIndex = pc_TreeItem->u32_Index;
                   const C_OscNodeDataPoolList * const pc_OscList = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
                      u32_NodeIndex, u32_DataPoolIndex, u32_ListIndex);
-                  if (pc_OscList != NULL)
+                  if (pc_OscList != nullptr)
                   {
                      for (uint32_t u32_ItElement = 0; u32_ItElement < pc_OscList->c_Elements.size(); ++u32_ItElement)
                      {
@@ -2570,7 +2571,7 @@ std::vector<uint32_t> C_TblTreDataElementModel::mh_GetViewSdHash(const uint32_t 
       ou32_ViewIndex,
       c_NodeActiveFlags);
 
-   if ((pc_View != NULL) &&
+   if ((pc_View != nullptr) &&
        (s32_Retval == C_NO_ERR))
    {
       bool q_Data;

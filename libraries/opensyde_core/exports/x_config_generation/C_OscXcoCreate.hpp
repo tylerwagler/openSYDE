@@ -9,6 +9,8 @@
 #define C_OSCXCOCREATE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "C_OscXcoBase.hpp"
 #include "C_OscXcoManifest.hpp"
@@ -27,19 +29,19 @@ class C_OscXcoCreate :
    public C_OscXcoBase
 {
 public:
-   static int32_t h_CreatePackage(const std::string & orc_PackagePath,
-                                  const C_OscSystemDefinition & orc_SystemDefinition,
-                                  const C_OscXcoManifest & orc_Manifest,
-                                  stw::scl::std::vector<std::string> & orc_WarningMessages,
-                                  std::string & orc_ErrorMessage,
-                                  const std::string & orc_TemporaryDirectory = "");
+   static std::error_code h_CreatePackage(const std::string & orc_PackagePath,
+                                          const C_OscSystemDefinition & orc_SystemDefinition,
+                                          const C_OscXcoManifest & orc_Manifest,
+                                          std::vector<std::string> & orc_WarningMessages,
+                                          std::string & orc_ErrorMessage,
+                                          const std::string & orc_TemporaryDirectory = "");
 
 private:
    static const std::string mhc_USE_CASE;
 
-   static int32_t mh_CheckParamsToCreatePackage(const std::string & orc_PackagePath,
-                                                const C_OscSystemDefinition & orc_SystemDefinition,
-                                                const C_OscXcoManifest & orc_Manifest);
+   static std::error_code mh_CheckParamsToCreatePackage(const std::string & orc_PackagePath,
+                                                        const C_OscSystemDefinition & orc_SystemDefinition,
+                                                        const C_OscXcoManifest & orc_Manifest);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

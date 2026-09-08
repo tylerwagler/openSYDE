@@ -37,7 +37,7 @@ class C_CamMosFilterWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamMosFilterWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamMosFilterWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamMosFilterWidget(void) override;
 
    void LoadUserSettings(void) const;

@@ -226,7 +226,7 @@ std::vector<uint32_t> C_SyvDaItTaView::GetUniqueAndValidSelectedRows(void) const
    {
       const C_PuiSvDbNodeDataPoolListElementId * const pc_DataElementId =
          this->mc_Model.GetDataPoolElementIndex(c_Tmp[u32_It]);
-      if ((pc_DataElementId != NULL) && (pc_DataElementId->GetIsValid() == true))
+      if ((pc_DataElementId != nullptr) && (pc_DataElementId->GetIsValid() == true))
       {
          c_Retval.push_back(c_Tmp[u32_It]);
       }

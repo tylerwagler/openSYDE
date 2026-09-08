@@ -49,7 +49,7 @@ public:
       eSIZE
    };
 
-   C_SdNdeComIfSettingsTableDelegate(QObject * const opc_Parent = NULL, const uint32_t ou32_NodeIndex = 0);
+   C_SdNdeComIfSettingsTableDelegate(QObject * const opc_Parent = nullptr, const uint32_t ou32_NodeIndex = 0);
 
    QWidget * createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem & orc_Option,
                           const QModelIndex & orc_Index) const override;

@@ -55,7 +55,7 @@ C_TblTreItem::C_TblTreItem(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_TblTreItem * C_TblTreItem::GetItem(const uint32_t ou32_Index)
 {
-   C_TblTreItem * pc_Retval = NULL;
+   C_TblTreItem * pc_Retval = nullptr;
 
    for (std::vector<C_TblTreSimpleItem *>::const_iterator c_It = this->c_Children.begin();
         c_It != this->c_Children.end(); ++c_It)
@@ -63,7 +63,7 @@ C_TblTreItem * C_TblTreItem::GetItem(const uint32_t ou32_Index)
       C_TblTreSimpleItem * const pc_Item = *c_It;
 
       C_TblTreItem * const pc_CurItem = dynamic_cast<C_TblTreItem * const>(pc_Item);
-      if ((pc_CurItem != NULL) && (pc_CurItem->u32_Index == ou32_Index))
+      if ((pc_CurItem != nullptr) && (pc_CurItem->u32_Index == ou32_Index))
       {
          pc_Retval = pc_CurItem;
          break;

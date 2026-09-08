@@ -59,7 +59,7 @@ C_GiSvEthernetBus::C_GiSvEthernetBus(const uint32_t ou32_ViewIndex, const int32_
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvEthernetBus::CheckBusForChanges(void)
 {
-   if (this->mpc_TextElementName != NULL)
+   if (this->mpc_TextElementName != nullptr)
    {
       if (C_PuiSvHandler::h_GetInstance()->CheckBusDisabled(this->mu32_ViewIndex,
                                                             static_cast<uint32_t>(this->ms32_Index)) == false)

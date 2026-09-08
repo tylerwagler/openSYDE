@@ -25,7 +25,7 @@ class C_PopServiceProjSettingsModel :
    public C_TblTreeModelCheckable
 {
 public:
-   explicit C_PopServiceProjSettingsModel(QObject * const opc_Parent = NULL);
+   explicit C_PopServiceProjSettingsModel(QObject * const opc_Parent = nullptr);
    ~C_PopServiceProjSettingsModel(void) override;
 
    int32_t Init(const std::vector<uint32_t> & orc_ElementIndices) override;

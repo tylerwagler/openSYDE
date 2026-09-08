@@ -118,11 +118,12 @@ int32_t C_SdNdeHalcConfigImportDialog::PrepareDialog(QString & orc_ErrorDetails)
 
    orc_ErrorDetails = "";
 
-   if (pc_Config != NULL)
+   if (pc_Config != nullptr)
    {
       // Load the configuration only once
-      s32_Return = C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(this->mc_ImportConfig,
-                                                                        this->mc_ImportFileName.toStdString().c_str());
+      s32_Return =
+         C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(this->mc_ImportConfig,
+                                                              this->mc_ImportFileName.toStdString().c_str()).value();
 
       if (s32_Return == C_NO_ERR)
       {
@@ -304,7 +305,7 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
 {
    bool q_Consistent = true;
 
-   if (opc_Config != NULL)
+   if (opc_Config != nullptr)
    {
       if (opc_Config->GetDomainSize() == orc_ConfigStandalone.c_Domains.size())
       {
@@ -312,7 +313,7 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
          {
             const C_OscHalcConfigDomain * const pc_RefConfig = opc_Config->GetDomainConfigDataConst(
                u32_ItDomain);
-            if (pc_RefConfig != NULL)
+            if (pc_RefConfig != nullptr)
             {
                const C_OscHalcConfigStandaloneDomain & rc_NewConfig =
                   orc_ConfigStandalone.c_Domains[u32_ItDomain];

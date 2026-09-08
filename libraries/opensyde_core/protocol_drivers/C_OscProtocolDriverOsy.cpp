@@ -16,8 +16,10 @@
 #include <cstring>
 #include <sstream>
 #include <iomanip>
+#include <system_error>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
 #include "C_SclStringCompat.hpp"
 #include "C_SclChecksums.hpp"
@@ -82,14 +84,14 @@ C_OscProtocolDriverOsy::C_ListOfFeatures::C_ListOfFeatures(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProtocolDriverOsy::C_OscProtocolDriverOsy(void) :
-   mpr_OnOsyTunnelCanMessageReceived(NULL),
-   mpv_OnAsyncTunnelCanMessageInstance(NULL),
-   mpr_OnOsyWaitTime(NULL),
-   mpv_OnOsyWaitTimeInstance(NULL),
-   mpc_TransportProtocol(NULL),
+   mpr_OnOsyTunnelCanMessageReceived(nullptr),
+   mpv_OnAsyncTunnelCanMessageInstance(nullptr),
+   mpr_OnOsyWaitTime(nullptr),
+   mpv_OnOsyWaitTimeInstance(nullptr),
+   mpc_TransportProtocol(nullptr),
    mu32_TimeoutPollingMs(hu32_DEFAULT_TIMEOUT),
    mu16_MaxServiceSize(C_OscProtocolDriverOsyTpBase::hu16_OSY_MAXIMUM_SERVICE_SIZE),
-   pc_SecuritySubLayer(NULL)
+   pc_SecuritySubLayer(nullptr)
 {
 }
 
@@ -99,12 +101,12 @@ C_OscProtocolDriverOsy::C_OscProtocolDriverOsy(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProtocolDriverOsy::~C_OscProtocolDriverOsy(void)
 {
-   mpc_TransportProtocol = NULL;
-   mpr_OnOsyTunnelCanMessageReceived = NULL;
-   mpv_OnAsyncTunnelCanMessageInstance = NULL;
-   mpr_OnOsyWaitTime = NULL;
-   mpv_OnOsyWaitTimeInstance = NULL;
-   pc_SecuritySubLayer = NULL;
+   mpc_TransportProtocol = nullptr;
+   mpr_OnOsyTunnelCanMessageReceived = nullptr;
+   mpv_OnAsyncTunnelCanMessageInstance = nullptr;
+   mpr_OnOsyWaitTime = nullptr;
+   mpv_OnOsyWaitTimeInstance = nullptr;
+   pc_SecuritySubLayer = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -179,24 +181,24 @@ void C_OscProtocolDriverOsy::InitializeHandleWaitTime(
 /*! \brief   Checks the connection of the TCP socket
 
    \return
-   C_NO_ERR   is connected
-   C_NOACT    is not connected
-   C_CONFIG   no transport protocol installed
+   Errc::success   is connected
+   Errc::noact     is not connected
+   Errc::config    no transport protocol installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::IsConnected(void)
+std::error_code C_OscProtocolDriverOsy::IsConnected(void)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   if (this->mpc_TransportProtocol == NULL)
+   if (this->mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
-      s32_Return = this->mpc_TransportProtocol->IsConnected();
+      c_Return = this->mpc_TransportProtocol->IsConnected();
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -206,24 +208,24 @@ int32_t C_OscProtocolDriverOsy::IsConnected(void)
    Useful after losing a connection (e.g. after ECU reset)
 
    \return
-   C_NO_ERR   re-connected
-   C_CONFIG   no transport protocol installed
-   C_BUSY     re-connect failed
+   Errc::success   re-connected
+   Errc::config    no transport protocol installed
+   Errc::busy      re-connect failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::ReConnect(void)
+std::error_code C_OscProtocolDriverOsy::ReConnect(void)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   if (this->mpc_TransportProtocol == NULL)
+   if (this->mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
-      s32_Return = this->mpc_TransportProtocol->ReConnect();
+      c_Return = this->mpc_TransportProtocol->ReConnect();
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -232,24 +234,24 @@ int32_t C_OscProtocolDriverOsy::ReConnect(void)
    Disconnect to openSYDE node.
 
    \return
-   C_NO_ERR   disconnected
-   C_CONFIG   no transport protocol installed
-   C_NOACT    disconnect failed
+   Errc::success   disconnected
+   Errc::config    no transport protocol installed
+   Errc::noact     disconnect failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::Disconnect(void)
+std::error_code C_OscProtocolDriverOsy::Disconnect(void)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   if (this->mpc_TransportProtocol == NULL)
+   if (this->mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
-      s32_Return = this->mpc_TransportProtocol->Disconnect();
+      c_Return = this->mpc_TransportProtocol->Disconnect();
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -258,19 +260,20 @@ int32_t C_OscProtocolDriverOsy::Disconnect(void)
    Add log entries for standard protocol error codes.
 
    \param[in]   orc_Service       Name of protocol service
-   \param[in]   os32_ReturnCode   Protocol driver function return code (C_NO_ERR -> no log entry)
-   \param[in]   ou8_NrCode        Negative response code (if os32_ReturnCode is C_WARN)
+   \param[in]   orc_ReturnCode    Protocol driver function return code (Errc::success -> no log entry)
+   \param[in]   ou8_NrCode        Negative response code (if orc_ReturnCode is Errc::warn)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscProtocolDriverOsy::m_LogServiceError(const std::string & orc_Service, const int32_t os32_ReturnCode,
+void C_OscProtocolDriverOsy::m_LogServiceError(const std::string & orc_Service,
+                                               const std::error_code & orc_ReturnCode,
                                                const uint8_t ou8_NrCode) const
 {
-   if (os32_ReturnCode != C_NO_ERR)
+   if (orc_ReturnCode != Errc::success)
    {
       bool q_IsHardError; //we want to log error responses just as "warnings"
 
       const std::string c_ErrorText =
-         C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(os32_ReturnCode, ou8_NrCode, &q_IsHardError);
+         C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(orc_ReturnCode, ou8_NrCode, &q_IsHardError);
       m_LogErrorWithHeader("openSYDE protocol driver", "Service " + orc_Service + " failed. Error: " + c_ErrorText,
                            TGL_UTIL_FUNC_ID, q_IsHardError);
    }
@@ -293,38 +296,39 @@ void C_OscProtocolDriverOsy::m_LogServiceError(const std::string & orc_Service, 
                                                  received non event-driven response
 
    \return
-   C_NO_ERR   if oq_CheckForSpecificServiceId is true: expected service response (positive or negative) received and
-                                                       placed in orc_ReceivedService
-              if oq_CheckForSpecificServiceId is false: finished with handling Rx queue
-   C_WARN     if oq_CheckForSpecificServiceId is true: expected service not received
-   C_CONFIG   no transport protocol or transport protocol returns error
-   C_NOACT    nothing received
-   C_COM      communication error
+   Errc::success   if oq_CheckForSpecificServiceId is true: expected service response (positive or negative)
+                                                            received and placed in orc_ReceivedService
+                   if oq_CheckForSpecificServiceId is false: finished with handling Rx queue
+   Errc::warn      if oq_CheckForSpecificServiceId is true: expected service not received
+   Errc::config    no transport protocol or transport protocol returns error
+   Errc::noact     nothing received
+   Errc::com       communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_Cycle(const bool oq_CheckForSpecificServiceId, const uint8_t ou8_ExpectedServiceId,
-                                        C_OscProtocolDriverOsyService * const opc_ReceivedService)
+std::error_code C_OscProtocolDriverOsy::m_Cycle(const bool oq_CheckForSpecificServiceId,
+                                                const uint8_t ou8_ExpectedServiceId,
+                                                C_OscProtocolDriverOsyService * const opc_ReceivedService)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
-      s32_Return = mpc_TransportProtocol->Cycle();
-      if (s32_Return == C_NO_ERR)
+      c_Return = mpc_TransportProtocol->Cycle();
+      if (c_Return == Errc::success)
       {
          bool q_ExpectedServiceReceived = false;
          C_OscProtocolDriverOsyService c_Service;
          //handle all full services in Rx queue:
-         s32_Return = C_NO_ERR;
-         while (s32_Return == C_NO_ERR)
+         c_Return = Errc::success;
+         while (c_Return == Errc::success)
          {
-            s32_Return = m_ReadResponse(c_Service);
+            c_Return = m_ReadResponse(c_Service);
 
-            if (s32_Return == C_NO_ERR)
+            if (c_Return == Errc::success)
             {
                //Check error response first
                // The SID must match and the length must be minimum 3
@@ -336,7 +340,7 @@ int32_t C_OscProtocolDriverOsy::m_Cycle(const bool oq_CheckForSpecificServiceId,
                   {
                      //yes. report to caller
                      q_ExpectedServiceReceived = true;
-                     if (opc_ReceivedService != NULL)
+                     if (opc_ReceivedService != nullptr)
                      {
                         (*opc_ReceivedService) = c_Service;
                      }
@@ -354,7 +358,7 @@ int32_t C_OscProtocolDriverOsy::m_Cycle(const bool oq_CheckForSpecificServiceId,
                       (c_Service.c_Data[0] == (ou8_ExpectedServiceId | 0x40U)))
                   {
                      q_ExpectedServiceReceived = true;
-                     if (opc_ReceivedService != NULL)
+                     if (opc_ReceivedService != nullptr)
                      {
                         (*opc_ReceivedService) = c_Service;
                      }
@@ -370,10 +374,10 @@ int32_t C_OscProtocolDriverOsy::m_Cycle(const bool oq_CheckForSpecificServiceId,
                   break; //finished here
                }
             }
-            else if (s32_Return == C_WARN)
+            else if (c_Return == Errc::warn)
             {
                //security sub layer got an error response; no need to try to continue here
-               s32_Return = C_COM;
+               c_Return = Errc::com;
             }
             else
             {
@@ -381,13 +385,13 @@ int32_t C_OscProtocolDriverOsy::m_Cycle(const bool oq_CheckForSpecificServiceId,
             }
             if ((oq_CheckForSpecificServiceId == true) && (q_ExpectedServiceReceived == false))
             {
-               s32_Return = C_WARN;
+               c_Return = Errc::warn;
             }
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -413,19 +417,17 @@ int32_t C_OscProtocolDriverOsy::m_Cycle(const bool oq_CheckForSpecificServiceId,
                                        first three byte
 
    \return
-   C_NO_ERR   non event-driven service matching the definition received and placed in orc_Service
-   C_WARN     error response
-   C_TIMEOUT  expected response not received within timeout
-   C_COM      communication driver reported error
+   Errc::success   non event-driven service matching the definition received and placed in orc_Service
+   Errc::warn      error response
+   Errc::timeout   expected response not received within timeout
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t ou8_ExpectedServiceId,
-                                                                 const uint16_t ou16_ExpectedSize,
-                                                                 C_OscProtocolDriverOsyService & orc_Service,
-                                                                 uint8_t & oru8_NrCode, const bool oq_ExactSizeExpected,
-                                                                 const std::vector<uint8_t> * const opc_ExpectedErrData)
+std::error_code C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t ou8_ExpectedServiceId,
+   const uint16_t ou16_ExpectedSize, C_OscProtocolDriverOsyService & orc_Service, uint8_t & oru8_NrCode,
+   const bool oq_ExactSizeExpected, const std::vector<uint8_t> * const opc_ExpectedErrData)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
    uint32_t u32_LastWaitTimeHandled = u32_StartTime;
    uint16_t u16_RxSize;
@@ -437,13 +439,13 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
    //lock access to "polling"
    //If another thread checking for async responses kicks in (calling ::Cycle) is could otherwise
    // snatch away the response we want to get.
-   mc_LockReception.Acquire();
+   mc_LockReception.lock();
 
    while ((stw::tgl::TglGetTickCount() < (u32_StartTime + mu32_TimeoutPollingMs)) && (q_Finished == false))
    {
       //trigger handling of Rx and Tx communication
-      s32_Return = this->m_Cycle(true, ou8_ExpectedServiceId, &orc_Service);
-      if (s32_Return == C_NO_ERR)
+      c_Return = this->m_Cycle(true, ou8_ExpectedServiceId, &orc_Service);
+      if (c_Return == Errc::success)
       {
          u16_RxSize = static_cast<uint16_t>(orc_Service.c_Data.size());
 
@@ -457,7 +459,7 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
                bool q_Match = true;
 
                // Check only if it is a negative response with additional bytes
-               if ((opc_ExpectedErrData != NULL) && (u16_RxSize > 3U))
+               if ((opc_ExpectedErrData != nullptr) && (u16_RxSize > 3U))
                {
                   // Extended not UDS conform error response expected
                   const uint32_t u32_NumberOfBytes = static_cast<uint32_t>(opc_ExpectedErrData->size());
@@ -478,7 +480,7 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
                            if (orc_Service.c_Data[1] == mhu8_OSY_SI_READ_DATA_POOL_DATA_EVENT_DRIVEN)
                            {
                               //handle data error
-                              s32_Return = m_HandleAsyncResponse(orc_Service);
+                              c_Return = m_HandleAsyncResponse(orc_Service);
                            }
                            else
                            {
@@ -501,13 +503,12 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
 
                if (q_Match == true)
                {
-                  osc_write_log_info("", "q_Match==true");
-
                   // Matching error response found!
                   // special handling for "responsePending": rewind Rx timeout expectation
                   if (orc_Service.c_Data[2] == hu8_NR_CODE_RESPONSE_PENDING)
                   {
-                     osc_write_log_info("", "ResponsePending detected, rewinding timeout ...");
+                     osc_write_log_info("Synchronous communication",
+                                        "ResponsePending detected, rewinding timeout ...");
                      u32_StartTime = stw::tgl::TglGetTickCount();
                      // The response of the server resets the session timeouts
                      u32_LastWaitTimeHandled = u32_StartTime;
@@ -516,15 +517,16 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
                   {
                      //other code: report to application
                      oru8_NrCode = orc_Service.c_Data[2];
-                     s32_Return = C_WARN;
+                     c_Return = Errc::warn;
                      q_Finished = true;
                   }
                }
             }
             else
             {
-               m_LogErrorWithHeader(TGL_UTIL_FUNC_ID, "Synchronous communication",
-                                    "Sync negative response to unexpected service received. Ignoring.");
+               m_LogErrorWithHeader("Synchronous communication",
+                                    "Sync negative response to unexpected service received. Ignoring.",
+                                    TGL_UTIL_FUNC_ID);
             }
          }
 
@@ -548,9 +550,9 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
                if (orc_Service.c_Data[0] == (mhu8_OSY_SI_READ_DATA_POOL_DATA_EVENT_DRIVEN | 0x40U))
                {
                   //last chance ...
-                  s32_Return = m_HandleAsyncResponse(orc_Service);
+                  c_Return = m_HandleAsyncResponse(orc_Service);
                }
-               if (s32_Return != C_NO_ERR)
+               if (c_Return != Errc::success)
                {
                   //unexpected response
                   m_LogErrorWithHeader("Synchronous communication",
@@ -559,7 +561,7 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
             }
          }
       }
-      else if (s32_Return == C_COM)
+      else if (c_Return == Errc::com)
       {
          // Communication error
          break;
@@ -567,7 +569,7 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
       else
       {
          // Handle long waiting time by registered function
-         if (this->mpr_OnOsyWaitTime != NULL)
+         if (this->mpr_OnOsyWaitTime != nullptr)
          {
             const uint32_t u32_CurrentTime = stw::tgl::TglGetTickCount();
             if ((u32_CurrentTime - hu32_DEFAULT_HANDLE_WAIT_TIME) > u32_LastWaitTimeHandled)
@@ -583,9 +585,9 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
          stw::tgl::TglSleepPolling(); //rescind CPU time to other threads ...
       }
    }
-   mc_LockReception.Release();
+   mc_LockReception.unlock();
 
-   if (s32_Return == C_COM)
+   if (c_Return == Errc::com)
    {
       m_LogErrorWithHeader("Synchronous communication", "No response received (communication error).",
                            TGL_UTIL_FUNC_ID);
@@ -593,14 +595,14 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
    else if (q_Finished == false)
    {
       m_LogErrorWithHeader("Synchronous communication", "No response received (timed out).", TGL_UTIL_FUNC_ID);
-      s32_Return = C_TIMEOUT;
+      c_Return = Errc::timeout;
    }
    else
    {
       // Nothing to do
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -613,24 +615,25 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong session ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong session ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyDiagnosticSessionControl(const uint8_t ou8_SessionId, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyDiagnosticSessionControl(const uint8_t ou8_SessionId,
+                                                                    uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Service;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -638,20 +641,20 @@ int32_t C_OscProtocolDriverOsy::OsyDiagnosticSessionControl(const uint8_t ou8_Se
       c_Service.c_Data[0] = mhu8_OSY_SI_DIAGNOSTIC_SESSION_CONTROL;
       c_Service.c_Data[1] = ou8_SessionId;
 
-      s32_Return = m_SendRequest(c_Service);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Service);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
-         s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_DIAGNOSTIC_SESSION_CONTROL, 6U, c_Service,
-                                                       u8_NrErrorCode);
-         if ((s32_Return == C_NO_ERR) && (c_Service.c_Data[1] != ou8_SessionId))
+         c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_DIAGNOSTIC_SESSION_CONTROL, 6U, c_Service,
+                                                     u8_NrErrorCode);
+         if ((c_Return == Errc::success) && (c_Service.c_Data[1] != ou8_SessionId))
          {
-            s32_Return = C_RD_WR;
+            c_Return = Errc::rd_wr;
          }
-         else if ((s32_Return == C_WARN) && (opu8_NrCode != NULL))
+         else if ((c_Return == Errc::warn) && (opu8_NrCode != nullptr))
          {
             (*opu8_NrCode) = u8_NrErrorCode;
          }
@@ -662,9 +665,9 @@ int32_t C_OscProtocolDriverOsy::OsyDiagnosticSessionControl(const uint8_t ou8_Se
       }
    }
 
-   m_LogServiceError("DiagnosticSessionControl", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("DiagnosticSessionControl", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -681,27 +684,28 @@ int32_t C_OscProtocolDriverOsy::OsyDiagnosticSessionControl(const uint8_t ou8_Se
    \param[out] oru8_NrCode                negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_ReadDataByIdentifier(const uint16_t ou16_Identifier,
-                                                       const uint16_t ou16_ExpectedPayloadSize,
-                                                       const bool oq_ExactSizeExpected,
-                                                       std::vector<uint8_t> & orc_ReadData, uint8_t & oru8_NrCode)
+std::error_code C_OscProtocolDriverOsy::m_ReadDataByIdentifier(const uint16_t ou16_Identifier,
+                                                               const uint16_t ou16_ExpectedPayloadSize,
+                                                               const bool oq_ExactSizeExpected,
+                                                               std::vector<uint8_t> & orc_ReadData,
+                                                               uint8_t & oru8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -710,25 +714,24 @@ int32_t C_OscProtocolDriverOsy::m_ReadDataByIdentifier(const uint16_t ou16_Ident
       c_Request.c_Data[1] = static_cast<uint8_t>(ou16_Identifier >> 8U);
       c_Request.c_Data[2] = static_cast<uint8_t>(ou16_Identifier & 0xFFU);
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
          uint8_t u8_NrErrorCode;
-         s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_DATA_BY_IDENTIFIER,
-                                                       ou16_ExpectedPayloadSize + 3U, c_Response,
-                                                       u8_NrErrorCode, oq_ExactSizeExpected);
-         switch (s32_Return)
+         c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_DATA_BY_IDENTIFIER,
+                                                     ou16_ExpectedPayloadSize + 3U, c_Response,
+                                                     u8_NrErrorCode, oq_ExactSizeExpected);
+         if (c_Return == Errc::success)
          {
-         case C_NO_ERR:
             //check DI:
             if ((c_Request.c_Data[1] != c_Response.c_Data[1]) ||
                 (c_Request.c_Data[2] != c_Response.c_Data[2]))
             {
-               s32_Return = C_RD_WR;
+               c_Return = Errc::rd_wr;
             }
             else
             {
@@ -738,16 +741,18 @@ int32_t C_OscProtocolDriverOsy::m_ReadDataByIdentifier(const uint16_t ou16_Ident
                   (void)std::memcpy(&orc_ReadData[0], &c_Response.c_Data[3], c_Response.c_Data.size() - 3);
                }
             }
-            break;
-         case C_WARN:
+         }
+         else if (c_Return == Errc::warn)
+         {
             oru8_NrCode = u8_NrErrorCode;
-            break;
-         default:
-            break;
+         }
+         else
+         {
+            //nothing to do
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -762,24 +767,24 @@ int32_t C_OscProtocolDriverOsy::m_ReadDataByIdentifier(const uint16_t ou16_Ident
    \param[out] oru8_NrCode              negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_ReadStringDataIdentifier(const uint16_t ou16_DataIdentifier, std::string & orc_String,
-                                                           uint8_t & oru8_NrCode)
+std::error_code C_OscProtocolDriverOsy::m_ReadStringDataIdentifier(const uint16_t ou16_DataIdentifier,
+                                                                   std::string & orc_String, uint8_t & oru8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
 
-   s32_Return = m_ReadDataByIdentifier(ou16_DataIdentifier, 0U, false, c_Data, oru8_NrCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(ou16_DataIdentifier, 0U, false, c_Data, oru8_NrCode);
+   if (c_Return == Errc::success)
    {
       //extract text:
       std::vector<char_t> c_Text;
@@ -789,7 +794,7 @@ int32_t C_OscProtocolDriverOsy::m_ReadStringDataIdentifier(const uint16_t ou16_D
       orc_String = &c_Text[0];
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -806,26 +811,26 @@ int32_t C_OscProtocolDriverOsy::m_ReadStringDataIdentifier(const uint16_t ou16_D
    \param[out] oru8_NrCode                negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_WriteDataByIdentifier(const uint16_t ou16_Identifier,
-                                                        const std::vector<uint8_t> & orc_WriteData,
-                                                        uint8_t & oru8_NrCode)
+std::error_code C_OscProtocolDriverOsy::m_WriteDataByIdentifier(const uint16_t ou16_Identifier,
+                                                                const std::vector<uint8_t> & orc_WriteData,
+                                                                uint8_t & oru8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -835,35 +840,36 @@ int32_t C_OscProtocolDriverOsy::m_WriteDataByIdentifier(const uint16_t ou16_Iden
       c_Request.c_Data[2] = static_cast<uint8_t>(ou16_Identifier & 0xFFU);
       (void)std::memcpy(&c_Request.c_Data[3], &orc_WriteData[0], orc_WriteData.size());
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
          uint8_t u8_NrErrorCode;
-         s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_WRITE_DATA_BY_IDENTIFIER,
-                                                       3U, c_Response, u8_NrErrorCode, true);
-         switch (s32_Return)
+         c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_WRITE_DATA_BY_IDENTIFIER,
+                                                     3U, c_Response, u8_NrErrorCode, true);
+         if (c_Return == Errc::success)
          {
-         case C_NO_ERR:
             //check response:
             if ((c_Request.c_Data[1] != c_Response.c_Data[1]) ||
                 (c_Request.c_Data[2] != c_Response.c_Data[2]))
             {
-               s32_Return = C_RD_WR;
+               c_Return = Errc::rd_wr;
             }
-            break;
-         case C_WARN:
+         }
+         else if (c_Return == Errc::warn)
+         {
             oru8_NrCode = u8_NrErrorCode;
-            break;
-         default:
-            break;
+         }
+         else
+         {
+            //nothing to do
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -876,38 +882,38 @@ int32_t C_OscProtocolDriverOsy::m_WriteDataByIdentifier(const uint16_t ou16_Iden
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadEcuSerialNumber(C_OscProtocolSerialNumber & orc_SerialNumber,
-                                                       uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadEcuSerialNumber(C_OscProtocolSerialNumber & orc_SerialNumber,
+                                                               uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Snr;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_ECU_SERIAL_NUMBER, 6U, true, c_Snr, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_ECU_SERIAL_NUMBER, 6U, true, c_Snr, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       uint8_t au8_SerialNumber[6];
       (void)std::memcpy(&au8_SerialNumber[0], &c_Snr[0], 6);
       orc_SerialNumber.SetPosSerialNumber(au8_SerialNumber);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::EcuSerialNumber", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::EcuSerialNumber", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -920,38 +926,39 @@ int32_t C_OscProtocolDriverOsy::OsyReadEcuSerialNumber(C_OscProtocolSerialNumber
    \param[out] opu8_NrCode            if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadHardwareNumber(uint32_t & oru32_HardwareNumber, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadHardwareNumber(uint32_t & oru32_HardwareNumber,
+                                                              uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SYS_SUPPLIER_ECU_HW_NUMBER, 4U, true, c_Data, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SYS_SUPPLIER_ECU_HW_NUMBER, 4U, true, c_Data, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       oru32_HardwareNumber = ((static_cast<uint32_t>(c_Data[0])) << 24U) +
                              ((static_cast<uint32_t>(c_Data[1])) << 16U) +
                              ((static_cast<uint32_t>(c_Data[2])) << 8U) +
                              (static_cast<uint32_t>(c_Data[3]));
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::HardwareNumber", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::HardwareNumber", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -964,32 +971,32 @@ int32_t C_OscProtocolDriverOsy::OsyReadHardwareNumber(uint32_t & oru32_HardwareN
    \param[out] opu8_NrCode                  if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadHardwareVersionNumber(std::string & orc_HardwareVersionNumber,
-                                                             uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadHardwareVersionNumber(std::string & orc_HardwareVersionNumber,
+                                                                     uint8_t * const opu8_NrCode)
 
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_SYS_SUPPLIER_ECU_HW_VERSION, orc_HardwareVersionNumber,
-                                           u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_SYS_SUPPLIER_ECU_HW_VERSION, orc_HardwareVersionNumber,
+                                         u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::HardwareVersionNumber", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::HardwareVersionNumber", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1002,25 +1009,25 @@ int32_t C_OscProtocolDriverOsy::OsyReadHardwareVersionNumber(std::string & orc_H
    \param[out] opu8_NrCode                  if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadListOfFeatures(C_ListOfFeatures & orc_ListOfFeatures,
-                                                      uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadListOfFeatures(C_ListOfFeatures & orc_ListOfFeatures,
+                                                              uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_LIST_OF_FEATURES, 8U, true, c_Data, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_LIST_OF_FEATURES, 8U, true, c_Data, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       //extract bits:
       orc_ListOfFeatures.q_FlashloaderCanWriteToNvm        = ((c_Data[7] & 0x01U) == 0x01U) ? true : false;
@@ -1034,14 +1041,14 @@ int32_t C_OscProtocolDriverOsy::OsyReadListOfFeatures(C_ListOfFeatures & orc_Lis
       orc_ListOfFeatures.q_SupportsSecurityTrafficEncryption = ((c_Data[6] & 0x01U) == 0x01U) ? true : false;
       //we don't know anything about the meaning of the rest of the bits as we have no crystal ball
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::ListOfFeatures", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::ListOfFeatures", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1058,29 +1065,29 @@ int32_t C_OscProtocolDriverOsy::OsyReadListOfFeatures(C_ListOfFeatures & orc_Lis
    \param[out] opu8_NrCode                      if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadMaxNumberOfBlockLength(uint16_t & oru16_MaxNumberOfBlockLength,
-                                                              uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadMaxNumberOfBlockLength(uint16_t & oru16_MaxNumberOfBlockLength,
+                                                                      uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_MAX_NUMBER_OF_BLOCK_LENGTH, 2U, true, c_Data, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_MAX_NUMBER_OF_BLOCK_LENGTH, 2U, true, c_Data, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       //extract information:
       oru16_MaxNumberOfBlockLength = (static_cast<uint16_t>((static_cast<uint16_t>(c_Data[0])) << 8U)) + (c_Data[1]);
-      tgl_assert(this->pc_SecuritySubLayer != NULL);
+      tgl_assert(this->pc_SecuritySubLayer != nullptr);
       if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
       {
          //if traffic encryption is active we need to consider that the service size that can effectively
@@ -1097,14 +1104,14 @@ int32_t C_OscProtocolDriverOsy::OsyReadMaxNumberOfBlockLength(uint16_t & oru16_M
          }
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::ReadMaxNumberOfBlockLength", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::ReadMaxNumberOfBlockLength", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1118,29 +1125,29 @@ int32_t C_OscProtocolDriverOsy::OsyReadMaxNumberOfBlockLength(uint16_t & oru16_M
    \param[out] opu8_NrCode                  if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadDeviceName(std::string & orc_DeviceName, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadDeviceName(std::string & orc_DeviceName, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_DEVICE_NAME, orc_DeviceName, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_DEVICE_NAME, orc_DeviceName, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::DeviceName", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::DeviceName", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1154,29 +1161,30 @@ int32_t C_OscProtocolDriverOsy::OsyReadDeviceName(std::string & orc_DeviceName, 
    \param[out] opu8_NrCode                  if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadApplicationName(std::string & orc_ApplicationName, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadApplicationName(std::string & orc_ApplicationName,
+                                                               uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_APPLICATION_NAME, orc_ApplicationName, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_APPLICATION_NAME, orc_ApplicationName, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::ApplicationName", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::ApplicationName", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1190,30 +1198,30 @@ int32_t C_OscProtocolDriverOsy::OsyReadApplicationName(std::string & orc_Applica
    \param[out] opu8_NrCode                  if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadApplicationVersion(std::string & orc_ApplicationVersion,
-                                                          uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadApplicationVersion(std::string & orc_ApplicationVersion,
+                                                                  uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_APPLICATION_VERSION, orc_ApplicationVersion, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_APPLICATION_VERSION, orc_ApplicationVersion, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::ApplicationVersion", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::ApplicationVersion", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1234,43 +1242,43 @@ int32_t C_OscProtocolDriverOsy::OsyReadApplicationVersion(std::string & orc_Appl
    \param[out] opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID, or: number of modules is not 1)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID, or: number of modules is not 1)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadBootSoftwareIdentification(uint8_t (&orau8_Version)[3],
-                                                                  uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadBootSoftwareIdentification(uint8_t (&orau8_Version)[3],
+                                                                          uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_BOOT_SOFTWARE_IDENTIFICATION, 4U, true, c_Data, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_BOOT_SOFTWARE_IDENTIFICATION, 4U, true, c_Data, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       if (c_Data[0] != 1U)
       {
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
       else
       {
          (void)std::memcpy(&orau8_Version[0], &c_Data[1], 3U);
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::BootSoftwareIdentification", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::BootSoftwareIdentification", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1283,35 +1291,36 @@ int32_t C_OscProtocolDriverOsy::OsyReadBootSoftwareIdentification(uint8_t (&orau
    \param[out] opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_COM      communication driver reported error
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::com       communication driver reported error
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadActiveDiagnosticSession(uint8_t & oru8_SessionId, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadActiveDiagnosticSession(uint8_t & oru8_SessionId,
+                                                                       uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_ACTIVE_DIAGNOSTIC_SESSION, 1U, true, c_Data, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_ACTIVE_DIAGNOSTIC_SESSION, 1U, true, c_Data, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       oru8_SessionId = c_Data[0];
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   m_LogServiceError("ReadDataByIdentifier::ActiveDiagnosticSession", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::ActiveDiagnosticSession", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1327,28 +1336,28 @@ int32_t C_OscProtocolDriverOsy::OsyReadActiveDiagnosticSession(uint8_t & oru8_Se
    \param[out] opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadApplicationSoftwareFingerprint(uint8_t (&orau8_Date)[3],
-                                                                      uint8_t (&orau8_Time)[3],
-                                                                      std::string & orc_Username,
-                                                                      uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadApplicationSoftwareFingerprint(uint8_t (&orau8_Date)[3],
+                                                                              uint8_t (&orau8_Time)[3],
+                                                                              std::string & orc_Username,
+                                                                              uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return =
+   c_Return =
       m_ReadDataByIdentifier(mhu16_OSY_DI_APPLICATION_SOFTWARE_FINGERPRINT, 7U, false, c_Data, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
       std::vector<char_t> c_Text;
       (void)std::memcpy(&orau8_Date[0], &c_Data[0], 3U);
@@ -1359,13 +1368,13 @@ int32_t C_OscProtocolDriverOsy::OsyReadApplicationSoftwareFingerprint(uint8_t (&
       (void)std::memcpy(&c_Text[0], &c_Data[7], c_Data.size() - 7U);
       orc_Username = &c_Text[0];
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   m_LogServiceError("ReadDataByIdentifier::ApplicationSoftwareFingerprint", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::ApplicationSoftwareFingerprint", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1378,31 +1387,31 @@ int32_t C_OscProtocolDriverOsy::OsyReadApplicationSoftwareFingerprint(uint8_t (&
    \param[out] opu8_NrCode              if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadFileBasedTransferExitResult(std::string & orc_TransferExitResult,
-                                                                   uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadFileBasedTransferExitResult(std::string & orc_TransferExitResult,
+                                                                           uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_FILE_BASED_TRANSFER_EXIT_RESULT, orc_TransferExitResult,
-                                           u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_FILE_BASED_TRANSFER_EXIT_RESULT, orc_TransferExitResult,
+                                         u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::FileBasedTransferExitResult", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::FileBasedTransferExitResult", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1416,31 +1425,31 @@ int32_t C_OscProtocolDriverOsy::OsyReadFileBasedTransferExitResult(std::string &
    \param[out] opu8_NrCode                         if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
-   C_RANGE    length of read string or serial number does not match
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
+   Errc::range     length of read string or serial number does not match
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadEcuSerialNumberExt(C_OscProtocolSerialNumber & orc_SerialNumberExt,
-                                                          uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadEcuSerialNumberExt(C_OscProtocolSerialNumber & orc_SerialNumberExt,
+                                                                  uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
    std::vector<uint8_t> c_Data;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_ECU_SERIAL_NUMBER_EXT, 3, false, c_Data, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_ECU_SERIAL_NUMBER_EXT, 3, false, c_Data, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
       // At least 3 bytes are necessary
       if (c_Data.size() > 2)
@@ -1456,22 +1465,22 @@ int32_t C_OscProtocolDriverOsy::OsyReadEcuSerialNumberExt(C_OscProtocolSerialNum
             const uint8_t u8_SerialNumberManufacturerFormat = c_Data[0];
             // Erase the first two bytes to have the serial number data only
             c_Data.erase(c_Data.begin(), c_Data.begin() + 2);
-            s32_Return = orc_SerialNumberExt.SetExtSerialNumber(c_Data, u8_SerialNumberManufacturerFormat);
+            c_Return = orc_SerialNumberExt.SetExtSerialNumber(c_Data, u8_SerialNumberManufacturerFormat);
          }
          else
          {
-            s32_Return = C_RANGE;
+            c_Return = Errc::range;
          }
       }
       else
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
    }
 
-   m_LogServiceError("ReadDataByIdentifier::ECUSerialNumberDataIdentifierExt", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::ECUSerialNumberDataIdentifierExt", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1486,36 +1495,36 @@ int32_t C_OscProtocolDriverOsy::OsyReadEcuSerialNumberExt(C_OscProtocolSerialNum
    \param[out] opu8_NrCode                      if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadSubNodeId(uint8_t & oru8_SubNodeId, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadSubNodeId(uint8_t & oru8_SubNodeId, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SUB_NODE_ID, 1U, true, c_Data, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SUB_NODE_ID, 1U, true, c_Data, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       //extract information:
       oru8_SubNodeId = c_Data[0];
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::ReadMaxNumberOfBlockLength", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::ReadMaxNumberOfBlockLength", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1531,21 +1540,21 @@ int32_t C_OscProtocolDriverOsy::OsyReadSubNodeId(uint8_t & oru8_SubNodeId, uint8
    \param[out] opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyWriteApplicationSoftwareFingerprint(const uint8_t (&orau8_Date)[3],
-                                                                       const uint8_t (&orau8_Time)[3],
-                                                                       const std::string & orc_UserName,
-                                                                       uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyWriteApplicationSoftwareFingerprint(const uint8_t (&orau8_Date)[3],
+                                                                               const uint8_t (&orau8_Time)[3],
+                                                                               const std::string & orc_UserName,
+                                                                               uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    std::string c_UserName = orc_UserName;
@@ -1562,14 +1571,14 @@ int32_t C_OscProtocolDriverOsy::OsyWriteApplicationSoftwareFingerprint(const uin
    c_Data[6] = static_cast<uint8_t>(c_UserName.length());
    (void)std::memcpy(&c_Data[7], c_UserName.c_str(), c_UserName.length());
 
-   s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_APPLICATION_SOFTWARE_FINGERPRINT, c_Data, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_APPLICATION_SOFTWARE_FINGERPRINT, c_Data, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   m_LogServiceError("WriteDataByIdentifier::ApplicationSoftwareFingerprint", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("WriteDataByIdentifier::ApplicationSoftwareFingerprint", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1585,18 +1594,18 @@ int32_t C_OscProtocolDriverOsy::OsyWriteApplicationSoftwareFingerprint(const uin
    \param[out]  opu8_NrCode      if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyFactoryMode(const uint8_t ou8_Operation, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyFactoryMode(const uint8_t ou8_Operation, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_ReceiveData;
    std::vector<uint8_t> c_SendData;
@@ -1606,19 +1615,19 @@ int32_t C_OscProtocolDriverOsy::OsyFactoryMode(const uint8_t ou8_Operation, uint
    c_SendData[0] = ou8_Operation;
    c_SendData[1] = 0U; // reserved byte for future usage
 
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_FACTORY_MODE, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                 c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_FACTORY_MODE, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                               c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::FactoryMode(Operation: %d)", ou8_Operation);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1633,20 +1642,20 @@ int32_t C_OscProtocolDriverOsy::OsyFactoryMode(const uint8_t ou8_Operation, uint
    \param[out] opu8_NrCode                  if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
-   C_RANGE    count of read bytes does not match the expectation (more than 20 bytes received)
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
+   Errc::range     count of read bytes does not match the expectation (more than 20 bytes received)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNumber(std::vector<uint8_t> & orc_SerialNumber,
-                                                                             uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNumber(
+   std::vector<uint8_t> & orc_SerialNumber, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    uint8_t u8_NrErrorCode = 0U;
 
@@ -1656,10 +1665,10 @@ int32_t C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNumber(std
    // if it does not have a valid certificate serial number.
    //Unfortunately there are incorrect implementations that send "ok" with a zero length value.
    //We will play nice and accept such responses.
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_AUTHENTICATION_CERTIFICATE_SERIAL_NUMBER, 0U, false,
-                                       orc_SerialNumber,
-                                       u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_AUTHENTICATION_CERTIFICATE_SERIAL_NUMBER, 0U, false,
+                                     orc_SerialNumber,
+                                     u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       if (orc_SerialNumber.size() == 0)
       {
@@ -1678,18 +1687,18 @@ int32_t C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNumber(std
          if (orc_SerialNumber.size() > 20)
          {
             orc_SerialNumber.clear();
-            s32_Return = C_RANGE;
+            c_Return = Errc::range;
          }
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::CertificateAuthenticationSerialNumber", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::CertificateAuthenticationSerialNumber", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1704,28 +1713,28 @@ int32_t C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNumber(std
    \param[out] opu8_NrCode                  if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
-   C_RANGE    count of read bytes does not match the expectation (more than 20 bytes received)
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
+   Errc::range     count of read bytes does not match the expectation (more than 20 bytes received)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNumberL7(std::vector<uint8_t> & orc_SerialNumber,
-                                                                               uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNumberL7(
+   std::vector<uint8_t> & orc_SerialNumber, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    uint8_t u8_NrErrorCode = 0U;
 
    orc_SerialNumber.clear();
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_AUTHENTICATION_CERTIFICATE_SERIAL_NUMBER_L7, 1U, false,
-                                       orc_SerialNumber, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_AUTHENTICATION_CERTIFICATE_SERIAL_NUMBER_L7, 1U, false,
+                                     orc_SerialNumber, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       //Strip leading zeroes for compatibility (see #100795 for details)
       while ((orc_SerialNumber.size() > 0) && (orc_SerialNumber[0] == 0x00U))
@@ -1735,17 +1744,17 @@ int32_t C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNumberL7(s
       if (orc_SerialNumber.size() > 20)
       {
          orc_SerialNumber.clear();
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::CertificateAuthenticationSerialNumberL7", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::CertificateAuthenticationSerialNumberL7", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1763,22 +1772,22 @@ int32_t C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNumberL7(s
    \param[out] opu8_NrCode                     if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
-   C_RANGE    parameter orc_PublicKeyModulus, orc_PublicKeyExponent, orc_SerialNumber does not match the size expectation
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
+   Errc::range     parameter orc_PublicKeyModulus, orc_PublicKeyExponent, orc_SerialNumber does not match the
+                   size expectation
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyWriteSecurityAuthenticationKey(const std::vector<uint8_t> & orc_PublicKeyModulus,
-                                                                  const std::vector<uint8_t> & orc_PublicKeyExponent,
-                                                                  const std::vector<uint8_t> & orc_CertificateSerialNumber,
-                                                                  uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyWriteSecurityAuthenticationKey(
+   const std::vector<uint8_t> & orc_PublicKeyModulus, const std::vector<uint8_t> & orc_PublicKeyExponent,
+   const std::vector<uint8_t> & orc_CertificateSerialNumber, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
    if ((orc_PublicKeyModulus.size() != 128) ||
@@ -1787,7 +1796,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityAuthenticationKey(const std::vec
        (orc_CertificateSerialNumber.size() == 0) ||
        (orc_CertificateSerialNumber.size() > 20))
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -1802,15 +1811,15 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityAuthenticationKey(const std::vec
       (void)memcpy(&c_Data[orc_PublicKeyModulus.size() + 4], &orc_CertificateSerialNumber[0],
                    orc_CertificateSerialNumber.size());
 
-      s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_SECURITY_AUTHENTICATION_KEY, c_Data, u8_NrErrorCode);
-      if (opu8_NrCode != NULL)
+      c_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_SECURITY_AUTHENTICATION_KEY, c_Data, u8_NrErrorCode);
+      if (opu8_NrCode != nullptr)
       {
          (*opu8_NrCode) = u8_NrErrorCode;
       }
    }
-   m_LogServiceError("WriteDataByIdentifier::SecurityAuthenticationKey", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("WriteDataByIdentifier::SecurityAuthenticationKey", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1824,40 +1833,40 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityAuthenticationKey(const std::vec
    \param[out] opu8_NrCode                  if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadSecurityAuthenticationActivation(bool & orq_SecurityOn,
-                                                                        uint8_t & oru8_SecurityAlgorithm,
-                                                                        uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadSecurityAuthenticationActivation(bool & orq_SecurityOn,
+                                                                                uint8_t & oru8_SecurityAlgorithm,
+                                                                                uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SECURITY_AUTHENTICATION_ACTIVATION, 2U, true, c_Data,
-                                       u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SECURITY_AUTHENTICATION_ACTIVATION, 2U, true, c_Data,
+                                     u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       orq_SecurityOn = ((c_Data[0] & 0x01U) == 0x01U) ? true : false;
       oru8_SecurityAlgorithm = c_Data[1];
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::SecurityAuthenticationActivation", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::SecurityAuthenticationActivation", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1871,20 +1880,20 @@ int32_t C_OscProtocolDriverOsy::OsyReadSecurityAuthenticationActivation(bool & o
    \param[out] opu8_NrCode            if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyWriteSecurityAuthenticationActivation(const bool oq_SecurityOn,
-                                                                         const uint8_t ou8_SecurityAlgorithm,
-                                                                         uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyWriteSecurityAuthenticationActivation(const bool oq_SecurityOn,
+                                                                                 const uint8_t ou8_SecurityAlgorithm,
+                                                                                 uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
    std::vector<uint8_t> c_Data;
@@ -1893,15 +1902,15 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityAuthenticationActivation(const b
    c_Data[0] = (oq_SecurityOn == true) ? 0x01U : 0x00U;
    c_Data[1] = ou8_SecurityAlgorithm;
 
-   s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_SECURITY_AUTHENTICATION_ACTIVATION, c_Data, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_SECURITY_AUTHENTICATION_ACTIVATION, c_Data, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("WriteDataByIdentifier::SecurityAuthenticationActivation", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("WriteDataByIdentifier::SecurityAuthenticationActivation", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1915,40 +1924,40 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityAuthenticationActivation(const b
    \param[out] opu8_NrCode                  if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadSecurityTrafficEncryptionActivation(bool & orq_SecurityOn,
-                                                                           uint8_t & oru8_SecurityAlgorithm,
-                                                                           uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadSecurityTrafficEncryptionActivation(bool & orq_SecurityOn,
+                                                                                   uint8_t & oru8_SecurityAlgorithm,
+                                                                                   uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SECURITY_TRAFFIC_ENCRYPTION_ACTIVATION, 2U, true, c_Data,
-                                       u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SECURITY_TRAFFIC_ENCRYPTION_ACTIVATION, 2U, true, c_Data,
+                                     u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       orq_SecurityOn = ((c_Data[0] & 0x01U) == 0x01U) ? true : false;
       oru8_SecurityAlgorithm = c_Data[1];
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::SecurityTrafficEncryptionActivation", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::SecurityTrafficEncryptionActivation", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1962,20 +1971,20 @@ int32_t C_OscProtocolDriverOsy::OsyReadSecurityTrafficEncryptionActivation(bool 
    \param[out] opu8_NrCode            if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyWriteSecurityTrafficEncryptionActivation(const bool oq_SecurityOn,
-                                                                            const uint8_t ou8_SecurityAlgorithm,
-                                                                            uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyWriteSecurityTrafficEncryptionActivation(const bool oq_SecurityOn,
+                                                                                    const uint8_t ou8_SecurityAlgorithm,
+                                                                                    uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
    std::vector<uint8_t> c_Data;
@@ -1984,15 +1993,15 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityTrafficEncryptionActivation(cons
    c_Data[0] = (oq_SecurityOn == true) ? 0x01U : 0x00U;
    c_Data[1] = ou8_SecurityAlgorithm;
 
-   s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_SECURITY_TRAFFIC_ENCRYPTION_ACTIVATION, c_Data, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_SECURITY_TRAFFIC_ENCRYPTION_ACTIVATION, c_Data, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("WriteDataByIdentifier::SecurityTrafficEncryptionActivation", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("WriteDataByIdentifier::SecurityTrafficEncryptionActivation", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2005,37 +2014,37 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityTrafficEncryptionActivation(cons
    \param[out] opu8_NrCode                  if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadDebuggerEnabled(bool & orq_DebuggerEnabled, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadDebuggerEnabled(bool & orq_DebuggerEnabled, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_DEBUGGER_ACTIVATION, 1U, true, c_Data,
-                                       u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_DEBUGGER_ACTIVATION, 1U, true, c_Data,
+                                     u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       orq_DebuggerEnabled = ((c_Data[0] & 0x01U) == 0x01U) ? true : false;
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("ReadDataByIdentifier::DebuggerEnabled", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::DebuggerEnabled", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2052,18 +2061,19 @@ int32_t C_OscProtocolDriverOsy::OsyReadDebuggerEnabled(bool & orq_DebuggerEnable
    \param[out] opu8_NrCode            if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyWriteDebuggerEnabled(const bool oq_DebuggerEnabled, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyWriteDebuggerEnabled(const bool oq_DebuggerEnabled,
+                                                                uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
    std::vector<uint8_t> c_Data;
@@ -2071,15 +2081,15 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDebuggerEnabled(const bool oq_DebuggerEn
    c_Data.resize(1);
    c_Data[0] = (oq_DebuggerEnabled == true) ? 0x01U : 0x00U;
 
-   s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_DEBUGGER_ACTIVATION, c_Data, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_DEBUGGER_ACTIVATION, c_Data, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
 
-   m_LogServiceError("WriteDataByIdentifier::DebuggerEnabled", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("WriteDataByIdentifier::DebuggerEnabled", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2092,35 +2102,35 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDebuggerEnabled(const bool oq_DebuggerEn
    \param[out] opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadMaxNumOfEventDrivenTransmissions(uint16_t & oru16_MaxNum,
-                                                                        uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadMaxNumOfEventDrivenTransmissions(uint16_t & oru16_MaxNum,
+                                                                                uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_MAX_NUM_ASYNC, 2U, true, c_Data, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_MAX_NUM_ASYNC, 2U, true, c_Data, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       oru16_MaxNum = (static_cast<uint16_t>((static_cast<uint16_t>(c_Data[0])) << 8U)) + (c_Data[1]);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   m_LogServiceError("ReadDataByIdentifier::MaxNumOfEventDrivenTransmissions", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::MaxNumOfEventDrivenTransmissions", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2136,34 +2146,34 @@ int32_t C_OscProtocolDriverOsy::OsyReadMaxNumOfEventDrivenTransmissions(uint16_t
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadProtocolVersion(uint8_t (&orau8_Version)[3], uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadProtocolVersion(uint8_t (&orau8_Version)[3], uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_PROTOCOL_VERSION, 3U, true, c_Data, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_PROTOCOL_VERSION, 3U, true, c_Data, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       (void)std::memcpy(&orau8_Version[0], &c_Data[0], 3U);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   m_LogServiceError("ReadDataByIdentifier::ProtocolVersion", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::ProtocolVersion", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2179,35 +2189,35 @@ int32_t C_OscProtocolDriverOsy::OsyReadProtocolVersion(uint8_t (&orau8_Version)[
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadFlashloaderProtocolVersion(uint8_t (&orau8_Version)[3],
-                                                                  uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadFlashloaderProtocolVersion(uint8_t (&orau8_Version)[3],
+                                                                          uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_FLASHLOADER_PROTOCOL_VERSION, 3U, true, c_Data, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_FLASHLOADER_PROTOCOL_VERSION, 3U, true, c_Data, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       (void)std::memcpy(&orau8_Version[0], &c_Data[0], 3U);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   m_LogServiceError("ReadDataByIdentifier::FlashloaderProtocolVersion", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::FlashloaderProtocolVersion", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2220,37 +2230,37 @@ int32_t C_OscProtocolDriverOsy::OsyReadFlashloaderProtocolVersion(uint8_t (&orau
    \param[out] opu8_NrCode            if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadFlashCount(uint32_t & oru32_FlashCount, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadFlashCount(uint32_t & oru32_FlashCount, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_FLASH_COUNT, 4U, true, c_Data, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_FLASH_COUNT, 4U, true, c_Data, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       oru32_FlashCount = ((static_cast<uint32_t>(c_Data[0])) << 24U) +
                          ((static_cast<uint32_t>(c_Data[1])) << 16U) +
                          ((static_cast<uint32_t>(c_Data[2])) << 8U) +
                          (static_cast<uint32_t>(c_Data[3]));
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   m_LogServiceError("ReadDataByIdentifier::FlashCount", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::FlashCount", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2266,36 +2276,36 @@ int32_t C_OscProtocolDriverOsy::OsyReadFlashCount(uint32_t & oru32_FlashCount, u
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadProtocolDriverImplementationVersion(uint8_t (&orau8_Version)[3],
-                                                                           uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadProtocolDriverImplementationVersion(uint8_t (&orau8_Version)[3],
+                                                                                   uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_Data;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_PROTOCOL_DRIVER_IMPLEMENTATION_VERSION, 3U, true, c_Data,
-                                       u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_PROTOCOL_DRIVER_IMPLEMENTATION_VERSION, 3U, true, c_Data,
+                                     u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       (void)std::memcpy(&orau8_Version[0], &c_Data[0], 3U);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   m_LogServiceError("ReadDataByIdentifier::ProtocolDriverImplementationVersion", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("ReadDataByIdentifier::ProtocolDriverImplementationVersion", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2309,15 +2319,16 @@ int32_t C_OscProtocolDriverOsy::OsyReadProtocolDriverImplementationVersion(uint8
    \param[out] orau8_PackedId     packed ID to be placed into protocol service
 
    \return
-   C_NO_ERR   packed
-   C_RANGE    one of the parameters is out of range
+   Errc::success   packed
+   Errc::range     one of the parameters is out of range
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_PackDataPoolIdentifier(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                                         const uint16_t ou16_ElementIndex,
-                                                         uint8_t(&orau8_PackedId)[3]) const
+std::error_code C_OscProtocolDriverOsy::m_PackDataPoolIdentifier(const uint8_t ou8_DataPoolIndex,
+                                                                 const uint16_t ou16_ListIndex,
+                                                                 const uint16_t ou16_ElementIndex,
+                                                                 uint8_t(&orau8_PackedId)[3]) const
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
    const uint8_t ou8_ServerDpIndex = this->m_GetDataPoolIndexClientToServer(ou8_DataPoolIndex);
 
    if ((ou8_ServerDpIndex < mhu8_OSY_MAX_NUM_DATA_POOLS) && (ou16_ListIndex < mhu8_OSY_MAX_NUM_DATA_POOL_LISTS) &&
@@ -2329,9 +2340,9 @@ int32_t C_OscProtocolDriverOsy::m_PackDataPoolIdentifier(const uint8_t ou8_DataP
       orau8_PackedId[0] = static_cast<uint8_t>(u32_PackedId >> 16U);
       orau8_PackedId[1] = static_cast<uint8_t>(u32_PackedId >> 8U);
       orau8_PackedId[2] = static_cast<uint8_t>(u32_PackedId);
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2374,36 +2385,38 @@ void C_OscProtocolDriverOsy::m_UnpackDataPoolIdentifier(const uint8_t (&orau8_Pa
    \param[out] opu8_NrCode        if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_RANGE    data pool, list or element index out of range
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::range     data pool, list or element index out of range
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadDataPoolData(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                                    const uint16_t ou16_ElementIndex,
-                                                    std::vector<uint8_t> & orc_ReadData, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadDataPoolData(const uint8_t ou8_DataPoolIndex,
+                                                            const uint16_t ou16_ListIndex,
+                                                            const uint16_t ou16_ElementIndex,
+                                                            std::vector<uint8_t> & orc_ReadData,
+                                                            uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
       uint8_t au8_Identifier[3];
-      s32_Return = m_PackDataPoolIdentifier(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, au8_Identifier);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_PackDataPoolIdentifier(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, au8_Identifier);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
       else
       {
@@ -2412,53 +2425,53 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolData(const uint8_t ou8_DataPoolIn
          c_Request.c_Data[1] = au8_Identifier[0];
          c_Request.c_Data[2] = au8_Identifier[1];
          c_Request.c_Data[3] = au8_Identifier[2];
-         s32_Return = m_SendRequest(c_Request);
-         if (s32_Return != C_NO_ERR)
+         c_Return = m_SendRequest(c_Request);
+         if (c_Return != Errc::success)
          {
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
          }
          else
          {
-            s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_DATA_POOL_DATA_BY_ID, 4U, c_Response,
-                                                          u8_NrErrorCode, false);
-            switch (s32_Return)
+            c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_DATA_POOL_DATA_BY_ID, 4U, c_Response,
+                                                        u8_NrErrorCode, false);
+            if (c_Return == Errc::success)
             {
-            case C_NO_ERR:
-
                //check DI:
                if ((c_Request.c_Data[1] != c_Response.c_Data[1]) ||
                    (c_Request.c_Data[2] != c_Response.c_Data[2]) ||
                    (c_Request.c_Data[3] != c_Response.c_Data[3]))
                {
-                  s32_Return = C_RD_WR;
+                  c_Return = Errc::rd_wr;
                }
                else
                {
                   orc_ReadData.resize(c_Response.c_Data.size() - 4);
                   (void)std::memcpy(&orc_ReadData[0], &c_Response.c_Data[4], c_Response.c_Data.size() - 4);
                }
-               break;
-            case C_WARN:
-               if (opu8_NrCode != NULL)
+            }
+            else if (c_Return == Errc::warn)
+            {
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
-               break;
-            default:
-               break;
+            }
+            else
+            {
+               //nothing to do
             }
          }
       }
    }
 
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("ReadDataPoolData(Client indexes: Datapool: %d, List: %d, Element: %d)",
                                  ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2474,41 +2487,42 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolData(const uint8_t ou8_DataPoolIn
    \param[out] opu8_NrCode        if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_RANGE    data pool, list or element index out of range; length of data zero
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::range     data pool, list or element index out of range; length of data zero
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolData(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                                     const uint16_t ou16_ElementIndex,
-                                                     const std::vector<uint8_t> & orc_DataToWrite,
-                                                     uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyWriteDataPoolData(const uint8_t ou8_DataPoolIndex,
+                                                             const uint16_t ou16_ListIndex,
+                                                             const uint16_t ou16_ElementIndex,
+                                                             const std::vector<uint8_t> & orc_DataToWrite,
+                                                             uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else if (orc_DataToWrite.size() == 0)
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
       uint8_t au8_Identifier[3];
-      s32_Return = m_PackDataPoolIdentifier(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, au8_Identifier);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_PackDataPoolIdentifier(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, au8_Identifier);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
       else
       {
@@ -2519,48 +2533,48 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolData(const uint8_t ou8_DataPoolI
          c_Request.c_Data[3] = au8_Identifier[2];
          (void)std::memcpy(&c_Request.c_Data[4], &orc_DataToWrite[0], orc_DataToWrite.size());
 
-         s32_Return = m_SendRequest(c_Request);
-         if (s32_Return != C_NO_ERR)
+         c_Return = m_SendRequest(c_Request);
+         if (c_Return != Errc::success)
          {
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
          }
          else
          {
-            s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_WRITE_DATA_POOL_DATA_BY_ID, 4U, c_Response,
-                                                          u8_NrErrorCode, true);
-            switch (s32_Return)
+            c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_WRITE_DATA_POOL_DATA_BY_ID, 4U, c_Response,
+                                                        u8_NrErrorCode, true);
+            if (c_Return == Errc::success)
             {
-            case C_NO_ERR:
-
                //check DI:
                if ((c_Request.c_Data[1] != c_Response.c_Data[1]) ||
                    (c_Request.c_Data[2] != c_Response.c_Data[2]) ||
                    (c_Request.c_Data[3] != c_Response.c_Data[3]))
                {
-                  s32_Return = C_RD_WR;
+                  c_Return = Errc::rd_wr;
                }
-               break;
-            case C_WARN:
-               if (opu8_NrCode != NULL)
+            }
+            else if (c_Return == Errc::warn)
+            {
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
-               break;
-            default:
-               break;
+            }
+            else
+            {
+               //nothing to do
             }
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("WriteDataPoolData(Client indexes: Datapool: %d, List: %d, Element: %d, Size: %u)",
                                  ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
                                  static_cast<uint32_t>(orc_DataToWrite.size()));
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2574,20 +2588,21 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolData(const uint8_t ou8_DataPoolI
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_RANGE    Transmission rail invalid
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::range     Transmission rail invalid
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolEventDataRate(const uint8_t ou8_TransmissionRail,
-                                                              const uint16_t ou16_DataRate, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyWriteDataPoolEventDataRate(const uint8_t ou8_TransmissionRail,
+                                                                      const uint16_t ou16_DataRate,
+                                                                      uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    uint8_t u8_NrErrorCode = 0U;
 
@@ -2615,17 +2630,17 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolEventDataRate(const uint8_t ou8_
       c_Data[0] = static_cast<uint8_t>(ou16_DataRate >> 8U);
       c_Data[1] = static_cast<uint8_t>(ou16_DataRate & 0xFFU);
 
-      s32_Return = m_WriteDataByIdentifier(u16_DataIdentifier, c_Data, u8_NrErrorCode);
+      c_Return = m_WriteDataByIdentifier(u16_DataIdentifier, c_Data, u8_NrErrorCode);
 
-      if (opu8_NrCode != NULL)
+      if (opu8_NrCode != nullptr)
       {
          (*opu8_NrCode) = u8_NrErrorCode;
       }
    }
 
-   m_LogServiceError("WriteDataByIdentifier::DataPoolEventDataRate", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("WriteDataByIdentifier::DataPoolEventDataRate", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2641,41 +2656,41 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolEventDataRate(const uint8_t ou8_
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent
-   C_RANGE    data pool, list, element index, rail index out of range; length of data zero
-   C_NOACT    could not put request in Tx queue
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data pool index)
-   C_COM      communication driver reported error
+   Errc::success   request sent
+   Errc::range     data pool, list, element index, rail index out of range; length of data zero
+   Errc::noact     could not put request in Tx queue
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data pool index)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataCyclic(const uint8_t ou8_DataPoolIndex,
-                                                          const uint16_t ou16_ListIndex,
-                                                          const uint16_t ou16_ElementIndex,
-                                                          const uint8_t ou8_TransmissionRail,
-                                                          uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadDataPoolDataCyclic(const uint8_t ou8_DataPoolIndex,
+                                                                  const uint16_t ou16_ListIndex,
+                                                                  const uint16_t ou16_ElementIndex,
+                                                                  const uint8_t ou8_TransmissionRail,
+                                                                  uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else if (ou8_TransmissionRail > 2U)
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
       uint8_t au8_Identifier[3];
-      s32_Return = m_PackDataPoolIdentifier(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, au8_Identifier);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_PackDataPoolIdentifier(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, au8_Identifier);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
       else
       {
@@ -2685,10 +2700,10 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataCyclic(const uint8_t ou8_Data
          c_Request.c_Data[2] = au8_Identifier[0];
          c_Request.c_Data[3] = au8_Identifier[1];
          c_Request.c_Data[4] = au8_Identifier[2];
-         s32_Return = m_SendRequest(c_Request);
-         if (s32_Return != C_NO_ERR)
+         c_Return = m_SendRequest(c_Request);
+         if (c_Return != Errc::success)
          {
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
          }
          else
          {
@@ -2699,21 +2714,21 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataCyclic(const uint8_t ou8_Data
             c_IdentifierForErrorResponse[1] = au8_Identifier[1];
             c_IdentifierForErrorResponse[2] = au8_Identifier[2];
 
-            s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_DATA_POOL_DATA_EVENT_DRIVEN,
-                                                          4U, c_Response,
-                                                          u8_NrErrorCode, true, &c_IdentifierForErrorResponse);
-            if (s32_Return == C_NO_ERR)
+            c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_DATA_POOL_DATA_EVENT_DRIVEN,
+                                                        4U, c_Response,
+                                                        u8_NrErrorCode, true, &c_IdentifierForErrorResponse);
+            if (c_Return == Errc::success)
             {
                if ((c_Response.c_Data[1] != c_Request.c_Data[2]) ||
                    (c_Response.c_Data[2] != c_Request.c_Data[3]) ||
                    (c_Response.c_Data[3] != c_Request.c_Data[4]))
                {
-                  s32_Return = C_RD_WR;
+                  c_Return = Errc::rd_wr;
                }
             }
-            else if (s32_Return == C_WARN)
+            else if (c_Return == Errc::warn)
             {
-               if (opu8_NrCode != NULL)
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
@@ -2725,16 +2740,16 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataCyclic(const uint8_t ou8_Data
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat(
          "ReadDataPoolDataCyclic(Client indexes: Datapool: %d, List: %d, Element: %d, Rail: %d)",
          ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, ou8_TransmissionRail);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2751,42 +2766,42 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataCyclic(const uint8_t ou8_Data
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent
-   C_RANGE    data pool, list, element index, rail index out of range; length of data zero
-   C_NOACT    could not put request in Tx queue
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data pool index)
-   C_COM      communication driver reported error
+   Errc::success   request sent
+   Errc::range     data pool, list, element index, rail index out of range; length of data zero
+   Errc::noact     could not put request in Tx queue
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data pool index)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataChangeDriven(const uint8_t ou8_DataPoolIndex,
-                                                                const uint16_t ou16_ListIndex,
-                                                                const uint16_t ou16_ElementIndex,
-                                                                const uint8_t ou8_TransmissionRail,
-                                                                const uint32_t ou32_Hysteresis,
-                                                                uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadDataPoolDataChangeDriven(const uint8_t ou8_DataPoolIndex,
+                                                                        const uint16_t ou16_ListIndex,
+                                                                        const uint16_t ou16_ElementIndex,
+                                                                        const uint8_t ou8_TransmissionRail,
+                                                                        const uint32_t ou32_Hysteresis,
+                                                                        uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else if (ou8_TransmissionRail > 2U)
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
       uint8_t au8_Identifier[3];
-      s32_Return = m_PackDataPoolIdentifier(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, au8_Identifier);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_PackDataPoolIdentifier(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, au8_Identifier);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
       else
       {
@@ -2801,10 +2816,10 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataChangeDriven(const uint8_t ou
          c_Request.c_Data[7] = static_cast<uint8_t>(ou32_Hysteresis >> 8U);
          c_Request.c_Data[8] = static_cast<uint8_t>(ou32_Hysteresis & 0xFFU);
 
-         s32_Return = m_SendRequest(c_Request);
-         if (s32_Return != C_NO_ERR)
+         c_Return = m_SendRequest(c_Request);
+         if (c_Return != Errc::success)
          {
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
          }
          else
          {
@@ -2815,22 +2830,22 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataChangeDriven(const uint8_t ou
             c_IdentifierForErrorResponse[1] = au8_Identifier[1];
             c_IdentifierForErrorResponse[2] = au8_Identifier[2];
 
-            s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_DATA_POOL_DATA_EVENT_DRIVEN,
-                                                          4U, c_Response,
-                                                          u8_NrErrorCode, true, &c_IdentifierForErrorResponse);
+            c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_DATA_POOL_DATA_EVENT_DRIVEN,
+                                                        4U, c_Response,
+                                                        u8_NrErrorCode, true, &c_IdentifierForErrorResponse);
 
-            if (s32_Return == C_NO_ERR)
+            if (c_Return == Errc::success)
             {
                if ((c_Response.c_Data[1] != c_Request.c_Data[2]) ||
                    (c_Response.c_Data[2] != c_Request.c_Data[3]) ||
                    (c_Response.c_Data[3] != c_Request.c_Data[4]))
                {
-                  s32_Return = C_RD_WR;
+                  c_Return = Errc::rd_wr;
                }
             }
-            else if (s32_Return == C_WARN)
+            else if (c_Return == Errc::warn)
             {
-               if (opu8_NrCode != NULL)
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
@@ -2842,17 +2857,17 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataChangeDriven(const uint8_t ou
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat(
          "ReadDataPoolDataChangeDriven(Client indexes: Datapool: %d, List: %d, Element: %d, Rail: %d, Hysteresis: 0x%08X)",
          ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, ou8_TransmissionRail,
          ou32_Hysteresis);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2864,23 +2879,23 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataChangeDriven(const uint8_t ou
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent
-   C_RANGE    data pool, list, element index, rail index out of range; length of data zero
-   C_NOACT    could not put request in Tx queue
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data pool index)
-   C_COM      communication driver reported error
+   Errc::success   request sent
+   Errc::range     data pool, list, element index, rail index out of range; length of data zero
+   Errc::noact     could not put request in Tx queue
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data pool index)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyStopDataPoolEvents(uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyStopDataPoolEvents(uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -2891,28 +2906,28 @@ int32_t C_OscProtocolDriverOsy::OsyStopDataPoolEvents(uint8_t * const opu8_NrCod
       c_Request.c_Data[0] = mhu8_OSY_SI_READ_DATA_POOL_DATA_EVENT_DRIVEN;
       c_Request.c_Data[1] = 0U; // Deactivate transmission
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
-         s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_DATA_POOL_DATA_EVENT_DRIVEN,
-                                                       1U, c_Response, u8_NrErrorCode, true);
+         c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_DATA_POOL_DATA_EVENT_DRIVEN,
+                                                     1U, c_Response, u8_NrErrorCode, true);
 
-         if (s32_Return == C_WARN)
+         if (c_Return == Errc::warn)
          {
-            if (opu8_NrCode != NULL)
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
          }
       }
    }
-   m_LogServiceError("StopDataPoolEvents", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("StopDataPoolEvents", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2923,19 +2938,20 @@ int32_t C_OscProtocolDriverOsy::OsyStopDataPoolEvents(uint8_t * const opu8_NrCod
    \param[out] opu8_NrCode        if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data pool index)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data pool index)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadDataPoolMetaData(const uint8_t ou8_DataPoolIndex,
-                                                        C_DataPoolMetaData & orc_MetaData, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadDataPoolMetaData(const uint8_t ou8_DataPoolIndex,
+                                                                C_DataPoolMetaData & orc_MetaData,
+                                                                uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
    const uint8_t ou8_ServerDpIndex = this->m_GetDataPoolIndexClientToServer(ou8_DataPoolIndex);
 
@@ -2943,9 +2959,9 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolMetaData(const uint8_t ou8_DataPo
    std::vector<uint8_t> c_ReceiveData;
 
    c_SendData.resize(1, ou8_ServerDpIndex);
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_READ_DATAPOOL_META_DATA, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                 c_SendData, 0, false, c_ReceiveData, u8_NrErrorCode);
-   if ((s32_Return == C_NO_ERR) && (c_ReceiveData.size() >= 1))
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_READ_DATAPOOL_META_DATA, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                               c_SendData, 0, false, c_ReceiveData, u8_NrErrorCode);
+   if ((c_Return == Errc::success) && (c_ReceiveData.size() >= 1))
    {
       if (c_ReceiveData[0] == ou8_ServerDpIndex)
       {
@@ -3010,22 +3026,22 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolMetaData(const uint8_t ou8_DataPo
       }
       else
       {
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::ReadDataPoolMetaData(Client indexes: Datapool: %d)",
                                  ou8_DataPoolIndex);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3037,19 +3053,20 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolMetaData(const uint8_t ou8_DataPo
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data pool index)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data pool index)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyVerifyDataPool(const uint8_t ou8_DataPoolIndex, const uint32_t ou32_DataPoolChecksum,
-                                                  bool & orq_Match, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyVerifyDataPool(const uint8_t ou8_DataPoolIndex,
+                                                          const uint32_t ou32_DataPoolChecksum, bool & orq_Match,
+                                                          uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
    const uint8_t ou8_ServerDpIndex = this->m_GetDataPoolIndexClientToServer(ou8_DataPoolIndex);
 
@@ -3061,9 +3078,9 @@ int32_t C_OscProtocolDriverOsy::OsyVerifyDataPool(const uint8_t ou8_DataPoolInde
    c_SendData[2] = static_cast<uint8_t>(ou32_DataPoolChecksum >> 16U);
    c_SendData[3] = static_cast<uint8_t>(ou32_DataPoolChecksum >> 8U);
    c_SendData[4] = static_cast<uint8_t>(ou32_DataPoolChecksum & 0xFFU);
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_VERIFY_DATAPOOL, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                 c_SendData, 2, true, c_ReceiveData, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_VERIFY_DATAPOOL, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                               c_SendData, 2, true, c_ReceiveData, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       if (c_ReceiveData[0] == ou8_ServerDpIndex)
       {
@@ -3071,23 +3088,23 @@ int32_t C_OscProtocolDriverOsy::OsyVerifyDataPool(const uint8_t ou8_DataPoolInde
       }
       else
       {
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::VerifyDataPool(Client indexes: Datapool: %d, Checksum: 0x%08X)",
                                  ou8_DataPoolIndex,
                                  ou32_DataPoolChecksum);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3105,25 +3122,25 @@ int32_t C_OscProtocolDriverOsy::OsyVerifyDataPool(const uint8_t ou8_DataPoolInde
    \param[out]    opu8_NrCode             if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong routine identifier ID)
-   C_RANGE    - input channel type is CAN and output channel type is Ethernet. This combination is not supported.
-              - a bus ID is out of range
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong routine identifier ID)
+   Errc::range     - input channel type is CAN and output channel type is Ethernet. This combination is not supported.
+                   - a bus ID is out of range
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsySetRouteDiagnosisCommunication(const uint8_t ou8_InputChannelType,
-                                                                  const uint8_t ou8_InputChannelIndex,
-                                                                  const uint8_t ou8_OutputChannelType,
-                                                                  const uint8_t ou8_OutputChannelIndex,
-                                                                  const uint8_t ou8_SourceBusId,
-                                                                  const uint8_t ou8_TargetBusId,
-                                                                  uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsySetRouteDiagnosisCommunication(const uint8_t ou8_InputChannelType,
+                                                                          const uint8_t ou8_InputChannelIndex,
+                                                                          const uint8_t ou8_OutputChannelType,
+                                                                          const uint8_t ou8_OutputChannelIndex,
+                                                                          const uint8_t ou8_SourceBusId,
+                                                                          const uint8_t ou8_TargetBusId,
+                                                                          uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
    uint8_t u8_NrErrorCode = 0U;
 
    if ((ou8_SourceBusId <= C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) &&
@@ -3141,15 +3158,15 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteDiagnosisCommunication(const uint8_t 
       c_SendData[4] = ou8_SourceBusId;
       c_SendData[5] = ou8_TargetBusId;
 
-      s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_ROUTE_DIAGNOSIS_COMMUNICATION,
-                                    mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                    c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
+      c_Return = m_RoutineControl(mhu16_OSY_RC_SID_ROUTE_DIAGNOSIS_COMMUNICATION,
+                                  mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                                  c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::SetRouteDiagnosisCommunication(InputType: %d, InputIndex: %d, "
@@ -3160,10 +3177,10 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteDiagnosisCommunication(const uint8_t 
                                  ou8_OutputChannelIndex,
                                  ou8_SourceBusId,
                                  ou8_TargetBusId);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3175,34 +3192,34 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteDiagnosisCommunication(const uint8_t 
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong routine identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong routine identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyStopRouteDiagnosisCommunication(uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyStopRouteDiagnosisCommunication(uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    const std::vector<uint8_t> c_SendData;
 
    std::vector<uint8_t> c_ReceiveData;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_ROUTE_DIAGNOSIS_COMMUNICATION,
-                                 mhu8_OSY_RC_SUB_FUNCTION_STOP_ROUTINE,
-                                 c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_ROUTE_DIAGNOSIS_COMMUNICATION,
+                               mhu8_OSY_RC_SUB_FUNCTION_STOP_ROUTINE,
+                               c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   m_LogServiceError("RoutineControl::StopRouteDiagnosisCommunication", s32_Return, u8_NrErrorCode);
+   m_LogServiceError("RoutineControl::StopRouteDiagnosisCommunication", c_Return, u8_NrErrorCode);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3224,25 +3241,25 @@ int32_t C_OscProtocolDriverOsy::OsyStopRouteDiagnosisCommunication(uint8_t * con
    \param[out]    opu8_NrCode             if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_RANGE    - output channel type is not Ethernet. Only Ethernet is supported.
-              - a bus ID is out of range
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::range     - output channel type is not Ethernet. Only Ethernet is supported.
+                   - a bus ID is out of range
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsySetRouteIp2IpCommunication(const uint8_t ou8_OutputChannelType,
-                                                              const uint8_t ou8_OutputChannelIndex,
-                                                              const uint8_t ou8_SourceBusId,
-                                                              const uint8_t ou8_TargetBusId,
-                                                              const uint8_t (&orau8_IpAddress)[4],
-                                                              uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsySetRouteIp2IpCommunication(const uint8_t ou8_OutputChannelType,
+                                                                      const uint8_t ou8_OutputChannelIndex,
+                                                                      const uint8_t ou8_SourceBusId,
+                                                                      const uint8_t ou8_TargetBusId,
+                                                                      const uint8_t (&orau8_IpAddress)[4],
+                                                                      uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
    uint8_t u8_NrErrorCode = 0U;
 
    if ((ou8_SourceBusId <= C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) &&
@@ -3262,15 +3279,15 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteIp2IpCommunication(const uint8_t ou8_
       c_SendData[6] = orau8_IpAddress[2];
       c_SendData[7] = orau8_IpAddress[3];
 
-      s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_ROUTE_IP_2_IP_COMMUNICATION,
-                                    mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                    c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
+      c_Return = m_RoutineControl(mhu16_OSY_RC_SID_ROUTE_IP_2_IP_COMMUNICATION,
+                                  mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                                  c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::OsySetRouteIp2IpCommunication("
@@ -3281,10 +3298,10 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteIp2IpCommunication(const uint8_t ou8_
                                  ou8_SourceBusId,
                                  ou8_TargetBusId,
                                  orau8_IpAddress[0], orau8_IpAddress[1], orau8_IpAddress[2], orau8_IpAddress[3]);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3304,18 +3321,19 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteIp2IpCommunication(const uint8_t ou8_
    \param[out] opu8_NrCode        if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyCheckRouteIp2IpCommunication(uint8_t & oru8_Status, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyCheckRouteIp2IpCommunication(uint8_t & oru8_Status,
+                                                                        uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
    std::vector<uint8_t> c_SendData;
@@ -3323,27 +3341,27 @@ int32_t C_OscProtocolDriverOsy::OsyCheckRouteIp2IpCommunication(uint8_t & oru8_S
 
    c_SendData.resize(0);
 
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_ROUTE_IP_2_IP_COMMUNICATION,
-                                 mhu8_OSY_RC_SUB_FUNCTION_REQUEST_ROUTINE_RESULTS,
-                                 c_SendData, 1, true, c_ReceiveData, u8_NrErrorCode);
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_ROUTE_IP_2_IP_COMMUNICATION,
+                               mhu8_OSY_RC_SUB_FUNCTION_REQUEST_ROUTINE_RESULTS,
+                               c_SendData, 1, true, c_ReceiveData, u8_NrErrorCode);
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
       oru8_Status = c_ReceiveData[0];
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::OsyCheckRouteIp2IpCommunication()");
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3359,21 +3377,21 @@ int32_t C_OscProtocolDriverOsy::OsyCheckRouteIp2IpCommunication(uint8_t & oru8_S
    \param[out] opu8_NrCode        if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_RANGE    CAN message invalid (RTR bit set; ID out of range; DLC out of range)
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::range     CAN message invalid (RTR bit set; ID out of range; DLC out of range)
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsySendCanMessage(const uint8_t ou8_ChannelIndex,
-                                                  const stw::can::T_STWCAN_Msg_TX & orc_CanMessage,
-                                                  uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsySendCanMessage(const uint8_t ou8_ChannelIndex,
+                                                          const stw::can::T_STWCAN_Msg_TX & orc_CanMessage,
+                                                          uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
    if ((orc_CanMessage.u8_RTR != 0U) || (orc_CanMessage.u8_XTD > 1U) ||
@@ -3381,7 +3399,7 @@ int32_t C_OscProtocolDriverOsy::OsySendCanMessage(const uint8_t ou8_ChannelIndex
        ((orc_CanMessage.u8_XTD == 1U) && (orc_CanMessage.u32_ID > 0x3FFFFFFFU)) ||
        (orc_CanMessage.u8_DLC > 8U))
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -3407,23 +3425,23 @@ int32_t C_OscProtocolDriverOsy::OsySendCanMessage(const uint8_t ou8_ChannelIndex
       c_SendData[13] = ou8_ChannelIndex;
 
       // Using openSYDE specific multi frames without flow control
-      s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_SEND_CAN_MESSAGE, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                    c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode, true);
+      c_Return = m_RoutineControl(mhu16_OSY_RC_SID_SEND_CAN_MESSAGE, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                                  c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode, true);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::SendCanMessage(Channel: %d, Id: 0x%08X, DLC: %d)",
                                  ou8_ChannelIndex,
                                  orc_CanMessage.u32_ID,
                                  orc_CanMessage.u8_DLC);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3442,19 +3460,21 @@ int32_t C_OscProtocolDriverOsy::OsySendCanMessage(const uint8_t ou8_ChannelIndex
    \param[out]    opu8_NrCode             if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong routine identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong routine identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsySetTunnelCanMessages(const uint8_t ou8_CanChannelIndex, const uint32_t ou32_FilterId,
-                                                        const uint32_t ou32_FilterMask, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsySetTunnelCanMessages(const uint8_t ou8_CanChannelIndex,
+                                                                const uint32_t ou32_FilterId,
+                                                                const uint32_t ou32_FilterMask,
+                                                                uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_SendData;
    std::vector<uint8_t> c_ReceiveData;
@@ -3471,24 +3491,24 @@ int32_t C_OscProtocolDriverOsy::OsySetTunnelCanMessages(const uint8_t ou8_CanCha
    c_SendData[7] = static_cast<uint8_t>(ou32_FilterMask >> 8U);
    c_SendData[8] = static_cast<uint8_t>(ou32_FilterMask);
 
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_TUNNEL_CAN_MESSAGE,
-                                 mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                 c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_TUNNEL_CAN_MESSAGE,
+                               mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                               c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::SetTunnelCanMessages(Channel: %d, Filter-Id: 0x%08X, Mask: 0x%08X)",
                                  ou8_CanChannelIndex,
                                  ou32_FilterId,
                                  ou32_FilterMask);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3500,37 +3520,37 @@ int32_t C_OscProtocolDriverOsy::OsySetTunnelCanMessages(const uint8_t ou8_CanCha
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong routine identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong routine identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyStopTunnelCanMessages(uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyStopTunnelCanMessages(uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    const std::vector<uint8_t> c_SendData;
 
    std::vector<uint8_t> c_ReceiveData;
    uint8_t u8_NrErrorCode = 0U;
 
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_TUNNEL_CAN_MESSAGE,
-                                 mhu8_OSY_RC_SUB_FUNCTION_STOP_ROUTINE,
-                                 c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_TUNNEL_CAN_MESSAGE,
+                               mhu8_OSY_RC_SUB_FUNCTION_STOP_ROUTINE,
+                               c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
-      m_LogServiceError("RoutineControl::StopTunnelCanMessages", s32_Return, u8_NrErrorCode);
+      m_LogServiceError("RoutineControl::StopTunnelCanMessages", c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3574,25 +3594,25 @@ void C_OscProtocolDriverOsy::m_LogErrorWithHeader(const std::string & orc_Activi
    \param[in] opc_TransportProtocol   transport protocol to use; NULL: do not use protocol
 
    \return
-   C_NO_ERR   no problems
-   C_CONFIG   transport protocol was set, but could not set node identifiers in installed protocol
+   Errc::success   no problems
+   Errc::config    transport protocol was set, but could not set node identifiers in installed protocol
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::SetTransportProtocol(C_OscProtocolDriverOsyTpBase * const opc_TransportProtocol)
+std::error_code C_OscProtocolDriverOsy::SetTransportProtocol(C_OscProtocolDriverOsyTpBase * const opc_TransportProtocol)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    mpc_TransportProtocol = opc_TransportProtocol;
-   if (mpc_TransportProtocol != NULL)
+   if (mpc_TransportProtocol != nullptr)
    {
-      s32_Return = mpc_TransportProtocol->SetNodeIdentifiers(mc_ClientId, mc_ServerId);
-      if (s32_Return != C_NO_ERR)
+      c_Return = mpc_TransportProtocol->SetNodeIdentifiers(mc_ClientId, mc_ServerId);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3605,36 +3625,37 @@ int32_t C_OscProtocolDriverOsy::SetTransportProtocol(C_OscProtocolDriverOsyTpBas
    \param[in] orc_ServerId    new server ID (= ID of server we communicate with)
 
    \return
-   C_NO_ERR   no problems
-   C_CONFIG   IDs were set, but could not be propagated to the installed transport protocol or the security sub layer
+   Errc::success   no problems
+   Errc::config    IDs were set, but could not be propagated to the installed transport protocol or the security
+                   sub layer
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::SetNodeIdentifiers(const C_OscProtocolDriverOsyNode & orc_ClientId,
-                                                   const C_OscProtocolDriverOsyNode & orc_ServerId)
+std::error_code C_OscProtocolDriverOsy::SetNodeIdentifiers(const C_OscProtocolDriverOsyNode & orc_ClientId,
+                                                           const C_OscProtocolDriverOsyNode & orc_ServerId)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    mc_ClientId = orc_ClientId;
    mc_ServerId = orc_ServerId;
 
    //set up instance of SSL helper
    this->pc_SecuritySubLayer = C_OscProtocolSecuritySubLayer::h_GetConfigByNodeId(orc_ServerId);
-   if (this->pc_SecuritySubLayer == NULL)
+   if (this->pc_SecuritySubLayer == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
 
    //propagate to installed transport protocol:
-   if (mpc_TransportProtocol != NULL)
+   if (mpc_TransportProtocol != nullptr)
    {
-      s32_Return = mpc_TransportProtocol->SetNodeIdentifiers(mc_ClientId, mc_ServerId);
-      if (s32_Return != C_NO_ERR)
+      c_Return = mpc_TransportProtocol->SetNodeIdentifiers(mc_ClientId, mc_ServerId);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3711,29 +3732,29 @@ void C_OscProtocolDriverOsy::ClearDataPoolMapping(void)
    If reception is already in progress the function will return with no action.
 
    \return
-   C_NO_ERR   finished cycle
-   C_CONFIG   no transport protocol installed
+   Errc::success   finished cycle
+   Errc::config    no transport protocol installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::Cycle(void)
+std::error_code C_OscProtocolDriverOsy::Cycle(void)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    //while we are checking for async responses, prevent other threads starting to poll
-   const bool q_LockClaimed = mc_LockReception.TryAcquire();
+   const bool q_LockClaimed = mc_LockReception.try_lock();
 
    if (q_LockClaimed == true)
    {
-      s32_Return = this->m_Cycle();
-      if ((s32_Return != C_CONFIG) && (s32_Return != C_COM))
+      c_Return = this->m_Cycle();
+      if ((c_Return != Errc::config) && (c_Return != Errc::com))
       {
-         // Only C_CONFIG is relevant for an extern call
-         s32_Return = C_NO_ERR;
+         // Only Errc::config is relevant for an extern call
+         c_Return = Errc::success;
       }
-      mc_LockReception.Release();
+      mc_LockReception.unlock();
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3801,19 +3822,20 @@ void C_OscProtocolDriverOsy::m_OsyReadDataPoolDataEventErrorReceived(const uint8
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyCheckFlashMemoryAvailable(const uint32_t ou32_StartAddress, const uint32_t ou32_Size,
-                                                             uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyCheckFlashMemoryAvailable(const uint32_t ou32_StartAddress,
+                                                                     const uint32_t ou32_Size,
+                                                                     uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_ReceiveData;
    std::vector<uint8_t> c_SendData;
@@ -3828,22 +3850,22 @@ int32_t C_OscProtocolDriverOsy::OsyCheckFlashMemoryAvailable(const uint32_t ou32
    c_SendData[5] = static_cast<uint8_t>(ou32_Size >> 16U);
    c_SendData[6] = static_cast<uint8_t>(ou32_Size >> 8U);
    c_SendData[7] = static_cast<uint8_t>(ou32_Size & 0xFFU);
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_CHECK_FLASH_MEMORY_AVAILABILITY,
-                                 mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE, c_SendData,  0U, true, c_ReceiveData,
-                                 u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_CHECK_FLASH_MEMORY_AVAILABILITY,
+                               mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE, c_SendData,  0U, true, c_ReceiveData,
+                               u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::CheckFlashMemoryAvailable(Address: 0x%08X, Size: 0x%08X)",
                                  ou32_StartAddress, ou32_Size);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3863,29 +3885,31 @@ int32_t C_OscProtocolDriverOsy::OsyCheckFlashMemoryAvailable(const uint32_t ou32
    \param[in]  oq_CanTransferWithoutFlowControl   flag if openSYDE specific frame shall be used for the service
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_RoutineControl(const uint16_t ou16_RoutineIdentifier, const uint8_t ou8_SubFunction,
-                                                 const std::vector<uint8_t> & orc_SendData,
-                                                 const uint16_t ou16_ExpectedPayloadSize,
-                                                 const bool oq_ExactSizeExpected, std::vector<uint8_t> & orc_ReadData,
-                                                 uint8_t & oru8_NrCode, const bool oq_CanTransferWithoutFlowControl)
+std::error_code C_OscProtocolDriverOsy::m_RoutineControl(const uint16_t ou16_RoutineIdentifier,
+                                                         const uint8_t ou8_SubFunction,
+                                                         const std::vector<uint8_t> & orc_SendData,
+                                                         const uint16_t ou16_ExpectedPayloadSize,
+                                                         const bool oq_ExactSizeExpected,
+                                                         std::vector<uint8_t> & orc_ReadData, uint8_t & oru8_NrCode,
+                                                         const bool oq_CanTransferWithoutFlowControl)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
    const uint32_t u32_SendPayloadSize = static_cast<uint32_t>(orc_SendData.size());
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -3901,26 +3925,25 @@ int32_t C_OscProtocolDriverOsy::m_RoutineControl(const uint16_t ou16_RoutineIden
          (void)std::memcpy(&c_Request.c_Data[4], &orc_SendData[0], u32_SendPayloadSize);
       }
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
          uint8_t u8_NrErrorCode;
-         s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_ROUTINE_CONTROL,
-                                                       ou16_ExpectedPayloadSize + 4U, c_Response,
-                                                       u8_NrErrorCode, oq_ExactSizeExpected);
-         switch (s32_Return)
+         c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_ROUTINE_CONTROL,
+                                                     ou16_ExpectedPayloadSize + 4U, c_Response,
+                                                     u8_NrErrorCode, oq_ExactSizeExpected);
+         if (c_Return == Errc::success)
          {
-         case C_NO_ERR:
             //check response:
             if ((c_Request.c_Data[1] != c_Response.c_Data[1]) ||
                 (c_Request.c_Data[2] != c_Response.c_Data[2]) ||
                 (c_Request.c_Data[3] != c_Response.c_Data[3]))
             {
-               s32_Return = C_RD_WR;
+               c_Return = Errc::rd_wr;
             }
             else
             {
@@ -3932,16 +3955,18 @@ int32_t C_OscProtocolDriverOsy::m_RoutineControl(const uint16_t ou16_RoutineIden
                   (void)std::memcpy(&orc_ReadData[0], &c_Response.c_Data[4], c_Response.c_Data.size() - 4);
                }
             }
-            break;
-         case C_WARN:
+         }
+         else if (c_Return == Errc::warn)
+         {
             oru8_NrCode = u8_NrErrorCode;
-            break;
-         default:
-            break;
+         }
+         else
+         {
+            //nothing to do
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3975,23 +4000,21 @@ int32_t C_OscProtocolDriverOsy::m_RoutineControl(const uint16_t ou16_RoutineIden
    \param[out] opu8_NrCode                     if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID,
-              unexpected size or not supported algorithm)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID,
+                   unexpected size or not supported algorithm)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsySecurityAccessRequestSeed(const uint8_t ou8_SecurityLevel, bool & orq_SecureMode,
-                                                             uint64_t & oru64_Seed, bool & orq_AuthenticationActive,
-                                                             bool & orq_TrafficEncryptionActive,
-                                                             std::vector<uint8_t> & orc_TrafficEncryptionInitVector,
-                                                             uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsySecurityAccessRequestSeed(const uint8_t ou8_SecurityLevel,
+   bool & orq_SecureMode, uint64_t & oru64_Seed, bool & orq_AuthenticationActive, bool & orq_TrafficEncryptionActive,
+   std::vector<uint8_t> & orc_TrafficEncryptionInitVector, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_SendData;
    std::vector<uint8_t> c_ReceiveData;
@@ -4000,9 +4023,9 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessRequestSeed(const uint8_t ou8_S
    c_SendData.resize(0);
    c_ReceiveData.resize(4);
 
-   s32_Return = m_SecurityAccess(ou8_SecurityLevel, c_SendData, 0U, 4U, c_ReceiveData, u8_NrErrorCode);
+   c_Return = m_SecurityAccess(ou8_SecurityLevel, c_SendData, 0U, 4U, c_ReceiveData, u8_NrErrorCode);
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
       if (c_ReceiveData.size() == 4)
       {
@@ -4099,29 +4122,29 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessRequestSeed(const uint8_t ou8_S
             else
             {
                // Not expected size
-               s32_Return = C_RD_WR;
+               c_Return = Errc::rd_wr;
             }
          }
          else
          {
             // Not expected value for security algorithms
-            s32_Return = C_RD_WR;
+            c_Return = Errc::rd_wr;
          }
       }
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("SecurityAccessRequestSeed(Level: %d)", ou8_SecurityLevel);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4139,19 +4162,20 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessRequestSeed(const uint8_t ou8_S
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_SecurityLevel,
-                                                         const uint32_t ou32_SecurityKey, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_SecurityLevel,
+                                                                 const uint32_t ou32_SecurityKey,
+                                                                 uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_SendData;
    std::vector<uint8_t> c_ReceiveData;
@@ -4164,19 +4188,19 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_Secur
    c_SendData[3] = static_cast<uint8_t>(ou32_SecurityKey & 0xFFU);
    c_ReceiveData.resize(0);
 
-   s32_Return = m_SecurityAccess(ou8_SecurityLevel + 1U, c_SendData, 4U, 0U, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_SecurityAccess(ou8_SecurityLevel + 1U, c_SendData, 4U, 0U, c_ReceiveData, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("SecurityAccessSendKey(Level: %d, Key: 0x%08X)", ou8_SecurityLevel, ou32_SecurityKey);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4209,23 +4233,22 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_Secur
    \param[out] opu8_NrCode                          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
-   C_RANGE    orc_AuthenticationKey or orc_TrafficEncryptionPublicClientKey have invalid length
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
+   Errc::range     orc_AuthenticationKey or orc_TrafficEncryptionPublicClientKey have invalid length
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_SecurityLevel,
-                                                         const std::vector<uint8_t> & orc_AuthenticationKey,
-                                                         const uint32_t ou32_SecurityKey,
-                                                         const std::vector<uint8_t> & orc_TrafficEncryptionPublicClientKey, std::vector<uint8_t> & orc_TrafficEncryptionPublicServerKey,
-                                                         uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_SecurityLevel,
+   const std::vector<uint8_t> & orc_AuthenticationKey, const uint32_t ou32_SecurityKey,
+   const std::vector<uint8_t> & orc_TrafficEncryptionPublicClientKey,
+   std::vector<uint8_t> & orc_TrafficEncryptionPublicServerKey, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
    uint8_t u8_NrErrorCode = 0U;
 
    if (((orc_AuthenticationKey.size() == 128) && (orc_TrafficEncryptionPublicClientKey.size() == 33)) ||
@@ -4278,24 +4301,24 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_Secur
 
       orc_TrafficEncryptionPublicServerKey.resize(u16_ExpectedSizeToReceive);
 
-      s32_Return = m_SecurityAccess(ou8_SecurityLevel + 1U, c_SendData,
-                                    u16_ExpectedSizeToSend, u16_ExpectedSizeToReceive,
-                                    orc_TrafficEncryptionPublicServerKey,
-                                    u8_NrErrorCode);
-      if (opu8_NrCode != NULL)
+      c_Return = m_SecurityAccess(ou8_SecurityLevel + 1U, c_SendData,
+                                  u16_ExpectedSizeToSend, u16_ExpectedSizeToReceive,
+                                  orc_TrafficEncryptionPublicServerKey,
+                                  u8_NrErrorCode);
+      if (opu8_NrCode != nullptr)
       {
          (*opu8_NrCode) = u8_NrErrorCode;
       }
    }
 
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("SecurityAccessSendKey(Level: %d)", ou8_SecurityLevel);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4315,28 +4338,28 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_Secur
    \param[out] oru8_NrCode                negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_SecurityAccess(const uint8_t ou8_SubFunction,
-                                                 const std::vector<uint8_t> & orc_SendData,
-                                                 const uint16_t ou16_SendPayloadSize,
-                                                 const uint16_t ou16_ExpectedPayloadSize,
-                                                 std::vector<uint8_t> & orc_ReadData, uint8_t & oru8_NrCode)
+std::error_code C_OscProtocolDriverOsy::m_SecurityAccess(const uint8_t ou8_SubFunction,
+                                                         const std::vector<uint8_t> & orc_SendData,
+                                                         const uint16_t ou16_SendPayloadSize,
+                                                         const uint16_t ou16_ExpectedPayloadSize,
+                                                         std::vector<uint8_t> & orc_ReadData, uint8_t & oru8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -4360,24 +4383,23 @@ int32_t C_OscProtocolDriverOsy::m_SecurityAccess(const uint8_t ou8_SubFunction,
          }
       }
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
          uint8_t u8_NrErrorCode;
-         s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_SECURITY_ACCESS,
-                                                       ou16_ExpectedPayloadSize + 2U, c_Response,
-                                                       u8_NrErrorCode, false);
-         switch (s32_Return)
+         c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_SECURITY_ACCESS,
+                                                     ou16_ExpectedPayloadSize + 2U, c_Response,
+                                                     u8_NrErrorCode, false);
+         if (c_Return == Errc::success)
          {
-         case C_NO_ERR:
             //check response:
             if ((c_Request.c_Data[1] != c_Response.c_Data[1]))
             {
-               s32_Return = C_RD_WR;
+               c_Return = Errc::rd_wr;
             }
             else
             {
@@ -4387,16 +4409,18 @@ int32_t C_OscProtocolDriverOsy::m_SecurityAccess(const uint8_t ou8_SubFunction,
                   (void)std::memcpy(&orc_ReadData[0], &c_Response.c_Data[2], c_Response.c_Data.size() - 2);
                }
             }
-            break;
-         case C_WARN:
+         }
+         else if (c_Return == Errc::warn)
+         {
             oru8_NrCode = u8_NrErrorCode;
-            break;
-         default:
-            break;
+         }
+         else
+         {
+            //nothing to do
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4416,14 +4440,14 @@ int32_t C_OscProtocolDriverOsy::m_SecurityAccess(const uint8_t ou8_SubFunction,
    \param[in]  orc_ReceivedService        received service suspected to be an async response
 
    \return
-   C_NO_ERR  something we could handle ...
-   C_NOACT   this function was not interested
-   C_RANGE   Received message is not complete
+   Errc::success   something we could handle ...
+   Errc::noact     this function was not interested
+   Errc::range     Received message is not complete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_HandleAsyncResponse(const C_OscProtocolDriverOsyService & orc_ReceivedService)
+std::error_code C_OscProtocolDriverOsy::m_HandleAsyncResponse(const C_OscProtocolDriverOsyService & orc_ReceivedService)
 {
-   int32_t s32_Return = C_NOACT;
+   std::error_code c_Return = Errc::noact;
 
    //is it a response at all ?
    if ((orc_ReceivedService.c_Data[0] & 0x40U) == 0U)
@@ -4440,10 +4464,10 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncResponse(const C_OscProtocolDriverO
          switch (u8_ServiceId)
          {
          case mhu8_OSY_SI_READ_DATA_POOL_DATA_EVENT_DRIVEN:
-            s32_Return = this->m_HandleAsyncOsyReadDataPoolDataEvent(orc_ReceivedService);
+            c_Return = this->m_HandleAsyncOsyReadDataPoolDataEvent(orc_ReceivedService);
             break;
          case mhu8_OSY_SI_TUNNEL_CAN_MESSAGE:
-            s32_Return = this->m_HandleAsyncOsyTunnelCanMessagesEvent(orc_ReceivedService);
+            c_Return = this->m_HandleAsyncOsyTunnelCanMessagesEvent(orc_ReceivedService);
             break;
          case mhu8_OSY_SI_READ_SERIAL_NUMBER:
             //not used in this implementation; at least report in log
@@ -4465,7 +4489,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncResponse(const C_OscProtocolDriverO
          switch (orc_ReceivedService.c_Data[1])
          {
          case mhu8_OSY_SI_READ_DATA_POOL_DATA_EVENT_DRIVEN:
-            s32_Return = this->m_HandleAsyncOsyReadDataPoolDataErrorEvent(orc_ReceivedService);
+            c_Return = this->m_HandleAsyncOsyReadDataPoolDataErrorEvent(orc_ReceivedService);
             break;
          case mhu8_OSY_SI_READ_SERIAL_NUMBER:
             m_LogErrorWithHeader("Asynchronous communication",
@@ -4482,7 +4506,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncResponse(const C_OscProtocolDriverO
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4491,14 +4515,14 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncResponse(const C_OscProtocolDriverO
    \param[in]  orc_ReceivedService        received service suspected to be an async response
 
    \return
-   C_NO_ERR     Async message received successfully
-   C_RANGE      Received message is not complete
+   Errc::success   Async message received successfully
+   Errc::range     Received message is not complete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataEvent(
+std::error_code C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataEvent(
    const C_OscProtocolDriverOsyService & orc_ReceivedService)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    //only if there is at least one byte of payload
    if (orc_ReceivedService.c_Data.size() > 4)
@@ -4524,7 +4548,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataEvent(
 
       m_OsyReadDataPoolDataEventReceived(u8_DataPoolIndex, u16_ListIndex, u16_ElementIndex, c_Value);
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
    else
    {
@@ -4532,7 +4556,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataEvent(
                            "Received async ReadDataPoolDataEvent with invalid length. Ignoring.", TGL_UTIL_FUNC_ID);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4546,14 +4570,14 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataEvent(
    \param[in]  orc_ReceivedService        received service suspected to be an async response
 
    \return
-   C_NO_ERR     Async message received successfully
-   C_RANGE      Received message is not complete
+   Errc::success   Async message received successfully
+   Errc::range     Received message is not complete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataErrorEvent(
+std::error_code C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataErrorEvent(
    const C_OscProtocolDriverOsyService & orc_ReceivedService)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (orc_ReceivedService.c_Data.size() == 6)
    {
@@ -4573,7 +4597,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataErrorEvent(
       m_OsyReadDataPoolDataEventErrorReceived(u8_DataPoolIndex, u16_ListIndex, u16_ElementIndex,
                                               orc_ReceivedService.c_Data[2]);
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
    else
    {
@@ -4582,7 +4606,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataErrorEvent(
                            TGL_UTIL_FUNC_ID);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4591,15 +4615,15 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataErrorEvent(
    \param[in]  orc_ReceivedService        received service suspected to be an async response
 
    \return
-   C_NO_ERR     Async message received successfully
-   C_RANGE      - Received message is not complete
-                - 11 Bit identifier is not valid
+   Errc::success   Async message received successfully
+   Errc::range     - Received message is not complete
+                   - 11 Bit identifier is not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyTunnelCanMessagesEvent(
+std::error_code C_OscProtocolDriverOsy::m_HandleAsyncOsyTunnelCanMessagesEvent(
    const C_OscProtocolDriverOsyService & orc_ReceivedService)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (orc_ReceivedService.c_Data.size() == 15U)
    {
@@ -4624,7 +4648,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyTunnelCanMessagesEvent(
          (void)std::memcpy(&c_CanMessage.au8_Data[0], &orc_ReceivedService.c_Data[6], 8U);
          c_CanMessage.u64_TimeStamp = stw::tgl::TglGetTickCountUs();
 
-         if (this->mpr_OnOsyTunnelCanMessageReceived != NULL)
+         if (this->mpr_OnOsyTunnelCanMessageReceived != nullptr)
          {
             this->mpr_OnOsyTunnelCanMessageReceived(this->mpv_OnAsyncTunnelCanMessageInstance,
                                                     orc_ReceivedService.c_Data[14], c_CanMessage);
@@ -4636,7 +4660,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyTunnelCanMessagesEvent(
                                  TGL_UTIL_FUNC_ID);
          }
 
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
       }
    }
    else
@@ -4645,7 +4669,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyTunnelCanMessagesEvent(
                            "Received async TunnelCanMessagesEvent with invalid length. Ignoring.", TGL_UTIL_FUNC_ID);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4763,20 +4787,20 @@ void C_OscProtocolDriverOsy::mh_ConvertVariableToNecessaryBytes(const uint32_t o
    \param[in]  orc_Service           request to send
 
    \return
-   C_NO_ERR    service added
-   C_RANGE     service size out of range
-   C_OVERFLOW  Tx queue is already full
-   C_NOACT     could not add to queue (out of memory; should not happen in real life)
-   C_CHECKSUM  failed to wrap up/encrypt service
+   Errc::success    service added
+   Errc::range      service size out of range
+   Errc::overflow   Tx queue is already full
+   Errc::noact      could not add to queue (out of memory; should not happen in real life)
+   Errc::checksum   failed to wrap up/encrypt service
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_SendRequest(const C_OscProtocolDriverOsyService & orc_Service)
+std::error_code C_OscProtocolDriverOsy::m_SendRequest(const C_OscProtocolDriverOsyService & orc_Service)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    const C_OscProtocolDriverOsyService * pc_Request = &orc_Service;
    C_OscProtocolDriverOsyService c_EncryptedRequest;
 
-   tgl_assert(this->pc_SecuritySubLayer != NULL);
+   tgl_assert(this->pc_SecuritySubLayer != nullptr);
    if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
    {
       bool q_NeedsEncryption = true; //preset: most services need encryption
@@ -4815,27 +4839,27 @@ int32_t C_OscProtocolDriverOsy::m_SendRequest(const C_OscProtocolDriverOsyServic
       }
       if (q_NeedsEncryption == true)
       {
-         s32_Return = this->pc_SecuritySubLayer->WrapRequest(orc_Service, c_EncryptedRequest).value();
-         if (s32_Return != C_NO_ERR)
+         c_Return = this->pc_SecuritySubLayer->WrapRequest(orc_Service, c_EncryptedRequest);
+         if (c_Return != Errc::success)
          {
             osc_write_log_error("Traffic encryption", "Could not create SecuredDataTransmission request. Detail: " +
-                                std::to_string(s32_Return));
-            s32_Return = C_CHECKSUM;
+                                std::to_string(c_Return.value()));
+            c_Return = Errc::checksum;
          }
          pc_Request = &c_EncryptedRequest;
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
       //pass on the original or encrypted request to the installed TP
-      s32_Return = mpc_TransportProtocol->SendRequest(*pc_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = mpc_TransportProtocol->SendRequest(*pc_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4843,25 +4867,25 @@ int32_t C_OscProtocolDriverOsy::m_SendRequest(const C_OscProtocolDriverOsyServic
 
    If encryption is active then this function will unwrap incoming SecuredDataTransmission services using
     the security sub layer.
-   Negative responses to SecuredDataTransmission will lead to a C_WARN on this level.
+   Negative responses to SecuredDataTransmission will lead to an Errc::warn on this level.
    Other negative responses (unencrypted or encrypted) will be passed to caller.
 
    \param[in]  orc_Service           received response (unencrypted if applicable)
 
    \return
-   C_NO_ERR    service read; data in orc_Service
-   C_WARN      error response to SecuredDataTransmission received
-   C_NOACT     no new response received
-   C_CHECKSUM  failed to unwrap/decrypt service
+   Errc::success    service read; data in orc_Service
+   Errc::warn       error response to SecuredDataTransmission received
+   Errc::noact      no new response received
+   Errc::checksum   failed to unwrap/decrypt service
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_ReadResponse(C_OscProtocolDriverOsyService & orc_Service)
+std::error_code C_OscProtocolDriverOsy::m_ReadResponse(C_OscProtocolDriverOsyService & orc_Service)
 {
-   int32_t s32_Return = mpc_TransportProtocol->ReadResponse(orc_Service);
+   std::error_code c_Return = mpc_TransportProtocol->ReadResponse(orc_Service);
 
-   tgl_assert(this->pc_SecuritySubLayer != NULL);
+   tgl_assert(this->pc_SecuritySubLayer != nullptr);
 
-   if ((s32_Return == C_NO_ERR) && (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true))
+   if ((c_Return == Errc::success) && (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true))
    {
       //try to decrypt only if we *do* have a SecuredDataTransmission service
       //otherwise we have an unencrypted response which we just pass through
@@ -4870,8 +4894,8 @@ int32_t C_OscProtocolDriverOsy::m_ReadResponse(C_OscProtocolDriverOsyService & o
           ((orc_Service.c_Data[0]) == (mhu8_OSY_SI_SECURED_DATA_TRANSMISSION | 0x40U)))
       {
          C_OscProtocolDriverOsyService c_DecryptedResponse;
-         s32_Return = this->pc_SecuritySubLayer->UnwrapResponse(orc_Service, c_DecryptedResponse).value();
-         if (s32_Return == C_NO_ERR)
+         c_Return = this->pc_SecuritySubLayer->UnwrapResponse(orc_Service, c_DecryptedResponse);
+         if (c_Return == Errc::success)
          {
             orc_Service = c_DecryptedResponse;
          }
@@ -4879,23 +4903,23 @@ int32_t C_OscProtocolDriverOsy::m_ReadResponse(C_OscProtocolDriverOsyService & o
          {
             osc_write_log_error("Traffic encryption",
                                 "Could not decrypt incoming SecuredDataTransmission response. Detail: " +
-                                std::to_string(s32_Return));
-            s32_Return = C_CHECKSUM;
+                                std::to_string(c_Return.value()));
+            c_Return = Errc::checksum;
          }
       }
       else if ((orc_Service.c_Data.size() == 3U) && (orc_Service.c_Data[0] == mhu8_OSY_NR_SI) &&
                (orc_Service.c_Data[1] == mhu8_OSY_SI_SECURED_DATA_TRANSMISSION))
       {
          //negative response to SecuredDataTransmission
-         s32_Return = C_WARN;
-         m_LogServiceError("SecuredDataTransmission", s32_Return, orc_Service.c_Data[2]);
+         c_Return = Errc::warn;
+         m_LogServiceError("SecuredDataTransmission", c_Return, orc_Service.c_Data[2]);
       }
       else
       {
          //no special handling needed
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4917,28 +4941,28 @@ int32_t C_OscProtocolDriverOsy::m_ReadResponse(C_OscProtocolDriverOsyService & o
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: incorrect response length)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: incorrect response length)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_StartAddress, const uint32_t ou32_Size,
-                                                   uint32_t & oru32_MaxBlockLength, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_StartAddress, const uint32_t ou32_Size,
+                                                           uint32_t & oru32_MaxBlockLength, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
    oru32_MaxBlockLength = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -4955,26 +4979,25 @@ int32_t C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_StartAddr
       c_Request.c_Data[9] = static_cast<uint8_t>(ou32_Size >> 8U);
       c_Request.c_Data[10] = static_cast<uint8_t>(ou32_Size & 0xFFU);
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
          uint8_t u8_LengthFormat;
-         s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_REQUEST_DOWNLOAD, 3U, c_Response,
-                                                       u8_NrErrorCode, false);
+         c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_REQUEST_DOWNLOAD, 3U, c_Response,
+                                                     u8_NrErrorCode, false);
 
-         switch (s32_Return)
+         if (c_Return == Errc::success)
          {
-         case C_NO_ERR:
             //check response:
             u8_LengthFormat = c_Response.c_Data[1] >> 4U;
             if (((u8_LengthFormat == 0U) || (u8_LengthFormat > 4U)) ||
                 (c_Response.c_Data.size() != (2U + static_cast<size_t>(u8_LengthFormat))))
             {
-               s32_Return = C_RD_WR;
+               c_Return = Errc::rd_wr;
             }
             else
             {
@@ -4986,7 +5009,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_StartAddr
                      (static_cast<uint32_t>(c_Response.c_Data[2U + static_cast<size_t>(u8_Index)]) <<
                       (((u8_LengthFormat - 1U) - u8_Index) * 8U));
                }
-               tgl_assert(pc_SecuritySubLayer != NULL);
+               tgl_assert(pc_SecuritySubLayer != nullptr);
                if (pc_SecuritySubLayer->GetEncryptionIsActive() == true)
                {
                   //if traffic encryption is active we need to consider that the service size that can effectively
@@ -5003,27 +5026,29 @@ int32_t C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_StartAddr
                   }
                }
             }
-            break;
-         case C_WARN:
-            if (opu8_NrCode != NULL)
+         }
+         else if (c_Return == Errc::warn)
+         {
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
-            break;
-         default:
-            break;
+         }
+         else
+         {
+            //nothing to do
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RequestDownload(Address: 0x%08X, Size: 0x%08X, MaxBlockLength: %u)",
                                  ou32_StartAddress, ou32_Size, oru32_MaxBlockLength);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -5046,34 +5071,36 @@ int32_t C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_StartAddr
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_RANGE    file path too long (theoretical maximum: 0xFFFF characters)
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response
-               (here: incorrect response length, mode of operation, data format)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::range     file path too long (theoretical maximum: 0xFFFF characters)
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response
+                    (here: incorrect response length, mode of operation, data format)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string & orc_FilePath, const uint32_t ou32_FileSize,
-                                                       uint32_t & oru32_MaxBlockLength, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string & orc_FilePath,
+                                                               const uint32_t ou32_FileSize,
+                                                               uint32_t & oru32_MaxBlockLength,
+                                                               uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
    oru32_MaxBlockLength = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else if (orc_FilePath.length() > 0xFFFF)
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -5092,19 +5119,18 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string & orc_F
       c_Request.c_Data[8 + static_cast<size_t>(u16_PathLength)] = static_cast<uint8_t>(ou32_FileSize >> 8U);
       c_Request.c_Data[9 + static_cast<size_t>(u16_PathLength)] = static_cast<uint8_t>(ou32_FileSize);
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
          uint8_t u8_LengthFormat;
-         s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_REQUEST_FILE_TRANSFER, 4U, c_Response,
-                                                       u8_NrErrorCode, false);
-         switch (s32_Return)
+         c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_REQUEST_FILE_TRANSFER, 4U, c_Response,
+                                                     u8_NrErrorCode, false);
+         if (c_Return == Errc::success)
          {
-         case C_NO_ERR:
             //check response:
             u8_LengthFormat = c_Response.c_Data[2];
             if ((c_Response.c_Data[1] != 0x03U) ||                                           //mode of operation OK ?
@@ -5112,7 +5138,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string & orc_F
                 (c_Response.c_Data.size() != (4U + static_cast<size_t>(u8_LengthFormat))) || //enough data bytes ?
                 (c_Response.c_Data[static_cast<size_t>(u8_LengthFormat) + 3U] != 0x00U))     //data format OK ?
             {
-               s32_Return = C_RD_WR;
+               c_Return = Errc::rd_wr;
             }
             else
             {
@@ -5124,7 +5150,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string & orc_F
                      (static_cast<uint32_t>(c_Response.c_Data[3U + static_cast<size_t>(u8_Index)]) <<
                       (((u8_LengthFormat - 1U) - u8_Index) * 8U));
                }
-               tgl_assert(pc_SecuritySubLayer != NULL);
+               tgl_assert(pc_SecuritySubLayer != nullptr);
                if (pc_SecuritySubLayer->GetEncryptionIsActive() == true)
                {
                   //if traffic encryption is active we need to consider that the service size that can effectively
@@ -5141,27 +5167,29 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string & orc_F
                   }
                }
             }
-            break;
-         case C_WARN:
-            if (opu8_NrCode != NULL)
+         }
+         else if (c_Return == Errc::warn)
+         {
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
-            break;
-         default:
-            break;
+         }
+         else
+         {
+            //nothing to do
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RequestFileTransfer(Path: %s, Size: %u, MaxBlockLength: %u)", orc_FilePath.c_str(),
                                  ou32_FileSize, oru32_MaxBlockLength);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -5180,24 +5208,25 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string & orc_F
    \param[out] opu8_NrCode                if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyTransferData(const uint8_t ou8_BlockSequenceCounter,
-                                                const std::vector<uint8_t> & orc_Data, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyTransferData(const uint8_t ou8_BlockSequenceCounter,
+                                                        const std::vector<uint8_t> & orc_Data,
+                                                        uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -5208,44 +5237,45 @@ int32_t C_OscProtocolDriverOsy::OsyTransferData(const uint8_t ou8_BlockSequenceC
       c_Request.c_Data[1] = ou8_BlockSequenceCounter;
       (void)std::memcpy(&c_Request.c_Data[2], &orc_Data[0], u16_NumberOfBytes);
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
          C_OscProtocolDriverOsyService c_Response;
-         s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_TRANSFER_DATA, 2U, c_Response, u8_NrErrorCode, true);
-         switch (s32_Return)
+         c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_TRANSFER_DATA, 2U, c_Response, u8_NrErrorCode, true);
+         if (c_Return == Errc::success)
          {
-         case C_NO_ERR:
             //check response:
             if (c_Response.c_Data[1] != ou8_BlockSequenceCounter)
             {
-               s32_Return = C_RD_WR;
+               c_Return = Errc::rd_wr;
             }
-            break;
-         case C_WARN:
-            if (opu8_NrCode != NULL)
+         }
+         else if (c_Return == Errc::warn)
+         {
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
-            break;
-         default:
-            break;
+         }
+         else
+         {
+            //nothing to do
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("TransferData(Sequence: %d, Size: %u)", ou8_BlockSequenceCounter,
                                  static_cast<uint32_t>(orc_Data.size()));
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -5265,26 +5295,26 @@ int32_t C_OscProtocolDriverOsy::OsyTransferData(const uint8_t ou8_BlockSequenceC
    \param[out] opu8_NrCode                   if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitAddressBased(const bool oq_SendSignatureBlockAddress,
-                                                                   const uint32_t ou32_SignatureBlockAddress,
-                                                                   uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyRequestTransferExitAddressBased(const bool oq_SendSignatureBlockAddress,
+                                                                           const uint32_t ou32_SignatureBlockAddress,
+                                                                           uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -5303,41 +5333,42 @@ int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitAddressBased(const bool oq
          c_Request.c_Data[0] = mhu8_OSY_SI_REQUEST_TRANSFER_EXIT;
       }
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
-         s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_REQUEST_TRANSFER_EXIT, 1U, c_Response,
-                                                       u8_NrErrorCode, true);
-         switch (s32_Return)
+         c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_REQUEST_TRANSFER_EXIT, 1U, c_Response,
+                                                     u8_NrErrorCode, true);
+         if (c_Return == Errc::success)
          {
-         case C_NO_ERR:
             // check response:
             // nothing to do here
-            break;
-         case C_WARN:
-            if (opu8_NrCode != NULL)
+         }
+         else if (c_Return == Errc::warn)
+         {
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
-            break;
-         default:
-            break;
+         }
+         else
+         {
+            //nothing to do
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RequestTransferExitAddressBased(WithSignatureAddress: %d, SignatureAddress: 0x%08X)",
                                  (oq_SendSignatureBlockAddress == true) ? 1 : 0, ou32_SignatureBlockAddress);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -5353,25 +5384,25 @@ int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitAddressBased(const bool oq
    \param[out] opu8_NrCode                   if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitFileBased(const uint8_t (&orau8_Signature)[8],
-                                                                uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyRequestTransferExitFileBased(const uint8_t (&orau8_Signature)[8],
+                                                                        uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -5384,42 +5415,43 @@ int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitFileBased(const uint8_t (&
          c_Request.c_Data[static_cast<size_t>(u32_Counter) + 1U] = orau8_Signature[u32_Counter];
       }
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
-         s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_REQUEST_TRANSFER_EXIT, 1U, c_Response,
-                                                       u8_NrErrorCode, true);
-         switch (s32_Return)
+         c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_REQUEST_TRANSFER_EXIT, 1U, c_Response,
+                                                     u8_NrErrorCode, true);
+         if (c_Return == Errc::success)
          {
-         case C_NO_ERR:
             // check response:
             // nothing to do here
-            break;
-         case C_WARN:
-            if (opu8_NrCode != NULL)
+         }
+         else if (c_Return == Errc::warn)
+         {
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
-            break;
-         default:
-            break;
+         }
+         else
+         {
+            //nothing to do
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RequestTransferExitFileBased(Signature: [%d,%d,%d,%d,%d,%d,%d,%d]",
                                  orau8_Signature[0], orau8_Signature[1], orau8_Signature[2], orau8_Signature[3],
                                  orau8_Signature[4], orau8_Signature[5], orau8_Signature[6], orau8_Signature[7]);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -5435,25 +5467,25 @@ int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitFileBased(const uint8_t (&
    \param[out]    opu8_NrCode        if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request(s) sent, positive response(s) received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RANGE    size of orc_DataRecord is zero
-   C_COM      expected server response not received because of communication error
+   Errc::success   request(s) sent, positive response(s) received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::range     size of orc_DataRecord is zero
+   Errc::com       expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(const uint32_t ou32_MemoryAddress,
-                                                       std::vector<uint8_t> & orc_DataRecord,
-                                                       uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadMemoryByAddress(const uint32_t ou32_MemoryAddress,
+                                                               std::vector<uint8_t> & orc_DataRecord,
+                                                               uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -5467,7 +5499,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(const uint32_t ou32_Memor
       //if traffic encryption is active we need to consider that the service size that can effectively
       // be transferred is reduced by the protocol overhead needed for encryption
       //4bytes header + padding to multiples of 16 bytes
-      tgl_assert(this->pc_SecuritySubLayer != NULL);
+      tgl_assert(this->pc_SecuritySubLayer != nullptr);
       if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
       {
          const uint16_t u16_EncryptionOverhead = static_cast<uint16_t>(4U + ((u32_BlockSize) % 16U));
@@ -5508,48 +5540,49 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(const uint32_t ou32_Memor
          (void)std::memcpy(&c_Request.c_Data[static_cast<size_t>(2) + u8_MemoryAddressByteCount], &c_MemorySize[0],
                            c_MemorySize.size());
 
-         s32_Return = m_SendRequest(c_Request);
-         if (s32_Return != C_NO_ERR)
+         c_Return = m_SendRequest(c_Request);
+         if (c_Return != Errc::success)
          {
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
          }
          else
          {
             C_OscProtocolDriverOsyService c_Response;
-            s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_MEMORY_BY_ADDRESS,
-                                                          static_cast<uint16_t>(1UL + u32_Size), c_Response,
-                                                          u8_NrErrorCode, true);
-            switch (s32_Return)
+            c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_READ_MEMORY_BY_ADDRESS,
+                                                        static_cast<uint16_t>(1UL + u32_Size), c_Response,
+                                                        u8_NrErrorCode, true);
+            if (c_Return == Errc::success)
             {
-            case C_NO_ERR:
                // size is OK: copy data
                (void)std::memcpy(&orc_DataRecord[u32_ReadIndex], &c_Response.c_Data[1], c_Response.c_Data.size() - 1U);
-               break;
-            case C_WARN:
-               if (opu8_NrCode != NULL)
+            }
+            else if (c_Return == Errc::warn)
+            {
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
-               break;
-            default:
-               break;
+            }
+            else
+            {
+               //nothing to do
             }
          }
-         if (s32_Return != C_NO_ERR)
+         if (c_Return != Errc::success)
          {
             break;
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("ReadMemoryByAddress(Address: 0x%08X, Size: 0x%08X)", ou32_MemoryAddress,
                                  static_cast<uint32_t>(orc_DataRecord.size()));
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -5567,26 +5600,26 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(const uint32_t ou32_Memor
    \param[out] opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: unexpected length or address)
-   C_RANGE    orc_DataRecord empty
-   C_COM      expected server response not received because of communication error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: unexpected length or address)
+   Errc::range     orc_DataRecord empty
+   Errc::com       expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t ou32_MemoryAddress,
-                                                        const std::vector<uint8_t> & orc_DataRecord,
-                                                        uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t ou32_MemoryAddress,
+                                                                const std::vector<uint8_t> & orc_DataRecord,
+                                                                uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -5600,7 +5633,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t ou32_Memo
       //if traffic encryption is active we need to consider that the service size that can effectively
       // be transferred is reduced by the protocol overhead needed for encryption
       //4bytes header + padding to multiples of 16 bytes
-      tgl_assert(this->pc_SecuritySubLayer != NULL);
+      tgl_assert(this->pc_SecuritySubLayer != nullptr);
       if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
       {
          const uint16_t u16_EncryptionOverhead = static_cast<uint16_t>(4U + ((u32_BlockSize) % 16U));
@@ -5646,10 +5679,10 @@ int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t ou32_Memo
             &c_Request.c_Data[static_cast<size_t>(2) + u8_MemoryAddressByteCount + u8_MemorySizeByteCount],
             &orc_DataRecord[u32_WriteIndex], u32_Size);
 
-         s32_Return = m_SendRequest(c_Request);
-         if (s32_Return != C_NO_ERR)
+         c_Return = m_SendRequest(c_Request);
+         if (c_Return != Errc::success)
          {
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
          }
          else
          {
@@ -5657,45 +5690,46 @@ int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t ou32_Memo
             int x_Diff; //lint !e8080 !e970  //using type to match library interface
             const uint8_t u8_ExpectedSize = 2U + u8_MemoryAddressByteCount + u8_MemorySizeByteCount;
 
-            s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_WRITE_MEMORY_BY_ADDRESS, u8_ExpectedSize,
-                                                          c_Response, u8_NrErrorCode, true);
-            switch (s32_Return)
+            c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_WRITE_MEMORY_BY_ADDRESS, u8_ExpectedSize,
+                                                        c_Response, u8_NrErrorCode, true);
+            if (c_Return == Errc::success)
             {
-            case C_NO_ERR:
                // format, size, address OK ?
                x_Diff = std::memcmp(&c_Request.c_Data[1], &c_Response.c_Data[1],
                                     static_cast<size_t>(u8_ExpectedSize) - 1);
                if (x_Diff != 0)
                {
                   //unexpected response
-                  s32_Return = C_RD_WR;
+                  c_Return = Errc::rd_wr;
                }
-               break;
-            case C_WARN:
-               if (opu8_NrCode != NULL)
+            }
+            else if (c_Return == Errc::warn)
+            {
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
-               break;
-            default:
-               break;
+            }
+            else
+            {
+               //nothing to do
             }
          }
-         if (s32_Return != C_NO_ERR)
+         if (c_Return != Errc::success)
          {
             break;
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("WriteMemoryByAddress(Address: 0x%08X, Size: 0x%08X)", ou32_MemoryAddress,
                                  static_cast<uint32_t>(orc_DataRecord.size()));
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -5708,19 +5742,21 @@ int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t ou32_Memo
    \param[out] opu8_NrCode                 if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data pool or list index)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data pool or list index)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyNotifyNvmDataChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
-                                                        bool & orq_ApplicationAcknowledge, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyNotifyNvmDataChanges(const uint8_t ou8_DataPoolIndex,
+                                                                const uint8_t ou8_ListIndex,
+                                                                bool & orq_ApplicationAcknowledge,
+                                                                uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
    const uint8_t ou8_ServerDpIndex = this->m_GetDataPoolIndexClientToServer(ou8_DataPoolIndex);
 
@@ -5729,9 +5765,9 @@ int32_t C_OscProtocolDriverOsy::OsyNotifyNvmDataChanges(const uint8_t ou8_DataPo
    c_SendData.resize(2);
    c_SendData[0] = ou8_ServerDpIndex;
    c_SendData[1] = ou8_ListIndex;
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_NOTIFY_NVM_DATA_CHANGED, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                 c_SendData, 3, true, c_ReceiveData, u8_NrErrorCode);
-   if (s32_Return == C_NO_ERR)
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_NOTIFY_NVM_DATA_CHANGED, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                               c_SendData, 3, true, c_ReceiveData, u8_NrErrorCode);
+   if (c_Return == Errc::success)
    {
       if ((c_ReceiveData[0] == ou8_ServerDpIndex) && (c_ReceiveData[1] == ou8_ListIndex))
       {
@@ -5739,22 +5775,22 @@ int32_t C_OscProtocolDriverOsy::OsyNotifyNvmDataChanges(const uint8_t ou8_DataPo
       }
       else
       {
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::NotifyNvmDataChanges(Client indexes: Datapool: %d, List: %d)",
                                  ou8_DataPoolIndex, ou8_ListIndex);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -5772,25 +5808,26 @@ int32_t C_OscProtocolDriverOsy::OsyNotifyNvmDataChanges(const uint8_t ou8_DataPo
    \param[out] opu8_NrCode                if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyTesterPresent(const uint8_t ou8_SuppressResponseMsg, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyTesterPresent(const uint8_t ou8_SuppressResponseMsg,
+                                                         uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -5798,55 +5835,56 @@ int32_t C_OscProtocolDriverOsy::OsyTesterPresent(const uint8_t ou8_SuppressRespo
       c_Request.c_Data[0] = mhu8_OSY_SI_TESTER_PRESENT;
       c_Request.c_Data[1] = static_cast<uint8_t>(ou8_SuppressResponseMsg << 7U);
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
          // response message expected
          if (ou8_SuppressResponseMsg == 0U)
          {
-            s32_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_TESTER_PRESENT, 2U, c_Response,
-                                                          u8_NrErrorCode, true);
+            c_Return = m_PollForSpecificServiceResponse(mhu8_OSY_SI_TESTER_PRESENT, 2U, c_Response,
+                                                        u8_NrErrorCode, true);
 
-            switch (s32_Return)
+            if (c_Return == Errc::success)
             {
-            case C_NO_ERR:
                //check response:
                if (((c_Request.c_Data[1] & 0x7FU) != c_Response.c_Data[1]))
                {
-                  s32_Return = C_RD_WR;
+                  c_Return = Errc::rd_wr;
                }
-               break;
-            case C_WARN:
-               if (opu8_NrCode != NULL)
+            }
+            else if (c_Return == Errc::warn)
+            {
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
-               break;
-            default:
-               break;
+            }
+            else
+            {
+               //nothing to do
             }
          }
          // no response message expected, only send single frame message
          else
          {
-            s32_Return = mpc_TransportProtocol->Cycle();
-            if (opu8_NrCode != NULL)
+            c_Return = mpc_TransportProtocol->Cycle();
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = 0U;
             }
          }
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
-      m_LogServiceError("TesterPresent", s32_Return, u8_NrErrorCode);
+      m_LogServiceError("TesterPresent", c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -5866,19 +5904,19 @@ int32_t C_OscProtocolDriverOsy::OsyTesterPresent(const uint8_t ou8_SuppressRespo
    \param[in]  ou8_ResetType        Reset type (Default by openSYDE protocol: 0x02: keyOffOnReset)
 
    \return
-   C_NO_ERR   request sent
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
+   Errc::success   request sent
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyEcuReset(const uint8_t ou8_ResetType)
+std::error_code C_OscProtocolDriverOsy::OsyEcuReset(const uint8_t ou8_ResetType)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyService c_Request;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -5886,23 +5924,23 @@ int32_t C_OscProtocolDriverOsy::OsyEcuReset(const uint8_t ou8_ResetType)
       c_Request.c_Data[0] = mhu8_OSY_SI_ECU_RESET;
       c_Request.c_Data[1] = ou8_ResetType;
 
-      s32_Return = m_SendRequest(c_Request);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_SendRequest(c_Request);
+      if (c_Return != Errc::success)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
-         s32_Return = mpc_TransportProtocol->Cycle();
+         c_Return = mpc_TransportProtocol->Cycle();
       }
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("EcuReset(Type: %d)", ou8_ResetType);
-      m_LogServiceError(c_ErrorText, s32_Return, 0);
+      m_LogServiceError(c_ErrorText, c_Return, 0);
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -5922,21 +5960,22 @@ int32_t C_OscProtocolDriverOsy::OsyEcuReset(const uint8_t ou8_ResetType)
    \param[out]  opu8_NrCode         if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_RANGE    BusId or NodeId out of range
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::range     BusId or NodeId out of range
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsySetNodeIdForChannel(const uint8_t ou8_ChannelType, const uint8_t ou8_ChannelIndex,
-                                                       const C_OscProtocolDriverOsyNode & orc_NewNodeId,
-                                                       uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsySetNodeIdForChannel(const uint8_t ou8_ChannelType,
+                                                               const uint8_t ou8_ChannelIndex,
+                                                               const C_OscProtocolDriverOsyNode & orc_NewNodeId,
+                                                               uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
    uint8_t u8_NrErrorCode = 0U;
 
    if ((orc_NewNodeId.u8_BusIdentifier <= C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) &&
@@ -5951,24 +5990,24 @@ int32_t C_OscProtocolDriverOsy::OsySetNodeIdForChannel(const uint8_t ou8_Channel
       c_SendData[2] = orc_NewNodeId.u8_BusIdentifier;
       c_SendData[3] = orc_NewNodeId.u8_NodeIdentifier;
 
-      s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_SET_NODE_ID_FOR_CHANNEL, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                    c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
+      c_Return = m_RoutineControl(mhu16_OSY_RC_SID_SET_NODE_ID_FOR_CHANNEL, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                                  c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::SetNodeIdForChannel(Type: %d, Index: %d, BusId: %d, NodeId: %d)",
                                  ou8_ChannelType, ou8_ChannelIndex, orc_NewNodeId.u8_BusIdentifier,
                                  orc_NewNodeId.u8_NodeIdentifier);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -5988,19 +6027,19 @@ int32_t C_OscProtocolDriverOsy::OsySetNodeIdForChannel(const uint8_t ou8_Channel
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsySetBitrate(const uint8_t ou8_ChannelType, const uint8_t ou8_ChannelIndex,
-                                              const uint32_t ou32_Bitrate, uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsySetBitrate(const uint8_t ou8_ChannelType, const uint8_t ou8_ChannelIndex,
+                                                      const uint32_t ou32_Bitrate, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_ReceiveData;
    std::vector<uint8_t> c_SendData;
@@ -6014,20 +6053,20 @@ int32_t C_OscProtocolDriverOsy::OsySetBitrate(const uint8_t ou8_ChannelType, con
    c_SendData[4] = static_cast<uint8_t>(ou32_Bitrate >> 8U);
    c_SendData[5] = static_cast<uint8_t>(ou32_Bitrate & 0xFFU);
 
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_RC_SID_SET_BITRATE, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                 c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_RoutineControl(mhu16_OSY_RC_RC_SID_SET_BITRATE, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                               c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::SetBitrate(Type: %d, Index: %d, Bitrate: %u)",
                                  ou8_ChannelType, ou8_ChannelIndex, ou32_Bitrate);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -6062,19 +6101,20 @@ int32_t C_OscProtocolDriverOsy::OsySetBitrate(const uint8_t ou8_ChannelType, con
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlock, C_FlashBlockInfo & orc_BlockInfo,
-                                                      uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlock,
+                                                              C_FlashBlockInfo & orc_BlockInfo,
+                                                              uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
    std::vector<uint8_t> c_ReceiveData;
@@ -6086,11 +6126,11 @@ int32_t C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlo
    c_SendData[0] = ou8_FlashBlock;
 
    this->mu32_TimeoutPollingMs = hu32_READ_FLASHBLOCK_DATA_TIMEOUT;
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_READ_FLASH_BLOCK_DATA, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                 c_SendData, 0U, false, c_ReceiveData, u8_NrErrorCode);
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_READ_FLASH_BLOCK_DATA, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                               c_SendData, 0U, false, c_ReceiveData, u8_NrErrorCode);
    this->mu32_TimeoutPollingMs = u32_PrevTimeout;
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
       uint32_t u32_Counter = 0U;
       //clear all information:
@@ -6156,18 +6196,18 @@ int32_t C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlo
          orc_BlockInfo.c_AdditionalInformation = &c_Text[0];
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::ReadFlashBlockData(Block: %d)", ou8_FlashBlock);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -6181,35 +6221,35 @@ int32_t C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlo
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyRequestProgramming(uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyRequestProgramming(uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_NrErrorCode = 0U;
 
    std::vector<uint8_t> c_ReceiveData;
    const std::vector<uint8_t> c_SendData;
 
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_REQUEST_PROGRAMMING, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                 c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_REQUEST_PROGRAMMING, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                               c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
-      m_LogServiceError("RoutineControl::RequestProgramming", s32_Return, u8_NrErrorCode);
+      m_LogServiceError("RoutineControl::RequestProgramming", c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -6221,21 +6261,21 @@ int32_t C_OscProtocolDriverOsy::OsyRequestProgramming(uint8_t * const opu8_NrCod
    \param[out] opu8_NrCode      if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong routine identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong routine identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyConfigureFlashloaderCommunicationChannel(const uint8_t ou8_ChannelType,
-                                                                            const uint8_t ou8_ChannelIndex,
-                                                                            const bool oq_Activated,
-                                                                            uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsyConfigureFlashloaderCommunicationChannel(const uint8_t ou8_ChannelType,
+                                                                                    const uint8_t ou8_ChannelIndex,
+                                                                                    const bool oq_Activated,
+                                                                                    uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_SendData;
    std::vector<uint8_t> c_ReceiveData;
@@ -6252,23 +6292,23 @@ int32_t C_OscProtocolDriverOsy::OsyConfigureFlashloaderCommunicationChannel(cons
    {
       c_SendData[2] = 0;
    }
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_CONFIGURE_FLASHLOADER_COMMUNICATION_CHANNEL,
-                                 mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE, c_SendData, 0, true, c_ReceiveData,
-                                 u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_CONFIGURE_FLASHLOADER_COMMUNICATION_CHANNEL,
+                               mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE, c_SendData, 0, true, c_ReceiveData,
+                               u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat(
          "RoutineControl::ConfigureFlashloaderCommunicationChannel(Type: %d, Index: %d, Active: %d)",
          ou8_ChannelType, ou8_ChannelIndex, (oq_Activated == true) ? 1 : 0);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -6282,22 +6322,23 @@ int32_t C_OscProtocolDriverOsy::OsyConfigureFlashloaderCommunicationChannel(cons
    \param[out] opu8_NrCode           if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong routine identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong routine identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsySetIpAddressForChannel(const uint8_t ou8_ChannelType, const uint8_t ou8_ChannelIndex,
-                                                          const uint8_t (&orau8_IpAddress)[4],
-                                                          const uint8_t (&orau8_NetMask)[4],
-                                                          const uint8_t (&orau8_DefaultGateway)[4],
-                                                          uint8_t * const opu8_NrCode)
+std::error_code C_OscProtocolDriverOsy::OsySetIpAddressForChannel(const uint8_t ou8_ChannelType,
+                                                                  const uint8_t ou8_ChannelIndex,
+                                                                  const uint8_t (&orau8_IpAddress)[4],
+                                                                  const uint8_t (&orau8_NetMask)[4],
+                                                                  const uint8_t (&orau8_DefaultGateway)[4],
+                                                                  uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_SendData;
    std::vector<uint8_t> c_ReceiveData;
@@ -6318,13 +6359,13 @@ int32_t C_OscProtocolDriverOsy::OsySetIpAddressForChannel(const uint8_t ou8_Chan
    c_SendData[11] = orau8_DefaultGateway[1];
    c_SendData[12] = orau8_DefaultGateway[2];
    c_SendData[13] = orau8_DefaultGateway[3];
-   s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_SET_IP_ADDRESS_FOR_CHANNEL, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
-                                 c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   c_Return = m_RoutineControl(mhu16_OSY_RC_SID_SET_IP_ADDRESS_FOR_CHANNEL, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
+                               c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       std::string c_ErrorText;
       c_ErrorText = PrintFormattedCompat("RoutineControl::SetIpAddressForChannel(Type: %d, Index: %d, IP: [%d.%d.%d.%d], "
@@ -6334,10 +6375,10 @@ int32_t C_OscProtocolDriverOsy::OsySetIpAddressForChannel(const uint8_t ou8_Chan
                                  orau8_NetMask[0], orau8_NetMask[1], orau8_NetMask[2], orau8_NetMask[3],
                                  orau8_DefaultGateway[0], orau8_DefaultGateway[1], orau8_DefaultGateway[2],
                                  orau8_DefaultGateway[3]);
-      m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
+      m_LogServiceError(c_ErrorText, c_Return, u8_NrErrorCode);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -6394,7 +6435,7 @@ C_OscProtocolDriverOsy::C_DataPoolMetaData::C_DataPoolMetaData(void) :
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Utility: create textual representation of openSYDE protocol service result
 
-   \param[in]  os32_FunctionResult   error result as returned by openSYDE protocol driver service function
+   \param[in]  orc_FunctionResult    error result as returned by openSYDE protocol driver service function
    \param[in]  ou8_NrCode            negative response code received
    \param[out] opq_IsHardError       set by function if not NULL:
                                      false: service was performed but an error response was received
@@ -6404,36 +6445,40 @@ C_OscProtocolDriverOsy::C_DataPoolMetaData::C_DataPoolMetaData(void) :
    string representation
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::string C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(const int32_t os32_FunctionResult,
+std::string C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(const std::error_code & orc_FunctionResult,
                                                                      const uint8_t ou8_NrCode,
                                                                      bool * const opq_IsHardError)
 {
    std::string c_Text;
 
-   if (opq_IsHardError != NULL)
+   if (opq_IsHardError != nullptr)
    {
       (*opq_IsHardError) = true;
    }
 
-   switch (os32_FunctionResult)
+   if (orc_FunctionResult == Errc::success)
    {
-   case C_NO_ERR:
       c_Text = "No problem";
-      break;
-   case C_TIMEOUT:
+   }
+   else if (orc_FunctionResult == Errc::timeout)
+   {
       c_Text = "No response received within timeout";
-      break;
-   case C_COM:
+   }
+   else if (orc_FunctionResult == Errc::com)
+   {
       c_Text = "No response received because of communication error";
-      break;
-   case C_NOACT:
+   }
+   else if (orc_FunctionResult == Errc::noact)
+   {
       c_Text = "Could not send request";
-      break;
-   case C_CONFIG:
+   }
+   else if (orc_FunctionResult == Errc::config)
+   {
       c_Text = "Misconfigured protocol stack.";
-      break;
-   case C_WARN:
-      if (opq_IsHardError != NULL)
+   }
+   else if (orc_FunctionResult == Errc::warn)
+   {
+      if (opq_IsHardError != nullptr)
       {
          (*opq_IsHardError) = false;
       }
@@ -6496,16 +6541,18 @@ std::string C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(const int32
          break;
       }
       c_Text += ")";
-      break;
-   case C_RD_WR:
+   }
+   else if (orc_FunctionResult == Errc::rd_wr)
+   {
       c_Text = "Unexpected protocol response";
-      break;
-   case C_CHECKSUM:
+   }
+   else if (orc_FunctionResult == Errc::checksum)
+   {
       c_Text = "Security handling error";
-      break;
-   default:
-      c_Text = ("Undefined error code " + std::to_string(os32_FunctionResult));
-      break;
+   }
+   else
+   {
+      c_Text = ("Undefined error code " + std::to_string(orc_FunctionResult.value()));
    }
    return c_Text;
 }

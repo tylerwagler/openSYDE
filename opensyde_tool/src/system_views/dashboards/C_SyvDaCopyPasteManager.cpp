@@ -136,10 +136,10 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-      if (pc_Dashboard != NULL)
+      if (pc_Dashboard != nullptr)
       {
          C_PuiSvDashboard c_Snapshot;
          uint32_t u32_Index;
@@ -168,7 +168,7 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
             if (q_Handled == false)
             {
                C_PuiSvDbDataElement * const pc_Data = dynamic_cast<C_PuiSvDbDataElement *>(pc_CurItem);
-               if (pc_Data != NULL)
+               if (pc_Data != nullptr)
                {
                   //Update core data
                   pc_Data->UpdateData();
@@ -191,33 +191,33 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
                      const C_GiSvDaTableBase * const pc_Table = dynamic_cast<const C_GiSvDaTableBase *>(pc_CurItem);
 
                      const C_GiSvDaToggleBase * const pc_Toggle = dynamic_cast<const C_GiSvDaToggleBase *>(pc_CurItem);
-                     if (pc_Label != NULL)
+                     if (pc_Label != nullptr)
                      {
                         u32_Index = static_cast<uint32_t>(pc_Label->GetIndex());
                         const C_PuiSvDbLabel * const pc_LabelData = pc_Dashboard->GetLabel(u32_Index);
-                        if (pc_LabelData != NULL)
+                        if (pc_LabelData != nullptr)
                         {
                            C_PuiSvDbLabel c_Tmp = *pc_LabelData;
                            C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues, c_Tmp);
                            tgl_assert(c_Snapshot.AddWidget(&c_Tmp, C_PuiSvDbDataElement::eLABEL) == C_NO_ERR);
                         }
                      }
-                     else if (pc_Param != NULL)
+                     else if (pc_Param != nullptr)
                      {
                         u32_Index = static_cast<uint32_t>(pc_Param->GetIndex());
                         const C_PuiSvDbParam * const pc_ParamData = pc_Dashboard->GetParam(u32_Index);
-                        if (pc_ParamData != NULL)
+                        if (pc_ParamData != nullptr)
                         {
                            C_PuiSvDbParam c_Tmp = *pc_ParamData;
                            C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues, c_Tmp);
                            tgl_assert(c_Snapshot.AddWidget(&c_Tmp, C_PuiSvDbDataElement::ePARAM) == C_NO_ERR);
                         }
                      }
-                     else if (pc_PieChart != NULL)
+                     else if (pc_PieChart != nullptr)
                      {
                         u32_Index = static_cast<uint32_t>(pc_PieChart->GetIndex());
                         const C_PuiSvDbPieChart * const pc_PieChartData = pc_Dashboard->GetPieChart(u32_Index);
-                        if (pc_PieChartData != NULL)
+                        if (pc_PieChartData != nullptr)
                         {
                            C_PuiSvDbPieChart c_Tmp = *pc_PieChartData;
                            C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues, c_Tmp);
@@ -225,11 +225,11 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
                                                            C_PuiSvDbDataElement::ePIE_CHART) == C_NO_ERR);
                         }
                      }
-                     else if (pc_ProgressBar != NULL)
+                     else if (pc_ProgressBar != nullptr)
                      {
                         u32_Index = static_cast<uint32_t>(pc_ProgressBar->GetIndex());
                         const C_PuiSvDbProgressBar * const pc_ProgressBarData = pc_Dashboard->GetProgressBar(u32_Index);
-                        if (pc_ProgressBarData != NULL)
+                        if (pc_ProgressBarData != nullptr)
                         {
                            C_PuiSvDbProgressBar c_Tmp = *pc_ProgressBarData;
                            C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues, c_Tmp);
@@ -237,22 +237,22 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
                                                            C_PuiSvDbDataElement::ePROGRESS_BAR) == C_NO_ERR);
                         }
                      }
-                     else if (pc_Slider != NULL)
+                     else if (pc_Slider != nullptr)
                      {
                         u32_Index = static_cast<uint32_t>(pc_Slider->GetIndex());
                         const C_PuiSvDbSlider * const pc_SliderData = pc_Dashboard->GetSlider(u32_Index);
-                        if (pc_SliderData != NULL)
+                        if (pc_SliderData != nullptr)
                         {
                            C_PuiSvDbSlider c_Tmp = *pc_SliderData;
                            C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues, c_Tmp);
                            tgl_assert(c_Snapshot.AddWidget(&c_Tmp, C_PuiSvDbDataElement::eSLIDER) == C_NO_ERR);
                         }
                      }
-                     else if (pc_SpinBox != NULL)
+                     else if (pc_SpinBox != nullptr)
                      {
                         u32_Index = static_cast<uint32_t>(pc_SpinBox->GetIndex());
                         const C_PuiSvDbSpinBox * const pc_SpinBoxData = pc_Dashboard->GetSpinBox(u32_Index);
-                        if (pc_SpinBoxData != NULL)
+                        if (pc_SpinBoxData != nullptr)
                         {
                            C_PuiSvDbSpinBox c_Tmp = *pc_SpinBoxData;
                            C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues, c_Tmp);
@@ -260,22 +260,22 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
                                                            C_PuiSvDbDataElement::eSPIN_BOX) == C_NO_ERR);
                         }
                      }
-                     else if (pc_Table != NULL)
+                     else if (pc_Table != nullptr)
                      {
                         u32_Index = static_cast<uint32_t>(pc_Table->GetIndex());
                         const C_PuiSvDbTable * const pc_TableData = pc_Dashboard->GetTable(u32_Index);
-                        if (pc_TableData != NULL)
+                        if (pc_TableData != nullptr)
                         {
                            C_PuiSvDbTable c_Tmp = *pc_TableData;
                            C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues, c_Tmp);
                            tgl_assert(c_Snapshot.AddWidget(&c_Tmp, C_PuiSvDbDataElement::eTABLE) == C_NO_ERR);
                         }
                      }
-                     else if (pc_Toggle != NULL)
+                     else if (pc_Toggle != nullptr)
                      {
                         u32_Index = static_cast<uint32_t>(pc_Toggle->GetIndex());
                         const C_PuiSvDbToggle * const pc_ToggleData = pc_Dashboard->GetToggle(u32_Index);
-                        if (pc_ToggleData != NULL)
+                        if (pc_ToggleData != nullptr)
                         {
                            C_PuiSvDbToggle c_Tmp = *pc_ToggleData;
                            C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues, c_Tmp);
@@ -290,7 +290,7 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
                         case ms32_GRAPHICS_ITEM_TEXTELEMENT:
 
                            pc_TextElement = dynamic_cast<const C_GiSvDaTextElement *>(pc_CurItem);
-                           if (pc_TextElement != NULL)
+                           if (pc_TextElement != nullptr)
                            {
                               u32_Index = static_cast<uint32_t>(pc_TextElement->GetIndex());
                               if (u32_Index < pc_Dashboard->c_TextElements.size())
@@ -305,7 +305,7 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
                         case ms32_GRAPHICS_ITEM_BOUNDARY:
 
                            pc_Boundary = dynamic_cast<const C_GiSvDaBoundary *>(pc_CurItem);
-                           if (pc_Boundary != NULL)
+                           if (pc_Boundary != nullptr)
                            {
                               u32_Index = static_cast<uint32_t>(pc_Boundary->GetIndex());
                               if (u32_Index < pc_Dashboard->c_Boundaries.size())
@@ -320,7 +320,7 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
                         case ms32_GRAPHICS_ITEM_IMAGE:
 
                            pc_Image = dynamic_cast<const C_GiSvDaImageGroup *>(pc_CurItem);
-                           if (pc_Image != NULL)
+                           if (pc_Image != nullptr)
                            {
                               u32_Index = static_cast<uint32_t>(pc_Image->GetIndex());
                               if (u32_Index < pc_Dashboard->c_Images.size())
@@ -335,7 +335,7 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
                         case ms32_GRAPHICS_ITEM_LINE_ARROW:
 
                            pc_LineArrow = dynamic_cast<const C_GiSvDaArrow *>(pc_CurItem);
-                           if (pc_LineArrow != NULL)
+                           if (pc_LineArrow != nullptr)
                            {
                               u32_Index = static_cast<uint32_t>(pc_LineArrow->GetIndex());
                               if (u32_Index < pc_Dashboard->c_LineArrows.size())
@@ -406,7 +406,7 @@ void C_SyvDaCopyPasteManager::h_AdaptCopyDataForPaste(C_PuiSvDashboard & orc_Cop
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       //Check param widget validity
       for (uint32_t u32_ItParam = 0; u32_ItParam < orc_CopyData.GetParams().size();)
@@ -435,7 +435,7 @@ void C_SyvDaCopyPasteManager::h_AdaptCopyDataForPaste(C_PuiSvDashboard & orc_Cop
                   q_Found = true;
                }
                //For each element check if all elements of this list are contained
-               if (pc_List != NULL)
+               if (pc_List != nullptr)
                {
                   //Iterate over all list elements
                   for (uint32_t u32_ItSdElement = 0UL; u32_ItSdElement < pc_List->c_Elements.size(); ++u32_ItSdElement)
@@ -475,7 +475,7 @@ void C_SyvDaCopyPasteManager::h_AdaptCopyDataForPaste(C_PuiSvDashboard & orc_Cop
                         //For each missing element add default
                         q_ElementMissing = true;
                         //Remember name
-                        if ((pc_Node != NULL) && (pc_DataPool != NULL))
+                        if ((pc_Node != nullptr) && (pc_DataPool != nullptr))
                         {
                            c_Tmp = static_cast<QString>("%1::%2::%3").arg(pc_Node->c_Properties.c_Name.c_str()).arg(
                               pc_DataPool->c_Name.c_str()).arg(
@@ -558,7 +558,7 @@ void C_SyvDaCopyPasteManager::m_CalcOriginalPosition(const C_PuiBsElements * con
       dynamic_cast<const C_PuiSvDashboard * const>(opc_Data);
 
    C_SebBaseCopyPasteManager::m_CalcOriginalPosition(opc_Data);
-   if (pc_ExpectedData != NULL)
+   if (pc_ExpectedData != nullptr)
    {
       uint32_t u32_ItElem;
       const std::vector<C_PuiSvDbLabel> & rc_Labels = pc_ExpectedData->GetLabels();

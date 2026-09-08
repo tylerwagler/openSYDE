@@ -11,6 +11,7 @@
 #include "precomp_headers.hpp"
 
 #include <cstring>
+#include <system_error>
 
 #include "C_CamComDriverBase.hpp"
 #include "C_CamCanTpData.hpp"
@@ -58,19 +59,19 @@ C_CamComDriverBase::~C_CamComDriverBase(void)
    \param[in]  os32_Bitrate          CAN bitrate in kBit/s. Is used for the bus load calculation not the initialization
 
    \return
-   C_NO_ERR                          CAN initialized and logging started
-   C_CONFIG                          CAN dispatcher is not set
+   Errc::success                     CAN initialized and logging started
+   Errc::config                      CAN dispatcher is not set
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CamComDriverBase::StartLogging(const int32_t os32_Bitrate)
+std::error_code C_CamComDriverBase::StartLogging(const int32_t os32_Bitrate)
 {
-   int32_t s32_Return;
+   std::error_code c_Return;
 
    this->mc_CriticalSectionMsg.lock();
-   s32_Return = C_OscComDriverBase::StartLogging(os32_Bitrate);
+   c_Return = C_OscComDriverBase::StartLogging(os32_Bitrate);
    this->mc_CriticalSectionMsg.unlock();
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -438,7 +439,7 @@ void C_CamComDriverBase::m_ProcessCyclicTpRequests(void)
 void C_CamComDriverBase::mh_SendTpFrame(const stw::can::T_STWCAN_Msg_TX & orc_Msg, void * const opv_Context)
 {
    C_CamComDriverBase * const pc_This = static_cast<C_CamComDriverBase *>(opv_Context);
-   if (pc_This != NULL)
+   if (pc_This != nullptr)
    {
       // Queue the TP frame for sending via the normal path.
       // These frames are always ≤8 bytes, so they won't recurse.

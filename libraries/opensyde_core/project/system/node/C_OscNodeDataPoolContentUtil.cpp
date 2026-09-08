@@ -13,9 +13,11 @@
 #include "precomp_headers.hpp"
 
 #include <cmath>
+#include <system_error>
 #include <limits>
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscNodeDataPoolContentUtil.hpp"
 #include "TglUtils.hpp"
 
@@ -481,23 +483,23 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
    \param[in]     oe_SetValue        flag for user choice if value should be left in range as it is or set to zero
 
    \return
-   C_NO_ERR    expected standard case, value was set (or left) successfully
-   C_CONFIG    min, max and value have not the same datatype
-   C_RANGE     min and max values are interchanged (max < min)
+   Errc::success   expected standard case, value was set (or left) successfully
+   Errc::config    min, max and value have not the same datatype
+   Errc::range     min and max values are interchanged (max < min)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(const C_OscNodeDataPoolContent & orc_Min,
+std::error_code C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(const C_OscNodeDataPoolContent & orc_Min,
                                                               const C_OscNodeDataPoolContent & orc_Max,
                                                               C_OscNodeDataPoolContent & orc_Value,
                                                               E_ValueChangedTo & ore_ValueChangedTo,
                                                               const E_SetValue oe_SetValue)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (((orc_Min.GetArray() != orc_Max.GetArray()) || (orc_Min.GetArray() != orc_Value.GetArray())) ||
        ((orc_Min.GetArraySize() != orc_Max.GetArraySize()) || (orc_Min.GetArraySize() != orc_Value.GetArraySize())))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -513,20 +515,20 @@ int32_t C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(const C_OscNodeDat
          // precondition: check if min, max and value have the same types
          if ((orc_Min.GetType() != orc_Max.GetType()) || (orc_Min.GetType() != orc_Value.GetType()))
          {
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
 
          // precondition: check if min and max value are interchanged
-         if (s32_Return == C_NO_ERR)
+         if (!c_Return)
          {
             if (f64_Max < f64_Min)
             {
-               s32_Return = C_RANGE;
+               c_Return = Errc::range;
             }
          }
 
          // main part of function
-         if (s32_Return == C_NO_ERR)
+         if (!c_Return)
          {
             if (oe_SetValue == C_OscNodeDataPoolContentUtil::eTO_ZERO)
             {
@@ -627,7 +629,7 @@ int32_t C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(const C_OscNodeDat
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

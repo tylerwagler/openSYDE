@@ -29,7 +29,7 @@ class C_PopFileTableDelegate :
    public QStyledItemDelegate
 {
 public:
-   C_PopFileTableDelegate(QObject * const opc_Parent = NULL);
+   C_PopFileTableDelegate(QObject * const opc_Parent = nullptr);
 
    void paint(QPainter * const opc_Painter, const QStyleOptionViewItem & orc_Option,
               const QModelIndex & orc_Index) const override;

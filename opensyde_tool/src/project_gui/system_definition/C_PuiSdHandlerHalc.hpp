@@ -24,7 +24,7 @@ class C_PuiSdHandlerHalc :
    public C_PuiSdHandlerNodeLogic
 {
 public:
-   C_PuiSdHandlerHalc(QObject * const opc_Parent = NULL);
+   C_PuiSdHandlerHalc(QObject * const opc_Parent = nullptr);
 
    //Get
    const stw::opensyde_core::C_OscHalcConfig * GetHalcConfig(const uint32_t ou32_NodeIndex) const;
@@ -146,9 +146,9 @@ public:
    int32_t CheckHalcDomainChannelLinked(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                         const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
                                         bool & orq_IsLinked, std::vector<QString> * const
-                                        opc_LinkedChannelNames = NULL, std::vector<uint32_t> * const
-                                        opc_LinkedChannelIndices = NULL,
-                                        const uint32_t * const opu32_UseCaseIndex = NULL) const;
+                                        opc_LinkedChannelNames = nullptr, std::vector<uint32_t> * const
+                                        opc_LinkedChannelIndices = nullptr,
+                                        const uint32_t * const opu32_UseCaseIndex = nullptr) const;
    int32_t SetHalcDomainChannelConfigOfLinkedChannels(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                                       const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
                                                       const uint32_t ou32_UseCaseIndexOld,
@@ -168,7 +168,7 @@ public:
    int32_t HalcResetDataBlocks(const uint32_t ou32_NodeIndex);
    bool CheckHalcChannelNameAvailable(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                       const std::string & orc_ChannelName,
-                                      const uint32_t * const opu32_ChannelIndexToSkip = NULL) const;
+                                      const uint32_t * const opu32_ChannelIndexToSkip = nullptr) const;
    void Clear(const bool oq_TriggerSyncSignals) override;
 
 protected:

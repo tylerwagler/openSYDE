@@ -31,7 +31,7 @@ class C_OgeWiBopperle :
    Q_OBJECT
 
 public:
-   explicit C_OgeWiBopperle(QWidget * const opc_Parent = NULL);
+   explicit C_OgeWiBopperle(QWidget * const opc_Parent = nullptr);
 
    void SetCountIndex(const int32_t os32_Count);
    void SetCurrentIndex(const int32_t os32_Index);

@@ -285,7 +285,7 @@ void C_SdNdeDpListHeaderWidget::CheckError(void)
    const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
       this->mu32_NodeIndex, this->mu32_DataPoolIndex);
 
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
       bool q_CheckSize;
       bool q_NameConflict = false;
@@ -303,7 +303,7 @@ void C_SdNdeDpListHeaderWidget::CheckError(void)
          q_CheckSize = false;
       }
       pc_DataPool->CheckErrorList(this->mu32_ListIndex, &q_NameConflict, &q_NameInvalid, &q_UsageInvalid,
-                                  &q_OutOfDataPool, &this->mq_DataSetError, &q_ElementsInvalid, NULL, NULL);
+                                  &q_OutOfDataPool, &this->mq_DataSetError, &q_ElementsInvalid, nullptr, nullptr);
       if (q_CheckSize == false)
       {
          q_UsageInvalid = false;
@@ -356,7 +356,7 @@ void C_SdNdeDpListHeaderWidget::UpdateDataSetCount(void)
    const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
       this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
 
-   if (pc_List != NULL)
+   if (pc_List != nullptr)
    {
       const QString c_Error = this->mq_DataSetError ? "Error" : "";
       QString c_Svg;
@@ -454,7 +454,7 @@ void C_SdNdeDpListHeaderWidget::PopUp(void)
 
    static_cast<void>(c_Dialog->exec());
    //Check save
-   if (c_Dialog != NULL)
+   if (c_Dialog != nullptr)
    {
       disconnect(pc_PopUp, &C_SdNdeDpListPopUp::SigSave, this, &C_SdNdeDpListHeaderWidget::SigSave);
       if (pc_PopUp->GetSaveAsAfterClose() == true)
@@ -540,8 +540,8 @@ void C_SdNdeDpListHeaderWidget::m_UpdateUi(void)
    this->mq_InitActive = true;
 
    //List or data pool may not exist on first calls
-   tgl_assert(pc_Node != NULL);
-   if ((pc_Node != NULL) && ((pc_List != NULL) && (pc_DataPool != NULL)))
+   tgl_assert(pc_Node != nullptr);
+   if ((pc_Node != nullptr) && ((pc_List != nullptr) && (pc_DataPool != nullptr)))
    {
       // name and comment
       const QString c_SimplifiedComment = static_cast<QString>(pc_List->c_Comment.c_str()).simplified();
@@ -577,8 +577,8 @@ void C_SdNdeDpListHeaderWidget::m_UpdateUi(void)
          this->mpc_Ui->pc_GroupBoxSize->setVisible(true);
 
          //Size max
-         tgl_assert(pc_Device != NULL);
-         if (pc_Device != NULL)
+         tgl_assert(pc_Device != nullptr);
+         if (pc_Device != nullptr)
          {
             tgl_assert(u32_SubDeviceIndex < pc_Device->c_SubDevices.size());
             if (u32_SubDeviceIndex < pc_Device->c_SubDevices.size())
@@ -616,7 +616,7 @@ void C_SdNdeDpListHeaderWidget::m_EditNameFinished(void)
    {
       const QVariant c_Data = this->mpc_Ui->pc_LineEditName->GetName();
 
-      if (this->mpc_UndoManager != NULL)
+      if (this->mpc_UndoManager != nullptr)
       {
          this->mpc_UndoManager->DoChangeListData(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                  dynamic_cast<C_SdNdeDpListsTreeWidget * const>(this->
@@ -648,7 +648,7 @@ void C_SdNdeDpListHeaderWidget::m_OnEditCommentClicked(void)
       //Resize
       c_Dialog->SetSize(QSize(800, 550));
 
-      if ((c_Dialog->exec() == static_cast<int32_t>(QDialog::Accepted)) && (this->mpc_UndoManager != NULL))
+      if ((c_Dialog->exec() == static_cast<int32_t>(QDialog::Accepted)) && (this->mpc_UndoManager != nullptr))
       {
          // save to data on ok
          const QVariant c_Data = pc_ArrayEditWidget->GetComment();
@@ -659,7 +659,7 @@ void C_SdNdeDpListHeaderWidget::m_OnEditCommentClicked(void)
          // this also triggers label and icon update
       }
 
-      if (c_Dialog != NULL)
+      if (c_Dialog != nullptr)
       {
          c_Dialog->HideOverlay();
          c_Dialog->deleteLater();
@@ -678,7 +678,7 @@ void C_SdNdeDpListHeaderWidget::m_EditSizeFinished(void)
       //lint -e571 cast necessary to explicitly have QVariant of type uint64
       const QVariant c_Data = QVariant::fromValue(static_cast<uint64_t>(this->mpc_Ui->pc_SpinBoxSize->value()));
 
-      if (this->mpc_UndoManager != NULL)
+      if (this->mpc_UndoManager != nullptr)
       {
          this->mpc_UndoManager->DoChangeListData(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                  dynamic_cast<C_SdNdeDpListsTreeWidget * const>(this->
@@ -714,7 +714,7 @@ void C_SdNdeDpListHeaderWidget::m_OpenDataSetEdit(void)
       {
          //Register undo
          QUndoCommand * const pc_UndoCommand = pc_DataSetWidget->TakeUndoCommand();
-         if ((pc_UndoCommand != NULL) && (this->mpc_UndoManager != NULL))
+         if ((pc_UndoCommand != nullptr) && (this->mpc_UndoManager != nullptr))
          {
             //Undo all because push automatically redos
             pc_UndoCommand->undo();
@@ -723,7 +723,7 @@ void C_SdNdeDpListHeaderWidget::m_OpenDataSetEdit(void)
       }
       else
       {
-         if (c_Dialog != NULL)
+         if (c_Dialog != nullptr)
          {
             //Revert changes
             C_PuiSdHandler::h_GetInstance()->SetDataPoolList(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
@@ -732,7 +732,7 @@ void C_SdNdeDpListHeaderWidget::m_OpenDataSetEdit(void)
          }
       }
    } //lint !e429  //no memory leak because of the parent of pc_Dialog and the Qt memory management
-   if (c_Dialog != NULL)
+   if (c_Dialog != nullptr)
    {
       c_Dialog->HideOverlay();
       c_Dialog->deleteLater();
@@ -807,7 +807,7 @@ void C_SdNdeDpListHeaderWidget::m_UpdateErrorToolTip(void) const
    const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
       this->mu32_NodeIndex, this->mu32_DataPoolIndex);
 
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
       bool q_CheckSize;
       bool q_NameConflict = false;
@@ -876,7 +876,7 @@ void C_SdNdeDpListHeaderWidget::m_UpdateErrorToolTip(void) const
                   C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListDataSet(
                      this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex,
                      c_InvalidDataSetIndices[u32_ItDataSet]);
-               if (pc_DataSet != NULL)
+               if (pc_DataSet != nullptr)
                {
                   c_Content += static_cast<QString>("%1\n").arg(pc_DataSet->c_Name.c_str());
                }
@@ -901,7 +901,7 @@ void C_SdNdeDpListHeaderWidget::m_UpdateErrorToolTip(void) const
                                                                              this->mu32_DataPoolIndex,
                                                                              this->mu32_ListIndex,
                                                                              c_InvalidElementIndices[u32_ItElement]);
-               if (pc_Appl != NULL)
+               if (pc_Appl != nullptr)
                {
                   c_Content += static_cast<QString>("%1\n").arg(pc_Appl->c_Name.c_str());
                }

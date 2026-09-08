@@ -13,11 +13,12 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <mutex>
+#include <system_error>
 #include <vector>
 #include <string>
 #include "stwtypes.hpp"
 
-#include "TglTasks.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -128,8 +129,8 @@ public:
    const std::vector<float64_t> GetValueArrF64(void) const;
    float64_t GetValueArrF64Element(const uint32_t ou32_Index) const;
 
-   int32_t SetValueFromBigEndianBlob(const std::vector<uint8_t> & orc_Data);
-   int32_t SetValueFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data);
+   std::error_code SetValueFromBigEndianBlob(const std::vector<uint8_t> & orc_Data);
+   std::error_code SetValueFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data);
    void GetValueAsBigEndianBlob(std::vector<uint8_t> & orc_Data) const;
    void GetValueAsLittleEndianBlob(std::vector<uint8_t> & orc_Data) const;
 
@@ -163,8 +164,8 @@ public:
    void GetAnyValueAsFloat32(float32_t & orf32_Output, const uint32_t ou32_Index) const;
    void GetAnyValueAsFloat64(float64_t & orf64_Output, const uint32_t ou32_Index) const;
 
-   const std::vector<uint8_t> * GetDataAccessConst(stw::tgl::C_TglCriticalSection ** const oppc_CriticalSection) const;
-   std::vector<uint8_t> * GetDataAccess(stw::tgl::C_TglCriticalSection ** const oppc_CriticalSection);
+   const std::vector<uint8_t> * GetDataAccessConst(std::mutex ** const oppc_CriticalSection) const;
+   std::vector<uint8_t> * GetDataAccess(std::mutex ** const oppc_CriticalSection);
 
 private:
    E_Type me_Type;               ///< Currently active type
@@ -197,7 +198,7 @@ private:
 
    // It is mutable because of the constness of the getter functions. Without the keyword mutable the getter functions
    // must be non const and that is not wanted.
-   mutable stw::tgl::C_TglCriticalSection mc_CriticalSection;
+   mutable std::mutex mc_CriticalSection;
 
    void m_GetBaseType(bool & orq_IsUintBase, bool & orq_IsSintBase, bool & orq_IsFloatBase, uint64_t & oru64_UintValue,
                       int64_t & ors64_SintValue, float64_t & orf64_FloatValue) const;

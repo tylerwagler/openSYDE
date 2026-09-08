@@ -122,7 +122,7 @@ void C_SdBueMlvWidget::InitStaticNames(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvWidget::SetMessageSyncManager(stw::opensyde_gui_logic::C_PuiSdNodeCanMessageSyncManager * const opc_Value)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->SetMessageSyncManager(opc_Value);
    }
@@ -143,7 +143,7 @@ void C_SdBueMlvWidget::SetComProtocol(const stw::opensyde_core::C_OscCanProtocol
       (this->me_Protocol == C_OscCanProtocol::eLAYER2) ||
       (this->me_Protocol == C_OscCanProtocol::eJ1939));
 
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->SetComProtocol(ore_Value);
    }
@@ -178,7 +178,7 @@ void C_SdBueMlvWidget::SelectSignal(const C_OscCanMessageIdentificationIndices &
    uint16_t u16_MultiplexerValue = 0;
    bool q_SetMultiplexerValue = false;
 
-   if ((pc_Signal != NULL) &&
+   if ((pc_Signal != nullptr) &&
        (pc_Signal->e_MultiplexerType == C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL))
    {
       // Change the multiplexer value only if it is a multiplexed signal. All other types are always visible for
@@ -192,7 +192,7 @@ void C_SdBueMlvWidget::SelectSignal(const C_OscCanMessageIdentificationIndices &
 
    this->m_SelectMessage(orc_MessageId);
 
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->SetSignal(ou32_SignalIndex);
    }
@@ -219,7 +219,7 @@ void C_SdBueMlvWidget::resizeEvent(QResizeEvent * const opc_Event)
 {
    QWidget::resizeEvent(opc_Event);
 
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->setSceneRect(0.0, 0.0,
                                     static_cast<float64_t>(this->mpc_Ui->pc_GraphicsView->width()),
@@ -235,7 +235,7 @@ void C_SdBueMlvWidget::resizeEvent(QResizeEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvWidget::m_SelectMessage(const C_OscCanMessageIdentificationIndices & orc_MessageId)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       bool q_MultiplexedMsg = false;
       uint16_t u16_MultiplexerValue = 0;
@@ -276,7 +276,7 @@ void C_SdBueMlvWidget::m_OnMessageUpdated(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvWidget::m_OnMultiplexerValueChanged(void)
 {
-   if ((this->mpc_Scene != NULL) &&
+   if ((this->mpc_Scene != nullptr) &&
        ((this->me_Protocol == C_OscCanProtocol::eLAYER2) || (this->me_Protocol == C_OscCanProtocol::eJ1939)) &&
        (this->mpc_Ui->pc_ComboBoxMultiplexer->isEnabled() == true))
    {
@@ -337,8 +337,8 @@ void C_SdBueMlvWidget::m_UpdateMultiplexerValues(const C_OscCanMessageIdentifica
       this->mpc_Ui->pc_ComboBoxMultiplexer->clear();
       this->mc_MultiplexerValues.clear();
 
-      tgl_assert(pc_Message != NULL);
-      if (pc_Message != NULL)
+      tgl_assert(pc_Message != nullptr);
+      if (pc_Message != nullptr)
       {
          uint32_t u32_MultiplexerIndex;
 
@@ -356,11 +356,11 @@ void C_SdBueMlvWidget::m_UpdateMultiplexerValues(const C_OscCanMessageIdentifica
                stw::opensyde_gui_logic::C_PuiSdHandler::h_GetInstance()->GetOscCanDataPoolListElement(
                   orc_MessageId,
                   u32_MultiplexerIndex);
-            tgl_assert(pc_MultiplexerElement != NULL);
+            tgl_assert(pc_MultiplexerElement != nullptr);
 
             pc_Message->GetMultiplexerValues(c_MultiplexerValues);
 
-            if ((pc_MultiplexerElement != NULL) &&
+            if ((pc_MultiplexerElement != nullptr) &&
                 (c_MultiplexerValues.size() > 0))
             {
                // Selection possible

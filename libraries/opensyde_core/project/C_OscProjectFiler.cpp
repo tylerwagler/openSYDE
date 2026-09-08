@@ -13,8 +13,10 @@
 #include "precomp_headers.hpp"
 
 #include <cstdio>
+#include <system_error>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclDateTime.hpp"
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
@@ -58,21 +60,21 @@ using namespace stw::tgl;
    \param[in]      orc_OpenSydeVersion Current openSYDE version
 
    \return
-   C_NO_ERR   data saved
-   C_RD_WR    problems accessing file system (could not erase pre-existing file before saving;
-               no write access to file)
-   C_RANGE    orc_Path is empty
+   Errc::success    data saved
+   Errc::rd_wr      problems accessing file system (could not erase pre-existing file before saving;
+                    no write access to file)
+   Errc::range      orc_Path is empty
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProjectFiler::h_Save(C_OscProject & orc_Project, const std::string & orc_Path,
-                                  const std::string & orc_OpenSydeVersion)
+std::error_code C_OscProjectFiler::h_Save(C_OscProject & orc_Project, const std::string & orc_Path,
+                                          const std::string & orc_OpenSydeVersion)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Check if file was specified
    if (orc_Path == "")
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
    else
    {
@@ -86,23 +88,23 @@ int32_t C_OscProjectFiler::h_Save(C_OscProject & orc_Project, const std::string 
          if (x_Return != 0)
          {
             osc_write_log_error("Saving project file", "Could not erase pre-existing file \"" + orc_Path + "\".");
-            s32_Retval = C_RD_WR;
+            c_Retval = Errc::rd_wr;
          }
          q_NewFile = false;
       }
 
       //Normal XML
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = mh_SaveInternal(orc_Project, orc_Path, orc_OpenSydeVersion, q_NewFile);
-         if (s32_Retval != C_NO_ERR)
+         c_Retval = mh_SaveInternal(orc_Project, orc_Path, orc_OpenSydeVersion, q_NewFile);
+         if (c_Retval)
          {
             osc_write_log_error("Saving project file", "Could not write to file \"" + orc_Path + "\".");
-            s32_Retval = C_RD_WR;
+            c_Retval = Errc::rd_wr;
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -114,23 +116,23 @@ int32_t C_OscProjectFiler::h_Save(C_OscProject & orc_Project, const std::string 
    \param[in]     orc_Path    Path of project
 
    \return
-   C_NO_ERR   data read
-   C_RANGE    specified file does not exist
-   C_NOACT    specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read
+   Errc::range      specified file does not exist
+   Errc::noact      specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const std::string & orc_Path)
+std::error_code C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const std::string & orc_Path)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_Path) == true)
    {
       std::string c_Tmp;
       //Open file
       C_OscXmlParser c_Xml;
-      s32_Retval = ListLoadFromFile(c_Xml, orc_Path);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = c_Xml.LoadFromFile(orc_Path);
+      if (!c_Retval)
       {
          //Check if file and root node exists
          if (c_Xml.SelectRoot() == "Project")
@@ -163,33 +165,33 @@ int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const std::string 
             //Check Version
             if (c_Xml.SelectNodeChild("Version") == "Version")
             {
-               s32_Retval = C_NO_ERR;
+               c_Retval = Errc::success;
                orc_Project.c_Version = c_Xml.GetNodeContent();
                c_Xml.SelectNodeParent();
             }
             else
             {
                osc_write_log_error("Loading project file", "XML node \"Version\" not found.");
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
          }
          else
          {
             osc_write_log_error("Loading project file", "XML node \"Project\" not found.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
       else
       {
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
       }
    }
    else
    {
       osc_write_log_error("Loading project file", "File does not exist \"" + orc_Path + "\".");
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -207,17 +209,17 @@ int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const std::string 
    \param[in]      oq_New              Flag if file is new
 
    \return
-   C_NO_ERR   data was written
-   C_NOACT    could not write to file
+   Errc::success    data was written
+   Errc::noact      could not write to file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProjectFiler::mh_SaveInternal(C_OscProject & orc_Project, const std::string & orc_Path,
-                                           const std::string & orc_OpenSydeVersion, const bool oq_New)
+std::error_code C_OscProjectFiler::mh_SaveInternal(C_OscProject & orc_Project, const std::string & orc_Path,
+                                                   const std::string & orc_OpenSydeVersion, const bool oq_New)
 {
    std::string c_Tmp;
    //Open file
    C_OscXmlParser c_Xml;
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    //create root:
    c_Xml.CreateNodeChild("Project");
@@ -259,6 +261,6 @@ int32_t C_OscProjectFiler::mh_SaveInternal(C_OscProject & orc_Project, const std
    c_Xml.SetNodeContent(orc_Project.c_Version);
    c_Xml.SelectNodeParent();
 
-   s32_Return = ListSaveToFile(c_Xml, orc_Path);
-   return s32_Return;
+   c_Return = c_Xml.SaveToFile(orc_Path);
+   return c_Return;
 }

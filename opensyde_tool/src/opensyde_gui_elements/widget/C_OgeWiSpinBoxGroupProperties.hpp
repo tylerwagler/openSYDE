@@ -29,7 +29,7 @@ class C_OgeWiSpinBoxGroupProperties :
    Q_OBJECT
 
 public:
-   explicit C_OgeWiSpinBoxGroupProperties(QWidget * const opc_Parent = NULL);
+   explicit C_OgeWiSpinBoxGroupProperties(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

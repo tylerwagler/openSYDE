@@ -41,7 +41,7 @@ class C_SyvDaItPaWidgetNew :
 public:
    explicit C_SyvDaItPaWidgetNew(const uint32_t & oru32_ViewIndex,
                                  stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const opc_DataWidget,
-                                 QWidget * const opc_Parent = NULL);
+                                 QWidget * const opc_Parent = nullptr);
    ~C_SyvDaItPaWidgetNew() override;
 
    void InitStaticNames(void) const;

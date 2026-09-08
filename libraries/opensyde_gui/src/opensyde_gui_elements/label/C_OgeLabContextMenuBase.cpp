@@ -45,7 +45,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeLabContextMenuBase::C_OgeLabContextMenuBase(QWidget * const opc_Parent) :
    C_OgeLabToolTipBase(opc_Parent),
-   mpc_ContextMenu(NULL)
+   mpc_ContextMenu(nullptr)
 {
    m_InitContextMenu();
 }

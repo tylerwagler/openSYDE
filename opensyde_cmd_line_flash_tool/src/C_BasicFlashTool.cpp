@@ -30,7 +30,7 @@ static int kbhit(void)
    c_Timeout.tv_usec = 0;
    FD_ZERO(&c_ReadFds);
    FD_SET(STDIN_FILENO, &c_ReadFds);
-   return select(STDIN_FILENO + 1, &c_ReadFds, NULL, NULL, &c_Timeout) > 0 ? 1 : 0;
+   return select(STDIN_FILENO + 1, &c_ReadFds, nullptr, nullptr, &c_Timeout) > 0 ? 1 : 0;
 }
 #endif
 
@@ -77,7 +77,7 @@ C_BasicFlashTool::C_BasicFlashTool(void) :
    mc_CanDriver(""),
    mq_ExitApplOnError(true),
    mq_StartAppl(true),
-   mpc_CanDispatcher(NULL)
+   mpc_CanDispatcher(nullptr)
 {
 }
 
@@ -87,11 +87,11 @@ C_BasicFlashTool::C_BasicFlashTool(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_BasicFlashTool::~C_BasicFlashTool()
 {
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       (void)this->mpc_CanDispatcher->CAN_Exit();
       delete this->mpc_CanDispatcher;
-      this->mpc_CanDispatcher = NULL;
+      this->mpc_CanDispatcher = nullptr;
       osc_write_log_info("Teardown", "CAN adapter closed.");
    }
 }
@@ -115,7 +115,7 @@ void C_BasicFlashTool::Init(const int32_t os32_Argc, char_t * const * const oppc
 #ifdef _WIN32
    {
       char_t acn_ApplicationName[MAX_PATH + 1];
-      const uint32_t u32_Return = GetModuleFileNameA(NULL, &acn_ApplicationName[0], MAX_PATH + 1);
+      const uint32_t u32_Return = GetModuleFileNameA(nullptr, &acn_ApplicationName[0], MAX_PATH + 1);
       tgl_assert(u32_Return != 0);
       c_ExeName = acn_ApplicationName;
    }
@@ -180,37 +180,37 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::ParseCommandLine(const int32_t os32
    {
       /* name, has_arg, flag, val */
       {
-         "help",                       no_argument,         NULL,    'h'
+         "help",                       no_argument,         nullptr,    'h'
       },
       {
-         "nodeid",                     required_argument,   NULL,    'n'
+         "nodeid",                     required_argument,   nullptr,    'n'
       },
       {
-         "hexfile",                    required_argument,   NULL,    'f'
+         "hexfile",                    required_argument,   nullptr,    'f'
       },
       {
-         "caninterface",               required_argument,   NULL,    'i'
+         "caninterface",               required_argument,   nullptr,    'i'
       },
       {
-         "bitrate",                    required_argument,   NULL,    'b'
+         "bitrate",                    required_argument,   nullptr,    'b'
       },
       {
-         "dontexitonerror",            no_argument,         NULL,    'e'
+         "dontexitonerror",            no_argument,         nullptr,    'e'
       },
       {
-         "dontstartapplication",       no_argument,         NULL,    'a'
+         "dontstartapplication",       no_argument,         nullptr,    'a'
       },
       {
-         "flashloaderresetwaittime",   no_argument,         NULL,    'w'
+         "flashloaderresetwaittime",   no_argument,         nullptr,    'w'
       },
       {
-         "requestdownloadtimeout",     no_argument,         NULL,    'r'
+         "requestdownloadtimeout",     no_argument,         nullptr,    'r'
       },
       {
-         "transferdatatimeout",        no_argument,         NULL,    't'
+         "transferdatatimeout",        no_argument,         nullptr,    't'
       },
       {
-         NULL,                         0,                   NULL,    0
+         nullptr,                         0,                   nullptr,    0
       }
    };
 
@@ -364,22 +364,23 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
    std::string c_Error;
    stw::can::C_CanDispatcher * const pc_LocalDispatcher =
       stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
-   if (pc_LocalDispatcher == NULL)
+   if (pc_LocalDispatcher == nullptr)
    {
       osc_write_log_error("Initialization", "Could not create CAN adapter: " + c_Error);
       e_Result = eERR_INITIALIZATION_FAILED;
    }
    else
    {
-      s32_Return = pc_LocalDispatcher->CAN_Init(ms32_CanBitrate);
-      if (s32_Return != C_NO_ERR)
+      const std::error_code c_CanInitResult = pc_LocalDispatcher->CAN_Init(ms32_CanBitrate);
+      if (c_CanInitResult != Errc::success)
       {
          delete pc_LocalDispatcher;
          e_Result = eERR_INITIALIZATION_FAILED;
       }
       else
       {
-         s32_Return = c_TheSequence.Init(pc_LocalDispatcher, ms32_CanBitrate, mu8_NodeId);
+         //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+         s32_Return = c_TheSequence.Init(pc_LocalDispatcher, ms32_CanBitrate, mu8_NodeId).value();
          if (s32_Return != C_NO_ERR)
          {
             (void)pc_LocalDispatcher->CAN_Exit();
@@ -396,7 +397,8 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 
    if (e_Result == eRESULT_OK)
    {
-      s32_Return = c_TheSequence.ActivateFlashLoader(mu32_FlashloaderResetWaitTime);
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Return = c_TheSequence.ActivateFlashLoader(mu32_FlashloaderResetWaitTime).value();
       if (s32_Return != C_NO_ERR)
       {
          e_Result = eERR_ACTIVATE_FLASHLOADER;
@@ -405,7 +407,8 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 
    if (e_Result == eRESULT_OK)
    {
-      s32_Return = c_TheSequence.ReadDeviceInformation();
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Return = c_TheSequence.ReadDeviceInformation().value();
       if (s32_Return != C_NO_ERR)
       {
          e_Result = eERR_READ_DEVICE_INFO;
@@ -414,7 +417,9 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 
    if (e_Result == eRESULT_OK)
    {
-      s32_Return = c_TheSequence.UpdateNode(mc_HexFilePath, mu32_RequestDownloadTimeout, mu32_TransferDataTimeout);
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Return =
+         c_TheSequence.UpdateNode(mc_HexFilePath, mu32_RequestDownloadTimeout, mu32_TransferDataTimeout).value();
       if (s32_Return != C_NO_ERR)
       {
          e_Result = eERR_UPDATE;
@@ -423,7 +428,8 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 
    if ((e_Result == eRESULT_OK) && (mq_StartAppl == true))
    {
-      s32_Return = c_TheSequence.ResetSystem();
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Return = c_TheSequence.ResetSystem().value();
       if (s32_Return != C_NO_ERR)
       {
          e_Result = eERR_RESET;
@@ -475,7 +481,7 @@ std::string C_BasicFlashTool::mh_GetApplicationVersion(const std::string & orc_F
    int32_t s32_InfoSize;
    uint8_t * pu8_Buffer;
 
-   s32_InfoSize = GetFileVersionInfoSizeA(orc_FileName.c_str(), NULL);
+   s32_InfoSize = GetFileVersionInfoSizeA(orc_FileName.c_str(), nullptr);
    if (s32_InfoSize != 0)
    {
       pu8_Buffer = new uint8_t[static_cast<uint32_t>(s32_InfoSize)];

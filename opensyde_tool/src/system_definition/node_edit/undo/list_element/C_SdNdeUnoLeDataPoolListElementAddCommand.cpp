@@ -58,7 +58,7 @@ C_SdNdeUnoLeDataPoolListElementAddCommand::C_SdNdeUnoLeDataPoolListElementAddCom
                                                                                                  oru32_DataPoolIndex);
    c_OscContent.resize(orc_Indices.size());
    c_UiContent.resize(orc_Indices.size());
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
       for (uint32_t u32_ItData = 0; u32_ItData < orc_Indices.size(); ++u32_ItData)
       {

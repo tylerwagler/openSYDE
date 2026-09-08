@@ -426,22 +426,22 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
               static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged), this,
               &C_SdNdeNodePropertiesWidget::m_XappSupportChange);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       QPixmap c_ImgNode;
       QString c_ComIfName;
       QString c_BusName;
       const C_OscDeviceDefinition * const pc_DevDef = pc_Node->pc_DeviceDefinition;
       const uint32_t u32_SubDeviceIndex = pc_Node->u32_SubDeviceIndex;
-      tgl_assert(pc_DevDef != NULL);
+      tgl_assert(pc_DevDef != nullptr);
 
       //create delegate
       this->mpc_Ui->pc_TableWidgetComIfSettings->setItemDelegate(new C_SdNdeComIfSettingsTableDelegate(this,
                                                                                                        this->
                                                                                                        mu32_NodeIndex));
 
-      if (pc_DevDef != NULL)
+      if (pc_DevDef != nullptr)
       {
          tgl_assert(u32_SubDeviceIndex < pc_DevDef->c_SubDevices.size());
          if (u32_SubDeviceIndex < pc_DevDef->c_SubDevices.size())
@@ -673,7 +673,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(
                      pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt].u32_BusIndex);
                   //get bus name
-                  if (pc_Bus != NULL)
+                  if (pc_Bus != nullptr)
                   {
                      c_BusName = pc_Bus->c_Name.c_str();
 
@@ -1063,7 +1063,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   {
                      const C_OscNode * const pc_NodeRo =
                         C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_CapturedNode);
-                     if ((pc_NodeRo != NULL) &&
+                     if ((pc_NodeRo != nullptr) &&
                          (u32_CapturedInterface < pc_NodeRo->c_Properties.c_ComInterfaces.size()))
                      {
                         const C_OscCanProtocol::E_Type e_Current =
@@ -1095,7 +1095,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                            {
                               C_OscNode * const pc_MutNode =
                                  C_PuiSdHandler::h_GetInstance()->GetOscNode(u32_CapturedNode);
-                              if ((pc_MutNode != NULL) &&
+                              if ((pc_MutNode != nullptr) &&
                                   (u32_CapturedInterface < pc_MutNode->c_Properties.c_ComInterfaces.size()))
                               {
                                  C_OscNodeComInterfaceSettings & rc_If =
@@ -1183,13 +1183,13 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const C_OscDeviceDefinition * const pc_DevDef = pc_Node->pc_DeviceDefinition;
       const uint32_t u32_SubDeviceIndex = pc_Node->u32_SubDeviceIndex;
-      tgl_assert(pc_DevDef != NULL);
+      tgl_assert(pc_DevDef != nullptr);
 
-      if (pc_DevDef != NULL)
+      if (pc_DevDef != nullptr)
       {
          tgl_assert(u32_SubDeviceIndex < pc_DevDef->c_SubDevices.size());
          if (u32_SubDeviceIndex < pc_DevDef->c_SubDevices.size())
@@ -1212,7 +1212,7 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
             //name
             //Only accept new name if not in conflict
             if (C_PuiSdHandler::h_GetInstance()->CheckNodeNameAvailable(
-                   this->mpc_Ui->pc_LineEditNodeName->text().toStdString().c_str(), &this->mu32_NodeIndex, NULL))
+                   this->mpc_Ui->pc_LineEditNodeName->text().toStdString().c_str(), &this->mu32_NodeIndex, nullptr))
             {
                c_Name = this->mpc_Ui->pc_LineEditNodeName->text();
             }
@@ -1227,7 +1227,7 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
                   //squad node
                   const stw::opensyde_core::C_OscNodeSquad * const pc_NodeSquad =
                      C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(u32_NodeSquadIndex);
-                  if (pc_NodeSquad != NULL)
+                  if (pc_NodeSquad != nullptr)
                   {
                      //name (base name)
                      c_Name = pc_NodeSquad->c_BaseName.c_str();
@@ -1366,13 +1366,13 @@ void C_SdNdeNodePropertiesWidget::m_SupportedProtocolChange(void)
    this->m_RegisterChange();
 
    // Update the com interface routing and dashboard settings in the table
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const C_OscDeviceDefinition * const pc_DevDef = pc_Node->pc_DeviceDefinition;
       const C_OscNodeProperties c_NodeProp = pc_Node->c_Properties;
 
-      tgl_assert(pc_DevDef != NULL);
-      if (pc_DevDef != NULL)
+      tgl_assert(pc_DevDef != nullptr);
+      if (pc_DevDef != nullptr)
       {
          for (uint16_t u16_ComIfCnt = 0U;
               u16_ComIfCnt <
@@ -1397,7 +1397,7 @@ void C_SdNdeNodePropertiesWidget::m_SupportedProtocolChange(void)
                dynamic_cast<C_OgeChxTristateBase *>(this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u16_ComIfCnt,
                                                                                                       s32_COL_DIAGNOSTIC));
 
-            if (pc_TristateRouting != NULL)
+            if (pc_TristateRouting != nullptr)
             {
                this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u16_ComIfCnt, s32_COL_ROUTING)->setEnabled(
                   q_IsRoutingAvailable);
@@ -1447,7 +1447,7 @@ void C_SdNdeNodePropertiesWidget::m_CheckNodeName(void)
    //check
    const std::string c_Text = this->mpc_Ui->pc_LineEditNodeName->text().toStdString().c_str();
    const bool q_NameIsUnique = C_PuiSdHandler::h_GetInstance()->CheckNodeNameAvailable(c_Text, &this->mu32_NodeIndex,
-                                                                                       NULL);
+                                                                                       nullptr);
    const bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(c_Text);
 
    //set invalid text property
@@ -1552,7 +1552,7 @@ void C_SdNdeNodePropertiesWidget::m_RegisterNameChange(void)
          //Restore previous name
          {
             const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-            if (pc_Node != NULL)
+            if (pc_Node != nullptr)
             {
                uint32_t u32_NodeSquadIndex;
 
@@ -1562,7 +1562,7 @@ void C_SdNdeNodePropertiesWidget::m_RegisterNameChange(void)
                   //squad node
                   const stw::opensyde_core::C_OscNodeSquad * const pc_NodeSquad =
                      C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(u32_NodeSquadIndex);
-                  if (pc_NodeSquad != NULL)
+                  if (pc_NodeSquad != nullptr)
                   {
                      //name (base name)
                      this->mpc_Ui->pc_LineEditNodeName->setText(pc_NodeSquad->c_BaseName.c_str());
@@ -1582,7 +1582,7 @@ void C_SdNdeNodePropertiesWidget::m_RegisterNameChange(void)
          m_TrimNodeName();
          m_RegisterChange();
 
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             Q_EMIT (this->SigNameChanged("NETWORK TOPOLOGY", pc_Node->c_Properties.c_Name.c_str(), false));
          }
@@ -1675,7 +1675,7 @@ void C_SdNdeNodePropertiesWidget::m_GetInterfaceStatus(const uint32_t ou32_NodeI
    //to 0.0.0.0 and would otherwise collide with each other in CheckIpAddressIsValid,
    //producing a spurious "Interface: IP Address invalid" tooltip on every CAN row.
    const C_OscNode * const pc_NodeForType = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
-   if ((pc_NodeForType != NULL) &&
+   if ((pc_NodeForType != nullptr) &&
        (static_cast<uint32_t>(os32_InterfaceIndex) < pc_NodeForType->c_Properties.c_ComInterfaces.size()) &&
        (pc_NodeForType->c_Properties.c_ComInterfaces[os32_InterfaceIndex].e_InterfaceType ==
         C_OscSystemBus::eETHERNET))
@@ -1760,7 +1760,7 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(const int32_t os32_Inter
    else
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          if (os32_InterfaceIndex < static_cast<int32_t>(pc_Node->c_Properties.c_ComInterfaces.size()))
          {
@@ -1770,7 +1770,7 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(const int32_t os32_Inter
             {
                const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(
                   rc_Interface.u32_BusIndex);
-               if (pc_Bus != NULL)
+               if (pc_Bus != nullptr)
                {
                   QString c_TooltipContent;
 
@@ -1940,7 +1940,7 @@ void C_SdNdeNodePropertiesWidget::m_IpAddressClick(const uint32_t ou32_Row)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       //Set parent for better hierarchy handling via window manager
       const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this->parentWidget(), this->parentWidget());
@@ -1993,8 +1993,8 @@ void C_SdNdeNodePropertiesWidget::m_BusBitrateClick(const uint32_t ou32_Row)
          //get name of connected bus
          const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(
             rc_ComInterfaces[ou32_Row].u32_BusIndex);
-         tgl_assert(pc_Bus != NULL);
-         if (pc_Bus != NULL)
+         tgl_assert(pc_Bus != nullptr);
+         if (pc_Bus != nullptr)
          {
             const QString c_BusName = pc_Bus->c_Name.c_str();
 
@@ -2036,7 +2036,7 @@ void C_SdNdeNodePropertiesWidget::m_XappSupportChange(const int32_t os32_Index)
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
    // Check if file generation Data Blocks exist
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_ItApp = 0; u32_ItApp < pc_Node->c_Applications.size(); ++u32_ItApp)
       {
@@ -2050,7 +2050,7 @@ void C_SdNdeNodePropertiesWidget::m_XappSupportChange(const int32_t os32_Index)
    }
 
    // If disabling, check if active log jobs exist
-   if ((os32_Index == mhs32_PR_INDEX_DISABLED) && (pc_Node != NULL))
+   if ((os32_Index == mhs32_PR_INDEX_DISABLED) && (pc_Node != nullptr))
    {
       if (pc_Node->c_DataLoggerJobs.size() > 0)
       {

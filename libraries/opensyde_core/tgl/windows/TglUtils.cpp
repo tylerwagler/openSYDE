@@ -147,7 +147,7 @@ void stw::tgl::TglHandleSystemMessages(void)
    MSG t_Msg;
    bool q_Return;
 
-   q_Return = (PeekMessage(&t_Msg, NULL, 0, 0, PM_REMOVE) == 0) ? false : true;
+   q_Return = (PeekMessage(&t_Msg, nullptr, 0, 0, PM_REMOVE) == 0) ? false : true;
    if (q_Return == true)
    {
       TranslateMessage(&t_Msg);

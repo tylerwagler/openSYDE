@@ -12,7 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include "stwtypes.hpp"
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscViewData.hpp"
 
@@ -184,7 +187,7 @@ void C_OscViewData::SetNodeUpdateInformation(const std::vector<C_OscViewNodeUpda
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscViewNodeUpdate * C_OscViewData::GetNodeUpdateInformation(const uint32_t ou32_NodeIndex) const
 {
-   const C_OscViewNodeUpdate * pc_Retval = NULL;
+   const C_OscViewNodeUpdate * pc_Retval = nullptr;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
@@ -200,22 +203,22 @@ const C_OscViewNodeUpdate * C_OscViewData::GetNodeUpdateInformation(const uint32
    \param[in]  orc_NodeUpdateInformation  New node update information
 
    \return
-   C_NO_ERR    No error
-   C_RANGE     Node index invalid
+   Errc::success No error
+   Errc::range   Node index invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformation(const uint32_t ou32_NodeIndex,
-                                                const C_OscViewNodeUpdate & orc_NodeUpdateInformation)
+std::error_code C_OscViewData::SetNodeUpdateInformation(const uint32_t ou32_NodeIndex,
+                                                        const C_OscViewNodeUpdate & orc_NodeUpdateInformation)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       this->mc_NodeUpdateInformation[ou32_NodeIndex] = orc_NodeUpdateInformation;
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -227,23 +230,23 @@ int32_t C_OscViewData::SetNodeUpdateInformation(const uint32_t ou32_NodeIndex,
    \param[in]  oe_Type           Selector for structure
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
-                                                    const std::string & orc_Value,
-                                                    const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
+std::error_code C_OscViewData::SetNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+                                                            const std::string & orc_Value,
+                                                            const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.SetPath(ou32_Index, orc_Value, oe_Type);
+      c_Return = rc_UpdateInformation.SetPath(ou32_Index, orc_Value, oe_Type);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -254,22 +257,23 @@ int32_t C_OscViewData::SetNodeUpdateInformationPath(const uint32_t ou32_NodeInde
    \param[in]  orc_Value         New path
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
-                                                         const C_OscViewNodeUpdateParamInfo & orc_Value)
+std::error_code C_OscViewData::SetNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex,
+                                                                 const uint32_t ou32_Index,
+                                                                 const C_OscViewNodeUpdateParamInfo & orc_Value)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.SetParamInfo(ou32_Index, orc_Value);
+      c_Return = rc_UpdateInformation.SetParamInfo(ou32_Index, orc_Value);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -279,22 +283,23 @@ int32_t C_OscViewData::SetNodeUpdateInformationParamInfo(const uint32_t ou32_Nod
    \param[in]  orc_Value         New path
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex, const std::string & orc_Value)
+std::error_code C_OscViewData::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex,
+                                                                   const std::string & orc_Value)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
       rc_UpdateInformation.SetPemFilePath(orc_Value);
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -306,23 +311,24 @@ int32_t C_OscViewData::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_N
    \param[in]  oe_Type           Selector for structure
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPath(const uint32_t ou32_NodeIndex,
-                                                                const uint32_t ou32_Index, const bool oq_SkipFile,
-                                                                const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
+std::error_code C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPath(const uint32_t ou32_NodeIndex,
+                                                                        const uint32_t ou32_Index,
+                                                                        const bool oq_SkipFile,
+                                                                        const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.SetSkipUpdateOfPath(ou32_Index, oq_SkipFile, oe_Type);
+      c_Return = rc_UpdateInformation.SetSkipUpdateOfPath(ou32_Index, oq_SkipFile, oe_Type);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -333,22 +339,23 @@ int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPath(const uint32_t o
    \param[in]  oq_SkipFile       New skip flag
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfParamInfo(const uint32_t ou32_NodeIndex,
-                                                                     const uint32_t ou32_Index, const bool oq_SkipFile)
+std::error_code C_OscViewData::SetNodeUpdateInformationSkipUpdateOfParamInfo(const uint32_t ou32_NodeIndex,
+                                                                             const uint32_t ou32_Index,
+                                                                             const bool oq_SkipFile)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.SetSkipUpdateOfParamInfo(ou32_Index, oq_SkipFile);
+      c_Return = rc_UpdateInformation.SetSkipUpdateOfParamInfo(ou32_Index, oq_SkipFile);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -358,23 +365,23 @@ int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfParamInfo(const uint3
    \param[in]  oq_SkipFile       New skip flag
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPemFile(const uint32_t ou32_NodeIndex,
-                                                                   const bool oq_SkipFile)
+std::error_code C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPemFile(const uint32_t ou32_NodeIndex,
+                                                                           const bool oq_SkipFile)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
       rc_UpdateInformation.SetSkipUpdateOfPemFile(oq_SkipFile);
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -386,24 +393,25 @@ int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPemFile(const uint32_
    \param[in]  oe_StateTrafficEncryption  Traffic encryption state of node
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationStates(const uint32_t ou32_NodeIndex,
-                                                      const C_OscViewNodeUpdate::E_StateSecureAuthentication oe_StateAuthentication, const C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger,
-                                                      const C_OscViewNodeUpdate::E_StateTrafficEncryption oe_StateTrafficEncryption)
+std::error_code C_OscViewData::SetNodeUpdateInformationStates(const uint32_t ou32_NodeIndex,
+                                                              const C_OscViewNodeUpdate::E_StateSecureAuthentication oe_StateAuthentication,
+                                                              const C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger,
+                                                              const C_OscViewNodeUpdate::E_StateTrafficEncryption oe_StateTrafficEncryption)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
       rc_UpdateInformation.SetStates(oe_StateAuthentication, oe_StateDebugger, oe_StateTrafficEncryption);
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -415,24 +423,24 @@ int32_t C_OscViewData::SetNodeUpdateInformationStates(const uint32_t ou32_NodeIn
    \param[in]  ou32_LastKnownCrc    Last known CRC for this file
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationParamInfoContent(const uint32_t ou32_NodeIndex,
-                                                                const uint32_t ou32_Index,
-                                                                const std::string & orc_FilePath,
-                                                                const uint32_t ou32_LastKnownCrc)
+std::error_code C_OscViewData::SetNodeUpdateInformationParamInfoContent(const uint32_t ou32_NodeIndex,
+                                                                        const uint32_t ou32_Index,
+                                                                        const std::string & orc_FilePath,
+                                                                        const uint32_t ou32_LastKnownCrc)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.SetParamInfoContent(ou32_Index, orc_FilePath, ou32_LastKnownCrc);
+      c_Return = rc_UpdateInformation.SetParamInfoContent(ou32_Index, orc_FilePath, ou32_LastKnownCrc);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -443,24 +451,25 @@ int32_t C_OscViewData::SetNodeUpdateInformationParamInfoContent(const uint32_t o
    \param[in]  oe_Type           Selector for structure
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::AddNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const std::string & orc_Value,
-                                                    const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
+std::error_code C_OscViewData::AddNodeUpdateInformationPath(const uint32_t ou32_NodeIndex,
+                                                            const std::string & orc_Value,
+                                                            const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
       rc_UpdateInformation.AddPath(orc_Value, oe_Type);
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -470,24 +479,24 @@ int32_t C_OscViewData::AddNodeUpdateInformationPath(const uint32_t ou32_NodeInde
    \param[in]  orc_Value         New path
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::AddNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex,
-                                                         const C_OscViewNodeUpdateParamInfo & orc_Value)
+std::error_code C_OscViewData::AddNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex,
+                                                                 const C_OscViewNodeUpdateParamInfo & orc_Value)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
       rc_UpdateInformation.AddParamInfo(orc_Value);
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -555,22 +564,23 @@ void C_OscViewData::OnSyncBusDeleted(const uint32_t ou32_Index)
    \param[in]  oe_Type           Selector for structure
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::RemoveNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
-                                                       const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
+std::error_code C_OscViewData::RemoveNodeUpdateInformationPath(const uint32_t ou32_NodeIndex,
+                                                               const uint32_t ou32_Index,
+                                                               const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.RemovePath(ou32_Index, oe_Type);
+      c_Return = rc_UpdateInformation.RemovePath(ou32_Index, oe_Type);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -580,21 +590,22 @@ int32_t C_OscViewData::RemoveNodeUpdateInformationPath(const uint32_t ou32_NodeI
    \param[in]  ou32_Index        Index to remove
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::RemoveNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index)
+std::error_code C_OscViewData::RemoveNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex,
+                                                                    const uint32_t ou32_Index)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.RemoveParamInfo(ou32_Index);
+      c_Return = rc_UpdateInformation.RemoveParamInfo(ou32_Index);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -603,22 +614,22 @@ int32_t C_OscViewData::RemoveNodeUpdateInformationParamInfo(const uint32_t ou32_
    \param[in]  ou32_NodeIndex    Node index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::RemoveNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex)
+std::error_code C_OscViewData::RemoveNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
       rc_UpdateInformation.RemovePemFilePath();
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -628,24 +639,24 @@ int32_t C_OscViewData::RemoveNodeUpdateInformationPemFilePath(const uint32_t ou3
    \param[in]  oe_Type           Selector for structure
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::ClearNodeUpdateInformationAsAppropriate(const uint32_t ou32_NodeIndex,
-                                                               const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
+std::error_code C_OscViewData::ClearNodeUpdateInformationAsAppropriate(const uint32_t ou32_NodeIndex,
+                                                                       const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
       rc_UpdateInformation.ClearPathsAsAppropriate(oe_Type);
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -654,21 +665,21 @@ int32_t C_OscViewData::ClearNodeUpdateInformationAsAppropriate(const uint32_t ou
    \param[in]  ou32_NodeIndex    Node index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::ClearNodeUpdateInformationParamPaths(const uint32_t ou32_NodeIndex)
+std::error_code C_OscViewData::ClearNodeUpdateInformationParamPaths(const uint32_t ou32_NodeIndex)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {
       C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
       rc_UpdateInformation.ClearParamPaths();
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }

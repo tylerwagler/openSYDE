@@ -29,7 +29,7 @@ class C_OgePubNavigationHover :
    Q_OBJECT
 
 public:
-   explicit C_OgePubNavigationHover(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubNavigationHover(QWidget * const opc_Parent = nullptr);
 
    void SetActive(const bool oq_Active);
 };

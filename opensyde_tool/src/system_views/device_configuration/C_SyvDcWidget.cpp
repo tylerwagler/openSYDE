@@ -69,7 +69,7 @@ C_SyvDcWidget::C_SyvDcWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_
    QWidget(&orc_Parent),
    mpc_Ui(new Ui::C_SyvDcWidget),
    mpc_ParentDialog(&orc_Parent),
-   mpc_DcSequences(NULL),
+   mpc_DcSequences(nullptr),
    mu32_ViewIndex(ou32_ViewIndex),
    mq_InitializationFinished(false),
    mu32_TempBitrate(0U),
@@ -108,13 +108,13 @@ C_SyvDcWidget::C_SyvDcWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_
    // Get the connected bus id
    pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       //No check for connected because error check passed
       this->mu32_BusIndex = pc_View->GetOscPcData().GetBusIndex();
       const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_BusIndex);
 
-      if (pc_Bus != NULL)
+      if (pc_Bus != nullptr)
       {
          this->mu8_BusId = pc_Bus->u8_BusId;
          this->me_BusType = pc_Bus->e_Type;
@@ -197,7 +197,7 @@ C_SyvDcWidget::~C_SyvDcWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::CleanUp(void)
 {
-   if (this->mpc_DcSequences != NULL)
+   if (this->mpc_DcSequences != nullptr)
    {
       disconnect(this->mpc_DcSequences, &C_SyvDcSequences::SigRunConfCanOpenSydeDevicesProgress, this,
                  &C_SyvDcWidget::m_UpdateProgressOfOpenSydeConfig);
@@ -211,7 +211,7 @@ void C_SyvDcWidget::CleanUp(void)
    //Stop timer just in case
    this->mc_Timer.stop();
    delete mpc_DcSequences;
-   mpc_DcSequences = NULL;
+   mpc_DcSequences = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -325,7 +325,7 @@ int32_t C_SyvDcWidget::m_InitSequence(void)
    int32_t s32_Retval = C_NO_ERR;
 
    // Sequence initialization
-   if (this->mpc_DcSequences == NULL)
+   if (this->mpc_DcSequences == nullptr)
    {
       this->mpc_DcSequences = new C_SyvDcSequences();
 
@@ -338,7 +338,7 @@ int32_t C_SyvDcWidget::m_InitSequence(void)
               &C_SyvDcWidget::m_UpdateStateOfOpenSydeConfig, Qt::QueuedConnection);
    }
 
-   if (this->mpc_DcSequences != NULL) // required anyway by PC lint
+   if (this->mpc_DcSequences != nullptr) // required anyway by PC lint
    {
       if (this->mpc_DcSequences->IsInitialized() == false)
       {
@@ -377,13 +377,13 @@ int32_t C_SyvDcWidget::m_InitSequence(void)
          //Check if ethernet
          const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             if (pc_View->GetOscPcData().GetConnected())
             {
                const C_OscSystemBus * const pc_Bus =
                   C_PuiSdHandler::h_GetInstance()->GetOscBus(pc_View->GetOscPcData().GetBusIndex());
-               if (pc_Bus != NULL)
+               if (pc_Bus != nullptr)
                {
                   if (pc_Bus->e_Type == C_OscSystemBus::eETHERNET)
                   {
@@ -476,7 +476,7 @@ void C_SyvDcWidget::m_StartSearchProper(void)
 
    this->mc_FoundDevices.clear();
 
-   if (this->mpc_DcSequences != NULL)
+   if (this->mpc_DcSequences != nullptr)
    {
       //No error report necessary here
       if (s32_Return == C_NO_ERR)
@@ -747,7 +747,7 @@ void C_SyvDcWidget::m_EnterScanErrorState(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::m_StartConfigProper(void)
 {
-   if (this->mpc_DcSequences != NULL)
+   if (this->mpc_DcSequences != nullptr)
    {
       int32_t s32_Result = C_NO_ERR;
 
@@ -966,7 +966,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
    tgl_assert(orc_Config.size() > 0);
    tgl_assert(orc_Config[0].c_NodeIds.size() > 0);
 
-   if ((this->mpc_DcSequences != NULL) &&
+   if ((this->mpc_DcSequences != nullptr) &&
        (orc_Config.size() > 0) &&
        (orc_Config[0].c_NodeIds.size() > 0))
    {
@@ -1003,8 +1003,8 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
                                                                                        u32_SquadIndex) == C_NO_ERR);
             pc_Squad = C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(u32_SquadIndex);
 
-            tgl_assert(pc_Squad != NULL);
-            if (pc_Squad != NULL)
+            tgl_assert(pc_Squad != nullptr);
+            if (pc_Squad != nullptr)
             {
                tgl_assert(pc_Squad->c_SubNodeIndexes.size() == orc_Config.size());
 
@@ -1034,7 +1034,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
             c_ServerIds.push_back(c_FirstServerId);
          }
 
-         if ((pc_FirstNode != NULL) &&
+         if ((pc_FirstNode != nullptr) &&
              (c_SubNodes.size() > 0))
          {
             uint32_t u32_IntfCounter;
@@ -1078,7 +1078,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
                {
                   const C_OscNode * const pc_SubNode = c_SubNodes[u32_SubNodeCounter];
 
-                  if (pc_SubNode != NULL)
+                  if (pc_SubNode != nullptr)
                   {
                      // All sub nodes are connected, so the sub node with index 0 is the first connected sub node
                      // in all cases
@@ -1137,7 +1137,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
                   {
                      const C_OscNode * const pc_SubNode = c_SubNodes[u32_SubNodeCounter];
 
-                     if (pc_SubNode != NULL)
+                     if (pc_SubNode != nullptr)
                      {
                         //lint -e{514}  Using operator with a bool value was intended and is no accident
                         q_BusConnected |= pc_SubNode->c_Properties.c_ComInterfaces[u32_IntfCounter].GetBusConnected();
@@ -1159,7 +1159,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
                      {
                         const C_OscNode * const pc_SubNode = c_SubNodes[u32_SubNodeCounter];
 
-                        if (pc_SubNode != NULL)
+                        if (pc_SubNode != nullptr)
                         {
                            const C_OscNodeComInterfaceSettings & rc_IntfSetting =
                               pc_SubNode->c_Properties.c_ComInterfaces[u32_IntfCounter];
@@ -1175,7 +1175,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
 
                               const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(
                                  rc_IntfSetting.u32_BusIndex);
-                              if (pc_Bus != NULL)
+                              if (pc_Bus != nullptr)
                               {
                                  const C_SyvDcDeviceConfiguation & rc_CurConfig =  orc_Config[u32_SubNodeCounter];
                                  const uint32_t u32_CurSubNodeConfigCounter = c_CanCounters[u32_SubNodeCounter] +
@@ -1398,7 +1398,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfInterface(const C_OscNodeComInterfaceSetti
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
 {
-   if (this->mpc_DcSequences != NULL)
+   if (this->mpc_DcSequences != nullptr)
    {
       int32_t s32_Return;
       const bool q_Manual = false;
@@ -1641,7 +1641,7 @@ int32_t C_SyvDcWidget::m_GetRelevantConfigInfo(std::vector<C_OscProtocolDriverOs
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::m_ResetNetwork(const bool oq_ToFlashloader)
 {
-   if (this->mpc_DcSequences != NULL)
+   if (this->mpc_DcSequences != nullptr)
    {
       if (this->mc_OpenSydeDeviceConfigurations.size() > 0)
       {
@@ -1659,7 +1659,7 @@ void C_SyvDcWidget::m_ResetNetwork(const bool oq_ToFlashloader)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
 {
-   if (this->mpc_DcSequences != NULL)
+   if (this->mpc_DcSequences != nullptr)
    {
       std::vector<C_OscDcDeviceInformation> c_DeviceInfos;
       const int32_t s32_Return = this->mpc_DcSequences->GetDeviceInfosResult(c_DeviceInfos);
@@ -1712,9 +1712,9 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
             {
                const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
 
-               if (pc_Node != NULL)
+               if (pc_Node != nullptr)
                {
-                  if (pc_Node->pc_DeviceDefinition != NULL)
+                  if (pc_Node->pc_DeviceDefinition != nullptr)
                   {
                      c_TopologyDeviceType = pc_Node->pc_DeviceDefinition->c_DeviceName.c_str();
                   }
@@ -2032,7 +2032,7 @@ void C_SyvDcWidget::m_InitBitRateComboBox(void)
    // Bitrate
    this->mpc_Ui->pc_ComboBoxBitRate->clear();
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       std::vector<uint32_t> c_ConnectedNodes;
       std::vector<uint32_t> c_ConnectedInterfaces;
@@ -2111,7 +2111,7 @@ void C_SyvDcWidget::m_InitModeComboBox(void)
               &C_SyvDcWidget::m_OnDeviceConfigModeChanged);
 
    //Apply value
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       switch (pc_View->GetDeviceConfigMode())
       {
@@ -2278,7 +2278,7 @@ void C_SyvDcWidget::m_AssignmentUpdateProgress(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::m_Timer(void)
 {
-   if (this->mpc_DcSequences != NULL)
+   if (this->mpc_DcSequences != nullptr)
    {
       const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
       int32_t s32_Result;
@@ -2630,8 +2630,8 @@ bool C_SyvDcWidget::m_AreAllInterfacesToConfigure(void) const
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
    // Get configuration from view
-   tgl_assert(pc_View != NULL);
-   if (pc_View != NULL)
+   tgl_assert(pc_View != nullptr);
+   if (pc_View != nullptr)
    {
       switch (pc_View->GetDeviceConfigMode())
       {
@@ -2661,12 +2661,12 @@ void C_SyvDcWidget::m_DoCompleteDisconnect(void)
       //Stop timer (don't continue process)
       this->mc_Timer.stop();
 
-      if ((pc_View != NULL) && (pc_View->GetOscPcData().GetConnected() == true))
+      if ((pc_View != nullptr) && (pc_View->GetOscPcData().GetConnected() == true))
       {
          const C_OscSystemBus * const pc_Bus =
             C_PuiSdHandler::h_GetInstance()->GetOscBus(pc_View->GetOscPcData().GetBusIndex());
-         if ((this->mpc_DcSequences != NULL) &&
-             (pc_Bus != NULL))
+         if ((this->mpc_DcSequences != nullptr) &&
+             (pc_Bus != nullptr))
          {
             bool q_Osy = false;
             bool q_StartedAnything = false;
@@ -2701,7 +2701,7 @@ void C_SyvDcWidget::m_DoCompleteDisconnect(void)
                   const C_OscNode * const pc_Node =
                      C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndexes[u32_ItNode]);
                   //Check which type of node
-                  if ((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL) &&
+                  if ((pc_Node != nullptr) && (pc_Node->pc_DeviceDefinition != nullptr) &&
                       (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()))
                   {
                      if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
@@ -2767,7 +2767,7 @@ bool C_SyvDcWidget::m_CheckQuitPossible(void) const
    bool q_Retval = false;
    int32_t s32_Result;
 
-   if ((this->mpc_DcSequences == NULL) ||
+   if ((this->mpc_DcSequences == nullptr) ||
        (this->mpc_DcSequences->GetResults(s32_Result) == C_NO_ERR))
    {
       q_Retval = true;

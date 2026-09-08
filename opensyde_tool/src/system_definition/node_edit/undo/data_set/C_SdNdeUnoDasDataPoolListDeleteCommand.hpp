@@ -32,7 +32,7 @@ public:
                                           const uint32_t & oru32_DataPoolListIndex,
                                           C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
                                           const std::vector<uint32_t> & orc_Indices,
-                                          QUndoCommand * const opc_Parent = NULL);
+                                          QUndoCommand * const opc_Parent = nullptr);
    void redo(void) override;
    void undo(void) override;
 };

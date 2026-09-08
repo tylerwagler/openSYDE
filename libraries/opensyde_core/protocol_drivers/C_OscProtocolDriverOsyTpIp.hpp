@@ -16,6 +16,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <system_error>
 #include "stwtypes.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
@@ -60,7 +61,7 @@ private:
       uint16_t u16_PayloadType;
       uint32_t u32_PayloadSize;
 
-      int32_t DecodeHeader(const std::vector<uint8_t> & orc_Header);
+      std::error_code DecodeHeader(const std::vector<uint8_t> & orc_Header);
       void ComposeHeader(std::vector<uint8_t> & orc_Header) const;
    };
 
@@ -134,27 +135,27 @@ public:
    explicit C_OscProtocolDriverOsyTpIp(const uint16_t ou16_MaxServiceQueueSize = 200U);
    virtual ~C_OscProtocolDriverOsyTpIp(void);
 
-   virtual int32_t Cycle(void);
+   virtual std::error_code Cycle(void);
 
    //Tp-specific functions:
-   int32_t SetDispatcher(C_OscIpDispatcher * const opc_Dispatcher, const uint32_t ou32_DispatcherHandle);
+   std::error_code SetDispatcher(C_OscIpDispatcher * const opc_Dispatcher, const uint32_t ou32_DispatcherHandle);
 
-   virtual int32_t IsConnected(void);
-   virtual int32_t ReConnect(void);
-   virtual int32_t Disconnect(void);
+   virtual std::error_code IsConnected(void);
+   virtual std::error_code ReConnect(void);
+   virtual std::error_code Disconnect(void);
 
    //Tp-specific broadcast services:
-   int32_t BroadcastGetDeviceInfo(std::vector<C_BroadcastGetDeviceInfoResults> & orc_DeviceInfos,
-                                  std::vector<C_BroadcastGetDeviceInfoExtendedResults> & orc_DeviceExtendedInfos)
-   const;
-   int32_t BroadcastSetIpAddress(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
-                                 const uint8_t(&orau8_NewIpAddress)[4],
-                                 const uint8_t(&orau8_NetMask)[4],
-                                 const uint8_t(&orau8_DefaultGateway)[4],
-                                 const C_OscProtocolDriverOsyNode &orc_NewNodeId,
-                                 uint8_t(&orau8_ResponseIp)[4],
-                                 uint8_t * const opu8_ErrorResult = NULL) const;
-   int32_t BroadcastSetIpAddressExtended(
+   std::error_code BroadcastGetDeviceInfo(
+      std::vector<C_BroadcastGetDeviceInfoResults> & orc_DeviceInfos,
+      std::vector<C_BroadcastGetDeviceInfoExtendedResults> & orc_DeviceExtendedInfos) const;
+   std::error_code BroadcastSetIpAddress(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
+                                         const uint8_t(&orau8_NewIpAddress)[4],
+                                         const uint8_t(&orau8_NetMask)[4],
+                                         const uint8_t(&orau8_DefaultGateway)[4],
+                                         const C_OscProtocolDriverOsyNode &orc_NewNodeId,
+                                         uint8_t(&orau8_ResponseIp)[4],
+                                         uint8_t * const opu8_ErrorResult = nullptr) const;
+   std::error_code BroadcastSetIpAddressExtended(
       const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
       const uint8_t(&orau8_NewIpAddress)[4],
       const uint8_t(&orau8_NetMask)[4],
@@ -162,10 +163,10 @@ public:
       const C_OscProtocolDriverOsyNode &orc_NewNodeId,
       const uint8_t ou8_SubNodeId,
       uint8_t(&orau8_ResponseIp)[4],
-      uint8_t * const opu8_ErrorResult = NULL) const;
-   int32_t BroadcastRequestProgramming(std::vector<C_BroadcastRequestProgrammingResults> & orc_Results) const;
-   int32_t BroadcastNetReset(const uint8_t ou8_ResetType, const bool oq_SpecificSerialNumberOnly = false,
-                             const uint8_t (*const opau8_SerialNumber)[6] = NULL) const;
+      uint8_t * const opu8_ErrorResult = nullptr) const;
+   std::error_code BroadcastRequestProgramming(std::vector<C_BroadcastRequestProgrammingResults> & orc_Results) const;
+   std::error_code BroadcastNetReset(const uint8_t ou8_ResetType, const bool oq_SpecificSerialNumberOnly = false,
+                                     const uint8_t (*const opau8_SerialNumber)[6] = nullptr) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

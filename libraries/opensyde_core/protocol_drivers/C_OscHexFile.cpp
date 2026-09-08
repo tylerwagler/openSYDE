@@ -11,8 +11,11 @@
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include <cstring>
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscHexFile.hpp"
 #include "C_SclStringCompat.hpp"
 #include <string>
@@ -34,37 +37,27 @@ using namespace stw::tgl;
    Textual representation of error.
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::string C_OscHexFile::ErrorCodeToErrorText(const uint32_t ou32_ErrorCode) const
+std::string C_OscHexFile::ErrorCodeToErrorText(const std::error_code & orc_Error) const
 {
    std::string c_Text;
 
-   switch (ou32_ErrorCode & ERR_MASK)
+   //The category supplies the description; the context that used to be packed
+   //into the error value is read back from the instance that produced it.
+   if (orc_Error == stw::hex_file::HexFileErrc::record_overlay)
    {
-   case WRN_NO_EOF_RECORD:
-      c_Text = "Error reading hex file: No EOF record";
-      break;
-   case WRN_RECORD_OVERLAY:
-      //ou32_ErrorCode only contains lowest 7 nibbles!
-      c_Text = PrintFormattedCompat("Error in Hexfile: Address 0x%08x used twice !", this->GetLastOverlayErrorAddress());
-      break;
-   case ERR_HEXLINE_SYNTAX:
-      c_Text = PrintFormattedCompat("Error reading hex file: Wrong syntax in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
-      break;
-   case ERR_HEXLINE_CHECKSUM:
-      c_Text = PrintFormattedCompat("Error reading hex file: Wrong checksum in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
-      break;
-   case ERR_HEXLINE_COMMAND:
-      c_Text = PrintFormattedCompat("Error reading hex file: Wrong command in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
-      break;
-   case ERR_NOT_ENOUGH_MEMORY:
-      c_Text = "Error reading hex file: Out of memory";
-      break;
-   case ERR_CANT_OPEN_FILE:
-      c_Text = "Error reading hex file: File not found";
-      break;
-   default:
-      c_Text = "Error reading hex file: Undefined error";
-      break;
+      c_Text = PrintFormattedCompat("Error in Hexfile: Address 0x%08x used twice !",
+                                    this->GetLastOverlayErrorAddress());
+   }
+   else if ((orc_Error == stw::hex_file::HexFileErrc::hexline_syntax) ||
+            (orc_Error == stw::hex_file::HexFileErrc::hexline_checksum) ||
+            (orc_Error == stw::hex_file::HexFileErrc::hexline_command))
+   {
+      c_Text = "Error reading hex file: " + orc_Error.message() + " " +
+               PrintFormattedCompat("in line %d", this->GetLastErrorLineNumber());
+   }
+   else
+   {
+      c_Text = "Error reading hex file: " + orc_Error.message();
    }
    return c_Text;
 }
@@ -84,56 +77,60 @@ std::string C_OscHexFile::ErrorCodeToErrorText(const uint32_t ou32_ErrorCode) co
                                                     e.g. 1 = "BIOS".
 
    \return
-   C_NO_ERR     everything OK (data in oat_InfoBlocks); but maybe there are 0 blocks
-   C_NOACT      if oq_ExactAddressMatch: no block found at specified address
+   Errc::success   everything OK (data in orc_InfoBlocks); but maybe there are 0 blocks
+   Errc::noact     if oq_ExactAddressMatch: no block found at specified address
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscApplicationInfoBlock> & orc_InfoBlocks,
-                                                      const uint32_t ou32_SearchStartAddress,
-                                                      const bool oq_OnlyOneBlock,
-                                                      const bool oq_ExactAddressMatch, const bool oq_Block0Only)
+std::error_code C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscApplicationInfoBlock> & orc_InfoBlocks,
+                                                              const uint32_t ou32_SearchStartAddress,
+                                                              const bool oq_OnlyOneBlock,
+                                                              const bool oq_ExactAddressMatch,
+                                                              const bool oq_Block0Only)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint32_t u32_Address = ou32_SearchStartAddress;
    C_OscApplicationInfoBlock c_Block;
    uint16_t u16_Size = static_cast<uint16_t>(c_Block.GetMaxSizeOnECU());
    uint8_t * const pu8_Buffer = new uint8_t[u16_Size];
    uint16_t u16_Help;
 
-   s32_Return = C_NO_ERR;
    char_t acn_Magic[APPLICATION_INFO_MAGIC_LENGTH_V2];
 
    orc_InfoBlocks.clear();
 
    while (true)
    {
+      //FindPattern and GetDataByAddress are inherited from C_HexFile and report their own 0 / -1 / -2
+      //convention - neither the STW codes nor the hex_file category - so they get a plain local.
+      int32_t s32_HexResult;
+
       //exact match required:
       //V1 and V2 have the same beginning:
-      s32_Return = this->FindPattern(u32_Address, 5, reinterpret_cast<const uint8_t *>("Lx_?z"));
-      if (s32_Return != C_NO_ERR)
+      s32_HexResult = this->FindPattern(u32_Address, 5, reinterpret_cast<const uint8_t *>("Lx_?z"));
+      if (s32_HexResult != 0)
       {
          break; //only stop if we cannot find any more pattern; in all other cases: continue searching
       }
 
       //get part of dump:
       u16_Help = APPLICATION_INFO_MAGIC_LENGTH_V2;
-      s32_Return = this->GetDataByAddress(u32_Address, u16_Help, reinterpret_cast<uint8_t *>(&acn_Magic[0]));
-      if (s32_Return == C_NO_ERR)
+      s32_HexResult = this->GetDataByAddress(u32_Address, u16_Help, reinterpret_cast<uint8_t *>(&acn_Magic[0]));
+      c_Return = Errc::config; //until a magic we know about is recognised
+      if (s32_HexResult == 0)
       {
-         s32_Return = C_CONFIG;
          //"Block0" ?
          if ((acn_Magic[6] == '.') || (oq_Block0Only == false))
          {
             //V1 ?
             if (acn_Magic[5] == '2')
             {
-               s32_Return = C_NO_ERR;
+               c_Return = Errc::success;
                (void)memcpy(&c_Block.acn_Magic[0], &acn_Magic[0], APPLICATION_INFO_MAGIC_LENGTH_V1);
             }
             //V2 or V3 ?
             else if ((acn_Magic[5] == 'g') && (acn_Magic[7] == '\0'))
             {
-               s32_Return = C_NO_ERR;
+               c_Return = Errc::success;
                (void)memcpy(&c_Block.acn_Magic[0], &acn_Magic[0], APPLICATION_INFO_MAGIC_LENGTH_V2);
             }
             else
@@ -145,15 +142,15 @@ int32_t C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscApplicati
 
       if (oq_ExactAddressMatch == true)
       {
-         if ((u32_Address != ou32_SearchStartAddress) || (s32_Return != C_NO_ERR))
+         if ((u32_Address != ou32_SearchStartAddress) || c_Return)
          {
             //we searched the start address and did not find anything !
             delete[] pu8_Buffer;
-            return C_NOACT;
+            return make_error_code(Errc::noact);
          }
       }
 
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
          //for performance reasons we try to read the maximum possible size of the struct on the ECU:
          u16_Size = static_cast<uint16_t>(c_Block.GetMaxSizeOnECU());
@@ -161,26 +158,29 @@ int32_t C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscApplicati
          //the alignment on PC is not neccessarily the same as on the ECU
          //-> we have to use a temporary buffer to copy the data over ...
          (void)memset(pu8_Buffer, 0, u16_Size);
-         s32_Return = this->GetDataByAddress(u32_Address, u16_Size, pu8_Buffer);
-         switch (s32_Return)
+         s32_HexResult = this->GetDataByAddress(u32_Address, u16_Size, pu8_Buffer);
+         switch (s32_HexResult)
          {
          case 0:
             break; //great ...
          case -2:  //data read but not fully
-            s32_Return = 0;
             if (u16_Size < 2U) //we need at least 2 bytes for the header information
             {
+               //skip past this pattern before retrying, or FindPattern below matches the same
+               //address again and the loop never terminates
+               u32_Address += APPLICATION_INFO_MAGIC_LENGTH_V1;
                continue;
             }
             break;
          case -1:
          default:
-            s32_Return = 0;
+            //as above: advance, or this is an infinite loop
+            u32_Address += APPLICATION_INFO_MAGIC_LENGTH_V1;
             continue; //nothing we can handle or undefined error -> continue
          }
 
-         s32_Return = c_Block.ParseFromBLOB(pu8_Buffer, u16_Size);
-         if (s32_Return == C_NO_ERR)
+         c_Return = c_Block.ParseFromBLOB(pu8_Buffer, u16_Size);
+         if (!c_Return)
          {
             //we have all the data !
             //-> add to array
@@ -194,7 +194,7 @@ int32_t C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscApplicati
       u32_Address += APPLICATION_INFO_MAGIC_LENGTH_V1; //done with this block ...
    }
    delete[] pu8_Buffer;
-   return C_NO_ERR;
+   return make_error_code(Errc::success);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -216,19 +216,21 @@ int32_t C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscApplicati
    \param[out]    oru32_Checksum   calculated checksum
 
    \return
-   C_NO_ERR      checksum calculated
-   C_CONFIG      error
+   Errc::success   checksum calculated
+   Errc::config    error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHexFile::CalcFileChecksum(uint32_t & oru32_Checksum)
+std::error_code C_OscHexFile::CalcFileChecksum(uint32_t & oru32_Checksum)
 {
-   uint32_t u32_Return;
+   //GetDataDump reports the hex_file category, which is a different set of codes to the STW one this
+   //function returns - hence the separate local.
+   std::error_code c_DumpError = Errc::success;
    const C_HexDataDump * pc_Dump;
 
-   pc_Dump = this->GetDataDump(u32_Return);
-   if (u32_Return != NO_ERR)
+   pc_Dump = this->GetDataDump(c_DumpError);
+   if (c_DumpError)
    {
-      return C_CONFIG;
+      return make_error_code(Errc::config);
    }
 
    oru32_Checksum = static_cast<uint32_t>(~0x56489437U); //fixed start value !
@@ -254,7 +256,7 @@ int32_t C_OscHexFile::CalcFileChecksum(uint32_t & oru32_Checksum)
 
    oru32_Checksum = ~oru32_Checksum;
 
-   return C_NO_ERR;
+   return make_error_code(Errc::success);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -269,23 +271,25 @@ int32_t C_OscHexFile::CalcFileChecksum(uint32_t & oru32_Checksum)
    \param[out]     oru32_Address             address of signature block
 
    \return
-   C_NO_ERR     everything OK; block found
-   C_NOACT      no block found
+   Errc::success   everything OK; block found
+   Errc::noact     no block found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHexFile::GetSignatureBlockAddress(uint32_t & oru32_Address)
+std::error_code C_OscHexFile::GetSignatureBlockAddress(uint32_t & oru32_Address)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    oru32_Address = this->mu32_MinAdr;
 
+   //FindPattern is inherited from C_HexFile and reports 0 / -1, not an STW code.
    //lint -e{926}
-   s32_Return = this->FindPattern(oru32_Address, 10, reinterpret_cast<const uint8_t *>(";zwm2KgUZ!"));
-   if (s32_Return == -1)
+   const int32_t s32_HexResult =
+      this->FindPattern(oru32_Address, 10, reinterpret_cast<const uint8_t *>(";zwm2KgUZ!"));
+   if (s32_HexResult != 0)
    {
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -299,22 +303,22 @@ int32_t C_OscHexFile::GetSignatureBlockAddress(uint32_t & oru32_Address)
    \param[out]    orc_DeviceId                     device ID found in hex-file
 
    \return
-   C_NO_ERR     everything OK (device ID in orc_DeviceId)
-   C_NOACT      device-ID not found
-   C_CONFIG     ambiguous device-IDs in hex-file
+   Errc::success   everything OK (device ID in orc_DeviceId)
+   Errc::noact     device-ID not found
+   Errc::config    ambiguous device-IDs in hex-file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHexFile::ScanDeviceIdFromHexFile(std::string & orc_DeviceId)
+std::error_code C_OscHexFile::ScanDeviceIdFromHexFile(std::string & orc_DeviceId)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    std::string c_DeviceId = "";
 
    std::vector<C_OscApplicationInfoBlock> c_InfoBlocks;
-   s32_Return = this->GetApplicationInformationBlocks(c_InfoBlocks, 0x0U, false, false, true);
-   if ((s32_Return == C_NO_ERR) && (c_InfoBlocks.size() > 0))
+   c_Return = this->GetApplicationInformationBlocks(c_InfoBlocks, 0x0U, false, false, true);
+   if ((!c_Return) && (c_InfoBlocks.size() > 0))
    {
       int32_t s32_Index;
-      for (s32_Index = 0; s32_Index < c_InfoBlocks.size(); s32_Index++)
+      for (s32_Index = 0; s32_Index < static_cast<int32_t>(c_InfoBlocks.size()); s32_Index++)
       {
          if (c_InfoBlocks[s32_Index].ContainsDeviceID() == true)
          {
@@ -327,14 +331,14 @@ int32_t C_OscHexFile::ScanDeviceIdFromHexFile(std::string & orc_DeviceId)
             {
                if (c_DeviceId != c_Help)
                {
-                  s32_Return = C_CONFIG; //ambiguous device IDs !
+                  c_Return = Errc::config; //ambiguous device IDs !
                   break;
                }
             }
          }
       }
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       if (c_DeviceId != "")
       {
@@ -342,10 +346,10 @@ int32_t C_OscHexFile::ScanDeviceIdFromHexFile(std::string & orc_DeviceId)
       }
       else
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -359,38 +363,38 @@ int32_t C_OscHexFile::ScanDeviceIdFromHexFile(std::string & orc_DeviceId)
    \param[out]    orc_InfoBlock        application info block found in hex file
 
    \return
-   C_NO_ERR     everything OK
-   C_WARN       multiple application blocks detected in hex file but device names match
-                  output in this case is the first found application block
-   C_NOACT      no application information block detected in hex file
-   C_OVERFLOW   multiple application information blocks detected in hex file and device names differ
+   Errc::success    everything OK
+   Errc::warn       multiple application blocks detected in hex file but device names match
+                      output in this case is the first found application block
+   Errc::noact      no application information block detected in hex file
+   Errc::overflow   multiple application information blocks detected in hex file and device names differ
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHexFile::ScanApplicationInformationBlockFromHexFile(C_OscApplicationInfoBlock & orc_InfoBlock)
+std::error_code C_OscHexFile::ScanApplicationInformationBlockFromHexFile(C_OscApplicationInfoBlock & orc_InfoBlock)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<C_OscApplicationInfoBlock> c_InfoBlocks;
-   s32_Return = this->GetApplicationInformationBlocks(c_InfoBlocks, 0x0U, false, false, true);
-   tgl_assert(s32_Return == C_NO_ERR); //no plausible reasons documented
+   c_Return = this->GetApplicationInformationBlocks(c_InfoBlocks, 0x0U, false, false, true);
+   tgl_assert(!c_Return); //no plausible reasons documented
 
    if (c_InfoBlocks.size() == 0)
    {
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
    else if (c_InfoBlocks.size() > 1)
    {
-      for (int32_t s32_Pos = 1; s32_Pos < c_InfoBlocks.size(); s32_Pos++)
+      for (uint32_t u32_Pos = 1U; u32_Pos < c_InfoBlocks.size(); u32_Pos++)
       {
          // compare every device name with first device name, this is enough because all must be equal
-         if (c_InfoBlocks[0].GetDeviceID() != c_InfoBlocks[s32_Pos].GetDeviceID())
+         if (c_InfoBlocks[0].GetDeviceID() != c_InfoBlocks[u32_Pos].GetDeviceID())
          {
-            s32_Return = C_OVERFLOW;
+            c_Return = Errc::overflow;
          }
          else
          {
             orc_InfoBlock = c_InfoBlocks[0];
-            s32_Return = C_WARN;
+            c_Return = Errc::warn;
          }
       }
    }
@@ -398,8 +402,8 @@ int32_t C_OscHexFile::ScanApplicationInformationBlockFromHexFile(C_OscApplicatio
    {
       //one block found !
       orc_InfoBlock = c_InfoBlocks[0];
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }

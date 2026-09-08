@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_OscNodeDataPoolListElement.hpp"
 #include "C_SclChecksums.hpp"
@@ -295,14 +298,14 @@ uint32_t C_OscNodeDataPoolListElement::GetArraySize(void) const
    The function checks c_Value against the minimum (c_MinValue) and maximum (c_MaxValue)
 
    \return
-   C_NO_ERR   Current value is valid
-   C_RANGE    Current value is invalid
-   C_CONFIG   Wrong types are set in minimum or maximum
+   Errc::success   Current value is valid
+   Errc::range     Current value is invalid
+   Errc::config    Wrong types are set in minimum or maximum
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolListElement::CheckValueRange(void) const
+std::error_code C_OscNodeDataPoolListElement::CheckValueRange(void) const
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    try
    {
@@ -311,7 +314,7 @@ int32_t C_OscNodeDataPoolListElement::CheckValueRange(void) const
           (this->c_Value.GetType() != this->c_MaxValue.GetType()) ||
           (this->c_Value.GetType() != this->c_MinValue.GetType()))
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -320,16 +323,16 @@ int32_t C_OscNodeDataPoolListElement::CheckValueRange(void) const
 
          if (q_Valid == true)
          {
-            s32_Return = C_NO_ERR;
+            c_Return = Errc::success;
          }
       }
    }
    catch (...)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -338,14 +341,14 @@ int32_t C_OscNodeDataPoolListElement::CheckValueRange(void) const
    The function checks c_NvmValue against the minimum (c_MinValue) and maximum (c_MaxValue)
 
    \return
-   C_NO_ERR   Current value is valid
-   C_RANGE    Current value is invalid
-   C_CONFIG   Wrong types are set in minimum or maximum
+   Errc::success   Current value is valid
+   Errc::range     Current value is invalid
+   Errc::config    Wrong types are set in minimum or maximum
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolListElement::CheckNvmValueRange(void) const
+std::error_code C_OscNodeDataPoolListElement::CheckNvmValueRange(void) const
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    try
    {
@@ -354,7 +357,7 @@ int32_t C_OscNodeDataPoolListElement::CheckNvmValueRange(void) const
           (this->c_NvmValue.GetType() != this->c_MaxValue.GetType()) ||
           (this->c_NvmValue.GetType() != this->c_MinValue.GetType()))
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -363,14 +366,14 @@ int32_t C_OscNodeDataPoolListElement::CheckNvmValueRange(void) const
 
          if (q_Valid == true)
          {
-            s32_Return = C_NO_ERR;
+            c_Return = Errc::success;
          }
       }
    }
    catch (...)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
 
-   return s32_Return;
+   return c_Return;
 }

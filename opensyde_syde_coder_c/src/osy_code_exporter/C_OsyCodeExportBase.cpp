@@ -115,7 +115,7 @@ std::string C_OsyCodeExportBase::h_GetApplicationVersion(const std::string & orc
    int32_t s32_InfoSize;
    uint8_t * pu8_Buffer;
 
-   s32_InfoSize = GetFileVersionInfoSizeA(orc_FileName.c_str(), NULL);
+   s32_InfoSize = GetFileVersionInfoSizeA(orc_FileName.c_str(), nullptr);
    if (s32_InfoSize != 0)
    {
       pu8_Buffer = new uint8_t[static_cast<uint32_t>(s32_InfoSize)];
@@ -227,28 +227,28 @@ C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::ParseCommandLine(const in
    {
       // name                         has_arg            flag  val
       {
-         "systemdefinition",          required_argument, NULL, 's'
+         "systemdefinition",          required_argument, nullptr, 's'
       },
       {
-         "devicedefinition",          required_argument, NULL, 'd'
+         "devicedefinition",          required_argument, nullptr, 'd'
       },
       {
-         "outputpath",                required_argument, NULL, 'o'
+         "outputpath",                required_argument, nullptr, 'o'
       },
       {
-         "node",                      required_argument, NULL, 'n'
+         "node",                      required_argument, nullptr, 'n'
       },
       {
-         "application",               required_argument, NULL, 'a'
+         "application",               required_argument, nullptr, 'a'
       },
       {
-         "erasefolder",               no_argument,       NULL, 'e'
+         "erasefolder",               no_argument,       nullptr, 'e'
       },
       {
-         "help",                      no_argument,       NULL, 'h'
+         "help",                      no_argument,       nullptr, 'h'
       },
       {
-         NULL, 0, NULL, 0
+         nullptr, 0, nullptr, 0
       }
    };
 
@@ -344,7 +344,7 @@ C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::LoadSystemDefinition(void
 {
    E_ResultCode e_Return = eRESULT_OK;
    int32_t s32_Return;
-   const std::string * pc_DeviceToLoad = NULL;
+   const std::string * pc_DeviceToLoad = nullptr;
 
    //single device operation ?
    if (mc_DeviceName != "")
@@ -357,9 +357,10 @@ C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::LoadSystemDefinition(void
       // Load whole system definition (keep pointer to NULL)
    }
 
-   s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(mc_SystemDefinition,
-                                                                       mc_SystemDefinitionFilePath, "",
-                                                                       false, NULL, NULL, false, pc_DeviceToLoad);
+   //the filer reports std::error_code now; this class still runs on the STW int32_t convention
+   s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(mc_SystemDefinition, mc_SystemDefinitionFilePath,
+                                                                       "", false, nullptr, nullptr, false,
+                                                                       pc_DeviceToLoad).value();
 
    if (s32_Return == C_NO_ERR)
    {
@@ -619,14 +620,12 @@ C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::GenerateSourceCode(void)
    {
       if (TglDirectoryExists(mc_OutputPath) == false)
       {
-         int32_t s32_Return;
          std::string c_Info = "Creating target folder (" + mc_OutputPath + ").";
          std::cout << c_Info.c_str() << &std::endl;
          osc_write_log_info("Code Generation", c_Info);
 
          //create target folder if required:
-         s32_Return = C_OscUtils::h_CreateFolderRecursively(mc_OutputPath);
-         if (s32_Return != C_NO_ERR)
+         if (C_OscUtils::h_CreateFolderRecursively(mc_OutputPath))
          {
             c_Info = "Could not create target folder (" + mc_OutputPath + ").";
             std::cout << "Error: " << c_Info.c_str() << &std::endl;

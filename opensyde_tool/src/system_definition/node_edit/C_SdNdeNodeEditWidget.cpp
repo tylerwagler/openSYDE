@@ -65,12 +65,12 @@ C_SdNdeNodeEditWidget::C_SdNdeNodeEditWidget(const uint32_t ou32_NodeIndex, cons
    mu32_NodeIndex(ou32_NodeIndex),
    mq_DataChanged(false),
    mq_SkipLoadUserSettings(true),
-   mpc_PropertiesWidget(NULL),
-   mpc_DataPoolEditWidget(NULL),
-   mpc_ComIfDescriptionWidget(NULL),
-   mpc_HalWidget(NULL),
-   mpc_CoManagerWidget(NULL),
-   mpc_DataLoggerWidget(NULL)
+   mpc_PropertiesWidget(nullptr),
+   mpc_DataPoolEditWidget(nullptr),
+   mpc_ComIfDescriptionWidget(nullptr),
+   mpc_HalWidget(nullptr),
+   mpc_CoManagerWidget(nullptr),
+   mpc_DataLoggerWidget(nullptr)
 {
    int32_t s32_RestoredTabIndex = os32_TabIndex;
 
@@ -142,11 +142,11 @@ bool C_SdNdeNodeEditWidget::WasChanged(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::Save(void) const
 {
-   if (this->mpc_PropertiesWidget != NULL)
+   if (this->mpc_PropertiesWidget != nullptr)
    {
       this->mpc_PropertiesWidget->SaveToData();
    }
-   if (this->mpc_DataLoggerWidget != NULL)
+   if (this->mpc_DataLoggerWidget != nullptr)
    {
       this->mpc_DataLoggerWidget->Save();
    }
@@ -171,8 +171,8 @@ void C_SdNdeNodeEditWidget::SetFlag(const uint32_t ou32_Flag) const
 
       if (ou32_Flag == mu32_FLAG_EDIT_NAME)
       {
-         tgl_assert(this->mpc_PropertiesWidget != NULL);
-         if (this->mpc_PropertiesWidget != NULL)
+         tgl_assert(this->mpc_PropertiesWidget != nullptr);
+         if (this->mpc_PropertiesWidget != nullptr)
          {
             this->mpc_PropertiesWidget->SelectName();
          }
@@ -185,8 +185,8 @@ void C_SdNdeNodeEditWidget::SetFlag(const uint32_t ou32_Flag) const
       // Special case: the interface number of the manager to navigate to in the tree of the manager is part of the flag
       const uint8_t u8_InterfaceNumber = static_cast<uint8_t>(ou32_Flag & (~mu32_FLAG_OPEN_SYSDEF_CANOPENMANAGER));
       this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(hs32_TAB_INDEX_CO_MANAGER);
-      tgl_assert(this->mpc_CoManagerWidget != NULL);
-      if (this->mpc_CoManagerWidget != NULL)
+      tgl_assert(this->mpc_CoManagerWidget != nullptr);
+      if (this->mpc_CoManagerWidget != nullptr)
       {
          this->mpc_CoManagerWidget->OpenManagerConfiguration(u8_InterfaceNumber);
       }
@@ -198,8 +198,8 @@ void C_SdNdeNodeEditWidget::SetFlag(const uint32_t ou32_Flag) const
       // Special case: the node id of the device to navigate to in the tree of the manager is part of the flag
       const uint32_t u32_DeviceNodeIndex = ou32_Flag & (~mu32_FLAG_OPEN_SYSDEF_DEVICENODE_IN_CANOPENMANAGER);
       this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(hs32_TAB_INDEX_CO_MANAGER);
-      tgl_assert(this->mpc_CoManagerWidget != NULL);
-      if (this->mpc_CoManagerWidget != NULL)
+      tgl_assert(this->mpc_CoManagerWidget != nullptr);
+      if (this->mpc_CoManagerWidget != nullptr)
       {
          this->mpc_CoManagerWidget->OpenDeviceConfiguration(u32_DeviceNodeIndex);
       }
@@ -235,8 +235,8 @@ void C_SdNdeNodeEditWidget::OpenDetail(const int32_t os32_MainIndex, const int32
    {
       // open the datapool
       this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(hs32_TAB_INDEX_DATA_POOL);
-      tgl_assert(this->mpc_DataPoolEditWidget != NULL);
-      if (this->mpc_DataPoolEditWidget != NULL)
+      tgl_assert(this->mpc_DataPoolEditWidget != nullptr);
+      if (this->mpc_DataPoolEditWidget != nullptr)
       {
          this->mpc_DataPoolEditWidget->OpenDetail(os32_MainIndex, os32_ListIndex, os32_ElementIndex);
       }
@@ -246,8 +246,8 @@ void C_SdNdeNodeEditWidget::OpenDetail(const int32_t os32_MainIndex, const int32
    {
       // open the interface description widget
       this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(hs32_TAB_INDEX_COMM);
-      tgl_assert(this->mpc_ComIfDescriptionWidget != NULL);
-      if (this->mpc_ComIfDescriptionWidget != NULL)
+      tgl_assert(this->mpc_ComIfDescriptionWidget != nullptr);
+      if (this->mpc_ComIfDescriptionWidget != nullptr)
       {
          if (os32_Flag == 1)
          {
@@ -273,8 +273,8 @@ void C_SdNdeNodeEditWidget::OpenDetail(const int32_t os32_MainIndex, const int32
    {
       // show the application / data block
       this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(hs32_TAB_INDEX_PROPERTIES);
-      tgl_assert(this->mpc_PropertiesWidget != NULL);
-      if (this->mpc_PropertiesWidget != NULL)
+      tgl_assert(this->mpc_PropertiesWidget != nullptr);
+      if (this->mpc_PropertiesWidget != nullptr)
       {
          this->mpc_PropertiesWidget->ShowApplication(os32_MainIndex);
       }
@@ -283,8 +283,8 @@ void C_SdNdeNodeEditWidget::OpenDetail(const int32_t os32_MainIndex, const int32
    {
       // show HALC
       this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(hs32_TAB_INDEX_HALC);
-      tgl_assert(this->mpc_HalWidget != NULL);
-      if (this->mpc_HalWidget != NULL)
+      tgl_assert(this->mpc_HalWidget != nullptr);
+      if (this->mpc_HalWidget != nullptr)
       {
          this->mpc_HalWidget->ShowChannel(os32_MainIndex, os32_ListIndex);
       }
@@ -293,8 +293,8 @@ void C_SdNdeNodeEditWidget::OpenDetail(const int32_t os32_MainIndex, const int32
    {
       // show CANopen Manager
       this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(hs32_TAB_INDEX_CO_MANAGER);
-      tgl_assert(this->mpc_CoManagerWidget != NULL);
-      if (this->mpc_CoManagerWidget != NULL)
+      tgl_assert(this->mpc_CoManagerWidget != nullptr);
+      if (this->mpc_CoManagerWidget != nullptr)
       {
          // TODO: Handle CANopen Manager
       }
@@ -317,8 +317,8 @@ void C_SdNdeNodeEditWidget::AddFromTsp(const bool oq_IsNewNode)
 
    //Widget necessary
    m_CreatePropertiesTab(q_ADAPT_CURSOR);
-   tgl_assert(this->mpc_PropertiesWidget != NULL);
-   if (this->mpc_PropertiesWidget != NULL)
+   tgl_assert(this->mpc_PropertiesWidget != nullptr);
+   if (this->mpc_PropertiesWidget != nullptr)
    {
       this->mpc_PropertiesWidget->AddFromTsp(oq_IsNewNode);
    }
@@ -373,26 +373,26 @@ void C_SdNdeNodeEditWidget::m_LoadUserSettings() const
 {
    int32_t s32_RestoredTabIndex = C_UsHandler::h_GetInstance()->GetProjLastSysDefNodeTabIndex();
 
-   if (this->mpc_PropertiesWidget != NULL)
+   if (this->mpc_PropertiesWidget != nullptr)
    {
       this->mpc_PropertiesWidget->LoadUserSettings();
    }
    m_FixInitialTabIndex(s32_RestoredTabIndex);
    this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(s32_RestoredTabIndex);
 
-   if (this->mpc_HalWidget != NULL)
+   if (this->mpc_HalWidget != nullptr)
    {
       this->mpc_HalWidget->LoadUserSettings();
    }
-   if (this->mpc_ComIfDescriptionWidget != NULL)
+   if (this->mpc_ComIfDescriptionWidget != nullptr)
    {
       this->mpc_ComIfDescriptionWidget->LoadUserSettings();
    }
-   if (this->mpc_CoManagerWidget != NULL)
+   if (this->mpc_CoManagerWidget != nullptr)
    {
       this->mpc_CoManagerWidget->LoadUserSettings();
    }
-   if (this->mpc_DataLoggerWidget != NULL)
+   if (this->mpc_DataLoggerWidget != nullptr)
    {
       this->mpc_DataLoggerWidget->LoadUserSettings();
    }
@@ -404,24 +404,24 @@ void C_SdNdeNodeEditWidget::m_LoadUserSettings() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_SaveUserSettings() const
 {
-   if (this->mpc_PropertiesWidget != NULL)
+   if (this->mpc_PropertiesWidget != nullptr)
    {
       this->mpc_PropertiesWidget->SaveUserSettings();
    }
    C_UsHandler::h_GetInstance()->SetProjLastSysDefNodeTabIndex(this->mpc_Ui->pc_TabWidgetPageNavi->currentIndex());
-   if (this->mpc_HalWidget != NULL)
+   if (this->mpc_HalWidget != nullptr)
    {
       this->mpc_HalWidget->SaveUserSettings();
    }
-   if (this->mpc_ComIfDescriptionWidget != NULL)
+   if (this->mpc_ComIfDescriptionWidget != nullptr)
    {
       this->mpc_ComIfDescriptionWidget->SaveUserSettings();
    }
-   if (this->mpc_CoManagerWidget != NULL)
+   if (this->mpc_CoManagerWidget != nullptr)
    {
       this->mpc_CoManagerWidget->SaveUserSettings();
    }
-   if (this->mpc_DataLoggerWidget != NULL)
+   if (this->mpc_DataLoggerWidget != nullptr)
    {
       this->mpc_DataLoggerWidget->SaveUserSettings();
    }
@@ -464,8 +464,8 @@ void C_SdNdeNodeEditWidget::m_OnSwitchToHalc(void)
 void C_SdNdeNodeEditWidget::m_OnSwitchToCommMessages(const uint32_t ou32_DataPoolIndex)
 {
    this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(hs32_TAB_INDEX_COMM);
-   tgl_assert(this->mpc_ComIfDescriptionWidget != NULL);
-   if (this->mpc_ComIfDescriptionWidget != NULL)
+   tgl_assert(this->mpc_ComIfDescriptionWidget != nullptr);
+   if (this->mpc_ComIfDescriptionWidget != nullptr)
    {
       this->mpc_ComIfDescriptionWidget->SetProtocolByDataPool(ou32_DataPoolIndex);
    }
@@ -500,7 +500,7 @@ void C_SdNdeNodeEditWidget::m_CurrentTabChanged(const int32_t os32_Index)
    m_CreateTabWidgetsAlways(os32_Index, true);
 
    //Simple trigger update
-   if (this->mpc_PropertiesWidget != NULL)
+   if (this->mpc_PropertiesWidget != nullptr)
    {
       this->mpc_PropertiesWidget->UpdateApplications();
    }
@@ -521,15 +521,15 @@ void C_SdNdeNodeEditWidget::m_CurrentTabChanged(const int32_t os32_Index)
    // The previous call of adjustSize causes some times to a second size change of pc_DataPoolEditWidget
    // This can cause a wrong size of the widget. A further call of adjustSize seems to repair the problem
    // The origin reason why the widget is resized two times with different sizes is unknown
-   if (this->mpc_DataPoolEditWidget != NULL)
+   if (this->mpc_DataPoolEditWidget != nullptr)
    {
       this->mpc_DataPoolEditWidget->adjustSize();
    }
 
    if (os32_Index == hs32_TAB_INDEX_COMM)
    {
-      tgl_assert(this->mpc_ComIfDescriptionWidget != NULL);
-      if (this->mpc_ComIfDescriptionWidget != NULL)
+      tgl_assert(this->mpc_ComIfDescriptionWidget != nullptr);
+      if (this->mpc_ComIfDescriptionWidget != nullptr)
       {
          this->mpc_ComIfDescriptionWidget->SetInitialFocus();
       }
@@ -550,8 +550,8 @@ void C_SdNdeNodeEditWidget::m_TabClicked(const int32_t os32_Index) const
        (os32_Index == hs32_TAB_INDEX_DATA_POOL))
    {
       // Only relevant if no other tab than the Datapool tab was clicked and no other tab was selected before
-      tgl_assert(this->mpc_DataPoolEditWidget != NULL);
-      if (this->mpc_DataPoolEditWidget != NULL)
+      tgl_assert(this->mpc_DataPoolEditWidget != nullptr);
+      if (this->mpc_DataPoolEditWidget != nullptr)
       {
          this->mpc_DataPoolEditWidget->OpenOverview();
       }
@@ -616,11 +616,11 @@ void C_SdNdeNodeEditWidget::m_OnDpChanged(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_ReloadDataPools(void) const
 {
-   if (this->mpc_DataPoolEditWidget != NULL)
+   if (this->mpc_DataPoolEditWidget != nullptr)
    {
       this->mpc_DataPoolEditWidget->SetNode(this->mu32_NodeIndex);
    }
-   if (this->mpc_PropertiesWidget != NULL)
+   if (this->mpc_PropertiesWidget != nullptr)
    {
       this->mpc_PropertiesWidget->UpdateApplications();
    }
@@ -633,7 +633,7 @@ void C_SdNdeNodeEditWidget::m_ReloadDataPools(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_ReloadCanOpenConfig(void) const
 {
-   if (this->mpc_CoManagerWidget != NULL)
+   if (this->mpc_CoManagerWidget != nullptr)
    {
       this->mpc_CoManagerWidget->Refresh();
    }
@@ -647,7 +647,7 @@ void C_SdNdeNodeEditWidget::m_ReloadCanOpenConfig(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_ReloadCommMessages(void) const
 {
-   if (this->mpc_ComIfDescriptionWidget != NULL)
+   if (this->mpc_ComIfDescriptionWidget != nullptr)
    {
       this->mpc_ComIfDescriptionWidget->SetNodeId(this->mu32_NodeIndex,
                                                   this->mpc_ComIfDescriptionWidget->GetActProtocol());
@@ -672,7 +672,7 @@ void C_SdNdeNodeEditWidget::m_ReloadCommDatapools() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_ReloadHalc(void) const
 {
-   if (this->mpc_HalWidget != NULL)
+   if (this->mpc_HalWidget != nullptr)
    {
       this->mpc_HalWidget->SetNode(this->mu32_NodeIndex);
    }
@@ -686,7 +686,7 @@ void C_SdNdeNodeEditWidget::m_ReloadHalc(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_ReloadDataLogger() const
 {
-   if (this->mpc_DataLoggerWidget != NULL)
+   if (this->mpc_DataLoggerWidget != nullptr)
    {
       this->mpc_DataLoggerWidget->ReloadDataLogger();
    }
@@ -698,7 +698,7 @@ void C_SdNdeNodeEditWidget::m_ReloadDataLogger() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_ReloadApplications(void) const
 {
-   if (this->mpc_PropertiesWidget != NULL)
+   if (this->mpc_PropertiesWidget != nullptr)
    {
       this->mpc_PropertiesWidget->SetNodeIndex(this->mu32_NodeIndex);
    }
@@ -734,7 +734,7 @@ void C_SdNdeNodeEditWidget::m_HalcLoadedFromTsp(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_CreatePropertiesTab(const bool oq_AdaptCursor)
 {
-   if (this->mpc_PropertiesWidget == NULL)
+   if (this->mpc_PropertiesWidget == nullptr)
    {
       if (oq_AdaptCursor)
       {
@@ -783,7 +783,7 @@ void C_SdNdeNodeEditWidget::m_CreatePropertiesTab(const bool oq_AdaptCursor)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_CreateDpTab(const bool oq_AdaptCursor)
 {
-   if (this->mpc_DataPoolEditWidget == NULL)
+   if (this->mpc_DataPoolEditWidget == nullptr)
    {
       if (oq_AdaptCursor)
       {
@@ -825,7 +825,7 @@ void C_SdNdeNodeEditWidget::m_CreateDpTab(const bool oq_AdaptCursor)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_CreateCommTab(const bool oq_AdaptCursor)
 {
-   if (this->mpc_ComIfDescriptionWidget == NULL)
+   if (this->mpc_ComIfDescriptionWidget == nullptr)
    {
       if (oq_AdaptCursor)
       {
@@ -863,7 +863,7 @@ void C_SdNdeNodeEditWidget::m_CreateCommTab(const bool oq_AdaptCursor)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_CreateHalTab(const bool oq_AdaptCursor)
 {
-   if (this->mpc_HalWidget == NULL)
+   if (this->mpc_HalWidget == nullptr)
    {
       if (oq_AdaptCursor)
       {
@@ -897,7 +897,7 @@ void C_SdNdeNodeEditWidget::m_CreateHalTab(const bool oq_AdaptCursor)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_CreateCoManagerTab(const bool oq_AdaptCursor)
 {
-   if (this->mpc_CoManagerWidget == NULL)
+   if (this->mpc_CoManagerWidget == nullptr)
    {
       if (oq_AdaptCursor)
       {
@@ -939,7 +939,7 @@ void C_SdNdeNodeEditWidget::m_CreateCoManagerTab(const bool oq_AdaptCursor)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::m_CreateDataLoggerTab(const bool oq_AdaptCursor)
 {
-   if (this->mpc_DataLoggerWidget == NULL)
+   if (this->mpc_DataLoggerWidget == nullptr)
    {
       if (oq_AdaptCursor)
       {
@@ -1002,7 +1002,7 @@ void C_SdNdeNodeEditWidget::m_UpdateTrigger()
 void C_SdNdeNodeEditWidget::m_PropAndCoTabUpdateTrigger(const uint32_t ou32_NodeIndex)
 {
    this->m_ReloadCanOpenConfig();
-   if (this->mpc_PropertiesWidget != NULL)
+   if (this->mpc_PropertiesWidget != nullptr)
    {
       this->mpc_PropertiesWidget->SetNodeIndex(ou32_NodeIndex);
    }
@@ -1017,9 +1017,9 @@ void C_SdNdeNodeEditWidget::m_HandleVisibleTabs(void)
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
    bool q_DataLoggerVisible = false;
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
-      if (((pc_Node->pc_DeviceDefinition != NULL) &&
+      if (((pc_Node->pc_DeviceDefinition != nullptr) &&
            (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size())) &&
           (pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].q_FlashloaderOpenSydeIsFileBased))
       {

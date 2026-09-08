@@ -41,7 +41,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_SebBaseContextMenuManager::C_SebBaseContextMenuManager() :
    QObject(),
-   mpc_ActiveItem(NULL)
+   mpc_ActiveItem(nullptr)
 {
    // add all actions
    this->mpc_ActionCut = this->mc_ContextMenu.addAction("Cut", this, &C_SebBaseContextMenuManager::m_Cut,
@@ -140,7 +140,7 @@ void C_SebBaseContextMenuManager::HandleContextMenuEvent(QGraphicsSceneContextMe
    bool q_ShowMenu = false;
 
    // reset all previous configurations
-   this->mpc_ActiveItem = NULL;
+   this->mpc_ActiveItem = nullptr;
    // set all actions invisible
    this->m_SetActionsInvisible();
 
@@ -205,7 +205,7 @@ void C_SebBaseContextMenuManager::HandleContextMenuEvent(QGraphicsSceneContextMe
          if (orc_SelectedItems.size() > 1)
          {
             const QGraphicsItem * const pc_FirstItem = C_SebUtil::h_GetHighestParent(orc_SelectedItems[0]);
-            if (pc_FirstItem != NULL)
+            if (pc_FirstItem != nullptr)
             {
                bool q_AllEqual = true;
                for (int32_t s32_ItItem = 0; s32_ItItem < orc_SelectedItems.size(); ++s32_ItItem)

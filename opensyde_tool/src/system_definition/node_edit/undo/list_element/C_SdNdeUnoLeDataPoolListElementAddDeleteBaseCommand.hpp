@@ -37,7 +37,7 @@ public:
                                                        const uint32_t & oru32_DataPoolListIndex,
                                                        C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
                                                        const std::vector<uint32_t> & orc_Indices, const QString & orc_Text = "",
-                                                       QUndoCommand * const opc_Parent = NULL);
+                                                       QUndoCommand * const opc_Parent = nullptr);
 
 protected:
    void m_Add(void);

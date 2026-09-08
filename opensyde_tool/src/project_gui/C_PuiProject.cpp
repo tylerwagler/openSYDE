@@ -12,6 +12,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include "precomp_headers.hpp"
 
 #include <QDir>
@@ -48,7 +49,7 @@ const QString C_PuiProject::mhc_SERVICE_PROJECT_EXTENSION = "syde_sp";
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-C_PuiProject * C_PuiProject::mhpc_Singleton = NULL;
+C_PuiProject * C_PuiProject::mhpc_Singleton = nullptr;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -258,7 +259,7 @@ bool C_PuiProject::IsPasswordNecessary(void)
 
    if (this->m_IsServiceModeProject() == true)
    {
-      if (C_OscZipFile::h_IsZipFile(this->GetPath().toStdString().c_str()) != C_NO_ERR)
+      if (C_OscZipFile::h_IsZipFile(this->GetPath().toStdString().c_str()))
       {
          // Not a zip file, so it is encrypted
          q_Return = true;
@@ -351,10 +352,16 @@ bool C_PuiProject::GetSwitchUseCaseFlag() const
 //----------------------------------------------------------------------------------------------------------------------
 C_PuiProject * C_PuiProject::h_GetInstance(void)
 {
-   if (C_PuiProject::mhpc_Singleton == NULL)
+   //Guard the lazy construction: the previous check-then-new was a data race
+   //if two threads reached it at once. Destruction stays explicit via h_Destroy()
+   //so shutdown ordering is preserved.
+   static std::once_flag hc_OnceFlag;
+
+   std::call_once(hc_OnceFlag, []
    {
       C_PuiProject::mhpc_Singleton = new C_PuiProject();
-   }
+   });
+
    return C_PuiProject::mhpc_Singleton;
 }
 
@@ -364,10 +371,10 @@ C_PuiProject * C_PuiProject::h_GetInstance(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiProject::h_Destroy(void)
 {
-   if (C_PuiProject::mhpc_Singleton != NULL)
+   if (C_PuiProject::mhpc_Singleton != nullptr)
    {
       delete (C_PuiProject::mhpc_Singleton);
-      C_PuiProject::mhpc_Singleton = NULL;
+      C_PuiProject::mhpc_Singleton = nullptr;
    }
 }
 
@@ -575,7 +582,7 @@ void C_PuiProject::h_HandlePendingEvents(void)
 {
    const QPointer<QWidget> c_PreviousFocusWidget = QApplication::focusWidget();
 
-   if (c_PreviousFocusWidget != NULL)
+   if (c_PreviousFocusWidget != nullptr)
    {
       //Force focus change so any on focus change events (e.g. edit finished) will be processed before the CRC check
       c_PreviousFocusWidget->clearFocus();
@@ -584,7 +591,7 @@ void C_PuiProject::h_HandlePendingEvents(void)
       QApplication::processEvents();
 
       //Restore original focus (if possible)
-      if (c_PreviousFocusWidget != NULL)
+      if (c_PreviousFocusWidget != nullptr)
       {
          c_PreviousFocusWidget->setFocus();
       }
@@ -760,7 +767,7 @@ int32_t C_PuiProject::m_LoadProject(uint16_t * const opu16_FileVersion,
    else
    {
       //Load project file
-      s32_Retval = C_OscProjectFiler::h_Load(*this, this->mc_Path.toStdString().c_str());
+      s32_Retval = C_OscProjectFiler::h_Load(*this, this->mc_Path.toStdString().c_str()).value();
       if (s32_Retval == C_NO_ERR)
       {
          QString c_SystemDefintionPath;
@@ -933,10 +940,11 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
    if (c_Directory.mkpath(".") == true)
    {
       C_PuiProject::h_HandlePendingEvents();
+      //the project filers report std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = C_OscProjectFiler::h_Save(*this,
                                              orc_FilePath.toStdString().c_str(),
                                              stw::opensyde_gui_logic::C_Uti::h_GetApplicationVersion(
-                                                false).toStdString().c_str());
+                                                false).toStdString().c_str()).value();
       if (s32_Retval == C_NO_ERR)
       {
          // save system definition only if it has changed

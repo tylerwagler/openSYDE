@@ -550,8 +550,8 @@ void C_SdNdeCoPdoTableModel::m_FillPdoInfo(void)
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
       this->mu32_ManagerNodeIndex);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       uint32_t u32_InterfaceIndex = 0U;
       bool q_IntfFound = false;

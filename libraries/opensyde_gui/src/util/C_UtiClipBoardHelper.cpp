@@ -51,7 +51,7 @@ QString C_UtiClipBoardHelper::mh_GetClipBoard(void)
    QString c_Retval;
    QClipboard * const pc_Clipboard = QApplication::clipboard();
 
-   if (pc_Clipboard != NULL)
+   if (pc_Clipboard != nullptr)
    {
       //Copy from clipboard
       c_Retval = pc_Clipboard->text();
@@ -69,7 +69,7 @@ void C_UtiClipBoardHelper::mh_SetClipBoard(const QString & orc_Text)
 {
    QClipboard * const pc_Clipboard = QApplication::clipboard();
 
-   if (pc_Clipboard != NULL)
+   if (pc_Clipboard != nullptr)
    {
       //Copy to clipboard
       pc_Clipboard->clear();

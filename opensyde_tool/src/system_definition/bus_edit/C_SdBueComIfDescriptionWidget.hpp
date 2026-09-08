@@ -42,7 +42,7 @@ class C_SdBueComIfDescriptionWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdBueComIfDescriptionWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueComIfDescriptionWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdBueComIfDescriptionWidget(void) override;
 
    void InitStaticNames(void) const;

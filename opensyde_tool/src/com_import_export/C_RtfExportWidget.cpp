@@ -608,7 +608,8 @@ int32_t C_RtfExportWidget::m_CreateConfigXml(const std::string & orc_Path,
    tgl_assert(c_XmlParser.SelectNodeParent() == c_ROOT_NAME);
 
    // save DocuCreator configuration file
-   s32_Return = ListSaveToFile(c_XmlParser, orc_Path);
+   //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+   s32_Return = c_XmlParser.SaveToFile(orc_Path).value();
 
    return s32_Return;
 }

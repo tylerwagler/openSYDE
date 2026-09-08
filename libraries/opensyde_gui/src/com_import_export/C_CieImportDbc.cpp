@@ -935,7 +935,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
    {
       const std::string c_Message = "Signal \"" + c_String +
                                     "\": violation of datatype range in DBC file for minimum raw value \"" +
-                                    QString::number(f64_MinValue).toStdString().c_str() +
+                                    QString::number(f64_MinValue).toStdString() +
                                     "\". Correct datatype with \"Start Bit\" and \"Length\" has to be set manually.";
       osc_write_log_warning("DBC file import", c_Message);
       orc_WarningMessages.push_back(c_Message);
@@ -945,7 +945,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
    {
       const std::string c_Message = "Signal \"" + c_String +
                                     "\": violation of datatype range in DBC file for maximum raw value \"" +
-                                    QString::number(f64_MaxValue).toStdString().c_str() +
+                                    QString::number(f64_MaxValue).toStdString() +
                                     "\". Correct datatype with \"Start Bit\" and \"Length\" has to be set manually.";
       osc_write_log_warning("DBC file import", c_Message);
       orc_WarningMessages.push_back(c_Message);
@@ -1001,7 +1001,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
             const float64_t f64_DefaultPhy = (f64_DEFAULT * c_DbcSignal.factor) + c_DbcSignal.offset;
             const std::string c_Message = "Signal \"" + c_String +
                                           "\": Type for initial value unknown. Initial value set to default value \"" +
-                                          QString::number(f64_DefaultPhy).toStdString().c_str() + "\".";
+                                          QString::number(f64_DefaultPhy).toStdString() + "\".";
             osc_write_log_warning("DBC file import", c_Message);
             orc_WarningMessages.push_back(c_Message);
             f64_InitialValue = f64_DEFAULT;
@@ -1023,7 +1023,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
          {
             const std::string c_Message = "Signal \"" + c_String +
                                           "\": violation of datatype range in DBC file for initial raw value \"" +
-                                          QString::number(f64_InitialValue).toStdString().c_str() +
+                                          QString::number(f64_InitialValue).toStdString() +
                                           "\". Correct datatype with \"Start Bit\" and \"Length\"" \
                                           " has to be set manually.";
             osc_write_log_warning("DBC file import", c_Message);
@@ -1035,11 +1035,12 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
          // set value in range, leave initial value if in range
          C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_ValueChangedTo;
          const int32_t s32_Tmp =
+            //the core class reports std::error_code now; this class keeps the STW int32_t convention
             C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(orc_Element.c_MinValue,
                                                                   orc_Element.c_MaxValue,
                                                                   c_InitialValue,
                                                                   e_ValueChangedTo,
-                                                                  C_OscNodeDataPoolContentUtil::eLEAVE_VALUE);
+                                                                  C_OscNodeDataPoolContentUtil::eLEAVE_VALUE).value();
          if (s32_Tmp == C_RANGE)
          {
             // min and max values are interchanged
@@ -1047,9 +1048,9 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
             // do not know how to handle this better than leave all values as they are
             // and display warning to user
             const std::string c_Message = "Signal \"" + c_String + "\": Minimum raw value \"" +
-                                          QString::number(f64_MinValue).toStdString().c_str() +
+                                          QString::number(f64_MinValue).toStdString() +
                                           "\" and maximum raw value \"" +
-                                          QString::number(f64_MaxValue).toStdString().c_str() +
+                                          QString::number(f64_MaxValue).toStdString() +
                                           "\" are interchanged. This is not supported. Values left as they are.";
             osc_write_log_warning("DBC file import", c_Message);
             orc_WarningMessages.push_back(c_Message);
@@ -1078,11 +1079,11 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                }
 
                const std::string c_Message = "Signal \"" + c_String + "\": Initial value \"" +
-                                             QString::number(f64_InitialValuePhy).toStdString().c_str() +
+                                             QString::number(f64_InitialValuePhy).toStdString() +
                                              "\" is not between minimum \"" +
-                                             QString::number(f64_MinValuePhy).toStdString().c_str() +
+                                             QString::number(f64_MinValuePhy).toStdString() +
                                              "\" and maximum \"" +
-                                             QString::number(f64_MaxValuePhy).toStdString().c_str() +
+                                             QString::number(f64_MaxValuePhy).toStdString() +
                                              "\" value. Initial value set to " +
                                              c_PlaceholderMinMax + " value.";
                osc_write_log_warning("DBC file import", c_Message);
@@ -1124,11 +1125,12 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
       // set value in range, leave default initial value if in range
       C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_ValueChangedTo;
       const int32_t s32_Tmp =
+         //the core class reports std::error_code now; this class keeps the STW int32_t convention
          C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(orc_Element.c_MinValue,
                                                                orc_Element.c_MaxValue,
                                                                c_InitialValue,
                                                                e_ValueChangedTo,
-                                                               C_OscNodeDataPoolContentUtil::eLEAVE_VALUE);
+                                                               C_OscNodeDataPoolContentUtil::eLEAVE_VALUE).value();
       if (s32_Tmp == C_RANGE)
       {
          // min and max values are interchanged
@@ -1136,9 +1138,9 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
          // do not know how to handle this better than leave all values as they are
          // and display warning to user
          const std::string c_Message = "Signal \"" + c_String + "\": Minimum raw value \"" +
-                                       QString::number(f64_MinValue).toStdString().c_str() +
+                                       QString::number(f64_MinValue).toStdString() +
                                        "\" and maximum raw value \"" +
-                                       QString::number(f64_MaxValue).toStdString().c_str() +
+                                       QString::number(f64_MaxValue).toStdString() +
                                        "\" are interchanged. This is not supported. Values left as they are.";
          osc_write_log_warning("DBC file import", c_Message);
          orc_WarningMessages.push_back(c_Message);
@@ -1154,7 +1156,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
             {
                const std::string c_Message = "No initial value for signal \"" + c_String +
                                              "\" available. Initial value set to default \"" +
-                                             QString::number(f64_InitialValuePhy).toStdString().c_str() +
+                                             QString::number(f64_InitialValuePhy).toStdString() +
                                              "\".";
                osc_write_log_warning("DBC file import", c_Message);
                orc_WarningMessages.push_back(c_Message);
@@ -1169,13 +1171,13 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
             if (e_ValueChangedTo == C_OscNodeDataPoolContentUtil::eMIN)
             {
                c_PlaceholderMinMax = "minimum";
-               c_PlaceholderValue = QString::number(f64_MinValuePhy).toStdString().c_str();
+               c_PlaceholderValue = QString::number(f64_MinValuePhy).toStdString();
                f64_InitialValue = f64_MinValue; // set value for later datatype range check
             }
             else
             {
                c_PlaceholderMinMax = "maximum";
-               c_PlaceholderValue = QString::number(f64_MaxValuePhy).toStdString().c_str();
+               c_PlaceholderValue = QString::number(f64_MaxValuePhy).toStdString();
                f64_InitialValue = f64_MaxValue; // set value for later datatype range check
             }
 
@@ -1183,11 +1185,11 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
             {
                const float64_t f64_DefaultPhy = (f64_DEFAULT * c_DbcSignal.factor) + c_DbcSignal.offset;
                const std::string c_Message = "Signal \"" + c_String + "\": Global initial value \"" +
-                                             QString::number(f64_DefaultPhy).toStdString().c_str() +
+                                             QString::number(f64_DefaultPhy).toStdString() +
                                              "\" is not between minimum \"" +
-                                             QString::number(f64_MinValuePhy).toStdString().c_str() +
+                                             QString::number(f64_MinValuePhy).toStdString() +
                                              "\" and maximum \"" +
-                                             QString::number(f64_MaxValuePhy).toStdString().c_str() +
+                                             QString::number(f64_MaxValuePhy).toStdString() +
                                              "\" value. Initial value set to " + c_PlaceholderMinMax + " value.";
                osc_write_log_warning("DBC file import", c_Message);
                orc_WarningMessages.push_back(c_Message);
@@ -1211,7 +1213,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
    {
       const std::string c_Message = "Signal \"" + c_String +
                                     "\": violation of datatype range in DBC file for initial raw value \"" +
-                                    QString::number(f64_InitialValue).toStdString().c_str() +
+                                    QString::number(f64_InitialValue).toStdString() +
                                     "\" after it was set automatically. Correct datatype with \"Start Bit\" and \"Length\"" \
                                     " has to be set manually.";
       osc_write_log_warning("DBC file import", c_Message);
@@ -1572,5 +1574,5 @@ std::string C_CieImportDbc::mh_ReEscapeCriticalSymbols(const std::string & orc_S
 
    c_Temp.replace("\\\"", "\"");
 
-   return c_Temp.toStdString().c_str();
+   return c_Temp.toStdString();
 }

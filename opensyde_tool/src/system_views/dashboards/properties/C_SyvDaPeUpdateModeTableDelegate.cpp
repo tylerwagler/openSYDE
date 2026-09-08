@@ -68,7 +68,7 @@ QWidget * C_SyvDaPeUpdateModeTableDelegate::createEditor(QWidget * const opc_Par
                                                          const QStyleOptionViewItem & orc_Option,
                                                          const QModelIndex & orc_Index) const
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
    Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
@@ -90,7 +90,7 @@ QWidget * C_SyvDaPeUpdateModeTableDelegate::createEditor(QWidget * const opc_Par
          break;
       case C_SyvDaPeUpdateModeTableModel::eCYCLIC_INTERVAL:
          pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             pc_ComboBox = new C_OgeCbxTable(opc_Parent);
             //Init
@@ -168,7 +168,7 @@ QWidget * C_SyvDaPeUpdateModeTableDelegate::createEditor(QWidget * const opc_Par
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeUpdateModeTableDelegate::setEditorData(QWidget * const opc_Editor, const QModelIndex & orc_Index) const
 {
-   if ((opc_Editor != NULL) && (orc_Index.isValid() == true))
+   if ((opc_Editor != nullptr) && (orc_Index.isValid() == true))
    {
       QDoubleSpinBox * const pc_DoubleSpinBox = dynamic_cast<QDoubleSpinBox * const>(opc_Editor);
 
@@ -181,13 +181,13 @@ void C_SyvDaPeUpdateModeTableDelegate::setEditorData(QWidget * const opc_Editor,
       {
       case C_SyvDaPeUpdateModeTableModel::eTRANSMISSION_MODE:
       case C_SyvDaPeUpdateModeTableModel::eCYCLIC_INTERVAL:
-         if (pc_ComboBox != NULL)
+         if (pc_ComboBox != nullptr)
          {
             pc_ComboBox->setCurrentIndex(orc_Index.data(static_cast<int32_t>(Qt::EditRole)).toInt());
          }
          break;
       case C_SyvDaPeUpdateModeTableModel::eTHRESHOLD:
-         if (pc_DoubleSpinBox != NULL)
+         if (pc_DoubleSpinBox != nullptr)
          {
             const QVariant c_Data = orc_Index.data(static_cast<int32_t>(Qt::EditRole));
             switch (c_Data.type()) //lint !e788 //not all types required
@@ -212,7 +212,7 @@ void C_SyvDaPeUpdateModeTableDelegate::setEditorData(QWidget * const opc_Editor,
                break;
             }
          }
-         if (pc_Int64SpinBox != NULL)
+         if (pc_Int64SpinBox != nullptr)
          {
             pc_Int64SpinBox->SetValue(orc_Index.data(static_cast<int32_t>(Qt::EditRole)), false);
          }
@@ -236,7 +236,7 @@ void C_SyvDaPeUpdateModeTableDelegate::setEditorData(QWidget * const opc_Editor,
 void C_SyvDaPeUpdateModeTableDelegate::setModelData(QWidget * const opc_Editor, QAbstractItemModel * const opc_Model,
                                                     const QModelIndex & orc_Index) const
 {
-   if (((opc_Editor != NULL) && (opc_Model != NULL)) && (orc_Index.isValid() == true))
+   if (((opc_Editor != nullptr) && (opc_Model != nullptr)) && (orc_Index.isValid() == true))
    {
       QDoubleSpinBox * const pc_DoubleSpinBox = dynamic_cast<QDoubleSpinBox * const>(opc_Editor);
 
@@ -249,18 +249,18 @@ void C_SyvDaPeUpdateModeTableDelegate::setModelData(QWidget * const opc_Editor, 
       {
       case C_SyvDaPeUpdateModeTableModel::eTRANSMISSION_MODE:
       case C_SyvDaPeUpdateModeTableModel::eCYCLIC_INTERVAL:
-         if (pc_ComboBox != NULL)
+         if (pc_ComboBox != nullptr)
          {
             const int32_t s32_NewValue = pc_ComboBox->currentIndex();
             opc_Model->setData(orc_Index, s32_NewValue);
          }
          break;
       case C_SyvDaPeUpdateModeTableModel::eTHRESHOLD:
-         if (pc_DoubleSpinBox != NULL)
+         if (pc_DoubleSpinBox != nullptr)
          {
             opc_Model->setData(orc_Index, pc_DoubleSpinBox->value());
          }
-         if (pc_Int64SpinBox != NULL)
+         if (pc_Int64SpinBox != nullptr)
          {
             //Trigger manual interpretation to avoid accepting intermediate values
             pc_Int64SpinBox->InterpretValue();

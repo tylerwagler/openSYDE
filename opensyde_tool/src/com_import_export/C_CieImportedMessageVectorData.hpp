@@ -33,7 +33,7 @@ public:
                                   const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData,
                                   const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessageData,
                                   const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
-                                  const std::vector<QString> * const opc_WarningMessagesPerMessage = NULL);
+                                  const std::vector<QString> * const opc_WarningMessagesPerMessage = nullptr);
 
    std::vector<stw::opensyde_core::C_OscCanMessage> c_OscMessageData;
    std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> c_OscSignalData;

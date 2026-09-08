@@ -138,10 +138,10 @@ void C_SyvDaItTaModel::InitMinMaxAndName(void)
    stw::opensyde_gui::C_GiSvDaTableBase * const pc_TableWidget =
       dynamic_cast<stw::opensyde_gui::C_GiSvDaTableBase * const>(this->mpc_Data);
 
-   if (pc_TableWidget != NULL)
+   if (pc_TableWidget != nullptr)
    {
       const C_PuiSvDbTable * const pc_Item = pc_TableWidget->GetTableItem();
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          const uint32_t u32_Count = static_cast<uint32_t>(pc_Item->c_DataPoolElementsConfig.size());
 
@@ -178,10 +178,10 @@ void C_SyvDaItTaModel::UpdateValue(void)
    stw::opensyde_gui::C_GiSvDaTableBase * const pc_TableWidget =
       dynamic_cast<stw::opensyde_gui::C_GiSvDaTableBase * const>(this->mpc_Data);
 
-   if (pc_TableWidget != NULL)
+   if (pc_TableWidget != nullptr)
    {
       const C_PuiSvDbTable * const pc_Item = pc_TableWidget->GetTableItem();
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          const uint32_t u32_Count = pc_TableWidget->GetWidgetDataPoolElementCount();
 
@@ -260,10 +260,10 @@ void C_SyvDaItTaModel::UpdateTransparency(const uint32_t ou32_DataElementIndex, 
    stw::opensyde_gui::C_GiSvDaTableBase * const pc_TableWidget =
       dynamic_cast<stw::opensyde_gui::C_GiSvDaTableBase * const>(this->mpc_Data);
 
-   if (pc_TableWidget != NULL)
+   if (pc_TableWidget != nullptr)
    {
       const C_PuiSvDbTable * const pc_Item = pc_TableWidget->GetTableItem();
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          C_PuiSvDbNodeDataPoolListElementId c_Id;
          if (pc_TableWidget->GetDataPoolElementIndex(ou32_DataElementIndex, c_Id) == C_NO_ERR)
@@ -393,10 +393,10 @@ int32_t C_SyvDaItTaModel::rowCount(const QModelIndex & orc_Parent) const
       const stw::opensyde_gui::C_GiSvDaTableBase * const pc_TableWidget =
          dynamic_cast<const stw::opensyde_gui::C_GiSvDaTableBase * const>(this->mpc_Data);
 
-      if (pc_TableWidget != NULL)
+      if (pc_TableWidget != nullptr)
       {
          const C_PuiSvDbTable * const pc_Item = pc_TableWidget->GetTableItem();
-         if (pc_Item != NULL)
+         if (pc_Item != nullptr)
          {
             if (pc_Item->c_DataPoolElementsConfig.size() == 0)
             {
@@ -451,7 +451,7 @@ QVariant C_SyvDaItTaModel::data(const QModelIndex & orc_Index, const int32_t os3
       const uint32_t u32_Index = static_cast<uint32_t>(orc_Index.row());
       const C_SyvDaItTaModel::E_Columns e_Col = h_ColumnToEnum(orc_Index.column());
       const C_PuiSvDbNodeDataPoolListElementId * const pc_DataElementId = this->GetDataPoolElementIndex(u32_Index);
-      if (pc_DataElementId != NULL)
+      if (pc_DataElementId != nullptr)
       {
          //Generic settings, independent of invalid flag
          if (os32_Role == static_cast<int32_t>(Qt::TextAlignmentRole))
@@ -503,7 +503,7 @@ QVariant C_SyvDaItTaModel::data(const QModelIndex & orc_Index, const int32_t os3
                const stw::opensyde_gui::C_GiSvDaTableBase * const pc_TableWidget =
                   dynamic_cast<const stw::opensyde_gui::C_GiSvDaTableBase * const>(this->mpc_Data);
 
-               if (pc_TableWidget != NULL)
+               if (pc_TableWidget != nullptr)
                {
                   //Default
                   if (os32_Role == static_cast<int32_t>(Qt::DisplayRole))
@@ -541,7 +541,7 @@ QVariant C_SyvDaItTaModel::data(const QModelIndex & orc_Index, const int32_t os3
                         pc_DataPool =
                            C_PuiSdHandler::h_GetInstance()->GetOscDataPool(pc_DataElementId->u32_NodeIndex,
                                                                            pc_DataElementId->u32_DataPoolIndex);
-                        if (pc_DataPool != NULL)
+                        if (pc_DataPool != nullptr)
                         {
                            bool q_IsTransmissionError;
                            QString c_Error;
@@ -736,7 +736,7 @@ QVariant C_SyvDaItTaModel::data(const QModelIndex & orc_Index, const int32_t os3
                         break;
                      case C_SyvDaItTaModel::eNAME:
                         //get element name as heading
-                        if (C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(*pc_DataElementId) != NULL)
+                        if (C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(*pc_DataElementId) != nullptr)
                         {
                            c_Retval =
                               C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(*pc_DataElementId)->c_Name.
@@ -1130,16 +1130,16 @@ int32_t C_SyvDaItTaModel::h_EnumToColumn(const C_SyvDaItTaModel::E_Columns & ore
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDbNodeDataPoolListElementId * C_SyvDaItTaModel::GetDataPoolElementIndex(const uint32_t ou32_Index) const
 {
-   const C_PuiSvDbNodeDataPoolListElementId * pc_Retval = NULL;
+   const C_PuiSvDbNodeDataPoolListElementId * pc_Retval = nullptr;
 
-   if (this->mpc_Data != NULL)
+   if (this->mpc_Data != nullptr)
    {
       //lint -e{929}  false positive in PC-Lint: allowed by MISRA 5-2-2
       const C_GiSvDaTableBase * const pc_Table = dynamic_cast<const C_GiSvDaTableBase *>(this->mpc_Data);
-      if (pc_Table != NULL)
+      if (pc_Table != nullptr)
       {
          const C_PuiSvDbTable * const pc_TableData = pc_Table->GetTableItem();
-         if ((pc_TableData != NULL) && (ou32_Index < pc_TableData->c_DataPoolElementsConfig.size()))
+         if ((pc_TableData != nullptr) && (ou32_Index < pc_TableData->c_DataPoolElementsConfig.size()))
          {
             const C_PuiSvDbNodeDataElementConfig & rc_Config = pc_TableData->c_DataPoolElementsConfig[ou32_Index];
             pc_Retval = &rc_Config.c_ElementId;
@@ -1167,10 +1167,10 @@ uint32_t C_SyvDaItTaModel::m_AddNewItem(const uint32_t ou32_SelectedIndex)
    stw::opensyde_gui::C_GiSvDaTableBase * const pc_TableWidget =
       dynamic_cast<stw::opensyde_gui::C_GiSvDaTableBase * const>(this->mpc_Data);
 
-   if ((pc_TableWidget != NULL) && (this->mc_AddDataPoolElementId.GetIsValid() == true))
+   if ((pc_TableWidget != nullptr) && (this->mc_AddDataPoolElementId.GetIsValid() == true))
    {
       const C_PuiSvDbTable * const pc_Item = pc_TableWidget->GetTableItem();
-      if ((pc_Item != NULL) && (pc_Item->c_DataPoolElementsConfig.size() < C_SyvDaItTaModel::hu32_MAX_ELEMENTS))
+      if ((pc_Item != nullptr) && (pc_Item->c_DataPoolElementsConfig.size() < C_SyvDaItTaModel::hu32_MAX_ELEMENTS))
       {
          const C_PuiSvDbNodeDataElementConfig c_NewConfig = C_SyvDaItTaModel::mh_GetConfigForNewItem(
             this->mc_AddDataPoolElementId);
@@ -1224,7 +1224,7 @@ uint32_t C_SyvDaItTaModel::m_AddNewItem(const uint32_t ou32_SelectedIndex)
          //Apply
          tgl_assert(pc_TableWidget->SetTableItem(c_Copy) == C_NO_ERR);
          //Register
-         if ((this->mpc_Data != NULL) &&
+         if ((this->mpc_Data != nullptr) &&
              (this->mpc_Data->IsDataElementRegistered(this->mc_AddDataPoolElementId) == false))
          {
             tgl_assert(this->mpc_Data->RegisterDataPoolElement(this->mc_AddDataPoolElementId,
@@ -1282,10 +1282,10 @@ uint32_t C_SyvDaItTaModel::m_GetSizeItems(void) const
    const stw::opensyde_gui::C_GiSvDaTableBase * const pc_TableWidget =
       dynamic_cast<const stw::opensyde_gui::C_GiSvDaTableBase * const>(this->mpc_Data);
 
-   if (pc_TableWidget != NULL)
+   if (pc_TableWidget != nullptr)
    {
       const C_PuiSvDbTable * const pc_Item = pc_TableWidget->GetTableItem();
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          u32_Retval = static_cast<uint32_t>(pc_Item->c_DataPoolElementsConfig.size());
       }
@@ -1309,10 +1309,10 @@ void C_SyvDaItTaModel::m_DeleteItem(const uint32_t ou32_Index)
    stw::opensyde_gui::C_GiSvDaTableBase * const pc_TableWidget =
       dynamic_cast<stw::opensyde_gui::C_GiSvDaTableBase * const>(this->mpc_Data);
 
-   if (pc_TableWidget != NULL)
+   if (pc_TableWidget != nullptr)
    {
       const C_PuiSvDbTable * const pc_Item = pc_TableWidget->GetTableItem();
-      if ((pc_Item != NULL) && (pc_Item->c_DataPoolElementsConfig.size() > 0))
+      if ((pc_Item != nullptr) && (pc_Item->c_DataPoolElementsConfig.size() > 0))
       {
          C_PuiSvDbTable c_Copy = *pc_Item;
          //Step 2: Remove rows and store the according data element index
@@ -1383,10 +1383,10 @@ void C_SyvDaItTaModel::m_MoveItem(const uint32_t ou32_SourceIndex, const uint32_
    stw::opensyde_gui::C_GiSvDaTableBase * const pc_TableWidget =
       dynamic_cast<stw::opensyde_gui::C_GiSvDaTableBase * const>(this->mpc_Data);
 
-   if (pc_TableWidget != NULL)
+   if (pc_TableWidget != nullptr)
    {
       const C_PuiSvDbTable * const pc_Item = pc_TableWidget->GetTableItem();
-      if ((pc_Item != NULL) && (ou32_SourceIndex < pc_Item->c_DataPoolElementsConfig.size()))
+      if ((pc_Item != nullptr) && (ou32_SourceIndex < pc_Item->c_DataPoolElementsConfig.size()))
       {
          const C_PuiSvDbNodeDataElementConfig c_NewConfig = pc_Item->c_DataPoolElementsConfig[ou32_SourceIndex];
          C_PuiSvDbTable c_Copy = *pc_Item;
@@ -1423,7 +1423,7 @@ C_PuiSvDbNodeDataElementConfig C_SyvDaItTaModel::mh_GetConfigForNewItem(
 
    c_NewConfig.c_ElementId = orc_DataPoolElementId;
    c_NewConfig.c_ElementScaling.q_UseDefault = true;
-   if (pc_Element != NULL)
+   if (pc_Element != nullptr)
    {
       c_NewConfig.c_ElementScaling.f64_Offset = pc_Element->f64_Offset;
       c_NewConfig.c_ElementScaling.f64_Factor = pc_Element->f64_Factor;
@@ -1452,7 +1452,7 @@ C_PuiSvDbNodeDataPoolListElementId C_SyvDaItTaModel::m_RemoveItem(const uint32_t
    C_PuiSvDbNodeDataPoolListElementId c_Retval;
    const C_PuiSvDbNodeDataPoolListElementId * const pc_CurId = this->GetDataPoolElementIndex(ou32_Index);
 
-   if (pc_CurId != NULL)
+   if (pc_CurId != nullptr)
    {
       bool q_Found = false;
       c_Retval = *pc_CurId;
@@ -1467,7 +1467,7 @@ C_PuiSvDbNodeDataPoolListElementId C_SyvDaItTaModel::m_RemoveItem(const uint32_t
             q_Found = true;
          }
       }
-      if ((q_Found == false) && (this->mpc_Data != NULL))
+      if ((q_Found == false) && (this->mpc_Data != nullptr))
       {
          //Remove completely if no usages
          this->mpc_Data->RemoveDataPoolElement(*pc_CurId);
@@ -1535,7 +1535,7 @@ QString C_SyvDaItTaModel::m_GetValue(const uint32_t ou32_Index) const
 {
    QString c_Retval = "";
 
-   if (((((this->mpc_Data != NULL) &&
+   if (((((this->mpc_Data != nullptr) &&
           (ou32_Index < this->mc_UnscaledLastDataValues.size())) &&
          (ou32_Index < this->mc_InterpretAsStringFlags.size())) && (ou32_Index < this->mc_ShowPercentage.size())) &&
        (ou32_Index < this->mc_ArrayItemIndex.size()))
@@ -1632,9 +1632,9 @@ void C_SyvDaItTaModel::m_InitMinMaxAndNameForOneRow(const C_PuiSvDbNodeDataPoolL
       const C_OscNodeDataPool * const pc_Datapool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
          orc_ElementId.u32_NodeIndex, orc_ElementId.u32_DataPoolIndex);
 
-      tgl_assert(pc_OscElement != NULL);
-      tgl_assert(pc_Datapool != NULL);
-      if ((pc_OscElement != NULL) && (pc_Datapool != NULL))
+      tgl_assert(pc_OscElement != nullptr);
+      tgl_assert(pc_Datapool != nullptr);
+      if ((pc_OscElement != nullptr) && (pc_Datapool != nullptr))
       {
          this->m_InitValuesForOneRow(orc_ElementId, orc_ElementConfig, *pc_OscElement, ou32_Index);
 
@@ -1780,10 +1780,10 @@ void C_SyvDaItTaModel::m_AddAndInitMinMaxAndNameForItem(const uint32_t ou32_Inde
    stw::opensyde_gui::C_GiSvDaTableBase * const pc_TableWidget =
       dynamic_cast<stw::opensyde_gui::C_GiSvDaTableBase * const>(this->mpc_Data);
 
-   if (pc_TableWidget != NULL)
+   if (pc_TableWidget != nullptr)
    {
       const C_PuiSvDbTable * const pc_Item = pc_TableWidget->GetTableItem();
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          //Reserve
          this->mc_ScaledDisplayDataValues.insert(this->mc_ScaledDisplayDataValues.begin() + ou32_Index,
@@ -1819,7 +1819,7 @@ void C_SyvDaItTaModel::m_InitMinMaxAndNameForItem(const C_PuiSvDbTable & orc_Tab
    const C_PuiSvDbNodeDataPoolListElementId * const pc_ElementId =
       this->GetDataPoolElementIndex(ou32_Index);
 
-   if (pc_ElementId != NULL)
+   if (pc_ElementId != nullptr)
    {
       this->m_InitMinMaxAndNameForOneRow(*pc_ElementId,
                                          orc_Table.c_DataPoolElementsConfig[ou32_Index], ou32_Index);

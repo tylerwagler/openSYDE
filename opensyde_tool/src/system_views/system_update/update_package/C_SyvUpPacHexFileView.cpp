@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
 #include <QDateTime>
 #include <QFileInfo>
 #include <QCryptographicHash>
@@ -106,10 +107,9 @@ void C_SyvUpPacHexFileView::m_LoadInfo(void) const
 {
    QString c_Text = "<html><body>";
    C_OscHexFile c_HexFile;
-   uint32_t u32_Result;
 
-   u32_Result = ListLoadFromFile(c_HexFile, this->mc_AbsoluteFilePath.toStdString().c_str());
-   if (u32_Result == stw::hex_file::NO_ERR)
+   const std::error_code c_Result = c_HexFile.LoadFromFile(this->mc_AbsoluteFilePath.toStdString().c_str());
+   if (!c_Result)
    {
       mh_AddFileSection(this->mc_AbsoluteFilePath, c_Text);
       mh_AddDataInformation(c_HexFile, c_Text);
@@ -258,7 +258,7 @@ void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexF
    orc_Content += "</td>";
    orc_Content += "</tr>";
    orc_Content += "</table>";
-   for (int32_t s32_ItAppl = 0UL; s32_ItAppl < c_InfoBlocks.size(); ++s32_ItAppl)
+   for (int32_t s32_ItAppl = 0L; s32_ItAppl < static_cast<int32_t>(c_InfoBlocks.size()); ++s32_ItAppl)
    {
       const stw::opensyde_core::C_OscApplicationInfoBlock & rc_CurInfo = c_InfoBlocks[s32_ItAppl];
       orc_Content += "<h3>" +

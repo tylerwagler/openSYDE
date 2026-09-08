@@ -30,7 +30,7 @@ class C_CamMetClipBoardHelperCanMessageData
 {
 public:
    C_CamMetClipBoardHelperCanMessageData() :
-      pc_MessageData(NULL),
+      pc_MessageData(nullptr),
       q_Extended(false)
    {
    }

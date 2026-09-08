@@ -74,7 +74,7 @@ const std::vector<C_CamProMessageData> & C_CamProHandler::GetMessages(void) cons
 //----------------------------------------------------------------------------------------------------------------------
 const C_CamProMessageData * C_CamProHandler::GetMessageConst(const uint32_t ou32_Index) const
 {
-   const C_CamProMessageData * pc_Retval = NULL;
+   const C_CamProMessageData * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_Messages.size())
    {
@@ -791,12 +791,12 @@ void C_CamProHandler::GetAllMessagesFromDatabase(const QString & orc_File, QStri
       {
          //Match
          //Add
-         if (opc_CompleteMessageNames != NULL)
+         if (opc_CompleteMessageNames != nullptr)
          {
             const QString c_CompleteName = C_CamProHandler::h_GetCompleteMessageName(rc_Message);
             opc_CompleteMessageNames->append(c_CompleteName);
          }
-         if (opc_MessageIndices != NULL)
+         if (opc_MessageIndices != nullptr)
          {
             opc_MessageIndices->push_back(u32_ItMessage);
          }
@@ -997,7 +997,8 @@ int32_t C_CamProHandler::LoadFromFile(const std::string & orc_Path)
 
       Q_EMIT (this->SigClearOldConfiguration());
 
-      s32_Return = ListLoadFromFile(c_XmlParser, orc_Path);
+      //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Return = c_XmlParser.LoadFromFile(orc_Path).value();
       if (s32_Return == C_NO_ERR)
       {
          s32_Return = C_CamProHandlerFiler::h_Load(*this, c_XmlParser);
@@ -1086,7 +1087,8 @@ int32_t C_CamProHandler::SaveToFile(const std::string & orc_Path)
          C_OscXmlParser c_XmlParser;
          C_CamProHandlerFiler::h_Save(*this, c_XmlParser);
 
-         s32_Return = ListSaveToFile(c_XmlParser, orc_Path);
+         //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+         s32_Return = c_XmlParser.SaveToFile(orc_Path).value();
          if (s32_Return != C_NO_ERR)
          {
             osc_write_log_error("Saving Project", "Could not write to file \"" + orc_Path + "\".");

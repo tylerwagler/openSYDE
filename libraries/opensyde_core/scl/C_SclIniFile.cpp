@@ -127,7 +127,7 @@ void C_SclIniFile::mh_CopyLessTrim(std::string & orc_String)
 bool C_SclIniFile::m_Load(const std::string & orc_FileName)
 {
    std::string c_Comment;
-   C_SclIniSection * pc_CurrentSection = NULL;
+   C_SclIniSection * pc_CurrentSection = nullptr;
    int32_t s32_Index;
    uint16_t u16_NumSections = 0;
    uint16_t u16_NumKeysAdded = 0U;
@@ -149,7 +149,7 @@ bool C_SclIniFile::m_Load(const std::string & orc_FileName)
    // of resizing them when new values are added.
    //But performance tests showed better performance with this single pass approach.
    //So all the string checking only needs to be done once.
-   for (s32_Index = 0; s32_Index < c_List.size(); s32_Index++)
+   for (s32_Index = 0; s32_Index < static_cast<int32_t>(c_List.size()); s32_Index++)
    {
       C_SclIniFile::mh_CopyLessTrim(c_List[s32_Index]);
       const std::string & rc_Line = c_List[s32_Index];
@@ -176,7 +176,7 @@ bool C_SclIniFile::m_Load(const std::string & orc_FileName)
          }
          else // in this case this should be a key, add this key/value pair
          {
-            if (pc_CurrentSection != NULL)
+            if (pc_CurrentSection != nullptr)
             {
                std::string c_Key;
                std::string c_Value;
@@ -262,7 +262,7 @@ void C_SclIniFile::UpdateFile(void)
 bool C_SclIniFile::m_SetValue(const std::string & orc_Section, const std::string & orc_Key,
                               const std::string & orc_Value, const bool oq_ForceAppend)
 {
-   C_SclIniKey * pc_Key = NULL;
+   C_SclIniKey * pc_Key = nullptr;
    C_SclIniSection * pc_Section;
 
    if ((orc_Section == "") || (orc_Key == ""))
@@ -272,7 +272,7 @@ bool C_SclIniFile::m_SetValue(const std::string & orc_Section, const std::string
 
    //does the section already exist ?
    pc_Section = m_GetSection(orc_Section);
-   if (pc_Section != NULL)
+   if (pc_Section != nullptr)
    {
       if (oq_ForceAppend == false)
       {
@@ -288,7 +288,7 @@ bool C_SclIniFile::m_SetValue(const std::string & orc_Section, const std::string
    mq_Dirty = true;
 
    // if the key does not exist in that section, then add the new key.
-   if (pc_Key == NULL)
+   if (pc_Key == nullptr)
    {
       pc_Section->c_Keys.emplace_back();
       pc_Section->c_Keys[pc_Section->c_Keys.size() - 1U].c_Key     = orc_Key;
@@ -446,7 +446,7 @@ const std::string & C_SclIniFile::m_GetValue(const std::string & orc_Key, const 
 
    const C_SclIniKey * const pc_Key = m_GetKey(orc_Key, orc_Section);
 
-   return (pc_Key == NULL) ? hc_Empty : pc_Key->c_Value;
+   return (pc_Key == nullptr) ? hc_Empty : pc_Key->c_Value;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -653,7 +653,7 @@ float64_t C_SclIniFile::ReadFloat(const std::string & orc_Section, const std::st
    }
    else
    {
-       f64_Return = std::stod(c_String);
+      f64_Return = ToDoubleCompat(c_String);
    }
    return f64_Return;
 }
@@ -671,7 +671,7 @@ void C_SclIniFile::EraseSection(const std::string & orc_Section)
 {
    int32_t s32_Index;
 
-   for (s32_Index = 0; s32_Index < mc_Sections.size(); s32_Index++)
+   for (s32_Index = 0; s32_Index < static_cast<int32_t>(mc_Sections.size()); s32_Index++)
    {
       if (LowerCaseCompat(mc_Sections[s32_Index].c_Name).compare(LowerCaseCompat(orc_Section)) == 0)
       {
@@ -700,12 +700,12 @@ void C_SclIniFile::DeleteKey(const std::string & orc_Section, const std::string 
    int32_t s32_Index;
    C_SclIniSection * const pc_Section = m_GetSection(orc_Section);
 
-   if (pc_Section == NULL)
+   if (pc_Section == nullptr)
    {
       return;
    }
 
-   for (s32_Index = 0; s32_Index < pc_Section->c_Keys.size(); s32_Index++)
+   for (s32_Index = 0; s32_Index < static_cast<int32_t>(pc_Section->c_Keys.size()); s32_Index++)
    {
       if (LowerCaseCompat(pc_Section->c_Keys[s32_Index].c_Key).compare(LowerCaseCompat(orc_Key)) == 0)
       {
@@ -755,7 +755,7 @@ bool C_SclIniFile::SectionExists(const std::string & orc_Section)
 {
    const C_SclIniSection * const pt_Section = m_GetSection(orc_Section);
 
-   return (pt_Section != NULL);
+   return (pt_Section != nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -775,7 +775,7 @@ bool C_SclIniFile::ValueExists(const std::string & orc_Section, const std::strin
 {
    const C_SclIniKey * const pt_Key = m_GetKey(orc_Key, orc_Section);
 
-   return (pt_Key != NULL);
+   return (pt_Key != nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -785,9 +785,9 @@ C_SclIniKey * C_SclIniFile::m_GetKey(const std::string & orc_Key, const std::str
 {
    C_SclIniSection * const pt_Section = m_GetSection(orc_Section);
 
-   if (pt_Section == NULL)
+   if (pt_Section == nullptr)
    {
-      return NULL;
+      return nullptr;
    }
 
    return pt_Section->GetKey(orc_Key);
@@ -803,7 +803,7 @@ C_SclIniKey * C_SclIniSection::GetKey(const std::string & orc_Key)
    s32_LastIndex = ms32_PreviousKeyIndex;
 
    //Search from last successful point to the end
-   for (s32_Index = s32_LastIndex; s32_Index < this->c_Keys.size(); s32_Index++)
+   for (s32_Index = s32_LastIndex; s32_Index < static_cast<int32_t>(this->c_Keys.size()); s32_Index++)
    {
       if (LowerCaseCompat(this->c_Keys[s32_Index].c_Key).compare(LowerCaseCompat(orc_Key)) == 0)
       {
@@ -822,7 +822,7 @@ C_SclIniKey * C_SclIniSection::GetKey(const std::string & orc_Key)
       }
    }
 
-   return NULL;
+   return nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -832,7 +832,7 @@ std::string C_SclIniSection::GetValue(const std::string & orc_Key)
    std::string c_Result;
    C_SclIniKey * const pc_Key = this->GetKey(orc_Key);
 
-   if (pc_Key != NULL)
+   if (pc_Key != nullptr)
    {
       c_Result = pc_Key->c_Value;
    }
@@ -866,7 +866,7 @@ C_SclIniSection * C_SclIniFile::m_GetSection(const std::string & orc_Section)
    s32_LastIndex = ms32_PreviousSectionIndex;
 
    //Search from last successful point to the end
-   for (s32_Index = s32_LastIndex; s32_Index < mc_Sections.size(); s32_Index++)
+   for (s32_Index = s32_LastIndex; s32_Index < static_cast<int32_t>(mc_Sections.size()); s32_Index++)
    {
       if (LowerCaseCompat(mc_Sections[s32_Index].c_Name).compare(LowerCaseCompat(orc_Section)) == 0)
       {
@@ -885,7 +885,7 @@ C_SclIniSection * C_SclIniFile::m_GetSection(const std::string & orc_Section)
       }
    }
 
-   return NULL;
+   return nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -939,10 +939,10 @@ void C_SclIniFile::ReadSection(const std::string & orc_Section, std::vector<std:
       u32_OldLength = 0U;
    }
 
-   if (pc_Section != NULL)
+   if (pc_Section != nullptr)
    {
       opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + pc_Section->c_Keys.size());
-      for (s32_Loop = 0; s32_Loop < pc_Section->c_Keys.size(); s32_Loop++)
+      for (s32_Loop = 0; s32_Loop < static_cast<int32_t>(pc_Section->c_Keys.size()); s32_Loop++)
       {
          (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] = pc_Section->c_Keys[s32_Loop].c_Key;
       }
@@ -977,10 +977,10 @@ void C_SclIniFile::ReadSectionValues(const std::string & orc_Section, std::vecto
       u32_OldLength = 0U;
    }
 
-   if (pc_Section != NULL)
+   if (pc_Section != nullptr)
    {
       opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + pc_Section->c_Keys.size());
-      for (s32_Loop = 0; s32_Loop < pc_Section->c_Keys.size(); s32_Loop++)
+      for (s32_Loop = 0; s32_Loop < static_cast<int32_t>(pc_Section->c_Keys.size()); s32_Loop++)
       {
          (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
             pc_Section->c_Keys[s32_Loop].c_Key + "=" + pc_Section->c_Keys[s32_Loop].c_Value;
@@ -1013,7 +1013,7 @@ void C_SclIniFile::ReadSections(std::vector<std::string> * const opc_Strings, co
    }
 
    opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + mc_Sections.size());
-   for (s32_Loop = 0; s32_Loop < mc_Sections.size(); s32_Loop++)
+   for (s32_Loop = 0; s32_Loop < static_cast<int32_t>(mc_Sections.size()); s32_Loop++)
    {
       (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] = mc_Sections[s32_Loop].c_Name;
    }
@@ -1066,7 +1066,7 @@ void C_SclIniFile::GetFileAsStringList(std::vector<std::string> & orc_Strings) c
 
    orc_Strings.clear();
 
-   for (s32_Section = 0; s32_Section < mc_Sections.size(); s32_Section++)
+   for (s32_Section = 0; s32_Section < static_cast<int32_t>(mc_Sections.size()); s32_Section++)
    {
       pc_Section = &mc_Sections[s32_Section];
 
@@ -1096,7 +1096,7 @@ void C_SclIniFile::GetFileAsStringList(std::vector<std::string> & orc_Strings) c
       }
 
       //add one blank line after every section (increases readability; required by some parsers)
-      if (s32_Section < (mc_Sections.size() - 1))
+      if (s32_Section < (static_cast<int32_t>(mc_Sections.size()) - 1))
       {
          orc_Strings.push_back("");
       }

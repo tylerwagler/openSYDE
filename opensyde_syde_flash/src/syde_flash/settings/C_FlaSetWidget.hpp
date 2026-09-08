@@ -33,7 +33,7 @@ class C_FlaSetWidget :
    Q_OBJECT
 
 public:
-   explicit C_FlaSetWidget(QWidget * const opc_Parent = NULL);
+   explicit C_FlaSetWidget(QWidget * const opc_Parent = nullptr);
    ~C_FlaSetWidget(void) override;
 
    void LoadUserSettings(void);

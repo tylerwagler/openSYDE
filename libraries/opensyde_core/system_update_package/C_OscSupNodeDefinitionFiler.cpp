@@ -13,10 +13,12 @@
 #include "precomp_headers.hpp"
 
 #include <string>
+#include <system_error>
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSupSignatureFiler.hpp"
@@ -76,35 +78,35 @@ static const std::string mc_SIG_FILE_ATTR = "name";                             
    \param[in]  oq_UseMinorVersion1  Use minor version 1
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   No error
-   \retval   C_RD_WR    File(s) could not be created
-   \retval   C_CONFIG   Input invalid
+   \retval   Errc::success   No error
+   \retval   Errc::rd_wr     File(s) could not be created
+   \retval   Errc::config    Input invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::h_SaveNodes(const std::vector<std::string> & orc_Files,
-                                                 const std::vector<C_OscSupNodeDefinition> & orc_Nodes,
-                                                 const bool oq_UseMinorVersion1)
+std::error_code C_OscSupNodeDefinitionFiler::h_SaveNodes(const std::vector<std::string> & orc_Files,
+                                                         const std::vector<C_OscSupNodeDefinition> & orc_Nodes,
+                                                         const bool oq_UseMinorVersion1)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Nodes.size() == orc_Files.size())
    {
-      for (uint32_t u32_Pos = 0; (u32_Pos < orc_Nodes.size()) && (s32_Retval == C_NO_ERR); u32_Pos++)
+      for (uint32_t u32_Pos = 0; (u32_Pos < orc_Nodes.size()) && (!c_Retval); u32_Pos++)
       {
          if (orc_Nodes[u32_Pos].u8_Active == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE)
          {
-            s32_Retval = C_OscSupNodeDefinitionFiler::mh_SaveNode(orc_Files[u32_Pos], orc_Nodes[u32_Pos],
-                                                                  oq_UseMinorVersion1);
+            c_Retval = C_OscSupNodeDefinitionFiler::mh_SaveNode(orc_Files[u32_Pos], orc_Nodes[u32_Pos],
+                                                                oq_UseMinorVersion1);
          }
       }
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -120,22 +122,20 @@ int32_t C_OscSupNodeDefinitionFiler::h_SaveNodes(const std::vector<std::string> 
    \param[in]      oq_UseMinorVersion1       Use minor version 1
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   success
-   \retval   C_RD_WR    read/write error (see log file)
+   \retval   Errc::success   success
+   \retval   Errc::rd_wr     read/write error (see log file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::string> & orc_Files,
-                                                 const std::vector<std::string> & orc_NodeFoldersAbs,
-                                                 const std::vector<uint8_t> & orc_ActiveNodes,
-                                                 std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-                                                 std::map<uint32_t, uint32_t> & orc_UpdateOrderByNodes,
-                                                 const std::vector<uint32_t> & orc_UpdatePosition,
-                                                 std::vector<std::string> & orc_Signatures,
-                                                 const bool oq_UseMinorVersion1)
+std::error_code C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::string> & orc_Files,
+                                                         const std::vector<std::string> & orc_NodeFoldersAbs,
+                                                         const std::vector<uint8_t> & orc_ActiveNodes,
+                                                         std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::map<uint32_t,
+                                                                                                                                     uint32_t> & orc_UpdateOrderByNodes, const std::vector<uint32_t> & orc_UpdatePosition, std::vector<std::string> & orc_Signatures,
+                                                         const bool oq_UseMinorVersion1)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    tgl_assert((orc_Files.size() == orc_NodeFoldersAbs.size()) &&
               ((orc_Files.size() == orc_ActiveNodes.size()) && (orc_Files.size() == orc_UpdatePosition.size())));
@@ -143,7 +143,7 @@ int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::string> 
        ((orc_Files.size() == orc_ActiveNodes.size()) && (orc_Files.size() == orc_UpdatePosition.size())))
    {
       // go through all nodes
-      for (uint32_t u32_NodeCounter = 0; (u32_NodeCounter < orc_ActiveNodes.size()) && (s32_Retval == C_NO_ERR);
+      for (uint32_t u32_NodeCounter = 0; (u32_NodeCounter < orc_ActiveNodes.size()) && (!c_Retval);
            ++u32_NodeCounter)
       {
          std::string c_Signature;
@@ -152,14 +152,14 @@ int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::string> 
          {
             C_OscXmlParserLog c_XmlParser;
             c_XmlParser.SetLogHeading("Loading secure update collection definition");
-            s32_Retval = ListLoadFromFile(c_XmlParser, orc_Files[u32_NodeCounter]);
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = c_XmlParser.LoadFromFile(orc_Files[u32_NodeCounter]);
+            if (!c_Retval)
             {
                // get update position
                const uint32_t u32_UpdatePosition = orc_UpdatePosition[u32_NodeCounter];
                tgl_assert(c_XmlParser.SelectRoot() == mc_ROOT_NAME); // we shall have a valid and
-               s32_Retval = mh_CheckFileVersion(oq_UseMinorVersion1, c_XmlParser);
-               if (s32_Retval == C_NO_ERR)
+               c_Retval = mh_CheckFileVersion(oq_UseMinorVersion1, c_XmlParser);
+               if (!c_Retval)
                {
                   // compatible update package
                   C_OscSupNodeDefinitionFiler::mh_LoadFilesSection(c_DoFlash.c_FilesToFlash, u32_NodeCounter,
@@ -172,13 +172,13 @@ int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::string> 
                                                                    c_XmlParser, mc_PARAM_FILES, mc_PARAM_FILE);
                   if (oq_UseMinorVersion1)
                   {
-                     s32_Retval = C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSectionVersion1Minor1(c_DoFlash,
-                                                                                                     u32_NodeCounter,
-                                                                                                     u32_UpdatePosition,
-                                                                                                     orc_UpdateOrderByNodes,
-                                                                                                     orc_NodeFoldersAbs[
-                                                                                                        u32_NodeCounter],
-                                                                                                     c_XmlParser);
+                     c_Retval = C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSectionVersion1Minor1(c_DoFlash,
+                                                                                                   u32_NodeCounter,
+                                                                                                   u32_UpdatePosition,
+                                                                                                   orc_UpdateOrderByNodes,
+                                                                                                   orc_NodeFoldersAbs[
+                                                                                                      u32_NodeCounter],
+                                                                                                   c_XmlParser);
                   }
                   else
                   {
@@ -188,9 +188,9 @@ int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::string> 
                                                                                   orc_NodeFoldersAbs[u32_NodeCounter],
                                                                                   c_XmlParser);
                   }
-                  if (s32_Retval == C_NO_ERR)
+                  if (!c_Retval)
                   {
-                     s32_Retval = mh_LoadSignatureFile(orc_NodeFoldersAbs[u32_NodeCounter], c_Signature, c_XmlParser);
+                     c_Retval = mh_LoadSignatureFile(orc_NodeFoldersAbs[u32_NodeCounter], c_Signature, c_XmlParser);
                   }
                }
             }
@@ -200,11 +200,11 @@ int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::string> 
          orc_Signatures.push_back(c_Signature);        // same for signature
       }
    }
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
-      s32_Retval = C_RD_WR;
+      c_Retval = Errc::rd_wr;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -215,17 +215,17 @@ int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::string> 
    \param[in]  oq_UseMinorVersion1  Use minor version 1
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   No error
-   \retval   C_RD_WR    File(s) could not be created
+   \retval   Errc::success   No error
+   \retval   Errc::rd_wr     File(s) could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::mh_SaveNode(const std::string & orc_File,
-                                                 const C_OscSupNodeDefinition & orc_Node,
-                                                 const bool oq_UseMinorVersion1)
+std::error_code C_OscSupNodeDefinitionFiler::mh_SaveNode(const std::string & orc_File,
+                                                         const C_OscSupNodeDefinition & orc_Node,
+                                                         const bool oq_UseMinorVersion1)
 {
-   int32_t s32_Result;
+   std::error_code c_Result = Errc::success;
    C_OscXmlParser c_XmlParser;
 
    //Root Node
@@ -255,12 +255,12 @@ int32_t C_OscSupNodeDefinitionFiler::mh_SaveNode(const std::string & orc_File,
    mh_SaveSignatureFile(orc_Node, c_XmlParser);
 
    // save update package definition file
-   s32_Result = ListSaveToFile(c_XmlParser, orc_File);
-   if (s32_Result != C_NO_ERR)
+   c_Result = c_XmlParser.SaveToFile(orc_File);
+   if (c_Result)
    {
-      s32_Result = C_RD_WR;
+      c_Result = Errc::rd_wr;
    }
-   return s32_Result;
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -367,52 +367,49 @@ void C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSectionVersion1(C_OscSuSequenc
    \param[in,out]  orc_XmlParser       XMLParser for service update package definition file
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   No error
-   \retval   C_CONFIG   Input invalid
+   \retval   Errc::success   No error
+   \retval   Errc::config    Input invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSectionVersion1Minor1(C_OscSuSequences::C_DoFlash & orc_DoFlash,
-                                                                           const uint32_t ou32_NodeCounter,
-                                                                           const uint32_t ou32_UpdatePos,
-                                                                           std::map<uint32_t,
-                                                                                    uint32_t> & orc_PositionMap,
-                                                                           const std::string & orc_NodeFolderAbs,
-                                                                           C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSectionVersion1Minor1(
+   C_OscSuSequences::C_DoFlash & orc_DoFlash, const uint32_t ou32_NodeCounter, const uint32_t ou32_UpdatePos,
+   std::map<uint32_t, uint32_t> & orc_PositionMap, const std::string & orc_NodeFolderAbs,
+   C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError(mc_SECURITY);
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError(mc_SECURITY);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_LoadPemConfigOption(mc_SECURITY_AUTHENTICATION,
-                                          orc_DoFlash.q_SendSecureAuthenticationEnabledState,
-                                          orc_DoFlash.q_SecureAuthenticationEnabled, true, orc_XmlParser,
-                                          orc_NodeFolderAbs,
-                                          &orc_DoFlash.c_PemFile);
+      c_Retval = mh_LoadPemConfigOption(mc_SECURITY_AUTHENTICATION,
+                                        orc_DoFlash.q_SendSecureAuthenticationEnabledState,
+                                        orc_DoFlash.q_SecureAuthenticationEnabled, true, orc_XmlParser,
+                                        orc_NodeFolderAbs,
+                                        &orc_DoFlash.c_PemFile);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_LoadPemConfigOption(mc_SECURITY_TRAFFIC_ENCRYPTION,
-                                          orc_DoFlash.q_SendTrafficEncryptionEnabledState,
-                                          orc_DoFlash.q_TrafficEncryptionEnabled, false, orc_XmlParser,
-                                          orc_NodeFolderAbs);
+      c_Retval = mh_LoadPemConfigOption(mc_SECURITY_TRAFFIC_ENCRYPTION,
+                                        orc_DoFlash.q_SendTrafficEncryptionEnabledState,
+                                        orc_DoFlash.q_TrafficEncryptionEnabled, false, orc_XmlParser,
+                                        orc_NodeFolderAbs);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_LoadPemConfigOption(mc_SECURITY_DEBUGGER_CONFIG, orc_DoFlash.q_SendDebuggerEnabledState,
-                                          orc_DoFlash.q_DebuggerEnabled, false, orc_XmlParser, orc_NodeFolderAbs);
+      c_Retval = mh_LoadPemConfigOption(mc_SECURITY_DEBUGGER_CONFIG, orc_DoFlash.q_SendDebuggerEnabledState,
+                                        orc_DoFlash.q_DebuggerEnabled, false, orc_XmlParser, orc_NodeFolderAbs);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       tgl_assert(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       mh_DecideNodeRequiresFlashForSecurity(orc_DoFlash, ou32_NodeCounter, ou32_UpdatePos, orc_PositionMap);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -449,39 +446,39 @@ void C_OscSupNodeDefinitionFiler::mh_DecideNodeRequiresFlashForSecurity(const C_
    \param[in,out]  opc_FileName        File name
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   No error
-   \retval   C_CONFIG   Input invalid
+   \retval   Errc::success   No error
+   \retval   Errc::config    Input invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::mh_LoadPemConfigOption(const std::string & orc_NodeName,
-                                                            bool & orq_SendOption, bool & orq_EnabledOption,
-                                                            const bool oq_AddFileOption,
-                                                            C_OscXmlParserBase & orc_XmlParser,
-                                                            const std::string & orc_NodeFolderAbs,
-                                                            std::string * const opc_FileName)
+std::error_code C_OscSupNodeDefinitionFiler::mh_LoadPemConfigOption(const std::string & orc_NodeName,
+                                                                    bool & orq_SendOption, bool & orq_EnabledOption,
+                                                                    const bool oq_AddFileOption,
+                                                                    C_OscXmlParserBase & orc_XmlParser,
+                                                                    const std::string & orc_NodeFolderAbs,
+                                                                    std::string * const opc_FileName)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError(orc_NodeName);
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError(orc_NodeName);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.GetAttributeBoolError(mc_SECURITY_SEND_ATTR, orq_SendOption);
+      c_Retval = orc_XmlParser.GetAttributeBoolError(mc_SECURITY_SEND_ATTR, orq_SendOption);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.GetAttributeBoolError(mc_SECURITY_ENAB_ATTR, orq_EnabledOption);
+      c_Retval = orc_XmlParser.GetAttributeBoolError(mc_SECURITY_ENAB_ATTR, orq_EnabledOption);
    }
    if (oq_AddFileOption)
    {
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.SelectNodeChildError(mc_PEM_FILE);
+         c_Retval = orc_XmlParser.SelectNodeChildError(mc_PEM_FILE);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         tgl_assert(opc_FileName != NULL);
-         if (opc_FileName != NULL)
+         tgl_assert(opc_FileName != nullptr);
+         if (opc_FileName != nullptr)
          {
             // we have to take care of OS dependent path delimiters for windows '\\'
             const std::string c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR);
@@ -498,11 +495,11 @@ int32_t C_OscSupNodeDefinitionFiler::mh_LoadPemConfigOption(const std::string & 
          tgl_assert(orc_XmlParser.SelectNodeParent() == orc_NodeName);
       }
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       tgl_assert(orc_XmlParser.SelectNodeParent() == mc_SECURITY);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -651,28 +648,28 @@ void C_OscSupNodeDefinitionFiler::mh_SaveSignatureFile(const C_OscSupNodeDefinit
    \param[in,out]  orc_XmlParser       Xml parser
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   File read
-   \retval   C_RD_WR    File not read
+   \retval   Errc::success   File read
+   \retval   Errc::rd_wr     File not read
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::mh_LoadSignatureFile(const std::string & orc_NodeFolderAbs,
-                                                          std::string & orc_Signature,
-                                                          C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscSupNodeDefinitionFiler::mh_LoadSignatureFile(const std::string & orc_NodeFolderAbs,
+                                                                  std::string & orc_Signature,
+                                                                  C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild(mc_SIG_FILE) == mc_SIG_FILE)
    {
       const std::string c_XmlAttr = orc_XmlParser.GetAttributeString(mc_SIG_FILE_ATTR);
       const std::string c_PackagePathTmp = TglFileIncludeTrailingDelimiter(orc_NodeFolderAbs) +
                                                      TglExtractFileName(c_XmlAttr);
-      s32_Retval = C_OscSupSignatureFiler::h_LoadSignatureFile(c_PackagePathTmp, orc_Signature);
+      c_Retval = C_OscSupSignatureFiler::h_LoadSignatureFile(c_PackagePathTmp, orc_Signature);
 
       tgl_assert(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -682,16 +679,16 @@ int32_t C_OscSupNodeDefinitionFiler::mh_LoadSignatureFile(const std::string & or
    \param[in,out]  orc_XmlParser          Xml parser
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   No error
-   \retval   C_CONFIG   Input invalid
+   \retval   Errc::success   No error
+   \retval   Errc::config    Input invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::mh_CheckFileVersion(const bool oq_UseMinorVersion1,
-                                                         C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscSupNodeDefinitionFiler::mh_CheckFileVersion(const bool oq_UseMinorVersion1,
+                                                                 C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("file-version") == "file-version")
    {
@@ -704,11 +701,11 @@ int32_t C_OscSupNodeDefinitionFiler::mh_CheckFileVersion(const bool oq_UseMinorV
       {
          osc_write_log_error("Loading secure update collection definition",
                              "\"file-version\" could not be converted to a number.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
 
       //is the file version one we know ?
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          osc_write_log_info("Loading secure update collection definition", "Value of \"file-version\": " +
                             std::to_string(u16_FileVersion));
@@ -718,7 +715,7 @@ int32_t C_OscSupNodeDefinitionFiler::mh_CheckFileVersion(const bool oq_UseMinorV
          {
             osc_write_log_error("Loading secure update collection definition",
                                 "Version defined by \"file-version\" is not supported.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
 
@@ -728,7 +725,7 @@ int32_t C_OscSupNodeDefinitionFiler::mh_CheckFileVersion(const bool oq_UseMinorV
    else
    {
       osc_write_log_error("Loading secure update collection definition", "Could not find \"file-version\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }

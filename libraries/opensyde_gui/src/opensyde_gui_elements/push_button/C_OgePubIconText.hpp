@@ -32,7 +32,7 @@ class C_OgePubIconText :
    Q_OBJECT
 
 public:
-   explicit C_OgePubIconText(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubIconText(QWidget * const opc_Parent = nullptr);
 
    void SetIconSize(const int32_t os32_IconSize);
 

@@ -9,6 +9,8 @@
 #define C_OSCHALCMAGICIANUTIL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "C_OscHalcConfigDomain.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
 
@@ -29,10 +31,11 @@ public:
    static std::string h_GetDatapoolName(const bool oq_IsSafe, const uint32_t ou32_CopyIndex = 0UL);
    static std::string h_GetDatapoolComment(const bool oq_IsSafe, const uint32_t ou32_CopyIndex = 0UL);
    static std::string h_GetListName(const C_OscHalcDefDomain::E_VariableSelector oe_Type);
-   static int32_t h_GetVariableName(const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
-                                    const uint32_t ou32_ParameterIndexStruct, const uint32_t ou32_ParameterIndexElement,
-                                    const std::string & orc_DomainSingularName,
-                                    std::string & orc_Name, const uint32_t ou32_CurChannel = 0UL);
+   static std::error_code h_GetVariableName(const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
+                                            const uint32_t ou32_ParameterIndexStruct,
+                                            const uint32_t ou32_ParameterIndexElement,
+                                            const std::string & orc_DomainSingularName, std::string & orc_Name,
+                                            const uint32_t ou32_CurChannel = 0UL);
    static std::string h_CombineVariableName(const std::string & orc_Domain,
                                                       const std::string & orc_ParameterName);
    static C_OscNodeDataPoolListElement h_GetChanNumVariable(const std::string & orc_DomainSingularName,

@@ -13,12 +13,14 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <list>
+#include <system_error>
 
 #include "stwtypes.hpp"
 
 #include "stw_can.hpp"
 
 #include "C_CanDispatcher.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -41,23 +43,23 @@ public:
                             const uint32_t ou32_FilterMask);
 
    //lint -e{8001}  //name of function dictated by base class
-   virtual int32_t CAN_Init(void);
+   virtual std::error_code CAN_Init(void);
    //lint -e{8001}  //name of function dictated by base class
-   virtual int32_t CAN_Init(const int32_t os32_BitrateKBitS);
+   virtual std::error_code CAN_Init(const int32_t os32_BitrateKBitS);
    //lint -e{8001}  //name of function dictated by base class
-   virtual int32_t CAN_Exit(void);
+   virtual std::error_code CAN_Exit(void);
    //lint -e{8001}  //name of function dictated by base class
-   virtual int32_t CAN_Reset(void);
+   virtual std::error_code CAN_Reset(void);
    //lint -e{8001}  //name of function dictated by base class
-   virtual int32_t CAN_Send_Msg(const stw::can::T_STWCAN_Msg_TX & orc_Message);
+   virtual std::error_code CAN_Send_Msg(const stw::can::T_STWCAN_Msg_TX & orc_Message);
    //lint -e{8001}  //name of function dictated by base class
-   virtual int32_t CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const;
+   virtual std::error_code CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const;
 
    uint8_t GetNrCodeOfCanInit() const;
 
 protected:
    //lint -e{8001}  //name of function dictated by base class
-   virtual int32_t m_CAN_Read_Msg(stw::can::T_STWCAN_Msg_RX & orc_Message);
+   virtual std::error_code m_CAN_Read_Msg(stw::can::T_STWCAN_Msg_RX & orc_Message);
 
 private:
    //this class can not be copied:

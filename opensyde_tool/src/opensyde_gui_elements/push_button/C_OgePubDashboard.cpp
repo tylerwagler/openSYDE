@@ -45,8 +45,8 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubDashboard::C_OgePubDashboard(QWidget * const opc_Parent) :
    QPushButton(opc_Parent),
-   mpc_RendererActivated(NULL),
-   mpc_RendererDeactivated(NULL)
+   mpc_RendererActivated(nullptr),
+   mpc_RendererDeactivated(nullptr)
 {
    this->setCheckable(true);
 }
@@ -76,7 +76,7 @@ void C_OgePubDashboard::SetFiles(const QString & orc_SvgActivated, const QString
    delete this->mpc_RendererDeactivated;
    if (orc_SvgActivated.compare("") == 0)
    {
-      this->mpc_RendererActivated = NULL;
+      this->mpc_RendererActivated = nullptr;
    }
    else
    {
@@ -84,7 +84,7 @@ void C_OgePubDashboard::SetFiles(const QString & orc_SvgActivated, const QString
    }
    if (orc_SvgDeactivated.compare("") == 0)
    {
-      this->mpc_RendererDeactivated = NULL;
+      this->mpc_RendererDeactivated = nullptr;
    }
    else
    {
@@ -103,13 +103,13 @@ void C_OgePubDashboard::SetFiles(const QString & orc_SvgActivated, const QString
 void C_OgePubDashboard::paintEvent(QPaintEvent * const opc_Event)
 {
    Q_UNUSED(opc_Event)
-   if ((this->isChecked() == true) && (this->mpc_RendererActivated != NULL))
+   if ((this->isChecked() == true) && (this->mpc_RendererActivated != nullptr))
    {
       QPainter c_Painter(this);
       const QRectF c_Tmp = mh_AdaptToAspectRatio(this->mpc_RendererActivated->viewBox(), this->rect());
       this->mpc_RendererActivated->render(&c_Painter, c_Tmp);
    }
-   else if (this->mpc_RendererDeactivated != NULL)
+   else if (this->mpc_RendererDeactivated != nullptr)
    {
       QPainter c_Painter(this);
       const QRectF c_Tmp = mh_AdaptToAspectRatio(this->mpc_RendererDeactivated->viewBox(), this->rect());

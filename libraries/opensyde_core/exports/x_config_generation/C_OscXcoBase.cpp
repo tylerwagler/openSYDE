@@ -16,7 +16,6 @@
 #include "C_OscXcoBase.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -33,7 +32,7 @@ const std::string C_OscXcoBase::hc_INI_DEV_FOLDER = "device_definitions";
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-stw::scl::std::vector<std::string> C_OscXcoBase::mhc_WarningMessages; // global warnings e.g. if update
+std::vector<std::string> C_OscXcoBase::mhc_WarningMessages; // global warnings e.g. if update
                                                              // position
                                                              // of
                                                              // active node is not available

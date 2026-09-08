@@ -12,6 +12,7 @@
 #include <vector>
 
 #include <string>
+#include <system_error>
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_OscHalcDefContentBitmaskItem.hpp"
 
@@ -40,9 +41,9 @@ public:
 
    void SetComplexType(const E_ComplexType oe_Type);
    E_ComplexType GetComplexType(void) const;
-   int32_t AddEnumItem(const std::string & orc_DisplayName, const C_OscNodeDataPoolContent & orc_Value);
-   int32_t SetEnumValue(const std::string & orc_DisplayName);
-   int32_t GetEnumValue(std::string & orc_DisplayName);
+   std::error_code AddEnumItem(const std::string & orc_DisplayName, const C_OscNodeDataPoolContent & orc_Value);
+   std::error_code SetEnumValue(const std::string & orc_DisplayName);
+   std::error_code GetEnumValue(std::string & orc_DisplayName);
    const C_OscNodeDataPoolContent * FindEnumItem(const std::string & orc_DisplayName) const;
    const std::vector<std::pair<std::string, C_OscNodeDataPoolContent> > & GetEnumItems(void) const;
 
@@ -50,11 +51,11 @@ public:
    const std::vector<C_OscHalcDefContentBitmaskItem> & GetBitmaskItems(void) const;
    void GetBitmaskStatusValues(std::vector<std::string> * const opc_Displays,
                                std::vector<bool> * const opc_Values) const;
-   int32_t GetBitmask(const std::string & orc_DisplayName, bool & orq_Value) const;
-   int32_t SetBitmask(const std::string & orc_DisplayName, const bool oq_Value);
+   std::error_code GetBitmask(const std::string & orc_DisplayName, bool & orq_Value) const;
+   std::error_code SetBitmask(const std::string & orc_DisplayName, const bool oq_Value);
 
-   int32_t SetStringValue(const std::string & orc_Value);
-   int32_t GetStringValue(std::string & orc_Value) const;
+   std::error_code SetStringValue(const std::string & orc_Value);
+   std::error_code GetStringValue(std::string & orc_Value) const;
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
    virtual void CalcHashElement(uint32_t & oru32_HashValue, const uint32_t ou32_Index) const;

@@ -73,7 +73,7 @@ void C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(c
    if (orc_Name.length() > ou32_NameMaxCharLimit)
    {
       const std::string c_NewNameTmp = SubStringCompat(orc_Name, 1UL, ou32_NameMaxCharLimit);
-      if (opc_ChangedItems != NULL)
+      if (opc_ChangedItems != nullptr)
       {
          const C_OscSystemNameMaxCharLimitChangeReportItem c_Entry(orc_Type, orc_Name, c_NewNameTmp);
          opc_ChangedItems->push_back(c_Entry);

@@ -15,7 +15,10 @@
 #define C_OSCSUSEQUENCES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "stwtypes.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
 #include "C_HexFile.hpp"
 #include "C_OscSystemDefinition.hpp"
@@ -219,24 +222,24 @@ public:
    C_OscSuSequences(void);
    virtual ~C_OscSuSequences(void);
 
-   static int32_t h_CreateTemporaryFolder(const std::vector<C_OscNode> & orc_Nodes,
-                                          const std::vector<uint8_t> & orc_ActiveNodes,
-                                          const std::string & orc_TargetPath,
-                                          std::vector<C_DoFlash> & orc_ApplicationsToWrite,
-                                          std::string * const opc_ErrorPath = NULL);
+   static std::error_code h_CreateTemporaryFolder(const std::vector<C_OscNode> & orc_Nodes,
+                                                  const std::vector<uint8_t> & orc_ActiveNodes,
+                                                  const std::string & orc_TargetPath,
+                                                  std::vector<C_DoFlash> & orc_ApplicationsToWrite,
+                                                  std::string * const opc_ErrorPath = nullptr);
    static void h_CheckForChangedApplications(const std::vector<C_ApplicationProperties> & orc_ClientSideApplications,
                                              const std::vector<C_ApplicationProperties> & orc_ServerSideApplications,
                                              std::vector<uint8_t> & orc_ApplicationsPresentOnServer);
 
-   int32_t ActivateFlashloader(const bool oq_FailOnFirstError = true);
-   int32_t ReadDeviceInformation(const bool oq_FailOnFirstError = true);
-   int32_t UpdateSystem(const std::vector<C_DoFlash> & orc_ApplicationsToWrite,
-                        const std::vector<uint32_t> & orc_NodesOrder);
-   int32_t ResetSystem(void);
+   std::error_code ActivateFlashloader(const bool oq_FailOnFirstError = true);
+   std::error_code ReadDeviceInformation(const bool oq_FailOnFirstError = true);
+   std::error_code UpdateSystem(const std::vector<C_DoFlash> & orc_ApplicationsToWrite,
+                                const std::vector<uint32_t> & orc_NodesOrder);
+   std::error_code ResetSystem(void);
 
-   virtual int32_t GetConnectStates(std::vector<C_OscSuSequencesNodeConnectStates> & orc_ConnectStatesNodes)
+   virtual std::error_code GetConnectStates(std::vector<C_OscSuSequencesNodeConnectStates> & orc_ConnectStatesNodes)
    const;
-   virtual int32_t GetUpdateStates(std::vector<C_OscSuSequencesNodeUpdateStates> & orc_UpdateStatesNodes)
+   virtual std::error_code GetUpdateStates(std::vector<C_OscSuSequencesNodeUpdateStates> & orc_UpdateStatesNodes)
    const;
 
    static void h_FillDoFlashWithSecurityOptions(
@@ -244,7 +247,7 @@ public:
       const C_OscViewNodeUpdate::E_StateTrafficEncryption oe_StateEncryption,
       const C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger, C_OscSuSequences::C_DoFlash & orc_DoFlash);
    static void h_OpenSydeFlashloaderInformationToText(const C_OsyDeviceInformation & orc_Info,
-                                                      stw::scl::std::vector<std::string> & orc_Text);
+                                                      std::vector<std::string> & orc_Text);
 
 protected:
    //functions we use to report to application:
@@ -271,49 +274,52 @@ private:
    std::vector<C_OscSuSequencesNodeConnectStates> mc_ConnectStatesNodes;
    std::vector<C_OscSuSequencesNodeUpdateStates> mc_UpdateStatesNodes;
 
-   int32_t m_FlashNodeOpenSydeHex(const std::vector<std::string> & orc_FilesToFlash,
-                                  const std::vector<std::string> & orc_OtherAcceptedDeviceNames,
-                                  const uint32_t ou32_RequestDownloadTimeout, const uint32_t ou32_TransferDataTimeout,
-                                  bool & orq_SetProgrammingMode,
-                                  std::vector<C_OscSuSequencesNodeHexFileStates> & orc_StateHexFiles);
-   int32_t m_FlashOneFileOpenSydeHex(const stw::hex_file::C_HexDataDump & orc_HexDataDump,
-                                     const uint32_t ou32_SignatureAddress, const uint32_t ou32_RequestDownloadTimeout,
-                                     const uint32_t ou32_TransferDataTimeout,
-                                     C_OscSuSequencesNodeHexFileStates & orc_StateHexFile);
-   int32_t m_FlashNodeOpenSydeFile(const std::vector<std::string> & orc_FilesToFlash,
-                                   const uint32_t ou32_RequestDownloadTimeout, const uint32_t ou32_TransferDataTimeout,
-                                   const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
-                                   bool & orq_SetProgrammingMode,
-                                   std::vector<C_OscSuSequencesNodeOtherFileStates> & orc_StateOtherFiles);
-   int32_t m_FlashOneFileOpenSydeFile(const std::string & orc_FileToFlash,
-                                      const uint32_t ou32_RequestDownloadTimeout,
-                                      const uint32_t ou32_TransferDataTimeout,
+   std::error_code m_FlashNodeOpenSydeHex(const std::vector<std::string> & orc_FilesToFlash,
+                                          const std::vector<std::string> & orc_OtherAcceptedDeviceNames,
+                                          const uint32_t ou32_RequestDownloadTimeout,
+                                          const uint32_t ou32_TransferDataTimeout, bool & orq_SetProgrammingMode,
+                                          std::vector<C_OscSuSequencesNodeHexFileStates> & orc_StateHexFiles);
+   std::error_code m_FlashOneFileOpenSydeHex(const stw::hex_file::C_HexDataDump & orc_HexDataDump,
+                                             const uint32_t ou32_SignatureAddress,
+                                             const uint32_t ou32_RequestDownloadTimeout,
+                                             const uint32_t ou32_TransferDataTimeout,
+                                             C_OscSuSequencesNodeHexFileStates & orc_StateHexFile);
+   std::error_code m_FlashNodeOpenSydeFile(const std::vector<std::string> & orc_FilesToFlash,
+                                           const uint32_t ou32_RequestDownloadTimeout,
+                                           const uint32_t ou32_TransferDataTimeout,
+                                           const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
+                                           bool & orq_SetProgrammingMode,
+                                           std::vector<C_OscSuSequencesNodeOtherFileStates> & orc_StateOtherFiles);
+   std::error_code m_FlashOneFileOpenSydeFile(const std::string & orc_FileToFlash,
+                                              const uint32_t ou32_RequestDownloadTimeout,
+                                              const uint32_t ou32_TransferDataTimeout,
+                                              const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
+                                              C_OscSuSequencesNodeOtherFileStates & orc_StateOtherFile);
+   std::error_code m_WriteNvmOpenSyde(const std::vector<std::string> & orc_FilesToWrite,
                                       const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
-                                      C_OscSuSequencesNodeOtherFileStates & orc_StateOtherFile);
-   int32_t m_WriteNvmOpenSyde(const std::vector<std::string> & orc_FilesToWrite,
-                              const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
-                              const bool oq_SetProgrammingMode,
-                              std::vector<C_OscSuSequencesNodePsiFileStates> & orc_StatePsiFiles);
-   int32_t m_WritePemOpenSydeFile(const std::string & orc_FileToWrite,
-                                  const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
-                                  bool & orq_SetProgrammingMode,
-                                  C_OscSuSequencesNodeSecuritySettingsStates & orc_StateSecuritySettings);
-   int32_t m_WriteOpenSydeNodeStates(const C_OscSuSequences::C_DoFlash & orc_ApplicationsToWrite,
-                                     const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
-                                     bool & orq_SetProgrammingMode,
-                                     C_OscSuSequencesNodeSecuritySettingsStates & orc_StateSecuritySettings);
+                                      const bool oq_SetProgrammingMode,
+                                      std::vector<C_OscSuSequencesNodePsiFileStates> & orc_StatePsiFiles);
+   std::error_code m_WritePemOpenSydeFile(const std::string & orc_FileToWrite,
+                                          const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
+                                          bool & orq_SetProgrammingMode,
+                                          C_OscSuSequencesNodeSecuritySettingsStates & orc_StateSecuritySettings);
+   std::error_code m_WriteOpenSydeNodeStates(const C_OscSuSequences::C_DoFlash & orc_ApplicationsToWrite,
+                                             const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
+                                             bool & orq_SetProgrammingMode,
+                                             C_OscSuSequencesNodeSecuritySettingsStates & orc_StateSecuritySettings);
 
-   int32_t m_WriteFingerPrintOsy(void);
+   std::error_code m_WriteFingerPrintOsy(void);
 
-   int32_t m_ReadDeviceInformationOpenSyde(const uint8_t ou8_ProgressToReport, const uint32_t ou32_NodeIndex,
-                                           C_OscSuSequencesNodeConnectStates & orc_NodeState);
+   std::error_code m_ReadDeviceInformationOpenSyde(const uint8_t ou8_ProgressToReport, const uint32_t ou32_NodeIndex,
+                                                   C_OscSuSequencesNodeConnectStates & orc_NodeState);
 
    bool m_IsNodeActive(const uint32_t ou32_NodeIndex, const uint32_t ou32_BusIndex,
                        C_OscNodeProperties::E_FlashLoaderProtocol & ore_ProtocolType,
                        C_OscProtocolDriverOsyNode & orc_NodeId) const;
 
-   int32_t m_ReconnectToTargetServer(const bool oq_RestartRouting = false, const uint32_t ou32_NodeIndex = 0U);
-   int32_t m_DisconnectFromTargetServer(const bool oq_DisconnectOnIp2IpRouting = true);
+   std::error_code m_ReconnectToTargetServer(const bool oq_RestartRouting = false,
+                                             const uint32_t ou32_NodeIndex = 0U);
+   std::error_code m_DisconnectFromTargetServer(const bool oq_DisconnectOnIp2IpRouting = true);
 
    uint32_t m_GetAdaptedTransferDataTimeout(const uint32_t ou32_DeviceTransferDataTimeout,
                                             const uint32_t ou32_MaxBlockLength, const uint8_t ou8_BusIdentifier) const;

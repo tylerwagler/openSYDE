@@ -144,7 +144,7 @@ void C_SyvDaPePieChart::SetShowUnit(const bool oq_Value) const
 void C_SyvDaPePieChart::m_UpdatePreview(void)
 {
    const QSize c_ViewSize = C_SyvDaPeBase::h_GetSceneViewSize();
-   C_GiSvDaPieChartBase * const pc_Item = new C_GiSvDaPieChartBase(0UL, 0UL, -1L, 0ULL, NULL);
+   C_GiSvDaPieChartBase * const pc_Item = new C_GiSvDaPieChartBase(0UL, 0UL, -1L, 0ULL, nullptr);
    const QSizeF c_ItemSize(static_cast<float64_t>(c_ViewSize.height()),
                            static_cast<float64_t>(c_ViewSize.height()));
    //20.0 to center the chart

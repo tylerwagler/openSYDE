@@ -75,16 +75,18 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const std::string & orc_Path, uint16_t 
    if (QFileInfo::exists(QString::fromLocal8Bit(orc_Path.c_str())) == true)
    {
       C_OscXmlParser c_XmlParser;
-      s32_Return = ListLoadFromFile(c_XmlParser, orc_Path);
+      //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Return = c_XmlParser.LoadFromFile(orc_Path).value();
       if (s32_Return == C_NO_ERR)
       {
          uint16_t u16_FileVersion;
          this->Clear(false);
+         //the project filers report std::error_code now; this class keeps the STW int32_t convention
          s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
             mc_CoreDefinition, c_XmlParser,
             C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString().c_str(),
-            orc_Path, true, &u16_FileVersion, NULL, false, NULL, opc_ErrorDetailsMissingDevices);
-         if (opu16_FileVersion != NULL)
+            orc_Path, true, &u16_FileVersion, nullptr, false, nullptr, opc_ErrorDetailsMissingDevices).value();
+         if (opu16_FileVersion != nullptr)
          {
             *opu16_FileVersion = u16_FileVersion;
          }
@@ -213,7 +215,8 @@ int32_t C_PuiSdHandlerData::SaveToFile(const std::string & orc_Path, const bool 
    }
    if (s32_Return == C_NO_ERR)
    {
-      s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(this->mc_CoreDefinition, orc_Path);
+      //the project filers report std::error_code now; this class keeps the STW int32_t convention
+      s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(this->mc_CoreDefinition, orc_Path).value();
       if (s32_Return == C_NO_ERR)
       {
          QString c_FilePath = C_PuiSdHandlerFiler::h_GetSystemDefinitionUiFilePath(orc_Path.c_str());

@@ -29,7 +29,7 @@ class C_OgeSpiBase :
    public QSplitter
 {
 public:
-   C_OgeSpiBase(QWidget * const opc_Parent = NULL);
+   C_OgeSpiBase(QWidget * const opc_Parent = nullptr);
 
    void SetFirstSegment(const int32_t os32_Width);
    void SetSecondSegment(const int32_t os32_Width);

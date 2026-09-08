@@ -106,7 +106,7 @@ public:
       bool operator ==(const C_CieNodeMessage & orc_Cmp) const;
 
       C_CieCanMessage c_CanMessage;         ///< Transmitted message type
-      stw::scl::std::vector<std::string> c_Warnings; ///< Appropriate warnings: if empty, there is no warning
+      std::vector<std::string> c_Warnings; ///< Appropriate warnings: if empty, there is no warning
    };
 
    ///all information about a single node

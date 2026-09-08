@@ -15,6 +15,8 @@
 #include "C_SdNdeHalcWidget.hpp"
 #include "ui_C_SdNdeHalcWidget.h"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "constants.hpp"
@@ -343,7 +345,7 @@ void C_SdNdeHalcWidget::m_OnImportConfigClicked(void)
          this->m_ShowOverview(true);
       }
 
-      if (c_PopUpDialog != NULL)
+      if (c_PopUpDialog != nullptr)
       {
          c_PopUpDialog->HideOverlay();
          c_PopUpDialog->deleteLater();
@@ -364,7 +366,7 @@ void C_SdNdeHalcWidget::m_OnExportConfigClicked(void)
    QString c_DefaultName = "";
    QString c_FileName = "";
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       c_DefaultName = C_OscSystemFilerUtil::h_PrepareItemNameForFileName(pc_Node->c_Properties.c_Name.c_str()).c_str();
    }
@@ -395,13 +397,14 @@ void C_SdNdeHalcWidget::m_OnExportConfigClicked(void)
          const stw::opensyde_core::C_OscHalcConfig * const pc_Config =
             stw::opensyde_gui_logic::C_PuiSdHandler::h_GetInstance()->GetHalcConfig(this->mu32_NodeIndex);
 
-         if (pc_Config != NULL)
+         if (pc_Config != nullptr)
          {
             C_OscHalcConfigStandalone c_StandaloneConfig;
             C_OscHalcConfigUtil::h_GetConfigStandalone(*pc_Config, c_StandaloneConfig);
 
-            s32_Result = C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(c_StandaloneConfig,
-                                                                              c_FileName.toStdString().c_str());
+            s32_Result =
+               C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(c_StandaloneConfig,
+                                                                    c_FileName.toStdString().c_str()).value();
          }
          else
          {
@@ -496,7 +499,7 @@ void C_SdNdeHalcWidget::m_OnSelectClicked(void)
       uint32_t u32_NotHalcDpCount = 0UL;
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             for (uint32_t u32_ItDp = 0UL; u32_ItDp < pc_Node->c_DataPools.size(); ++u32_ItDp)
             {
@@ -556,8 +559,8 @@ void C_SdNdeHalcWidget::m_OnUpdateClicked(void)
 {
    const C_OscHalcConfig * const pc_OldConfig = C_PuiSdHandler::h_GetInstance()->GetHalcConfig(this->mu32_NodeIndex);
 
-   tgl_assert((pc_OldConfig != NULL) && (pc_OldConfig->IsClear() == false));
-   if ((pc_OldConfig != NULL) && (pc_OldConfig->IsClear() == false))
+   tgl_assert((pc_OldConfig != nullptr) && (pc_OldConfig->IsClear() == false));
+   if ((pc_OldConfig != nullptr) && (pc_OldConfig->IsClear() == false))
    {
       C_OscHalcConfig c_HalcConfig;
       QString c_HalcDefPath;
@@ -643,7 +646,7 @@ void C_SdNdeHalcWidget::m_OnUpdateClicked(void)
                }
             }
 
-            if (c_PopUpDialog != NULL)
+            if (c_PopUpDialog != nullptr)
             {
                c_PopUpDialog->HideOverlay();
                c_PopUpDialog->deleteLater();
@@ -763,18 +766,18 @@ bool C_SdNdeHalcWidget::m_LoadHalcDefinitionFile(C_OscHalcConfig & orc_HalcConfi
    if (orc_HalcDefPath.isEmpty() == false)
    {
       // load definition directly into configuration data structure
-      const int32_t s32_LoadResult =
+      const std::error_code c_LoadResult =
          C_OscHalcDefFiler::h_LoadFile(orc_HalcConfig, orc_HalcDefPath.toStdString().c_str());
 
       // remember path for user settings
       C_UsHandler::h_GetInstance()->SetLastKnownHalcDefPath(orc_HalcDefPath);
 
-      if (s32_LoadResult == C_NO_ERR)
+      if (!c_LoadResult)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-         tgl_assert(pc_Node != NULL);
-         if (pc_Node != NULL)
+         tgl_assert(pc_Node != nullptr);
+         if (pc_Node != nullptr)
          {
             // Device type comparison
             if (pc_Node->c_DeviceType == orc_HalcConfig.c_DeviceName)
@@ -854,7 +857,7 @@ void C_SdNdeHalcWidget::m_UpdatePinCount(void) const
 {
    const C_OscHalcConfig * const pc_Config = C_PuiSdHandler::h_GetInstance()->GetHalcConfig(this->mu32_NodeIndex);
 
-   if (pc_Config != NULL)
+   if (pc_Config != nullptr)
    {
       uint32_t u32_PinCount = 0;
 
@@ -862,7 +865,7 @@ void C_SdNdeHalcWidget::m_UpdatePinCount(void) const
       for (uint32_t u32_ItDomain = 0; u32_ItDomain < pc_Config->GetDomainSize(); u32_ItDomain++)
       {
          const C_OscHalcDefDomain * const pc_Domain = pc_Config->GetDomainDefDataConst(u32_ItDomain);
-         if (pc_Domain != NULL)
+         if (pc_Domain != nullptr)
          {
             if (pc_Domain->c_Channels.empty() == true)
             {
@@ -894,7 +897,7 @@ void C_SdNdeHalcWidget::m_UpdateDisplayedData(void) const
 {
    const C_OscHalcConfig * const pc_Config = C_PuiSdHandler::h_GetInstance()->GetHalcConfig(this->mu32_NodeIndex);
 
-   if (pc_Config != NULL)
+   if (pc_Config != nullptr)
    {
       // Update button states
       this->m_DisableButtons(pc_Config->IsClear());

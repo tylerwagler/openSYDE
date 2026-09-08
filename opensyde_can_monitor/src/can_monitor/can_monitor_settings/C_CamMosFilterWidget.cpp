@@ -375,7 +375,7 @@ void C_CamMosFilterWidget::m_LoadConfig(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosFilterWidget::m_RemoveFilterWidget(C_CamMosFilterItemWidget * const opc_ItemWidget) const
 {
-   if (opc_ItemWidget != NULL)
+   if (opc_ItemWidget != nullptr)
    {
       // disconnect everything
       opc_ItemWidget->disconnect();
@@ -505,7 +505,7 @@ void C_CamMosFilterWidget::m_OnAddClicked()
       }
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
    }
@@ -587,7 +587,7 @@ void C_CamMosFilterWidget::m_OnAddFilterFromContextmenu(const QList<int32_t> oc_
       }
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
    }
@@ -643,7 +643,7 @@ void C_CamMosFilterWidget::m_RemoveFilter(C_CamMosFilterItemWidget * const opc_I
 
    if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
    {
-      if (opc_ItemWidget != NULL)
+      if (opc_ItemWidget != nullptr)
       {
          int32_t s32_IndexToRemove = 0;
 
@@ -816,7 +816,7 @@ int32_t C_CamMosFilterWidget::m_GetIndexFromWidget(const C_CamMosFilterItemWidge
 {
    int32_t s32_Return = 0;
 
-   if (opc_ItemWidget != NULL)
+   if (opc_ItemWidget != nullptr)
    {
       // get index from opc_Item
       for (std::vector<C_CamMosFilterItemWidget *>::iterator c_It = mc_Entries.begin(); c_It != mc_Entries.end();

@@ -44,7 +44,7 @@ public:
    };
 
    explicit C_NagToolTip(const QString & orc_Heading = "", const QString & orc_Content = "",
-                         QWidget * const opc_Parent = NULL);
+                         QWidget * const opc_Parent = nullptr);
    ~C_NagToolTip() override;
    void SetHeading(const QString & orc_Heading) const;
    void SetContent(const QString & orc_Content) const;

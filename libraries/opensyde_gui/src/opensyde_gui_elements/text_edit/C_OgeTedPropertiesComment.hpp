@@ -30,7 +30,7 @@ class C_OgeTedPropertiesComment :
    Q_OBJECT
 
 public:
-   C_OgeTedPropertiesComment(QWidget * const opc_Parent = NULL);
+   C_OgeTedPropertiesComment(QWidget * const opc_Parent = nullptr);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

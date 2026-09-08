@@ -38,14 +38,14 @@ public:
    void InitStaticNames(void) const;
    void SetMessageData(const std::map<std::string, std::string> & orc_NodeMapping,
                        const stw::opensyde_gui_logic::C_CieExportDbc::C_ExportStatistic & orc_ExportStatistic,
-                       const stw::scl::std::vector<std::string> & orc_Warnings);
+                       const std::vector<std::string> & orc_Warnings);
 
 
 private:
    Ui::C_CieExportReportWidget * mpc_Ui;
    std::map<std::string, std::string> mc_NodeMapping;
    stw::opensyde_gui_logic::C_CieExportDbc::C_ExportStatistic mc_ExportStatistic;
-   stw::scl::std::vector<std::string> mc_Warnings;
+   std::vector<std::string> mc_Warnings;
    const QString mc_FilePath;
    static const QString mhc_HTML_TABLE_HEADER_START;
    static const QString mhc_HTML_TABLE_DATA_START;

@@ -33,7 +33,7 @@ class C_SdNdeDalLogJobPropertiesWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDalLogJobPropertiesWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDalLogJobPropertiesWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDalLogJobPropertiesWidget(void) noexcept override;
 
    void SetNodeDataLoggerJob(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataLoggerJobIndex);

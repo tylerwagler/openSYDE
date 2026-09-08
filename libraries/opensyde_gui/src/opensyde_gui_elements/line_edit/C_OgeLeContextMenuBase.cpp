@@ -42,7 +42,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeLeContextMenuBase::C_OgeLeContextMenuBase(QWidget * const opc_Parent) :
    QLineEdit(opc_Parent),
-   mpc_ContextMenu(NULL)
+   mpc_ContextMenu(nullptr)
 {
    m_InitContextMenu();
 }

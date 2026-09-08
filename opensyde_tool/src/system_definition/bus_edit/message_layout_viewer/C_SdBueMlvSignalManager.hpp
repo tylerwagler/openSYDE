@@ -66,7 +66,7 @@ public:
    C_SdBueMlvSignalManager(stw::opensyde_gui_logic::C_PuiSdNodeCanMessageSyncManager * const opc_SyncManager,
                            const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                            const uint16_t ou16_MaximumCountBits, const float64_t of64_Space,
-                           QObject * const opc_Parent = NULL);
+                           QObject * const opc_Parent = nullptr);
    ~C_SdBueMlvSignalManager() override;
 
    void LoadSignal(const uint32_t ou32_SignalIndex, const C_SignalItemColors & orc_ColorConfiguration,

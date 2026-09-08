@@ -113,7 +113,7 @@ bool C_GiLiEthernetBus::OpenStyleDialog(void)
    {
       q_Retval = false;
    }
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -133,7 +133,7 @@ void C_GiLiEthernetBus::CopyStyle(const QGraphicsItem * const opc_GuidelineItem)
 {
    const C_GiLiBus * const pc_Item = dynamic_cast<const C_GiLiBus * const>(opc_GuidelineItem);
 
-   if (pc_Item != NULL)
+   if (pc_Item != nullptr)
    {
       this->SetMiddleLineColor(pc_Item->GetMiddleLineColor());
       C_GiLiBus::CopyStyle(opc_GuidelineItem);

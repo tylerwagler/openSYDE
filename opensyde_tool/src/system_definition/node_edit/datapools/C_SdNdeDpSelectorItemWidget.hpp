@@ -37,7 +37,7 @@ class C_SdNdeDpSelectorItemWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpSelectorItemWidget(const bool oq_UsageViewActive, QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDpSelectorItemWidget(const bool oq_UsageViewActive, QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpSelectorItemWidget() override;
 
    void InitWidget(void);

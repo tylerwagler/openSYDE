@@ -156,7 +156,7 @@ void C_SyvManager::DuplicateSysView(const uint32_t ou32_Index)
 {
    const C_PuiSvData * const pc_ViewPrev = C_PuiSvHandler::h_GetInstance()->GetView(ou32_Index);
 
-   if (pc_ViewPrev != NULL)
+   if (pc_ViewPrev != nullptr)
    {
       const uint32_t u32_NewViewIndex = ou32_Index + 1UL;
       QString c_SubMode;
@@ -169,7 +169,7 @@ void C_SyvManager::DuplicateSysView(const uint32_t ou32_Index)
 
       //User settings
       pc_ViewNew = C_PuiSvHandler::h_GetInstance()->GetView(u32_NewViewIndex);
-      if (pc_ViewNew != NULL)
+      if (pc_ViewNew != nullptr)
       {
          C_UsHandler::h_GetInstance()->CopyProjSvSettings(pc_ViewPrev->GetName().c_str(),
                                                           pc_ViewNew->GetName().c_str());
@@ -197,7 +197,7 @@ void C_SyvManager::DeleteSysView(const uint32_t ou32_Index, const int32_t os32_S
    if (C_PuiSvHandler::h_GetInstance()->GetViewCount() > 1UL)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_Index);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::E_Type::eQUESTION);
          c_Message.SetHeading("View delete");

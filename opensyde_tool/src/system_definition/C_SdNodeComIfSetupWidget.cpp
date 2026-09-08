@@ -107,7 +107,7 @@ uint8_t C_SdNodeComIfSetupWidget::GetSelectedInterface(void) const
    uint32_t u32_Retval = 0;
    const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_BusIndex);
 
-   if (pc_Bus != NULL)
+   if (pc_Bus != nullptr)
    {
       u32_Retval = C_SdUtil::h_GetActiveNodeInterface(*this->mpc_Ui->pc_ComboBoxComIntf, this->mu32_NodeIndex,
                                                       pc_Bus->e_Type);
@@ -155,7 +155,7 @@ void C_SdNodeComIfSetupWidget::m_InitFromData(void)
    const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_BusIndex);
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if ((pc_Bus != NULL) && (pc_Node != NULL))
+   if ((pc_Bus != nullptr) && (pc_Node != nullptr))
    {
       this->mq_InteractionPossible = C_SdUtil::h_InitNodeInterfaceComboBox(*pc_Node,
                                                                            pc_Bus->e_Type,

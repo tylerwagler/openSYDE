@@ -176,7 +176,7 @@ QStringList C_NagViewListModel::mimeTypes(void) const
 //----------------------------------------------------------------------------------------------------------------------
 QMimeData * C_NagViewListModel::mimeData(const QModelIndexList & orc_Indices) const
 {
-   QMimeData * pc_Retval = NULL;
+   QMimeData * pc_Retval = nullptr;
 
    if (orc_Indices.size() > 0)
    {

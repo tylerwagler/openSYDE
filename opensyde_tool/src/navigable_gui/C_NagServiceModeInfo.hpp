@@ -31,7 +31,7 @@ class C_NagServiceModeInfo :
    Q_OBJECT
 
 public:
-   explicit C_NagServiceModeInfo(QWidget * const opc_Parent = NULL);
+   explicit C_NagServiceModeInfo(QWidget * const opc_Parent = nullptr);
    ~C_NagServiceModeInfo(void) override;
 
    void InitStaticNames(void);

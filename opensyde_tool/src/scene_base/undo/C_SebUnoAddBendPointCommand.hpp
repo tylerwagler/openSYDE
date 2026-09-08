@@ -29,7 +29,7 @@ class C_SebUnoAddBendPointCommand :
 {
 public:
    C_SebUnoAddBendPointCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                               const QPointF & orc_ScenePosition, QUndoCommand * const opc_Parent = NULL);
+                               const QPointF & orc_ScenePosition, QUndoCommand * const opc_Parent = nullptr);
    ~C_SebUnoAddBendPointCommand(void) override;
    void undo(void) override;
    void redo(void) override;

@@ -58,7 +58,7 @@ C_SdNdeUnoDataPoolListAddCommand::C_SdNdeUnoDataPoolListAddCommand(const uint32_
    c_OscContent.resize(orc_Indices.size());
    c_UiContent.resize(orc_Indices.size());
    //Init
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
       for (uint32_t u32_ItList = 0; u32_ItList < c_OscContent.size(); ++u32_ItList)
       {

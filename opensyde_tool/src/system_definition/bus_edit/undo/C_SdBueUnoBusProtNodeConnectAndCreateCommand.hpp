@@ -29,7 +29,7 @@ class C_SdBueUnoBusProtNodeConnectAndCreateCommand :
 public:
    C_SdBueUnoBusProtNodeConnectAndCreateCommand(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
                                                 const stw::opensyde_core::C_OscCanProtocol::E_Type oe_Protocol,
-                                                QWidget * const opc_Widget, QUndoCommand * const opc_Parent = NULL);
+                                                QWidget * const opc_Widget, QUndoCommand * const opc_Parent = nullptr);
 
    void redo(void) override;
    void undo(void) override;

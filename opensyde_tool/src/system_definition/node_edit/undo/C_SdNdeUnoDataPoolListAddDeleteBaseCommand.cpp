@@ -88,8 +88,8 @@ void C_SdNdeUnoDataPoolListAddDeleteBaseCommand::m_Add(void)
    for (uint32_t u32_Index = 0; u32_Index < this->mc_Indices.size(); ++u32_Index)
    {
       QTreeWidgetItem * const pc_Item = this->mpc_DataPoolListsTreeWidget->topLevelItem(this->mc_Indices[u32_Index]);
-      tgl_assert(pc_Item != NULL);
-      if (pc_Item != NULL)
+      tgl_assert(pc_Item != nullptr);
+      if (pc_Item != nullptr)
       {
          pc_Item->setSelected(true);
          //Check last item (It's sorted)
@@ -139,7 +139,7 @@ void C_SdNdeUnoDataPoolListAddDeleteBaseCommand::m_Delete(void)
       if ((this->mpc_DataPoolListsTreeWidget->topLevelItemCount() > s32_NewSelection) && (s32_NewSelection >= 0))
       {
          QTreeWidgetItem * const pc_Item = this->mpc_DataPoolListsTreeWidget->topLevelItem(s32_NewSelection);
-         if (pc_Item != NULL)
+         if (pc_Item != nullptr)
          {
             pc_Item->setSelected(true);
             this->mpc_DataPoolListsTreeWidget->setCurrentItem(pc_Item);
@@ -152,7 +152,7 @@ void C_SdNdeUnoDataPoolListAddDeleteBaseCommand::m_Delete(void)
          if ((this->mpc_DataPoolListsTreeWidget->topLevelItemCount() > s32_NewSelection) && (s32_NewSelection >= 0))
          {
             QTreeWidgetItem * const pc_Item = this->mpc_DataPoolListsTreeWidget->topLevelItem(s32_NewSelection);
-            if (pc_Item != NULL)
+            if (pc_Item != nullptr)
             {
                pc_Item->setSelected(true);
                this->mpc_DataPoolListsTreeWidget->setCurrentItem(pc_Item);
@@ -218,7 +218,7 @@ void C_SdNdeUnoDataPoolListAddDeleteBaseCommand::m_SortAscending(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoDataPoolListAddDeleteBaseCommand::m_UpdateModels(void)
 {
-   if (this->mpc_DataPoolListsTreeWidget != NULL)
+   if (this->mpc_DataPoolListsTreeWidget != nullptr)
    {
       this->mpc_DataPoolListsTreeWidget->UpdateModels();
    }

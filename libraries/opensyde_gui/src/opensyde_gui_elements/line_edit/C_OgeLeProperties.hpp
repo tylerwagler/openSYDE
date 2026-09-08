@@ -30,7 +30,7 @@ class C_OgeLeProperties :
    Q_OBJECT
 
 public:
-   C_OgeLeProperties(QWidget * const opc_Parent = NULL);
+   C_OgeLeProperties(QWidget * const opc_Parent = nullptr);
 
    void SetBackgroundColor(const int32_t os32_Value);
 };

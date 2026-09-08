@@ -48,7 +48,7 @@ public:
    std::string GetEcuSerialNumber(void) const;
    std::string GetEcuSerialNumberFormatDescription(void) const;
 
-   stw::scl::std::vector<std::string> FlashloaderInformationToText() const;
+   std::vector<std::string> FlashloaderInformationToText() const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

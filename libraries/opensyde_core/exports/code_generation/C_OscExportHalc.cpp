@@ -12,8 +12,11 @@
 
 #include <sstream>
 #include <iomanip>
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscExportHalc.hpp"
 #include <string>
 #include <vector>
@@ -106,17 +109,17 @@ uint16_t C_OscExportHalc::h_ConvertOverallCodeVersion(const uint16_t ou16_GenCod
    \param[in]  orc_ExportToolInfo   Information about calling executable (name + version)
 
    \return
-   C_NO_ERR    Success
-   C_RD_WR     Operation failure: cannot store file
-   C_NOACT     Datapool is not of type HALC
+   Errc::success  Success
+   Errc::rd_wr    Operation failure: cannot store file
+   Errc::noact    Datapool is not of type HALC
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportHalc::h_CreateSourceCode(const std::string & orc_Path, const uint16_t ou16_GenCodeVersion,
-                                            const C_OscHalcConfig & orc_HalcConfig,
-                                            const C_OscNodeDataPool & orc_Datapool,
-                                            const std::string & orc_ExportToolInfo)
+std::error_code C_OscExportHalc::h_CreateSourceCode(const std::string & orc_Path, const uint16_t ou16_GenCodeVersion,
+                                                    const C_OscHalcConfig & orc_HalcConfig,
+                                                    const C_OscNodeDataPool & orc_Datapool,
+                                                    const std::string & orc_ExportToolInfo)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    uint32_t u32_HashValue = 0U;
 
    //calculate hash value from a combination of HALC configuration and Datapool definition:
@@ -127,7 +130,7 @@ int32_t C_OscExportHalc::h_CreateSourceCode(const std::string & orc_Path, const 
    // make sure version is known
    if (ou16_GenCodeVersion > C_OscNodeApplication::hu16_HIGHEST_KNOWN_CODE_VERSION)
    {
-      s32_Retval = C_NOACT;
+      c_Retval = Errc::noact;
       osc_write_log_error("Creating source code",
                           "Did not generate code for HALC configuration because code format version is unknown.");
    }
@@ -139,22 +142,22 @@ int32_t C_OscExportHalc::h_CreateSourceCode(const std::string & orc_Path, const 
       osc_write_log_error("Creating source code",
                           "Did not generate code for HALC configuration of Datapool \"" + orc_Datapool.c_Name +
                           "\" because Datapool type is not HALC.");
-      s32_Retval = C_NOACT;
+      c_Retval = Errc::noact;
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, orc_HalcConfig, c_ProjectId,
-                                       orc_Datapool.q_IsSafety, ou16_GenCodeVersion);
+      c_Retval = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, orc_HalcConfig, c_ProjectId,
+                                     orc_Datapool.q_IsSafety, ou16_GenCodeVersion);
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_CreateImplementationFile(orc_ExportToolInfo, orc_Path, orc_HalcConfig, c_ProjectId,
-                                               orc_Datapool.q_IsSafety, ou16_GenCodeVersion);
+      c_Retval = mh_CreateImplementationFile(orc_ExportToolInfo, orc_Path, orc_HalcConfig, c_ProjectId,
+                                             orc_Datapool.q_IsSafety, ou16_GenCodeVersion);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -168,17 +171,18 @@ int32_t C_OscExportHalc::h_CreateSourceCode(const std::string & orc_Path, const 
    \param[in]  ou16_GenCodeVersion  version of structure (generate code as specified for this version)
 
    \return
-   C_NO_ERR    Success
-   C_RD_WR     Operation failure: cannot store file
+   Errc::success  Success
+   Errc::rd_wr    Operation failure: cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportHalc::mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
-                                             const std::string & orc_Path,
-                                             const C_OscHalcConfig & orc_HalcConfig,
-                                             const std::string & orc_ProjectId, const bool oq_IsSafe,
-                                             const uint16_t ou16_GenCodeVersion)
+std::error_code C_OscExportHalc::mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
+                                                     const std::string & orc_Path,
+                                                     const C_OscHalcConfig & orc_HalcConfig,
+                                                     const std::string & orc_ProjectId, const bool oq_IsSafe,
+                                                     const uint16_t ou16_GenCodeVersion)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
+
    std::vector<std::string> c_Data;
 
    // add header
@@ -206,9 +210,9 @@ int32_t C_OscExportHalc::mh_CreateHeaderFile(const std::string & orc_ExportToolI
    c_Data.push_back("#endif");
 
    // finally save to file
-   s32_Retval = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(oq_IsSafe), true);
+   c_Retval = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(oq_IsSafe), true);
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -222,17 +226,17 @@ int32_t C_OscExportHalc::mh_CreateHeaderFile(const std::string & orc_ExportToolI
    \param[in]  ou16_GenCodeVersion  version of structure (generate code as specified for this version)
 
    \return
-   C_NO_ERR    Success
-   C_RD_WR     Operation failure: cannot store file
+   Errc::success  Success
+   Errc::rd_wr    Operation failure: cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportHalc::mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
-                                                     const std::string & orc_Path,
-                                                     const C_OscHalcConfig & orc_HalcConfig,
-                                                     const std::string & orc_ProjectId, const bool oq_IsSafe,
-                                                     const uint16_t ou16_GenCodeVersion)
+std::error_code C_OscExportHalc::mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
+                                                             const std::string & orc_Path,
+                                                             const C_OscHalcConfig & orc_HalcConfig,
+                                                             const std::string & orc_ProjectId, const bool oq_IsSafe,
+                                                             const uint16_t ou16_GenCodeVersion)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
    std::vector<std::string> c_Data;
 
@@ -264,9 +268,9 @@ int32_t C_OscExportHalc::mh_CreateImplementationFile(const std::string & orc_Exp
    c_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Implementation"));
 
    // finally save to file
-   s32_Retval = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(oq_IsSafe), false);
+   c_Retval = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(oq_IsSafe), false);
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -368,7 +372,7 @@ void C_OscExportHalc::mh_AddDefines(std::vector<std::string> & orc_Data, const C
          {
             const C_OscHalcConfigDomain * const pc_Domain = orc_HalcConfig.GetDomainConfigDataConst(u32_DomainIt);
 
-            if (pc_Domain != NULL)
+            if (pc_Domain != nullptr)
             {
                const std::string c_DataPoolName = C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe) + "_";
                uint32_t u32_NumberOfAssignedChannels = 0U;
@@ -465,7 +469,7 @@ void C_OscExportHalc::mh_AddGlobalVariables(std::vector<std::string> & orc_Data,
             const C_OscHalcConfigDomain * const pc_Domain = orc_HalcConfig.GetDomainConfigDataConst(u32_DomainIt);
             std::string c_Tmp;
 
-            if (pc_Domain != NULL)
+            if (pc_Domain != nullptr)
             {
                bool q_IsArray;
                const C_OscHalcDefChannelValues * pc_ChannelValues;
@@ -679,7 +683,7 @@ std::string C_OscExportHalc::mh_GetMagicName(const std::string & orc_ProjectId, 
    \param[in]      oq_IsSafe                 true: generate code for safe HALC
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportHalc::mh_AddDpListElementReferences(stw::scl::std::vector<std::string> & orc_Data,
+void C_OscExportHalc::mh_AddDpListElementReferences(std::vector<std::string> & orc_Data,
                                                     const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
                                                     const std::vector<C_OscHalcConfigChannel> & orc_ConfigArray,
                                                     const C_OscHalcDefDomain::E_VariableSelector & ore_Type,
@@ -773,9 +777,9 @@ std::string C_OscExportHalc::mh_GetDpListElementReference(const std::vector<C_Os
 {
    std::string c_Return;
 
-   tgl_assert(C_OscHalcMagicianUtil::h_GetVariableName(orc_DefinitionArray, ou32_StructIndex,
-                                                       ou32_ElementIndex, orc_DomainSingularName,
-                                                       c_Return) == C_NO_ERR);
+   tgl_assert(!C_OscHalcMagicianUtil::h_GetVariableName(orc_DefinitionArray, ou32_StructIndex,
+                                                        ou32_ElementIndex, orc_DomainSingularName,
+                                                        c_Return));
    c_Return = C_OscExportUti::h_GetElementCeName(c_Return, oq_IsArray, orc_Element.GetType());
    c_Return = "&gt_" + C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe) + "_DataPoolValues.t_" +
               C_OscHalcMagicianUtil::h_GetListName(ore_Type) + "Values." + c_Return;

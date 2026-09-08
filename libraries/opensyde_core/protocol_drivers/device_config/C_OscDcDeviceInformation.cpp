@@ -184,7 +184,7 @@ void C_OscDcDeviceOldComConfig::SetContent(const uint8_t ou8_OldNodeId, const bo
                                            const uint8_t * const opu8_OldIpAddress)
 {
    this->u8_OldNodeId = ou8_OldNodeId;
-   if (opu8_OldIpAddress != NULL)
+   if (opu8_OldIpAddress != nullptr)
    {
       this->q_OldIpAddressValid = oq_OldIpAddressValid;
       if (this->q_OldIpAddressValid == true)

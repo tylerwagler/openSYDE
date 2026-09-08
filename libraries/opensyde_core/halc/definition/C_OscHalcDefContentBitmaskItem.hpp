@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include <string>
+#include <system_error>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -27,7 +28,7 @@ public:
    C_OscHalcDefContentBitmaskItem(void);
    virtual ~C_OscHalcDefContentBitmaskItem();
 
-   int32_t SetValueByString(const std::string & orc_Item);
+   std::error_code SetValueByString(const std::string & orc_Item);
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
    virtual void CalcHashStructure(uint32_t & oru32_HashValue) const;
@@ -38,7 +39,7 @@ public:
    uint64_t u64_Value;              ///< Bitmask value
 
 private:
-   static int32_t mh_ParseUintFromString(const std::string & orc_Item, uint64_t & oru64_Value);
+   static std::error_code mh_ParseUintFromString(const std::string & orc_Item, uint64_t & oru64_Value);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

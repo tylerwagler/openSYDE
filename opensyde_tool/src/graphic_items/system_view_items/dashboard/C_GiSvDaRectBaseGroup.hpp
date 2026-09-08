@@ -46,7 +46,7 @@ public:
                          const uint32_t ou32_MaximumDataElements, const uint64_t & oru64_Id,
                          const float64_t of64_MinWidth, const float64_t of64_MinHeight, const float64_t of64_InitWidth,
                          const float64_t of64_InitHeight, const bool oq_KeepAspectRatio, const bool oq_ReadItem,
-                         QGraphicsItem * const opc_Parent = NULL, const QPointF & orc_PosOffset = QPointF(-1.0, -1.0));
+                         QGraphicsItem * const opc_Parent = nullptr, const QPointF & orc_PosOffset = QPointF(-1.0, -1.0));
    ~C_GiSvDaRectBaseGroup(void) override;
 
    bool IsMousePosRelevantForProxyWidgetInteraction(const QPointF & orc_ScenePos) const;
@@ -82,7 +82,7 @@ public:
    virtual void SetDrawingActive(const bool oq_Active);
 
    void paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-              QWidget * const opc_Widget = NULL) override;
+              QWidget * const opc_Widget = nullptr) override;
 
    virtual void ConfigureContextMenu(C_SyvDaContextMenuManager * const opc_ContextMenuManager, const bool oq_Active);
 

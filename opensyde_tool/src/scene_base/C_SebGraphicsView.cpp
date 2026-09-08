@@ -157,7 +157,7 @@ void C_SebGraphicsView::UpdateTransform(void) const
 {
    C_SebScene * const pc_Scene = dynamic_cast<C_SebScene *>(this->scene());
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       //Register scaling factor
       pc_Scene->UpdateTransform(this->transform());
@@ -282,7 +282,7 @@ void C_SebGraphicsView::SetSceneAndConnect(QGraphicsScene * const opc_Scene)
    this->setScene(opc_Scene);
 
    //Connects
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       connect(pc_Scene, &C_SebScene::SigProxyWidgetInteractionActive, this,
               &C_SebGraphicsView::m_SetProxyWidgetInteractionActive);
@@ -436,7 +436,7 @@ void C_SebGraphicsView::mouseMoveEvent(QMouseEvent * const opc_Event)
       {
          const C_SebScene * const pc_Scene = dynamic_cast<C_SebScene *>(this->scene());
 
-         if (pc_Scene != NULL)
+         if (pc_Scene != nullptr)
          {
             q_OverrideCursorNecessary =
                pc_Scene->IsOverrideCursorNecessary(this->mapToScene(opc_Event->pos()), e_Cursor);
@@ -486,7 +486,7 @@ void C_SebGraphicsView::mousePressEvent(QMouseEvent * const opc_Event)
    C_SebScene * const pc_Scene = dynamic_cast<C_SebScene *>(this->scene());
    bool q_BlockPressHandling = false;
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       q_BlockPressHandling = pc_Scene->IsMousePosRelevantForProxyWidgetInteraction(this->mapToScene(opc_Event->pos()));
    }
@@ -496,7 +496,7 @@ void C_SebGraphicsView::mousePressEvent(QMouseEvent * const opc_Event)
    {
       bool q_RubberBandModeAvailable = true;
 
-      if (pc_Scene != NULL)
+      if (pc_Scene != nullptr)
       {
          if (pc_Scene->IsSceneRubberBandAvailable() == false)
          {
@@ -540,7 +540,7 @@ void C_SebGraphicsView::mousePressEvent(QMouseEvent * const opc_Event)
          this->setDragMode(QGraphicsView::NoDrag);
          // and context menu
          // TODO Maybe we need the context menu in this context too
-         if (pc_Scene != NULL)
+         if (pc_Scene != nullptr)
          {
             pc_Scene->BlockContextMenu();
          }
@@ -615,7 +615,7 @@ void C_SebGraphicsView::keyPressEvent(QKeyEvent * const opc_Event)
    const C_SebScene * const pc_Scene = dynamic_cast<C_SebScene *>(this->scene());
    bool q_BlockPressHandling = false;
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       q_BlockPressHandling = pc_Scene->IsSelectionRelevantForProxyWidgetInteraction();
    }
@@ -731,7 +731,7 @@ bool C_SebGraphicsView::event(QEvent * const opc_Event)
    if (opc_Event->type() == QEvent::ToolTip)
    {
       QHelpEvent * const pc_Help = dynamic_cast<QHelpEvent *>(opc_Event);
-      if (pc_Help != NULL)
+      if (pc_Help != nullptr)
       {
          Q_EMIT (this->SigShowToolTip(this->mapToScene(pc_Help->pos())));
          //Accept event because of Qt dynamic tooltip time based on the fact if there was a tooltip in this widget
@@ -798,7 +798,7 @@ void C_SebGraphicsView::m_ScaleBy(const float64_t of64_ScaleFactor, const bool &
       {
          // adapt the scene rectangle
          C_SebScene * const pc_Scene = dynamic_cast<C_SebScene *>(this->scene());
-         if (pc_Scene != NULL)
+         if (pc_Scene != nullptr)
          {
             QPointF c_Point;
             QRectF c_Rect = this->scene()->sceneRect();
@@ -884,7 +884,7 @@ void C_SebGraphicsView::m_DragMove(const QMouseEvent * const opc_Event)
    {
       C_SebScene * const pc_Scene = dynamic_cast<C_SebScene *>(this->scene());
 
-      if (pc_Scene != NULL)
+      if (pc_Scene != nullptr)
       {
          // block the context menu till the move is finished
          pc_Scene->BlockContextMenu();

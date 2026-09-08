@@ -12,9 +12,12 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "TglUtils.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscHalcDefContent.hpp"
 
@@ -76,20 +79,20 @@ C_OscHalcDefContent::E_ComplexType C_OscHalcDefContent::GetComplexType() const
    \param[in]  orc_Value         Enum internal value
 
    \return
-   C_NO_ERR Added successfully
-   C_RANGE  Display value already used
-   C_CONFIG Content type invalid
+   Errc::success    Added successfully
+   Errc::range      Display value already used
+   Errc::config     Content type invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefContent::AddEnumItem(const std::string & orc_DisplayName,
-                                         const C_OscNodeDataPoolContent & orc_Value)
+std::error_code C_OscHalcDefContent::AddEnumItem(const std::string & orc_DisplayName,
+                                                 const C_OscNodeDataPoolContent & orc_Value)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    const C_OscNodeDataPoolContent * const pc_Content = this->FindEnumItem(orc_DisplayName);
 
-   if (pc_Content != NULL)
+   if (pc_Content != nullptr)
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
    else
    {
@@ -100,10 +103,10 @@ int32_t C_OscHalcDefContent::AddEnumItem(const std::string & orc_DisplayName,
       }
       else
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -112,17 +115,17 @@ int32_t C_OscHalcDefContent::AddEnumItem(const std::string & orc_DisplayName,
    \param[in]  orc_DisplayName   Enum display value
 
    \return
-   C_NO_ERR Value set
-   C_RANGE  Display value does not exist
-   C_CONFIG Enum content invalid
+   Errc::success    Value set
+   Errc::range      Display value does not exist
+   Errc::config     Enum content invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefContent::SetEnumValue(const std::string & orc_DisplayName)
+std::error_code C_OscHalcDefContent::SetEnumValue(const std::string & orc_DisplayName)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    const C_OscNodeDataPoolContent * const pc_NewContent = this->FindEnumItem(orc_DisplayName);
 
-   if (pc_NewContent != NULL)
+   if (pc_NewContent != nullptr)
    {
       if ((this->GetArray() == pc_NewContent->GetArray()) && (this->GetType() == pc_NewContent->GetType()))
       {
@@ -205,14 +208,14 @@ int32_t C_OscHalcDefContent::SetEnumValue(const std::string & orc_DisplayName)
       }
       else
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -221,13 +224,13 @@ int32_t C_OscHalcDefContent::SetEnumValue(const std::string & orc_DisplayName)
    \param[in,out]  orc_DisplayName  Display name
 
    \return
-   C_NO_ERR Value set
-   C_RANGE  Display value does not exist for this value
+   Errc::success    Value set
+   Errc::range      Display value does not exist for this value
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefContent::GetEnumValue(std::string & orc_DisplayName)
+std::error_code C_OscHalcDefContent::GetEnumValue(std::string & orc_DisplayName)
 {
-   int32_t s32_Retval = C_RANGE;
+   std::error_code c_Retval = Errc::range;
 
    for (std::vector<std::pair<std::string, C_OscNodeDataPoolContent> >::const_iterator c_It =
            this->mc_EnumItems.begin();
@@ -236,11 +239,11 @@ int32_t C_OscHalcDefContent::GetEnumValue(std::string & orc_DisplayName)
       if (c_It->second == *this)
       {
          orc_DisplayName = c_It->first;
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
          break;
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -254,7 +257,7 @@ int32_t C_OscHalcDefContent::GetEnumValue(std::string & orc_DisplayName)
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolContent * C_OscHalcDefContent::FindEnumItem(const std::string & orc_DisplayName) const
 {
-   const C_OscNodeDataPoolContent * pc_Retval = NULL;
+   const C_OscNodeDataPoolContent * pc_Retval = nullptr;
 
    for (std::vector<std::pair<std::string, C_OscNodeDataPoolContent> >::const_iterator c_It =
            this->mc_EnumItems.begin();
@@ -315,12 +318,12 @@ const std::vector<C_OscHalcDefContentBitmaskItem> & C_OscHalcDefContent::GetBitm
 void C_OscHalcDefContent::GetBitmaskStatusValues(std::vector<std::string> * const opc_Displays,
                                                  std::vector<bool> * const opc_Values) const
 {
-   if (opc_Displays != NULL)
+   if (opc_Displays != nullptr)
    {
       opc_Displays->clear();
       opc_Displays->reserve(this->mc_BitmaskItems.size());
    }
-   if (opc_Values != NULL)
+   if (opc_Values != nullptr)
    {
       opc_Values->clear();
       opc_Values->reserve(this->mc_BitmaskItems.size());
@@ -328,11 +331,11 @@ void C_OscHalcDefContent::GetBitmaskStatusValues(std::vector<std::string> * cons
    for (std::vector<C_OscHalcDefContentBitmaskItem>::const_iterator c_ItBitmask = this->mc_BitmaskItems.begin();
         c_ItBitmask != this->mc_BitmaskItems.end(); ++c_ItBitmask)
    {
-      if (opc_Displays != NULL)
+      if (opc_Displays != nullptr)
       {
          opc_Displays->push_back(c_ItBitmask->c_Display);
       }
-      if (opc_Values != NULL)
+      if (opc_Values != nullptr)
       {
          opc_Values->push_back(c_ItBitmask->q_ApplyValueSetting);
       }
@@ -346,14 +349,14 @@ void C_OscHalcDefContent::GetBitmaskStatusValues(std::vector<std::string> * cons
    \param[out]  orq_Value        Value
 
    \return
-   C_NO_ERR Value set
-   C_RANGE  Display value does not exist
-   C_CONFIG Type invalid
+   Errc::success    Value set
+   Errc::range      Display value does not exist
+   Errc::config     Type invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefContent::GetBitmask(const std::string & orc_DisplayName, bool & orq_Value) const
+std::error_code C_OscHalcDefContent::GetBitmask(const std::string & orc_DisplayName, bool & orq_Value) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if ((this->GetArray() == false) && (this->GetComplexType() == C_OscHalcDefContent::eCT_BIT_MASK))
    {
@@ -372,14 +375,14 @@ int32_t C_OscHalcDefContent::GetBitmask(const std::string & orc_DisplayName, boo
       }
       if (q_Found == false)
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -389,14 +392,14 @@ int32_t C_OscHalcDefContent::GetBitmask(const std::string & orc_DisplayName, boo
    \param[in]  oq_Value          Value
 
    \return
-   C_NO_ERR Value set
-   C_RANGE  Display value does not exist
-   C_CONFIG Type invalid
+   Errc::success    Value set
+   Errc::range      Display value does not exist
+   Errc::config     Type invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefContent::SetBitmask(const std::string & orc_DisplayName, const bool oq_Value)
+std::error_code C_OscHalcDefContent::SetBitmask(const std::string & orc_DisplayName, const bool oq_Value)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if ((this->GetArray() == false) && (this->GetComplexType() == C_OscHalcDefContent::eCT_BIT_MASK))
    {
@@ -417,7 +420,7 @@ int32_t C_OscHalcDefContent::SetBitmask(const std::string & orc_DisplayName, con
       }
       if (q_Found == false)
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
       else
       {
@@ -438,10 +441,10 @@ int32_t C_OscHalcDefContent::SetBitmask(const std::string & orc_DisplayName, con
             u64_CurrentValue = this->GetValueU64();
             break;
          default:
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
             break;
          }
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
             //Step 2: get initial value
             for (std::vector<C_OscHalcDefContentBitmaskItem>::iterator c_ItBitmask = this->mc_BitmaskItems.begin();
@@ -484,9 +487,9 @@ int32_t C_OscHalcDefContent::SetBitmask(const std::string & orc_DisplayName, con
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -495,14 +498,14 @@ int32_t C_OscHalcDefContent::SetBitmask(const std::string & orc_DisplayName, con
    \param[in]  orc_Value   Value
 
    \return
-   C_NO_ERR Value set
-   C_RANGE String too long
-   C_CONFIG Type invalid
+   Errc::success    Value set
+   Errc::range      String too long
+   Errc::config     Type invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefContent::SetStringValue(const std::string & orc_Value)
+std::error_code C_OscHalcDefContent::SetStringValue(const std::string & orc_Value)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if ((this->GetArray() == true) && (this->GetComplexType() == C_OscHalcDefContent::eCT_STRING))
    {
@@ -519,14 +522,14 @@ int32_t C_OscHalcDefContent::SetStringValue(const std::string & orc_Value)
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -535,13 +538,13 @@ int32_t C_OscHalcDefContent::SetStringValue(const std::string & orc_Value)
    \param[in,out]  orc_Value  Value
 
    \return
-   C_NO_ERR Value set
-   C_CONFIG Type invalid
+   Errc::success    Value set
+   Errc::config     Type invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefContent::GetStringValue(std::string & orc_Value) const
+std::error_code C_OscHalcDefContent::GetStringValue(std::string & orc_Value) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if ((this->GetArray() == true) && (this->GetComplexType() == C_OscHalcDefContent::eCT_STRING))
    {
@@ -561,9 +564,9 @@ int32_t C_OscHalcDefContent::GetStringValue(std::string & orc_Value) const
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

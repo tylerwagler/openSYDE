@@ -137,10 +137,10 @@ void C_SyvDaPeUpdateModeTreeWidget::Init(const uint32_t ou32_ViewIndex)
          C_SyvDaPeUpdateModeTableModel * const pc_Model = this->mc_Models[u32_ItModel];
 
          //Check valid entry
-         if (pc_Model != NULL)
+         if (pc_Model != nullptr)
          {
             const C_OscNodeDataPoolListElementId * const pc_Id = pc_Model->GetIndex(0);
-            if (pc_Id != NULL)
+            if (pc_Id != nullptr)
             {
                QTreeWidgetItem * const pc_TopLevelItem =
                   new QTreeWidgetItem(static_cast<int32_t>(QTreeWidgetItem::UserType));
@@ -192,31 +192,31 @@ void C_SyvDaPeUpdateModeTreeWidget::Select(const C_PuiSvDbNodeDataPoolListElemen
       for (uint32_t u32_It = 0; u32_It < this->mc_Models.size(); ++u32_It)
       {
          const stw::opensyde_gui_logic::C_SyvDaPeUpdateModeTableModel * const pc_Model = this->mc_Models[u32_It];
-         if (pc_Model != NULL)
+         if (pc_Model != nullptr)
          {
             const C_OscNodeDataPoolListElementId * const pc_ElementId = pc_Model->GetIndex(0);
-            if (pc_ElementId != NULL)
+            if (pc_ElementId != nullptr)
             {
                if (orc_Id.u32_NodeIndex == pc_ElementId->u32_NodeIndex)
                {
                   //Match node
                   const QTreeWidgetItem * const pc_TopLevelItem = this->topLevelItem(static_cast<int32_t>(u32_It));
-                  if (pc_TopLevelItem != NULL)
+                  if (pc_TopLevelItem != nullptr)
                   {
                      QTreeWidgetItem * const pc_ViewItem = pc_TopLevelItem->child(0);
 
-                     if (pc_ViewItem != NULL)
+                     if (pc_ViewItem != nullptr)
                      {
                         C_SyvDaPeUpdateModeTableView * const pc_Table =
                            dynamic_cast<C_SyvDaPeUpdateModeTableView * const>(this->itemWidget(pc_ViewItem, 0));
-                        if (pc_Table != NULL)
+                        if (pc_Table != nullptr)
                         {
                            //Find row
                            for (int32_t s32_ItRow = 0; s32_ItRow < pc_Model->rowCount(); ++s32_ItRow)
                            {
                               const C_OscNodeDataPoolListElementId * const pc_CurElementId = pc_Model->GetIndex(
                                  s32_ItRow);
-                              if (pc_CurElementId != NULL)
+                              if (pc_CurElementId != nullptr)
                               {
                                  if (orc_Id == *pc_CurElementId)
                                  {
@@ -233,7 +233,7 @@ void C_SyvDaPeUpdateModeTreeWidget::Select(const C_PuiSvDbNodeDataPoolListElemen
                                        // The main scroll bar must handle this. The problem: The normal scroll functions
                                        // does not work here. The position must be set manually
                                        QScrollBar * const pc_ScrollBar = this->verticalScrollBar();
-                                       if (pc_ScrollBar != NULL)
+                                       if (pc_ScrollBar != nullptr)
                                        {
                                           const int32_t s32_SliderPos = pc_ScrollBar->sliderPosition();
                                           const int32_t s32_SliderMax = pc_ScrollBar->maximum();
@@ -266,7 +266,7 @@ void C_SyvDaPeUpdateModeTreeWidget::ApplyData(void) const
    for (uint32_t u32_ItModel = 0; u32_ItModel < this->mc_Models.size(); ++u32_ItModel)
    {
       const C_SyvDaPeUpdateModeTableModel * const pc_Model = this->mc_Models[u32_ItModel];
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          pc_Model->ApplyData();
       }
@@ -317,7 +317,7 @@ void C_SyvDaPeUpdateModeTreeWidget::m_OnCollapse(const QModelIndex & orc_Index) 
    const C_SyvDaPeUpdateModeNodeHeader * const pc_Widget =
       dynamic_cast<C_SyvDaPeUpdateModeNodeHeader * const>(this->indexWidget(orc_Index));
 
-   if (pc_Widget != NULL)
+   if (pc_Widget != nullptr)
    {
       pc_Widget->RegisterExpandOrCollapse(false);
    }
@@ -334,7 +334,7 @@ void C_SyvDaPeUpdateModeTreeWidget::m_OnExpand(const QModelIndex & orc_Index) co
    const C_SyvDaPeUpdateModeNodeHeader * const pc_Widget =
       dynamic_cast<C_SyvDaPeUpdateModeNodeHeader * const>(this->indexWidget(orc_Index));
 
-   if (pc_Widget != NULL)
+   if (pc_Widget != nullptr)
    {
       pc_Widget->RegisterExpandOrCollapse(true);
    }

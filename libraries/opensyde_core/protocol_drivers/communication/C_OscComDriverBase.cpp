@@ -14,8 +14,10 @@
 #include "precomp_headers.hpp"
 
 #include <cstring>
+#include <system_error>
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_OscComDriverBase.hpp"
 #include <string>
@@ -100,7 +102,7 @@ bool C_OscComDriverBaseCanMessage::operator ==(const C_OscComDriverBaseCanMessag
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscComDriverBase::C_OscComDriverBase(void) :
-   mpc_CanDispatcher(NULL),
+   mpc_CanDispatcher(nullptr),
    mu16_DispatcherClientHandle(0U),
    mq_Started(false),
    mq_Paused(false),
@@ -120,7 +122,7 @@ C_OscComDriverBase::C_OscComDriverBase(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscComDriverBase::~C_OscComDriverBase(void)
 {
-   this->mpc_CanDispatcher = NULL; //do not delete ! not owned by us
+   this->mpc_CanDispatcher = nullptr; //do not delete ! not owned by us
    delete this->mpc_AutoSupportProtocol;
 }
 
@@ -130,27 +132,25 @@ C_OscComDriverBase::~C_OscComDriverBase(void)
    \param[in]  opc_CanDispatcher       Pointer to concrete CAN dispatcher
 
    \return
-   C_NO_ERR      Operation success
-   C_COM         CAN initialization failed
+   Errc::success    Operation success
+   Errc::com        CAN initialization failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverBase::InitBase(C_CanDispatcher * const opc_CanDispatcher)
+std::error_code C_OscComDriverBase::InitBase(C_CanDispatcher * const opc_CanDispatcher)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    this->mpc_CanDispatcher = opc_CanDispatcher;
 
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
-      s32_Return = this->mpc_CanDispatcher->RegisterClient(this->mu16_DispatcherClientHandle);
-
-      if (s32_Return != C_NO_ERR)
+      if (this->mpc_CanDispatcher->RegisterClient(this->mu16_DispatcherClientHandle) != Errc::success)
       {
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -174,18 +174,18 @@ void C_OscComDriverBase::RegisterLogger(C_OscComMessageLogger * const opc_Logger
    \param[in]  os32_Bitrate          CAN bitrate in kbit/s. Is used for the bus load calculation not the initialization
 
    \return
-   C_NO_ERR                          CAN initialized and logging started
-   C_CONFIG                          CAN dispatcher is not set
+   Errc::success    CAN initialized and logging started
+   Errc::config     CAN dispatcher is not set
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverBase::StartLogging(const int32_t os32_Bitrate)
+std::error_code C_OscComDriverBase::StartLogging(const int32_t os32_Bitrate)
 {
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       uint32_t u32_Counter;
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
 
       this->mq_Started = true;
       this->mq_Paused = false;
@@ -202,7 +202,7 @@ int32_t C_OscComDriverBase::StartLogging(const int32_t os32_Bitrate)
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -288,9 +288,9 @@ void C_OscComDriverBase::UpdateBitrate(const int32_t os32_Bitrate)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComDriverBase::ClearRxMessages()
 {
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
-      this->mpc_CanDispatcher->ClearQueue(this->mu16_DispatcherClientHandle);
+      (void)this->mpc_CanDispatcher->ClearQueue(this->mu16_DispatcherClientHandle);
    }
 }
 
@@ -308,10 +308,10 @@ void C_OscComDriverBase::ClearRxMessages()
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComDriverBase::DistributeMessages(void)
 {
-   if ((this->mpc_CanDispatcher != NULL) &&
+   if ((this->mpc_CanDispatcher != nullptr) &&
        (this->mq_Started == true))
    {
-      int32_t s32_Return;
+      std::error_code c_Return = Errc::success;
       T_STWCAN_Msg_RX c_Msg;
       static uint32_t hu32_BusLoadTimeRefresh = 0U;
       uint32_t u32_BusLoadTimeDiff;
@@ -327,9 +327,9 @@ void C_OscComDriverBase::DistributeMessages(void)
       do
       {
          // Get the messages even if paused to clean the queue. The messages in the pause phase are not relevant
-         s32_Return = this->mpc_CanDispatcher->ReadFromQueue(this->mu16_DispatcherClientHandle, c_Msg);
+         c_Return = this->mpc_CanDispatcher->ReadFromQueue(this->mu16_DispatcherClientHandle, c_Msg);
 
-         if (s32_Return == C_NO_ERR)
+         if (c_Return == Errc::success)
          {
             if (c_Msg.u8_DLC <= 8)
             {
@@ -344,7 +344,7 @@ void C_OscComDriverBase::DistributeMessages(void)
             }
          }
       }
-      while (s32_Return == C_NO_ERR);
+      while (c_Return == Errc::success);
 
       // Check and update bus load
       u32_BusLoadTimeDiff = stw::tgl::TglGetTickCount() - hu32_BusLoadTimeRefresh;
@@ -409,23 +409,25 @@ void C_OscComDriverBase::SendCanMessageQueued(const T_STWCAN_Msg_TX & orc_Msg)
    \param[in]     orc_Msg        CAN message to send
 
    \return
-   C_NO_ERR    CAN message sent
-   C_CONFIG    CAN dispatcher not initialized
-   C_COM       Error on sending CAN message
+   Errc::success    CAN message sent
+   Errc::config     CAN dispatcher not initialized
+   Errc::com        Error on sending CAN message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverBase::SendCanMessageDirect(T_STWCAN_Msg_TX & orc_Msg)
+std::error_code C_OscComDriverBase::SendCanMessageDirect(T_STWCAN_Msg_TX & orc_Msg)
 {
    orc_Msg.au8_Data[6] = mpc_AutoSupportProtocol->MessageCounter(orc_Msg.u32_ID, orc_Msg.au8_Data[6]);
    orc_Msg.au8_Data[7] =
       mpc_AutoSupportProtocol->SetCyclicRedundancyCheckCalculation(orc_Msg.u32_ID, orc_Msg.u8_DLC - 2,
                                                                    &orc_Msg.au8_Data[0]);
 
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
-      s32_Return = this->mpc_CanDispatcher->CAN_Send_Msg(orc_Msg);
+      const std::error_code c_SendResult = this->mpc_CanDispatcher->CAN_Send_Msg(orc_Msg);
+      //report what the transmit actually did; this previously always reported success
+      c_Return = c_SendResult;
 
       if (mpc_AutoSupportProtocol->SupportInvertedCanMessage(orc_Msg.u32_ID))
       {
@@ -440,10 +442,10 @@ int32_t C_OscComDriverBase::SendCanMessageDirect(T_STWCAN_Msg_TX & orc_Msg)
          orc_TransmitInvertedMsg.u8_XTD = orc_Msg.u8_XTD;
          orc_TransmitInvertedMsg.u8_RTR = orc_Msg.u8_RTR;
          orc_TransmitInvertedMsg.u8_Align = orc_Msg.u8_Align;
-         this->mpc_CanDispatcher->CAN_Send_Msg(orc_TransmitInvertedMsg);
+         (void)this->mpc_CanDispatcher->CAN_Send_Msg(orc_TransmitInvertedMsg);
       }
 
-      if (s32_Return == C_NO_ERR)
+      if (c_SendResult == Errc::success)
       {
          // Inform the logger about the sent message
          T_STWCAN_Msg_RX c_Msg;
@@ -489,17 +491,17 @@ int32_t C_OscComDriverBase::SendCanMessageDirect(T_STWCAN_Msg_TX & orc_Msg)
             // Count the error
             ++this->mu32_CanTxErrors;
          }
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
    }
 
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       osc_write_log_error("Sending CAN message", "Could not send CAN message. Error code: " +
-                          std::to_string(s32_Return));
+                          std::to_string(c_Return.value()));
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -604,9 +606,9 @@ void C_OscComDriverBase::RemoveAllCyclicCanMessages(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComDriverBase::PrepareForDestruction(void)
 {
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
-      this->mpc_CanDispatcher->RemoveClient(this->mu16_DispatcherClientHandle);
+      (void)this->mpc_CanDispatcher->RemoveClient(this->mu16_DispatcherClientHandle);
    }
 }
 

@@ -13,7 +13,10 @@
 #include "precomp_headers.hpp"
 #include "C_SclStringCompat.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscNodeDataPoolList.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
@@ -182,7 +185,7 @@ void C_OscNodeDataPoolList::CheckErrorDataSet(const uint32_t & oru32_DataSetInde
    {
       const C_OscNodeDataPoolDataSet & rc_CurrentElement = this->c_DataSets[oru32_DataSetIndex];
       //Check variable name
-      if (opq_NameInvalid != NULL)
+      if (opq_NameInvalid != nullptr)
       {
          if (C_OscUtils::h_CheckValidCeName(rc_CurrentElement.c_Name) == false)
          {
@@ -194,7 +197,7 @@ void C_OscNodeDataPoolList::CheckErrorDataSet(const uint32_t & oru32_DataSetInde
          }
       }
       //Name conflict
-      if (opq_NameConflict != NULL)
+      if (opq_NameConflict != nullptr)
       {
          *opq_NameConflict = false;
          for (uint32_t u32_ItDataSet = 0; (u32_ItDataSet < this->c_DataSets.size()) && (*opq_NameConflict == false);
@@ -213,11 +216,11 @@ void C_OscNodeDataPoolList::CheckErrorDataSet(const uint32_t & oru32_DataSetInde
    }
    else
    {
-      if (opq_NameConflict != NULL)
+      if (opq_NameConflict != nullptr)
       {
          *opq_NameConflict = false;
       }
-      if (opq_NameInvalid != NULL)
+      if (opq_NameInvalid != nullptr)
       {
          *opq_NameInvalid = false;
       }
@@ -245,7 +248,7 @@ void C_OscNodeDataPoolList::CheckErrorElement(const uint32_t & oru32_ElementInde
    {
       const C_OscNodeDataPoolListElement & rc_CurrentElement = this->c_Elements[oru32_ElementIndex];
       //Check variable name
-      if (opq_NameInvalid != NULL)
+      if (opq_NameInvalid != nullptr)
       {
          if (C_OscUtils::h_CheckValidCeName(rc_CurrentElement.c_Name) == false)
          {
@@ -257,7 +260,7 @@ void C_OscNodeDataPoolList::CheckErrorElement(const uint32_t & oru32_ElementInde
          }
       }
       //Name conflict
-      if (opq_NameConflict != NULL)
+      if (opq_NameConflict != nullptr)
       {
          *opq_NameConflict = false;
          for (uint32_t u32_ItElement = 0; (u32_ItElement < this->c_Elements.size()) && (*opq_NameConflict == false);
@@ -274,7 +277,7 @@ void C_OscNodeDataPoolList::CheckErrorElement(const uint32_t & oru32_ElementInde
          }
       }
       //Check min max
-      if (opq_MinOverMax != NULL)
+      if (opq_MinOverMax != nullptr)
       {
          if (rc_CurrentElement.c_MinValue <= rc_CurrentElement.c_MaxValue)
          {
@@ -286,18 +289,18 @@ void C_OscNodeDataPoolList::CheckErrorElement(const uint32_t & oru32_ElementInde
          }
       }
       //Check data sets
-      if (opq_DataSetValueInvalid != NULL)
+      if (opq_DataSetValueInvalid != nullptr)
       {
          *opq_DataSetValueInvalid = false;
          for (uint32_t u32_ItDataSet = 0; u32_ItDataSet < rc_CurrentElement.c_DataSetValues.size(); ++u32_ItDataSet)
          {
             bool q_ValueBelowMin = false;
             bool q_ValueOverMax = false;
-            this->CheckErrorDataSetValue(oru32_ElementIndex, u32_ItDataSet, &q_ValueBelowMin, &q_ValueOverMax, NULL);
+            this->CheckErrorDataSetValue(oru32_ElementIndex, u32_ItDataSet, &q_ValueBelowMin, &q_ValueOverMax, nullptr);
             if ((q_ValueBelowMin == true) || (q_ValueOverMax == true))
             {
                *opq_DataSetValueInvalid = true;
-               if (opc_InvalidDataSetIndices != NULL)
+               if (opc_InvalidDataSetIndices != nullptr)
                {
                   opc_InvalidDataSetIndices->push_back(u32_ItDataSet);
                }
@@ -307,15 +310,15 @@ void C_OscNodeDataPoolList::CheckErrorElement(const uint32_t & oru32_ElementInde
    }
    else
    {
-      if (opq_NameConflict != NULL)
+      if (opq_NameConflict != nullptr)
       {
          *opq_NameConflict = false;
       }
-      if (opq_NameInvalid != NULL)
+      if (opq_NameInvalid != nullptr)
       {
          *opq_NameInvalid = false;
       }
-      if (opq_MinOverMax != NULL)
+      if (opq_MinOverMax != nullptr)
       {
          *opq_MinOverMax = false;
       }
@@ -337,11 +340,11 @@ void C_OscNodeDataPoolList::CheckErrorDataSetValue(const uint32_t & oru32_Elemen
                                                    bool * const opq_ValueOverMax,
                                                    const uint32_t * const opu32_ArrayIndex) const
 {
-   if (opq_ValueBelowMin != NULL)
+   if (opq_ValueBelowMin != nullptr)
    {
       *opq_ValueBelowMin = false;
    }
-   if (opq_ValueOverMax != NULL)
+   if (opq_ValueOverMax != nullptr)
    {
       *opq_ValueOverMax = false;
    }
@@ -351,10 +354,10 @@ void C_OscNodeDataPoolList::CheckErrorDataSetValue(const uint32_t & oru32_Elemen
       if (oru32_DataSetIndex < rc_CurrentElement.c_DataSetValues.size())
       {
          const C_OscNodeDataPoolContent & rc_DataSetValue = rc_CurrentElement.c_DataSetValues[oru32_DataSetIndex];
-         if (opq_ValueBelowMin != NULL)
+         if (opq_ValueBelowMin != nullptr)
          {
             *opq_ValueBelowMin = false;
-            if (opu32_ArrayIndex == NULL)
+            if (opu32_ArrayIndex == nullptr)
             {
                if ((rc_DataSetValue >= rc_CurrentElement.c_MinValue) == false)
                {
@@ -369,10 +372,10 @@ void C_OscNodeDataPoolList::CheckErrorDataSetValue(const uint32_t & oru32_Elemen
                }
             }
          }
-         if (opq_ValueOverMax != NULL)
+         if (opq_ValueOverMax != nullptr)
          {
             *opq_ValueOverMax = false;
-            if (opu32_ArrayIndex == NULL)
+            if (opu32_ArrayIndex == nullptr)
             {
                if ((rc_DataSetValue <= rc_CurrentElement.c_MaxValue) == false)
                {
@@ -432,13 +435,13 @@ void C_OscNodeDataPoolList::HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCh
    \param[in]     orc_Data    data to set
 
    \return
-   C_NO_ERR   value set
-   C_RANGE    size of orc_Data does not match our size
+   Errc::success   value set
+   Errc::range     size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolList::SetCrcFromBigEndianBlob(const std::vector<uint8_t> & orc_Data)
+std::error_code C_OscNodeDataPoolList::SetCrcFromBigEndianBlob(const std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Data.size() == 2)
    {
@@ -446,9 +449,9 @@ int32_t C_OscNodeDataPoolList::SetCrcFromBigEndianBlob(const std::vector<uint8_t
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -460,13 +463,13 @@ int32_t C_OscNodeDataPoolList::SetCrcFromBigEndianBlob(const std::vector<uint8_t
    \param[in]     orc_Data    data to set
 
    \return
-   C_NO_ERR   value set
-   C_RANGE    size of orc_Data does not match our size
+   Errc::success   value set
+   Errc::range     size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolList::SetCrcFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data)
+std::error_code C_OscNodeDataPoolList::SetCrcFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Data.size() == 2)
    {
@@ -474,9 +477,9 @@ int32_t C_OscNodeDataPoolList::SetCrcFromLittleEndianBlob(const std::vector<uint
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

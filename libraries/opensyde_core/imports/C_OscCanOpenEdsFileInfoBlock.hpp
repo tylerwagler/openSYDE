@@ -9,6 +9,8 @@
 #define C_OSCCANOPENEDSFILEINFOBLOCK_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include <string>
 #include "C_SclDateTime.hpp"
@@ -41,7 +43,7 @@ public:
    std::string c_ModifiedBy;       ///< Name or description of file creator, max 244 characters
 
    void CalcHash(uint32_t & oru32_HashValue) const;
-   int32_t LoadFromIni(stw::scl::C_SclIniFile & orc_File, std::string & orc_LastError);
+   std::error_code LoadFromIni(stw::scl::C_SclIniFile & orc_File, std::string & orc_LastError);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

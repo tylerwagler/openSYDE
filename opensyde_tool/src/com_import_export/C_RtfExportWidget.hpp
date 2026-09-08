@@ -47,7 +47,7 @@ public:
 
    int32_t ExportToRtf(const std::string & orc_RtfPath, const std::string & orc_CompanyName,
                        const std::string & orc_CompanyLogoPath, C_SdTopologyWidget * const opc_Widget,
-                       stw::scl::std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage);
+                       std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage);
 
    void InitStaticNames(void) const;
 
@@ -78,7 +78,7 @@ protected:
 private:
    Ui::C_RtfExportWidget * mpc_Ui;
    std::map<std::string, std::string> mc_NodeMapping;
-   stw::scl::std::vector<std::string> mc_Warnings;
+   std::vector<std::string> mc_Warnings;
    std::string mc_Error;
 
    void m_OkClicked(void);

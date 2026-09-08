@@ -29,7 +29,7 @@ class C_GiCheckBox :
    public C_GiRectPixmap
 {
 public:
-   C_GiCheckBox(const QRectF & orc_Rect, QGraphicsItem * const opc_Parent = NULL);
+   C_GiCheckBox(const QRectF & orc_Rect, QGraphicsItem * const opc_Parent = nullptr);
 
    void SetChecked(const bool oq_Checked);
    bool IsChecked(void) const;

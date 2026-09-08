@@ -82,7 +82,7 @@ C_SupCreatePackage::C_SupCreatePackage(const bool oq_Quiet, const std::string & 
 C_SydeSup::E_Result C_SupCreatePackage::Create()
 {
    C_SydeSup::E_Result e_Result = C_SydeSup::eOK;
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    std::string c_SysDefPath;
    std::string c_SysViewPath;
    C_OscSystemDefinition c_SystemDefinition;
@@ -101,13 +101,14 @@ C_SydeSup::E_Result C_SupCreatePackage::Create()
    {
       C_OscSystemFilerUtil::h_AdaptProjectPathToSystemDefinition(mc_OsyProjectPath, c_SysDefPath);
       C_OscSystemFilerUtil::h_AdaptProjectPathToSystemViews(mc_OsyProjectPath, c_SysViewPath);
-      s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(c_SystemDefinition, c_SysDefPath,
-                                                                          mc_DeviceDefPath);
-      if (s32_Return == C_NO_ERR)
+      c_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(c_SystemDefinition, c_SysDefPath,
+                                                                        mc_DeviceDefPath);
+      if (!c_Return)
       {
-         s32_Return = C_OscViewFiler::h_LoadSystemViewsFile(c_SysViews, c_SysViewPath, c_SystemDefinition.c_Nodes);
+         c_Return = C_OscViewFiler::h_LoadSystemViewsFile(c_SysViews, c_SysViewPath,
+                                                          c_SystemDefinition.c_Nodes);
       }
-      if (s32_Return != C_NO_ERR)
+      if (c_Return)
       {
          e_Result = C_SydeSup::eERR_CREATE_PROJ_LOAD_FAILED;
       }
@@ -184,19 +185,19 @@ C_SydeSup::E_Result C_SupCreatePackage::Create()
 
       // Now we have all data collected and can create the package (V2 zip; encryption/signing not surfaced
       // through the SYDEsup CLI yet — pass empty defaults for those parameters).
-      s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackage(mc_SupFilePath, c_SystemDefinition,
-                                                                       c_View.GetOscPcData().GetBusIndex(),
-                                                                       c_NodeActiveFlags, c_NodesUpdateOrder,
-                                                                       c_ApplicationsToWrite, c_Warnings,
-                                                                       c_Error, mc_TempDir);
+      c_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackage(mc_SupFilePath, c_SystemDefinition,
+                                                                     c_View.GetOscPcData().GetBusIndex(),
+                                                                     c_NodeActiveFlags, c_NodesUpdateOrder,
+                                                                     c_ApplicationsToWrite, c_Warnings,
+                                                                     c_Error, mc_TempDir);
 
       // File writing issues
-      if ((s32_Return == C_RD_WR) || (s32_Return == C_RANGE) || (s32_Return == C_BUSY))
+      if ((c_Return == Errc::rd_wr) || (c_Return == Errc::range) || (c_Return == Errc::busy))
       {
          e_Result = C_SydeSup::eERR_CREATE_ZIP_RD_RW;
       }
       // Configuration issues
-      else if (s32_Return != C_NO_ERR)
+      else if (c_Return)
       {
          e_Result = C_SydeSup::eERR_CREATE_ZIP_CONFIG;
       }
@@ -273,7 +274,7 @@ void C_SupCreatePackage::m_GetUpdatePackage(const C_OscViewData & orc_View,
          const C_OscNode & rc_Node = orc_SystemDefinition.c_Nodes[u32_NodeCounter];
 
          // Fill other known device names
-         if (rc_Node.pc_DeviceDefinition != NULL)
+         if (rc_Node.pc_DeviceDefinition != nullptr)
          {
             if (rc_Node.u32_SubDeviceIndex < rc_Node.pc_DeviceDefinition->c_SubDevices.size())
             {

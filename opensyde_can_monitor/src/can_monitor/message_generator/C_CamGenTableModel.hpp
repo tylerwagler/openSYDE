@@ -53,7 +53,7 @@ public:
       eUDS_DATA
    };
 
-   C_CamGenTableModel(QObject * const opc_Parent = NULL);
+   C_CamGenTableModel(QObject * const opc_Parent = nullptr);
 
    void UpdateMessageKey(const uint32_t ou32_MessageIndex);
    void TriggerModelUpdateCyclicMessage(const uint32_t ou32_MessageIndex, const bool oq_Active);

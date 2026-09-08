@@ -53,14 +53,14 @@ public:
                                               const stw::opensyde_core::C_OscCanProtocol::E_Type oe_Type,
                                               const stw::opensyde_core::C_OscCanMessage & orc_OscCanMessage,
                                               C_CieConverter::C_CieNodeMessage & orc_CieNodeMessage,
-                                              stw::scl::std::vector<std::string> & orc_Warnings);
+                                              std::vector<std::string> & orc_Warnings);
 
 private:
    // internal function called by adapters to fill Ui data structures
    static void mh_FillUpUiStructure(C_CieDataPoolListStructure & orc_DataPoolListStructure,
                                     const bool oq_ActivateAutoMinMaxForSignals,
-                                    const std::vector<uint8_t> * const opc_RxSignalDefaultMinMaxValuesUsed = NULL,
-                                    const std::vector<uint8_t> * const opc_TxSignalDefaultMinMaxValuesUsed = NULL);
+                                    const std::vector<uint8_t> * const opc_RxSignalDefaultMinMaxValuesUsed = nullptr,
+                                    const std::vector<uint8_t> * const opc_TxSignalDefaultMinMaxValuesUsed = nullptr);
    static void mh_FillUpUiStructureForSignals(const stw::opensyde_core::C_OscCanMessage & orc_Message,
                                               const bool oq_TxMessage,
                                               const C_PuiSdNodeDataPoolListElement & orc_DefaultUiSig,

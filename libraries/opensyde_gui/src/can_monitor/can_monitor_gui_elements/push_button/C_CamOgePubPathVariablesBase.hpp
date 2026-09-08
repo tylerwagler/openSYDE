@@ -27,7 +27,7 @@ class C_CamOgePubPathVariablesBase :
    Q_OBJECT
 
 public:
-   C_CamOgePubPathVariablesBase(QWidget * const opc_Parent = NULL);
+   C_CamOgePubPathVariablesBase(QWidget * const opc_Parent = nullptr);
    ~C_CamOgePubPathVariablesBase(void) override;
 
    //The signals keyword is necessary for Qt signal slot functionality

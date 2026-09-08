@@ -29,7 +29,7 @@ class C_OgeCbxParam :
    Q_OBJECT
 
 public:
-   explicit C_OgeCbxParam(QWidget * const opc_Parent = NULL);
+   explicit C_OgeCbxParam(QWidget * const opc_Parent = nullptr);
    ~C_OgeCbxParam(void) override;
 
 protected:

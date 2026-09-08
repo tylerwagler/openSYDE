@@ -30,7 +30,7 @@ class C_SdSearchTreeWidget :
    Q_OBJECT
 
 public:
-   C_SdSearchTreeWidget(QWidget * const opc_Parent = NULL);
+   C_SdSearchTreeWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdSearchTreeWidget() override;
 
    bool Search(const QString & orc_SearchString) override;

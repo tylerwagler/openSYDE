@@ -10,7 +10,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_OscHalcConfigUtil.hpp"
 
@@ -58,7 +61,7 @@ void C_OscHalcConfigUtil::h_GetConfigStandalone(const C_OscHalcConfig & orc_Conf
    {
       const C_OscHalcConfigDomain * const pc_Domain = orc_Config.GetDomainConfigDataConst(u32_DomainCounter);
 
-      if (pc_Domain != NULL)
+      if (pc_Domain != nullptr)
       {
          uint32_t u32_Channels;
          std::vector<C_OscHalcConfigStandaloneChannel> c_ChannelIds;
@@ -99,22 +102,23 @@ void C_OscHalcConfigUtil::h_GetConfigStandalone(const C_OscHalcConfig & orc_Conf
                                           When true, ou32_ChannelIndex is not relevant
    \param[out]      orc_ConfigStandalone  Standalone HALC configuration as result with the configuration of orc_Config
 
-   \retval   C_NO_ERR   Stand alone configuration prepared
-   \retval   C_RANGE    ou32_DomainIndex or ou32_ChannelIndex is invalid
+   \retval   Errc::success   Stand alone configuration prepared
+   \retval   Errc::range     ou32_DomainIndex or ou32_ChannelIndex is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigUtil::h_GetConfigStandaloneChannel(const C_OscHalcConfig & orc_Config,
-                                                          const uint32_t ou32_DomainIndex,
-                                                          const uint32_t ou32_ChannelIndex, const bool oq_DomainOnly,
-                                                          C_OscHalcConfigStandalone & orc_ConfigStandalone)
+std::error_code C_OscHalcConfigUtil::h_GetConfigStandaloneChannel(const C_OscHalcConfig & orc_Config,
+                                                                  const uint32_t ou32_DomainIndex,
+                                                                  const uint32_t ou32_ChannelIndex,
+                                                                  const bool oq_DomainOnly,
+                                                                  C_OscHalcConfigStandalone & orc_ConfigStandalone)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_DomainIndex < orc_Config.GetDomainSize())
    {
       const C_OscHalcConfigDomain * const pc_Domain = orc_Config.GetDomainConfigDataConst(ou32_DomainIndex);
 
-      if (pc_Domain != NULL)
+      if (pc_Domain != nullptr)
       {
          if (((oq_DomainOnly == true) ||
               ((ou32_ChannelIndex < pc_Domain->c_Channels.size()) &&
@@ -123,7 +127,7 @@ int32_t C_OscHalcConfigUtil::h_GetConfigStandaloneChannel(const C_OscHalcConfig 
          {
             std::vector<C_OscHalcConfigStandaloneChannel> c_ChannelIds;
 
-            s32_Return = C_NO_ERR;
+            c_Return = Errc::success;
 
             // Basic information of configuration
             orc_ConfigStandalone.c_DeviceType = orc_Config.c_DeviceName;
@@ -187,5 +191,5 @@ int32_t C_OscHalcConfigUtil::h_GetConfigStandaloneChannel(const C_OscHalcConfig 
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }

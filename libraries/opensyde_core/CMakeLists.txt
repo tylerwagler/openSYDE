@@ -540,6 +540,7 @@ else()
    set(OPENSYDE_CORE_PROTOCOL_DRIVERS_COMMON_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpCan.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/hex_file/C_HexFile.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/hex_file/C_HexFileErrorCategory.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscCanAdapterConfig.cpp
@@ -563,6 +564,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/stw_can.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpCan.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/hex_file/C_HexFile.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/hex_file/C_HexFileErrorCategory.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher/C_OscIpDispatcher.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.hpp
@@ -814,11 +816,9 @@ else()
 
    set (OPENSYDE_CORE_WINDOWS_TARGET_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglFile.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTasks.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTime.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglUtils.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglFile.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTasks.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTime.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglUtils.hpp
    )
@@ -852,11 +852,9 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
    set(OPENSYDE_CORE_LINUX_TARGET_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglFile.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTasks.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTime.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglUtils.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglFile.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTasks.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTime.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglUtils.hpp
    )
@@ -959,9 +957,34 @@ endif()
 # define library target including all sources
 add_library(opensyde_core ${OPENSYDE_CORE_SOURCES})
 
-# Enable large file support on Linux (required by miniz for 64-bit file I/O)
+# Warnings. The eight tool trees have built with -Wall -Wextra -Wpedantic all
+# along; opensyde_core set no warning flags at all, so the most safety-critical
+# code in the repository was the only part compiled without them.
+#
+# That is not theoretical. C_OscViewFiler carried nine inverted comparisons of the
+# form `if (orc_String == "activate" == 0)`, which silently swapped the debugger,
+# authentication and traffic-encryption settings read from a project file. GCC
+# reports it as -Wparentheses, part of -Wall, and did so in the tool builds --
+# where nobody was reading core's output because core was not compiled there with
+# warnings on.
+#
+# -Werror is on because the count is zero and the point is to keep it there. If
+# this ever blocks legitimate work, silence the specific warning at its site
+# with a comment explaining why, rather than dropping the flag.
+if(NOT MSVC)
+   target_compile_options(opensyde_core PRIVATE -Wall -Wextra -Werror)
+endif()
+
+# Enable large file support on Linux (required by miniz for 64-bit file I/O).
+#
+# PUBLIC, not PRIVATE, and that matters: the precompiled header below is PUBLIC,
+# so consumers reuse a PCH that was compiled with this define. When the define
+# was PRIVATE they did not have it themselves, the preprocessor state no longer
+# matched, and GCC silently discarded the PCH -- 18 -Winvalid-pch warnings from
+# the test targets alone, each one recompiling the whole header set. A PUBLIC PCH
+# needs the flags that shaped it to be PUBLIC too.
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   target_compile_definitions(opensyde_core PRIVATE _LARGEFILE64_SOURCE)
+   target_compile_definitions(opensyde_core PUBLIC _LARGEFILE64_SOURCE)
 endif()
 
 # add all include directories to library target and make public

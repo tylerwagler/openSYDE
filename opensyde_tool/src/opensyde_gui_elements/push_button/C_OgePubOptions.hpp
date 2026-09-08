@@ -29,7 +29,7 @@ class C_OgePubOptions :
    Q_OBJECT
 
 public:
-   C_OgePubOptions(QWidget * const opc_Parent = NULL);
+   C_OgePubOptions(QWidget * const opc_Parent = nullptr);
    void SetCustomIcon(const QString & orc_IconPathEnabled, const QString & orc_IconPathDisabled);
    void SetTextRightAligned();
 

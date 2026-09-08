@@ -120,7 +120,7 @@ bool C_OgeSliToolTipBase::event(QEvent * const opc_Event)
          {
             QHelpEvent * const pc_HelpEvent = dynamic_cast<QHelpEvent * const>(opc_Event);
 
-            if (pc_HelpEvent != NULL)
+            if (pc_HelpEvent != nullptr)
             {
                this->setMouseTracking(true);
 
@@ -179,11 +179,11 @@ void C_OgeSliToolTipBase::m_OnValueChange(void)
       c_Tmp);
 
    //apply factor and offset
-   c_Content = this->mc_FormatterConfig.GetSingleValueContentFormatted(c_Tmp, 0UL, this->mc_ToolTipUserScaling, NULL);
+   c_Content = this->mc_FormatterConfig.GetSingleValueContentFormatted(c_Tmp, 0UL, this->mc_ToolTipUserScaling, nullptr);
 
    this->SetToolTipInformation("Value", c_Content);
    //Update directly
-   if (this->m_GetToolTip() != NULL)
+   if (this->m_GetToolTip() != nullptr)
    {
       this->m_GetToolTip()->SetContent(c_Content);
    }
@@ -198,7 +198,7 @@ void C_OgeSliToolTipBase::m_OnValueChange(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeSliToolTipBase::m_MoveToolTip(void)
 {
-   if (this->m_GetToolTip() != NULL)
+   if (this->m_GetToolTip() != nullptr)
    {
       QPoint c_ToolTipPos;
 

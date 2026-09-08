@@ -9,6 +9,8 @@
 #define C_OSCHALCCONFIG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "C_OscHalcDefBase.hpp"
 #include "C_OscHalcConfigDomain.hpp"
 
@@ -35,58 +37,61 @@ public:
    virtual bool IsClear(void) const;
    virtual void AddDomain(const C_OscHalcDefDomain & orc_Domain);
    virtual void HandleFileLoadPostProcessing(void);
-   int32_t SetDomainConfig(const uint32_t ou32_Index, const C_OscHalcConfigDomain & orc_Domain);
-   int32_t SetDomainChannelConfig(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                  const bool oq_UseChannelIndex, const std::string & orc_Name,
-                                  const std::string & orc_Comment, const bool oq_SafetyRelevant,
-                                  const uint32_t ou32_UseCaseIndex);
-   int32_t ResetDomainChannelConfig(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                    const bool oq_UseChannelIndex);
-   int32_t ResetDomainChannelUseCase(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                     const bool oq_UseChannelIndex);
-   int32_t SetDomainChannelConfigName(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                      const bool oq_UseChannelIndex, const std::string & orc_Name);
-   int32_t SetDomainChannelConfigComment(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                         const bool oq_UseChannelIndex, const std::string & orc_Comment);
-   int32_t SetDomainChannelConfigSafety(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                        const bool oq_UseChannelIndex, const bool oq_SafetyRelevant);
-   int32_t SetDomainChannelConfigUseCase(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                         const bool oq_UseChannelIndex, const uint32_t ou32_UseCaseIndex);
-   int32_t SetDomainChannelParameterConfig(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                           const uint32_t ou32_ParameterIndex, const bool oq_UseChannelIndex,
-                                           const stw::opensyde_core::C_OscHalcConfigParameterStruct & orc_Parameter);
-   int32_t SetDomainChannelParameterConfigElement(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                                  const uint32_t ou32_ParameterIndex, const uint32_t ou32_ElementIndex,
-                                                  const bool oq_UseChannelIndex, const stw::opensyde_core::C_OscHalcConfigParameter &
-                                                  orc_Parameter);
-   int32_t SetDomainChannelParameterConfigElementPlain(const uint32_t ou32_DomainIndex,
-                                                       const uint32_t ou32_ChannelIndex,
-                                                       const uint32_t ou32_ParameterIndex,
-                                                       const uint32_t ou32_ElementIndex, const bool oq_UseChannelIndex,
-                                                       const C_OscHalcDefContent & orc_Value);
-   int32_t SetDomainChannelParameterConfigElementEnum(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                                      const uint32_t ou32_ParameterIndex,
-                                                      const uint32_t ou32_ElementIndex, const bool oq_UseChannelIndex,
-                                                      const std::string & orc_DisplayName);
-   int32_t SetDomainChannelParameterConfigElementBitmask(const uint32_t ou32_DomainIndex,
-                                                         const uint32_t ou32_ChannelIndex,
-                                                         const uint32_t ou32_ParameterIndex,
-                                                         const uint32_t ou32_ElementIndex,
-                                                         const bool oq_UseChannelIndex,
-                                                         const std::string & orc_DisplayName,
-                                                         const bool oq_Value);
-   int32_t SetDomainChannelParameterConfigElementString(const uint32_t ou32_DomainIndex,
-                                                        const uint32_t ou32_ChannelIndex,
-                                                        const uint32_t ou32_ParameterIndex,
-                                                        const uint32_t ou32_ElementIndex, const bool oq_UseChannelIndex,
-                                                        const std::string & orc_Value);
-   int32_t GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                                const bool oq_UseChannelIndex,
-                                                std::vector<uint32_t> * const opc_ParameterIndices,
-                                                std::vector<uint32_t> * const opc_InputIndices,
-                                                std::vector<uint32_t> * const opc_OutputIndices,
-                                                std::vector<uint32_t> * const opc_StatusIndices)
-   const;
+   std::error_code SetDomainConfig(const uint32_t ou32_Index, const C_OscHalcConfigDomain & orc_Domain);
+   std::error_code SetDomainChannelConfig(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
+                                          const bool oq_UseChannelIndex, const std::string & orc_Name,
+                                          const std::string & orc_Comment, const bool oq_SafetyRelevant,
+                                          const uint32_t ou32_UseCaseIndex);
+   std::error_code ResetDomainChannelConfig(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
+                                            const bool oq_UseChannelIndex);
+   std::error_code ResetDomainChannelUseCase(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
+                                             const bool oq_UseChannelIndex);
+   std::error_code SetDomainChannelConfigName(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
+                                              const bool oq_UseChannelIndex, const std::string & orc_Name);
+   std::error_code SetDomainChannelConfigComment(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
+                                                 const bool oq_UseChannelIndex, const std::string & orc_Comment);
+   std::error_code SetDomainChannelConfigSafety(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
+                                                const bool oq_UseChannelIndex, const bool oq_SafetyRelevant);
+   std::error_code SetDomainChannelConfigUseCase(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
+                                                 const bool oq_UseChannelIndex, const uint32_t ou32_UseCaseIndex);
+   std::error_code SetDomainChannelParameterConfig(
+      const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex, const uint32_t ou32_ParameterIndex,
+      const bool oq_UseChannelIndex, const stw::opensyde_core::C_OscHalcConfigParameterStruct & orc_Parameter);
+   std::error_code SetDomainChannelParameterConfigElement(
+      const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex, const uint32_t ou32_ParameterIndex,
+      const uint32_t ou32_ElementIndex, const bool oq_UseChannelIndex,
+      const stw::opensyde_core::C_OscHalcConfigParameter & orc_Parameter);
+   std::error_code SetDomainChannelParameterConfigElementPlain(const uint32_t ou32_DomainIndex,
+                                                               const uint32_t ou32_ChannelIndex,
+                                                               const uint32_t ou32_ParameterIndex,
+                                                               const uint32_t ou32_ElementIndex,
+                                                               const bool oq_UseChannelIndex,
+                                                               const C_OscHalcDefContent & orc_Value);
+   std::error_code SetDomainChannelParameterConfigElementEnum(const uint32_t ou32_DomainIndex,
+                                                              const uint32_t ou32_ChannelIndex,
+                                                              const uint32_t ou32_ParameterIndex,
+                                                              const uint32_t ou32_ElementIndex,
+                                                              const bool oq_UseChannelIndex,
+                                                              const std::string & orc_DisplayName);
+   std::error_code SetDomainChannelParameterConfigElementBitmask(const uint32_t ou32_DomainIndex,
+                                                                 const uint32_t ou32_ChannelIndex,
+                                                                 const uint32_t ou32_ParameterIndex,
+                                                                 const uint32_t ou32_ElementIndex,
+                                                                 const bool oq_UseChannelIndex,
+                                                                 const std::string & orc_DisplayName,
+                                                                 const bool oq_Value);
+   std::error_code SetDomainChannelParameterConfigElementString(const uint32_t ou32_DomainIndex,
+                                                                const uint32_t ou32_ChannelIndex,
+                                                                const uint32_t ou32_ParameterIndex,
+                                                                const uint32_t ou32_ElementIndex,
+                                                                const bool oq_UseChannelIndex,
+                                                                const std::string & orc_Value);
+   std::error_code GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_DomainIndex,
+                                                        const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
+                                                        std::vector<uint32_t> * const opc_ParameterIndices,
+                                                        std::vector<uint32_t> * const opc_InputIndices,
+                                                        std::vector<uint32_t> * const opc_OutputIndices,
+                                                        std::vector<uint32_t> * const opc_StatusIndices) const;
    void CheckConfigValid(bool * const opq_DomainsInvalid, std::vector<uint32_t> * const opc_InvalidDomainIndices) const;
    void CheckDomainConfigValid(const uint32_t ou32_DomainIndex, bool * const opq_DomainInvalid,
                                bool * const opq_ChannelsInvalid,

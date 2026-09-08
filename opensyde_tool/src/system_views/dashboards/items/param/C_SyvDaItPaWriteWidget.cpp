@@ -261,7 +261,7 @@ void C_SyvDaItPaWriteWidget::m_StartWriteChangedElements(
       this->mc_RelevantLists.insert(static_cast<C_OscNodeDataPoolListId>(orc_ChangedElements[u32_Counter]));
 
       //Parse original values
-      if (pc_List != NULL)
+      if (pc_List != nullptr)
       {
          for (uint32_t u32_ItElement = 0UL; u32_ItElement < pc_List->c_Elements.size(); ++u32_ItElement)
          {
@@ -318,7 +318,7 @@ void C_SyvDaItPaWriteWidget::m_StartWriteChangedElements(
       this->mc_RelevantLists.insert(rc_CurListId);
 
       //Parse original values
-      if (pc_List != NULL)
+      if (pc_List != nullptr)
       {
          for (uint32_t u32_ItElement = 0UL; u32_ItElement < pc_List->c_Elements.size(); ++u32_ItElement)
          {
@@ -575,7 +575,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
    QString c_Text = "";
    uint32_t u32_CurNodeIndex = 0xFFFFFFFFU;
    uint32_t u32_CurDataPoolIndex = 0xFFFFFFFFU;
-   const C_OscNode * pc_OscNode = NULL;
+   const C_OscNode * pc_OscNode = nullptr;
 
    for (c_ItItem = this->mc_RelevantLists.begin(); c_ItItem != this->mc_RelevantLists.end(); ++c_ItItem)
    {
@@ -594,14 +594,14 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
             c_Text = "";
          }
 
-         if (pc_OscNode != NULL)
+         if (pc_OscNode != nullptr)
          {
             c_Text += "<u>" + static_cast<QString>("Node") + " - " +
                       static_cast<QString>(pc_OscNode->c_Properties.c_Name.c_str()) + "</u>";
          }
       }
 
-      if (pc_OscNode != NULL)
+      if (pc_OscNode != nullptr)
       {
          const C_OscNodeDataPoolList * const pc_OscList =
             C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(u32_CurNodeIndex,
@@ -617,7 +617,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
             pc_OscDataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(u32_CurNodeIndex,
                                                                              u32_CurDataPoolIndex);
 
-            if (pc_OscDataPool != NULL)
+            if (pc_OscDataPool != nullptr)
             {
                c_Text += static_cast<QString>("<div %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(1UL));
                c_Text += static_cast<QString>("Datapool") +
@@ -625,7 +625,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
             }
          }
 
-         if (pc_OscList != NULL)
+         if (pc_OscList != nullptr)
          {
             uint32_t u32_ElementCounter;
             // Heading for list
@@ -664,13 +664,13 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
                                                        (*c_ItItem).u32_DataPoolIndex,
                                                        (*c_ItItem).u32_ListIndex,
                                                        u32_ElementCounter);
-                  tgl_assert(pc_OscElement != NULL);
+                  tgl_assert(pc_OscElement != nullptr);
                }
                else
                {
                   pc_OscElement = &pc_OscList->c_Elements[u32_ElementCounter];
                }
-               if (pc_OscElement != NULL)
+               if (pc_OscElement != nullptr)
                {
                   if (pc_OscElement->q_InterpretAsString == true)
                   {
@@ -1142,8 +1142,8 @@ QString C_SyvDaItPaWriteWidget::m_GetSuspectElementReport(void) const
       {
          const C_OscNodeDataPoolListElement * const pc_Element =
             C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_It->first);
-         tgl_assert(pc_Element != NULL);
-         if (pc_Element != NULL)
+         tgl_assert(pc_Element != nullptr);
+         if (pc_Element != nullptr)
          {
             const QString c_Namespace = C_PuiSdUtil::h_GetNamespace(c_It->first);
             QString c_Expected;
@@ -1629,8 +1629,8 @@ QString C_SyvDaItPaWriteWidget::m_ReadAndStoreUpdatedValues(void)
                                                                                    c_It->first.u32_DataPoolIndex,
                                                                                    c_It->first.u32_ListIndex,
                                                                                    c_It->first.u32_ElementIndex);
-      tgl_assert(pc_Element != NULL);
-      if (pc_Element != NULL)
+      tgl_assert(pc_Element != nullptr);
+      if (pc_Element != nullptr)
       {
          c_It->second.c_Actual = pc_Element->c_NvmValue;
       }
@@ -1656,7 +1656,7 @@ QString C_SyvDaItPaWriteWidget::mh_GetId(const C_OscNodeDataPoolListId & orc_Id)
    const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
       orc_Id.u32_NodeIndex, orc_Id.u32_DataPoolIndex, orc_Id.u32_ListIndex);
 
-   if (((pc_Node != NULL) && (pc_DataPool != NULL)) && (pc_List != NULL))
+   if (((pc_Node != nullptr) && (pc_DataPool != nullptr)) && (pc_List != nullptr))
    {
       c_Default = static_cast<QString>("%1::%2::%3").arg(pc_Node->c_Properties.c_Name.c_str()).arg(
          pc_DataPool->c_Name.c_str()).arg(
@@ -1684,7 +1684,7 @@ const C_OscNodeDataPoolListElement * C_SyvDaItPaWriteWidget::m_GetReadElementByI
                                                                                   const uint32_t ou32_ElementIndex)
 const
 {
-   const C_OscNodeDataPoolListElement * pc_Retval = NULL;
+   const C_OscNodeDataPoolListElement * pc_Retval = nullptr;
 
    if (this->mc_AllNodeIndexes.size() == this->mc_ReadNodeValues.size())
    {
@@ -1693,7 +1693,7 @@ const
          if (this->mc_AllNodeIndexes[u32_ItKnownIndices] == ou32_NodeIndex)
          {
             const stw::opensyde_core::C_OscNode * const pc_Node = this->mc_ReadNodeValues[u32_ItKnownIndices];
-            if (pc_Node != NULL)
+            if (pc_Node != nullptr)
             {
                if (ou32_DataPoolIndex < pc_Node->c_DataPools.size())
                {

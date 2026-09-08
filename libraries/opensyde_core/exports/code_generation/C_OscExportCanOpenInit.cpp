@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscExportCanOpenInit.hpp"
 #include "C_OscExportUti.hpp"
 #include "C_SclStringCompat.hpp"
@@ -58,15 +61,15 @@ std::string C_OscExportCanOpenInit::h_GetFileName()
    \param[in]       orc_ExportToolInfo        information about calling executable (name + version)
 
    \return
-   C_NO_ERR Operation success
-   C_RD_WR  Operation failure: cannot store files
+   Errc::success  Operation success
+   Errc::rd_wr    Operation failure: cannot store files
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const std::string & orc_FilePath, const C_OscNode & orc_Node,
-                                                   const std::vector<uint8_t> & orc_IfWithCanOpenMan,
-                                                   const std::string & orc_ExportToolInfo)
+std::error_code C_OscExportCanOpenInit::h_CreateSourceCode(const std::string & orc_FilePath, const C_OscNode & orc_Node,
+                                                           const std::vector<uint8_t> & orc_IfWithCanOpenMan,
+                                                           const std::string & orc_ExportToolInfo)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<std::string> c_Data;
    std::string c_DefineValue;
@@ -171,9 +174,9 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const std::string & orc_FileP
    c_Data.push_back("#endif");
 
    //finally save all to file
-   s32_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_FilePath, h_GetFileName(), true);
+   c_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_FilePath, h_GetFileName(), true);
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       //now for the c file:
       std::string c_ProtocolConfig;
@@ -237,10 +240,10 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const std::string & orc_FileP
       c_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Implementation"));
 
       //save all this to file
-      s32_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_FilePath, h_GetFileName(), false);
+      c_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_FilePath, h_GetFileName(), false);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

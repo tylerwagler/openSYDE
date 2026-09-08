@@ -28,7 +28,7 @@ class C_GiSyColorBrightnessPicker :
    Q_OBJECT
 
 public:
-   C_GiSyColorBrightnessPicker(QWidget * const opc_Parent = NULL);
+   C_GiSyColorBrightnessPicker(QWidget * const opc_Parent = nullptr);
    ~C_GiSyColorBrightnessPicker() override;
 
    void SetColorWithHsv(const int32_t os32_Hue, const int32_t os32_Sat, const int32_t os32_Value);

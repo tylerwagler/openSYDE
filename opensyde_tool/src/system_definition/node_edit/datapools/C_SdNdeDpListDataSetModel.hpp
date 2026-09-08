@@ -40,7 +40,7 @@ public:
       eCOMMENT
    };
 
-   explicit C_SdNdeDpListDataSetModel(QObject * const opc_Parent = NULL);
+   explicit C_SdNdeDpListDataSetModel(QObject * const opc_Parent = nullptr);
 
    void SetList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                 const uint32_t & oru32_ListIndex);

@@ -29,7 +29,7 @@ class C_SdManUnoTopologyAddBaseCommand :
 {
 public:
    C_SdManUnoTopologyAddBaseCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                                    const QString & orc_Text, QUndoCommand * const opc_Parent = NULL, const C_SdTopologyDataSnapshot & orc_InitialSnapshotData =
+                                    const QString & orc_Text, QUndoCommand * const opc_Parent = nullptr, const C_SdTopologyDataSnapshot & orc_InitialSnapshotData =
                                        C_SdTopologyDataSnapshot());
    ~C_SdManUnoTopologyAddBaseCommand(void) override;
    void undo(void) override;

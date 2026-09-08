@@ -51,7 +51,7 @@ using namespace stw::opensyde_core;
 C_SdTopologyToolbox::C_SdTopologyToolbox(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SdTopologyToolbox),
-   mpc_List(NULL)
+   mpc_List(nullptr)
 {
    this->mpc_Ui->setupUi(this);
    this->mpc_Ui->pc_ScrollAreaSearch->setVisible(false);
@@ -222,7 +222,7 @@ void C_SdTopologyToolbox::m_FillToolboxDynamic(void)
          c_DeviceGroups[u32_ItDeviceGroup].GetGroupName().c_str(),
          this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets, this);
 
-      if (this->mpc_List != NULL)
+      if (this->mpc_List != nullptr)
       {
          for (uint32_t u32_ItDevice = 0U; u32_ItDevice < rc_Devices.size(); ++u32_ItDevice)
          {
@@ -284,7 +284,7 @@ void C_SdTopologyToolbox::m_FillToolboxWithDynamicNodes(const C_OscDeviceDefinit
    // Tooltip
    const QString c_DeviceDescription = static_cast<QString>(orc_Device.c_DeviceDescription.c_str());
 
-   if (this->mpc_List != NULL)
+   if (this->mpc_List != nullptr)
    {
       QListWidgetItem * pc_Item;
       this->mpc_List->addItem(orc_Device.GetDisplayName().c_str());

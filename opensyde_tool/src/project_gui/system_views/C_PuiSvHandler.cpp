@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include "precomp_headers.hpp"
 
 #include <iostream>
@@ -52,7 +53,7 @@ using namespace stw::opensyde_gui_logic;
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-C_PuiSvHandler * C_PuiSvHandler::mhpc_Singleton = NULL;
+C_PuiSvHandler * C_PuiSvHandler::mhpc_Singleton = nullptr;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -134,7 +135,8 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_Updat
          }
          if (s32_Return == C_NO_ERR)
          {
-            s32_Return = ListSaveToFile(c_XmlParser, orc_Path.toStdString().c_str());
+            //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+            s32_Return = c_XmlParser.SaveToFile(orc_Path.toStdString().c_str()).value();
             if (s32_Return != C_NO_ERR)
             {
                s32_Return = C_RD_WR;
@@ -194,7 +196,7 @@ const C_PuiSvData * C_PuiSvHandler::GetView(const uint32_t ou32_Index) const
    }
    else
    {
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
    return pc_Retval;
 }
@@ -276,7 +278,7 @@ int32_t C_PuiSvHandler::GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32
       if (c_It == this->mc_PreviousNodeActiveFlagsWithSquadAdaptionsResults.end())
       {
          C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-         const C_OscNodeSquad * pc_Squad = NULL;
+         const C_OscNodeSquad * pc_Squad = nullptr;
          uint32_t u32_SquadCounter = 0U;
 
          // activate all where only one active
@@ -290,7 +292,7 @@ int32_t C_PuiSvHandler::GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32
          {
             pc_Squad = C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(u32_SquadCounter);
 
-            if (pc_Squad != NULL)
+            if (pc_Squad != nullptr)
             {
                uint32_t u32_SubNodeCounter;
                bool q_AtLeastOneSubNodeActive = false;
@@ -308,8 +310,8 @@ int32_t C_PuiSvHandler::GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32
                   if (orc_ActiveFlags[u32_NodeIndex] != 0U)
                   {
                      const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
-                     tgl_assert(pc_Node != NULL);
-                     if (pc_Node != NULL)
+                     tgl_assert(pc_Node != nullptr);
+                     if (pc_Node != nullptr)
                      {
                         // Check for connected interfaces
                         uint32_t u32_IntfCounter;
@@ -338,7 +340,7 @@ int32_t C_PuiSvHandler::GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32
 
                            if ((c_RouteCalcCheck.GetState() == C_NO_ERR) &&
                                (oq_IncludeRoutingResults ||
-                                ((pc_BestRoute != NULL) &&
+                                ((pc_BestRoute != nullptr) &&
                                  (pc_BestRoute->c_VecRoutePoints.size() == 0))))
                            {
                               // Valid route found
@@ -365,7 +367,7 @@ int32_t C_PuiSvHandler::GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32
                ++u32_SquadCounter;
             }
          }
-         while (pc_Squad != NULL);
+         while (pc_Squad != nullptr);
 
          //Store results
          this->mc_PreviousNodeActiveFlagsWithSquadAdaptionsResults.insert(c_HashRef, orc_ActiveFlags);
@@ -1213,8 +1215,9 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationPath(const uint32_t ou32_ViewInd
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = rc_View.SetNodeUpdateInformationPath(ou32_NodeIndex, ou32_Index,
-                                                        orc_Value.toStdString().c_str(), oe_Type);
+                                                        orc_Value.toStdString().c_str(), oe_Type).value();
    }
    else
    {
@@ -1245,7 +1248,8 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationParamInfo(const uint32_t ou32_Vi
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationParamInfo(ou32_NodeIndex, ou32_Index, orc_Value);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.SetNodeUpdateInformationParamInfo(ou32_NodeIndex, ou32_Index, orc_Value).value();
    }
    else
    {
@@ -1274,7 +1278,8 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationPemFilePath(ou32_NodeIndex, orc_Value.toStdString().c_str());
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.SetNodeUpdateInformationPemFilePath(ou32_NodeIndex, orc_Value.toStdString().c_str()).value();
    }
    else
    {
@@ -1307,7 +1312,8 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationSkipUpdateOfPath(const uint32_t 
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfPath(ou32_NodeIndex, ou32_Index, oq_SkipFile, oe_Type);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfPath(ou32_NodeIndex, ou32_Index, oq_SkipFile, oe_Type).value();
    }
    else
    {
@@ -1338,7 +1344,8 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationSkipUpdateOfParamInfo(const uint
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfParamInfo(ou32_NodeIndex, ou32_Index, oq_SkipFile);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfParamInfo(ou32_NodeIndex, ou32_Index, oq_SkipFile).value();
    }
    else
    {
@@ -1368,7 +1375,8 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationSkipUpdateOfPemFile(const uint32
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfPemFile(ou32_NodeIndex, oq_SkipFile);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfPemFile(ou32_NodeIndex, oq_SkipFile).value();
    }
    else
    {
@@ -1400,9 +1408,10 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationStates(const uint32_t ou32_ViewI
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = rc_View.SetNodeUpdateInformationStates(ou32_NodeIndex, oe_StateSecureAuthentication,
                                                           oe_StateDebugger,
-                                                          oe_StateTrafficEncryption);
+                                                          oe_StateTrafficEncryption).value();
    }
    else
    {
@@ -1437,8 +1446,9 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationParamInfoContent(const uint32_t 
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
       s32_Retval =
+         //the core class reports std::error_code now; this class keeps the STW int32_t convention
          rc_View.SetNodeUpdateInformationParamInfoContent(ou32_NodeIndex, ou32_Index,
-                                                          orc_FilePath.toStdString().c_str(), ou32_LastKnownCrc);
+                                                          orc_FilePath.toStdString().c_str(), ou32_LastKnownCrc).value();
    }
    else
    {
@@ -1580,7 +1590,8 @@ int32_t C_PuiSvHandler::AddNodeUpdateInformationPath(const uint32_t ou32_ViewInd
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.AddNodeUpdateInformationPath(ou32_NodeIndex, orc_Value.toStdString().c_str(), oe_Type);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.AddNodeUpdateInformationPath(ou32_NodeIndex, orc_Value.toStdString().c_str(), oe_Type).value();
    }
    else
    {
@@ -1609,7 +1620,8 @@ int32_t C_PuiSvHandler::AddNodeUpdateInformationParamInfo(const uint32_t ou32_Vi
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.AddNodeUpdateInformationParamInfo(ou32_NodeIndex, orc_Value);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.AddNodeUpdateInformationParamInfo(ou32_NodeIndex, orc_Value).value();
    }
    else
    {
@@ -2057,7 +2069,8 @@ int32_t C_PuiSvHandler::RemoveNodeUpdateInformationPath(const uint32_t ou32_View
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.RemoveNodeUpdateInformationPath(ou32_NodeIndex, ou32_Index, oe_Type);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.RemoveNodeUpdateInformationPath(ou32_NodeIndex, ou32_Index, oe_Type).value();
    }
    else
    {
@@ -2086,7 +2099,8 @@ int32_t C_PuiSvHandler::RemoveNodeUpdateInformationParamInfo(const uint32_t ou32
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.RemoveNodeUpdateInformationParamInfo(ou32_NodeIndex, ou32_Index);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.RemoveNodeUpdateInformationParamInfo(ou32_NodeIndex, ou32_Index).value();
    }
    else
    {
@@ -2114,7 +2128,8 @@ int32_t C_PuiSvHandler::RemoveNodeUpdateInformationPemFilePath(const uint32_t ou
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.RemoveNodeUpdateInformationPemFilePath(ou32_NodeIndex);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.RemoveNodeUpdateInformationPemFilePath(ou32_NodeIndex).value();
    }
    else
    {
@@ -2144,7 +2159,8 @@ int32_t C_PuiSvHandler::ClearNodeUpdateInformationAsAppropriate(const uint32_t o
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.ClearNodeUpdateInformationAsAppropriate(ou32_NodeIndex, oe_Type);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.ClearNodeUpdateInformationAsAppropriate(ou32_NodeIndex, oe_Type).value();
    }
    else
    {
@@ -2172,7 +2188,8 @@ int32_t C_PuiSvHandler::ClearNodeUpdateInformationParamPaths(const uint32_t ou32
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.ClearNodeUpdateInformationParamPaths(ou32_NodeIndex);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.ClearNodeUpdateInformationParamPaths(ou32_NodeIndex).value();
    }
    else
    {
@@ -2388,7 +2405,7 @@ int32_t C_PuiSvHandler::MoveView(const uint32_t ou32_StartIndex, const uint32_t 
    int32_t s32_Retval;
    const C_PuiSvData * const pc_View = this->GetView(ou32_StartIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_PuiSvData c_View = *pc_View;
       s32_Retval = this->DeleteView(ou32_StartIndex);
@@ -2666,7 +2683,7 @@ int32_t C_PuiSvHandler::CheckViewReconnectNecessary(const uint32_t ou32_ViewInde
       const C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
       // Trigger view check
       // includes hash and is necessary for node indices update, which should be done before loading any view
-      this->CheckViewError(ou32_ViewIndex, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      this->CheckViewError(ou32_ViewIndex, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
       //Check if bus exists
       if (rc_View.GetOscPcData().GetConnected() == true)
       {
@@ -2738,7 +2755,7 @@ int32_t C_PuiSvHandler::CheckViewNodeDashboardRoutingError(const uint32_t ou32_V
       }
       else
       {
-         this->CheckViewError(ou32_ViewIndex, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+         this->CheckViewError(ou32_ViewIndex, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 
          c_It = this->mc_PreviousErrorCheckResults.find(u32_Hash);
          if (c_It != this->mc_PreviousErrorCheckResults.end())
@@ -2903,14 +2920,14 @@ int32_t C_PuiSvHandler::CalcViewRoutingCrcIndex(const uint32_t ou32_ViewIndex, c
 
    const C_PuiSvData * const pc_View = this->GetView(ou32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       if (pc_View->GetNodeActive(ou32_NodeIndex))
       {
          const stw::opensyde_core::C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
             ou32_NodeIndex);
 
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             // Check update routes
             const C_SyvRoRouteCalculation c_RouteCalcUpdate(ou32_ViewIndex, ou32_NodeIndex,
@@ -2918,7 +2935,7 @@ int32_t C_PuiSvHandler::CalcViewRoutingCrcIndex(const uint32_t ou32_ViewIndex, c
             if (c_RouteCalcUpdate.GetState() == C_NO_ERR)
             {
                const C_OscRoutingRoute * const pc_Route = c_RouteCalcUpdate.GetBestRoute();
-               if (pc_Route != NULL)
+               if (pc_Route != nullptr)
                {
                   QString c_Name;
 
@@ -3100,7 +3117,7 @@ QString C_PuiSvHandler::h_GetShortNamespace(const C_PuiSvDbNodeDataPoolListEleme
             C_PuiSdHandler::h_GetInstance()->GetHalcDomainFileDataConst(orc_Id.u32_NodeIndex,
                                                                         u32_DomainIndex);
 
-         if ((((pc_List != NULL)) && (pc_Config != NULL)) && (pc_Domain != NULL))
+         if ((((pc_List != nullptr)) && (pc_Config != nullptr)) && (pc_Domain != nullptr))
          {
             QString c_ElementName;
 
@@ -3164,7 +3181,7 @@ bool C_PuiSvHandler::CheckBusDisabled(const uint32_t ou32_ViewIndex, const uint3
    if (c_NodeIndexes.size() == c_InterfaceIndexes.size())
    {
       const C_PuiSvData * const pc_View = this->GetView(ou32_ViewIndex);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const std::vector<uint8_t> & rc_Nodes = pc_View->GetNodeActiveFlags();
          for (uint32_t u32_ItNode = 0; u32_ItNode < c_NodeIndexes.size(); ++u32_ItNode)
@@ -3278,10 +3295,16 @@ uint32_t C_PuiSvHandler::GetViewHash(const uint32_t ou32_ViewIndex)
 //----------------------------------------------------------------------------------------------------------------------
 C_PuiSvHandler * C_PuiSvHandler::h_GetInstance(void)
 {
-   if (C_PuiSvHandler::mhpc_Singleton == NULL)
+   //Guard the lazy construction: the previous check-then-new was a data race
+   //if two threads reached it at once. Destruction stays explicit via h_Destroy()
+   //so shutdown ordering is preserved.
+   static std::once_flag hc_OnceFlag;
+
+   std::call_once(hc_OnceFlag, []
    {
       C_PuiSvHandler::mhpc_Singleton = new C_PuiSvHandler();
-   }
+   });
+
    return C_PuiSvHandler::mhpc_Singleton;
 }
 
@@ -3292,7 +3315,7 @@ C_PuiSvHandler * C_PuiSvHandler::h_GetInstance(void)
 void C_PuiSvHandler::h_Destroy(void)
 {
    delete C_PuiSvHandler::mhpc_Singleton;
-   C_PuiSvHandler::mhpc_Singleton = NULL;
+   C_PuiSvHandler::mhpc_Singleton = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3321,7 +3344,8 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading views");
-      s32_Retval = ListLoadFromFile(c_XmlParser, orc_Path.toStdString().c_str());
+      //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.toStdString().c_str()).value();
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-system-views")
@@ -4209,7 +4233,7 @@ const
             const stw::opensyde_core::C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                u32_Counter);
 
-            if (pc_Node != NULL)
+            if (pc_Node != nullptr)
             {
                // Check generic route independent of the specific functionality
                const C_SyvRoRouteCalculation c_RouteCalcCheck(
@@ -4484,44 +4508,44 @@ void C_PuiSvHandler::C_PuiSvViewErrorDetails::GetResults(bool * const opq_NameIn
                                                          std::vector<QString> * const opc_RoutingErrorDetails,
                                                          QString * const opc_SetupRoutingWarningDetails) const
 {
-   if (opq_NameInvalid != NULL)
+   if (opq_NameInvalid != nullptr)
    {
       *opq_NameInvalid = this->q_NameInvalid;
    }
-   if (opq_PcNotConnected != NULL)
+   if (opq_PcNotConnected != nullptr)
    {
       *opq_PcNotConnected = this->q_PcNotConnected;
    }
 
    // Routing errors depending of the submode
-   if (opq_RoutingInvalid != NULL)
+   if (opq_RoutingInvalid != nullptr)
    {
       *opq_RoutingInvalid = (this->c_RoutingErrorMessages[ms32_SUBMODE_SYSVIEW_SETUP].size() > 0);
    }
-   if (opq_RoutingUpdateInvalid != NULL)
+   if (opq_RoutingUpdateInvalid != nullptr)
    {
       *opq_RoutingUpdateInvalid = (this->c_RoutingErrorMessages[ms32_SUBMODE_SYSVIEW_UPDATE].size() > 0);
    }
-   if (opq_RoutingDashboardInvalid != NULL)
+   if (opq_RoutingDashboardInvalid != nullptr)
    {
       *opq_RoutingDashboardInvalid = (this->c_RoutingErrorMessages[ms32_SUBMODE_SYSVIEW_DASHBOARD].size() > 0);
    }
-   if (opc_RoutingErrorDetails != NULL)
+   if (opc_RoutingErrorDetails != nullptr)
    {
       *opc_RoutingErrorDetails = this->c_RoutingErrorMessages;
    }
 
    // Routing warnings for setup sub mode
-   if (opc_SetupRoutingWarningDetails != NULL)
+   if (opc_SetupRoutingWarningDetails != nullptr)
    {
       *opc_SetupRoutingWarningDetails = this->c_RoutingSetupWarningMessage;
    }
 
-   if (opq_SysDefInvalid != NULL)
+   if (opq_SysDefInvalid != nullptr)
    {
       *opq_SysDefInvalid = this->q_SysDefInvalid;
    }
-   if (opq_NoNodesActive != NULL)
+   if (opq_NoNodesActive != nullptr)
    {
       *opq_NoNodesActive = this->q_NoNodesActive;
    }

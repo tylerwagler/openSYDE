@@ -18,8 +18,10 @@
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
+#include <system_error>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglTime.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
@@ -94,22 +96,22 @@ C_OscProtocolDriverOsyTpIp::C_DoIpHeader::C_DoIpHeader(const uint16_t ou16_Paylo
    \param[in]    orc_Header         header to decode; must contain >= 8 bytes
 
    \return
-   C_NO_ERR    decoded; data stored in instance data
-   C_RANGE     not enough data
-   C_CONFIG    incorrect version
+   Errc::success   decoded; data stored in instance data
+   Errc::range     not enough data
+   Errc::config    incorrect version
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpIp::C_DoIpHeader::DecodeHeader(const std::vector<uint8_t> & orc_Header)
+std::error_code C_OscProtocolDriverOsyTpIp::C_DoIpHeader::DecodeHeader(const std::vector<uint8_t> & orc_Header)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (orc_Header.size() < hu8_DOIP_HEADER_SIZE)
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else if ((orc_Header[0] != 0x02U) || (orc_Header[1] != 0xFDU))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -120,9 +122,9 @@ int32_t C_OscProtocolDriverOsyTpIp::C_DoIpHeader::DecodeHeader(const std::vector
                         (static_cast<uint32_t>(orc_Header[5]) << 16U) +
                         (static_cast<uint32_t>(orc_Header[6]) << 8U) +
                         orc_Header[7];
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -168,42 +170,42 @@ C_OscProtocolDriverOsyTpIp::C_TcpRxServiceState::C_TcpRxServiceState(void) :
    \param[in]    ou32_DispatcherHandle  handle to use for dispatcher TCP functions
 
    \return
-   C_NO_ERR   no problems
+   Errc::success   no problems
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpIp::SetDispatcher(C_OscIpDispatcher * const opc_Dispatcher,
-                                                  const uint32_t ou32_DispatcherHandle)
+std::error_code C_OscProtocolDriverOsyTpIp::SetDispatcher(C_OscIpDispatcher * const opc_Dispatcher,
+                                                          const uint32_t ou32_DispatcherHandle)
 {
    //no need to reconfigure anything: application is responsible for connection
    this->mpc_Dispatcher = opc_Dispatcher;
    this->mu32_DispatcherHandle = ou32_DispatcherHandle;
 
-   return C_NO_ERR;
+   return make_error_code(Errc::success);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Checks the connection of the TCP socket
 
    \return
-   C_NO_ERR   is connected
-   C_NOACT    is not connected
+   Errc::success   is connected
+   Errc::noact     is not connected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpIp::IsConnected(void)
+std::error_code C_OscProtocolDriverOsyTpIp::IsConnected(void)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   if (this->mpc_Dispatcher == NULL)
+   if (this->mpc_Dispatcher == nullptr)
    {
       tgl_assert(false); //misuse ...
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
    else
    {
-      s32_Return = this->mpc_Dispatcher->IsTcpConnected(this->mu32_DispatcherHandle);
+      c_Return = this->mpc_Dispatcher->IsTcpConnected(this->mu32_DispatcherHandle);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -212,29 +214,29 @@ int32_t C_OscProtocolDriverOsyTpIp::IsConnected(void)
    Here: re-connect via TCP
 
    \return
-   C_NO_ERR   no problems
-   C_BUSY     could not establish connection
+   Errc::success   no problems
+   Errc::busy      could not establish connection
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpIp::ReConnect(void)
+std::error_code C_OscProtocolDriverOsyTpIp::ReConnect(void)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   if (this->mpc_Dispatcher == NULL)
+   if (this->mpc_Dispatcher == nullptr)
    {
       tgl_assert(false); //misuse ...
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
    else
    {
-      s32_Return = this->mpc_Dispatcher->IsTcpConnected(this->mu32_DispatcherHandle);
-      if (s32_Return == C_NOACT)
+      c_Return = this->mpc_Dispatcher->IsTcpConnected(this->mu32_DispatcherHandle);
+      if (c_Return == Errc::noact)
       {
-         s32_Return = this->mpc_Dispatcher->ReConnectTcp(this->mu32_DispatcherHandle);
+         c_Return = this->mpc_Dispatcher->ReConnectTcp(this->mu32_DispatcherHandle);
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -243,30 +245,30 @@ int32_t C_OscProtocolDriverOsyTpIp::ReConnect(void)
    Here: disconnect via TCP
 
    \return
-   C_NO_ERR   no problems
-   C_NOACT    could not disconnect
+   Errc::success   no problems
+   Errc::noact     could not disconnect
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpIp::Disconnect(void)
+std::error_code C_OscProtocolDriverOsyTpIp::Disconnect(void)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   if (this->mpc_Dispatcher == NULL)
+   if (this->mpc_Dispatcher == nullptr)
    {
       tgl_assert(false); //misuse ...
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
    else
    {
-      s32_Return = this->IsConnected();
+      c_Return = this->IsConnected();
 
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
-         s32_Return = this->mpc_Dispatcher->CloseTcp(this->mu32_DispatcherHandle);
+         c_Return = this->mpc_Dispatcher->CloseTcp(this->mu32_DispatcherHandle);
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -282,12 +284,12 @@ int32_t C_OscProtocolDriverOsyTpIp::Disconnect(void)
    \param[out]    orc_DeviceExtendedInfos   information about all nodes that sent an extended response
 
    \return
-   C_NO_ERR   no problems; zero or more responses received; data placed in orc_DeviceInfos
-   C_COM      could not send request
-   C_CONFIG   no dispatcher installed
+   Errc::success   no problems; zero or more responses received; data placed in orc_DeviceInfos
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpIp::BroadcastGetDeviceInfo(
+std::error_code C_OscProtocolDriverOsyTpIp::BroadcastGetDeviceInfo(
    std::vector<C_BroadcastGetDeviceInfoResults> & orc_DeviceInfos,
    std::vector<C_BroadcastGetDeviceInfoExtendedResults> & orc_DeviceExtendedInfos)
 const
@@ -295,25 +297,24 @@ const
    const uint32_t u32_PAYLOAD_SIZE_STD = 37U;
    const uint32_t u32_PAYLOAD_SIZE_EXT_MIN = 36U;
    const uint32_t u32_PAYLOAD_SIZE_EXT_MAX = 64U;
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_OSY_GET_DEVICE_INFO_REQ, 0U);
 
    orc_DeviceInfos.clear();
    orc_DeviceExtendedInfos.clear();
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
       std::vector<uint8_t> c_Request;
       c_Header.ComposeHeader(c_Request);
 
-      s32_Return = mpc_Dispatcher->SendUdp(c_Request);
-      if (s32_Return != C_NO_ERR)
+      if (mpc_Dispatcher->SendUdp(c_Request))
       {
          m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
       else
       {
@@ -326,17 +327,16 @@ const
 
          while ((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime)
          {
-            int32_t s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, au8_Ip);
-            if (s32_ReturnLocal == C_NO_ERR)
+            const std::error_code c_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, au8_Ip);
+            if (!c_ReturnLocal)
             {
                if (((c_Response.size() >= (C_DoIpHeader::hu8_DOIP_HEADER_SIZE + u32_PAYLOAD_SIZE_EXT_MIN)) &&
                     (c_Response.size() <= (C_DoIpHeader::hu8_DOIP_HEADER_SIZE + u32_PAYLOAD_SIZE_EXT_MAX))))
                {
                   //header OK ?
-                  s32_ReturnLocal = c_Header.DecodeHeader(c_Response);
-                  switch (s32_ReturnLocal)
+                  const std::error_code c_HeaderResult = c_Header.DecodeHeader(c_Response);
+                  if (!c_HeaderResult)
                   {
-                  case C_NO_ERR:
                      //sanity check: does payload size match response size ?
                      if (c_Header.u32_PayloadSize ==
                          static_cast<uint32_t>((c_Response.size() - C_DoIpHeader::hu8_DOIP_HEADER_SIZE)))
@@ -375,15 +375,16 @@ const
                         m_LogWarningWithHeaderAndIp("UDP response with unexpected payload size received. Ignoring.",
                                                     TGL_UTIL_FUNC_ID, au8_Ip);
                      }
-                     break;
-                  case C_CONFIG:
+                  }
+                  else if (c_HeaderResult == Errc::config)
+                  {
                      m_LogWarningWithHeaderAndIp("UDP response with unexpected version received. Ignoring.",
                                                  TGL_UTIL_FUNC_ID, au8_Ip);
-                     break;
-                  default:
+                  }
+                  else
+                  {
                      //unexpected ...
                      m_LogWarningWithHeaderAndIp("Internal error parsing DoIp header.", TGL_UTIL_FUNC_ID, au8_Ip);
-                     break;
                   }
                }
                else
@@ -394,7 +395,7 @@ const
                }
             }
          }
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
 
          // Remove duplicates. It is possible to get the responses multiple times, if the server and the client
          // are connected to at least two same subnets.
@@ -417,7 +418,7 @@ const
          orc_DeviceExtendedInfos.erase(c_ItDeviceExtInfo, orc_DeviceExtendedInfos.end());
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -435,18 +436,18 @@ const
    \param[in]    orau8_DefaultGateway  Default gateway to set
    \param[in]    orc_NewNodeId         New bus id and node id for the interface
    \param[out]   orau8_ResponseIp      IP address the response was received from
-   \param[out]   opu8_ErrorResult      if not NULL: code of error response (if C_WARN is returned)
+   \param[out]   opu8_ErrorResult      if not NULL: code of error response (if Errc::warn is returned)
 
    \return
-   C_NO_ERR   no problems
-   C_WARN     error response
-   C_COM      could not send request
-   C_CONFIG   no dispatcher installed
-   C_RANGE    serial number is invalid or wrong format of serial number is configured
-   C_TIMEOUT  no response within timeout
+   Errc::success   no problems
+   Errc::warn      error response
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
+   Errc::range     serial number is invalid or wrong format of serial number is configured
+   Errc::timeout   no response within timeout
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSerialNumber & orc_SerialNumber,
+std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSerialNumber & orc_SerialNumber,
                                                           const uint8_t (&orau8_NewIpAddress)[4],
                                                           const uint8_t (&orau8_NetMask)[4],
                                                           const uint8_t (&orau8_DefaultGateway)[4],
@@ -454,22 +455,22 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
                                                           uint8_t (&orau8_ResponseIp)[4],
                                                           uint8_t * const opu8_ErrorResult) const
 {
-   int32_t s32_Return = C_TIMEOUT;
+   std::error_code c_Return = Errc::timeout;
 
    std::vector<uint8_t> c_Request;
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else if ((orc_SerialNumber.q_IsValid == false) ||
             (orc_SerialNumber.q_ExtFormatUsed == true))
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
       C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_REQ, 21U);
-      int32_t s32_ReturnLocal;
+      std::error_code c_ReturnLocal = Errc::success;
       c_Header.ComposeHeader(c_Request);
       (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE], &orc_SerialNumber.au8_SerialNumber[0], 6);
       // Mode flag. Bit 1 is IP address, bit 2 is node identifier
@@ -480,11 +481,11 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
       c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 19] = orc_NewNodeId.u8_BusIdentifier;
       c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 20] = orc_NewNodeId.u8_NodeIdentifier;
 
-      s32_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
-      if (s32_ReturnLocal != C_NO_ERR)
+      c_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
+      if (c_ReturnLocal)
       {
          m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
       else
       {
@@ -495,16 +496,15 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
          while (((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime) && (q_Done == false))
          {
             //check for response
-            s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
-            if (s32_ReturnLocal == C_NO_ERR)
+            c_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
+            if (!c_ReturnLocal)
             {
                if (c_Response.size() == (C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 9U))
                {
                   //header OK ?
-                  s32_ReturnLocal = c_Header.DecodeHeader(c_Response);
-                  switch (s32_ReturnLocal)
+                  const std::error_code c_HeaderResult = c_Header.DecodeHeader(c_Response);
+                  if (!c_HeaderResult)
                   {
-                  case C_NO_ERR:
                      //sanity check: does payload size match response size ?
                      if ((c_Header.u32_PayloadSize ==
                           static_cast<uint32_t>((c_Response.size() - C_DoIpHeader::hu8_DOIP_HEADER_SIZE))) &&
@@ -524,22 +524,22 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
                         {
                            if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U] == 0U)
                            {
-                              s32_Return = C_NO_ERR;
+                              c_Return = Errc::success;
                            }
                            else if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U] == 3U)
                            {
                               m_LogWarningWithHeaderAndIp(
                                  "SetIpAddress: could not perform action. Node has security feature activated.",
                                  TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                              if (opu8_ErrorResult != NULL)
+                              if (opu8_ErrorResult != nullptr)
                               {
                                  (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U];
                               }
                            }
                            else
                            {
-                              s32_Return = C_WARN;
-                              if (opu8_ErrorResult != NULL)
+                              c_Return = Errc::warn;
+                              if (opu8_ErrorResult != nullptr)
                               {
                                  (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U];
                               }
@@ -553,16 +553,17 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
                            "UDP response with unexpected payload size or type received. Ignoring.", TGL_UTIL_FUNC_ID,
                            orau8_ResponseIp);
                      }
-                     break;
-                  case C_CONFIG:
+                  }
+                  else if (c_HeaderResult == Errc::config)
+                  {
                      m_LogWarningWithHeaderAndIp("UDP response with unexpected version received. Ignoring.",
                                                  TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                     break;
-                  default:
+                  }
+                  else
+                  {
                      //unexpected ...
                      m_LogWarningWithHeaderAndIp("Internal error parsing DoIp header.", TGL_UTIL_FUNC_ID,
                                                  orau8_ResponseIp);
-                     break;
                   }
                }
                else
@@ -575,7 +576,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -594,18 +595,18 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
    \param[in]    orc_NewNodeId                      New bus id and node id for the interface
    \param[in]    ou8_SubNodeId                      Sub node id of node for identification in case of a multi CPU node
    \param[out]   orau8_ResponseIp                   IP address the response was received from
-   \param[out]   opu8_ErrorResult                   if not NULL: code of error response (if C_WARN is returned)
+   \param[out]   opu8_ErrorResult                   if not NULL: code of error response (if Errc::warn is returned)
 
    \return
-   C_NO_ERR   no problems
-   C_WARN     error response
-   C_COM      could not send request
-   C_CONFIG   no dispatcher installed
-   C_TIMEOUT  no response within timeout
-   C_RANGE    serial number (orc_SerialNumber) is to long (maximum is 29 byte) or empty
+   Errc::success   no problems
+   Errc::warn      error response
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
+   Errc::timeout   no response within timeout
+   Errc::range     serial number (orc_SerialNumber) is to long (maximum is 29 byte) or empty
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscProtocolSerialNumber & orc_SerialNumber,
+std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscProtocolSerialNumber & orc_SerialNumber,
                                                                   const uint8_t(&orau8_NewIpAddress)[4],
                                                                   const uint8_t(&orau8_NetMask)[4],
                                                                   const uint8_t(&orau8_DefaultGateway)[4],
@@ -614,17 +615,17 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
                                                                   uint8_t(&orau8_ResponseIp)[4],
                                                                   uint8_t * const opu8_ErrorResult) const
 {
-   int32_t s32_Return = C_TIMEOUT;
+   std::error_code c_Return = Errc::timeout;
 
    std::vector<uint8_t> c_Request;
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else if ((orc_SerialNumber.q_IsValid == false) ||
             (orc_SerialNumber.q_ExtFormatUsed == false))
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -632,7 +633,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
       const std::vector<uint8_t> c_SerialNumberRaw = orc_SerialNumber.GetSerialNumberAsRawData();
       C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_EXT_REQ,
                             (static_cast<uint32_t>(18U) + u8_SerialNumberLength));
-      int32_t s32_ReturnLocal;
+      std::error_code c_ReturnLocal = Errc::success;
 
       c_Header.ComposeHeader(c_Request);
       // Mode flag. Bit 1 is IP address, bit 2 is node identifier
@@ -650,11 +651,11 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
       (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 18],
                         &c_SerialNumberRaw[0], u8_SerialNumberLength);
 
-      s32_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
-      if (s32_ReturnLocal != C_NO_ERR)
+      c_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
+      if (c_ReturnLocal)
       {
          m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
       else
       {
@@ -665,17 +666,16 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
          while (((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime) && (q_Done == false))
          {
             //check for response
-            s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
-            if (s32_ReturnLocal == C_NO_ERR)
+            c_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
+            if (!c_ReturnLocal)
             {
                if (static_cast<uint32_t>(c_Response.size()) ==
                    (static_cast<uint32_t>(C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6U) + u8_SerialNumberLength))
                {
                   //header OK ?
-                  s32_ReturnLocal = c_Header.DecodeHeader(c_Response);
-                  switch (s32_ReturnLocal)
+                  const std::error_code c_HeaderResult = c_Header.DecodeHeader(c_Response);
+                  if (!c_HeaderResult)
                   {
-                  case C_NO_ERR:
                      //sanity check: does payload size match response size ?
                      if ((c_Header.u32_PayloadSize ==
                           static_cast<uint32_t>((c_Response.size() - C_DoIpHeader::hu8_DOIP_HEADER_SIZE))) &&
@@ -721,22 +721,22 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
                         {
                            if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U] == 0U)
                            {
-                              s32_Return = C_NO_ERR;
+                              c_Return = Errc::success;
                            }
                            else if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U] == 3U)
                            {
                               m_LogWarningWithHeaderAndIp(
                                  "SetIpAddress: could not perform action. Node has security feature activated.",
                                  TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                              if (opu8_ErrorResult != NULL)
+                              if (opu8_ErrorResult != nullptr)
                               {
                                  (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U];
                               }
                            }
                            else
                            {
-                              s32_Return = C_WARN;
-                              if (opu8_ErrorResult != NULL)
+                              c_Return = Errc::warn;
+                              if (opu8_ErrorResult != nullptr)
                               {
                                  (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U];
                               }
@@ -750,16 +750,17 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
                            "UDP response with unexpected payload size or type received. Ignoring.", TGL_UTIL_FUNC_ID,
                            orau8_ResponseIp);
                      }
-                     break;
-                  case C_CONFIG:
+                  }
+                  else if (c_HeaderResult == Errc::config)
+                  {
                      m_LogWarningWithHeaderAndIp("UDP response with unexpected version received. Ignoring.",
                                                  TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                     break;
-                  default:
+                  }
+                  else
+                  {
                      //unexpected ...
                      m_LogWarningWithHeaderAndIp("Internal error parsing DoIp header.", TGL_UTIL_FUNC_ID,
                                                  orau8_ResponseIp);
-                     break;
                   }
                }
                else
@@ -773,7 +774,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -788,21 +789,21 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
    \param[out]    orc_Results   information about all nodes that sent a response
 
    \return
-   C_NO_ERR   no problems; zero or more responses received; data placed in orc_Results
-   C_COM      could not send request
-   C_CONFIG   no dispatcher installed
+   Errc::success   no problems; zero or more responses received; data placed in orc_Results
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
+std::error_code C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
    std::vector<C_OscProtocolDriverOsyTpIp::C_BroadcastRequestProgrammingResults> & orc_Results) const
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_REQUEST_PROGRAMMING_REQ, 0U);
 
    orc_Results.clear();
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -810,11 +811,10 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
 
       c_Header.ComposeHeader(c_Request);
 
-      s32_Return = mpc_Dispatcher->SendUdp(c_Request);
-      if (s32_Return != C_NO_ERR)
+      if (mpc_Dispatcher->SendUdp(c_Request))
       {
          m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
       else
       {
@@ -825,16 +825,15 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
 
          while ((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime)
          {
-            int32_t s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, au8_Ip);
-            if (s32_ReturnLocal == C_NO_ERR)
+            const std::error_code c_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, au8_Ip);
+            if (!c_ReturnLocal)
             {
                if (c_Response.size() == (C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2 + 1))
                {
                   //header OK ?
-                  s32_ReturnLocal = c_Header.DecodeHeader(c_Response);
-                  switch (s32_ReturnLocal)
+                  const std::error_code c_HeaderResult = c_Header.DecodeHeader(c_Response);
+                  if (!c_HeaderResult)
                   {
-                  case C_NO_ERR:
                      //sanity check: does payload size match response size ?
                      if ((c_Header.u32_PayloadSize ==
                           static_cast<uint32_t>((c_Response.size() - C_DoIpHeader::hu8_DOIP_HEADER_SIZE))) &&
@@ -858,15 +857,16 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
                         m_LogWarningWithHeaderAndIp("UDP response with unexpected payload size received. Ignoring.",
                                                     TGL_UTIL_FUNC_ID, au8_Ip);
                      }
-                     break;
-                  case C_CONFIG:
+                  }
+                  else if (c_HeaderResult == Errc::config)
+                  {
                      m_LogWarningWithHeaderAndIp("UDP response with unexpected version received. Ignoring.",
                                                  TGL_UTIL_FUNC_ID, au8_Ip);
-                     break;
-                  default:
+                  }
+                  else
+                  {
                      //unexpected ...
                      m_LogWarningWithHeaderAndIp("Internal error parsing DoIp header.", TGL_UTIL_FUNC_ID, au8_Ip);
-                     break;
                   }
                }
                else
@@ -877,10 +877,10 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
                }
             }
          }
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -896,28 +896,28 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
                                                shall reset
 
    \return
-   C_NO_ERR   no problems
-   C_COM      could not send request
-   C_CONFIG   no dispatcher installed
-   C_RANGE    oq_SpecificSerialNumberOnly is true but opau8_SerialNumber is NULL
+   Errc::success   no problems
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
+   Errc::range     oq_SpecificSerialNumberOnly is true but opau8_SerialNumber is NULL
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpIp::BroadcastNetReset(const uint8_t ou8_ResetType,
+std::error_code C_OscProtocolDriverOsyTpIp::BroadcastNetReset(const uint8_t ou8_ResetType,
                                                       const bool oq_SpecificSerialNumberOnly,
                                                       const uint8_t (*const opau8_SerialNumber)[6]) const
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    const C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_NET_RESET_MESSAGE_REQ, 8U);
 
    std::vector<uint8_t> c_Request;
 
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
-   else if ((oq_SpecificSerialNumberOnly == true) && (opau8_SerialNumber == NULL))
+   else if ((oq_SpecificSerialNumberOnly == true) && (opau8_SerialNumber == nullptr))
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -934,14 +934,13 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastNetReset(const uint8_t ou8_ResetTyp
       // set reset type
       c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 7] = ou8_ResetType;
 
-      s32_Return = mpc_Dispatcher->SendUdp(c_Request);
-      if (s32_Return != C_NO_ERR)
+      if (mpc_Dispatcher->SendUdp(c_Request))
       {
          m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -954,7 +953,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastNetReset(const uint8_t ou8_ResetTyp
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProtocolDriverOsyTpIp::C_OscProtocolDriverOsyTpIp(const uint16_t ou16_MaxServiceQueueSize) :
    C_OscProtocolDriverOsyTpBase(ou16_MaxServiceQueueSize),
-   mpc_Dispatcher(NULL),
+   mpc_Dispatcher(nullptr),
    mu32_DispatcherHandle(0U)
 {
 }
@@ -967,7 +966,7 @@ C_OscProtocolDriverOsyTpIp::C_OscProtocolDriverOsyTpIp(const uint16_t ou16_MaxSe
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProtocolDriverOsyTpIp::~C_OscProtocolDriverOsyTpIp(void)
 {
-   mpc_Dispatcher = NULL;
+   mpc_Dispatcher = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1032,53 +1031,58 @@ void C_OscProtocolDriverOsyTpIp::m_ComposeRequest(const C_OscProtocolDriverOsySe
    Ongoing communication problems will be written to the class's log text.
 
    \return
-   C_NO_ERR   cycle finished
-   C_CONFIG   no dispatcher installed
-   C_COM      error on sending service
+   Errc::success   cycle finished
+   Errc::config    no dispatcher installed
+   Errc::com       error on sending service
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpIp::Cycle(void)
+std::error_code C_OscProtocolDriverOsyTpIp::Cycle(void)
 {
-   int32_t s32_ReturnFunc = C_NO_ERR;
+   std::error_code c_ReturnFunc = Errc::success;
    C_OscProtocolDriverOsyService c_Service;
 
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
-      s32_ReturnFunc = C_CONFIG;
+      c_ReturnFunc = Errc::config;
    }
    else
    {
+      //doubles as the loop control: a failed send stops the loop just as an empty queue does
+      std::error_code c_TxResult = Errc::success;
+
+      //the Rx pass has its own control variable: it doubles as the read-loop condition
+      std::error_code c_RxResult = Errc::success;
+
       //do we have requests to send ?
-      int32_t s32_Return = C_NO_ERR;
-      while (s32_Return == C_NO_ERR)
+      while (!c_TxResult)
       {
-         s32_Return = this->m_GetFromTxQueue(c_Service);
-         if (s32_Return == C_NO_ERR)
+         c_TxResult = this->m_GetFromTxQueue(c_Service);
+         if (!c_TxResult)
          {
             //send data on TCP:
             std::vector<uint8_t> c_Request;
             m_ComposeRequest(c_Service, c_Request);
 
-            s32_Return = mpc_Dispatcher->SendTcp(this->mu32_DispatcherHandle, c_Request);
-            if (s32_Return != C_NO_ERR)
+            if (mpc_Dispatcher->SendTcp(this->mu32_DispatcherHandle, c_Request))
             {
                m_LogWarningWithHeader("Could not send TCP request. Service data lost.", TGL_UTIL_FUNC_ID);
-               s32_Return = C_COM;
+               c_TxResult = Errc::com;
             }
          }
       }
 
-      if (s32_Return != C_COM)
+      if (c_TxResult == Errc::com)
       {
-         s32_Return = C_NO_ERR;
+         c_ReturnFunc = Errc::com;
+         c_RxResult = Errc::com; //as before, a failed send skips the Rx pass entirely
       }
       else
       {
-         s32_ReturnFunc = C_COM;
+         c_RxResult = Errc::success;
       }
 
       //read all incoming messages:
-      while (s32_Return == C_NO_ERR)
+      while (!c_RxResult)
       {
          std::vector<uint8_t> c_Data;
          bool q_DataFromBuffer = false;
@@ -1092,25 +1096,24 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void)
          if (mc_RxState.e_Status == C_TcpRxServiceState::eIDLE)
          {
             //look in the buffer first
-            s32_Return = this->mpc_Dispatcher->ReadTcpBuffer(this->mc_ClientId.u8_BusIdentifier,
-                                                             this->mc_ClientId.u8_NodeIdentifier,
-                                                             this->mc_ServerId.u8_BusIdentifier,
-                                                             this->mc_ServerId.u8_NodeIdentifier,
-                                                             c_Data);
+            c_RxResult = this->mpc_Dispatcher->ReadTcpBuffer(this->mc_ClientId.u8_BusIdentifier,
+                                                            this->mc_ClientId.u8_NodeIdentifier,
+                                                            this->mc_ServerId.u8_BusIdentifier,
+                                                            this->mc_ServerId.u8_NodeIdentifier,
+                                                            c_Data);
 
-            if (s32_Return != C_NO_ERR)
+            if (c_RxResult)
             {
                // No data in buffer, search for new data
                //try to get header ...
                c_Data.resize(C_DoIpHeader::hu8_DOIP_HEADER_SIZE);
-               s32_Return = mpc_Dispatcher->ReadTcp(this->mu32_DispatcherHandle, c_Data);
-               if (s32_Return == C_NO_ERR)
+               c_RxResult = mpc_Dispatcher->ReadTcp(this->mu32_DispatcherHandle, c_Data);
+               if (!c_RxResult)
                {
                   //we got the header ...
-                  s32_Return = mc_RxState.c_ServiceHeader.DecodeHeader(c_Data);
-                  switch (s32_Return)
+                  const std::error_code c_HeaderResult = mc_RxState.c_ServiceHeader.DecodeHeader(c_Data);
+                  if (!c_HeaderResult)
                   {
-                  case C_NO_ERR:
                      //sanity check: is the payload size realistic ?
                      //effectively CAN-TP limits the size of one service to 4kB
                      if ((mc_RxState.c_ServiceHeader.u32_PayloadSize < 4200U) &&
@@ -1124,17 +1127,18 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void)
                         m_LogWarningWithHeader("TCP response with unexpected payload size received. Ignoring.",
                                                TGL_UTIL_FUNC_ID);
                      }
-                     break;
-                  case C_CONFIG:
+                  }
+                  else if (c_HeaderResult == Errc::config)
+                  {
                      m_LogWarningWithHeader("TCP response with unexpected version received. Ignoring.",
                                             TGL_UTIL_FUNC_ID);
-                     break;
-                  default:
+                  }
+                  else
+                  {
                      //unexpected ...
                      m_LogWarningWithHeader("Internal error parsing DoIp header.", TGL_UTIL_FUNC_ID);
-                     break;
                   }
-                  s32_Return = C_NO_ERR; //maybe there's more ...
+                  c_RxResult = Errc::success; //maybe there's more ...
                }
             }
             else
@@ -1152,15 +1156,15 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void)
             {
                c_Data.resize(mc_RxState.c_ServiceHeader.u32_PayloadSize);
 
-               s32_Return = mpc_Dispatcher->ReadTcp(this->mu32_DispatcherHandle,
-                                                    this->mc_ClientId.u8_BusIdentifier,
-                                                    this->mc_ClientId.u8_NodeIdentifier,
-                                                    this->mc_ServerId.u8_BusIdentifier,
-                                                    this->mc_ServerId.u8_NodeIdentifier,
-                                                    c_Data);
+               c_RxResult = mpc_Dispatcher->ReadTcp(this->mu32_DispatcherHandle,
+                                                   this->mc_ClientId.u8_BusIdentifier,
+                                                   this->mc_ClientId.u8_NodeIdentifier,
+                                                   this->mc_ServerId.u8_BusIdentifier,
+                                                   this->mc_ServerId.u8_NodeIdentifier,
+                                                   c_Data);
             }
 
-            if (s32_Return == C_NO_ERR)
+            if (!c_RxResult)
             {
                //we got the payload ...
                if (c_Data.size() < 4)
@@ -1174,10 +1178,12 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void)
                      c_Service.c_Data.resize(c_Data.size() - 4U);
                      (void)std::memcpy(&c_Service.c_Data[0], &c_Data[4], c_Data.size() - 4U);
                      //add to queue:
-                     s32_Return = m_AddToRxQueue(c_Service);
-                     if (s32_Return != C_NO_ERR)
+                     const std::error_code c_AddResult = m_AddToRxQueue(c_Service);
+                     if (c_AddResult)
                      {
                         m_LogWarningWithHeader("Rx Queue overflow. Incoming TCP response dumped.", TGL_UTIL_FUNC_ID);
+                        //a full queue ended the read loop before; keep that
+                        c_RxResult = Errc::noact;
                      }
                   }
                   else
@@ -1190,11 +1196,11 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void)
                }
                mc_RxState.e_Status = C_TcpRxServiceState::eIDLE;
             }
-            else if (s32_Return == C_WARN)
+            else if (c_RxResult == Errc::warn)
             {
                // Receiving of an other server. Check further messages
                mc_RxState.e_Status = C_TcpRxServiceState::eIDLE;
-               s32_Return = C_NO_ERR;
+               c_RxResult = Errc::success;
             }
             else
             {
@@ -1210,7 +1216,7 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void)
          }
       }
    }
-   return s32_ReturnFunc;
+   return c_ReturnFunc;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

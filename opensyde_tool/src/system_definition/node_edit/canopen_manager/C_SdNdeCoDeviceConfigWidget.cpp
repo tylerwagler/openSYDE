@@ -287,14 +287,14 @@ void C_SdNdeCoDeviceConfigWidget::m_HandleSameAsOpensydeNodeIdState(void) const
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNode(
          this->mc_DeviceInterfaceId.u32_NodeIndex);
 
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          const C_OscNodeComInterfaceSettings * const pc_ComInterface = pc_Node->c_Properties.GetComInterface(
             C_OscSystemBus::eCAN, this->mc_DeviceInterfaceId.u8_InterfaceNumber);
 
-         tgl_assert(pc_ComInterface != NULL);
-         if (pc_ComInterface != NULL)
+         tgl_assert(pc_ComInterface != nullptr);
+         if (pc_ComInterface != nullptr)
          {
             this->mpc_Ui->pc_SpinBoxCanOpenId->setValue(static_cast<int32_t>(pc_ComInterface->u8_NodeId));
          }
@@ -352,13 +352,14 @@ void C_SdNdeCoDeviceConfigWidget::m_CheckCoNodeId(void) const
    const C_OscCanOpenManagerInfo * const pc_CanOpenManagerInfo =
       C_PuiSdHandler::h_GetInstance()->GetCanOpenManager(this->mu32_ManagerNodeIndex, this->mu8_ManagerInterfaceId);
 
-   if (pc_CanOpenManagerInfo != NULL)
+   if (pc_CanOpenManagerInfo != nullptr)
    {
       bool q_NodeIdInvalid;
       bool q_NodeIdConflict;
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       const int32_t s32_FuncReturn = pc_CanOpenManagerInfo->CheckErrorDeviceCoNodeId(this->mc_DeviceInterfaceId,
                                                                                      &q_NodeIdConflict,
-                                                                                     &q_NodeIdInvalid, true);
+                                                                                     &q_NodeIdInvalid, true).value();
 
       tgl_assert(s32_FuncReturn == C_NO_ERR);
       if (s32_FuncReturn == C_NO_ERR)
@@ -464,11 +465,12 @@ void C_SdNdeCoDeviceConfigWidget::m_CheckHeartbeatConsumerTime(void) const
    const C_OscCanOpenManagerInfo * const pc_CanOpenManagerInfo = C_PuiSdHandler::h_GetInstance()->GetCanOpenManager(
       this->mu32_ManagerNodeIndex, this->mu8_ManagerInterfaceId);
 
-   if (pc_CanOpenManagerInfo != NULL)
+   if (pc_CanOpenManagerInfo != nullptr)
    {
       bool q_TimeError;
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       const int32_t s32_FuncReturn = pc_CanOpenManagerInfo->CheckErrorDeviceHeartbeat(this->mc_DeviceInterfaceId,
-                                                                                      &q_TimeError);
+                                                                                      &q_TimeError).value();
 
       tgl_assert(s32_FuncReturn == C_NO_ERR);
       if (s32_FuncReturn == C_NO_ERR)
@@ -571,9 +573,9 @@ void C_SdNdeCoDeviceConfigWidget::m_LoadFromData(void)
    disconnect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatConsuming, &QCheckBox::stateChanged, this,
               &C_SdNdeCoDeviceConfigWidget::m_OnHeartbeatConsumingEnableChanged);
 
-   tgl_assert(pc_CanOpenDeviceInfo != NULL);
+   tgl_assert(pc_CanOpenDeviceInfo != nullptr);
 
-   if (pc_CanOpenDeviceInfo != NULL)
+   if (pc_CanOpenDeviceInfo != nullptr)
    {
       const C_OscCanOpenObjectDictionary & rc_EdsFileContent = pc_CanOpenDeviceInfo->GetEdsFileContent();
 
@@ -674,7 +676,7 @@ void C_SdNdeCoDeviceConfigWidget::m_LoadFromData(void)
          //supported
          // check for read-only
          bool q_HbProducerRo = true;
-         tgl_assert(rc_EdsFileContent.IsHeartbeatProducerRo(q_HbProducerRo) == C_NO_ERR);
+         tgl_assert(!rc_EdsFileContent.IsHeartbeatProducerRo(q_HbProducerRo));
          this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing->setEnabled(!q_HbProducerRo);
 
          this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing->setChecked(pc_CanOpenDeviceInfo->q_EnableHeartbeatProducing);
@@ -693,7 +695,7 @@ void C_SdNdeCoDeviceConfigWidget::m_LoadFromData(void)
          //supported
          // check for read-only
          bool q_HbConsumerRo = true;
-         tgl_assert(rc_EdsFileContent.IsHeartbeatConsumerRo(q_HbConsumerRo) == C_NO_ERR);
+         tgl_assert(!rc_EdsFileContent.IsHeartbeatConsumerRo(q_HbConsumerRo));
 
          this->mpc_Ui->pc_CheckBoxEnableHeartbeatConsuming->setEnabled(!q_HbConsumerRo);
 

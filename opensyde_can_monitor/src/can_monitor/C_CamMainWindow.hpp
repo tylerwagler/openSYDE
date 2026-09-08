@@ -40,7 +40,7 @@ class C_CamMainWindow :
    Q_OBJECT
 
 public:
-   explicit C_CamMainWindow(QWidget * const opc_Parent = NULL);
+   explicit C_CamMainWindow(QWidget * const opc_Parent = nullptr);
    ~C_CamMainWindow(void) override;
    void CanFilterMsgDropped(void);
 
@@ -89,7 +89,7 @@ private:
    void m_LoadInitialProject(void);
    void m_LoadUserSettings(void);
    void m_SaveUserSettings(void);
-   static bool mh_CheckMime(const QMimeData * const opc_Mime, QString * const opc_FilePath = NULL);
+   static bool mh_CheckMime(const QMimeData * const opc_Mime, QString * const opc_FilePath = nullptr);
 
    static void mh_ThreadFunc(void * const opv_Instance);
    void m_ThreadFunc(void);

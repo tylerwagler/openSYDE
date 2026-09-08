@@ -12,8 +12,11 @@
 #define CCANBASEH
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stw_can.hpp"
+#include "C_OscErrorCategory.hpp"
 
 namespace stw
 {
@@ -47,11 +50,11 @@ public:
       Functions shall init the CAN bus bus with the specified bitrate
 
       \return
-      C_NO_ERR   bus initialized
-      else       error at initialization
+      Errc::success   bus initialized
+      else            error at initialization
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t CAN_Init(void) = 0;
+   virtual std::error_code CAN_Init(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -63,11 +66,11 @@ public:
       \param[in]  os32_BitrateKBitS  bitrate to initialize bus with
 
       \return
-      C_NO_ERR   bus initialized
-      else       error at initialization
+      Errc::success   bus initialized
+      else            error at initialization
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t CAN_Init(const int32_t os32_BitrateKBitS) = 0;
+   virtual std::error_code CAN_Init(const int32_t os32_BitrateKBitS) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -77,11 +80,11 @@ public:
       How and where the bitrate is specified is up to the implementation.
 
       \return
-      C_NO_ERR   bus closed
-      else       error
+      Errc::success   bus closed
+      else            error
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t CAN_Exit(void) = 0;
+   virtual std::error_code CAN_Exit(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -91,11 +94,11 @@ public:
       As a result all TX and RX buffers shall be cleared.
 
       \return
-      C_NO_ERR   bus reset
-      else       error
+      Errc::success   bus reset
+      else            error
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t CAN_Reset(void) = 0;
+   virtual std::error_code CAN_Reset(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -106,11 +109,11 @@ public:
       \param[out]  orc_Message  read message
 
       \return
-      C_NO_ERR   message read
-      else       no message read or error
+      Errc::success   message read
+      else            no message read or error
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message) = 0;
+   virtual std::error_code CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -121,11 +124,11 @@ public:
       \param[in]  orc_Message  message to send
 
       \return
-      C_NO_ERR   message sent
-      else       error trying to send message
+      Errc::success   message sent
+      else            error trying to send message
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t CAN_Send_Msg(const T_STWCAN_Msg_TX & orc_Message) = 0;
+   virtual std::error_code CAN_Send_Msg(const T_STWCAN_Msg_TX & orc_Message) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -138,11 +141,11 @@ public:
       \param[out]  oru64_SystemTimeUs  system time in micro seconds
 
       \return
-      C_NO_ERR   information read
-      else       error trying to get information
+      Errc::success   information read
+      else            error trying to get information
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const = 0;
+   virtual std::error_code CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const = 0;
 
    //-----------------------------------------------------------------------------
    /*!

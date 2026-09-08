@@ -68,7 +68,7 @@ QVariant C_TblTreModel::data(const QModelIndex & orc_Index, const int32_t os32_R
          //lint -e{9079}  Result of Qt interface restrictions, set by index function
          const C_TblTreItem * const pc_TreeItem =
             static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
-         if (pc_TreeItem != NULL)
+         if (pc_TreeItem != nullptr)
          {
             c_Retval = pc_TreeItem->c_Name;
          }
@@ -78,7 +78,7 @@ QVariant C_TblTreModel::data(const QModelIndex & orc_Index, const int32_t os32_R
          //lint -e{9079}  Result of Qt interface restrictions, set by index function
          const C_TblTreItem * const pc_TreeItem =
             static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
-         if (pc_TreeItem != NULL)
+         if (pc_TreeItem != nullptr)
          {
             c_Retval = pc_TreeItem->c_Icon;
          }
@@ -88,7 +88,7 @@ QVariant C_TblTreModel::data(const QModelIndex & orc_Index, const int32_t os32_R
          //lint -e{9079}  Result of Qt interface restrictions, set by index function
          const C_TblTreItem * const pc_TreeItem =
             static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
-         if (pc_TreeItem != NULL)
+         if (pc_TreeItem != nullptr)
          {
             c_Retval = pc_TreeItem->c_ToolTipHeading;
          }
@@ -98,7 +98,7 @@ QVariant C_TblTreModel::data(const QModelIndex & orc_Index, const int32_t os32_R
          //lint -e{9079}  Result of Qt interface restrictions, set by index function
          const C_TblTreItem * const pc_TreeItem =
             static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
-         if (pc_TreeItem != NULL)
+         if (pc_TreeItem != nullptr)
          {
             c_Retval = pc_TreeItem->c_ToolTipContent;
          }
@@ -129,7 +129,7 @@ Qt::ItemFlags C_TblTreModel::flags(const QModelIndex & orc_Index) const
       //lint -e{9079}  Result of Qt interface restrictions, set by index function
       const C_TblTreItem * const pc_TreeItem =
          static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
-      if (pc_TreeItem != NULL)
+      if (pc_TreeItem != nullptr)
       {
          if (pc_TreeItem->q_Enabled == true)
          {

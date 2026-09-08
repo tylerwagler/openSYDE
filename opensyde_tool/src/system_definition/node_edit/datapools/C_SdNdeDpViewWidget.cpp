@@ -78,7 +78,7 @@ const bool C_SdNdeDpViewWidget::mhaq_ADD_BUTTON_INVISIBLE[static_cast<int32_t>(s
 C_SdNdeDpViewWidget::C_SdNdeDpViewWidget(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SdNdeDpViewWidget),
-   mpc_UsageBar(NULL),
+   mpc_UsageBar(nullptr),
    mu32_NodeIndex(0),
    mu32_LastKnownDataPoolIndex(0),
    me_ActiveDataPoolType(stw::opensyde_core::C_OscNodeDataPool::eDIAG),
@@ -222,7 +222,7 @@ void C_SdNdeDpViewWidget::SetNode(const uint32_t ou32_NodeIndex)
 
    //User settings store
    m_StoreToUserSettings();
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       //User settings restores
       const C_UsNode c_UserSettingsNode = C_UsHandler::h_GetInstance()->GetProjSdNode(
@@ -278,7 +278,7 @@ void C_SdNdeDpViewWidget::SetNode(const uint32_t ou32_NodeIndex)
 
    this->mu32_NodeIndex = ou32_NodeIndex;
 
-   if (this->mpc_UsageBar == NULL)
+   if (this->mpc_UsageBar == nullptr)
    {
       this->mpc_UsageBar = new C_SdNdeDpViewUsageWidget(this);
    }
@@ -529,7 +529,7 @@ void C_SdNdeDpViewWidget::m_StoreToUserSettings(void) const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if ((this->ms32_ActiveDataPoolWidget >= 0) &&
           (this->mu32_LastKnownDataPoolIndex < pc_Node->c_DataPools.size()))
@@ -563,19 +563,19 @@ void C_SdNdeDpViewWidget::m_DpChangedUpdateUsageView(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpViewWidget::m_DpUpdateUsageView(void)
 {
-   if (this->mpc_UsageBar != NULL)
+   if (this->mpc_UsageBar != nullptr)
    {
       // update the usage view
       const stw::opensyde_core::C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
          this->mu32_NodeIndex);
 
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          const stw::opensyde_core::C_OscDeviceDefinition * const pc_DevDef = pc_Node->pc_DeviceDefinition;
          const uint32_t u32_SubDeviceIndex = pc_Node->u32_SubDeviceIndex;
-         tgl_assert(pc_DevDef != NULL);
-         if (pc_DevDef != NULL)
+         tgl_assert(pc_DevDef != nullptr);
+         if (pc_DevDef != nullptr)
          {
             tgl_assert(u32_SubDeviceIndex < pc_DevDef->c_SubDevices.size());
             if (u32_SubDeviceIndex < pc_DevDef->c_SubDevices.size())
@@ -628,7 +628,7 @@ void C_SdNdeDpViewWidget::m_DpUpdateUsageView(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpViewWidget::m_UpdateUsageBarSize(void)
 {
-   if (this->mpc_UsageBar != NULL)
+   if (this->mpc_UsageBar != nullptr)
    {
       this->mpc_UsageBar->setGeometry(0, this->height() - 16, this->width() - 14, 16);
    }
@@ -687,7 +687,7 @@ void C_SdNdeDpViewWidget::m_AutoStartAddressClicked(const bool oq_Enabled)
       {
          C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNode(this->mu32_NodeIndex);
 
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             pc_Node->q_DatapoolAutoNvmStartAddress = oq_Enabled;
             this->m_UpdateAutoStartAddressSvg();

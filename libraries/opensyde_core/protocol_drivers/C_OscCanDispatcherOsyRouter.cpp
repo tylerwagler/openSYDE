@@ -18,6 +18,7 @@
 #include "precomp_headers.hpp"
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_OscCanDispatcherOsyRouter.hpp"
 
@@ -76,7 +77,8 @@ C_OscCanDispatcherOsyRouter::C_OscCanDispatcherOsyRouter(C_OscProtocolDriverOsy 
    mrc_OsyProtocol(orc_OsyProtocol),
    mu8_RoutingChannel(0U),
    mu32_FilterId(0U),
-   mu32_FilterMask(0xFFFFFFFFU)
+   mu32_FilterMask(0xFFFFFFFFU),
+   mu8_NrCode(0U)
 {
    orc_OsyProtocol.InitializeTunnelCanMessage(&C_OscCanDispatcherOsyRouter::mh_OsyTunnelCanMessageReceived, this);
 }
@@ -110,17 +112,17 @@ void C_OscCanDispatcherOsyRouter::SetFilterParameters(const uint8_t ou8_RoutingC
    Parameters shall be set with SetFilterParameters first before calling this function.
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong routine identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong routine identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{8001}  //name of function dictated by base class
-int32_t C_OscCanDispatcherOsyRouter::CAN_Init(void)
+std::error_code C_OscCanDispatcherOsyRouter::CAN_Init(void)
 {
    return this->mrc_OsyProtocol.OsySetTunnelCanMessages(this->mu8_RoutingChannel, this->mu32_FilterId,
                                                         this->mu32_FilterMask, &this->mu8_NrCode);
@@ -135,31 +137,31 @@ int32_t C_OscCanDispatcherOsyRouter::CAN_Init(void)
    \param[in]     os32_BitrateKBitS         Bitrate
 
    \return
-   C_NOACT
+   Errc::noact
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{8001}  //name of function dictated by base class
-int32_t C_OscCanDispatcherOsyRouter::CAN_Init(const int32_t os32_BitrateKBitS)
+std::error_code C_OscCanDispatcherOsyRouter::CAN_Init(const int32_t os32_BitrateKBitS)
 {
    (void)os32_BitrateKBitS;
-   return C_NOACT;
+   return Errc::noact;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Stop of CAN legacy routing
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong routine identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong routine identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{8001}  //name of function dictated by base class
-int32_t C_OscCanDispatcherOsyRouter::CAN_Exit(void)
+std::error_code C_OscCanDispatcherOsyRouter::CAN_Exit(void)
 {
    return this->mrc_OsyProtocol.OsyStopTunnelCanMessages();
 }
@@ -168,28 +170,28 @@ int32_t C_OscCanDispatcherOsyRouter::CAN_Exit(void)
 /*! \brief   Resets the current CAN session
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong routine identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong routine identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{8001}  //name of function dictated by base class
-int32_t C_OscCanDispatcherOsyRouter::CAN_Reset(void)
+std::error_code C_OscCanDispatcherOsyRouter::CAN_Reset(void)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   s32_Return = this->CAN_Exit();
+   c_Return = this->CAN_Exit();
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
-      s32_Return = this->CAN_Init();
+      c_Return = this->CAN_Init();
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -198,18 +200,18 @@ int32_t C_OscCanDispatcherOsyRouter::CAN_Reset(void)
    \param[in]  orc_Message     CAN message to send
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_RANGE    CAN message invalid (RTR bit set; ID out of range; DLC out of range)
-   C_NOACT    could not put request in Tx queue ...
-   C_CONFIG   no transport protocol installed
-   C_WARN     error response (negative response code placed in *opu8_NrCode)
-   C_RD_WR    unexpected content in response (here: wrong data identifier ID)
-   C_COM      communication driver reported error
+   Errc::success   request sent, positive response received
+   Errc::timeout   expected response not received within timeout
+   Errc::range     CAN message invalid (RTR bit set; ID out of range; DLC out of range)
+   Errc::noact     could not put request in Tx queue ...
+   Errc::config    no transport protocol installed
+   Errc::warn      error response (negative response code placed in *opu8_NrCode)
+   Errc::rd_wr     unexpected content in response (here: wrong data identifier ID)
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{8001}  //name of function dictated by base class
-int32_t C_OscCanDispatcherOsyRouter::CAN_Send_Msg(const stw::can::T_STWCAN_Msg_TX & orc_Message)
+std::error_code C_OscCanDispatcherOsyRouter::CAN_Send_Msg(const stw::can::T_STWCAN_Msg_TX & orc_Message)
 {
    return this->mrc_OsyProtocol.OsySendCanMessage(this->mu8_RoutingChannel, orc_Message);
 }
@@ -224,21 +226,21 @@ int32_t C_OscCanDispatcherOsyRouter::CAN_Send_Msg(const stw::can::T_STWCAN_Msg_T
    \param[out]  oru64_SystemTimeUs  system time in micro seconds
 
    \return
-   C_NO_ERR   information read
+   Errc::success   information read
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{8001}  //name of function dictated by base class
-int32_t C_OscCanDispatcherOsyRouter::CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const
+std::error_code C_OscCanDispatcherOsyRouter::CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const
 {
    oru64_SystemTimeUs = stw::tgl::TglGetTickCountUs();
 
-   return C_NO_ERR;
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Returns the NrCode which could be received in CAN_Init
 
-   When the function OsySetTunnelCanMessages called in CAN_Init returns with C_WARN, a NRC is received and stored
+   When the function OsySetTunnelCanMessages called in CAN_Init returns Errc::warn, a NRC is received and stored
 
    \return
    NRC of OsySetTunnelCanMessages
@@ -257,14 +259,14 @@ uint8_t C_OscCanDispatcherOsyRouter::GetNrCodeOfCanInit() const
    \param[out]  orc_Message  read message
 
    \return
-   C_NO_ERR   message read
-   C_WARN     no message read
+   Errc::success   message read
+   Errc::warn      no message read
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{8001}  //name of function dictated by base class
-int32_t C_OscCanDispatcherOsyRouter::m_CAN_Read_Msg(stw::can::T_STWCAN_Msg_RX & orc_Message)
+std::error_code C_OscCanDispatcherOsyRouter::m_CAN_Read_Msg(stw::can::T_STWCAN_Msg_RX & orc_Message)
 {
-   int32_t s32_Return = C_WARN;
+   std::error_code c_Return = Errc::warn;
 
    mrc_OsyProtocol.Cycle();
 
@@ -278,10 +280,10 @@ int32_t C_OscCanDispatcherOsyRouter::m_CAN_Read_Msg(stw::can::T_STWCAN_Msg_RX & 
       // Remove it from the list
       this->mc_AsyncMessages.erase(c_ItItem);
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -299,8 +301,8 @@ void C_OscCanDispatcherOsyRouter::mh_OsyTunnelCanMessageReceived(void * const op
    C_OscCanDispatcherOsyRouter * const pc_Dispatcher =
       reinterpret_cast<C_OscCanDispatcherOsyRouter *>(opv_Instance);
 
-   tgl_assert(pc_Dispatcher != NULL);
-   if (pc_Dispatcher != NULL)
+   tgl_assert(pc_Dispatcher != nullptr);
+   if (pc_Dispatcher != nullptr)
    {
       pc_Dispatcher->m_OsyTunnelCanMessageReceived(ou8_Channel, orc_CanMessage);
    }

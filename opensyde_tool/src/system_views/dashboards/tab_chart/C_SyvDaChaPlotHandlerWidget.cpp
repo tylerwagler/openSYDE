@@ -134,8 +134,8 @@ C_SyvDaChaPlotHandlerWidget::C_SyvDaChaPlotHandlerWidget(QWidget * const opc_Par
    mq_PauseState(false),
    mq_ShowSamplePointState(true),
    me_SettingCursorMode(eSETTING_CM_NO_CURSOR),
-   mpc_FirstCursor(NULL),
-   mpc_SecondCursor(NULL),
+   mpc_FirstCursor(nullptr),
+   mpc_SecondCursor(nullptr),
    mf64_MeasuredTimeFirstCursor(0.0),
    mf64_MeasuredTimeSecondCursor(0.0),
    mq_IsSecondCursorClicked(false),
@@ -435,7 +435,7 @@ void C_SyvDaChaPlotHandlerWidget::SetData(const C_PuiSvDbTabChart & orc_Data, co
       QString c_ToolTipErrorTextHeading = "";
       QString c_ToolTipErrorText = "";
 
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          // Save the minimum to have a content instance of the element to have the type
          this->mc_DataPoolElementContentMin.push_back(pc_Element->c_MinValue);
@@ -716,7 +716,7 @@ int32_t C_SyvDaChaPlotHandlerWidget::AddNewGraph(const C_PuiSvDbNodeDataPoolList
                                                                     orc_DataPoolElementId.u32_DataPoolIndex,
                                                                     orc_DataPoolElementId.u32_ListIndex,
                                                                     orc_DataPoolElementId.u32_ElementIndex);
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          c_Config.c_ElementId = orc_DataPoolElementId;
          c_Config.c_ElementScaling = orc_ElementScaling;
@@ -790,7 +790,7 @@ bool C_SyvDaChaPlotHandlerWidget::RemoveSpecificGraph(const uint32_t ou32_DataPo
             {
                QCPItemTracer * const pc_Tracer =
                   this->mc_ItemTracers.at(static_cast<int32_t>(ou32_DataPoolElementConfigIndex));
-               if (pc_Tracer != NULL)
+               if (pc_Tracer != nullptr)
                {
                   this->mpc_Ui->pc_Plot->removeItem(pc_Tracer);
                }
@@ -923,7 +923,7 @@ void C_SyvDaChaPlotHandlerWidget::SelectGraph(const uint32_t ou32_DataPoolElemen
          {
             QCPItemTracer * const pc_Tracer = this->mc_ItemTracers.at(s32_CounterTracers);
 
-            if (pc_Tracer != NULL)
+            if (pc_Tracer != nullptr)
             {
                if (s32_CounterTracers == static_cast<int32_t>(ou32_DataPoolElementConfigIndex))
                {
@@ -1007,7 +1007,7 @@ void C_SyvDaChaPlotHandlerWidget::AddGraphContent(const C_PuiSvDbNodeDataPoolLis
          {
             QCPGraph * const pc_Graph = this->mpc_Ui->pc_Plot->graph(u32_ConfigCounter);
 
-            if (pc_Graph != NULL)
+            if (pc_Graph != nullptr)
             {
                int32_t s32_ValueCounter;
                float64_t f64_Value;
@@ -1158,7 +1158,7 @@ void C_SyvDaChaPlotHandlerWidget::FitDefault(void)
             this->mc_Data.c_DataPoolElementsConfig[u32_ConfigCounter];
          const C_OscNodeDataPoolListElement * const pc_Elem =
             C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(rc_CurConfig.c_ElementId);
-         if (pc_Elem != NULL)
+         if (pc_Elem != nullptr)
          {
             //Scaling
             float64_t f64_Factor;
@@ -1190,7 +1190,7 @@ void C_SyvDaChaPlotHandlerWidget::FitDefault(void)
    {
       //Empty
       QCPAxis * const pc_Axis = this->m_GetVerticalAxis(0);
-      if (pc_Axis != NULL)
+      if (pc_Axis != nullptr)
       {
          pc_Axis->setRange(-100.0, 100.0);
       }
@@ -1225,7 +1225,7 @@ void C_SyvDaChaPlotHandlerWidget::RefreshColors(void)
       if (u32_Counter < static_cast<uint32_t>(this->mpc_Ui->pc_Plot->graphCount()))
       {
          QCPGraph * const pc_Graph = this->mpc_Ui->pc_Plot->graph(u32_Counter);
-         if (pc_Graph != NULL)
+         if (pc_Graph != nullptr)
          {
             QPen c_Pen = pc_Graph->pen();
             c_Pen.setColor(c_Color);
@@ -1326,14 +1326,14 @@ void C_SyvDaChaPlotHandlerWidget::m_AddGraph(const uint32_t ou32_DataPoolElement
    const QColor c_Color = mhac_DATA_COLORS[this->mc_Data.c_DataPoolElementsColorIndex[ou32_DataPoolElementConfigIndex]];
    const int32_t s32_GraphNumber = this->mpc_Ui->pc_Plot->graphCount();
    QCPAxisRect * const pc_AxisRect = this->mpc_Ui->pc_Plot->axisRect();
-   QCPAxis * pc_VerticalAxis = NULL;
+   QCPAxis * pc_VerticalAxis = nullptr;
    QCPGraph * pc_Graph;
    QPen c_Pen;
 
    // Get the Y axis for the new graph and if the axis does not exist yet, add it
    tgl_assert(static_cast<int32_t>(ou32_DataPoolElementConfigIndex) == s32_GraphNumber);
-   tgl_assert(pc_AxisRect != NULL);
-   if (pc_AxisRect != NULL)
+   tgl_assert(pc_AxisRect != nullptr);
+   if (pc_AxisRect != nullptr)
    {
       if (pc_AxisRect->axisCount(QCPAxis::atLeft) <= s32_GraphNumber)
       {
@@ -1348,13 +1348,13 @@ void C_SyvDaChaPlotHandlerWidget::m_AddGraph(const uint32_t ou32_DataPoolElement
    }
 
    // Add the new graph
-   pc_Graph = this->mpc_Ui->pc_Plot->addGraph(NULL, pc_VerticalAxis);
+   pc_Graph = this->mpc_Ui->pc_Plot->addGraph(nullptr, pc_VerticalAxis);
 
    // Add tracer
    if (this->me_SettingCursorMode != eSETTING_CM_NO_CURSOR)
    {
       // A new added graph can not have any data, so no concrete tracer is necessary
-      this->mc_ItemTracers.append(NULL);
+      this->mc_ItemTracers.append(nullptr);
    } //lint !e429  //no memory leak because of the parent of pc_Tracer and the Qt memory management
 
    // Assign the axis to the graph by its index in a separate mapping
@@ -1396,8 +1396,8 @@ void C_SyvDaChaPlotHandlerWidget::m_AddGraph(const uint32_t ou32_DataPoolElement
    pc_Graph->setPen(c_Pen);
    pc_Graph->setScatterStyle(QCPScatterStyle::ssDisc);
 
-   tgl_assert(pc_VerticalAxis != NULL);
-   if (pc_VerticalAxis != NULL)
+   tgl_assert(pc_VerticalAxis != nullptr);
+   if (pc_VerticalAxis != nullptr)
    {
       // Configure axis
       this->m_UpdateVerticalAxisLabel(ou32_DataPoolElementConfigIndex);
@@ -1893,11 +1893,11 @@ void C_SyvDaChaPlotHandlerWidget::m_PrepareNextColorSection(void)
 //----------------------------------------------------------------------------------------------------------------------
 QCPAxis * C_SyvDaChaPlotHandlerWidget::m_GetVerticalAxis(const uint32_t ou32_DataPoolElementConfigIndex) const
 {
-   QCPAxis * pc_VerticalAxis = NULL;
+   QCPAxis * pc_VerticalAxis = nullptr;
    QCPAxisRect * const pc_AxisRect = this->mpc_Ui->pc_Plot->axisRect();
 
-   tgl_assert(pc_AxisRect != NULL);
-   if (pc_AxisRect != NULL)
+   tgl_assert(pc_AxisRect != nullptr);
+   if (pc_AxisRect != nullptr)
    {
       pc_VerticalAxis = pc_AxisRect->axis(QCPAxis::atLeft, ou32_DataPoolElementConfigIndex);
    }
@@ -1920,7 +1920,7 @@ void C_SyvDaChaPlotHandlerWidget::m_UpdateVerticalAxisLabel(const uint32_t ou32_
       QCPAxis * const pc_VerticalAxis =
          this->mc_DataElementConfigIndexToVerticalAxis.at(ou32_DataPoolElementConfigIndex);
 
-      if (pc_VerticalAxis != NULL)
+      if (pc_VerticalAxis != nullptr)
       {
          if (c_Unit != "")
          {
@@ -2062,7 +2062,7 @@ void C_SyvDaChaPlotHandlerWidget::m_AdaptVerticalAxisWithSpace(QCPAxis * const o
    const float64_t f64_Height = static_cast<float64_t>(this->mpc_Ui->pc_Plot->axisRect()->height());
    const float64_t f64_ScaleFactor = (f64_Height + f64_PIXEL_OFFSET) / f64_Height;
 
-   if (opc_Axis != NULL)
+   if (opc_Axis != nullptr)
    {
       opc_Axis->rescale();
       opc_Axis->scaleRange(f64_ScaleFactor, opc_Axis->range().center());
@@ -2077,7 +2077,7 @@ void C_SyvDaChaPlotHandlerWidget::m_AdaptVerticalAxisWithSpace(QCPAxis * const o
          {
             QCPGraph * const pc_Graph = this->mpc_Ui->pc_Plot->graph(s32_Counter);
 
-            if (((pc_Graph != NULL) && (pc_Graph->visible())) &&
+            if (((pc_Graph != nullptr) && (pc_Graph->visible())) &&
                 (pc_Graph->dataCount() > 0))
 
             {
@@ -2133,7 +2133,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemReleased(C_SyvDaChaPlotCursorItem 
    {
       // If no data was received for the selected element, the tracer is NULL and nothing is to do in this case
       QCPItemTracer * const pc_Tracer = this->mc_ItemTracers.at(static_cast<int32_t>(u32_SelectedElement));
-      if (pc_Tracer != NULL)
+      if (pc_Tracer != nullptr)
       {
          const float64_t f64_TimeOfPoint = pc_Tracer->position->key();
          opc_CursorItem->UpdatePosition(f64_TimeOfPoint);
@@ -2192,7 +2192,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemMovedOnHorizontalAxis(
            ++u32_ElementCounter)
       {
          QCPItemTracer * const pc_Tracer = this->mc_ItemTracers.at(static_cast<int32_t>(u32_ElementCounter));
-         if (pc_Tracer != NULL)
+         if (pc_Tracer != nullptr)
          {
             pc_Tracer->setGraphKey(of64_PosHorizontal);
             pc_Tracer->updatePosition();
@@ -2210,7 +2210,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemMovedOnHorizontalAxis(
          QString c_Value = "NA";
          QCPItemTracer * const pc_Tracer = this->mc_ItemTracers.at(static_cast<int32_t>(u32_ElementCounter));
 
-         if (pc_Tracer != NULL)
+         if (pc_Tracer != nullptr)
          {
             float64_t f64_Value;
             C_OscNodeDataPoolContent c_Tmp = this->mc_DataPoolElementContentMin[u32_ElementCounter];
@@ -2226,7 +2226,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemMovedOnHorizontalAxis(
             C_OscNodeDataPoolContentUtil::h_SetValueInContent(f64_Value, c_Tmp, 0U);
             // No need of scaling here, it is already scaled
             c_Value = this->mc_DataPoolElementDisplayFormatter[u32_ElementCounter].
-                      GetSingleValueContentFormatted(c_Tmp, 0U, c_TmpScaling, NULL);
+                      GetSingleValueContentFormatted(c_Tmp, 0U, c_TmpScaling, nullptr);
          }
 
          this->mpc_Ui->pc_ChartSelectorWidget->UpdateDataSerieMeasurementValue(
@@ -2266,7 +2266,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemMovedOnHorizontalAxis(
    }
 
    // If the second cursor exist, the difference is available and possible
-   if (this->mpc_SecondCursor != NULL)
+   if (this->mpc_SecondCursor != nullptr)
    {
       const float64_t f64_Diff = this->mf64_MeasuredTimeSecondCursor - this->mf64_MeasuredTimeFirstCursor;
 
@@ -2309,12 +2309,12 @@ void C_SyvDaChaPlotHandlerWidget::m_CheckMeasurementCursorsVisibility(void)
 {
    const float64_t f64_HorizontalAxisLower = this->mpc_Ui->pc_Plot->xAxis->range().lower;
 
-   if (this->mpc_FirstCursor != NULL)
+   if (this->mpc_FirstCursor != nullptr)
    {
       this->mpc_FirstCursor->SetItemsNextToPlotVisible(
          this->mpc_FirstCursor->start->coords().x() >= f64_HorizontalAxisLower);
 
-      if (this->mpc_SecondCursor != NULL)
+      if (this->mpc_SecondCursor != nullptr)
       {
          this->mpc_SecondCursor->SetItemsNextToPlotVisible(this->mpc_SecondCursor->start->coords().x() >=
                                                            f64_HorizontalAxisLower);
@@ -2351,8 +2351,8 @@ void C_SyvDaChaPlotHandlerWidget::m_Zoom(const bool oq_ZoomIn)
 {
    QCPAxisRect * const pc_AxisRect = this->mpc_Ui->pc_Plot->axisRect();
 
-   tgl_assert(pc_AxisRect != NULL);
-   if (pc_AxisRect != NULL)
+   tgl_assert(pc_AxisRect != nullptr);
+   if (pc_AxisRect != nullptr)
    {
       float64_t f64_Factor;
       QRectF c_RectChart = pc_AxisRect->rect();
@@ -2503,8 +2503,8 @@ void C_SyvDaChaPlotHandlerWidget::m_ConfigureZoomMode(const C_PuiSvDbTabChart::E
 {
    QCPAxisRect * const pc_AxisRect = this->mpc_Ui->pc_Plot->axisRect();
 
-   tgl_assert(pc_AxisRect != NULL);
-   if (pc_AxisRect != NULL)
+   tgl_assert(pc_AxisRect != nullptr);
+   if (pc_AxisRect != nullptr)
    {
       switch (oe_SettingZoomMode)
       {
@@ -2532,8 +2532,8 @@ void C_SyvDaChaPlotHandlerWidget::m_UpdateDragAxesConfiguration(void)
 {
    QCPAxisRect * const pc_AxisRect = this->mpc_Ui->pc_Plot->axisRect();
 
-   tgl_assert(pc_AxisRect != NULL);
-   if (pc_AxisRect != NULL)
+   tgl_assert(pc_AxisRect != nullptr);
+   if (pc_AxisRect != nullptr)
    {
       pc_AxisRect->setRangeDragAxes(pc_AxisRect->axes(QCPAxis::atBottom), pc_AxisRect->axes(QCPAxis::atLeft));
    }
@@ -2613,8 +2613,8 @@ void C_SyvDaChaPlotHandlerWidget::m_ConfigureVerticalAxisMode(
 {
    QCPAxisRect * const pc_AxisRect = this->mpc_Ui->pc_Plot->axisRect();
 
-   tgl_assert(pc_AxisRect != NULL);
-   if (pc_AxisRect != NULL)
+   tgl_assert(pc_AxisRect != nullptr);
+   if (pc_AxisRect != nullptr)
    {
       // Adapt all Y axes
       const QList<QCPAxis *> c_ListAxes = pc_AxisRect->axes(QCPAxis::atLeft);
@@ -2769,10 +2769,10 @@ void C_SyvDaChaPlotHandlerWidget::m_ConfigureCursorMode(const E_SettingCursorMod
          // Deactivate all cursors
          this->mpc_Ui->pc_Plot->setInteraction(QCP::iSelectItems, false);
 
-         if (this->mpc_FirstCursor != NULL)
+         if (this->mpc_FirstCursor != nullptr)
          {
             this->mpc_Ui->pc_Plot->RemoveCursorItem(this->mpc_FirstCursor);
-            this->mpc_FirstCursor = NULL;
+            this->mpc_FirstCursor = nullptr;
          }
 
          q_RemoveSecondCursor = true;
@@ -2781,7 +2781,7 @@ void C_SyvDaChaPlotHandlerWidget::m_ConfigureCursorMode(const E_SettingCursorMod
          for (s32_CounterTracers = 0; s32_CounterTracers < this->mc_ItemTracers.size(); ++s32_CounterTracers)
          {
             QCPItemTracer * const pc_Tracer = this->mc_ItemTracers[s32_CounterTracers];
-            if (pc_Tracer != NULL)
+            if (pc_Tracer != nullptr)
             {
                this->mpc_Ui->pc_Plot->removeItem(pc_Tracer);
             }
@@ -2829,13 +2829,13 @@ void C_SyvDaChaPlotHandlerWidget::m_ConfigureCursorMode(const E_SettingCursorMod
                {
                   // No points added to the chart, no tracer necessary. In addition to that a tracer connected to
                   // a graph wiht no data causes debug outputs
-                  this->mc_ItemTracers.append(NULL);
+                  this->mc_ItemTracers.append(nullptr);
                }
             }
          }
 
          // Activate in both cases the first cursor
-         if (this->mpc_FirstCursor == NULL)
+         if (this->mpc_FirstCursor == nullptr)
          {
             // Activate the second cursor
             this->m_CreateCursor(&this->mpc_FirstCursor, f64_InitHorizontalPosFirstCursor, mc_STYLE_GUIDE_COLOR_CH1,
@@ -2844,7 +2844,7 @@ void C_SyvDaChaPlotHandlerWidget::m_ConfigureCursorMode(const E_SettingCursorMod
 
          if (oe_SettingCursorMode == eSETTING_CM_TWO_DIFF_CURSOR)
          {
-            if (this->mpc_SecondCursor == NULL)
+            if (this->mpc_SecondCursor == nullptr)
             {
                // Activate the second cursor
                this->m_CreateCursor(&this->mpc_SecondCursor, f64_InitHorizontalPosSecondCursor,
@@ -2862,10 +2862,10 @@ void C_SyvDaChaPlotHandlerWidget::m_ConfigureCursorMode(const E_SettingCursorMod
       if (q_RemoveSecondCursor == true)
       {
          // Deactivate the second cursor
-         if (this->mpc_SecondCursor != NULL)
+         if (this->mpc_SecondCursor != nullptr)
          {
             this->mpc_Ui->pc_Plot->RemoveCursorItem(this->mpc_SecondCursor);
-            this->mpc_SecondCursor = NULL;
+            this->mpc_SecondCursor = nullptr;
          }
       }
 
@@ -2961,7 +2961,7 @@ void C_SyvDaChaPlotHandlerWidget::m_FitHorizontalVerticalSignals(void)
 {
    this->mpc_Ui->pc_Plot->rescaleAxes(true);
    // Scale all y axes with a little bit space around
-   this->m_AdaptVerticalAxisWithSpace(NULL);
+   this->m_AdaptVerticalAxisWithSpace(nullptr);
    this->m_RedrawGraph();
 }
 
@@ -2977,7 +2977,7 @@ void C_SyvDaChaPlotHandlerWidget::m_FitVerticalSignals(void)
    {
       QCPGraph * const pc_Graph = this->mpc_Ui->pc_Plot->graph(s32_ItGraph);
 
-      if (((pc_Graph != NULL) && (pc_Graph->visible())) &&
+      if (((pc_Graph != nullptr) && (pc_Graph->visible())) &&
           (pc_Graph->dataCount() > 0))
 
       {
@@ -3001,7 +3001,7 @@ void C_SyvDaChaPlotHandlerWidget::m_FitHorizontalSignals(void)
    {
       QCPGraph * const pc_Graph = this->mpc_Ui->pc_Plot->graph(s32_ItGraph);
 
-      if ((pc_Graph != NULL) && (pc_Graph->visible()))
+      if ((pc_Graph != nullptr) && (pc_Graph->visible()))
       {
          pc_Graph->rescaleKeyAxis(!q_IsFirst);
          q_IsFirst = false;
@@ -3064,7 +3064,7 @@ void C_SyvDaChaPlotHandlerWidget::m_LoadState(const bool oq_IsPaused, const bool
    for (u32_ScreenStateCounter = 0U; u32_ScreenStateCounter < orc_ScreenState.size(); ++u32_ScreenStateCounter)
    {
       const QCPAxis * const pc_VerticalAxis = this->m_GetVerticalAxis(u32_ScreenStateCounter);
-      if (pc_VerticalAxis != NULL)
+      if (pc_VerticalAxis != nullptr)
       {
          const std::array<float64_t, 4> & rc_DisplayRange = orc_ScreenState[u32_ScreenStateCounter];
          if (u32_ScreenStateCounter == 0U)
@@ -3108,7 +3108,7 @@ void C_SyvDaChaPlotHandlerWidget::m_SaveState(bool & orq_IsPaused, int32_t & ors
         ++s32_VerticalAxisCounter)
    {
       QCPAxis * const pc_VerticalAxis = this->m_GetVerticalAxis(s32_VerticalAxisCounter);
-      if (pc_VerticalAxis != NULL)
+      if (pc_VerticalAxis != nullptr)
       {
          c_DisplayRange[2] = pc_VerticalAxis->range().lower;
          c_DisplayRange[3] = pc_VerticalAxis->range().upper;

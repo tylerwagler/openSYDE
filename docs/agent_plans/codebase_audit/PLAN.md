@@ -19,6 +19,378 @@ that do not regress existing functionality.
 
 ---
 
+## Status Summary (as of 2026-09-06)
+
+| Phase | Status | Notes |
+|---|---|---|
+| 0 — Tests & CI | ✅ **Complete** | GTest + CTest under `libraries/opensyde_core/tests/`, GitHub Actions workflow. CI was red from introduction until 2026-09-06; see the CI note below. |
+| 1 — Correctness bugs | ✅ **Complete** | |
+| 2 — Remove `C_SclDynamicArray` | ✅ **Complete** | Zero references remain. |
+| 3 — Retire `C_SclString` | ✅ **Complete** | Class deleted; `C_SclStringCompat.hpp` helpers remain, ~94 files still call them. `C_SclStringList` / `C_SclIniFile` still exist. See `PHASE3_PLAN.md`. |
+| 4 — Replace homegrown AES | ✅ **Complete for files; wire protocol out of scope** | File encryption is now AES-256-GCM + PBKDF2, with a versioned header and key wiping. The protocol sub-layer is deliberately unchanged — see below. |
+| 5 — Error handling | ✅ **Complete** | Every STW `int32_t` error return in `opensyde_core` is `std::error_code`. Nine waves: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc, protocol_drivers (4 sub-waves, 309 functions), CAN dispatcher, IP dispatcher, xml_parser, project filers and data model, and a final six. Bridging scaffolding fell 238 → 8. 19 functions stay on `int32_t` on purpose — see below. No `static_cast<Errc>` anywhere.  |
+| 6.1 — Singletons | ✅ **Complete, deviating from plan** | Meyer's singleton **rejected** — see below. Race fixed with `std::call_once`; `h_Destroy()` and teardown ordering kept. |
+| 6.2 — Standard mutex | ✅ **Complete** | `C_TglCriticalSection` and all four `TglTasks` files deleted; 52 call sites on `std::mutex`. |
+| 6.3 — Smart pointers | 🚫 **Closed, no defect found** | Exit criterion is wrong as written, and the hazards it implies do not exist here — see below. |
+| 7 — Performance | 🚫 **Blocked on its own criteria** | Prescribes `std::format` (C++20) in a C++17 codebase, and its exit criteria require benchmarks that do not exist — see below. |
+| 8 — Build system | 🔶 **Partial** | CMake minimum raised to 3.25 across the Vector submodules; CI matrix reworked; ccache added. The unified root build remains open — see below. |
+
+### Phase 5 — what is left, measured
+
+Counting `int32_t`-returning declarations in core headers (an upper bound: it
+includes functions that return a count rather than a status):
+
+| Subsystem | Remaining | Note |
+|---|---|---|
+| `protocol_drivers` | 317 | ECU-facing. Characterisation tests exist now for `C_OscProtocolSerialNumber` and `C_OscApplicationInfoBlock`; the rest is untested. |
+| `project` | 213 | Roughly 640 caller files — the caller set, not the function count, is what makes this one big. |
+| `xml_parser` | 26 | `C_OscXmlParserBase` is shared by every tree. Its own wave, never a rider on another. |
+| `system_update_package` | 4 | Plus the 16 wrong-idiom bridge sites below. |
+| `scl` | 4 | |
+| `data_dealer`, `exports`, `imports`, `halc`, `security` | 0 | Done. |
+
+68 core headers now use `std::error_code`.
+
+Both large waves have to run alone. `protocol_drivers` and `project` overlap
+heavily in callers, and the two-agent parallelism that worked for halc + security
+depended on their caller sets being disjoint — which these are not.
+
+### Phase 5 — the 17 functions that stay on int32_t
+
+The migration is complete, and these are deliberate. Two reasons, and neither is
+"not got to yet":
+
+**They return a value, not a status.** Converting destroys the value.
+
+| Function | Returns |
+|---|---|
+| `C_OscXmlParser::GetAttributeSint32` | the attribute (takes a default) |
+| `C_OscApplicationInfoBlock::GetInfoLevel` | 0..9, or `C_RANGE` |
+| `C_CanDispatcher::DispatchIncoming` | count of dispatched messages |
+| `C_SclIniFile::ReadInteger` | the integer read |
+| `C_SclStringList::IndexOf` / `IndexOfName` | an index |
+| `C_OscNodeDataPool::GetFreeBytes`, `C_OscNodeDataPoolList::GetFreeBytes` | signed byte count; **negative means the list overflows its NvM size** |
+| `C_OscNode::GetDataPoolIndex` / `GetDataPoolTypeIndex` | index, or -1 |
+| `C_OscNodeDataPoolContent::GetValueS32` / `GetValueArrS32Element` | the stored value |
+| `C_OscCanProtocol::h_GetListIndex` | index, or -1 |
+
+`h_GetListIndex` is the instructive one: its sibling `h_GetComListIndex` *is* a
+status returning the index through an out-parameter. The two differ only in shape,
+so name alone gets it wrong.
+
+**They use a foreign convention.** These must never be bridged with
+`make_error_code_from_stw` or become `Errc`.
+
+| Function | Convention |
+|---|---|
+| `C_HexFile::GetDataByAddress` / `FindPattern` / `mh_FindPattern` | plain 0 / -1 / -2 |
+| `C_SclChecksums::CalcCRC32TriCore` | documented 0 / -1 |
+
+`C_Md5Checksum::mh_Md5Process` / `mh_Md5Done` were briefly listed here as an
+"internal MD5 convention". That was wrong — both document `C_NO_ERR` / `C_CONFIG`
+and return those literals, so they are plain STW and have since been migrated.
+The error is worth recording: I classified them from the module they live in
+rather than from their `\return` blocks, which is exactly the shortcut this
+table exists to prevent.
+
+Foreign-convention conflation was the most repeated mistake of this migration —
+four separate instances (`TglRemoveDirectory`, `mz_compress`, `TglCreateDirectory`,
+and the socket API in `CloseTcp`), each invisible in testing because 0 means
+success on both sides.
+
+### Phase 5 — the remaining counts are upper bounds, and some are mostly noise
+
+Every "remaining" figure in this plan comes from counting `int32_t`-returning
+declarations in headers. That counts functions that return a **value**, not a
+status, and those must not be migrated — converting them loses the value. Wave 4A
+hit this with `C_OscApplicationInfoBlock::GetInfoLevel`, which returns 0..9 or
+`C_RANGE` in one integer and was deliberately left alone with a note in the
+header.
+
+`scl` is the clearest example. It reports 4, of which **at most 1 is an error
+return**:
+
+| Declaration | Reality |
+|---|---|
+| `C_SclIniFile::ReadInteger` | a value read from the file |
+| `C_SclStringList::IndexOf` | an index |
+| `C_SclStringList::IndexOfName` | an index |
+| `C_SclChecksums::CalcCRC32TriCore` | a status — but documented `0` / `-1`, so a **foreign** convention like `TglCreateDirectory`, not STW. Needs an explicit mapping (`Errc::range` matches its meaning), never `make_error_code_from_stw`. |
+
+So treat the table figures as a ceiling. `project`'s 213 and `protocol_drivers`'
+original 317 both included some number of value-returning functions; the waves
+found and skipped them case by case rather than up front, which worked, but it
+means progress looks slower than it is.
+
+### Phase 5 — the CAN dispatcher wave, surfaced by wave 4A
+
+Wave 4A stopped on `C_OscCanDispatcherOsyRouter` rather than forcing it, and was
+right to. All 7 of its functions are overrides of pure virtuals in
+`stw::can::C_CanBase` / `C_CanDispatcher`, so their signatures are fixed by a base
+class that has other subclasses. It cannot be migrated as a leaf.
+
+The unit is the abstraction, not the router:
+
+| Class | Decls | Note |
+|---|---|---|
+| `can_dispatcher/dispatcher/C_CanDispatcher` | 12 | derives from `C_CanBase` |
+| `can_dispatcher/dispatcher/C_CanBase` | 7 | the root |
+| `can_dispatcher/adapter/C_OscLibcanBackendAdapter` | 7 | sibling subclass |
+| `protocol_drivers/C_OscCanDispatcherOsyRouter` | 7 | the overrides 4A stopped on |
+
+33 functions, 38 caller files, `C_CanDispatcher` alone accounting for 35.
+
+**Correction to an earlier version of this note:** I previously wrote that these
+classes do not use the STW convention. They do. `C_CanBase`'s own doc comments
+specify `C_NO_ERR`, `C_CanDispatcher` documents `C_NO_ERR`, and
+`C_OscLibcanBackendAdapter` returns `C_CONFIG` / `C_COM` / `C_NO_ERR` throughout.
+So this is an ordinary `Errc` migration, not a new category.
+
+The reason waves 4B, 4C and 4D kept `CAN_Send_Msg` / `CAN_Init` results in plain
+`int32_t` locals was different: their signatures are fixed by `C_CanBase`, which
+was outside those waves' scope, and in several cases the value was discarded and
+overwritten with `C_COM` anyway. That is a scoping constraint, not a convention
+mismatch.
+
+The one real boundary is inside `C_OscLibcanBackendAdapter`, which wraps
+`can::ICanBackend` from the vendored `can-libraries` submodule. Whatever libcan
+returns is genuinely foreign and must not be bridged with
+`make_error_code_from_stw`; the adapter already translates it into STW codes, and
+that translation is the line to preserve. `C_CanBase` and `C_CanDispatcher`
+themselves are pure core and touch the submodule only through `stw_can.hpp`
+types.
+
+### Phase 5 — sizing the xml_parser wave
+
+`C_OscXmlParserBase` / `C_OscXmlParser` have 13 distinct `int32_t` functions
+(each declared in both the base and the derived class). They split into two
+groups with very different risk:
+
+| Group | Caller files | Note |
+|---|---|---|
+| The `*Error` family — `SelectRootError`, `SelectNodeChildError`, `GetAttribute*Error` | **20** | Contained, and the names are unique to this class. This is the tractable half. |
+| `LoadFromFile`, `SaveToFile`, `LoadFromString` | 60 / 40 / 5 *(inflated)* | **Do not trust those counts.** Those method names are shared with `C_PuiSdHandler`, `C_OscSecurityPem`, `C_CamProHandler` and others, so a name grep matches unrelated classes. The real figure needs type-aware resolution. |
+
+The parser is included by every tree, so this runs alone, never as a rider on
+another wave. Two `tgl_assert(... == C_NO_ERR)` sites in
+`C_OscHalcConfigFiler.cpp` (858, 861) are deliberately waiting on it, and the
+five bridge sites in `C_OscSupNodeDefinitionFiler.cpp` that wrap `*Error` calls
+will simplify once it lands.
+
+Splitting the `*Error` family from the file I/O is viable — they are distinct
+families — but it does leave the class with two conventions for a while, so it is
+a judgement call rather than an obvious win.
+
+### Phase 5 — two bridging idioms are in the tree, only one is right
+
+Migrated code has to call unmigrated code, so a legacy `int32_t` return has to
+become a `std::error_code` somewhere. There are two spellings of that in the tree
+and they are not equivalent:
+
+```cpp
+c_Retval = make_error_code_from_stw(Legacy());   // correct
+c_Retval = static_cast<Errc>(Legacy());          // wrong idiom
+```
+
+`static_cast<Errc>` names no conversion and asserts "this integer is an STW error
+code" without checking. Any value outside the 13-member set becomes an enumerator
+that does not exist, and a foreign status code — one where 0 also means success,
+so the mistake is invisible in testing — is silently relabelled as an STW code.
+That exact conflation has already been introduced and fixed twice in this
+migration (`TglRemoveDirectory`, `mz_compress`).
+
+**16 sites still use the wrong idiom**, all left by wave 2 in
+`libraries/opensyde_core/system_update_package/`:
+
+| File | Lines |
+|---|---|
+| `C_OscSupNodeDefinitionFiler.cpp` | 154, 257, 380, 461, 465, 469, 475 |
+| `C_OscSupServiceUpdatePackageLoad.cpp` | 253, 572 |
+| `C_OscSupServiceUpdatePackageCreate.cpp` | 146, 263 |
+| `C_OscSupSignatureFiler.cpp` | 84, 111 |
+| `C_OscSupDefinitionFiler.cpp` | 109, 152, 158 |
+
+None currently produces a wrong value: every bridged callee returns either an STW
+code or, in the case of `TglCreateDirectory` (`Load.cpp:572`), only 0 and -1,
+which happen to map onto `success` and `unknown_err`. So this is idiom debt, not
+a live defect — but it is the shape the two real bugs took, and it should be
+converted when that directory is next touched.
+
+Five of them (`C_OscSupNodeDefinitionFiler.cpp:380,461,465,469,475`) wrap
+`C_OscXmlParserBase`'s `*Error` methods, which still return `int32_t`. If those
+are ever migrated to return `std::error_code`, these sites are part of the blast
+radius, and the parser is shared by every tree — so that is its own wave, not a
+rider on someone else's.
+
+### Phase 6.1 — why Meyer's singleton was rejected
+
+The plan says "convert to Meyer's singleton, remove `h_Destroy()`". Applying that
+literally would introduce two defects:
+
+1. **User settings would be lost on exit.** `C_UsHandler::~C_UsHandler()` calls
+   `Save()`, and `h_Destroy()` is invoked from the main-window destructor of all
+   three apps — a controlled shutdown while `QApplication` is still alive. A
+   function-local static destructs after `main()` returns, once Qt is gone.
+2. **An explicit teardown ordering would be discarded.** `~C_PuiProject()`
+   destroys `C_PuiSvHandler` *then* `C_PuiSdHandler`. Both are `QObject`s.
+   Meyer's singletons destruct in reverse *construction* order, which depends on
+   runtime call order and is not guaranteed to preserve that.
+
+The real defect in these singletons was different from what the plan describes:
+`h_GetInstance()` did an unguarded check-then-`new`, a data race if ever reached
+from two threads. That is now guarded with `std::call_once` while `h_Destroy()`
+and the ordering stay exactly as they were.
+
+Known consequence: a `std::once_flag` cannot be reset, so calling
+`h_GetInstance()` *after* `h_Destroy()` now returns `nullptr` instead of silently
+constructing a fresh instance. The known shutdown paths were checked and none do
+this — the widget tree is deleted before the `h_Destroy()` calls,
+`C_TblTreDataElementModel::h_CleanUp()` touches only its own statics, and
+`C_UsHandler::Save()` reaches no other singleton. Silent resurrection during
+shutdown was arguably a latent bug being hidden, not a feature.
+
+`C_CamDbHandler`, `C_CamProHandler` and `C_HeHandler` were already race-free
+(static instance, no lazy init) and were left alone.
+
+### Phase 4 — what was done, and what is deliberately not
+
+**Done (file encryption).** The path protecting service-mode projects and
+service update packages was AES-128-ECB with a single unsalted MD5 as the KDF
+and no authentication. It is now AES-256-GCM with PBKDF2-HMAC-SHA256 (600000
+iterations), a random per-file salt and nonce, `OPENSSL_cleanse` on all key
+material, and a versioned header the format previously lacked entirely. Eight
+tests cover round-trip, wrong password, tamper detection, header layout,
+rejection of legacy input, ECB's block-repetition property, nonce uniqueness
+across files, and empty input.
+
+**Not done, deliberately: the protocol security sub-layer.**
+`C_OscProtocolSecuritySubLayer` encrypts traffic to the ECU with an
+ECDH-negotiated key, so the device firmware implements the matching half.
+Inspecting the ESX-4CS gateway TSP (`esx_4cs_gw_c_tsp_24_0B`) settles it: across
+all eleven precompiled archives and the 207 KB flashloader image there is no AES
+symbol, no S-box, no inverse S-box and no Rcon table. The device crypto is RSA
+PKCS#1 signature verification via BearSSL (`osy_udc_trg_sec_verify_rsa_signature`,
+`bearssl_rsa.c.obj`) plus an RNG for UDS SecurityAccess seeds — matched on the
+tool side by `C_OscSecurityRsa::h_SignSignature`.
+
+So traffic encryption is not merely risky to change, it is unusable with this
+hardware. The supported device-level security mechanism is RSA-based
+SecurityAccess. Changing the sub-layer would gain nothing and would break
+compatibility with any future STW device whose TSP does implement it.
+
+**Related, found while scoping Phase 4:** the `C_SclString` → `std::string`
+migration replaced hex-aware `ToInt()` with base-10 `std::stoi()`, which zeroed
+the AES key (the password was ignored entirely), ECDSA signature bytes, device
+serial numbers, and every CANopen EDS object index. Fixed with regression tests;
+see the commit "Fix hex string parsing regression that zeroed AES keys and ECDSA
+signatures". Any file encrypted before that fix should be treated as
+unprotected.
+
+### Phase 6.3 — closed: the criterion is wrong and the hazards are absent
+
+"No manual `new`/`delete` in newly-touched files" reads as ~2,972 violations, but
+the overwhelming majority are Qt widgets handed to a parent
+(`new C_OgeLabel(this)`), where Qt owns the lifetime and a `unique_ptr` would
+cause a double free.
+
+The genuine ownership cases were then checked individually and none is defective:
+
+- **`FILE*` sites.** Nine non-vendored call sites (the four in `tinyxml2` are
+  third party). Every one pairs with an `fclose`; no leak on an early return.
+  The single flagged case in `C_Md5Checksum::GetMD5` returns only when `fopen`
+  itself failed, so there is nothing to close.
+- **`C_HexFile` binary image.** `new uint16_t[]` at `OptimizeLinear` is matched
+  by `delete[]`, and the guard that could strand it (`u32_Error` non-zero on
+  entry) is unreachable — it is initialised to `NO_ERR` immediately above.
+- **`C_HexFile` `T_HexLine` ring buffer.** A hand-rolled doubly-linked list, and
+  the one item with real substance left in this sub-phase. Converting it means
+  restructuring 2,561 lines of firmware-image parsing that has **zero test
+  coverage**, to fix no observed defect. That is a bad trade in that order. If
+  this is ever revisited, characterisation tests for the hex parser come first.
+
+### Phase 7 — blocked on its own terms
+
+Two problems, neither about effort:
+
+1. **The prescribed tool is unavailable.** 7.1 says to replace `std::stringstream`
+   with `std::format`, which is C++20. The toolchain files pin `-std=c++17` and
+   `CMAKE_CXX_STANDARD 17`. Landing 7.1 as written requires either a language
+   standard bump (a real decision with its own blast radius) or a substitute
+   such as `snprintf` or fmtlib.
+2. **The exit criteria are unmeasurable.** "Logging throughput benchmark shows
+   2x+ improvement" and "CRC benchmark shows HW acceleration benefit" both
+   require a benchmark harness. There is none in the tree. Optimising without
+   one is speculation, and the phase cannot be declared done against its own
+   criteria either way.
+
+Prerequisite for Phase 7: add a benchmark harness, then decide on the C++20
+question. Neither is performance work as such.
+
+### Phase 8 — the unified root build is not a refactor, and here is why
+
+The remaining Phase 8 item is a single root `CMakeLists.txt` so `opensyde_core` is
+compiled once instead of per tool. The cost it targets is real: a clean eight-tool
+build produces **1,139 core object files across five separate core builds**, and
+`build/` reaches **5.8 GB**.
+
+But the tools do not configure core the same way. Every one passes a different set
+of `OPENSYDE_CORE_SKIP_*` options — eight sets, no two alike:
+
+| Tool | Notable exclusions |
+|---|---|
+| `opensyde_tool` | protocol drivers basic/monitor, x-config generation |
+| `can_monitor` | **security**, zipping, imports, code generation, param set, … |
+| `syde_flash` | **security**, protocol drivers system/monitor, logging, … |
+| `syde_sup` | imports, code generation, x-config/x-certificates |
+| `syde_x_gen` | **security**, **linux drivers**, most protocol drivers |
+| `syde_coder_c` | **security**, **linux drivers**, protocol drivers, … |
+| `cmd_line_flash_tool` | **security**, project handling, param set, … |
+| `tsp_convert` | **security**, **linux drivers**, … |
+
+Those are not arbitrary. `OPENSYDE_CORE_SKIP_SECURITY` exists so SYDEflash and CAN
+Monitor do not acquire an OpenSSL dependency; the driver skips control which
+platform back-ends get compiled in. Collapsing to one core build changes what
+each binary depends on, which is a **deployment** decision, not a build-tidiness
+one.
+
+There is a plausible path — build core once with everything enabled as a static
+library and let the linker pull only referenced objects, which works because
+`opensyde_core` deliberately does not link OpenSSL itself (applications provide
+it, per the note in its CMakeLists). Then the SKIP flags stop affecting the
+dependency footprint and only affect what sits unused in the archive.
+
+That needs verifying per tool rather than assuming, specifically: that no skipped
+subsystem is reachable from a tool that currently excludes it, and that each
+resulting binary links the same set of external libraries as it does today. Worth
+doing, and worth doing deliberately — it is the sort of change that is invisible
+until a tool ships with a dependency it never had.
+
+### Phase 8 — what is done and what is not
+
+Done: CMake minimum raised 3.9 → 3.25 across `Vector_DBC` / `Vector_BLF` /
+`Vector_ASC` (clearing the "compatibility with CMake < 3.10" deprecation); CI
+reduced to resolute with the distro default compiler; ccache wired into
+`build.sh` and CI.
+
+Not done: `build.sh` still configures each of the eight tools as its own CMake
+project, so `opensyde_core` is compiled once per tool — eight times for `all`.
+The tools cannot trivially share one core target because each sets a different
+`OPENSYDE_CORE_SKIP_*` set. ccache masks the cost rather than removing it. A
+root `CMakeLists.txt` building core once against the union of those options is
+the real fix; `CMakePresets.json` already sits at the repo root with nothing to
+drive it.
+
+### CI note
+
+The workflow was red from the moment it was added until 2026-09-06 — every job,
+every run. Four independent environment defects (a Qt6 SVG package that does not
+exist on the targeted release, a compiler absent from a matrix entry, missing
+`flex`/`bison`/`libfl-dev`, missing `libssl-dev`). That is how phase-2 and
+phase-3 residue survived, and how two `pjt/` cmake files silently missing from
+CAN Monitor and SYDEflash went unnoticed. A job that never runs is not a gate.
+
+---
+
 ## Phase 0 — Foundation: Tests & Infrastructure
 
 **Goal:** Establish the testing harness and CI so subsequent phases can verify

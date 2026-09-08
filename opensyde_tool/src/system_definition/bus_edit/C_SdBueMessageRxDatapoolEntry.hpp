@@ -31,7 +31,7 @@ class C_SdBueMessageRxDatapoolEntry :
    Q_OBJECT
 
 public:
-   explicit C_SdBueMessageRxDatapoolEntry(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueMessageRxDatapoolEntry(QWidget * const opc_Parent = nullptr);
    ~C_SdBueMessageRxDatapoolEntry(void) override;
 
 private:

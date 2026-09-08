@@ -14,9 +14,12 @@
 
 #include <cstdio>
 #include <string>
+#include <system_error>
+
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscChecksummedXml.hpp"
 #include "C_OscParamSetRawNodeFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -54,26 +57,27 @@ using namespace stw::opensyde_core;
                                              Warning: flag is never set to false if optional content is present
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler::h_LoadRawNode(C_OscParamSetRawNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
-                                                 bool & orq_MissingOptionalContent)
+std::error_code C_OscParamSetRawNodeFiler::h_LoadRawNode(C_OscParamSetRawNode & orc_Node,
+                                                         C_OscXmlParserBase & orc_XmlParser,
+                                                         bool & orq_MissingOptionalContent)
 {
-   int32_t s32_Retval = C_OscParamSetFilerBase::mh_LoadNodeName(orc_Node.c_Name, orc_XmlParser);
+   std::error_code c_Retval = C_OscParamSetFilerBase::mh_LoadNodeName(orc_Node.c_Name, orc_XmlParser);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = C_OscParamSetFilerBase::mh_LoadDataPoolInfos(orc_Node.c_DataPools, orc_XmlParser,
-                                                                orq_MissingOptionalContent);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = C_OscParamSetFilerBase::mh_LoadDataPoolInfos(orc_Node.c_DataPools, orc_XmlParser,
+                                                              orq_MissingOptionalContent);
+      if (!c_Retval)
       {
-         s32_Retval = C_OscParamSetRawNodeFiler::mh_LoadEntries(orc_Node.c_Entries, orc_XmlParser);
+         c_Retval = C_OscParamSetRawNodeFiler::mh_LoadEntries(orc_Node.c_Entries, orc_XmlParser);
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -114,14 +118,14 @@ C_OscParamSetRawNodeFiler::C_OscParamSetRawNodeFiler(void) :
    \param[in,out] orc_XmlParser XML with specified node active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler::mh_LoadEntries(std::vector<C_OscParamSetRawEntry> & orc_Entries,
-                                                  C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscParamSetRawNodeFiler::mh_LoadEntries(std::vector<C_OscParamSetRawEntry> & orc_Entries,
+                                                          C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_Entries.clear();
    if (orc_XmlParser.SelectNodeChild("raw") == "raw")
@@ -133,8 +137,8 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntries(std::vector<C_OscParamSetRawEn
          do
          {
             C_OscParamSetRawEntry c_Item;
-            s32_Retval = C_OscParamSetRawNodeFiler::mh_LoadEntry(c_Item, orc_XmlParser);
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = C_OscParamSetRawNodeFiler::mh_LoadEntry(c_Item, orc_XmlParser);
+            if (!c_Retval)
             {
                orc_Entries.push_back(c_Item);
             }
@@ -142,23 +146,23 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntries(std::vector<C_OscParamSetRawEn
             //Next
             c_SelectedNode = orc_XmlParser.SelectNodeNext("raw-entry");
          }
-         while ((c_SelectedNode == "raw-entry") && (s32_Retval == C_NO_ERR));
+         while ((c_SelectedNode == "raw-entry") && (!c_Retval));
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "raw");
       }
       else
       {
          osc_write_log_error("Loading Dataset data", "Could not find \"node\".\"raw\".\"raw-entry\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -204,13 +208,14 @@ void C_OscParamSetRawNodeFiler::mh_SaveEntries(const std::vector<C_OscParamSetRa
    \param[in,out] orc_XmlParser XML with specified node active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entry, C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entry,
+                                                        C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("address") == "address")
    {
@@ -222,7 +227,7 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
       {
          osc_write_log_error("Loading Dataset data", "Node \"node\".\"raw\".\"raw-entry\".\"address\" contains non-integer value (" +
                              orc_XmlParser.GetNodeContent() + ").");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "raw-entry");
@@ -230,9 +235,9 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
    else
    {
       osc_write_log_error("Loading Dataset data", "Could not find \"node\".\"raw\".\"raw-entry\".\"address\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("value") == "value")
       {
@@ -240,7 +245,7 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
           std::vector<std::string> c_Tokens;
           TokenizeCompat(c_Content, ";", c_Tokens);
           orc_Entry.c_Bytes.reserve(c_Tokens.size());
-          for (int32_t s32_It = 0; (s32_It < c_Tokens.size()) && (s32_Retval == C_NO_ERR); ++s32_It)
+          for (int32_t s32_It = 0; (s32_It < static_cast<int32_t>(c_Tokens.size())) && (!c_Retval); ++s32_It)
           {
              const std::string & rc_Token = c_Tokens[s32_It];
             try
@@ -252,7 +257,7 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
                osc_write_log_error("Loading Dataset data", "Node \"node\".\"raw\".\"raw-entry\".\"value\" contains non-integer value (" +
                                    rc_Token + ").");
 
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
          }
          //Return
@@ -261,10 +266,10 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
       else
       {
          osc_write_log_error("Loading Dataset data", "Could not find \"node\".\"raw\".\"raw-entry\".\"value\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("size") == "size")
       {
@@ -275,13 +280,13 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
          }
          catch (...)
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
             if (u32_Size != orc_Entry.c_Bytes.size())
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
          }
          //Return
@@ -290,11 +295,11 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
       else
       {
          osc_write_log_error("Loading Dataset data", "Could not find \"node\".\"raw\".\"raw-entry\".\"size\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

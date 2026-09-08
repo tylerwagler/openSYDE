@@ -13,9 +13,11 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <map>
+#include <system_error>
 
 #include "stwtypes.hpp"
 #include <string>
+#include "C_OscErrorCategory.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -34,7 +36,7 @@ public:
                                   const uint16_t ou16_MaxLength = 31U);
    static bool h_IsFloat64NearlyEqual(const float64_t & orf64_Float1, const float64_t & orf64_Float2);
    static bool h_IsFloat32NearlyEqual(const float32_t & orf32_Float1, const float32_t & orf32_Float2);
-   static int32_t h_CreateFolderRecursively(const std::string & orc_Folder);
+   static std::error_code h_CreateFolderRecursively(const std::string & orc_Folder);
    static std::string h_NiceifyStringForFileName(const std::string & orc_String);
    static std::string h_NiceifyStringForCeComment(const std::string & orc_String);
    static bool h_CheckValidFileName(const std::string & orc_String);
@@ -50,9 +52,9 @@ public:
    static void h_FileToString(const std::string & orc_FilePath, std::string & orc_OutputString);
    static void h_RangeCheckFloat(float64_t & orf64_Value);
 
-   static int32_t h_CopyFile(const std::string & orc_SourceFile, const std::string & orc_TargetFile,
-                             std::string * const opc_ErrorPath = NULL,
-                             std::string * const opc_ErrorMessage = NULL);
+   static std::error_code h_CopyFile(const std::string & orc_SourceFile, const std::string & orc_TargetFile,
+                                     std::string * const opc_ErrorPath = nullptr,
+                                     std::string * const opc_ErrorMessage = nullptr);
    static std::string h_GetCommandLineAsString(const int32_t os32_Argc, char_t * const * const oppcn_Argv);
 
    //Utilities for path place holder parsing

@@ -96,7 +96,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPools(std::vector<C_PuiSdNodeDataPool> & 
          {
             C_OscNodeDataPool * const pc_OscDp = mh_GetArrayElemIfAvailable(opc_OscDataPools, u32_ItDp);
             C_PuiSdNodeDataPool c_Datapool;
-            if (opc_BasePath != NULL)
+            if (opc_BasePath != nullptr)
             {
                const QString c_FilePath = opc_BasePath->absoluteFilePath(orc_XmlParser.GetNodeContent().c_str());
                s32_Retval = mh_LoadDatapoolFile(c_Datapool, c_FilePath, pc_OscDp);
@@ -158,8 +158,8 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPool(C_PuiSdNodeDataPool & orc_DataPool, 
 
    if (orc_XmlParser.SelectNodeChild("lists") == "lists")
    {
-      std::vector<C_OscNodeDataPoolList> * pc_OscLists = NULL;
-      if (opc_OscDataPool != NULL)
+      std::vector<C_OscNodeDataPoolList> * pc_OscLists = nullptr;
+      if (opc_OscDataPool != nullptr)
       {
          pc_OscLists = &opc_OscDataPool->c_Lists;
       }
@@ -264,8 +264,8 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPoolList(C_PuiSdNodeDataPoolList & orc_Da
 
    if (orc_XmlParser.SelectNodeChild("data-elements") == "data-elements")
    {
-      std::vector<C_OscNodeDataPoolListElement> * pc_OscElements = NULL;
-      if (opc_OscList != NULL)
+      std::vector<C_OscNodeDataPoolListElement> * pc_OscElements = nullptr;
+      if (opc_OscList != nullptr)
       {
          pc_OscElements = &opc_OscList->c_Elements;
       }
@@ -356,7 +356,7 @@ void C_PuiSdHandlerFiler::h_LoadDataPoolListElement(C_PuiSdNodeDataPoolListEleme
                                                     C_OscNodeDataPoolListElement * const opc_OscElement)
 {
    orc_DataPoolListElement.q_AutoMinMaxActive = orc_XmlParser.GetAttributeBool("auto_min_max_active");
-   if ((opc_OscElement != NULL) && (orc_XmlParser.AttributeExists("interpret_as_string")))
+   if ((opc_OscElement != nullptr) && (orc_XmlParser.AttributeExists("interpret_as_string")))
    {
       opc_OscElement->q_InterpretAsString = orc_XmlParser.GetAttributeBool("interpret_as_string");
    }
@@ -381,7 +381,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveDataPools(const std::vector<C_PuiSdNodeDataPo
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if ((opc_OscDataPools != NULL) && (opc_BasePath != NULL))
+   if ((opc_OscDataPools != nullptr) && (opc_BasePath != nullptr))
    {
       if (orc_UiDataPools.size() == opc_OscDataPools->size())
       {
@@ -442,8 +442,9 @@ int32_t C_PuiSdHandlerFiler::h_SaveDataPools(const std::vector<C_PuiSdNodeDataPo
 int32_t C_PuiSdHandlerFiler::h_SaveDataPoolFile(const C_PuiSdNodeDataPool & orc_DataPool, const QString & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
-                                                                    "opensyde-dp-ui-definition");
+                                                                    "opensyde-dp-ui-definition").value();
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -453,7 +454,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveDataPoolFile(const C_PuiSdNodeDataPool & orc_
       //node
       C_PuiSdHandlerFiler::h_SaveDataPool(orc_DataPool, c_XmlParser);
       //Don't forget to save!
-      if (ListSaveToFile(c_XmlParser, orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()))
       {
          osc_write_log_error("Saving system definition UI", "Could not create file for datapool.");
          s32_Retval = C_CONFIG;
@@ -571,9 +572,9 @@ int32_t C_PuiSdHandlerFiler::h_LoadSharedDatapoolsFile(const QString & orc_FileP
                                                        C_PuiSdSharedDatapools & orc_SharedDatapools)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
-                                                                         orc_FilePath.toStdString().c_str(),
-                                                                         "opensyde-shared-datapools-ui-definition");
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
+   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_FilePath.toStdString().c_str(
+      ), "opensyde-shared-datapools-ui-definition").value();
 
    orc_SharedDatapools.c_SharedDatapools.clear();
 
@@ -767,8 +768,9 @@ int32_t C_PuiSdHandlerFiler::h_SaveSharedDatapoolsFile(const QString & orc_FileP
                                                        const C_PuiSdSharedDatapools & orc_SharedDatapools)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
-                                                                    "opensyde-shared-datapools-ui-definition");
+                                                                    "opensyde-shared-datapools-ui-definition").value();
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -780,7 +782,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSharedDatapoolsFile(const QString & orc_FileP
       C_PuiSdHandlerFiler::h_SaveSharedDatapoolsGroups(orc_SharedDatapools, c_XmlParser);
 
       //Don't forget to save!
-      if (ListSaveToFile(c_XmlParser, orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()))
       {
          osc_write_log_error("Saving shared Datapools UI", "Could not create file for configuration.");
          s32_Retval = C_CONFIG;
@@ -873,7 +875,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadCanProtocols(std::vector<C_PuiSdNodeCanProtoc
          do
          {
             C_PuiSdNodeCanProtocol c_CanProtocol;
-            if (opc_BasePath != NULL)
+            if (opc_BasePath != nullptr)
             {
                const QString c_FilePath = opc_BasePath->absoluteFilePath(orc_XmlParser.GetNodeContent().c_str());
                s32_Retval = mh_LoadCommFile(c_CanProtocol, c_FilePath);
@@ -1264,7 +1266,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveCanProtocols(const std::vector<C_PuiSdNodeCan
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (((opc_OscCanProtocols != NULL) && (opc_OscDatapools != NULL)) && (opc_BasePath != NULL))
+   if (((opc_OscCanProtocols != nullptr) && (opc_OscDatapools != nullptr)) && (opc_BasePath != nullptr))
    {
       if (orc_UiCanProtocols.size() == opc_OscCanProtocols->size())
       {
@@ -1337,8 +1339,9 @@ int32_t C_PuiSdHandlerFiler::h_SaveCanProtocolFile(const C_PuiSdNodeCanProtocol 
                                                    const QString & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
-                                                                    "opensyde-comm-ui-definition");
+                                                                    "opensyde-comm-ui-definition").value();
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -1348,7 +1351,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveCanProtocolFile(const C_PuiSdNodeCanProtocol 
       //node
       C_PuiSdHandlerFiler::h_SaveCanProtocol(orc_CanProtocol, c_XmlParser);
       //Don't forget to save!
-      if (ListSaveToFile(c_XmlParser, orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()))
       {
          osc_write_log_error("Saving system definition UI", "Could not create file for comm protocol.");
          s32_Retval = C_CONFIG;
@@ -1559,7 +1562,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadNodes(std::vector<C_PuiSdNode> & orc_Nodes, C
       {
          C_OscNode * const pc_OscNode = mh_GetArrayElemIfAvailable(opc_OscNodes, u32_ItNode);
          C_PuiSdNode c_Node;
-         if (opc_BasePath != NULL)
+         if (opc_BasePath != nullptr)
          {
             const QString c_FilePath = orc_XmlParser.GetNodeContent().c_str();
             const QString c_FilePathCombined = opc_BasePath->absoluteFilePath(c_FilePath);
@@ -1616,9 +1619,10 @@ int32_t C_PuiSdHandlerFiler::h_LoadNodeFile(C_PuiSdNode & orc_Node, const QStrin
                                             const QDir * const opc_BasePath, C_OscNode * const opc_OscNode)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
                                                                          orc_FilePath.toStdString().c_str(),
-                                                                         "opensyde-node-ui-definition");
+                                                                         "opensyde-node-ui-definition").value();
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -1696,7 +1700,7 @@ void C_PuiSdHandlerFiler::h_SaveNodes(const std::vector<C_PuiSdNode> & orc_Nodes
       for (uint32_t u32_Index = 0U; u32_Index < orc_Nodes.size(); u32_Index++)
       {
          orc_XmlParser.CreateAndSelectNodeChild("node");
-         tgl_assert(C_PuiSdHandlerFiler::mh_SaveNode(orc_Nodes[u32_Index], NULL, NULL, orc_XmlParser) == C_NO_ERR);
+         tgl_assert(C_PuiSdHandlerFiler::mh_SaveNode(orc_Nodes[u32_Index], nullptr, nullptr, orc_XmlParser) == C_NO_ERR);
          //Back up (don't check to allow reuse)
          orc_XmlParser.SelectNodeParent();
       }
@@ -1901,7 +1905,8 @@ int32_t C_PuiSdHandlerFiler::h_LoadLastKnownHalcCrcs(std::map<C_OscNodeDataPoolL
          do
          {
             C_OscNodeDataPoolListElementOptArrayId c_Id;
-            s32_Retval = C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(c_Id, orc_XmlParser);
+            //the project filers report std::error_code now; this class keeps the STW int32_t convention
+            s32_Retval = C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(c_Id, orc_XmlParser).value();
             if (s32_Retval == C_NO_ERR)
             {
                if (orc_XmlParser.AttributeExists("crc"))
@@ -1918,7 +1923,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadLastKnownHalcCrcs(std::map<C_OscNodeDataPoolL
                   {
                      const C_OscNodeDataPool * const pc_Dp = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
                         c_Id.u32_NodeIndex, c_Id.u32_DataPoolIndex);
-                     if (pc_Dp != NULL)
+                     if (pc_Dp != nullptr)
                      {
                         c_DpName = pc_Dp->c_Name.c_str();
                      }
@@ -1998,8 +2003,9 @@ int32_t C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(const QString & orc_Fi
                                                                                                                                                                                C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
-                                                                    "opensyde-system-ui-definition");
+                                                                    "opensyde-system-ui-definition").value();
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -2058,7 +2064,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(const QString & orc_Fi
          C_PuiSdHandlerFiler::h_SaveLastKnownHalcCrcs(orc_LastKnownHalcCrcs, c_XmlParser);
       }
       //Don't forget to save!
-      if (ListSaveToFile(c_XmlParser, orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()))
       {
          osc_write_log_error("Saving system definition ui", "Could not create file for ui part.");
          s32_Retval = C_RD_WR;
@@ -2101,9 +2107,10 @@ int32_t C_PuiSdHandlerFiler::h_LoadSystemDefinitionUiFile(const QString & orc_Fi
                                                           std::vector<C_OscNode> * const opc_OscNodes)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
                                                                          orc_FilePath.toStdString().c_str(),
-                                                                         "opensyde-system-ui-definition");
+                                                                         "opensyde-system-ui-definition").value();
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -2290,9 +2297,10 @@ int32_t C_PuiSdHandlerFiler::mh_LoadDatapoolFile(C_PuiSdNodeDataPool & orc_DataP
                                                  C_OscNodeDataPool * const opc_OscDataPool)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
                                                                          orc_FilePath.toStdString().c_str(),
-                                                                         "opensyde-dp-ui-definition");
+                                                                         "opensyde-dp-ui-definition").value();
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -2365,9 +2373,10 @@ int32_t C_PuiSdHandlerFiler::mh_LoadDatapoolFile(C_PuiSdNodeDataPool & orc_DataP
 int32_t C_PuiSdHandlerFiler::mh_LoadCommFile(C_PuiSdNodeCanProtocol & orc_UiCanProtocol, const QString & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
                                                                          orc_FilePath.toStdString().c_str(),
-                                                                         "opensyde-comm-ui-definition");
+                                                                         "opensyde-comm-ui-definition").value();
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -2458,8 +2467,8 @@ int32_t C_PuiSdHandlerFiler::mh_LoadNode(C_PuiSdNode & orc_Node, C_OscXmlParserB
       s32_Return = h_LoadCanProtocols(orc_Node.c_UiCanProtocols, orc_XmlParser, opc_BasePath);
       if (s32_Return == C_NO_ERR)
       {
-         std::vector<C_OscNodeDataPool> * pc_OscDataPools = NULL;
-         if (opc_OscNode != NULL)
+         std::vector<C_OscNodeDataPool> * pc_OscDataPools = nullptr;
+         if (opc_OscNode != nullptr)
          {
             pc_OscDataPools = &opc_OscNode->c_DataPools;
          }
@@ -2567,8 +2576,9 @@ int32_t C_PuiSdHandlerFiler::mh_SaveNodeFile(const C_PuiSdNode & orc_UiNode, con
                                              const QString & orc_FilePath, const QDir * const opc_BasePath)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
-                                                                    "opensyde-node-ui-definition");
+                                                                    "opensyde-node-ui-definition").value();
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -2580,7 +2590,7 @@ int32_t C_PuiSdHandlerFiler::mh_SaveNodeFile(const C_PuiSdNode & orc_UiNode, con
       if (s32_Retval == C_NO_ERR)
       {
          //Don't forget to save!
-         if (ListSaveToFile(c_XmlParser, orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+         if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()))
          {
             osc_write_log_error("Saving system definition UI", "Could not create file for node.");
             s32_Retval = C_CONFIG;
@@ -2617,24 +2627,24 @@ int32_t C_PuiSdHandlerFiler::mh_SaveNode(const C_PuiSdNode & orc_UiNode, const C
 {
    int32_t s32_Retval;
 
-   if (opc_OscNode != NULL)
+   if (opc_OscNode != nullptr)
    {
       s32_Retval = h_SaveCanProtocols(orc_UiNode.c_UiCanProtocols, &opc_OscNode->c_ComProtocols,
                                       &opc_OscNode->c_DataPools, opc_BasePath, orc_XmlParser);
    }
    else
    {
-      s32_Retval = h_SaveCanProtocols(orc_UiNode.c_UiCanProtocols, NULL, NULL, opc_BasePath, orc_XmlParser);
+      s32_Retval = h_SaveCanProtocols(orc_UiNode.c_UiCanProtocols, nullptr, nullptr, opc_BasePath, orc_XmlParser);
    }
    if (s32_Retval == C_NO_ERR)
    {
-      if (opc_OscNode != NULL)
+      if (opc_OscNode != nullptr)
       {
          s32_Retval = h_SaveDataPools(orc_UiNode.c_UiDataPools, &opc_OscNode->c_DataPools, opc_BasePath, orc_XmlParser);
       }
       else
       {
-         s32_Retval = h_SaveDataPools(orc_UiNode.c_UiDataPools, NULL, opc_BasePath, orc_XmlParser);
+         s32_Retval = h_SaveDataPools(orc_UiNode.c_UiDataPools, nullptr, opc_BasePath, orc_XmlParser);
       }
       if (s32_Retval == C_NO_ERR)
       {
@@ -2768,7 +2778,7 @@ int32_t C_PuiSdHandlerFiler::mh_LoadTextElement(C_PuiBsTextElement * const opc_T
 
    s32_Return = C_PuiBsElementsFiler::h_LoadTextElement(opc_TextElement, orc_XmlParser);
    //Check bus
-   if (opc_BusTextElement != NULL)
+   if (opc_BusTextElement != nullptr)
    {
       opc_BusTextElement->u32_BusIndex = orc_XmlParser.GetAttributeUint32("bus-index");
    }
@@ -2790,7 +2800,7 @@ void C_PuiSdHandlerFiler::mh_SaveTextElement(const C_PuiBsTextElement * const op
 
    C_PuiBsElementsFiler::h_SaveTextElement(opc_TextElement, orc_XmlParser);
    //Check bus
-   if (opc_BusTextElement != NULL)
+   if (opc_BusTextElement != nullptr)
    {
       orc_XmlParser.SetAttributeUint32("bus-index", opc_BusTextElement->u32_BusIndex);
    }
@@ -2809,9 +2819,9 @@ void C_PuiSdHandlerFiler::mh_SaveTextElement(const C_PuiBsTextElement * const op
 template <typename T>
 T * C_PuiSdHandlerFiler::mh_GetArrayElemIfAvailable(std::vector<T> * const opc_Vector, const uint32_t ou32_Index)
 {
-   T * pc_El = NULL;
+   T * pc_El = nullptr;
 
-   if (opc_Vector != NULL)
+   if (opc_Vector != nullptr)
    {
       if (ou32_Index < opc_Vector->size())
       {

@@ -39,7 +39,7 @@ class C_SyvSeSetupWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvSeSetupWidget(const uint32_t ou32_ViewIndex, QWidget * const opc_Parent = NULL);
+   explicit C_SyvSeSetupWidget(const uint32_t ou32_ViewIndex, QWidget * const opc_Parent = nullptr);
    ~C_SyvSeSetupWidget(void) noexcept override;
 
    void InitText() const;

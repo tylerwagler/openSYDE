@@ -43,7 +43,7 @@ class C_SyvDaTearOffWidget :
 
 public:
    explicit C_SyvDaTearOffWidget(const uint32_t ou32_ViewIndex, const uint32_t ou32_DataIndex, const QString & orc_Name,
-                                 C_SyvDaDashboardWidget * const opc_Widget, QWidget * const opc_Parent = NULL);
+                                 C_SyvDaDashboardWidget * const opc_Widget, QWidget * const opc_Parent = nullptr);
    ~C_SyvDaTearOffWidget() override;
 
    void InitText() const;

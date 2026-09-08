@@ -53,9 +53,9 @@ C_SdTopologyListWidget * C_SebToolboxUtil::h_AddNewList(const QString & orc_Name
                                                         QVector<C_SdTopologyListWidget *> & orc_ListWidgets,
                                                         QWidget * const opc_Parent)
 {
-   C_SdTopologyListWidget * pc_Retval = NULL;
+   C_SdTopologyListWidget * pc_Retval = nullptr;
 
-   if (opc_Layout != NULL)
+   if (opc_Layout != nullptr)
    {
       pc_Retval = new C_SdTopologyListWidget(opc_Parent);
       int32_t s32_Index;
@@ -110,9 +110,9 @@ C_SdTopologyListWidget * C_SebToolboxUtil::h_AddNewList(const QString & orc_Name
 QFrame * C_SebToolboxUtil::h_AddNewHeading(const QString & orc_Name, QVBoxLayout * const opc_Layout,
                                            QWidget * const opc_Parent, const bool oq_AddSpacerBefore)
 {
-   QFrame * pc_FrameSeparator = NULL;
+   QFrame * pc_FrameSeparator = nullptr;
 
-   if (opc_Layout != NULL)
+   if (opc_Layout != nullptr)
    {
       QLabel * const pc_Heading = new QLabel(opc_Parent);
       pc_Heading->setProperty("styleRole", "toolbox-heading-group-big");
@@ -166,10 +166,10 @@ std::vector<C_OgePubIconOnly *> C_SebToolboxUtil::h_AddNewUserHeading(const QStr
                                                                       QWidget * const opc_Parent)
 {
    std::vector<C_OgePubIconOnly *> c_Icons;
-   C_OgePubIconOnly * pc_IconButton = NULL;
-   C_OgePubIconOnly * pc_ClearAllUserNodesButton = NULL;
+   C_OgePubIconOnly * pc_IconButton = nullptr;
+   C_OgePubIconOnly * pc_ClearAllUserNodesButton = nullptr;
 
-   if (opc_Layout != NULL)
+   if (opc_Layout != nullptr)
    {
       //lint -e429  no memory leak because of the parent of the call of addSpacerItem and the Qt
       // memory management
@@ -232,7 +232,7 @@ std::vector<C_OgePubIconOnly *> C_SebToolboxUtil::h_AddNewUserHeading(const QStr
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebToolboxUtil::h_InitFreeElements(QListWidget * const opc_ListWidget)
 {
-   if (opc_ListWidget != NULL)
+   if (opc_ListWidget != nullptr)
    {
       C_SebToolboxUtil::h_AddElementToList(opc_ListWidget, "Text element", ":/images/system_definition/TextElement.png", "",
                                            "Text element");
@@ -260,7 +260,7 @@ void C_SebToolboxUtil::h_AddElementToList(QListWidget * const opc_ListWidget, co
                                           const QString & orc_IconPath, const QString & orc_IconPathDark,
                                           const QString & orc_ToolTipContent, const QString & orc_ToolTipHeading)
 {
-   if (opc_ListWidget != NULL)
+   if (opc_ListWidget != nullptr)
    {
       QListWidgetItem * pc_Item;
       QIcon c_Icon;
@@ -292,7 +292,7 @@ void C_SebToolboxUtil::h_AddElementToList(QListWidget * const opc_ListWidget, co
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebToolboxUtil::h_AddFinalSpacer(QVBoxLayout * const opc_Layout, QListWidget * const opc_ListWidget)
 {
-   if ((opc_Layout != NULL) && (opc_ListWidget != NULL))
+   if ((opc_Layout != nullptr) && (opc_ListWidget != nullptr))
    {
       QSpacerItem * pc_Spacer;
 
@@ -306,7 +306,7 @@ void C_SebToolboxUtil::h_AddFinalSpacer(QVBoxLayout * const opc_Layout, QListWid
       // configure spacer
 
       pc_Spacer = dynamic_cast<QSpacerItem *>(opc_Layout->itemAt(s32_Index));
-      if (pc_Spacer != NULL)
+      if (pc_Spacer != nullptr)
       {
          // without this call the spacer will not work correctly
          pc_Spacer->changeSize(20, 10, QSizePolicy::Expanding);

@@ -35,13 +35,13 @@ public:
    static const std::string hc_INI_DEV_FOLDER;
 
 protected:
-   static stw::scl::std::vector<std::string> mhc_WarningMessages; // global warnings e.g. if update position of active node is
+   static std::vector<std::string> mhc_WarningMessages; // global warnings e.g. if update position of active node is
                                                          // not available
    static std::string mhc_ErrorMessage;        // description of error which caused the service update package
                                                          // to fail
 
    static void mh_Init(void);
-   static void mh_GetWarningsAndErrors(stw::scl::std::vector<std::string> & orc_WarningMessages,
+   static void mh_GetWarningsAndErrors(std::vector<std::string> & orc_WarningMessages,
                                        std::string & orc_ErrorMessage);
 };
 

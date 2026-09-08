@@ -63,7 +63,7 @@ const QString C_SyvDcExistingNodeWidget::mhc_MIME_DATA_SUB_NODE_IDS_TO_OLD_NODE_
 C_SyvDcExistingNodeWidget::C_SyvDcExistingNodeWidget(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SyvDcExistingNodeWidget),
-   mpc_ListWidgetItem(NULL),
+   mpc_ListWidgetItem(nullptr),
    mu32_ViewIndex(0),
    mu32_NodeIndex(0),
    mq_PartOfSquad(false)
@@ -198,7 +198,7 @@ void C_SyvDcExistingNodeWidget::AppendDeviceConfig(std::vector<C_SyvDcDeviceConf
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if ((pc_View != NULL) && (pc_View->GetOscPcData().GetConnected() == true))
+   if ((pc_View != nullptr) && (pc_View->GetOscPcData().GetConnected() == true))
    {
       C_SyvDcDeviceConfiguation c_Config;
       C_OscProtocolSerialNumber c_SerialNumber;
@@ -291,7 +291,7 @@ void C_SyvDcExistingNodeWidget::dragEnterEvent(QDragEnterEvent * const opc_Event
 {
    const QMimeData * const pc_Mime = opc_Event->mimeData();
 
-   if ((pc_Mime != NULL) && (pc_Mime->hasFormat(C_SyvDcExistingNodeWidget::mhc_MIME_DATA_DEVICE) == true))
+   if ((pc_Mime != nullptr) && (pc_Mime->hasFormat(C_SyvDcExistingNodeWidget::mhc_MIME_DATA_DEVICE) == true))
    {
       const QString c_DroppedDevice = pc_Mime->data(C_SyvDcExistingNodeWidget::mhc_MIME_DATA_DEVICE);
       const QString c_DroppedDeviceValid = pc_Mime->data(C_SyvDcExistingNodeWidget::mhc_MIME_DATA_DEVICE_VALID);
@@ -319,7 +319,7 @@ void C_SyvDcExistingNodeWidget::dragMoveEvent(QDragMoveEvent * const opc_Event)
 {
    const QMimeData * const pc_Mime = opc_Event->mimeData();
 
-   if ((pc_Mime != NULL) && (pc_Mime->hasFormat(C_SyvDcExistingNodeWidget::mhc_MIME_DATA_DEVICE) == true))
+   if ((pc_Mime != nullptr) && (pc_Mime->hasFormat(C_SyvDcExistingNodeWidget::mhc_MIME_DATA_DEVICE) == true))
    {
       opc_Event->acceptProposedAction();
    }
@@ -352,7 +352,7 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
 {
    const QMimeData * const pc_Mime = opc_Event->mimeData();
 
-   if ((pc_Mime != NULL) && (pc_Mime->hasFormat(C_SyvDcExistingNodeWidget::mhc_MIME_DATA_DEVICE) == true))
+   if ((pc_Mime != nullptr) && (pc_Mime->hasFormat(C_SyvDcExistingNodeWidget::mhc_MIME_DATA_DEVICE) == true))
    {
       const QString c_DroppedDevice = pc_Mime->data(C_SyvDcExistingNodeWidget::mhc_MIME_DATA_DEVICE);
       const QString c_DroppedDeviceValid = pc_Mime->data(C_SyvDcExistingNodeWidget::mhc_MIME_DATA_DEVICE_VALID);
@@ -361,7 +361,7 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
       if (this->mpc_Ui->pc_WidgetSerialNumber->IsAssigned() == true)
       {
          C_OscProtocolSerialNumber c_SerialNumber;
-         this->mpc_Ui->pc_WidgetSerialNumber->GetContent(c_SerialNumber, NULL);
+         this->mpc_Ui->pc_WidgetSerialNumber->GetContent(c_SerialNumber, nullptr);
          Q_EMIT (this->SigDisconnect(this->mu32_NodeIndex, c_SerialNumber));
       }
       if ((this->mc_DeviceName.compare(c_DroppedDevice) == 0) ||
@@ -503,8 +503,8 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
                   {
                      const C_OscNodeSquad * const pc_Squad = C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(
                         u32_SquadIndex);
-                     tgl_assert(pc_Squad != NULL);
-                     if (pc_Squad != NULL)
+                     tgl_assert(pc_Squad != nullptr);
+                     if (pc_Squad != nullptr)
                      {
                         const uint32_t u32_CountSubNodes = static_cast<uint32_t>(pc_Squad->c_SubNodeIndexes.size());
                         if (u32_CountSubNodes == c_SubNodeIdsToOldNodeIds.size())
@@ -595,7 +595,7 @@ int32_t C_SyvDcExistingNodeWidget::m_Init(void)
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
    int32_t s32_Return = C_NO_ERR;
 
-   if (((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL) && (pc_View != NULL)) &&
+   if (((pc_Node != nullptr) && (pc_Node->pc_DeviceDefinition != nullptr) && (pc_View != nullptr)) &&
        (pc_View->GetOscPcData().GetConnected() == true))
    {
       QString c_Ids;
@@ -657,7 +657,7 @@ int32_t C_SyvDcExistingNodeWidget::m_Init(void)
    this->resize(this->width(), s32_HEIGHT);
    this->setMinimumHeight(s32_HEIGHT);
    this->setMaximumHeight(s32_HEIGHT);
-   if (this->mpc_ListWidgetItem != NULL)
+   if (this->mpc_ListWidgetItem != nullptr)
    {
       this->mpc_ListWidgetItem->setSizeHint(QSize(this->mpc_ListWidgetItem->sizeHint().width(), s32_HEIGHT));
    }
@@ -704,7 +704,7 @@ void C_SyvDcExistingNodeWidget::mh_AppendDeviceConfigForNode(const uint32_t ou32
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_ItInterface = 0U; u32_ItInterface < pc_Node->c_Properties.c_ComInterfaces.size();
            ++u32_ItInterface)

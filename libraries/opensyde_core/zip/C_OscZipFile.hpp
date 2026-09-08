@@ -17,6 +17,9 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <set>
+#include <system_error>
+#include "C_OscErrorCategory.hpp"
+
 #include "stwtypes.hpp"
 #include <string>
 
@@ -32,26 +35,26 @@ namespace opensyde_core
 class C_OscZipFile
 {
 public:
-   static int32_t h_CreateZipFile(const std::string & orc_SourcePath,
+   static std::error_code h_CreateZipFile(const std::string & orc_SourcePath,
                                   const std::set<std::string> & orc_SupFiles,
                                   const std::string & orc_ZipArchivePath,
-                                  std::string * const opc_ErrorText = NULL);
+                                  std::string * const opc_ErrorText = nullptr);
 
-   static int32_t h_UnpackZipFile(const std::string & orc_SourcePath,
+   static std::error_code h_UnpackZipFile(const std::string & orc_SourcePath,
                                   const std::string & orc_TargetUnzipPath,
-                                  std::string * const opc_ErrorText = NULL);
+                                  std::string * const opc_ErrorText = nullptr);
 
    static void h_AppendFilesRelative(std::set<std::string> & orc_Set,
                                      const std::vector<std::string> & orc_Files,
                                      const std::string & orc_BasePath);
 
-   static int32_t h_IsZipFile(const std::string & orc_FilePath);
+   static std::error_code h_IsZipFile(const std::string & orc_FilePath);
 
 private:
-   static int32_t mh_AddContentToZipFile(const std::string & orc_ZipArchivePath,
+   static std::error_code mh_AddContentToZipFile(const std::string & orc_ZipArchivePath,
                                          const std::string & orc_ItemName, const char_t * const opcn_Content,
                                          const uint32_t ou32_ContentSize, const std::string & orc_ItemType,
-                                         std::string * const opc_ErrorText = NULL);
+                                         std::string * const opc_ErrorText = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

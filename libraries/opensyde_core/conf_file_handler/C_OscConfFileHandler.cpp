@@ -12,10 +12,13 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 
 #include "C_OscConfFileHandler.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_SclStringCompat.hpp"
 
@@ -49,16 +52,16 @@ C_OscConfFileHandler::~C_OscConfFileHandler()
 
    \param[in]   orc_Path path to .conf file
 
-   \retval C_NO_ERR  setting loaded
-   \retval C_NOACT   failed to load settings file
-   \retval C_CONFIG  required setting content not found
+   \retval Errc::success  setting loaded
+   \retval Errc::noact    failed to load settings file
+   \retval Errc::config   required setting content not found
 */
 //---------------------------------------------------------------------------------------------------------------------/
-int32_t C_OscConfFileHandler::LoadSettings(const std::string & orc_Path)
+std::error_code C_OscConfFileHandler::LoadSettings(const std::string & orc_Path)
 {
    std::vector<std::string> c_StringListSource;
    std::vector<std::string> c_StringListWithoutComments;
-   int32_t s32_Result = C_NO_ERR;
+   std::error_code c_Result = Errc::success;
 
    mc_ConfigFilePath = orc_Path;
 
@@ -68,10 +71,10 @@ int32_t C_OscConfFileHandler::LoadSettings(const std::string & orc_Path)
    }
    catch (...)
    {
-      s32_Result = C_NOACT;
+      c_Result = Errc::noact;
    }
 
-   if (s32_Result == C_NO_ERR)
+   if (!c_Result)
    {
       //extract only lines without comments:
       for (uint32_t u32_Line = 0U; u32_Line < c_StringListSource.size(); u32_Line++)
@@ -84,9 +87,9 @@ int32_t C_OscConfFileHandler::LoadSettings(const std::string & orc_Path)
          }
       }
 
-      s32_Result = m_LoadSettings(c_StringListWithoutComments);
+      c_Result = m_LoadSettings(c_StringListWithoutComments);
    }
-   return s32_Result;
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -106,16 +109,16 @@ int32_t C_OscConfFileHandler::LoadSettings(const std::string & orc_Path)
    \param[in]   orc_Path     path to .conf file
    \param[in]   orc_Configs  All key (first) value (second) pairs for replacing with new settings
 
-   \retval C_NO_ERR  settings updated
-   \retval C_NOACT   failed to load previous settings file or
+   \retval Errc::success  settings updated
+   \retval Errc::noact    failed to load previous settings file or
                      failed to save settings file
 */
 //---------------------------------------------------------------------------------------------------------------------/
-int32_t C_OscConfFileHandler::mh_ReplaceSettings(const std::string & orc_Path,
+std::error_code C_OscConfFileHandler::mh_ReplaceSettings(const std::string & orc_Path,
                                                   const std::vector<std::pair<std::string, std::string> > & orc_Configs)
 {
    std::vector<std::string> c_StringList;
-   int32_t s32_Result = C_NO_ERR;
+   std::error_code c_Result = Errc::success;
 
    try
    {
@@ -123,10 +126,10 @@ int32_t C_OscConfFileHandler::mh_ReplaceSettings(const std::string & orc_Path,
    }
    catch (...)
    {
-      s32_Result = C_NOACT;
+      c_Result = Errc::noact;
    }
 
-   if (s32_Result == C_NO_ERR)
+   if (!c_Result)
    {
       uint32_t u32_Counter;
 
@@ -153,8 +156,8 @@ int32_t C_OscConfFileHandler::mh_ReplaceSettings(const std::string & orc_Path,
       }
       catch (...)
       {
-         s32_Result = C_NOACT;
+         c_Result = Errc::noact;
       }
    }
-   return s32_Result;
+   return c_Result;
 }

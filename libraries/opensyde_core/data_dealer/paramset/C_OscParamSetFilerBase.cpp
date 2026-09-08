@@ -15,8 +15,10 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <system_error>
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
 #include "C_OscChecksummedXml.hpp"
@@ -61,44 +63,44 @@ uint16_t C_OscParamSetFilerBase::mhu16_FileVersion = 1;
    \param[in] orc_Path File path
 
    \return
-   C_NO_ERR CRC updated
-   C_CONFIG Unexpected XML format
-   C_RD_WR  Error accessing file system
-   C_RANGE  File does not exist
+   Errc::success   CRC updated
+   Errc::config    Unexpected XML format
+   Errc::rd_wr     Error accessing file system
+   Errc::range     File does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetFilerBase::h_AddCrc(const std::string & orc_Path)
+std::error_code C_OscParamSetFilerBase::h_AddCrc(const std::string & orc_Path)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (TglFileExists(orc_Path) == true)
    {
       C_OscChecksummedXml c_XmlParser;
-      s32_Return = ListLoadFromFile(c_XmlParser, orc_Path);
+      c_Return = c_XmlParser.LoadFromFile(orc_Path);
       //ignore missing and incorrect CRC; we want to set it
-      if ((s32_Return == C_NO_ERR) || (s32_Return == C_CHECKSUM) || (s32_Return == C_RD_WR))
+      if ((!c_Return) || (c_Return == Errc::checksum) || (c_Return == Errc::rd_wr))
       {
          //do we have the correct type of file ?
          if (c_XmlParser.SelectRoot() != "opensyde-parameter-sets")
          {
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
          else
          {
-            s32_Return = ListSaveToFile(c_XmlParser, orc_Path);
+            c_Return = c_XmlParser.SaveToFile(orc_Path);
          }
       }
-      if (s32_Return == C_NOACT)
+      if (c_Return == Errc::noact)
       {
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
    else
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -111,13 +113,13 @@ int32_t C_OscParamSetFilerBase::h_AddCrc(const std::string & orc_Path)
    \param[in,out] orc_XmlParser XML with specified node active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetFilerBase::h_CheckFileVersion(C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscParamSetFilerBase::h_CheckFileVersion(C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("file-version") == "file-version")
    {
@@ -129,11 +131,11 @@ int32_t C_OscParamSetFilerBase::h_CheckFileVersion(C_OscXmlParserBase & orc_XmlP
       catch (...)
       {
          osc_write_log_error("Loading Dataset data", "\"file-version\" could not be converted to a number.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
 
       //is the file version one we know ?
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          osc_write_log_info("Loading Dataset data", "Value of \"file-version\": " +
                             std::to_string(u16_FileVersion));
@@ -142,7 +144,7 @@ int32_t C_OscParamSetFilerBase::h_CheckFileVersion(C_OscXmlParserBase & orc_XmlP
          {
             osc_write_log_error("Loading Dataset data",
                                 "Version defined by \"file-version\" is not supported.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
 
@@ -152,9 +154,9 @@ int32_t C_OscParamSetFilerBase::h_CheckFileVersion(C_OscXmlParserBase & orc_XmlP
    else
    {
       osc_write_log_error("Loading Dataset data", "Could not find \"file-version\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -222,7 +224,7 @@ void C_OscParamSetFilerBase::h_LoadFileInfo(C_OscXmlParserBase & orc_XmlParser,
                                             bool & orq_MissingOptionalContent)
 {
    //Default
-   orc_FileInfo.clear();
+   orc_FileInfo.Clear();
    //Read and overwrite if available
    if (orc_XmlParser.SelectNodeChild("file-info") == "file-info")
    {
@@ -324,13 +326,13 @@ C_OscParamSetFilerBase::C_OscParamSetFilerBase(void)
    \param[in,out] orc_XmlParser XML with specified node active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetFilerBase::mh_LoadNodeName(std::string & orc_Name, C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscParamSetFilerBase::mh_LoadNodeName(std::string & orc_Name, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("name") == "name")
    {
@@ -341,9 +343,9 @@ int32_t C_OscParamSetFilerBase::mh_LoadNodeName(std::string & orc_Name, C_OscXml
    else
    {
       osc_write_log_error("Loading Dataset data", "Could not find \"node\".\"name\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -384,15 +386,15 @@ void C_OscParamSetFilerBase::mh_SaveNodeName(const std::string & orc_Name, C_Osc
                                              Warning: flag is never set to false if optional content is present
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfos(std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
-                                                     C_OscXmlParserBase & orc_XmlParser,
-                                                     bool & orq_MissingOptionalContent)
+std::error_code C_OscParamSetFilerBase::mh_LoadDataPoolInfos(
+   std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos, C_OscXmlParserBase & orc_XmlParser,
+   bool & orq_MissingOptionalContent)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_DataPoolInfos.clear();
    if (orc_XmlParser.SelectNodeChild("datapools") == "datapools")
@@ -404,8 +406,8 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfos(std::vector<C_OscParamSetDa
          do
          {
             C_OscParamSetDataPoolInfo c_Item;
-            s32_Retval = C_OscParamSetFilerBase::mh_LoadDataPoolInfo(c_Item, orc_XmlParser, orq_MissingOptionalContent);
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = C_OscParamSetFilerBase::mh_LoadDataPoolInfo(c_Item, orc_XmlParser, orq_MissingOptionalContent);
+            if (!c_Retval)
             {
                orc_DataPoolInfos.push_back(c_Item);
             }
@@ -413,14 +415,14 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfos(std::vector<C_OscParamSetDa
             //Next
             c_SelectedNode = orc_XmlParser.SelectNodeNext("datapool");
          }
-         while ((c_SelectedNode == "datapool") && (s32_Retval == C_NO_ERR));
+         while ((c_SelectedNode == "datapool") && (!c_Retval));
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "datapools");
       }
       else
       {
          osc_write_log_error("Loading Dataset data", "Could not find \"datapools\".\"datapool\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
@@ -428,9 +430,9 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfos(std::vector<C_OscParamSetDa
    else
    {
       osc_write_log_error("Loading Dataset data", "Could not find \"datapools\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -481,15 +483,15 @@ void C_OscParamSetFilerBase::mh_SaveDataPoolInfos(const std::vector<C_OscParamSe
                                              Warning: flag is never set to false if optional content is present
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & orc_DataPoolInfo,
-                                                    C_OscXmlParserBase & orc_XmlParser,
-                                                    bool & orq_MissingOptionalContent)
+std::error_code C_OscParamSetFilerBase::mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & orc_DataPoolInfo,
+                                                            C_OscXmlParserBase & orc_XmlParser,
+                                                            bool & orq_MissingOptionalContent)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.AttributeExists("crc") == true)
    {
@@ -498,7 +500,7 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & 
    else
    {
       osc_write_log_error("Loading Dataset data", "Could not find \"node\".\"datapool\".\"crc\" attribute.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
    if (orc_XmlParser.AttributeExists("nvm-size") == true)
    {
@@ -516,7 +518,7 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & 
    {
       orq_MissingOptionalContent = true;
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("name") == "name")
       {
@@ -527,10 +529,10 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & 
       else
       {
          osc_write_log_error("Loading Dataset data", "Could not find \"node\".\"datapool\".\"name\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("version") == "version")
       {
@@ -542,9 +544,9 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & 
          {
             osc_write_log_error("Loading Dataset data",
                                 "Could not find \"node\".\"datapool\".\"version\".\"major\" attribute.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
-         if ((orc_XmlParser.AttributeExists("minor") == true) && (s32_Retval == C_NO_ERR))
+         if ((orc_XmlParser.AttributeExists("minor") == true) && (!c_Retval))
          {
             orc_DataPoolInfo.au8_Version[1] = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("minor"));
          }
@@ -552,9 +554,9 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & 
          {
             osc_write_log_error("Loading Dataset data",
                                 "Could not find \"node\".\"datapool\".\"version\".\"minor\" attribute.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
-         if ((orc_XmlParser.AttributeExists("release") == true) && (s32_Retval == C_NO_ERR))
+         if ((orc_XmlParser.AttributeExists("release") == true) && (!c_Retval))
          {
             orc_DataPoolInfo.au8_Version[2] = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("release"));
          }
@@ -562,7 +564,7 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & 
          {
             osc_write_log_error("Loading Dataset data",
                                 "Could not find \"node\".\"datapool\".\"version\".\"release\" attribute.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "datapool");
@@ -570,10 +572,10 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & 
       else
       {
          osc_write_log_error("Loading Dataset data", "Could not find \"node\".\"datapool\".\"version\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

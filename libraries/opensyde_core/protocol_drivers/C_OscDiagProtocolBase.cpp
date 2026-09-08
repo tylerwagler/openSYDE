@@ -36,9 +36,9 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscDiagProtocolBase::C_OscDiagProtocolBase(void) :
-   mpr_OnDataPoolReadEventReceived(NULL),
-   mpr_OnDataPoolReadEventErrorReceived(NULL),
-   mpv_OnAsyncInstance(NULL)
+   mpr_OnDataPoolReadEventReceived(nullptr),
+   mpr_OnDataPoolReadEventErrorReceived(nullptr),
+   mpv_OnAsyncInstance(nullptr)
 {
 }
 
@@ -50,9 +50,9 @@ C_OscDiagProtocolBase::C_OscDiagProtocolBase(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscDiagProtocolBase::~C_OscDiagProtocolBase(void)
 {
-   mpr_OnDataPoolReadEventReceived = NULL;
-   mpr_OnDataPoolReadEventErrorReceived = NULL;
-   mpv_OnAsyncInstance = NULL;
+   mpr_OnDataPoolReadEventReceived = nullptr;
+   mpr_OnDataPoolReadEventErrorReceived = nullptr;
+   mpv_OnAsyncInstance = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

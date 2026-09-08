@@ -63,7 +63,7 @@ C_UtiUndoStack::~C_UtiUndoStack(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_UtiUndoStack::DoPush(QUndoCommand * const opc_UndoCommand)
 {
-   if (opc_UndoCommand != NULL)
+   if (opc_UndoCommand != nullptr)
    {
       this->m_PrepareAction();
       this->push(opc_UndoCommand);

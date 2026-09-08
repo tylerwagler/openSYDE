@@ -38,7 +38,7 @@ class C_SdNdeCoPdoWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeCoPdoWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeCoPdoWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeCoPdoWidget(void) override;
 
    void LoadUserSettings(void) const;
