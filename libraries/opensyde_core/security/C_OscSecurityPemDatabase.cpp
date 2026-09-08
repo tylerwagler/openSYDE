@@ -19,7 +19,6 @@
 #include <string>
 #include <vector>
 #include "C_OscErrorCategory.hpp"
-#include "C_SclStringList.hpp"
 #include "C_OscSecurityPem.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSecurityPemDatabase.hpp"

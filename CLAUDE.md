@@ -209,7 +209,10 @@ Use `stwtypes.hpp`: `int8_t` … `uint64_t`, `float32_t`, `float64_t`, `char_t`.
 `std::string` and `std::vector`. `C_SclString` and `C_SclDynamicArray` have been
 **removed** — do not reintroduce them. `C_SclStringCompat.hpp` provides transitional
 helpers; prefer idiomatic `std::string` in new code and do not add new compat helpers.
-`C_SclStringList`, `C_SclIniFile`, `C_SclChecksums`, and `C_SclDateTime` still exist.
+`C_SclStringList` has been **retired** (phase 3 follow-up); its string-list
+helpers in `C_SclStringCompat.hpp` (`ListLoadFromFile`, `ListSaveToFile`, `ListGetText`,
+`ListIndexOfName`, `ListAddStrings`) operate on `std::vector<std::string>` and are the
+surviving API. `C_SclIniFile`, `C_SclChecksums`, and `C_SclDateTime` still exist.
 
 ### Error handling
 
@@ -285,6 +288,7 @@ detail.
 | 1 — Correctness bugs | Done |
 | 2 — Remove `C_SclDynamicArray` → `std::vector` | Done |
 | 3 — Retire `C_SclString` → `std::string` | Done |
+| 3x — Retire `C_SclStringList` → `std::vector` (phase 3 follow-up) | Done |
 | 4 — Replace homegrown AES | Done for files; wire protocol deliberately out of scope. `C_OscSecurityAesFile` is AES-256-GCM + PBKDF2 (600k) with a versioned 56-byte header and key wiping. `C_OscSecurityAesCbc` remains AES-128-CBC and is still used by `C_OscProtocolSecuritySubLayer` — changing that is an ECU-side protocol change, not a PC-side one |
 | 5 — Error handling modernization | In progress — `C_OscErrorCategory` (`Errc` + `STWErrorCategory`), `hex_file` has its own category. Waves done: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc. Remaining: `protocol_drivers` (~292) and `project` (~204, ~640 caller files) — each large enough to run alone |
 | 6 — Concurrency & singletons | 6.1 done (`std::call_once`; Meyer's singleton rejected). 6.2 done (`C_TglCriticalSection` and `TglTasks` deleted, 52 sites on `std::mutex`). 6.3 closed — no defect found |
