@@ -324,7 +324,10 @@ Two problems, neither about effort:
    criteria either way.
 
 Prerequisite for Phase 7: add a benchmark harness, then decide on the C++20
-(C++ standard decision RESOLVED 2026-09-08: C++23 adopted tree-wide, all Linux lanes)
+(RESOLVED 2026-09-08: C++23 adopted tree-wide, all Linux lanes; benchmark harness in
+libraries/opensyde_core/bench, OPENSYDE_CORE_BUILD_BENCHMARKS=ON. Initial data: SSE4.2
+CRC-32C ~17-20x the software table CRC; std::format slower than std::stringstream on
+libstdc++-14 -- recheck the 7.1 std::format premise against this harness.)
 question. Neither is performance work as such.
 
 ### Phase 8 — the unified root build is not a refactor, and here is why

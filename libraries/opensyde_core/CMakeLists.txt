@@ -1026,3 +1026,28 @@ if(OPENSYDE_CORE_BUILD_TESTS)
 
    add_subdirectory(tests)
 endif()
+
+# --- Benchmarks (optional, off by default) -------------------------------------------------------------------------
+option(OPENSYDE_CORE_BUILD_BENCHMARKS "Build openSYDE core benchmarks (Google Benchmark)" OFF)
+
+if(OPENSYDE_CORE_BUILD_BENCHMARKS)
+   include(FetchContent)
+   # Only the library target is needed; suppress benchmark's own tests/install/docs.
+   set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+   set(BENCHMARK_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
+   set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "" FORCE)
+   FetchContent_Declare(
+     googlebenchmark
+     GIT_REPOSITORY https://github.com/google/benchmark.git
+     GIT_TAG        v1.9.0
+   )
+   FetchContent_MakeAvailable(googlebenchmark)
+
+   add_executable(bench_opensyde
+      bench/bench_logging.cpp
+      bench/bench_crc.cpp
+      bench/bench_format.cpp)
+   target_link_libraries(bench_opensyde PRIVATE opensyde_core benchmark_main)
+   # The phase 7.2 CRC reference uses SSE4.2 (CRC-32C) intrinsics; this TU only.
+   target_compile_options(bench_opensyde PRIVATE -msse4.2)
+endif()
