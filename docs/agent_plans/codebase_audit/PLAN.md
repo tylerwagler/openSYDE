@@ -328,6 +328,22 @@ Prerequisite for Phase 7: add a benchmark harness, then decide on the C++20
 libraries/opensyde_core/bench, OPENSYDE_CORE_BUILD_BENCHMARKS=ON. Initial data: SSE4.2
 CRC-32C ~17-20x the software table CRC; std::format slower than std::stringstream on
 libstdc++-14 -- recheck the 7.1 std::format premise against this harness.)
+
+Phase 7 fieldwork 2026-09-08:
+- 7.1 std::format premise: local libstdc++-14 measures std::format SLOWER than
+  stringstream (1.17us vs 0.46us); GCC-15 confirmation is the deciding data but the
+  runner lane is indirect. bench.yml (dispatch-only) exists on develop; GitHub only
+  dispatches workflows present on the DEFAULT branch (master), so either merge
+  bench.yml to master via PR or accept the documented libstdc++-15 improvement.
+- 7.2: SSE4.2 reference is 17-20x the software table CRC (5-6 GiB/s vs 0.35 GiB/s).
+  Caveat: _mm_crc32_* is CRC-32C (poly 0x1EDC6F41) != STW software CRC (poly
+  0xEDB88320) -- landing it changes checksum semantics and invalidates stored CRCs.
+  Decision required before 7.2 code.
+- 7.3: NOT a defaulted-move sweep. Value types like C_OscNodeDataPoolContent carry a
+  critical-section member (std::mutex is non-movable -> defaulted moves are deleted)
+  and the large protocol classes are polymorphic (move is a slicing risk). Needs
+  hand-written moves per-class that skip the lock.
+
 question. Neither is performance work as such.
 
 ### Phase 8 — the unified root build is not a refactor, and here is why

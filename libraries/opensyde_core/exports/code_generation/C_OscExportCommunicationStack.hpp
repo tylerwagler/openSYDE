@@ -19,8 +19,6 @@
 
 #include "stwtypes.hpp"
 
-#include <string>
-#include <vector>
 #include "C_OscNode.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
