@@ -1240,11 +1240,11 @@ int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDef
    {
       C_OscXmlParserLog c_Xml;
       //"empty" device definition to have a clearly defined status:
-      orc_DeviceDefinition.Clear();
+      orc_DeviceDefinition.clear();
 
       c_Xml.SetLogHeading("Loading device definition");
 
-      s32_Return = c_Xml.LoadFromFile(orc_Path); //open XML file
+      s32_Return = ListLoadFromFile(c_Xml, orc_Path); //open XML file
       if (s32_Return == C_NO_ERR)
       {
          std::string c_Text;
@@ -1390,7 +1390,7 @@ int32_t C_OscDeviceDefinitionFiler::h_Save(const C_OscDeviceDefinition & orc_Dev
       }
       c_Xml.SelectNodeParent();
 
-      s32_Return = c_Xml.SaveToFile(orc_Path);
+      s32_Return = ListSaveToFile(c_Xml, orc_Path);
       if (s32_Return != C_NO_ERR)
       {
          osc_write_log_error("Saving Device definition", "Could not write to file \"" + orc_Path + "\".");

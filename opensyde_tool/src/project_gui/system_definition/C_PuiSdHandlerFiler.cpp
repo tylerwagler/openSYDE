@@ -453,7 +453,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveDataPoolFile(const C_PuiSdNodeDataPool & orc_
       //node
       C_PuiSdHandlerFiler::h_SaveDataPool(orc_DataPool, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (ListSaveToFile(c_XmlParser, orc_FilePath.toStdString().c_str()) != C_NO_ERR)
       {
          osc_write_log_error("Saving system definition UI", "Could not create file for datapool.");
          s32_Retval = C_CONFIG;
@@ -780,7 +780,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSharedDatapoolsFile(const QString & orc_FileP
       C_PuiSdHandlerFiler::h_SaveSharedDatapoolsGroups(orc_SharedDatapools, c_XmlParser);
 
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (ListSaveToFile(c_XmlParser, orc_FilePath.toStdString().c_str()) != C_NO_ERR)
       {
          osc_write_log_error("Saving shared Datapools UI", "Could not create file for configuration.");
          s32_Retval = C_CONFIG;
@@ -1348,7 +1348,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveCanProtocolFile(const C_PuiSdNodeCanProtocol 
       //node
       C_PuiSdHandlerFiler::h_SaveCanProtocol(orc_CanProtocol, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (ListSaveToFile(c_XmlParser, orc_FilePath.toStdString().c_str()) != C_NO_ERR)
       {
          osc_write_log_error("Saving system definition UI", "Could not create file for comm protocol.");
          s32_Retval = C_CONFIG;
@@ -2058,7 +2058,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(const QString & orc_Fi
          C_PuiSdHandlerFiler::h_SaveLastKnownHalcCrcs(orc_LastKnownHalcCrcs, c_XmlParser);
       }
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (ListSaveToFile(c_XmlParser, orc_FilePath.toStdString().c_str()) != C_NO_ERR)
       {
          osc_write_log_error("Saving system definition ui", "Could not create file for ui part.");
          s32_Retval = C_RD_WR;
@@ -2580,7 +2580,7 @@ int32_t C_PuiSdHandlerFiler::mh_SaveNodeFile(const C_PuiSdNode & orc_UiNode, con
       if (s32_Retval == C_NO_ERR)
       {
          //Don't forget to save!
-         if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+         if (ListSaveToFile(c_XmlParser, orc_FilePath.toStdString().c_str()) != C_NO_ERR)
          {
             osc_write_log_error("Saving system definition UI", "Could not create file for node.");
             s32_Retval = C_CONFIG;

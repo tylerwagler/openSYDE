@@ -17,7 +17,8 @@
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_SclIniFile.hpp"
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_OscCanOpenEdsInfoBlock.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

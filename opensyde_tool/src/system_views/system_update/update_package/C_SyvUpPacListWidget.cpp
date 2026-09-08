@@ -799,7 +799,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
          s32_Return = this->GetUpdatePackage(c_ApplicationsToWrite, c_NodesUpdateOrder);
          tgl_assert(s32_Return == C_NO_ERR);
 
-         C_SclStringList c_Warnings;
+         std::vector<std::string> c_Warnings;
          std::string c_Error;
          if (s32_Return == C_NO_ERR)
          {
@@ -869,7 +869,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
             c_MessageResult.SetHeading("Create Service Update Package");
             c_MessageResult.SetDescription("Created Service Update Package but there are warnings." +
                                            this->mc_LastPath);
-            c_MessageResult.SetDetails(c_Warnings.GetText().c_str());
+            c_MessageResult.SetDetails(ListGetText(c_Warnings).c_str());
             c_MessageResult.SetCustomMinHeight(250, 300);
             c_MessageResult.Execute();
          }

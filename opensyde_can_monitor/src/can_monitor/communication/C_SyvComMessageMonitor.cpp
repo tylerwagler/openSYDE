@@ -1103,7 +1103,7 @@ int32_t C_SyvComMessageMonitor::m_AddDbcFile(const std::string & orc_PathDbc)
    if (LowerCaseCompat(SubStringCompat(orc_PathDbc, orc_PathDbc.length() - 3U, 4U)) == ".dbc")
    {
       C_CieConverter::C_CieCommDefinition c_DbcDefinition;
-      C_SclStringList c_WarningMsgs;
+      std::vector<std::string> c_WarningMsgs;
       std::string c_ErrorMsg;
 
       s32_Return = C_CieImportDbc::h_ImportNetwork(orc_PathDbc, c_DbcDefinition, c_WarningMsgs, c_ErrorMsg, true);

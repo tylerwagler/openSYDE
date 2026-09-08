@@ -17,7 +17,8 @@
 
 #include "stwtypes.hpp"
 
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_OscNode.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

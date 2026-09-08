@@ -378,7 +378,7 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
 bool C_SyvDaCopyPasteManager::CheckValidContentAndPrepareData(void)
 {
    this->mc_LastKnownRails.clear();
-   this->mc_LastKnownData.Clear();
+   this->mc_LastKnownData.clear();
    this->mc_LastKnownElementIdGroups.clear();
    return (C_SyvClipBoardHelper::h_LoadDashboardFromClipboard(this->mc_LastKnownData, this->mc_LastKnownRails,
                                                               this->mc_LastKnownElementIdGroups,

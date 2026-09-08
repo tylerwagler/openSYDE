@@ -36,6 +36,7 @@
 #include "C_OscRoutingCalculation.hpp"
 #include "C_OscHalcMagicianUtil.hpp"
 #include "C_PuiSdNodeDataPoolListElementIdSyncUtil.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -133,7 +134,7 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_Updat
          }
          if (s32_Return == C_NO_ERR)
          {
-            s32_Return = c_XmlParser.SaveToFile(orc_Path.toStdString().c_str());
+            s32_Return = ListSaveToFile(c_XmlParser, orc_Path.toStdString().c_str());
             if (s32_Return != C_NO_ERR)
             {
                s32_Return = C_RD_WR;
@@ -3320,7 +3321,7 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading views");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.toStdString().c_str());
+      s32_Retval = ListLoadFromFile(c_XmlParser, orc_Path.toStdString().c_str());
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-system-views")

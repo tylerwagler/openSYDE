@@ -29,7 +29,7 @@ public:
                                    const std::string & orc_TargetUnzipPath, C_OscXcoManifest & orc_Manifest,
                                    std::string & orc_SystemDefinitionPath,
                                    std::string & orc_DeviceDefinitionPath,
-                                   stw::scl::C_SclStringList & orc_WarningMessages,
+                                   stw::scl::std::vector<std::string> & orc_WarningMessages,
                                    std::string & orc_ErrorMessage);
 
 private:

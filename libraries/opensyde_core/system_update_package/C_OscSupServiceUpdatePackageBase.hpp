@@ -44,7 +44,7 @@ protected:
    static const std::string mhc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
    static const std::string mhc_SUP_SYSDEF;
 
-   static stw::scl::C_SclStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
+   static stw::scl::std::vector<std::string> mhc_WarningMessages; // global warnings e.g. if update position of active node is
                                                          // not available
    static std::string mhc_ErrorMessage;        // description of error which caused the service update package
                                                          // to fail
@@ -78,7 +78,7 @@ protected:
    static int32_t mh_AddFileSectionToDigest(std::ifstream & orc_File, C_OscSecurityEcdsa & orc_Signature,
                                             const uint32_t ou32_SectionLength);
    static void mh_Init(void);
-   static void mh_GetWarningsAndErrors(stw::scl::C_SclStringList & orc_WarningMessages,
+   static void mh_GetWarningsAndErrors(stw::scl::std::vector<std::string> & orc_WarningMessages,
                                        std::string & orc_ErrorMessage);
    static void mh_DigestToString(const uint8_t (&orau8_DigestBin)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH],
                                  std::string & orc_Digest);

@@ -18,6 +18,7 @@
 #include "stwtypes.hpp"
 #include "C_FlaUpHexFileInfo.hpp"
 #include "C_OscHexFile.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -65,7 +66,7 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
    c_HexFileInfo.s32_NumberOfBlocks = 0;
    c_HexFileInfo.c_FileName = c_FileInfo.fileName();
 
-   u32_Result = c_HexFile.LoadFromFile(orc_File.toStdString().c_str());
+   u32_Result = ListLoadFromFile(c_HexFile, orc_File.toStdString().c_str());
    c_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
 
    if (u32_Result == stw::hex_file::NO_ERR)

@@ -24,6 +24,7 @@
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscSecurityPem.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -74,7 +75,7 @@ int32_t C_OscSecurityPem::h_ExtractModulusAndExponentFromFile(const std::string 
                                                               std::string & orc_ErrorMessage)
 {
    C_OscSecurityPem c_Pem;
-   int32_t s32_Retval = c_Pem.LoadFromFile(orc_FileName, orc_ErrorMessage);
+   int32_t s32_Retval = ListLoadFromFile(c_Pem, orc_FileName, orc_ErrorMessage);
 
    if (s32_Retval == C_NO_ERR)
    {

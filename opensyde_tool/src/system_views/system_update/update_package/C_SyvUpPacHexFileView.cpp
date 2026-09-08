@@ -21,6 +21,7 @@
 #include "C_SyvUpPacHexFileView.hpp"
 #include "C_PuiUtil.hpp"
 #include "ui_C_SyvUpPacHexFileView.h"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -107,7 +108,7 @@ void C_SyvUpPacHexFileView::m_LoadInfo(void) const
    C_OscHexFile c_HexFile;
    uint32_t u32_Result;
 
-   u32_Result = c_HexFile.LoadFromFile(this->mc_AbsoluteFilePath.toStdString().c_str());
+   u32_Result = ListLoadFromFile(c_HexFile, this->mc_AbsoluteFilePath.toStdString().c_str());
    if (u32_Result == stw::hex_file::NO_ERR)
    {
       mh_AddFileSection(this->mc_AbsoluteFilePath, c_Text);

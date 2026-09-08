@@ -217,12 +217,12 @@ bool C_OscSuSequences::m_ReportProgress(const E_ProgressStep oe_Step, const int3
 void C_OscSuSequences::m_ReportOpenSydeFlashloaderInformationRead(const C_OsyDeviceInformation & orc_Info,
                                                                   const uint32_t ou32_NodeIndex)
 {
-   C_SclStringList c_Text;
+   std::vector<std::string> c_Text;
 
    h_OpenSydeFlashloaderInformationToText(orc_Info, c_Text);
 
    std::cout << "openSYDE device information found for node with index " << ou32_NodeIndex << "\n";
-   for (uint32_t u32_Line = 0U; u32_Line < c_Text.GetCount(); u32_Line++)
+   for (uint32_t u32_Line = 0U; u32_Line < c_Text.size(); u32_Line++)
    {
       std::cout << c_Text.Strings[u32_Line].c_str() << "\n";
    }
@@ -1447,7 +1447,7 @@ int32_t C_OscSuSequences::m_WritePemOpenSydeFile(const std::string & orc_FileToW
          C_OscSecurityPem c_PemFile;
          std::string c_ErrorMessage;
 
-         s32_Return = c_PemFile.LoadFromFile(orc_FileToWrite.c_str(), c_ErrorMessage);
+         s32_Return = ListLoadFromFile(c_PemFile, orc_FileToWrite.c_str(), c_ErrorMessage);
 
          if (s32_Return == C_NO_ERR)
          {
@@ -3938,32 +3938,32 @@ void C_OscSuSequences::h_FillDoFlashWithSecurityOptions(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSuSequences::h_OpenSydeFlashloaderInformationToText(const C_OsyDeviceInformation & orc_Info,
-                                                              C_SclStringList & orc_Text)
+                                                              std::vector<std::string> & orc_Text)
 {
-   const C_SclStringList c_MoreInformation = orc_Info.c_MoreInformation.FlashloaderInformationToText();
+   const std::vector<std::string> c_MoreInformation = orc_Info.c_MoreInformation.FlashloaderInformationToText();
 
-   orc_Text.Clear();
-   orc_Text.Add("Device name: " + orc_Info.c_DeviceName);
-   orc_Text.Add("Number of applications: " + std::to_string(orc_Info.c_Applications.size()));
+   orc_Text.clear();
+   orc_Text.push_back("Device name: " + orc_Info.c_DeviceName);
+   orc_Text.push_back("Number of applications: " + std::to_string(orc_Info.c_Applications.size()));
    for (uint8_t u8_Application = 0U; u8_Application < orc_Info.c_Applications.size(); u8_Application++)
    {
-      orc_Text.Add("");
-      orc_Text.Add("Application " + std::to_string(u8_Application));
-      orc_Text.Add(" Name: " + orc_Info.c_Applications[u8_Application].c_ApplicationName);
-      orc_Text.Add(" Version: " + orc_Info.c_Applications[u8_Application].c_ApplicationVersion);
-      orc_Text.Add(" Build date: " + orc_Info.c_Applications[u8_Application].c_BuildDate);
-      orc_Text.Add(" Build time: " + orc_Info.c_Applications[u8_Application].c_BuildTime);
-      orc_Text.Add(" Block start address: 0x" +
+      orc_Text.push_back("");
+      orc_Text.push_back("Application " + std::to_string(u8_Application));
+      orc_Text.push_back(" Name: " + orc_Info.c_Applications[u8_Application].c_ApplicationName);
+      orc_Text.push_back(" Version: " + orc_Info.c_Applications[u8_Application].c_ApplicationVersion);
+      orc_Text.push_back(" Build date: " + orc_Info.c_Applications[u8_Application].c_BuildDate);
+      orc_Text.push_back(" Build time: " + orc_Info.c_Applications[u8_Application].c_BuildTime);
+      orc_Text.push_back(" Block start address: 0x" +
                    IntToHexCompat(static_cast<int64_t>(orc_Info.c_Applications[u8_Application].
                                                               u32_BlockStartAddress), 8U));
-      orc_Text.Add(" Block end address: 0x" +
+      orc_Text.push_back(" Block end address: 0x" +
                    IntToHexCompat(static_cast<int64_t>(orc_Info.c_Applications[u8_Application].
                                                               u32_BlockEndAddress), 8U));
-      orc_Text.Add(static_cast<std::string>(" Signature valid: ") +
+      orc_Text.push_back(static_cast<std::string>(" Signature valid: ") +
                    ((orc_Info.c_Applications[u8_Application].u8_SignatureValid == 0) ? "yes" : "no"));
-      orc_Text.Add(" Additional information: " + orc_Info.c_Applications[u8_Application].c_AdditionalInformation);
+      orc_Text.push_back(" Additional information: " + orc_Info.c_Applications[u8_Application].c_AdditionalInformation);
    }
-   orc_Text.AddStrings(&c_MoreInformation);
+   orc_Text.insert(orc_Text.end(), c_MoreInformation.begin(), c_MoreInformation.end());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

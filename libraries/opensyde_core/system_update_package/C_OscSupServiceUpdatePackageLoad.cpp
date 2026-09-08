@@ -117,7 +117,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const st
                                                                         uint32_t & oru32_ActiveBusIndex,
                                                                         std::vector<uint8_t> & orc_ActiveNodes,
                                                                         std::vector<uint32_t> & orc_NodesUpdateOrder,
-                                                                        std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<std::string> & orc_DecryptNodesPassword,
+                                                                        std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<std::string> & orc_DecryptNodesPassword,
                                                                         const std::vector<std::string> & orc_NodeSignaturePemFiles)
 {
    int32_t s32_Retval;
@@ -194,7 +194,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
                                                            uint32_t & oru32_ActiveBusIndex,
                                                            vector<uint8_t> & orc_ActiveNodes,
                                                            vector<uint32_t> & orc_NodesUpdateOrder,
-                                                           vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<std::string> & orc_DecryptNodesPassword,
+                                                           vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<std::string> & orc_DecryptNodesPassword,
                                                            const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
    int32_t s32_Return;
@@ -750,7 +750,7 @@ void C_OscSupServiceUpdatePackageLoad::mh_GetPemFileContent(const std::vector<st
    {
       std::string c_Err;
       C_OscSecurityPemSecUpdate c_Pem;
-      const int32_t s32_Retval = c_Pem.LoadFromFile(orc_NodeSignaturePemFiles[u32_ItNode].c_str(), c_Err);
+      const int32_t s32_Retval = ListLoadFromFile(c_Pem, orc_NodeSignaturePemFiles[u32_ItNode].c_str(), c_Err);
       if (s32_Retval != C_NO_ERR)
       {
          osc_write_log_warning("Reading pem files", mhc_ErrorMessage);

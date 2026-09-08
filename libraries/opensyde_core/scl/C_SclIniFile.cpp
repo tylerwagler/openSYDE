@@ -131,11 +131,11 @@ bool C_SclIniFile::m_Load(const std::string & orc_FileName)
    int32_t s32_Index;
    uint16_t u16_NumSections = 0;
    uint16_t u16_NumKeysAdded = 0U;
-   C_SclStringList c_List;
+   std::vector<std::string> c_List;
 
    try
    {
-      c_List.LoadFromFile(orc_FileName);
+      ListLoadFromFile(c_List, orc_FileName);
    }
    catch (...)
    {
@@ -149,10 +149,10 @@ bool C_SclIniFile::m_Load(const std::string & orc_FileName)
    // of resizing them when new values are added.
    //But performance tests showed better performance with this single pass approach.
    //So all the string checking only needs to be done once.
-   for (s32_Index = 0; s32_Index < c_List.Strings.size(); s32_Index++)
+   for (s32_Index = 0; s32_Index < c_List.size(); s32_Index++)
    {
-      C_SclIniFile::mh_CopyLessTrim(c_List.Strings[s32_Index]);
-      const std::string & rc_Line = c_List.Strings[s32_Index];
+      C_SclIniFile::mh_CopyLessTrim(c_List[s32_Index]);
+      const std::string & rc_Line = c_List[s32_Index];
 
       if (rc_Line.length() > 0)
       {
@@ -217,7 +217,7 @@ bool C_SclIniFile::m_Load(const std::string & orc_FileName)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SclIniFile::UpdateFile(void)
 {
-   C_SclStringList c_Strings;
+   std::vector<std::string> c_Strings;
 
    if (FileName.length() == 0U)
    {
@@ -227,7 +227,7 @@ void C_SclIniFile::UpdateFile(void)
    this->GetFileAsStringList(c_Strings);
    try
    {
-      c_Strings.SaveToFile(FileName);
+      ListSaveToFile(c_Strings, FileName);
    }
    catch (...)
    {
@@ -923,7 +923,7 @@ std::string C_SclIniFile::mh_CommentStr(const std::string & orc_Comment)
                                false: clear string list before adding keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::ReadSection(const std::string & orc_Section, C_SclStringList * const opc_Strings,
+void C_SclIniFile::ReadSection(const std::string & orc_Section, std::vector<std::string> * const opc_Strings,
                                const bool oq_Append)
 {
    int32_t s32_Loop;
@@ -932,7 +932,7 @@ void C_SclIniFile::ReadSection(const std::string & orc_Section, C_SclStringList 
 
    if (oq_Append == true)
    {
-      u32_OldLength = opc_Strings->GetCount();
+      u32_OldLength = opc_Strings->size();
    }
    else
    {
@@ -941,10 +941,10 @@ void C_SclIniFile::ReadSection(const std::string & orc_Section, C_SclStringList 
 
    if (pc_Section != NULL)
    {
-      opc_Strings->Strings.resize(static_cast<int32_t>(u32_OldLength) + pc_Section->c_Keys.size());
+      opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + pc_Section->c_Keys.size());
       for (s32_Loop = 0; s32_Loop < pc_Section->c_Keys.size(); s32_Loop++)
       {
-         opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] = pc_Section->c_Keys[s32_Loop].c_Key;
+         (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] = pc_Section->c_Keys[s32_Loop].c_Key;
       }
    }
 }
@@ -961,7 +961,7 @@ void C_SclIniFile::ReadSection(const std::string & orc_Section, C_SclStringList 
                                false: clear string list before adding keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::ReadSectionValues(const std::string & orc_Section, C_SclStringList * const opc_Strings,
+void C_SclIniFile::ReadSectionValues(const std::string & orc_Section, std::vector<std::string> * const opc_Strings,
                                      const bool oq_Append)
 {
    int32_t s32_Loop;
@@ -970,7 +970,7 @@ void C_SclIniFile::ReadSectionValues(const std::string & orc_Section, C_SclStrin
 
    if (oq_Append == true)
    {
-      u32_OldLength = opc_Strings->GetCount();
+      u32_OldLength = opc_Strings->size();
    }
    else
    {
@@ -979,10 +979,10 @@ void C_SclIniFile::ReadSectionValues(const std::string & orc_Section, C_SclStrin
 
    if (pc_Section != NULL)
    {
-      opc_Strings->Strings.resize(static_cast<int32_t>(u32_OldLength) + pc_Section->c_Keys.size());
+      opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + pc_Section->c_Keys.size());
       for (s32_Loop = 0; s32_Loop < pc_Section->c_Keys.size(); s32_Loop++)
       {
-         opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
+         (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
             pc_Section->c_Keys[s32_Loop].c_Key + "=" + pc_Section->c_Keys[s32_Loop].c_Value;
       }
    }
@@ -998,24 +998,24 @@ void C_SclIniFile::ReadSectionValues(const std::string & orc_Section, C_SclStrin
                                false: clear string list before adding keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::ReadSections(C_SclStringList * const opc_Strings, const bool oq_Append) const
+void C_SclIniFile::ReadSections(std::vector<std::string> * const opc_Strings, const bool oq_Append) const
 {
    int32_t s32_Loop;
    uint32_t u32_OldLength;
 
    if (oq_Append == true)
    {
-      u32_OldLength = opc_Strings->GetCount();
+      u32_OldLength = opc_Strings->size();
    }
    else
    {
       u32_OldLength = 0U;
    }
 
-   opc_Strings->Strings.resize(static_cast<int32_t>(u32_OldLength) + mc_Sections.size());
+   opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + mc_Sections.size());
    for (s32_Loop = 0; s32_Loop < mc_Sections.size(); s32_Loop++)
    {
-      opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] = mc_Sections[s32_Loop].c_Name;
+      (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] = mc_Sections[s32_Loop].c_Name;
    }
 }
 
@@ -1056,7 +1056,7 @@ void C_SclIniFile::mh_GetNextPair(const std::string & orc_CommandLine, std::stri
    \param[out]     orc_Strings    content of INI file (will be cleared before adding INI file strings)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
+void C_SclIniFile::GetFileAsStringList(std::vector<std::string> & orc_Strings) const
 {
    int32_t s32_Section;
    int32_t s32_Key;
@@ -1064,7 +1064,7 @@ void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
    const C_SclIniSection * pc_Section;
    const C_SclIniKey * pc_Key;
 
-   orc_Strings.Clear();
+   orc_Strings.clear();
 
    for (s32_Section = 0; s32_Section < mc_Sections.size(); s32_Section++)
    {
@@ -1072,12 +1072,12 @@ void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
 
       if (pc_Section->c_Comment.length() > 0U)
       {
-         orc_Strings.Add(mh_CommentStr(pc_Section->c_Comment));
+         orc_Strings.push_back(mh_CommentStr(pc_Section->c_Comment));
       }
 
       if (pc_Section->c_Name.length() > 0U)
       {
-         orc_Strings.Add("[" + pc_Section->c_Name + "]");
+         orc_Strings.push_back("[" + pc_Section->c_Name + "]");
       }
 
       s32_NumKeys = pc_Section->c_Keys.size();
@@ -1088,17 +1088,17 @@ void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
          {
             if (pc_Key->c_Comment.length() > 0U)
             {
-               orc_Strings.Add(mh_CommentStr(pc_Key->c_Comment));
+               orc_Strings.push_back(mh_CommentStr(pc_Key->c_Comment));
             }
 
-            orc_Strings.Add(pc_Key->c_Key + mcn_EqualIndicator + pc_Key->c_Value);
+            orc_Strings.push_back(pc_Key->c_Key + mcn_EqualIndicator + pc_Key->c_Value);
          }
       }
 
       //add one blank line after every section (increases readability; required by some parsers)
       if (s32_Section < (mc_Sections.size() - 1))
       {
-         orc_Strings.Add("");
+         orc_Strings.push_back("");
       }
    }
 }

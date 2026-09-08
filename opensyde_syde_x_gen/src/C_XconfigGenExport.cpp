@@ -88,7 +88,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExport::m_CreateApplicationCode
    else
    {
       C_OscXcoManifest c_Manifest;
-      C_SclStringList c_Warnings;
+      std::vector<std::string> c_Warnings;
       std::string c_Error;
       const std::string c_Path = TglFileIncludeTrailingDelimiter(orc_OutputPath) + "x_app.syde_xcfg";
 

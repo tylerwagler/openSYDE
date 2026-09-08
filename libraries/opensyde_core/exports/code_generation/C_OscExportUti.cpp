@@ -102,12 +102,12 @@ std::string C_OscExportUti::h_GetCreationToolInfo(const std::string & orc_Export
    \param[in]  orc_Data    File data to append structure to
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportUti::h_AddExternCeStart(C_SclStringList & orc_Data)
+void C_OscExportUti::h_AddExternCeStart(std::vector<std::string> & orc_Data)
 {
-   orc_Data.Append("#ifdef __cplusplus");
-   orc_Data.Append("extern \"C\" {");
-   orc_Data.Append("#endif");
-   orc_Data.Append("");
+   orc_Data.push_back("#ifdef __cplusplus");
+   orc_Data.push_back("extern \"C\" {");
+   orc_Data.push_back("#endif");
+   orc_Data.push_back("");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -116,12 +116,12 @@ void C_OscExportUti::h_AddExternCeStart(C_SclStringList & orc_Data)
    \param[in]  orc_Data    File data to append structure to
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportUti::h_AddExternCeEnd(C_SclStringList & orc_Data)
+void C_OscExportUti::h_AddExternCeEnd(std::vector<std::string> & orc_Data)
 {
-   orc_Data.Append("#ifdef __cplusplus");
-   orc_Data.Append("} /* end of extern \"C\" */");
-   orc_Data.Append("#endif");
-   orc_Data.Append("");
+   orc_Data.push_back("#ifdef __cplusplus");
+   orc_Data.push_back("} /* end of extern \"C\" */");
+   orc_Data.push_back("#endif");
+   orc_Data.push_back("");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -132,20 +132,20 @@ void C_OscExportUti::h_AddExternCeEnd(C_SclStringList & orc_Data)
    \param[in]   oq_HeaderFile    Flag if .c or .h file (true: header file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportUti::h_AddProjectIdDef(C_SclStringList & orc_Data, const std::string & orc_MagicName,
+void C_OscExportUti::h_AddProjectIdDef(std::vector<std::string> & orc_Data, const std::string & orc_MagicName,
                                        const bool oq_HeaderFile)
 {
    if (oq_HeaderFile == true)
    {
-      orc_Data.Append("///unique ID to ensure consistency between .h and .c files");
-      orc_Data.Append("#define " + orc_MagicName + " void " + LowerCaseCompat(orc_MagicName) + "(void) {}");
-      orc_Data.Append("");
+      orc_Data.push_back("///unique ID to ensure consistency between .h and .c files");
+      orc_Data.push_back("#define " + orc_MagicName + " void " + LowerCaseCompat(orc_MagicName) + "(void) {}");
+      orc_Data.push_back("");
    }
    else
    {
-      orc_Data.Append("///ensure file consistency (if compilation fails here the .h file does not match this .c file)");
-      orc_Data.Append(orc_MagicName);
-      orc_Data.Append("");
+      orc_Data.push_back("///ensure file consistency (if compilation fails here the .h file does not match this .c file)");
+      orc_Data.push_back(orc_MagicName);
+      orc_Data.push_back("");
    }
 }
 
@@ -156,12 +156,12 @@ void C_OscExportUti::h_AddProjectIdDef(C_SclStringList & orc_Data, const std::st
    \param[in]   orc_MagicName    Magic name including project ID
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportUti::h_AddProjIdFunctionPrototype(C_SclStringList & orc_Data, const std::string & orc_MagicName)
+void C_OscExportUti::h_AddProjIdFunctionPrototype(std::vector<std::string> & orc_Data, const std::string & orc_MagicName)
 {
-   orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Function Prototypes"));
-   orc_Data.Append("///unique ID to ensure consistency between .h and .c files");
-    orc_Data.Append("extern void " + LowerCaseCompat(orc_MagicName) + "(void);");
-   orc_Data.Append("");
+   orc_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Function Prototypes"));
+   orc_Data.push_back("///unique ID to ensure consistency between .h and .c files");
+    orc_Data.push_back("extern void " + LowerCaseCompat(orc_MagicName) + "(void);");
+   orc_Data.push_back("");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ void C_OscExportUti::h_AddProjIdFunctionPrototype(C_SclStringList & orc_Data, co
    C_RD_WR  Operation failure: cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportUti::h_SaveToFile(stw::scl::C_SclStringList & orc_Data, const std::string & orc_Path,
+int32_t C_OscExportUti::h_SaveToFile(stw::scl::std::vector<std::string> & orc_Data, const std::string & orc_Path,
                                      const std::string & orc_FileName, const bool oq_HeaderFile)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -199,7 +199,7 @@ int32_t C_OscExportUti::h_SaveToFile(stw::scl::C_SclStringList & orc_Data, const
    // store into file
    try
    {
-      orc_Data.SaveToFile(c_PathAndFilename);
+      ListSaveToFile(orc_Data, c_PathAndFilename);
    }
    catch (...)
    {

@@ -16,6 +16,7 @@
 #include "stwerrors.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscTargetSupportPackageFiler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -61,7 +62,7 @@ int32_t C_OscTargetSupportPackageFiler::h_Load(C_OscTargetSupportPackage & orc_T
    {
       C_OscXmlParser c_XmlParser;
 
-      s32_Return = c_XmlParser.LoadFromFile(orc_Path);
+      s32_Return = ListLoadFromFile(c_XmlParser, orc_Path);
       if (s32_Return == C_NO_ERR)
       {
          s32_Return = mh_Load(orc_TargetSupportPackage, orc_NodePath, c_XmlParser);

@@ -20,6 +20,7 @@
 #include "C_OscParamSetRawNodeFiler.hpp"
 #include "C_OscParamSetInterpretedNodeFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -87,7 +88,7 @@ int32_t C_OscParamSetHandler::CreateCleanFileWithoutCrc(const std::string & orc_
             tgl_assert(c_XmlParser.SelectNodeParent() == "nodes");
          }
 
-         s32_Return = c_XmlParser.SaveToFile(orc_FilePath);
+         s32_Return = ListSaveToFile(c_XmlParser, orc_FilePath);
          if (s32_Return != C_NO_ERR)
          {
             s32_Return = C_RD_WR;
@@ -218,7 +219,7 @@ int32_t C_OscParamSetHandler::h_UpdateCrcForFile(const std::string & orc_FilePat
 void C_OscParamSetHandler::ClearContent(void)
 {
    this->mc_RawNodes.clear();
-   this->mc_Data.Clear();
+   this->mc_Data.clear();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

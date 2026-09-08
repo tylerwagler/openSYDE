@@ -27,7 +27,7 @@ class C_OscXceLoad :
 public:
    static int32_t h_ProcessPackage(const std::string & orc_PackagePath,
                                    const std::string & orc_TargetUnzipPath, C_OscXceManifest & orc_Manifest,
-                                   stw::scl::C_SclStringList & orc_WarningMessages,
+                                   stw::scl::std::vector<std::string> & orc_WarningMessages,
                                    std::string & orc_ErrorMessage);
 
 private:

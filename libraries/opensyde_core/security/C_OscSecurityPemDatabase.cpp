@@ -14,7 +14,8 @@
 
 #include "TglFile.hpp"
 #include "stwerrors.hpp"
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_OscSecurityPem.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSecurityPemDatabase.hpp"
@@ -204,7 +205,7 @@ int32_t C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const std::string & orc_Pa
    C_OscSecurityPem c_NewFile;
 
    std::string c_ErrorMessage;
-   int32_t s32_Retval = c_NewFile.LoadFromFile(orc_Path, c_ErrorMessage);
+   int32_t s32_Retval = ListLoadFromFile(c_NewFile, orc_Path, c_ErrorMessage);
    if (s32_Retval == C_NO_ERR)
    {
       s32_Retval = m_TryAddKey(c_NewFile.GetKeyInfo(), c_ErrorMessage, oq_AddToList);

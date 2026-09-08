@@ -20,6 +20,7 @@
 #include "C_UsHandler.hpp"
 #include "C_OscHexFile.hpp"
 #include "C_OscParamSetHandler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -364,7 +365,7 @@ void C_SyvUpInformationWidget::InitUpdatePackage(
                {
                   //Do the address based byte count stuff
                   C_OscHexFile c_HexFile;
-                  const uint32_t u32_Result = c_HexFile.LoadFromFile(rc_File.c_str());
+                  const uint32_t u32_Result = ListLoadFromFile(c_HexFile, rc_File.c_str());
                   if (u32_Result == stw::hex_file::NO_ERR)
                   {
                      q_UseFileSize = false;

@@ -17,6 +17,7 @@
 #include "C_SclChecksums.hpp"
 #include "C_OscCanOpenManagerDeviceInfo.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -112,14 +113,14 @@ const C_OscCanOpenObjectDictionary & C_OscCanOpenManagerDeviceInfo::GetEdsFileCo
    {
       if (TglFileExists(this->c_ProjectEdsFilePath))
       {
-         const int32_t s32_Retval = this->mc_EdsFileContent.LoadFromFile(this->c_ProjectEdsFilePath);
+         const int32_t s32_Retval = ListLoadFromFile(this->mc_EdsFileContent, this->c_ProjectEdsFilePath);
          if (s32_Retval != C_NO_ERR)
          {
             osc_write_log_error("CANopen manager device information", "Failed to load from EDS file \"" +
                                 this->c_ProjectEdsFilePath + "\" Error: \"" + this->mc_EdsFileContent.GetLastErrorText() +
                                 "\".");
             this->mc_EdsFileContent.c_OdObjects.clear();
-            this->mc_EdsFileContent.c_TextFileContent.Clear();
+            this->mc_EdsFileContent.c_TextFileContent.clear();
          }
          else
          {
@@ -132,7 +133,7 @@ const C_OscCanOpenObjectDictionary & C_OscCanOpenManagerDeviceInfo::GetEdsFileCo
          osc_write_log_error("CANopen manager device information", "Failed to load from EDS file \"" +
                              this->c_ProjectEdsFilePath + "\" Error: File does not exist.");
          this->mc_EdsFileContent.c_OdObjects.clear();
-         this->mc_EdsFileContent.c_TextFileContent.Clear();
+         this->mc_EdsFileContent.c_TextFileContent.clear();
       }
       this->mq_EdsFileContentLoaded = true;
    }

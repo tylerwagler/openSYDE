@@ -96,7 +96,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(C_OscSystemDefini
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading System Definition");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_PathSystemDefinition);
+      s32_Retval = ListLoadFromFile(c_XmlParser, orc_PathSystemDefinition);
       if (s32_Retval == C_NO_ERR)
       {
          s32_Retval = h_LoadSystemDefinition(orc_SystemDefinition, c_XmlParser, orc_PathDeviceDefinitions,
@@ -171,7 +171,7 @@ int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(const C_OscSystem
       s32_Return = h_SaveSystemDefinition(orc_SystemDefinition, c_XmlParser, orc_Path, opc_CreatedFiles);
       if (s32_Return == C_NO_ERR)
       {
-         s32_Return = c_XmlParser.SaveToFile(orc_Path);
+         s32_Return = ListSaveToFile(c_XmlParser, orc_Path);
          if (s32_Return != C_NO_ERR)
          {
             osc_write_log_error("Saving System Definition", "Could not write to file \"" + orc_Path + "\".");

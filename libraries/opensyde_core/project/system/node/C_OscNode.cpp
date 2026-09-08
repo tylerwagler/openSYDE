@@ -79,7 +79,7 @@ void C_OscNode::Initialize(void)
    q_DatapoolAutoNvmStartAddress = true;
    c_Applications.resize(0);
    c_ComProtocols.resize(0);
-   c_HalcConfig.Clear();
+   c_HalcConfig.clear();
    c_CanOpenManagers.clear();
    c_DataLoggerJobs.clear();
    c_XappProperties.Initialize();

@@ -23,7 +23,8 @@
 #include "stwtypes.hpp"
 #include "C_OscIpDispatcher.hpp"
 #include <string>
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "TglTasks.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -76,7 +77,7 @@ private:
    std::vector<SOCKET> mc_SocketsUdpServer; ///< one socket per local interface (for receiving responses)
 
    std::vector<uint32_t> mc_LocalInterfaceIps;           ///< IPs of local interfaces
-   stw::scl::C_SclStringList mc_PreferredInterfaceNames; ///< Optional preferred interfaces
+   stw::scl::std::vector<std::string> mc_PreferredInterfaceNames; ///< Optional preferred interfaces
 
    static std::map<C_BufferIdentifier, std::list<std::vector<uint8_t> > > mhc_TcpBuffer; ///< dispatcher buffer
    static stw::tgl::C_TglCriticalSection mhc_LockBuffer;

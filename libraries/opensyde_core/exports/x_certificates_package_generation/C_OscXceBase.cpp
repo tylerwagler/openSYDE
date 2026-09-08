@@ -29,7 +29,7 @@ const std::string C_OscXceBase::hc_PACKAGE_EXT_TMP = ".syde_xcert_tmp"; // inter
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-stw::scl::C_SclStringList C_OscXceBase::mhc_WarningMessages; // global warnings e.g. if update
+stw::scl::std::vector<std::string> C_OscXceBase::mhc_WarningMessages; // global warnings e.g. if update
                                                              // position
                                                              // of
                                                              // active node is not available
@@ -61,7 +61,7 @@ std::string C_OscXceBase::h_GetPackageExtension()
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscXceBase::mh_Init()
 {
-   mhc_WarningMessages.Clear(); // clear old warning messages
+   mhc_WarningMessages.clear(); // clear old warning messages
    mhc_ErrorMessage = "";       // clear old error message
 }
 
@@ -72,7 +72,7 @@ void C_OscXceBase::mh_Init()
    \param[in,out]  orc_ErrorMessage       Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXceBase::mh_GetWarningsAndErrors(stw::scl::C_SclStringList & orc_WarningMessages,
+void C_OscXceBase::mh_GetWarningsAndErrors(stw::scl::std::vector<std::string> & orc_WarningMessages,
                                            std::string & orc_ErrorMessage)
 {
    orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller

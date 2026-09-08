@@ -11,7 +11,8 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_OscHalcConfig.hpp"
 #include "C_OscNodeDataPool.hpp"
 
@@ -49,16 +50,16 @@ protected:
                                               const std::string & orc_ProjectId, const bool oq_IsSafe,
                                               const uint16_t ou16_GenCodeVersion);
 
-   static void mh_AddHeader(const std::string & orc_ExportToolInfo, stw::scl::C_SclStringList & orc_Data,
+   static void mh_AddHeader(const std::string & orc_ExportToolInfo, stw::scl::std::vector<std::string> & orc_Data,
                             const bool oq_FileType, const bool oq_IsSafe);
-   static void mh_AddIncludes(stw::scl::C_SclStringList & orc_Data, const bool oq_FileType, const bool oq_IsSafe);
-   static void mh_AddDefines(stw::scl::C_SclStringList & orc_Data,  const C_OscHalcConfig & orc_HalcConfig,
+   static void mh_AddIncludes(stw::scl::std::vector<std::string> & orc_Data, const bool oq_FileType, const bool oq_IsSafe);
+   static void mh_AddDefines(stw::scl::std::vector<std::string> & orc_Data,  const C_OscHalcConfig & orc_HalcConfig,
                              const std::string & orc_ProjectId, const bool oq_FileType, const bool oq_IsSafe,
                              const uint16_t ou16_GenCodeVersion);
-   static void mh_AddGlobalVariables(stw::scl::C_SclStringList & orc_Data, const C_OscHalcConfig & orc_HalcConfig,
+   static void mh_AddGlobalVariables(stw::scl::std::vector<std::string> & orc_Data, const C_OscHalcConfig & orc_HalcConfig,
                                      const bool oq_FileType, const bool oq_IsSafe);
    static std::string mh_GetMagicName(const std::string & orc_ProjectId, const bool oq_IsSafe);
-   static void mh_AddDpListElementReferences(stw::scl::C_SclStringList & orc_Data,
+   static void mh_AddDpListElementReferences(stw::scl::std::vector<std::string> & orc_Data,
                                              const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
                                              const std::vector<C_OscHalcConfigChannel> & orc_ConfigArray,
                                              const C_OscHalcDefDomain::E_VariableSelector & ore_Type,

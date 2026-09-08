@@ -713,15 +713,15 @@ C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::Exit(const E_ResultCode o
    if (oe_ResultCode == C_OsyCodeExportBase::eRESULT_OK)
    {
       //write list of created files to file:
-      C_SclStringList c_List;
+      std::vector<std::string> c_List;
       for (uint32_t u32_String = 0U; u32_String < mc_CreatedFiles.size(); u32_String++)
       {
-         c_List.Add(mc_CreatedFiles[u32_String]);
+         c_List.push_back(mc_CreatedFiles[u32_String]);
       }
       //write even if empty in order to have clearly defined content:
       try
       {
-         c_List.SaveToFile(mc_ListOfFilesFileName);
+         ListSaveToFile(c_List, mc_ListOfFilesFileName);
       }
       catch (...)
       {

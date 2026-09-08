@@ -55,7 +55,7 @@ const std::string C_CieExportDbc::mhc_MSG_SEND_TYPE = "GenMsgSendType";
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
-stw::scl::C_SclStringList C_CieExportDbc::mhc_WarningMessages;         // global warnings e.g. why some messages could
+stw::scl::std::vector<std::string> C_CieExportDbc::mhc_WarningMessages;         // global warnings e.g. why some messages could
                                                                        // not be exported
 std::string C_CieExportDbc::mhc_ErrorMessage;                // description of error which caused the export
                                                                        // to fail
@@ -97,7 +97,7 @@ C_CieExportDbc::C_ExportStatistic C_CieExportDbc::mhc_ExportStatistic; // for pu
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieExportDbc::h_ExportNetwork(const std::string & orc_File,
                                         const C_CieConverter::C_CieCommDefinition & orc_Definition,
-                                        stw::scl::C_SclStringList & orc_WarningMessages,
+                                        stw::scl::std::vector<std::string> & orc_WarningMessages,
                                         std::string & orc_ErrorMessage)
 {
    int32_t s32_Return = C_NO_ERR;
@@ -105,7 +105,7 @@ int32_t C_CieExportDbc::h_ExportNetwork(const std::string & orc_File,
 
    Vector::DBC::Network c_DbcNetwork;
 
-   mhc_WarningMessages.Clear(); // clear old warning messages for this export
+   mhc_WarningMessages.clear(); // clear old warning messages for this export
    mhc_ErrorMessage = "";       // clear old error message for this export
    mhc_NodeMapping.clear();     // clear old node mapping for this export
    mhq_ValidDbcExport = false;  // only true if DBC file export was successful
@@ -722,7 +722,7 @@ int32_t C_CieExportDbc::mh_SetTransmission(const C_CieConverter::C_CieNodeMessag
          s32_CycleTime = 0;
          c_Message = "Negative cycle time for CAN message \"" + orc_Message.c_CanMessage.c_Name +
                      "\". Cycle time set to 0.";
-         mhc_WarningMessages.Append(c_Message);
+         mhc_WarningMessages.push_back(c_Message);
          osc_write_log_warning("DBC file export", c_Message);
          s32_Return = C_WARN;
       }

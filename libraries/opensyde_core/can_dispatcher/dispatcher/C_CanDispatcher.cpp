@@ -547,7 +547,7 @@ int32_t C_CanDispatcher::ClearQueue(const uint16_t ou16_Handle)
    {
       s32_Return = C_NO_ERR;
       mc_CriticalSection.Acquire();
-      mc_ClientsByHandle[ou16_Handle]->c_RXQueue.Clear();
+      mc_ClientsByHandle[ou16_Handle]->c_RXQueue.clear();
       mc_CriticalSection.Release();
    }
    return s32_Return;

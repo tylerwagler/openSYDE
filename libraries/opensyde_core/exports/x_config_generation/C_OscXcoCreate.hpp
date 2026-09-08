@@ -30,7 +30,7 @@ public:
    static int32_t h_CreatePackage(const std::string & orc_PackagePath,
                                   const C_OscSystemDefinition & orc_SystemDefinition,
                                   const C_OscXcoManifest & orc_Manifest,
-                                  stw::scl::C_SclStringList & orc_WarningMessages,
+                                  stw::scl::std::vector<std::string> & orc_WarningMessages,
                                   std::string & orc_ErrorMessage,
                                   const std::string & orc_TemporaryDirectory = "");
 

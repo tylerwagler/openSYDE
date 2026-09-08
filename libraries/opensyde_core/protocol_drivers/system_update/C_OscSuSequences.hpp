@@ -244,7 +244,7 @@ public:
       const C_OscViewNodeUpdate::E_StateTrafficEncryption oe_StateEncryption,
       const C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger, C_OscSuSequences::C_DoFlash & orc_DoFlash);
    static void h_OpenSydeFlashloaderInformationToText(const C_OsyDeviceInformation & orc_Info,
-                                                      stw::scl::C_SclStringList & orc_Text);
+                                                      stw::scl::std::vector<std::string> & orc_Text);
 
 protected:
    //functions we use to report to application:

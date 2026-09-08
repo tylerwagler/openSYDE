@@ -19,6 +19,7 @@
 #include "C_OscSecurityPem.hpp"
 #include "C_SyvUpPacPemFileInfoPopUp.hpp"
 #include "ui_C_SyvUpPacPemFileInfoPopUp.h"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -57,7 +58,7 @@ C_SyvUpPacPemFileInfoPopUp::C_SyvUpPacPemFileInfoPopUp(stw::opensyde_gui_element
    C_OscSecurityPem c_Pem;
 
    std::string c_ErrorMessage;
-   const int32_t s32_Result = c_Pem.LoadFromFile(orc_Path.toStdString(), c_ErrorMessage);
+   const int32_t s32_Result = ListLoadFromFile(c_Pem, orc_Path.toStdString(), c_ErrorMessage);
 
    this->mpc_Ui->setupUi(this);
 

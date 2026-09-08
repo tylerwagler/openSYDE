@@ -1808,7 +1808,7 @@ int32_t C_OscNodeDataPoolFiler::h_SaveDataPoolFile(const C_OscNodeDataPool & orc
       //node
       C_OscNodeDataPoolFiler::h_SaveDataPool(orc_NodeDataPool, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath) != C_NO_ERR)
+      if (ListSaveToFile(c_XmlParser, orc_FilePath) != C_NO_ERR)
       {
          osc_write_log_error("Saving node definition", "Could not create file for node.");
          s32_Retval = C_CONFIG;

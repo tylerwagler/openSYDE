@@ -124,7 +124,7 @@ void C_SdNdeHalcChannelTreeView::SelectChannel(const uint32_t ou32_DomainIndex, 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcChannelTreeView::Clear(void)
 {
-   this->mc_Model.Clear();
+   this->mc_Model.clear();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -25,6 +25,7 @@
 #include "C_PuiSdHandlerFiler.hpp"
 #include "C_PuiBsElementsFiler.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -74,7 +75,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const std::string & orc_Path, uint16_t 
    if (QFileInfo::exists(QString::fromLocal8Bit(orc_Path.c_str())) == true)
    {
       C_OscXmlParser c_XmlParser;
-      s32_Return = c_XmlParser.LoadFromFile(orc_Path);
+      s32_Return = ListLoadFromFile(c_XmlParser, orc_Path);
       if (s32_Return == C_NO_ERR)
       {
          uint16_t u16_FileVersion;
@@ -340,9 +341,9 @@ void C_PuiSdHandlerData::Clear(const bool oq_TriggerSyncSignals)
    this->mc_CoreDefinition.c_NodeSquads.clear();
    this->mc_CoreDefinition.c_Buses.clear();
    this->mc_CoreDefinition.c_Nodes.clear();
-   this->c_Elements.Clear();
+   this->c_Elements.clear();
    this->c_BusTextElements.clear();
-   this->mc_SharedDatapools.Clear();
+   this->mc_SharedDatapools.clear();
    this->mc_LastKnownHalcCrcs.clear();
 
    //Reset hash

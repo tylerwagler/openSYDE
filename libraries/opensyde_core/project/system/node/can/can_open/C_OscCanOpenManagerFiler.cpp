@@ -75,7 +75,7 @@ int32_t C_OscCanOpenManagerFiler::h_LoadFile(std::map<uint8_t, C_OscCanOpenManag
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading CANopen manager data");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
+      s32_Retval = ListLoadFromFile(c_XmlParser, orc_Path);
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-can-open-managers-config")
@@ -137,7 +137,7 @@ int32_t C_OscCanOpenManagerFiler::h_SaveFile(const std::map<uint8_t,
       if (s32_Retval == C_NO_ERR)
       {
          //Don't forget to save!
-         if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR)
+         if (ListSaveToFile(c_XmlParser, orc_Path) != C_NO_ERR)
          {
             osc_write_log_error("Saving CANopen manager data", "Could not create file for node.");
             s32_Retval = C_CONFIG;
@@ -864,7 +864,7 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(const C_OscCanO
    if (orc_BasePath.empty())
    {
       const C_OscCanOpenObjectDictionary & rc_EdsFileContent = orc_Config.GetEdsFileContent();
-      orc_XmlParser.CreateNodeChild("eds-file-content", rc_EdsFileContent.c_TextFileContent.GetText());
+      orc_XmlParser.CreateNodeChild("eds-file-content", ListGetText(rc_EdsFileContent.c_TextFileContent));
    }
    else
    {
@@ -887,7 +887,7 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(const C_OscCanO
          const C_OscCanOpenObjectDictionary & rc_EdsFileContent = orc_Config.GetEdsFileContent();
          //only use "\n" as separator; SaveStringToFile will add an \r anyways
          s32_Retval = C_OscSystemFilerUtil::h_SaveStringToFile(
-            rc_EdsFileContent.c_TextFileContent.GetText("\n"), c_CompleteFileName,
+            ListGetText(rc_EdsFileContent.c_TextFileContent, "\n"), c_CompleteFileName,
             "Saving CANopen manager data");
       }
       if (opc_CreatedFiles != NULL)

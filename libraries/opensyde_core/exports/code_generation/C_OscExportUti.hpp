@@ -10,7 +10,8 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <string>
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_OscNodeDataPool.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,13 +29,13 @@ public:
    static std::string h_GetSectionSeparator(const std::string & orc_SectionName);
    static std::string h_GetHeaderSeparator(void);
    static std::string h_GetCreationToolInfo(const std::string & orc_ExportToolInfo);
-   static void h_AddExternCeStart(stw::scl::C_SclStringList & orc_Data);
-   static void h_AddExternCeEnd(stw::scl::C_SclStringList & orc_Data);
-   static void h_AddProjectIdDef(stw::scl::C_SclStringList & orc_Data, const std::string & orc_MagicName,
+   static void h_AddExternCeStart(stw::scl::std::vector<std::string> & orc_Data);
+   static void h_AddExternCeEnd(stw::scl::std::vector<std::string> & orc_Data);
+   static void h_AddProjectIdDef(stw::scl::std::vector<std::string> & orc_Data, const std::string & orc_MagicName,
                                  const bool oq_HeaderFile);
-   static void h_AddProjIdFunctionPrototype(stw::scl::C_SclStringList & orc_Data,
+   static void h_AddProjIdFunctionPrototype(stw::scl::std::vector<std::string> & orc_Data,
                                             const std::string & orc_MagicName);
-   static int32_t h_SaveToFile(stw::scl::C_SclStringList & orc_Data, const std::string & orc_Path,
+   static int32_t h_SaveToFile(stw::scl::std::vector<std::string> & orc_Data, const std::string & orc_Path,
                                const std::string & orc_FileName, const bool oq_HeaderFile);
    static void h_CollectFilePaths(std::vector<std::string> & orc_FilePaths,
                                   const std::string & orc_Path, const std::string & orc_FileName,

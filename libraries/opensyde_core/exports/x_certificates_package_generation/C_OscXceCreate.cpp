@@ -85,7 +85,7 @@ const std::string C_OscXceCreate::mhc_USE_CASE = "Creating X-Certificates Packag
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceCreate::h_CreatePackage(const std::string & orc_PackagePath,
                                         const std::vector<std::string> & orc_CertificatesPath,
-                                        const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters, stw::scl::C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage,
+                                        const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters, stw::scl::std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage,
                                         const std::string & orc_TemporaryDirectory)
 {
    int32_t s32_Return;

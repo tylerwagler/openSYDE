@@ -17,7 +17,8 @@
 #include "C_UsHandler.hpp"
 #include "C_PuiProject.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_OscLoggingHandler.hpp"
 #include "C_CieImportDbc.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -318,7 +319,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_LinkClicked(const QUrl & orc_Li
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939AddMessagesFromCatalogDialog::m_LoadCatalog()
 {
-   C_SclStringList c_WarningMessages;
+   std::vector<std::string> c_WarningMessages;
    std::string c_ErrorMessage;
    const QString c_FullFilePath = this->mc_CatalogFilePath;
 

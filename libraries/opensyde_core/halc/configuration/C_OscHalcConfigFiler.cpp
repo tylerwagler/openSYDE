@@ -23,6 +23,7 @@
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscHalcConfigFiler.hpp"
 #include "C_OscHalcDefStructFiler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -66,7 +67,7 @@ int32_t C_OscHalcConfigFiler::h_LoadFile(C_OscHalcConfig & orc_IoData, const std
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading IO data");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
+      s32_Retval = ListLoadFromFile(c_XmlParser, orc_Path);
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-node-io-config")
@@ -125,7 +126,7 @@ int32_t C_OscHalcConfigFiler::h_SaveFile(const C_OscHalcConfig & orc_IoData, con
       s32_Retval = h_SaveData(orc_IoData, c_XmlParser, orc_BasePath, opc_CreatedFiles);
       if (s32_Retval == C_NO_ERR)
       {
-         s32_Retval = c_XmlParser.SaveToFile(orc_Path);
+         s32_Retval = ListSaveToFile(c_XmlParser, orc_Path);
          if (s32_Retval != C_NO_ERR)
          {
             osc_write_log_error("Saving IO data", "Could not write to file \"" + orc_Path + "\".");

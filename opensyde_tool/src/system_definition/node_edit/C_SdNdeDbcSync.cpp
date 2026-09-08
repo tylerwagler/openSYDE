@@ -441,7 +441,7 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
 
             // Step 1: parse DBC headlessly.
             C_CieConverter::C_CieCommDefinition c_CommDef;
-            stw::scl::C_SclStringList c_Warnings;
+            stw::scl::std::vector<std::string> c_Warnings;
             std::string c_ParseError;
             const int32_t s32_ParseResult =
                C_CieImportDbc::h_ImportNetwork(c_DbcPath.toStdString().c_str(),
@@ -701,7 +701,7 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
                   c_CieNode.c_Properties.c_Name = pc_Node->pc_DeviceDefinition->c_DeviceName;
                   c_CieNode.c_Properties.c_Comment = pc_Node->c_Properties.c_Comment;
 
-                  stw::scl::C_SclStringList c_ConvertWarnings;
+                  stw::scl::std::vector<std::string> c_ConvertWarnings;
 
                   const std::vector<C_OscCanMessage> & rc_TxMsgs = pc_Container->GetMessagesConst(true);
                   for (uint32_t u32_It = 0U; u32_It < rc_TxMsgs.size(); ++u32_It)
@@ -722,7 +722,7 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
                   c_CommDef.c_Nodes.push_back(c_CieNode);
 
                   // Write the DBC.
-                  stw::scl::C_SclStringList c_ExportWarnings;
+                  stw::scl::std::vector<std::string> c_ExportWarnings;
                   std::string c_ExportError;
                   const int32_t s32_Export = C_CieExportDbc::h_ExportNetwork(
                      c_DbcPath.toStdString().c_str(), c_CommDef, c_ExportWarnings, c_ExportError);

@@ -358,21 +358,21 @@ void C_FlaUpSequences::m_ReportProgress(const int32_t os32_Result, const std::st
 void C_FlaUpSequences::m_ReportFlashloaderInformationRead(const std::string & orc_DeviceName,
                                                           const stw::opensyde_core::C_OscComFlashloaderInformation & orc_Information)
 {
-   const C_SclStringList c_MoreInformation = orc_Information.FlashloaderInformationToText();
-   C_SclStringList c_Lines;
+   const std::vector<std::string> c_MoreInformation = orc_Information.FlashloaderInformationToText();
+   std::vector<std::string> c_Lines;
    QString c_ProgressText;
 
-   c_Lines.Clear();
-   c_Lines.Add("Device name: " + orc_DeviceName);
-   c_Lines.AddStrings(&c_MoreInformation);
+   c_Lines.clear();
+   c_Lines.push_back("Device name: " + orc_DeviceName);
+   c_Lines.insert(c_Lines.end(), c_MoreInformation.begin(), c_MoreInformation.end());
 
    c_ProgressText += "openSYDE device information read: \n";
 
-   for (uint32_t u32_Line = 0U; u32_Line < c_Lines.GetCount(); u32_Line++)
+   for (uint32_t u32_Line = 0U; u32_Line < c_Lines.size(); u32_Line++)
    {
       c_ProgressText += "  ";
       c_ProgressText += c_Lines.Strings[u32_Line].c_str();
-      if (u32_Line != (c_Lines.GetCount() - 1))
+      if (u32_Line != (c_Lines.size() - 1))
       {
          c_ProgressText += "\n";
       }

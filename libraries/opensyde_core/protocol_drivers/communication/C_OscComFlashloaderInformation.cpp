@@ -96,72 +96,72 @@ std::string C_OscComFlashloaderInformation::GetEcuSerialNumberFormatDescription(
    Textual represenation of this class
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclStringList C_OscComFlashloaderInformation::FlashloaderInformationToText(void) const
+std::vector<std::string> C_OscComFlashloaderInformation::FlashloaderInformationToText(void) const
 {
-   C_SclStringList c_Text;
+   std::vector<std::string> c_Text;
    std::string c_Line;
 
-   c_Text.Clear();
+   c_Text.clear();
    c_Line = PrintFormattedCompat("Flashloader software version: V%d.%02dr%d",
                          au8_FlashloaderSoftwareVersion[0],
                          au8_FlashloaderSoftwareVersion[1],
                          au8_FlashloaderSoftwareVersion[2]);
-   c_Text.Add(c_Line);
+   c_Text.push_back(c_Line);
    c_Line = PrintFormattedCompat("Flashloader protocol version: V%d.%02dr%d",
                          au8_FlashloaderProtocolVersion[0],
                          au8_FlashloaderProtocolVersion[1],
                          au8_FlashloaderProtocolVersion[2]);
-   c_Text.Add(c_Line);
+   c_Text.push_back(c_Line);
    c_Line = PrintFormattedCompat("Protocol version: V%d.%02dr%d", au8_ProtocolVersion[0],
                          au8_ProtocolVersion[1],
                          au8_ProtocolVersion[2]);
-   c_Text.Add(c_Line);
-   c_Text.Add("Flash count: " + std::to_string(u32_FlashCount));
+   c_Text.push_back(c_Line);
+   c_Text.push_back("Flash count: " + std::to_string(u32_FlashCount));
    c_Line = "Device serial number: " + GetEcuSerialNumber() + " " +
             GetEcuSerialNumberFormatDescription();
-   c_Text.Add(c_Line);
-   c_Text.Add("Device article number: " + std::to_string(u32_EcuArticleNumber));
-   c_Text.Add("Device article version: " + c_EcuHardwareVersionNumber);
+   c_Text.push_back(c_Line);
+   c_Text.push_back("Device article number: " + std::to_string(u32_EcuArticleNumber));
+   c_Text.push_back("Device article version: " + c_EcuHardwareVersionNumber);
    c_Line = PrintFormattedCompat("Flash fingerprint date: %02d-%02d-%02d (yy-mm-dd)",
                          au8_FlashFingerprintDate[0],
                          au8_FlashFingerprintDate[1],
                          au8_FlashFingerprintDate[2]);
-   c_Text.Add(c_Line);
+   c_Text.push_back(c_Line);
    c_Line = PrintFormattedCompat("Flash fingerprint time: %02d:%02d:%02d",
                          au8_FlashFingerprintTime[0],
                          au8_FlashFingerprintTime[1],
                          au8_FlashFingerprintTime[2]);
-   c_Text.Add(c_Line);
-   c_Text.Add("Flash fingerprint username: " + c_FlashFingerprintUserName);
+   c_Text.push_back(c_Line);
+   c_Text.push_back("Flash fingerprint username: " + c_FlashFingerprintUserName);
    c_Line = PrintFormattedCompat("NVM writing available: %d",
                          (c_AvailableFeatures.q_FlashloaderCanWriteToNvm == true) ? 1 : 0);
-   c_Text.Add(c_Line);
+   c_Text.push_back(c_Line);
    c_Line = PrintFormattedCompat("Security authentication supported: %d",
                          (c_AvailableFeatures.q_SupportsSecurityAuthentication == true) ? 1 : 0);
-   c_Text.Add(c_Line);
+   c_Text.push_back(c_Line);
    c_Line = PrintFormattedCompat("Security traffic encryption supported: %d",
                          (c_AvailableFeatures.q_SupportsSecurityTrafficEncryption == true) ? 1 : 0);
-   c_Text.Add(c_Line);
+   c_Text.push_back(c_Line);
    c_Line = PrintFormattedCompat("Disabling debugger supported: %d",
                          (c_AvailableFeatures.q_SupportsDebuggerOff == true) ? 1 : 0);
-   c_Text.Add(c_Line);
+   c_Text.push_back(c_Line);
    c_Line = PrintFormattedCompat("Enabling debugger supported: %d",
                          (c_AvailableFeatures.q_SupportsDebuggerOn == true) ? 1 : 0);
-   c_Text.Add(c_Line);
+   c_Text.push_back(c_Line);
    c_Line = PrintFormattedCompat("Maximum block size information available: %d",
                          (c_AvailableFeatures.q_MaxNumberOfBlockLengthAvailable == true) ? 1 : 0);
-   c_Text.Add(c_Line);
+   c_Text.push_back(c_Line);
    if (c_AvailableFeatures.q_MaxNumberOfBlockLengthAvailable == true)
    {
       c_Line = PrintFormattedCompat("Maximum block size: %d", u16_MaxNumberOfBlockLength);
-      c_Text.Add(c_Line);
+      c_Text.push_back(c_Line);
    }
    c_Line = PrintFormattedCompat("Ethernet2Ethernet routing supported: %d",
                          (c_AvailableFeatures.q_EthernetToEthernetRoutingSupported == true) ? 1 : 0);
-   c_Text.Add(c_Line);
+   c_Text.push_back(c_Line);
    c_Line = PrintFormattedCompat("FileBasedTransferExitResult available: %d",
                          (c_AvailableFeatures.q_FileBasedTransferExitResultAvailable == true) ? 1 : 0);
-   c_Text.Add(c_Line);
+   c_Text.push_back(c_Line);
 
    return c_Text;
 }

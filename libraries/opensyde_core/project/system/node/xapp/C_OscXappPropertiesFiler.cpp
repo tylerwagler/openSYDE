@@ -17,6 +17,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscXappPropertiesFiler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -147,7 +148,7 @@ int32_t C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(const C_OscXappProper
       //node
       C_OscXappPropertiesFiler::h_SaveXappProperties(orc_XappProperties, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath) != C_NO_ERR)
+      if (ListSaveToFile(c_XmlParser, orc_FilePath) != C_NO_ERR)
       {
          osc_write_log_error("Saving node definition", "Could not create file for node.");
          s32_Retval = C_CONFIG;

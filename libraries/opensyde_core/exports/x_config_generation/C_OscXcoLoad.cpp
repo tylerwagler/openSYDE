@@ -77,7 +77,7 @@ const std::string C_OscXcoLoad::mhc_USE_CASE = "Unpacking X-Config Package";
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXcoLoad::h_ProcessPackage(const std::string & orc_PackagePath, const std::string & orc_TargetUnzipPath,
                                        C_OscXcoManifest & orc_Manifest, std::string & orc_SystemDefinitionPath,
-                                       std::string & orc_DeviceDefinitionPath, C_SclStringList & orc_WarningMessages,
+                                       std::string & orc_DeviceDefinitionPath, std::vector<std::string> & orc_WarningMessages,
                                        std::string & orc_ErrorMessage)
 {
    int32_t s32_Return;

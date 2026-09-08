@@ -934,7 +934,7 @@ void C_SdHandlerWidget::m_Export(void)
                if ((pc_CanMessageContainer != NULL) && (pc_CanMessageContainer->q_IsComProtocolUsedByInterface == true))
                {
                   int32_t s32_Error = C_NO_ERR;
-                  stw::scl::C_SclStringList c_Warnings;
+                  stw::scl::std::vector<std::string> c_Warnings;
                   const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
                   C_CieConverter::C_CieNode c_CurrentCieNode;
 
@@ -983,7 +983,7 @@ void C_SdHandlerWidget::m_Export(void)
                                                                       std::to_string(this->mu32_Index)
                                                                       +
                                                                       "\" because message ID is not unique.";
-                              c_Warnings.Append(c_Message);
+                              c_Warnings.push_back(c_Message);
                               osc_write_log_warning("DBC Export", c_Message);
                               s32_Error += C_WARN;
                            }
@@ -1030,7 +1030,7 @@ void C_SdHandlerWidget::m_Export(void)
                                                                       std::to_string(this->mu32_Index)
                                                                       +
                                                                       "\" because message ID is not unique. Message is ignored.";
-                              c_Warnings.Append(c_Message);
+                              c_Warnings.push_back(c_Message);
                               osc_write_log_warning("DBC Export", c_Message);
                               s32_Error += C_WARN;
                            }
@@ -1048,7 +1048,7 @@ void C_SdHandlerWidget::m_Export(void)
                      C_OgeWiCustomMessage c_ExportWarnings(this, C_OgeWiCustomMessage::E_Type::eWARNING);
                      c_ExportWarnings.SetHeading("DBC file export");
                      c_ExportWarnings.SetDescription("Warnings occurred during DBC file export.");
-                     c_ExportWarnings.SetDetails(c_Warnings.GetText().c_str());
+                     c_ExportWarnings.SetDetails(ListGetText(c_Warnings).c_str());
                      c_ExportWarnings.SetCustomMinHeight(180, 300);
                      c_ExportWarnings.Execute();
                   }
@@ -1220,7 +1220,7 @@ void C_SdHandlerWidget::m_RtfExport(void)
             C_UsHandler::h_GetInstance()->Save();
 
             // export to RTF file
-            stw::scl::C_SclStringList c_Warnings;
+            stw::scl::std::vector<std::string> c_Warnings;
             std::string c_Error;
             const int32_t s32_Return = pc_DialogExportReport->ExportToRtf(c_RtfPath, c_CompanyName, c_CompanyLogoPath,
                                                                           this->mpc_Topology, c_Warnings, c_Error);
@@ -1241,7 +1241,7 @@ void C_SdHandlerWidget::m_RtfExport(void)
             }
             else if (s32_Return == C_WARN)
             {
-               const std::string c_Details = "Warnings: \r\n" + c_Warnings.GetText();
+               const std::string c_Details = "Warnings: \r\n" + ListGetText(c_Warnings);
                C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eWARNING);
                c_MessageResult.SetHeading("RTF File Export");
                c_MessageResult.SetDescription("Warnings occurred on RTF File Export.");

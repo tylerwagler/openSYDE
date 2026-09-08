@@ -91,10 +91,10 @@ int32_t C_OscImportEdsDcf::h_Import(const std::string & orc_FilePath, const uint
    int32_t s32_Retval = C_NO_ERR;
 
    //Clear data
-   orc_AllRxMessageData.Clear();
-   orc_AllTxMessageData.Clear();
-   orc_AllInvalidRxMessageData.Clear();
-   orc_AllInvalidTxMessageData.Clear();
+   orc_AllRxMessageData.clear();
+   orc_AllTxMessageData.clear();
+   orc_AllInvalidRxMessageData.clear();
+   orc_AllInvalidTxMessageData.clear();
    orc_ImportMessagesPerMessage.clear();
    orc_ParsingError = "";
 
@@ -121,7 +121,7 @@ int32_t C_OscImportEdsDcf::h_Import(const std::string & orc_FilePath, const uint
       if (s32_Retval == C_NO_ERR)
       {
          C_OscCanOpenObjectDictionary c_Dictionary;
-         if (c_Dictionary.LoadFromFile(orc_FilePath) == C_NO_ERR)
+         if (ListLoadFromFile(c_Dictionary, orc_FilePath) == C_NO_ERR)
          {
             std::vector<uint32_t> c_Dummies;
             uint32_t u32_StartId;
@@ -2138,10 +2138,10 @@ void C_OscImportEdsDcf::mh_LoadDummies(const std::string & orc_FilePath, std::ve
 {
    try
    {
-      C_SclStringList c_StringList;
+      std::vector<std::string> c_StringList;
       C_SclIniFile c_Ini(orc_FilePath);
       c_Ini.ReadSection("DummyUsage", &c_StringList);
-      if (c_StringList.GetCount() > 0UL)
+      if (c_StringList.size() > 0UL)
       {
          //1B is last supported data type
          for (uint32_t u32_ItPossibleDummy = 1U; u32_ItPossibleDummy <= 0x1B; ++u32_ItPossibleDummy)
@@ -2151,7 +2151,7 @@ void C_OscImportEdsDcf::mh_LoadDummies(const std::string & orc_FilePath, std::ve
             c_Stream << std::setw(4) << std::setfill('0') << std::hex << u32_ItPossibleDummy;
             c_CurString = std::string("Dummy") + c_Stream.str().c_str();
             //Check if entry exists
-            if (c_StringList.IndexOf(c_CurString) >= 0L)
+            if (VectorIndexOf(c_StringList, c_CurString) >= 0L)
             {
                //Check if entry specifies dummy can be used
                if (c_Ini.ReadBool("DummyUsage", c_CurString, false) == true)

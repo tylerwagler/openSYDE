@@ -329,7 +329,7 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SdManTopologyCopyPasteManager::CheckValidContentAndPrepareData(void)
 {
-   this->mc_LastKnownData.Clear();
+   this->mc_LastKnownData.clear();
    return (C_SdClipBoardHelper::h_LoadDataSnapShotFromClipboard(this->mc_LastKnownData) == C_NO_ERR);
 }
 

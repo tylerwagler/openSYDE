@@ -83,7 +83,7 @@ const std::string C_OscXcoCreate::mhc_USE_CASE = "Creating X-Config Package";
 int32_t C_OscXcoCreate::h_CreatePackage(const std::string & orc_PackagePath,
                                         const C_OscSystemDefinition & orc_SystemDefinition,
                                         const C_OscXcoManifest & orc_Manifest,
-                                        stw::scl::C_SclStringList & orc_WarningMessages,
+                                        stw::scl::std::vector<std::string> & orc_WarningMessages,
                                         std::string & orc_ErrorMessage,
                                         const std::string & orc_TemporaryDirectory)
 {

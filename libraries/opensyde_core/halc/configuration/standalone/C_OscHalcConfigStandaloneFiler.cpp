@@ -20,6 +20,7 @@
 #include "C_OscHalcConfigFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscHalcConfigStandaloneFiler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -69,7 +70,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(C_OscHalcConfigStan
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading IO standalone data");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
+      s32_Retval = ListLoadFromFile(c_XmlParser, orc_Path);
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-node-io-config-standalone")
@@ -126,7 +127,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(const C_OscHalcConf
       s32_Retval = h_SaveDataStandalone(orc_IoData, c_XmlParser);
       if (s32_Retval == C_NO_ERR)
       {
-         s32_Retval = c_XmlParser.SaveToFile(orc_Path);
+         s32_Retval = ListSaveToFile(c_XmlParser, orc_Path);
          if (s32_Retval != C_NO_ERR)
          {
             osc_write_log_error("Saving IO standalone data", "Could not write to file \"" + orc_Path + "\".");

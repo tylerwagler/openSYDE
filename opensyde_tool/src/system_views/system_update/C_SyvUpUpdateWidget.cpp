@@ -1240,7 +1240,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
    //Always reset flag
    this->mq_ConnectFailed = false;
    this->mq_NodesPreconditionError = false;
-   this->mc_NodePreconditionErrors.Clear();
+   this->mc_NodePreconditionErrors.clear();
 
    if (s32_Return == C_NO_ERR)
    {
@@ -1637,7 +1637,7 @@ void C_SyvUpUpdateWidget::m_Disconnect(void)
    //Always reset flag
    this->mq_ConnectFailed = false;
    this->mq_NodesPreconditionError = false;
-   this->mc_NodePreconditionErrors.Clear();
+   this->mc_NodePreconditionErrors.clear();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

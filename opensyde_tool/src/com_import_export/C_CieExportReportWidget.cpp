@@ -110,7 +110,7 @@ void C_CieExportReportWidget::InitStaticNames(void) const
 void C_CieExportReportWidget::SetMessageData(const std::map<std::string,
                                                             std::string> & orc_NodeMapping,
                                              const C_CieExportDbc::C_ExportStatistic & orc_ExportStatistic,
-                                             const C_SclStringList & orc_Warnings)
+                                             const std::vector<std::string> & orc_Warnings)
 {
    //Copy to internal data
    this->mc_NodeMapping = orc_NodeMapping;
@@ -157,12 +157,12 @@ void C_CieExportReportWidget::m_BuildReport(void)
 
    // build up warning messages
    std::string c_Warnings;
-   const uint32_t u32_NumOfWarnings = this->mc_Warnings.GetCount();
+   const uint32_t u32_NumOfWarnings = this->mc_Warnings.size();
    if (u32_NumOfWarnings > 0)
    {
       c_Warnings += "<br/>";
       c_Warnings +=  "Warnings: ";
-      for (uint32_t u32_Pos = 0; u32_Pos < this->mc_Warnings.GetCount(); u32_Pos++)
+      for (uint32_t u32_Pos = 0; u32_Pos < this->mc_Warnings.size(); u32_Pos++)
       {
          c_Warnings += "<br/>";
          c_Warnings += this->mc_Warnings.Strings[u32_Pos];

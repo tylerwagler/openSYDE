@@ -12,7 +12,8 @@
 #define C_OSCEXPORTCANOPENINIT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_OscNode.hpp"
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

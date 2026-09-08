@@ -21,6 +21,7 @@
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscViewFiler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -63,7 +64,7 @@ int32_t C_SyvUpPacConfigFiler::h_LoadConfig(const QString & orc_FilePath, C_SyvU
 
       c_XmlParser.SetLogHeading("Loading Update Package Configuration");
 
-      s32_Return = c_XmlParser.LoadFromFile(orc_FilePath.toStdString().c_str());
+      s32_Return = ListLoadFromFile(c_XmlParser, orc_FilePath.toStdString().c_str());
 
       if (s32_Return == C_NO_ERR)
       {
@@ -190,7 +191,7 @@ int32_t C_SyvUpPacConfigFiler::h_SaveConfig(const QString & orc_FilePath, const 
       if (q_Success == true)
       {
          // Save file
-         s32_Return = c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str());
+         s32_Return = ListSaveToFile(c_XmlParser, orc_FilePath.toStdString().c_str());
       }
       else
       {

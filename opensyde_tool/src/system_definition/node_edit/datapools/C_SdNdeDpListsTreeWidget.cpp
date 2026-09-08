@@ -162,7 +162,7 @@ void C_SdNdeDpListsTreeWidget::SetDataPool(const uint32_t & oru32_NodeIndex, con
    this->mu32_DataPoolIndex = oru32_DataPoolIndex;
    this->clear();
    this->mc_UndoManager.clear();
-   this->mc_ModelViewManager.Clear();
+   this->mc_ModelViewManager.clear();
    this->mc_ErrorManager.Init(this->mu32_NodeIndex, this->mu32_DataPoolIndex);
    this->mc_Delegate.SetDataPool(this->mu32_NodeIndex, this->mu32_DataPoolIndex);
    this->mc_Delegate.SetMaximumHeight(this->height());

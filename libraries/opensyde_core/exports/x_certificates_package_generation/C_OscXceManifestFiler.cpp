@@ -68,7 +68,7 @@ int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const s
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading manifest data");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
+      s32_Retval = ListLoadFromFile(c_XmlParser, orc_Path);
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-update-package-manifest")
@@ -118,7 +118,7 @@ int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, c
       //node
       C_OscXceManifestFiler::h_SaveData(orc_Config, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR)
+      if (ListSaveToFile(c_XmlParser, orc_Path) != C_NO_ERR)
       {
          osc_write_log_error("Saving manifest data", "Could not create file.");
          s32_Retval = C_CONFIG;

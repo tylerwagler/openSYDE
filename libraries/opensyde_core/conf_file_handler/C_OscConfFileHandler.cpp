@@ -56,15 +56,15 @@ C_OscConfFileHandler::~C_OscConfFileHandler()
 //---------------------------------------------------------------------------------------------------------------------/
 int32_t C_OscConfFileHandler::LoadSettings(const std::string & orc_Path)
 {
-   C_SclStringList c_StringListSource;
-   C_SclStringList c_StringListWithoutComments;
+   std::vector<std::string> c_StringListSource;
+   std::vector<std::string> c_StringListWithoutComments;
    int32_t s32_Result = C_NO_ERR;
 
    mc_ConfigFilePath = orc_Path;
 
    try
    {
-      c_StringListSource.LoadFromFile(orc_Path);
+      ListLoadFromFile(c_StringListSource, orc_Path);
    }
    catch (...)
    {
@@ -74,13 +74,13 @@ int32_t C_OscConfFileHandler::LoadSettings(const std::string & orc_Path)
    if (s32_Result == C_NO_ERR)
    {
       //extract only lines without comments:
-      for (uint32_t u32_Line = 0U; u32_Line < c_StringListSource.GetCount(); u32_Line++)
+      for (uint32_t u32_Line = 0U; u32_Line < c_StringListSource.size(); u32_Line++)
       {
-          const std::string c_Line = TrimCompat(c_StringListSource.Strings[u32_Line]);
+          const std::string c_Line = TrimCompat(c_StringListSource[u32_Line]);
 
          if ((c_Line != "") && (PosCompat(c_Line, "#") == 0))
          {
-            c_StringListWithoutComments.Add(c_StringListSource.Strings[u32_Line]);
+            c_StringListWithoutComments.push_back(c_StringListSource[u32_Line]);
          }
       }
 
@@ -114,12 +114,12 @@ int32_t C_OscConfFileHandler::LoadSettings(const std::string & orc_Path)
 int32_t C_OscConfFileHandler::mh_ReplaceSettings(const std::string & orc_Path,
                                                   const std::vector<std::pair<std::string, std::string> > & orc_Configs)
 {
-   C_SclStringList c_StringList;
+   std::vector<std::string> c_StringList;
    int32_t s32_Result = C_NO_ERR;
 
    try
    {
-      c_StringList.LoadFromFile(orc_Path);
+      ListLoadFromFile(c_StringList, orc_Path);
    }
    catch (...)
    {
@@ -135,21 +135,21 @@ int32_t C_OscConfFileHandler::mh_ReplaceSettings(const std::string & orc_Path,
       {
           const std::pair<std::string, std::string> & rc_KeyValuePair = orc_Configs[u32_Counter];
           const std::string c_NewEntry = rc_KeyValuePair.first + "=" + rc_KeyValuePair.second;
-         const int32_t s32_Index = c_StringList.IndexOfName(rc_KeyValuePair.first);
+         const int32_t s32_Index = ListIndexOfName(c_StringList, rc_KeyValuePair.first);
 
          if (s32_Index == -1)
          {
-            c_StringList.Append(c_NewEntry);
+            c_StringList.push_back(c_NewEntry);
          }
          else
          {
-            c_StringList.Strings[s32_Index] = c_NewEntry;
+            c_StringList[s32_Index] = c_NewEntry;
          }
       }
 
       try
       {
-         c_StringList.SaveToFile(orc_Path);
+         ListSaveToFile(c_StringList, orc_Path);
       }
       catch (...)
       {

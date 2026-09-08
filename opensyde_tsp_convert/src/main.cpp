@@ -41,6 +41,7 @@
 #include "C_OscTargetSupportPackageV2Filer.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscZipFile.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -250,7 +251,7 @@ static int32_t mh_WriteEmptyUiNodeXml(const std::string & orc_FilePath)
       tgl_assert(c_XmlParser.SelectNodeParent() == "node");
    }
 
-   return c_XmlParser.SaveToFile(orc_FilePath);
+   return ListSaveToFile(c_XmlParser, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -282,7 +283,7 @@ static int32_t mh_WriteWrapperXml(const std::string & orc_OutputTspPath, const s
       tgl_assert(c_XmlParser.SelectNodeParent() == "opensyde-target-support-package");
    }
 
-   return c_XmlParser.SaveToFile(orc_OutputTspPath);
+   return ListSaveToFile(c_XmlParser, orc_OutputTspPath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

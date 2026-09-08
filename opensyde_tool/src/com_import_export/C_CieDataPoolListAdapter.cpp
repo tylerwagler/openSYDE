@@ -198,10 +198,10 @@ void C_CieDataPoolListAdapter::mh_FillUpCoreStructureByDbcValues(
         ++c_CanMessageIter)
    {
       // restore warnings
-      if (c_CanMessageIter->c_Warnings.GetCount() > 0)
+      if (c_CanMessageIter->c_Warnings.size() > 0)
       {
          std::string c_Tmp;
-         for (uint32_t u32_Pos = 0; u32_Pos < c_CanMessageIter->c_Warnings.GetCount(); u32_Pos++)
+         for (uint32_t u32_Pos = 0; u32_Pos < c_CanMessageIter->c_Warnings.size(); u32_Pos++)
          {
             c_Tmp += c_CanMessageIter->c_Warnings.Strings[u32_Pos];
             c_Tmp += mc_MessageLineBreak;
@@ -479,7 +479,7 @@ int32_t C_CieDataPoolListAdapter::h_ConvertToDbcImportMessage(const uint32_t ou3
                                                               const C_OscCanProtocol::E_Type oe_Type,
                                                               const C_OscCanMessage & orc_OscCanMessage,
                                                               C_CieConverter::C_CieNodeMessage & orc_CieNodeMessage,
-                                                              C_SclStringList & orc_Warnings)
+                                                              std::vector<std::string> & orc_Warnings)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -542,7 +542,7 @@ int32_t C_CieDataPoolListAdapter::h_ConvertToDbcImportMessage(const uint32_t ou3
                                           std::to_string(u32_PosSignal) + "\" in message \"" +
                                           orc_OscCanMessage.c_Name + "\" in bus \"" +
                                           std::to_string(ou32_BusIndex) + "\".";
-            orc_Warnings.Append(c_Message);
+            orc_Warnings.push_back(c_Message);
             osc_write_log_warning("DBC Export", c_Message);
             s32_Return = C_WARN;
          }
@@ -552,7 +552,7 @@ int32_t C_CieDataPoolListAdapter::h_ConvertToDbcImportMessage(const uint32_t ou3
    {
       const std::string c_Message = "Can't find valid signal for message \"" + orc_OscCanMessage.c_Name +
                                     "\" in bus \"" + std::to_string(ou32_BusIndex) + "\".";
-      orc_Warnings.Append(c_Message);
+      orc_Warnings.push_back(c_Message);
       osc_write_log_warning("DBC Export", c_Message);
       s32_Return = C_WARN;
    }

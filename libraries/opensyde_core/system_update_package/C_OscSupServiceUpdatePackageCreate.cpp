@@ -120,7 +120,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(const std::string & orc_PackagePath,
-                                                                         const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes, const std::vector<uint32_t> & orc_NodesUpdateOrder, const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage, const std::string & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<std::string> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
+                                                                         const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes, const std::vector<uint32_t> & orc_NodesUpdateOrder, const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage, const std::string & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<std::string> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
                                                                          const std::vector<std::string> & orc_NodeSignaturePemFiles)
 {
    int32_t s32_Retval;
@@ -215,7 +215,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const std::string & 
                                                             const uint32_t ou32_ActiveBusIndex,
                                                             const vector<uint8_t> & orc_ActiveNodes,
                                                             const vector<uint32_t> & orc_NodesUpdateOrder,
-                                                            const vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage, const std::string & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<std::string> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
+                                                            const vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage, const std::string & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<std::string> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
                                                             const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
    int32_t s32_Return;
@@ -642,7 +642,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_SupDefParamAdapter(const uint32_t
             // strange: internal configuration error - should not happen!
             const std::string c_Message = "Could not find update position for active node \"" +
                                           std::to_string(u32_Pos) + "\".";
-            mhc_WarningMessages.Append(c_Message);
+            mhc_WarningMessages.push_back(c_Message);
             osc_write_log_warning("Creating Update Package", c_Message);
             s32_Return = C_WARN;
          }
@@ -1181,7 +1181,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_GetPemFileContent(const std::vect
          {
             std::string c_Err;
             C_OscSecurityPemSecUpdate c_Pem;
-            s32_Retval = c_Pem.LoadFromFile(c_NodeSignaturePemFiles[u32_ItNode].c_str(), c_Err);
+            s32_Retval = ListLoadFromFile(c_Pem, c_NodeSignaturePemFiles[u32_ItNode].c_str(), c_Err);
             if (s32_Retval != C_NO_ERR)
             {
                mhc_ErrorMessage = c_Err;

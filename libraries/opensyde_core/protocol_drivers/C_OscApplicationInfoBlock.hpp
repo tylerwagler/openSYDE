@@ -14,7 +14,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include <string>
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -78,7 +79,7 @@ public:
    std::string GetProjectVersion(void) const;
    std::string GetAdditionalInfo(void) const;
 
-   void AddInfoToList(stw::scl::C_SclStringList & orc_List) const;
+   void AddInfoToList(stw::scl::std::vector<std::string> & orc_List) const;
 
    int32_t GetInfoLevel(void) const;
    std::string GetInfoLevelAsString(void) const;

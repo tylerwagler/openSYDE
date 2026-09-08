@@ -239,7 +239,7 @@ int32_t C_OscNodeFiler::h_SaveNodeFile(const C_OscNode & orc_Node, const std::st
       s32_Retval = C_OscNodeFiler::h_SaveNode(orc_Node, c_XmlParser, orc_FilePath, opc_CreatedFiles,
                                               orc_NodeIndicesToNameMap);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath) != C_NO_ERR)
+      if (ListSaveToFile(c_XmlParser, orc_FilePath) != C_NO_ERR)
       {
          osc_write_log_error("Saving node definition", "Could not create file for node.");
          s32_Retval = C_CONFIG;
@@ -1348,7 +1348,7 @@ int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig & orc_Config, C_OscXmlParser
    int32_t s32_Retval = C_NO_ERR;
 
    //Clear
-   orc_Config.Clear();
+   orc_Config.clear();
    if (orc_XmlParser.SelectNodeChild("halc-file") == "halc-file")
    {
       if (orc_BasePath.empty())

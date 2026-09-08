@@ -152,7 +152,7 @@ C_OscIpDispatcherWinSock::C_OscIpDispatcherWinSock(void) :
    const int x_Result =                               //lint !e8080 !e970 //using type to match library interface
                         WSAStartup(0x0201U, &c_Data); //Request version 2.1
 
-   this->mc_PreferredInterfaceNames.Clear();
+   this->mc_PreferredInterfaceNames.clear();
 
    if (x_Result != 0)
    {
@@ -252,8 +252,8 @@ int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
 
             while (pc_Address != NULL)
             {
-               if ((this->mc_PreferredInterfaceNames.GetCount() == 0) ||
-                   (this->mc_PreferredInterfaceNames.IndexOf(pc_Adapter->FriendlyName) != -1))
+               if ((this->mc_PreferredInterfaceNames.size() == 0) ||
+                   (VectorIndexOf(this->mc_PreferredInterfaceNames, pc_Adapter->FriendlyName) != -1))
                {
                   // sockaddr is the generic descriptor and sockaddr_in is IPV4 specific
                   // https://stackoverflow.com/questions/21099041/why-do-we-cast-sockaddr-in-to-sockaddr-when-calling-bind/21099196
@@ -1292,6 +1292,6 @@ void C_OscIpDispatcherWinSock::LoadConfigFile(const std::string & orc_FileLocati
    }
    else
    {
-      this->mc_PreferredInterfaceNames.Clear();
+      this->mc_PreferredInterfaceNames.clear();
    }
 }

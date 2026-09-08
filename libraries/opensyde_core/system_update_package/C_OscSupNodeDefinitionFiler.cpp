@@ -21,6 +21,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSupSignatureFiler.hpp"
 #include "C_OscSupNodeDefinitionFiler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -151,7 +152,7 @@ int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::string> 
          {
             C_OscXmlParserLog c_XmlParser;
             c_XmlParser.SetLogHeading("Loading secure update collection definition");
-            s32_Retval = c_XmlParser.LoadFromFile(orc_Files[u32_NodeCounter]);
+            s32_Retval = ListLoadFromFile(c_XmlParser, orc_Files[u32_NodeCounter]);
             if (s32_Retval == C_NO_ERR)
             {
                // get update position
@@ -254,7 +255,7 @@ int32_t C_OscSupNodeDefinitionFiler::mh_SaveNode(const std::string & orc_File,
    mh_SaveSignatureFile(orc_Node, c_XmlParser);
 
    // save update package definition file
-   s32_Result = c_XmlParser.SaveToFile(orc_File);
+   s32_Result = ListSaveToFile(c_XmlParser, orc_File);
    if (s32_Result != C_NO_ERR)
    {
       s32_Result = C_RD_WR;

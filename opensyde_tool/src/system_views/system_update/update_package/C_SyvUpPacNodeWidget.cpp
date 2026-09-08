@@ -1978,7 +1978,7 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(const QString & orc_PublicKeyPath, 
    QString c_FilterName;
    QString c_DefaultFilename;
    QString c_SelectedFilterName;
-   C_SclStringList c_Warnings;
+   std::vector<std::string> c_Warnings;
    std::string c_Error;
    QString c_Folder;
    QString c_FullPackagePath;

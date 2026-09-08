@@ -64,23 +64,23 @@ uint16_t C_OscUtilChecksummedIniFile::m_CalcCheckSum(const bool oq_Fast)
 {
    uint32_t u32_NumSections;
    uint16_t u16_CheckSumCalc;
-   C_SclStringList c_SectionList;
-   C_SclStringList c_DirectivesValues;
+   std::vector<std::string> c_SectionList;
+   std::vector<std::string> c_DirectivesValues;
 
    this->ReadSections(&c_SectionList);
-   u32_NumSections = static_cast<uint16_t>(c_SectionList.GetCount());
+   u32_NumSections = static_cast<uint16_t>(c_SectionList.size());
    u16_CheckSumCalc = 58453U;
    for (uint32_t u32_Section = 0U; u32_Section < u32_NumSections; u32_Section++)
    {
-      if (c_SectionList.Strings[u32_Section] != "INISAFE")
+      if (c_SectionList[u32_Section] != "INISAFE")
       {
          //if "fast": do NOT append
          uint32_t u32_NumDirectives;
-         ReadSectionValues(c_SectionList.Strings[u32_Section], &c_DirectivesValues, !oq_Fast);
-         u32_NumDirectives = c_DirectivesValues.GetCount();
+         ReadSectionValues(c_SectionList[u32_Section], &c_DirectivesValues, !oq_Fast);
+         u32_NumDirectives = c_DirectivesValues.size();
          for (uint32_t u32_Directive = 0U; u32_Directive < u32_NumDirectives; u32_Directive++)
          {
-            const std::string & rc_String = c_DirectivesValues.Strings[u32_Directive];
+            const std::string & rc_String = c_DirectivesValues[u32_Directive];
             for (uint32_t u32_Byte = 0U; u32_Byte < rc_String.length(); u32_Byte++)
             {
                uint8_t u8_Value;

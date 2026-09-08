@@ -582,11 +582,11 @@ void C_SdNdeCoDeviceUpdateEdsDialog::m_CompareDataMessageVector(
    const bool oq_MessageIsTxInEds)
 {
    //Clear new
-   orc_NewMessages.Clear();
+   orc_NewMessages.clear();
    //Clear adapted
-   orc_AdaptedMessages.Clear();
+   orc_AdaptedMessages.clear();
    //Clear deleted
-   orc_DeletedMessages.Clear();
+   orc_DeletedMessages.clear();
    //Vector size check
    tgl_assert(orc_ExistingMessages.c_OscMessageData.size() == orc_ExistingMessages.c_UiMessageData.size());
    tgl_assert(orc_ExistingMessages.c_OscSignalData.size() == orc_ExistingMessages.c_UiSignalData.size());

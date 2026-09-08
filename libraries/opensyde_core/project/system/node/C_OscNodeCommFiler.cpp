@@ -222,7 +222,7 @@ int32_t C_OscNodeCommFiler::h_SaveNodeComProtocolFile(const C_OscCanProtocol & o
       //node
       C_OscNodeCommFiler::h_SaveNodeComProtocol(orc_NodeComProtocol, c_XmlParser, orc_DatapoolName);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath) != C_NO_ERR)
+      if (ListSaveToFile(c_XmlParser, orc_FilePath) != C_NO_ERR)
       {
          osc_write_log_error("Saving node definition", "Could not create file for node.");
          s32_Retval = C_CONFIG;

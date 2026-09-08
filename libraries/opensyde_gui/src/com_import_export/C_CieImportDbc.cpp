@@ -54,7 +54,7 @@ Vector::DBC::AttributeDefinition C_CieImportDbc::mhc_AttributeSendType;
 std::string C_CieImportDbc::mhc_DefaultSendTypeValue; // get value from network attribute default values
 float32_t C_CieImportDbc::mhf32_DefaultInitialValue;  // default initial value of DBC file or openSYDE
 bool C_CieImportDbc::mhq_DefaultValueDefined;         // in DBC file
-C_SclStringList C_CieImportDbc::mhc_WarningMessages;  // empty list
+std::vector<std::string> C_CieImportDbc::mhc_WarningMessages;  // empty list
 std::string C_CieImportDbc::mhc_ErrorMessage = "";    // empty string
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
@@ -84,12 +84,12 @@ std::string C_CieImportDbc::mhc_ErrorMessage = "";    // empty string
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieImportDbc::h_ImportNetwork(const std::string & orc_File,
                                         C_CieConverter::C_CieCommDefinition & orc_Definition,
-                                        C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage,
+                                        std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage,
                                         const bool oq_AddUnmappedMessages)
 {
    int32_t s32_Return;
 
-   mhc_WarningMessages.Clear(); // clear old warning messages for this import
+   mhc_WarningMessages.clear(); // clear old warning messages for this import
    mhc_ErrorMessage = "";       // clear old error message for this import
    Vector::DBC::Network c_DbcNetwork;
 
@@ -184,7 +184,7 @@ int32_t C_CieImportDbc::h_ImportNetwork(const std::string & orc_File,
                //Report issue
                osc_write_log_warning("DBC file import",
                                      "message \"" + c_String + "\" is not assigned to a node and ignored.");
-               mhc_WarningMessages.Append("Message \"" + c_String + "\" is not assigned to a node and ignored.");
+               mhc_WarningMessages.push_back("Message \"" + c_String + "\" is not assigned to a node and ignored.");
             }
          }
          if (oq_AddUnmappedMessages == false)
@@ -450,7 +450,7 @@ int32_t C_CieImportDbc::mh_PrepareMessage(const Vector::DBC::Network & orc_DbcNe
          osc_write_log_warning("DBC file import",
                                "CAN Message \"" + orc_Message.c_CanMessage.c_Name +
                                "\" was adapted due to a multiplexed message.");
-         orc_Message.c_Warnings.Append("The multiplexer signal properties were adapted due to a multiplexed message.\n"
+         orc_Message.c_Warnings.push_back("The multiplexer signal properties were adapted due to a multiplexed message.\n"
                                        "Multiplexer signal restrictions:\n"
                                        "- Auto min/max: active\n"
                                        "- Factor: 1\n"
@@ -563,7 +563,7 @@ int32_t C_CieImportDbc::mh_GetSignal(const Vector::DBC::Network & orc_DbcNetwork
       c_Signal.u16_ComBitLength = 1U;
       osc_write_log_warning("DBC file import",
                             "Invalid bit length of signal \"" + c_String + "\". Bit length set to \"1\".");
-      orc_Message.c_Warnings.Append("Invalid bit length of signal \"" + c_String + "\". Bit length set to \"1\".");
+      orc_Message.c_Warnings.push_back("Invalid bit length of signal \"" + c_String + "\". Bit length set to \"1\".");
       s32_Return = C_WARN;
    }
 
@@ -584,7 +584,7 @@ int32_t C_CieImportDbc::mh_GetSignal(const Vector::DBC::Network & orc_DbcNetwork
       // default value
       c_Signal.e_ComByteOrder = C_OscCanSignal::E_ByteOrderType::eBYTE_ORDER_INTEL;
       osc_write_log_warning("DBC file import", "\"" + c_String + "\" signal byte order type error");
-      orc_Message.c_Warnings.Append("\"" + c_String + "\" signal byte order type error");
+      orc_Message.c_Warnings.push_back("\"" + c_String + "\" signal byte order type error");
       s32_Return = C_WARN;
    }
 
@@ -748,7 +748,7 @@ void C_CieImportDbc::mh_VerifySignalValueTable(C_CieConverter::C_CieCanSignal & 
 int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcNetwork,
                                            const Vector::DBC::Signal & orc_DbcSignal, const bool oq_MultiplexerSignal,
                                            bool & orq_SignalAdapted, C_CieConverter::C_CieDataPoolElement & orc_Element,
-                                           C_SclStringList & orc_WarningMessages)
+                                           std::vector<std::string> & orc_WarningMessages)
 {
    int32_t s32_Return = C_NO_ERR;
    const std::string c_String = orc_DbcSignal.name.c_str();
@@ -894,7 +894,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
          f64_MaxValuePhy = (f64_MaxValue * c_DbcSignal.factor) + c_DbcSignal.offset;
 
          osc_write_log_warning("DBC file import", "Unknown value type error for signal \"" + c_String + "\".");
-         orc_WarningMessages.Append("Unknown value type error for signal \"" + c_String + "\".");
+         orc_WarningMessages.push_back("Unknown value type error for signal \"" + c_String + "\".");
          s32_Return = C_WARN;
       }
    }
@@ -923,7 +923,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
       f64_MaxValuePhy = (f64_MaxValue * c_DbcSignal.factor) + c_DbcSignal.offset;
 
       osc_write_log_warning("DBC file import", "Unknown value type error for signal \"" + c_String + "\".");
-      orc_WarningMessages.Append("Unknown value type error for signal \"" + c_String + "\".");
+      orc_WarningMessages.push_back("Unknown value type error for signal \"" + c_String + "\".");
       s32_Return = C_WARN;
    }
 
@@ -938,7 +938,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                     QString::number(f64_MinValue).toStdString().c_str() +
                                     "\". Correct datatype with \"Start Bit\" and \"Length\" has to be set manually.";
       osc_write_log_warning("DBC file import", c_Message);
-      orc_WarningMessages.Append(c_Message);
+      orc_WarningMessages.push_back(c_Message);
       s32_Return = C_WARN;
    }
    if (mh_CheckRange(f64_MaxValue, e_CurrentType) != C_NO_ERR)
@@ -948,7 +948,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                     QString::number(f64_MaxValue).toStdString().c_str() +
                                     "\". Correct datatype with \"Start Bit\" and \"Length\" has to be set manually.";
       osc_write_log_warning("DBC file import", c_Message);
-      orc_WarningMessages.Append(c_Message);
+      orc_WarningMessages.push_back(c_Message);
       s32_Return = C_WARN;
    }
    // set values via comfort data pool util interface
@@ -1003,7 +1003,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                           "\": Type for initial value unknown. Initial value set to default value \"" +
                                           QString::number(f64_DefaultPhy).toStdString().c_str() + "\".";
             osc_write_log_warning("DBC file import", c_Message);
-            orc_WarningMessages.Append(c_Message);
+            orc_WarningMessages.push_back(c_Message);
             f64_InitialValue = f64_DEFAULT;
             s32_Return = C_WARN;
          }
@@ -1027,7 +1027,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                           "\". Correct datatype with \"Start Bit\" and \"Length\"" \
                                           " has to be set manually.";
             osc_write_log_warning("DBC file import", c_Message);
-            orc_WarningMessages.Append(c_Message);
+            orc_WarningMessages.push_back(c_Message);
             s32_Return = C_WARN;
          }
          // set available initial value
@@ -1052,7 +1052,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                           QString::number(f64_MaxValue).toStdString().c_str() +
                                           "\" are interchanged. This is not supported. Values left as they are.";
             osc_write_log_warning("DBC file import", c_Message);
-            orc_WarningMessages.Append(c_Message);
+            orc_WarningMessages.push_back(c_Message);
             s32_Return = C_WARN;
          }
          else
@@ -1086,7 +1086,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                              "\" value. Initial value set to " +
                                              c_PlaceholderMinMax + " value.";
                osc_write_log_warning("DBC file import", c_Message);
-               orc_WarningMessages.Append(c_Message);
+               orc_WarningMessages.push_back(c_Message);
             }
          }
       }
@@ -1095,7 +1095,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
          const std::string c_Message = "Signal \"" + c_String +
                                        "\": Type not found.";
          osc_write_log_warning("DBC file import", c_Message);
-         orc_WarningMessages.Append(c_Message);
+         orc_WarningMessages.push_back(c_Message);
          s32_Return = C_WARN;
       }
    }
@@ -1141,7 +1141,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                        QString::number(f64_MaxValue).toStdString().c_str() +
                                        "\" are interchanged. This is not supported. Values left as they are.";
          osc_write_log_warning("DBC file import", c_Message);
-         orc_WarningMessages.Append(c_Message);
+         orc_WarningMessages.push_back(c_Message);
          s32_Return = C_WARN;
       }
       else
@@ -1157,7 +1157,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                              QString::number(f64_InitialValuePhy).toStdString().c_str() +
                                              "\".";
                osc_write_log_warning("DBC file import", c_Message);
-               orc_WarningMessages.Append(c_Message);
+               orc_WarningMessages.push_back(c_Message);
                s32_Return = C_WARN;
             }
          }
@@ -1190,7 +1190,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                              QString::number(f64_MaxValuePhy).toStdString().c_str() +
                                              "\" value. Initial value set to " + c_PlaceholderMinMax + " value.";
                osc_write_log_warning("DBC file import", c_Message);
-               orc_WarningMessages.Append(c_Message);
+               orc_WarningMessages.push_back(c_Message);
             }
             else
             {
@@ -1198,7 +1198,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                              "\" available. Initial value set to " + c_PlaceholderMinMax + " value \"" +
                                              c_PlaceholderValue + "\".";
                osc_write_log_warning("DBC file import", c_Message);
-               orc_WarningMessages.Append(c_Message);
+               orc_WarningMessages.push_back(c_Message);
             }
 
             s32_Return = C_WARN;
@@ -1215,7 +1215,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                     "\" after it was set automatically. Correct datatype with \"Start Bit\" and \"Length\"" \
                                     " has to be set manually.";
       osc_write_log_warning("DBC file import", c_Message);
-      orc_WarningMessages.Append(c_Message);
+      orc_WarningMessages.push_back(c_Message);
       s32_Return = C_WARN;
    }
 
@@ -1252,7 +1252,7 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(const Vector::DBC::Network & 
    else
    {
       s32_Return = C_WARN;
-      mhc_WarningMessages.Append("Missing attribute definition for send type \"" + mhc_SEND_TYPE + "\".");
+      mhc_WarningMessages.push_back("Missing attribute definition for send type \"" + mhc_SEND_TYPE + "\".");
       osc_write_log_warning("DBC file import", "Missing attribute definition for send type \"" + mhc_SEND_TYPE + "\".");
    }
 
@@ -1268,7 +1268,7 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(const Vector::DBC::Network & 
    {
       s32_Return = C_WARN;
       mhc_DefaultSendTypeValue = "OnEvent";
-      mhc_WarningMessages.Append("Missing default attribute definition for send type \"" + mhc_SEND_TYPE + "\"."
+      mhc_WarningMessages.push_back("Missing default attribute definition for send type \"" + mhc_SEND_TYPE + "\"."
                                  " Set to \"" + mhc_DefaultSendTypeValue + "\".");
       osc_write_log_warning("DBC file import",
                             "Missing default attribute definition for send type \"" + mhc_SEND_TYPE + "\".");
@@ -1320,7 +1320,7 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(const Vector::DBC::Network & 
             {
                // strange, print a warning to user
                s32_Return = C_WARN;
-               mhc_WarningMessages.Append("Default initial value for signals \"" + c_DefaultInitialValue +
+               mhc_WarningMessages.push_back("Default initial value for signals \"" + c_DefaultInitialValue +
                                           "\" could not be interpreted. Default value set to \"0\".");
                osc_write_log_warning("DBC file import",
                                      "Default initial value for signals \"" + c_DefaultInitialValue +
@@ -1331,7 +1331,7 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(const Vector::DBC::Network & 
          {
             // strange, print a warning to user
             s32_Return = C_WARN;
-            mhc_WarningMessages.Append("Default type value for signals \"" + mhc_SEND_TYPE +
+            mhc_WarningMessages.push_back("Default type value for signals \"" + mhc_SEND_TYPE +
                                        "\". Default value set to \"0\".");
             osc_write_log_warning("DBC file import",
                                   "Default type value for signals \"" + mhc_SEND_TYPE +
@@ -1342,7 +1342,7 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(const Vector::DBC::Network & 
       {
          // strange, print a warning to user
          s32_Return = C_WARN;
-         mhc_WarningMessages.Append("Default definition for signals \"" + c_DbcAttributeDefaultsInit->second.name +
+         mhc_WarningMessages.push_back("Default definition for signals \"" + c_DbcAttributeDefaultsInit->second.name +
                                     "\" could not be found. Default value set to \"0\".");
          osc_write_log_warning("DBC file import",
                                "Default definition for signals \"" + c_DbcAttributeDefaultsInit->second.name +
@@ -1446,7 +1446,7 @@ void C_CieImportDbc::mh_GetTransmission(const Vector::DBC::Network & orc_DbcNetw
                                                       "\" interpreted as \"Cyclic\".";
 
                         osc_write_log_warning("DBC file import", c_Message);
-                        orc_Message.c_Warnings.Append(c_Message);
+                        orc_Message.c_Warnings.push_back(c_Message);
                      }
                   }
                   else
@@ -1459,7 +1459,7 @@ void C_CieImportDbc::mh_GetTransmission(const Vector::DBC::Network & orc_DbcNetw
                         const std::string c_Message = "Message type \"" + c_MessageType +
                                                       "\" interpreted as \"OnEvent\".";
                         osc_write_log_warning("DBC file import", c_Message);
-                        orc_Message.c_Warnings.Append(c_Message);
+                        orc_Message.c_Warnings.push_back(c_Message);
                      }
                   }
                   break;
@@ -1476,7 +1476,7 @@ void C_CieImportDbc::mh_GetTransmission(const Vector::DBC::Network & orc_DbcNetw
                                     std::to_string(orc_Message.c_CanMessage.u32_CycleTimeMs) + "ms.";
 
       osc_write_log_warning("DBC file import", c_Message);
-      orc_Message.c_Warnings.Append(c_Message);
+      orc_Message.c_Warnings.push_back(c_Message);
    }
    else if (orc_Message.c_CanMessage.e_TxMethod == C_OscCanMessage::E_TxMethodType::eTX_METHOD_ON_EVENT)
    {

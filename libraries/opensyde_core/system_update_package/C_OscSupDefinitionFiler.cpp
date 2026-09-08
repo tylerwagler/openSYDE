@@ -20,6 +20,7 @@
 #include "C_OscXmlParser.hpp"
 #include "C_OscSupDefinitionFiler.hpp"
 #include "C_OscSupNodeDefinitionFiler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -104,7 +105,7 @@ int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const std::string 
    tgl_assert(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
    // save update package definition file
-   s32_Result = c_XmlParser.SaveToFile(c_FileName);
+   s32_Result = ListSaveToFile(c_XmlParser, c_FileName);
    if (s32_Result != C_NO_ERR)
    {
       s32_Result = C_RD_WR;
@@ -147,12 +148,12 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const std::string & 
 
    if (oq_IsZip)
    {
-      s32_Retval = c_XmlParser.LoadFromFile(orc_TargetUnzipPath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF);
+      s32_Retval = ListLoadFromFile(c_XmlParser, orc_TargetUnzipPath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF);
    }
    else
    {
       orc_FilePackagePath = TglFileIncludeTrailingDelimiter(orc_PackagePath);
-      s32_Retval = c_XmlParser.LoadFromFile(orc_FilePackagePath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF);
+      s32_Retval = ListLoadFromFile(c_XmlParser, orc_FilePackagePath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF);
    }
 
    if (s32_Retval == C_NO_ERR)

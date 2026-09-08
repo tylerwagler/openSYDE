@@ -28,6 +28,7 @@
 #include "C_CamProHandlerFiler.hpp"
 #include "cam_constants.hpp"
 #include "C_SclChecksums.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -996,7 +997,7 @@ int32_t C_CamProHandler::LoadFromFile(const std::string & orc_Path)
 
       Q_EMIT (this->SigClearOldConfiguration());
 
-      s32_Return = c_XmlParser.LoadFromFile(orc_Path);
+      s32_Return = ListLoadFromFile(c_XmlParser, orc_Path);
       if (s32_Return == C_NO_ERR)
       {
          s32_Return = C_CamProHandlerFiler::h_Load(*this, c_XmlParser);
@@ -1085,7 +1086,7 @@ int32_t C_CamProHandler::SaveToFile(const std::string & orc_Path)
          C_OscXmlParser c_XmlParser;
          C_CamProHandlerFiler::h_Save(*this, c_XmlParser);
 
-         s32_Return = c_XmlParser.SaveToFile(orc_Path);
+         s32_Return = ListSaveToFile(c_XmlParser, orc_Path);
          if (s32_Return != C_NO_ERR)
          {
             osc_write_log_error("Saving Project", "Could not write to file \"" + orc_Path + "\".");
@@ -1136,7 +1137,7 @@ void C_CamProHandler::Clear(const bool oq_UpdateUserSettings)
    this->mc_Databases.clear();
    this->mc_File = "";
    this->mc_AdapterConfig = stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
-   this->mc_LoggingData.Clear();
+   this->mc_LoggingData.clear();
 
    this->mu32_FileHash = this->m_GetHash();
    if (oq_UpdateUserSettings)

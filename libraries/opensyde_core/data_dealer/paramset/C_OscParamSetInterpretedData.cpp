@@ -45,7 +45,7 @@ C_OscParamSetInterpretedData::C_OscParamSetInterpretedData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscParamSetInterpretedData::Clear()
 {
-   this->c_FileInfo.Clear();
+   this->c_FileInfo.clear();
    this->c_InterpretedNodes.clear();
 }
 

@@ -18,7 +18,8 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_OscExportDataPool.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_OscUtils.hpp"
@@ -223,7 +224,7 @@ int32_t C_OscExportDataPool::mh_CreateHeaderFile(const std::string & orc_ExportT
                                                  const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport)
 {
    int32_t s32_Retval;
-   C_SclStringList c_Data;
+   std::vector<std::string> c_Data;
 
    // add header
    mh_AddHeader(orc_ExportToolInfo, c_Data, orc_DataPool, mhq_IS_HEADER_FILE);
@@ -283,7 +284,7 @@ int32_t C_OscExportDataPool::mh_CreateImplementationFile(const std::string & orc
                                                          const uint8_t ou8_ProcessId, const E_Linkage oe_Linkage)
 {
    int32_t s32_Retval;
-   C_SclStringList c_Data;
+   std::vector<std::string> c_Data;
 
    // add header
    mh_AddHeader(orc_ExportToolInfo, c_Data, orc_DataPool, mhq_IS_IMPLEMENTATION_FILE);
@@ -304,8 +305,8 @@ int32_t C_OscExportDataPool::mh_CreateImplementationFile(const std::string & orc
    mh_AddModuleGlobal(c_Data, orc_DataPool, ou16_GenCodeVersion, ou8_ProcessId, ou8_DataPoolIndexRemote, oe_Linkage);
 
    // add function prototypes
-   c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Module Global Function Prototypes"));
-   c_Data.Append("");
+   c_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Module Global Function Prototypes"));
+   c_Data.push_back("");
 
    // add implementation
    mh_AddImplementation(c_Data, mhq_IS_IMPLEMENTATION_FILE);
@@ -325,38 +326,38 @@ int32_t C_OscExportDataPool::mh_CreateImplementationFile(const std::string & orc
    \param[in]  oq_FileType              .c or .h file selected
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportDataPool::mh_AddHeader(const std::string & orc_ExportToolInfo, C_SclStringList & orc_Data,
+void C_OscExportDataPool::mh_AddHeader(const std::string & orc_ExportToolInfo, std::vector<std::string> & orc_Data,
                                        const C_OscNodeDataPool & orc_DataPool, const bool oq_FileType)
 {
-   orc_Data.Append(C_OscExportUti::h_GetHeaderSeparator());
-   orc_Data.Append("/*!");
-   orc_Data.Append("   \\file");
+   orc_Data.push_back(C_OscExportUti::h_GetHeaderSeparator());
+   orc_Data.push_back("/*!");
+   orc_Data.push_back("   \\file");
    if (oq_FileType == mhq_IS_IMPLEMENTATION_FILE)
    {
-      orc_Data.Append("   \\brief       openSYDE Datapool definition (Source file with constant definitions)");
+      orc_Data.push_back("   \\brief       openSYDE Datapool definition (Source file with constant definitions)");
       if (orc_DataPool.c_Comment.empty() == false)
       {
-         orc_Data.Append("");
-         orc_Data.Append("   " + C_OscUtils::h_NiceifyStringForCeComment(orc_DataPool.c_Comment));
+         orc_Data.push_back("");
+         orc_Data.push_back("   " + C_OscUtils::h_NiceifyStringForCeComment(orc_DataPool.c_Comment));
       }
-      orc_Data.Append("");
-      orc_Data.Append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
+      orc_Data.push_back("");
+      orc_Data.push_back(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
    }
    else
    {
-      orc_Data.Append(
+      orc_Data.push_back(
          "   \\brief       openSYDE Datapool definition (Header file with constant and global definitions)");
-      orc_Data.Append("");
-      orc_Data.Append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
+      orc_Data.push_back("");
+      orc_Data.push_back(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
    }
-   orc_Data.Append("*/");
-   orc_Data.Append(C_OscExportUti::h_GetHeaderSeparator());
+   orc_Data.push_back("*/");
+   orc_Data.push_back(C_OscExportUti::h_GetHeaderSeparator());
 
    if (oq_FileType == mhq_IS_HEADER_FILE)
    {
        const std::string c_HeaderGuard = UpperCaseCompat(h_GetFileName(orc_DataPool)) + "H";
-      orc_Data.Append("#ifndef " + c_HeaderGuard);
-      orc_Data.Append("#define " + c_HeaderGuard);
+      orc_Data.push_back("#ifndef " + c_HeaderGuard);
+      orc_Data.push_back("#define " + c_HeaderGuard);
    }
 }
 
@@ -368,24 +369,24 @@ void C_OscExportDataPool::mh_AddHeader(const std::string & orc_ExportToolInfo, C
    \param[in]  oq_FileType              .c or .h file selected
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportDataPool::mh_AddIncludes(C_SclStringList & orc_Data, const C_OscNodeDataPool & orc_DataPool,
+void C_OscExportDataPool::mh_AddIncludes(std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_DataPool,
                                          const bool oq_FileType)
 {
-   orc_Data.Append("");
-   orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Includes"));
+   orc_Data.push_back("");
+   orc_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Includes"));
 
    if (oq_FileType == mhq_IS_HEADER_FILE)
    {
-      orc_Data.Append("#include \"stwtypes.h\"");
-      orc_Data.Append("#include \"osy_dpa_data_pool.h\"");
-      orc_Data.Append("");
+      orc_Data.push_back("#include \"stwtypes.h\"");
+      orc_Data.push_back("#include \"osy_dpa_data_pool.h\"");
+      orc_Data.push_back("");
       C_OscExportUti::h_AddExternCeStart(orc_Data);
    }
    else
    {
-      orc_Data.Append("#include <stddef.h>");
-      orc_Data.Append("#include \"" + h_GetFileName(orc_DataPool) + ".h\"");
-      orc_Data.Append("");
+      orc_Data.push_back("#include <stddef.h>");
+      orc_Data.push_back("#include \"" + h_GetFileName(orc_DataPool) + ".h\"");
+      orc_Data.push_back("");
    }
 }
 
@@ -405,7 +406,7 @@ void C_OscExportDataPool::mh_AddIncludes(C_SclStringList & orc_Data, const C_Osc
    C_CONFIG Datapool list element factor negative or would be generated as zero
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, const C_OscNodeDataPool & orc_DataPool,
+int32_t C_OscExportDataPool::mh_AddDefinesHeader(std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_DataPool,
                                                  const uint8_t ou8_DataPoolIndex, const std::string & orc_ProjectId,
                                                  const uint16_t ou16_GenCodeVersion, const E_Linkage oe_Linkage,
                                                  const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport)
@@ -415,29 +416,29 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
    const std::string c_DataPoolName = UpperCaseCompat(orc_DataPool.c_Name);
    const std::string c_MagicName = mh_GetMagicName(orc_ProjectId, orc_DataPool);
 
-   orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Defines"));
+   orc_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Defines"));
 
    C_OscExportUti::h_AddProjectIdDef(orc_Data, c_MagicName, true);
-   orc_Data.Append("///Index of this Datapool");
-   orc_Data.Append("#define " + c_DataPoolName + "_DATA_POOL_INDEX (" + std::to_string(ou8_DataPoolIndex) +
+   orc_Data.push_back("///Index of this Datapool");
+   orc_Data.push_back("#define " + c_DataPoolName + "_DATA_POOL_INDEX (" + std::to_string(ou8_DataPoolIndex) +
                    "U)");
-   orc_Data.Append("");
+   orc_Data.push_back("");
 
    if ((oe_Linkage == eLOCAL) || ((ou16_GenCodeVersion >= 4U) && (oe_Linkage == eREMOTEPUBLIC)))
    {
       uint16_t u16_ListIndex;
-      orc_Data.Append("///Index of lists");
+      orc_Data.push_back("///Index of lists");
       for (u16_ListIndex = 0U; u16_ListIndex < orc_DataPool.c_Lists.size(); u16_ListIndex++)
       {
           const std::string c_ListName = UpperCaseCompat(orc_DataPool.c_Lists[u16_ListIndex].c_Name);
-         orc_Data.Append("#define " + c_DataPoolName + "_LIST_INDEX_" + c_ListName + " (" +
+         orc_Data.push_back("#define " + c_DataPoolName + "_LIST_INDEX_" + c_ListName + " (" +
                          std::to_string(u16_ListIndex) + "U)");
       }
-      orc_Data.Append("#define " + c_DataPoolName + "_NUMBER_OF_LISTS " + "(" + std::to_string(
+      orc_Data.push_back("#define " + c_DataPoolName + "_NUMBER_OF_LISTS " + "(" + std::to_string(
                          u16_ListIndex) + "U)");
-      orc_Data.Append("");
+      orc_Data.push_back("");
 
-      orc_Data.Append("///Index of elements");
+      orc_Data.push_back("///Index of elements");
       for (u16_ListIndex = 0U; u16_ListIndex < orc_DataPool.c_Lists.size(); u16_ListIndex++)
       {
          const C_OscNodeDataPoolList & rc_List = orc_DataPool.c_Lists[u16_ListIndex];
@@ -445,15 +446,15 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
          for (uint16_t u16_ElementIndex = 0U; u16_ElementIndex < rc_List.c_Elements.size(); u16_ElementIndex++)
          {
             const std::string c_ElementName = UpperCaseCompat(rc_List.c_Elements[u16_ElementIndex].c_Name);
-            orc_Data.Append("#define " + c_DataPoolName + "_ELEM_INDEX_" + c_ListName + "_" + c_ElementName +
+            orc_Data.push_back("#define " + c_DataPoolName + "_ELEM_INDEX_" + c_ListName + "_" + c_ElementName +
                             " (" + std::to_string(u16_ElementIndex) + "U)");
          }
-         orc_Data.Append("#define " + c_DataPoolName + "_" + c_ListName + "_NUMBER_OF_ELEMENTS " + "(" +
+         orc_Data.push_back("#define " + c_DataPoolName + "_" + c_ListName + "_NUMBER_OF_ELEMENTS " + "(" +
                          std::to_string(rc_List.c_Elements.size()) + "U)");
-         orc_Data.Append("");
+         orc_Data.push_back("");
       }
 
-      orc_Data.Append("///Index of Datasets");
+      orc_Data.push_back("///Index of Datasets");
       for (u16_ListIndex = 0U; u16_ListIndex < orc_DataPool.c_Lists.size(); u16_ListIndex++)
       {
          const C_OscNodeDataPoolList & rc_List = orc_DataPool.c_Lists[u16_ListIndex];
@@ -463,22 +464,22 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
             for (uint16_t u16_DataSetIndex = 0U; u16_DataSetIndex < rc_List.c_DataSets.size(); u16_DataSetIndex++)
             {
                const std::string c_DataSetName = UpperCaseCompat(rc_List.c_DataSets[u16_DataSetIndex].c_Name);
-               orc_Data.Append("#define " + c_DataPoolName + "_DATA_SET_INDEX_" + c_ListName + "_" + c_DataSetName +
+               orc_Data.push_back("#define " + c_DataPoolName + "_DATA_SET_INDEX_" + c_ListName + "_" + c_DataSetName +
                                " (" + std::to_string(u16_DataSetIndex) + "U)");
             }
-            orc_Data.Append("#define " + c_DataPoolName + "_" + c_ListName + "_NUMBER_OF_DATA_SETS " + "(" +
+            orc_Data.push_back("#define " + c_DataPoolName + "_" + c_ListName + "_NUMBER_OF_DATA_SETS " + "(" +
                             std::to_string(rc_List.c_DataSets.size()) + "U)");
          }
          else
          {
-            orc_Data.Append("#define " + c_DataPoolName + "_" + c_ListName + "_NUMBER_OF_DATA_SETS " + "(0U)");
+            orc_Data.push_back("#define " + c_DataPoolName + "_" + c_ListName + "_NUMBER_OF_DATA_SETS " + "(0U)");
          }
-         orc_Data.Append("");
+         orc_Data.push_back("");
       }
 
       if (oe_ScalingSupport != C_OscNodeCodeExportSettings::eNONE)
       {
-         orc_Data.Append("///Scaling values");
+         orc_Data.push_back("///Scaling values");
          for (u16_ListIndex = 0U; (u16_ListIndex < orc_DataPool.c_Lists.size()) && (s32_Retval == C_NO_ERR);
               u16_ListIndex++)
          {
@@ -538,21 +539,21 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
                   s32_Retval = C_CONFIG;
                }
 
-               orc_Data.Append("#define " +
+               orc_Data.push_back("#define " +
                                mh_GetElementScaleDefine(c_DataPoolName, c_ListName, c_ElementName, true) +
                                " (" + c_Factor + c_FloatType + ")");
 
-               orc_Data.Append("#define " +
+               orc_Data.push_back("#define " +
                                mh_GetElementScaleDefine(c_DataPoolName, c_ListName, c_ElementName, false) +
                                " (" + c_Offset + c_FloatType + ")");
             }
             if (rc_List.c_Elements.size() > 0)
             {
-               orc_Data.Append("");
+               orc_Data.push_back("");
             }
          }
 
-         orc_Data.Append("///Scaling utilities");
+         orc_Data.push_back("///Scaling utilities");
          for (u16_ListIndex = 0U; u16_ListIndex < orc_DataPool.c_Lists.size(); u16_ListIndex++)
          {
             const C_OscNodeDataPoolList & rc_List = orc_DataPool.c_Lists[u16_ListIndex];
@@ -594,7 +595,7 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
                           ") / " + mh_GetElementScaleDefine(c_DataPoolName, c_ListName, c_ElementName, true) +
                           ")";
 
-               orc_Data.Append(c_Makro);
+               orc_Data.push_back(c_Makro);
 
                // getter
                c_Makro = "#define " + c_DataPoolName + "_GET_SCALED_VALUE_" + c_ListName + "_" +
@@ -608,12 +609,12 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
                           " * " + mh_GetElementScaleDefine(c_DataPoolName, c_ListName, c_ElementName, true) +
                           ") + " + mh_GetElementScaleDefine(c_DataPoolName, c_ListName, c_ElementName, false) +
                           ")";
-               orc_Data.Append(c_Makro);
+               orc_Data.push_back(c_Makro);
             }
 
             if (rc_List.c_Elements.size() > 0)
             {
-               orc_Data.Append("");
+               orc_Data.push_back("");
             }
          }
       }
@@ -630,24 +631,24 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
    \param[in]  ou16_GenCodeVersion      version of structure (generate code as specified for this version)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportDataPool::mh_AddDefinesImpl(C_SclStringList & orc_Data, const C_OscNodeDataPool & orc_DataPool,
+void C_OscExportDataPool::mh_AddDefinesImpl(std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_DataPool,
                                             const std::string & orc_ProjectId, const uint16_t ou16_GenCodeVersion)
 {
    const std::string c_MagicName = mh_GetMagicName(orc_ProjectId, orc_DataPool);
 
-   orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Defines"));
+   orc_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Defines"));
 
    if (ou16_GenCodeVersion >= 3U)
    {
-      orc_Data.Append("///check for correct version of structure definitions");
-      orc_Data.Append("#if OSY_DPA_DATA_POOL_DEFINITION_VERSION != 0x" +
+      orc_Data.push_back("///check for correct version of structure definitions");
+      orc_Data.push_back("#if OSY_DPA_DATA_POOL_DEFINITION_VERSION != 0x" +
                       mh_IntToHex(static_cast<int64_t>(C_OscExportDataPool::h_ConvertOverallCodeVersion(
                                                                     ou16_GenCodeVersion)), 4U) + "U");
-      orc_Data.Append("///if compilation fails here the openSYDE library version does not match the version of the "
+      orc_Data.push_back("///if compilation fails here the openSYDE library version does not match the version of the "
                       "generated code");
-      orc_Data.Append("static T_osy_non_existing_type_" + orc_ProjectId + " mt_Variable;");
-      orc_Data.Append("#endif");
-      orc_Data.Append("");
+      orc_Data.push_back("static T_osy_non_existing_type_" + orc_ProjectId + " mt_Variable;");
+      orc_Data.push_back("#endif");
+      orc_Data.push_back("");
    }
 
    C_OscExportUti::h_AddProjectIdDef(orc_Data, c_MagicName, false);
@@ -662,10 +663,10 @@ void C_OscExportDataPool::mh_AddDefinesImpl(C_SclStringList & orc_Data, const C_
    \param[in]  oe_Linkage               flag for linkage context
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportDataPool::mh_AddTypes(C_SclStringList & orc_Data, const C_OscNodeDataPool & orc_DataPool,
+void C_OscExportDataPool::mh_AddTypes(std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_DataPool,
                                       const bool oq_FileType, const E_Linkage oe_Linkage)
 {
-   orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Types"));
+   orc_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Types"));
 
    if ((oq_FileType == mhq_IS_HEADER_FILE) &&
        ((oe_Linkage == eLOCAL) || (oe_Linkage == eREMOTEPUBLIC)))
@@ -678,9 +679,9 @@ void C_OscExportDataPool::mh_AddTypes(C_SclStringList & orc_Data, const C_OscNod
          if (rc_List.c_Elements.size() != 0)
          {
             q_AtLeastOneElement = true;
-            orc_Data.Append("///Elements in list \"" + rc_List.c_Name + "\":");
-            orc_Data.Append("typedef struct");
-            orc_Data.Append("{");
+            orc_Data.push_back("///Elements in list \"" + rc_List.c_Name + "\":");
+            orc_Data.push_back("typedef struct");
+            orc_Data.push_back("{");
 
             for (uint16_t u16_ElementIndex = 0U; u16_ElementIndex < rc_List.c_Elements.size(); u16_ElementIndex++)
             {
@@ -691,41 +692,41 @@ void C_OscExportDataPool::mh_AddTypes(C_SclStringList & orc_Data, const C_OscNod
                if (rc_Element.GetArray() == true)
                {
                   const std::string c_String = std::to_string(rc_Element.GetArraySize());
-                  orc_Data.Append("   " + c_ElementType + " " + c_TypePrefix + "_" + rc_Element.c_Name + "[" +
+                  orc_Data.push_back("   " + c_ElementType + " " + c_TypePrefix + "_" + rc_Element.c_Name + "[" +
                                   c_String + "]; /* " + C_OscUtils::h_NiceifyStringForCeComment(rc_Element.c_Comment) +
                                   " */");
                }
                else
                {
-                  orc_Data.Append("   " + c_ElementType + " " + c_TypePrefix + "_" + rc_Element.c_Name + "; /* " +
+                  orc_Data.push_back("   " + c_ElementType + " " + c_TypePrefix + "_" + rc_Element.c_Name + "; /* " +
                                   C_OscUtils::h_NiceifyStringForCeComment(rc_Element.c_Comment) + " */");
                }
             }
-            orc_Data.Append("} T_" + orc_DataPool.c_Name + "_" + rc_List.c_Name + "_Values;");
-            orc_Data.Append("");
+            orc_Data.push_back("} T_" + orc_DataPool.c_Name + "_" + rc_List.c_Name + "_Values;");
+            orc_Data.push_back("");
          }
       }
 
       if (q_AtLeastOneElement == true)
       {
-         orc_Data.Append("///Elements of all lists:");
-         orc_Data.Append("typedef struct");
-         orc_Data.Append("{");
+         orc_Data.push_back("///Elements of all lists:");
+         orc_Data.push_back("typedef struct");
+         orc_Data.push_back("{");
 
          for (uint16_t u16_ListIndex = 0U; u16_ListIndex < orc_DataPool.c_Lists.size(); u16_ListIndex++)
          {
             if (orc_DataPool.c_Lists[u16_ListIndex].c_Elements.size() != 0)
             {
                const std::string c_ListName = orc_DataPool.c_Lists[u16_ListIndex].c_Name;
-               orc_Data.Append("   T_" + orc_DataPool.c_Name + "_" + c_ListName + "_Values t_" + c_ListName +
+               orc_Data.push_back("   T_" + orc_DataPool.c_Name + "_" + c_ListName + "_Values t_" + c_ListName +
                                "Values;");
             }
          }
 
-         orc_Data.Append("} T_" + orc_DataPool.c_Name + "_DataPoolValues;");
+         orc_Data.push_back("} T_" + orc_DataPool.c_Name + "_DataPoolValues;");
       }
    }
-   orc_Data.Append("");
+   orc_Data.push_back("");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -738,7 +739,7 @@ void C_OscExportDataPool::mh_AddTypes(C_SclStringList & orc_Data, const C_OscNod
    \param[in]  oe_Linkage               flag for linkage context
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportDataPool::mh_AddGlobalVariables(C_SclStringList & orc_Data,  const C_OscNodeDataPool & orc_DataPool,
+void C_OscExportDataPool::mh_AddGlobalVariables(std::vector<std::string> & orc_Data,  const C_OscNodeDataPool & orc_DataPool,
                                                 const uint16_t ou16_GenCodeVersion, const bool oq_FileType,
                                                 const E_Linkage oe_Linkage)
 {
@@ -753,7 +754,7 @@ void C_OscExportDataPool::mh_AddGlobalVariables(C_SclStringList & orc_Data,  con
       }
    }
 
-   orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
+   orc_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
 
    if (oq_FileType == mhq_IS_HEADER_FILE)
    {
@@ -761,23 +762,23 @@ void C_OscExportDataPool::mh_AddGlobalVariables(C_SclStringList & orc_Data,  con
       {
          if (oe_Linkage == eLOCAL)
          {
-            orc_Data.Append("///Global Datapool RAM variables:");
-            orc_Data.Append("extern T_" + orc_DataPool.c_Name + "_DataPoolValues gt_" + orc_DataPool.c_Name +
+            orc_Data.push_back("///Global Datapool RAM variables:");
+            orc_Data.push_back("extern T_" + orc_DataPool.c_Name + "_DataPoolValues gt_" + orc_DataPool.c_Name +
                             "_DataPoolValues;");
-            orc_Data.Append("");
+            orc_Data.push_back("");
          }
 
          if (oe_Linkage == eREMOTEPUBLIC)
          {
-            orc_Data.Append("///Pointer to global Datapool RAM variables in other application:");
-            orc_Data.Append("extern T_" + orc_DataPool.c_Name + "_DataPoolValues * gpt_" + orc_DataPool.c_Name +
+            orc_Data.push_back("///Pointer to global Datapool RAM variables in other application:");
+            orc_Data.push_back("extern T_" + orc_DataPool.c_Name + "_DataPoolValues * gpt_" + orc_DataPool.c_Name +
                             "_DataPoolValues;");
-            orc_Data.Append("");
+            orc_Data.push_back("");
          }
       }
 
-      orc_Data.Append("///Datapool instance data for API functions:");
-      orc_Data.Append("extern const T_osy_dpa_data_pool gt_" + orc_DataPool.c_Name + "_DataPool;");
+      orc_Data.push_back("///Datapool instance data for API functions:");
+      orc_Data.push_back("extern const T_osy_dpa_data_pool gt_" + orc_DataPool.c_Name + "_DataPool;");
    }
    else
    {
@@ -804,19 +805,19 @@ void C_OscExportDataPool::mh_AddGlobalVariables(C_SclStringList & orc_Data,  con
                   c_SafeRamData = "OSY_DPA_NONSAFE_RAM_DATA_WRITEALL_ZERO ";
                }
             }
-            orc_Data.Append(c_SafeRamData + "T_" + orc_DataPool.c_Name + "_DataPoolValues gt_" + orc_DataPool.c_Name +
+            orc_Data.push_back(c_SafeRamData + "T_" + orc_DataPool.c_Name + "_DataPoolValues gt_" + orc_DataPool.c_Name +
                             "_DataPoolValues;");
          }
 
          if (oe_Linkage == eREMOTEPUBLIC)
          {
-            orc_Data.Append("///Pointer to global Datapool RAM variables in other application:");
-            orc_Data.Append("OSY_DPA_SAFE_RAM_DATA_PRIVATE_ZERO T_" + orc_DataPool.c_Name + "_DataPoolValues * gpt_" +
+            orc_Data.push_back("///Pointer to global Datapool RAM variables in other application:");
+            orc_Data.push_back("OSY_DPA_SAFE_RAM_DATA_PRIVATE_ZERO T_" + orc_DataPool.c_Name + "_DataPoolValues * gpt_" +
                             orc_DataPool.c_Name + "_DataPoolValues = NULL;");
          }
       }
    }
-   orc_Data.Append("");
+   orc_Data.push_back("");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -832,7 +833,7 @@ void C_OscExportDataPool::mh_AddGlobalVariables(C_SclStringList & orc_Data,  con
    \param[in]   oe_Linkage                flag for linkage context
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C_OscNodeDataPool & orc_DataPool,
+void C_OscExportDataPool::mh_AddModuleGlobal(std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_DataPool,
                                              const uint16_t ou16_GenCodeVersion, const uint8_t ou8_ProcessId,
                                              const uint8_t ou8_DataPoolIndexRemote, const E_Linkage oe_Linkage)
 {
@@ -842,7 +843,7 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
 
    orc_DataPool.CalcGeneratedDefinitionHash(u32_HashValue);
 
-   orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Module Global Variables"));
+   orc_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Module Global Variables"));
 
    // list, element and dataset definitions
    if (oe_Linkage == eLOCAL)
@@ -851,20 +852,20 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
       uint16_t u16_ElementIndex;
       std::string c_ListName;
 
-      orc_Data.Append("///Create Datapool definition instance data:");
-      orc_Data.Append("OSY_DPA_CREATE_STATIC_DP_DEFINITION_INSTANCE_DATA(mt_DpDefinitionInstanceData)");
-      orc_Data.Append("");
-      orc_Data.Append("///Min/max values:");
+      orc_Data.push_back("///Create Datapool definition instance data:");
+      orc_Data.push_back("OSY_DPA_CREATE_STATIC_DP_DEFINITION_INSTANCE_DATA(mt_DpDefinitionInstanceData)");
+      orc_Data.push_back("");
+      orc_Data.push_back("///Min/max values:");
 
       for (u16_ListIndex = 0U; u16_ListIndex < orc_DataPool.c_Lists.size(); u16_ListIndex++)
       {
          C_OscNodeDataPoolList c_List = orc_DataPool.c_Lists[u16_ListIndex];
          if (c_List.c_Elements.size() != 0)
          {
-            orc_Data.Append("///Minimum values");
-            orc_Data.Append("static const T_" + orc_DataPool.c_Name + "_" + c_List.c_Name + "_Values mt_" +
+            orc_Data.push_back("///Minimum values");
+            orc_Data.push_back("static const T_" + orc_DataPool.c_Name + "_" + c_List.c_Name + "_Values mt_" +
                             c_List.c_Name + "MinValues =");
-            orc_Data.Append("{");
+            orc_Data.push_back("{");
             for (u16_ElementIndex = 0U; u16_ElementIndex < c_List.c_Elements.size(); u16_ElementIndex++)
             {
                const C_OscNodeDataPoolListElement & rc_Element = c_List.c_Elements[u16_ElementIndex];
@@ -880,14 +881,14 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
                }
                c_String += ("   ///< " + rc_Element.c_Name + " (" +
                             C_OscUtils::h_NiceifyStringForCeComment(rc_Element.c_Comment) + ")");
-               orc_Data.Append(c_String);
+               orc_Data.push_back(c_String);
             }
-            orc_Data.Append("};");
-            orc_Data.Append("");
-            orc_Data.Append("///Maximum values");
-            orc_Data.Append("static const T_" + orc_DataPool.c_Name + "_" + c_List.c_Name + "_Values mt_" +
+            orc_Data.push_back("};");
+            orc_Data.push_back("");
+            orc_Data.push_back("///Maximum values");
+            orc_Data.push_back("static const T_" + orc_DataPool.c_Name + "_" + c_List.c_Name + "_Values mt_" +
                             c_List.c_Name + "MaxValues =");
-            orc_Data.Append("{");
+            orc_Data.push_back("{");
             for (u16_ElementIndex = 0U; u16_ElementIndex < c_List.c_Elements.size(); u16_ElementIndex++)
             {
                const C_OscNodeDataPoolListElement & rc_Element = c_List.c_Elements[u16_ElementIndex];
@@ -903,24 +904,24 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
                }
                c_String += ("   ///< " + rc_Element.c_Name + " (" +
                             C_OscUtils::h_NiceifyStringForCeComment(rc_Element.c_Comment) + ")");
-               orc_Data.Append(c_String);
+               orc_Data.push_back(c_String);
             }
-            orc_Data.Append("};");
-            orc_Data.Append("");
+            orc_Data.push_back("};");
+            orc_Data.push_back("");
 
             if (c_List.c_DataSets.size() > 0)
             {
                uint8_t u8_DataSetIndex;
-               orc_Data.Append("///Dataset values");
+               orc_Data.push_back("///Dataset values");
                c_ListName = c_List.c_Name;
-               orc_Data.Append("static const T_" + c_DataPoolName + "_" + c_List.c_Name + "_Values mat_" + c_List.c_Name +
+               orc_Data.push_back("static const T_" + c_DataPoolName + "_" + c_List.c_Name + "_Values mat_" + c_List.c_Name +
                                "DataSetValues [" + UpperCaseCompat(c_DataPoolName) + "_" + UpperCaseCompat(c_ListName) +
                                "_NUMBER_OF_DATA_SETS] =");
-               orc_Data.Add("{");
+               orc_Data.push_back("{");
 
                for (u8_DataSetIndex = 0U; u8_DataSetIndex < c_List.c_DataSets.size(); u8_DataSetIndex++)
                {
-                  orc_Data.Append("   {");
+                  orc_Data.push_back("   {");
                   for (u16_ElementIndex = 0U; u16_ElementIndex < c_List.c_Elements.size(); u16_ElementIndex++)
                   {
                      C_OscNodeDataPoolListElement c_Element = c_List.c_Elements[u16_ElementIndex];
@@ -938,26 +939,26 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
                      }
                      c_String += ("   ///< " + c_Element.c_Name + " (" +
                                   C_OscUtils::h_NiceifyStringForCeComment(c_Element.c_Comment) + ")");
-                     orc_Data.Append(c_String);
+                     orc_Data.push_back(c_String);
                   }
                   if (u8_DataSetIndex == (c_List.c_DataSets.size() - 1U))
                   {
-                     orc_Data.Append("   }");
+                     orc_Data.push_back("   }");
                   }
                   else
                   {
-                     orc_Data.Append("   },");
+                     orc_Data.push_back("   },");
                   }
                }
-               orc_Data.Append("};");
-               orc_Data.Append("");
+               orc_Data.push_back("};");
+               orc_Data.push_back("");
 
-               orc_Data.Append("///Dataset table:");
+               orc_Data.push_back("///Dataset table:");
                c_ListName = c_List.c_Name;
-               orc_Data.Append("static const T_osy_dpa_data_set mat_" + c_List.c_Name + "DataSetTable[" +
+               orc_Data.push_back("static const T_osy_dpa_data_set mat_" + c_List.c_Name + "DataSetTable[" +
                                UpperCaseCompat(c_DataPoolName) + "_" +  UpperCaseCompat(c_ListName) +
                                "_NUMBER_OF_DATA_SETS] =");
-               orc_Data.Add("{");
+               orc_Data.push_back("{");
 
                for (u8_DataSetIndex = 0U; u8_DataSetIndex < c_List.c_DataSets.size(); u8_DataSetIndex++)
                {
@@ -968,24 +969,24 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
                   {
                      c_String += ",";
                   }
-                  orc_Data.Append(c_String);
+                  orc_Data.push_back(c_String);
                }
-               orc_Data.Append("};");
-               orc_Data.Append("");
+               orc_Data.push_back("};");
+               orc_Data.push_back("");
             }
          }
       }
 
-      orc_Data.Append("///List definitions:");
+      orc_Data.push_back("///List definitions:");
       for (u16_ListIndex = 0U; u16_ListIndex < orc_DataPool.c_Lists.size(); u16_ListIndex++)
       {
          const C_OscNodeDataPoolList & rc_List = orc_DataPool.c_Lists[u16_ListIndex];
          if (rc_List.c_Elements.size() != 0)
          {
             c_ListName = rc_List.c_Name;
-            orc_Data.Append("static const T_osy_dpa_element_definition mat_DataPool" + rc_List.c_Name + "Elements[" +
+            orc_Data.push_back("static const T_osy_dpa_element_definition mat_DataPool" + rc_List.c_Name + "Elements[" +
                             UpperCaseCompat(c_DataPoolName) + "_" + UpperCaseCompat(c_ListName) + "_NUMBER_OF_ELEMENTS] =");
-            orc_Data.Append("{");
+            orc_Data.push_back("{");
 
             for (u16_ElementIndex = 0U; u16_ElementIndex < rc_List.c_Elements.size(); u16_ElementIndex++)
             {
@@ -1011,17 +1012,17 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
                   c_String += ",";
                }
 
-               orc_Data.Append(c_String);
+               orc_Data.push_back(c_String);
             }
-            orc_Data.Append("};");
-            orc_Data.Append("");
+            orc_Data.push_back("};");
+            orc_Data.push_back("");
          }
       }
 
-      orc_Data.Append("///list of lists:");
-      orc_Data.Append("static const T_osy_dpa_list_definition mat_DataPoolLists[" + UpperCaseCompat(c_DataPoolName) +
+      orc_Data.push_back("///list of lists:");
+      orc_Data.push_back("static const T_osy_dpa_list_definition mat_DataPoolLists[" + UpperCaseCompat(c_DataPoolName) +
                       "_NUMBER_OF_LISTS] =");
-      orc_Data.Append("{");
+      orc_Data.push_back("{");
 
       for (u16_ListIndex = 0U; u16_ListIndex < orc_DataPool.c_Lists.size(); u16_ListIndex++)
       {
@@ -1069,56 +1070,56 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
          {
             c_String += " },";
          }
-         orc_Data.Append(c_String);
+         orc_Data.push_back(c_String);
       }
-      orc_Data.Append("};");
-      orc_Data.Append("");
+      orc_Data.push_back("};");
+      orc_Data.push_back("");
 
-      orc_Data.Append("///Datapool definition:");
-      orc_Data.Append("static const T_osy_dpa_data_pool_definition mt_DataPoolDefinition =");
-      orc_Data.Append("{");
-      orc_Data.Append("   OSY_DPA_DATA_POOL_DEFINITION_VERSION,");
+      orc_Data.push_back("///Datapool definition:");
+      orc_Data.push_back("static const T_osy_dpa_data_pool_definition mt_DataPoolDefinition =");
+      orc_Data.push_back("{");
+      orc_Data.push_back("   OSY_DPA_DATA_POOL_DEFINITION_VERSION,");
       if ((orc_DataPool.e_Type == C_OscNodeDataPool::eNVM) || (orc_DataPool.e_Type == C_OscNodeDataPool::eHALC_NVM))
       {
-         orc_Data.Append("   OSY_DPA_DATA_POOL_TYPE_NVM,");
+         orc_Data.push_back("   OSY_DPA_DATA_POOL_TYPE_NVM,");
       }
       else if (orc_DataPool.e_Type == C_OscNodeDataPool::eCOM)
       {
-         orc_Data.Append("   OSY_DPA_DATA_POOL_TYPE_COMMUNICATION,");
+         orc_Data.push_back("   OSY_DPA_DATA_POOL_TYPE_COMMUNICATION,");
       }
       else
       {
          //we have either a HALC or DIAG DP: technically this results in a DIAGNOSIS DP
-         orc_Data.Append("   OSY_DPA_DATA_POOL_TYPE_DIAGNOSIS,");
+         orc_Data.push_back("   OSY_DPA_DATA_POOL_TYPE_DIAGNOSIS,");
       }
-      orc_Data.Append("   { 0x" + mh_IntToHex(orc_DataPool.au8_Version[0], 2U) + "U, 0x" +
+      orc_Data.push_back("   { 0x" + mh_IntToHex(orc_DataPool.au8_Version[0], 2U) + "U, 0x" +
                       mh_IntToHex(orc_DataPool.au8_Version[1], 2U) + "U, 0x" +
                       mh_IntToHex(orc_DataPool.au8_Version[2], 2U) + "U }," +
                       " ///< Datapool definition version V" +
                       std::to_string(orc_DataPool.au8_Version[0]) + "." +
                       std::to_string(orc_DataPool.au8_Version[1]) + "r" +
                       std::to_string(orc_DataPool.au8_Version[2]));
-      orc_Data.Append("   \"" + orc_DataPool.c_Name + "\",  ///< name of Datapool");
-      orc_Data.Append("   " + UpperCaseCompat(c_DataPoolName) + "_NUMBER_OF_LISTS,");
-      orc_Data.Append("   0x" + mh_IntToHex(static_cast<int64_t>(u32_HashValue), 4U) +
+      orc_Data.push_back("   \"" + orc_DataPool.c_Name + "\",  ///< name of Datapool");
+      orc_Data.push_back("   " + UpperCaseCompat(c_DataPoolName) + "_NUMBER_OF_LISTS,");
+      orc_Data.push_back("   0x" + mh_IntToHex(static_cast<int64_t>(u32_HashValue), 4U) +
                       "U, ///< CRC of Datapool definition");
       if ((orc_DataPool.e_Type == C_OscNodeDataPool::eNVM) ||
           (orc_DataPool.e_Type == C_OscNodeDataPool::eHALC_NVM))
       {
-         orc_Data.Append("   0x" + mh_IntToHex(static_cast<int64_t>(orc_DataPool.u32_NvmStartAddress), 8U) +
+         orc_Data.push_back("   0x" + mh_IntToHex(static_cast<int64_t>(orc_DataPool.u32_NvmStartAddress), 8U) +
                          "U,  ///< NVM start address");
-         orc_Data.Append("   " + std::to_string(orc_DataPool.u32_NvmSize) +
+         orc_Data.push_back("   " + std::to_string(orc_DataPool.u32_NvmSize) +
                          "U,  ///< number of bytes occupied in NVM");
       }
       else
       {
-         orc_Data.Append("   0x00000000U,  ///< NVM start address");
-         orc_Data.Append("   0U,  ///< number of bytes occupied in NVM");
+         orc_Data.push_back("   0x00000000U,  ///< NVM start address");
+         orc_Data.push_back("   0U,  ///< number of bytes occupied in NVM");
       }
-      orc_Data.Append("   &mat_DataPoolLists[0],");
-      orc_Data.Append("   &mt_DpDefinitionInstanceData");
-      orc_Data.Append("};");
-      orc_Data.Append("");
+      orc_Data.push_back("   &mat_DataPoolLists[0],");
+      orc_Data.push_back("   &mt_DpDefinitionInstanceData");
+      orc_Data.push_back("};");
+      orc_Data.push_back("");
    }
 
    // Remote/public structure
@@ -1126,39 +1127,39 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
    {
       if (oe_Linkage == eLOCAL)
       {
-         orc_Data.Append("///Information about process and Datapool:");
-         orc_Data.Append("static const T_osy_dpa_remote_data_pool_info mt_DataPoolInfo =");
-         orc_Data.Append("{");
-         orc_Data.Append("   " + std::to_string(ou8_ProcessId) +
+         orc_Data.push_back("///Information about process and Datapool:");
+         orc_Data.push_back("static const T_osy_dpa_remote_data_pool_info mt_DataPoolInfo =");
+         orc_Data.push_back("{");
+         orc_Data.push_back("   " + std::to_string(ou8_ProcessId) +
                          "U,  ///< Identification ID of our own process");
-         orc_Data.Append("   " + UpperCaseCompat(c_DataPoolName) + "_DATA_POOL_INDEX"
+         orc_Data.push_back("   " + UpperCaseCompat(c_DataPoolName) + "_DATA_POOL_INDEX"
                          "  ///< Index of Datapool within process identified by ProcessId");
-         orc_Data.Append("};");
-         orc_Data.Append("");
+         orc_Data.push_back("};");
+         orc_Data.push_back("");
       }
       else
       {
          c_String = "///Information about remote Datapool. ";
          c_String += "Can be used to request information about remote Datapool from another process:";
-         orc_Data.Append(c_String);
-         orc_Data.Append("static const T_osy_dpa_remote_data_pool_info mt_RemoteDataPoolInfo =");
-         orc_Data.Append("{");
-         orc_Data.Append("   " + std::to_string(ou8_ProcessId) +
+         orc_Data.push_back(c_String);
+         orc_Data.push_back("static const T_osy_dpa_remote_data_pool_info mt_RemoteDataPoolInfo =");
+         orc_Data.push_back("{");
+         orc_Data.push_back("   " + std::to_string(ou8_ProcessId) +
                          "U, ///< Identification ID of remote server providing information about the Datapool");
-         orc_Data.Append("   " + std::to_string(ou8_DataPoolIndexRemote) +
+         orc_Data.push_back("   " + std::to_string(ou8_DataPoolIndexRemote) +
                          "U  ///< Index of Datapool within process identified by ProcessId");
-         orc_Data.Append("};");
-         orc_Data.Append("");
+         orc_Data.push_back("};");
+         orc_Data.push_back("");
       }
    }
    else
    {
       if (oe_Linkage != eLOCAL) // structure was removed for local Datapools since version 4
       {
-         orc_Data.Append("///Information about process and Datapool:");
-         orc_Data.Append("static const T_osy_dpa_remote_data_pool_info mt_RemoteDataPoolInfo =");
-         orc_Data.Append("{");
-         orc_Data.Append("   " + std::to_string(ou8_ProcessId) +
+         orc_Data.push_back("///Information about process and Datapool:");
+         orc_Data.push_back("static const T_osy_dpa_remote_data_pool_info mt_RemoteDataPoolInfo =");
+         orc_Data.push_back("{");
+         orc_Data.push_back("   " + std::to_string(ou8_ProcessId) +
                          "U, ///< Identification ID of remote server providing information about the Datapool");
          switch (oe_Linkage)
          {
@@ -1166,25 +1167,25 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
             // never landing here
             break;
          case eREMOTE:
-            orc_Data.Append("   NULL,  ///< Pointer only relevant for Datapool with public scope");
+            orc_Data.push_back("   NULL,  ///< Pointer only relevant for Datapool with public scope");
             break;
          case eREMOTEPUBLIC:
-            orc_Data.Append("   (void**)&gpt_" + orc_DataPool.c_Name +
+            orc_Data.push_back("   (void**)&gpt_" + orc_DataPool.c_Name +
                             "_DataPoolValues,  ///< Pointer to pointer to struct containing all Datapool values");
             break;
          default:
             tgl_assert(false);
             break;
          }
-         orc_Data.Append("   0x" + mh_IntToHex(static_cast<int64_t>(u32_HashValue), 4U) +
+         orc_Data.push_back("   0x" + mh_IntToHex(static_cast<int64_t>(u32_HashValue), 4U) +
                          "U, ///< CRC of Datapool definition");
-         orc_Data.Append("   \"" + orc_DataPool.c_Name + "\"  ///< name of Datapool");
-         orc_Data.Append("};");
-         orc_Data.Append("");
+         orc_Data.push_back("   \"" + orc_DataPool.c_Name + "\"  ///< name of Datapool");
+         orc_Data.push_back("};");
+         orc_Data.push_back("");
       }
    }
 
-   orc_Data.Append("///Create Datapool instance data:");
+   orc_Data.push_back("///Create Datapool instance data:");
 
    //special macro from V5 on if local and NVM:
    if ((ou16_GenCodeVersion >= 5U) && (oe_Linkage == eLOCAL) &&
@@ -1226,13 +1227,13 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
       }
    }
 
-   orc_Data.Append(c_String);
-   orc_Data.Append("");
+   orc_Data.push_back(c_String);
+   orc_Data.push_back("");
 
-   orc_Data.Append("const T_osy_dpa_data_pool gt_" + c_DataPoolName + "_DataPool =");
-   orc_Data.Append("{");
-   orc_Data.Append("   OSY_DPA_DATA_POOL_MAGIC,  ///< identification of valid DP definition");
-   orc_Data.Append("   " + UpperCaseCompat(c_DataPoolName) +
+   orc_Data.push_back("const T_osy_dpa_data_pool gt_" + c_DataPoolName + "_DataPool =");
+   orc_Data.push_back("{");
+   orc_Data.push_back("   OSY_DPA_DATA_POOL_MAGIC,  ///< identification of valid DP definition");
+   orc_Data.push_back("   " + UpperCaseCompat(c_DataPoolName) +
                    "_DATA_POOL_INDEX,  ///< Datapool index within this process");
 
    c_String = "   ";
@@ -1254,32 +1255,32 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
          // eREMOTEPUBLIC is not supported in versions >=4U
       }
    }
-   orc_Data.Append(c_String);
+   orc_Data.push_back(c_String);
 
    switch (oe_Linkage)
    {
    case eLOCAL:
       if (ou16_GenCodeVersion >= 4U)
       {
-         orc_Data.Append("   NULL,  ///<  info about remote Datapool");
+         orc_Data.push_back("   NULL,  ///<  info about remote Datapool");
       }
       else
       {
-         orc_Data.Append("   &mt_DataPoolInfo,  ///<  info about local Datapool");
+         orc_Data.push_back("   &mt_DataPoolInfo,  ///<  info about local Datapool");
       }
       break;
    case eREMOTE:
    case eREMOTEPUBLIC:
-      orc_Data.Append("   &mt_RemoteDataPoolInfo,  ///< info about remote Datapool");
+      orc_Data.push_back("   &mt_RemoteDataPoolInfo,  ///< info about remote Datapool");
       break;
    default:
       tgl_assert(false);
       break;
    }
 
-   orc_Data.Append("   &mt_DpInstanceData  ///< run-time data");
-   orc_Data.Append("};");
-   orc_Data.Append("");
+   orc_Data.push_back("   &mt_DpInstanceData  ///< run-time data");
+   orc_Data.push_back("};");
+   orc_Data.push_back("");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1289,18 +1290,18 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
    \param[in]  oq_FileType              .c or .h file selected
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportDataPool::mh_AddImplementation(C_SclStringList & orc_Data, const bool oq_FileType)
+void C_OscExportDataPool::mh_AddImplementation(std::vector<std::string> & orc_Data, const bool oq_FileType)
 {
-   orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Implementation"));
+   orc_Data.push_back(C_OscExportUti::h_GetSectionSeparator("Implementation"));
 
    if (oq_FileType == mhq_IS_HEADER_FILE)
    {
       C_OscExportUti::h_AddExternCeEnd(orc_Data);
-      orc_Data.Append("#endif");
+      orc_Data.push_back("#endif");
    }
    else
    {
-      orc_Data.Append("");
+      orc_Data.push_back("");
    }
 }
 

@@ -486,7 +486,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
 void C_SyvDaUnoAddDeleteBaseCommand::m_Clear(void)
 {
    this->mc_MapTypeAndIndexToId.clear();
-   this->mc_DataBackup.Clear();
+   this->mc_DataBackup.clear();
    this->mc_SavedRailAssignments.clear();
 }
 

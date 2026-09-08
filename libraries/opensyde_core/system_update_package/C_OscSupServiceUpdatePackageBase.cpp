@@ -59,7 +59,7 @@ const std::string C_OscSupServiceUpdatePackageBase::mhc_SUP_SYSDEF = "sup_system
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-stw::scl::C_SclStringList C_OscSupServiceUpdatePackageBase::mhc_WarningMessages; // global warnings e.g. if update
+stw::scl::std::vector<std::string> C_OscSupServiceUpdatePackageBase::mhc_WarningMessages; // global warnings e.g. if update
                                                                                  // position
                                                                                  // of
                                                                                  // active node is not available
@@ -387,7 +387,7 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(ifstream & o
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_Init()
 {
-   mhc_WarningMessages.Clear(); // clear old warning messages
+   mhc_WarningMessages.clear(); // clear old warning messages
    mhc_ErrorMessage = "";       // clear old error message
 }
 
@@ -398,7 +398,7 @@ void C_OscSupServiceUpdatePackageBase::mh_Init()
    \param[in,out]  orc_ErrorMessage       Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupServiceUpdatePackageBase::mh_GetWarningsAndErrors(C_SclStringList & orc_WarningMessages,
+void C_OscSupServiceUpdatePackageBase::mh_GetWarningsAndErrors(std::vector<std::string> & orc_WarningMessages,
                                                                std::string & orc_ErrorMessage)
 {
    orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller

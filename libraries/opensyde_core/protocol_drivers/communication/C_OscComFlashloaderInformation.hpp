@@ -10,7 +10,8 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_OscProtocolSerialNumber.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
 
@@ -47,7 +48,7 @@ public:
    std::string GetEcuSerialNumber(void) const;
    std::string GetEcuSerialNumberFormatDescription(void) const;
 
-   stw::scl::C_SclStringList FlashloaderInformationToText() const;
+   stw::scl::std::vector<std::string> FlashloaderInformationToText() const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

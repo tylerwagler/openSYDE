@@ -21,6 +21,7 @@
 #include "C_OscProjectFiler.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -128,7 +129,7 @@ int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const std::string 
       std::string c_Tmp;
       //Open file
       C_OscXmlParser c_Xml;
-      s32_Retval = c_Xml.LoadFromFile(orc_Path);
+      s32_Retval = ListLoadFromFile(c_Xml, orc_Path);
       if (s32_Retval == C_NO_ERR)
       {
          //Check if file and root node exists
@@ -258,6 +259,6 @@ int32_t C_OscProjectFiler::mh_SaveInternal(C_OscProject & orc_Project, const std
    c_Xml.SetNodeContent(orc_Project.c_Version);
    c_Xml.SelectNodeParent();
 
-   s32_Return = c_Xml.SaveToFile(orc_Path);
+   s32_Return = ListSaveToFile(c_Xml, orc_Path);
    return s32_Return;
 }

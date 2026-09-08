@@ -13,7 +13,8 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <string>
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "stwtypes.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_OscNode.hpp"
@@ -105,7 +106,7 @@ public:
       bool operator ==(const C_CieNodeMessage & orc_Cmp) const;
 
       C_CieCanMessage c_CanMessage;         ///< Transmitted message type
-      stw::scl::C_SclStringList c_Warnings; ///< Appropriate warnings: if empty, there is no warning
+      stw::scl::std::vector<std::string> c_Warnings; ///< Appropriate warnings: if empty, there is no warning
    };
 
    ///all information about a single node

@@ -20,7 +20,8 @@
 #include "C_OscCanMessage.hpp"
 #include "C_CieConverter.hpp"
 #include "C_PuiSdNodeDataPoolListElement.hpp"
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_OscEdsDcfImportMessageGroup.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -52,7 +53,7 @@ public:
                                               const stw::opensyde_core::C_OscCanProtocol::E_Type oe_Type,
                                               const stw::opensyde_core::C_OscCanMessage & orc_OscCanMessage,
                                               C_CieConverter::C_CieNodeMessage & orc_CieNodeMessage,
-                                              stw::scl::C_SclStringList & orc_Warnings);
+                                              stw::scl::std::vector<std::string> & orc_Warnings);
 
 private:
    // internal function called by adapters to fill Ui data structures

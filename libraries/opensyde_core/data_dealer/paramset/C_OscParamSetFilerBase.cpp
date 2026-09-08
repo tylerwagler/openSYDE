@@ -22,6 +22,7 @@
 #include "C_OscChecksummedXml.hpp"
 #include "C_OscParamSetFilerBase.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -73,7 +74,7 @@ int32_t C_OscParamSetFilerBase::h_AddCrc(const std::string & orc_Path)
    if (TglFileExists(orc_Path) == true)
    {
       C_OscChecksummedXml c_XmlParser;
-      s32_Return = c_XmlParser.LoadFromFile(orc_Path);
+      s32_Return = ListLoadFromFile(c_XmlParser, orc_Path);
       //ignore missing and incorrect CRC; we want to set it
       if ((s32_Return == C_NO_ERR) || (s32_Return == C_CHECKSUM) || (s32_Return == C_RD_WR))
       {
@@ -84,7 +85,7 @@ int32_t C_OscParamSetFilerBase::h_AddCrc(const std::string & orc_Path)
          }
          else
          {
-            s32_Return = c_XmlParser.SaveToFile(orc_Path);
+            s32_Return = ListSaveToFile(c_XmlParser, orc_Path);
          }
       }
       if (s32_Return == C_NOACT)
@@ -221,7 +222,7 @@ void C_OscParamSetFilerBase::h_LoadFileInfo(C_OscXmlParserBase & orc_XmlParser,
                                             bool & orq_MissingOptionalContent)
 {
    //Default
-   orc_FileInfo.Clear();
+   orc_FileInfo.clear();
    //Read and overwrite if available
    if (orc_XmlParser.SelectNodeChild("file-info") == "file-info")
    {

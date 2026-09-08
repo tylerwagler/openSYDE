@@ -12,7 +12,8 @@
 #include <vector>
 
 #include <string>
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -33,7 +34,7 @@ public:
 
 protected:
    // Function for loading concrete settings. Must return C_CONFIG in error case
-   virtual int32_t m_LoadSettings(const stw::scl::C_SclStringList & orc_SettingsWithoutComments) = 0;
+   virtual int32_t m_LoadSettings(const std::vector<std::string> & orc_SettingsWithoutComments) = 0;
    static int32_t mh_ReplaceSettings(const std::string & orc_Path,
                                       const std::vector<std::pair<std::string,
                                                                   std::string> > & orc_Configs);

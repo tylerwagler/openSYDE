@@ -134,7 +134,7 @@ C_SydeSup::E_Result C_SupCreatePackage::Create()
    // Collect information and create zip package
    if (e_Result == C_SydeSup::eOK)
    {
-      C_SclStringList c_Warnings;
+      std::vector<std::string> c_Warnings;
       std::string c_Error;
       std::vector<uint8_t> c_NodeActiveFlags = c_View.GetNodeActiveFlags();
       std::vector<C_OscSuSequences::C_DoFlash> c_ApplicationsToWrite;

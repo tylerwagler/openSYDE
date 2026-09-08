@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstdarg>
+#include <vector>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -287,6 +288,190 @@ inline std::string PrintFormattedCompat(const char_t * const opcn_Format, ...)
    std::vsnprintf(&c_Result[0], static_cast<size_t>(s32_Len) + 1U, opcn_Format, c_Args);
    va_end(c_Args);
    return c_Result;
+}
+
+/* -- Helpers for retiring C_SclStringList (operate on std::vector<std::string>) -- */
+
+/// Replacement for C_SclStringList::IndexOf — case-insensitive, -1 if not found.
+inline int32_t VectorIndexOf(const std::vector<std::string> & orc_List, const std::string & orc_String)
+{
+   for (uint32_t u32_Index = 0U; u32_Index < static_cast<uint32_t>(orc_List.size()); ++u32_Index)
+   {
+      if (LowerCaseCompat(orc_List[u32_Index]).compare(LowerCaseCompat(orc_String)) == 0)
+      {
+         return static_cast<int32_t>(u32_Index);
+      }
+   }
+   return -1;
+}
+
+/// Replacement for C_SclStringList::GetText — joins with a separator after each line.
+inline std::string ListGetText(const std::vector<std::string> & orc_List,
+                               const std::string & orc_LineSeparator = "\r\n")
+{
+   std::string c_Text;
+   for (uint32_t u32_Index = 0U; u32_Index < static_cast<uint32_t>(orc_List.size()); ++u32_Index)
+   {
+      c_Text += (orc_List[u32_Index] + orc_LineSeparator);
+   }
+   return c_Text;
+}
+
+/// Replacement for C_SclStringList::LoadFromFile — preserves CRLF/LF and empty
+/// lines, strips a trailing '\r', throws const char* on error (same contract).
+inline void ListLoadFromFile(std::vector<std::string> & orc_List, const std::string & orc_FileName)
+{
+   std::FILE * pc_File;
+   long x_FileSize;
+   char_t * pcn_Buffer;
+   size_t x_SizeRead;
+   long x_Index;
+   uint32_t u32_NumStrings;
+   int32_t s32_Len; //2GB file size limit is acceptable
+
+   orc_List.clear();
+   pc_File = std::fopen(orc_FileName.c_str(), "rb");
+   if (pc_File == NULL)
+   {
+      throw ("C_SclStringList::LoadFromFile: file not found");
+   }
+
+   (void)std::fseek(pc_File, 0, SEEK_END);
+   x_FileSize = std::ftell(pc_File);
+   (void)std::fseek(pc_File, 0, SEEK_SET);
+
+   try
+   {
+      pcn_Buffer = new char_t[x_FileSize + 1U]; //+ 1: put a terminating \0
+   }
+   catch (...)
+   {
+      throw ("C_SclStringList::LoadFromFile: could not allocate buffer for file");
+   }
+   pcn_Buffer[x_FileSize] = '\0';
+
+   x_SizeRead = std::fread(pcn_Buffer, 1U, static_cast<size_t>(x_FileSize), pc_File);
+   if (x_SizeRead != static_cast<size_t>(x_FileSize))
+   {
+      delete[] pcn_Buffer;
+      throw ("C_SclStringList::LoadFromFile: could not read file");
+   }
+
+   (void)std::fclose(pc_File);
+
+   //count lines and split the file contents (see original implementation for details)
+   u32_NumStrings = 0U;
+   for (x_Index = 0; x_Index < x_FileSize; x_Index++)
+   {
+      if (pcn_Buffer[x_Index] == '\n')
+      {
+         pcn_Buffer[x_Index] = '\0';
+         u32_NumStrings++;
+      }
+   }
+   //maybe the last line is not terminated?
+   if ((x_Index > 0) && (pcn_Buffer[x_Index - 1U] != '\0'))
+   {
+      u32_NumStrings++;
+   }
+
+   try
+   {
+      orc_List.resize(u32_NumStrings);
+   }
+   catch (...)
+   {
+      delete[] pcn_Buffer;
+      throw ("C_SclStringList::LoadFromFile: could not allocate buffer for file");
+   }
+
+   x_Index = 0;
+   for (uint32_t u32_Line = 0U; u32_Line < u32_NumStrings; u32_Line++)
+   {
+      const char_t * const pcn_String = &pcn_Buffer[x_Index];
+
+      s32_Len = static_cast<int32_t>(std::strlen(pcn_String));
+      x_Index += (s32_Len + 1); //skip to next string
+
+      //Do we need to strip a final '\r'?
+      if ((s32_Len > 0) && (pcn_String[s32_Len - 1] == '\r'))
+      {
+         s32_Len--; //one character less in this string
+      }
+
+      orc_List[u32_Line].assign(pcn_String, static_cast<size_t>(s32_Len));
+   }
+
+   delete[] pcn_Buffer;
+}
+
+/// Replacement for C_SclStringList::SaveToFile — writes each line followed by
+/// "\r\n" (also after the last line), throws const char* on error (same contract).
+inline void ListSaveToFile(const std::vector<std::string> & orc_List, const std::string & orc_FileName)
+{
+   uint32_t u32_NumWritten;
+
+   std::FILE * const pc_File = std::fopen(orc_FileName.c_str(), "wb");
+   if (pc_File == NULL)
+   {
+      throw ("C_SclStringList::SaveToFile: could not create file");
+   }
+
+   for (uint32_t u32_Line = 0U; u32_Line < static_cast<uint32_t>(orc_List.size()); u32_Line++)
+   {
+      u32_NumWritten = std::fwrite(orc_List[u32_Line].c_str(), 1U, orc_List[u32_Line].length(), pc_File);
+      if (u32_NumWritten != orc_List[u32_Line].length())
+      {
+         (void)std::fclose(pc_File);
+         throw ("C_SclStringList::SaveToFile: could not write to file");
+      }
+      u32_NumWritten = std::fwrite("\r\n", 1U, 2U, pc_File);
+      if (u32_NumWritten != 2U)
+      {
+         (void)std::fclose(pc_File);
+         throw ("C_SclStringList::SaveToFile: could not write to file");
+      }
+   }
+   (void)std::fclose(pc_File);
+}
+
+/// Replacement for C_SclStringList::IndexOfName — case-insensitive, allows
+/// blanks before the '=', returns index or -1.
+inline int32_t ListIndexOfName(const std::vector<std::string> & orc_List, const std::string & orc_Name)
+{
+   bool q_Found = false;
+   int32_t s32_Index;
+   const std::string c_Search = UpperCaseCompat(orc_Name);
+   std::string c_Remainder;
+   uint32_t u32_Pos;
+
+   for (s32_Index = 0; s32_Index < static_cast<int32_t>(orc_List.size()); s32_Index++)
+   {
+      u32_Pos = PosCompat(UpperCaseCompat(orc_List[s32_Index]), c_Search);
+      if (u32_Pos == 1U)
+      {
+         //there must be a subsequent "=" (may be preceeded by blanks)
+         c_Remainder = TrimLeftCompat(SubStringCompat(orc_List[s32_Index], orc_Name.length() + 1U,
+                                                      static_cast<uint32_t>(orc_List[s32_Index].length())));
+         if (!c_Remainder.empty() && (c_Remainder.c_str()[0] == '='))
+         {
+            q_Found = true;
+            break;
+         }
+      }
+   }
+   if (q_Found == false)
+   {
+      s32_Index = -1;
+   }
+
+   return s32_Index;
+}
+
+/// Replacement for C_SclStringList::AddStrings.
+inline void ListAddStrings(std::vector<std::string> & orc_Target, const std::vector<std::string> & orc_Source)
+{
+   orc_Target.insert(orc_Target.end(), orc_Source.begin(), orc_Source.end());
 }
 
 } // namespace scl

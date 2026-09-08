@@ -931,7 +931,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
       C_OscHexFile c_HexFile;
       uint32_t u32_Result;
 
-      u32_Result = c_HexFile.LoadFromFile(c_Path.c_str());
+      u32_Result = ListLoadFromFile(c_HexFile, c_Path.c_str());
       if (u32_Result == stw::hex_file::NO_ERR)
       {
          stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;

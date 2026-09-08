@@ -786,7 +786,7 @@ int32_t C_OscBuSequences::h_ReadHexFile(const std::string & orc_HexFilePath, C_O
    uint32_t u32_Return;
    const std::string c_LogActivity = "Read HEX File";
 
-   u32_Return = orc_HexFile.LoadFromFile(orc_HexFilePath.c_str());
+   u32_Return = ListLoadFromFile(orc_HexFile, orc_HexFilePath.c_str());
    if (u32_Return != stw::hex_file::NO_ERR)
    {
       s32_Return = C_RD_WR;
@@ -804,13 +804,13 @@ int32_t C_OscBuSequences::h_ReadHexFile(const std::string & orc_HexFilePath, C_O
 
       for (int32_t s32_Index = 0; s32_Index < c_InfoBlocks.size(); s32_Index++)
       {
-         C_SclStringList c_Lines;
+         std::vector<std::string> c_Lines;
          std::string c_Help;
          c_Help = PrintFormattedCompat("%02d", s32_Index + 1);
          osc_write_log_info(c_LogActivity, "Application information block " + c_Help);
 
          c_InfoBlocks[s32_Index].AddInfoToList(c_Lines);
-         for (uint32_t u32_Line = 0; u32_Line < c_Lines.GetCount(); u32_Line++)
+         for (uint32_t u32_Line = 0; u32_Line < c_Lines.size(); u32_Line++)
          {
             osc_write_log_info(c_LogActivity, c_Lines.Strings[u32_Line]);
          }
@@ -901,15 +901,15 @@ void C_OscBuSequences::m_ReportProgress(const int32_t os32_Result, const std::st
 void C_OscBuSequences::m_ReportFlashloaderInformationRead(const std::string & orc_DeviceName,
                                                           const C_OscComFlashloaderInformation & orc_Information)
 {
-   C_SclStringList c_Text;
-   const C_SclStringList c_MoreInformation = orc_Information.FlashloaderInformationToText();
+   std::vector<std::string> c_Text;
+   const std::vector<std::string> c_MoreInformation = orc_Information.FlashloaderInformationToText();
 
-   c_Text.Clear();
-   c_Text.Add("Device name: " + orc_DeviceName);
-   c_Text.AddStrings(&c_MoreInformation);
+   c_Text.clear();
+   c_Text.push_back("Device name: " + orc_DeviceName);
+   c_Text.insert(c_Text.end(), c_MoreInformation.begin(), c_MoreInformation.end());
 
    std::cout << "openSYDE device information read: " << "\n";
-   for (uint32_t u32_Line = 0U; u32_Line < c_Text.GetCount(); u32_Line++)
+   for (uint32_t u32_Line = 0U; u32_Line < c_Text.size(); u32_Line++)
    {
       std::cout << c_Text.Strings[u32_Line] << "\n";
       osc_write_log_info("Flashloader Info", c_Text.Strings[u32_Line]);

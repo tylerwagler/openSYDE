@@ -583,7 +583,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToDataMultiNode(const uint32_
 void C_SdManUnoTopologyAddDeleteBaseCommand::m_Clear(void)
 {
    this->mc_MapTypeAndIndexToId.clear();
-   this->mc_DataBackup.Clear();
+   this->mc_DataBackup.clear();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

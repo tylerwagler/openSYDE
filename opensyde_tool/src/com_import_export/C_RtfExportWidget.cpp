@@ -340,11 +340,11 @@ void C_RtfExportWidget::SetCompanyLogoPath(const std::string & orc_CompanyLogoPa
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_RtfExportWidget::ExportToRtf(const std::string & orc_RtfPath, const std::string & orc_CompanyName,
                                        const std::string & orc_CompanyLogoPath, C_SdTopologyWidget * const opc_Widget,
-                                       C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage)
+                                       std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   this->mc_Warnings.Clear(); // reset global warnings
+   this->mc_Warnings.clear(); // reset global warnings
    this->mc_Error = "";       //     -"-      error
 
    // get paths of 'DocuCreator' tool and its config XML file (which has to be created)
@@ -608,7 +608,7 @@ int32_t C_RtfExportWidget::m_CreateConfigXml(const std::string & orc_Path,
    tgl_assert(c_XmlParser.SelectNodeParent() == c_ROOT_NAME);
 
    // save DocuCreator configuration file
-   s32_Return = c_XmlParser.SaveToFile(orc_Path);
+   s32_Return = ListSaveToFile(c_XmlParser, orc_Path);
 
    return s32_Return;
 }

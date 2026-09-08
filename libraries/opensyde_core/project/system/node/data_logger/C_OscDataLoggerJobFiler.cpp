@@ -97,7 +97,7 @@ int32_t C_OscDataLoggerJobFiler::h_SaveFile(const std::vector<C_OscDataLoggerJob
       //node
       C_OscDataLoggerJobFiler::h_SaveData(orc_Config, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR)
+      if (ListSaveToFile(c_XmlParser, orc_Path) != C_NO_ERR)
       {
          osc_write_log_error("Saving data loggers data", "Could not create file for node.");
          s32_Retval = C_CONFIG;

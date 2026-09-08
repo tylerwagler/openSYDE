@@ -119,7 +119,7 @@ int32_t C_OscSystemFilerUtil::h_GetParserForExistingFile(C_OscXmlParser & orc_Fi
 
    if (TglFileExists(orc_Path))
    {
-      s32_Retval = orc_FileXmlParser.LoadFromFile(orc_Path);
+      s32_Retval = ListLoadFromFile(orc_FileXmlParser, orc_Path);
       if (s32_Retval == C_NO_ERR)
       {
          if (orc_FileXmlParser.SelectRoot() != orc_RootNode)

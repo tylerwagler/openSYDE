@@ -71,7 +71,7 @@ const std::string C_OscXceLoad::mhc_USE_CASE = "Unpacking X-Certificates Package
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceLoad::h_ProcessPackage(const std::string & orc_PackagePath,
                                        const std::string & orc_TargetUnzipPath,
-                                       C_OscXceManifest & orc_Manifest, stw::scl::C_SclStringList & orc_WarningMessages,
+                                       C_OscXceManifest & orc_Manifest, stw::scl::std::vector<std::string> & orc_WarningMessages,
                                        std::string & orc_ErrorMessage)
 {
    int32_t s32_Return;

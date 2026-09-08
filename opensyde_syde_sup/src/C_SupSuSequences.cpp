@@ -204,12 +204,12 @@ bool C_SupSuSequences::m_ReportProgress(const stw::opensyde_core::C_OscSuSequenc
 void C_SupSuSequences::m_ReportOpenSydeFlashloaderInformationRead(
    const stw::opensyde_core::C_OscSuSequences::C_OsyDeviceInformation & orc_Info, const uint32_t ou32_NodeIndex)
 {
-   C_SclStringList c_Text;
+   std::vector<std::string> c_Text;
    std::string c_Message = "openSYDE device information found for node with index " +
                            std::to_string(ou32_NodeIndex) + "\n";
 
    h_OpenSydeFlashloaderInformationToText(orc_Info, c_Text);
-   for (uint32_t u32_Line = 0U; u32_Line < c_Text.GetCount(); u32_Line++)
+   for (uint32_t u32_Line = 0U; u32_Line < c_Text.size(); u32_Line++)
    {
       c_Message += c_Text.Strings[u32_Line] + "\n";
    }

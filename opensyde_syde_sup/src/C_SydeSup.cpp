@@ -507,7 +507,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
    int32_t s32_Return = C_NO_ERR;
    C_OscSystemDefinition c_SystemDefinition;
    uint32_t u32_ActiveBusIndex = 0;
-   C_SclStringList c_WarningMessages;
+   std::vector<std::string> c_WarningMessages;
    std::string c_ErrorMessage;
    C_SupSuSequences c_Sequence;
    bool q_ResetSystem = false;
@@ -1485,7 +1485,7 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
 
                   C_OscHexFile c_HexFile;
 
-                  const uint32_t u32_Result = c_HexFile.LoadFromFile(c_Path.c_str());
+                  const uint32_t u32_Result = ListLoadFromFile(c_HexFile, c_Path.c_str());
                   if (u32_Result == stw::hex_file::NO_ERR)
                   {
                      stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;

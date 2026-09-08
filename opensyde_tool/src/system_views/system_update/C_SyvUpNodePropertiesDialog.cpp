@@ -842,7 +842,7 @@ void C_SyvUpNodePropertiesDialog::mh_InitFlashloaderTableForNode(const C_GiSvSub
    QString c_NewContent = "";
    const C_SyvUpDeviceInfo c_DeviceInfo = orc_NodeInfo.GetDeviceInfo();
 
-   stw::scl::C_SclStringList c_List;
+   stw::scl::std::vector<std::string> c_List;
 
    if (c_DeviceInfo.pc_OpenSydeDevice != NULL)
    {

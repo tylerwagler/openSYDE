@@ -1,5 +1,8 @@
 #include "gtest/gtest.h"
 #include <string>
+#include <vector>
+#include <cstdio>
+#include <cstring>
 #include "C_SclStringCompat.hpp"
 
 using namespace stw::scl;

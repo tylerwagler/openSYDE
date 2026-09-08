@@ -185,7 +185,7 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
       if (c_Extension == "dbc")
       {
          std::string c_Error;
-         C_SclStringList c_Warnings;
+         std::vector<std::string> c_Warnings;
 
          // import network of DBC file
          QApplication::setOverrideCursor(Qt::WaitCursor); // big DBC file can take some time to load
@@ -222,20 +222,20 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
                      // build up additional warnings (there can be also one from export itself)
                      if (ou32_NumOfNodes != u32_NumOfOutputNodes)
                      {
-                        c_Warnings.Add("Number of input nodes (" + std::to_string(ou32_NumOfNodes) +
+                        c_Warnings.push_back("Number of input nodes (" + std::to_string(ou32_NumOfNodes) +
                                        ") does not match number of exported nodes (" +
                                        std::to_string(u32_NumOfOutputNodes) + ").");
                      }
                      if (ou32_NumOfMessages != u32_NumOfOutputMessages)
                      {
-                        c_Warnings.Add("Number of input messages (" + std::to_string(
+                        c_Warnings.push_back("Number of input messages (" + std::to_string(
                                           ou32_NumOfMessages) +
                                        ") does not match number of exported messages (" +
                                        std::to_string(u32_NumOfOutputMessages) + ").");
                      }
                      if (ou32_NumOfSignals != u32_NumOfOutputSignals)
                      {
-                        c_Warnings.Add("Number of input signals (" + std::to_string(ou32_NumOfSignals) +
+                        c_Warnings.push_back("Number of input signals (" + std::to_string(ou32_NumOfSignals) +
                                        ") does not match number of exported signals (" +
                                        std::to_string(u32_NumOfOutputSignals) + ").");
                      }
@@ -658,7 +658,7 @@ int32_t C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex, const C_OscCan
    int32_t s32_ImportReturn;
 
    C_CieConverter::C_CieCommDefinition c_CommDef;
-   C_SclStringList c_WarningMessages;
+   std::vector<std::string> c_WarningMessages;
    std::string c_ErrorMessage;
 
    // import network of DBC file
@@ -688,11 +688,11 @@ int32_t C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex, const C_OscCan
       }
       else
       {
-         if ((s32_ImportReturn == stw::errors::C_WARN) && (c_WarningMessages.GetCount() > 0))
+         if ((s32_ImportReturn == stw::errors::C_WARN) && (c_WarningMessages.size() > 0))
          {
             // display global warning messages
             QString c_Warnings;
-            for (uint32_t u32_Pos = 0; u32_Pos < c_WarningMessages.GetCount(); u32_Pos++)
+            for (uint32_t u32_Pos = 0; u32_Pos < c_WarningMessages.size(); u32_Pos++)
             {
                c_Warnings += c_WarningMessages.Strings[u32_Pos].c_str();
                c_Warnings += "\n";

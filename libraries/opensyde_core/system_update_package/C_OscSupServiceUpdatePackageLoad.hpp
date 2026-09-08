@@ -45,7 +45,7 @@ public:
                                                 uint32_t & oru32_ActiveBusIndex, std::vector<uint8_t> & orc_ActiveNodes,
                                                 std::vector<uint32_t> & orc_NodesUpdateOrder,
                                                 std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-                                                stw::scl::C_SclStringList & orc_WarningMessages,
+                                                stw::scl::std::vector<std::string> & orc_WarningMessages,
                                                 std::string & orc_ErrorMessage, const bool oq_IsZip,
                                                 const std::vector<uint8_t> & orc_DecryptNodes = std::vector<uint8_t>(),
                                                 const std::vector<std::string> & orc_DecryptNodesPassword = std::vector<std::string>(), const std::vector<std::string> & orc_NodeSignaturePemFiles = std::vector<std::string>());
@@ -55,7 +55,7 @@ public:
                                    C_OscSystemDefinition & orc_SystemDefinition, uint32_t & oru32_ActiveBusIndex,
                                    std::vector<uint8_t> & orc_ActiveNodes, std::vector<uint32_t> & orc_NodesUpdateOrder,
                                    std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-                                   stw::scl::C_SclStringList & orc_WarningMessages,
+                                   stw::scl::std::vector<std::string> & orc_WarningMessages,
                                    std::string & orc_ErrorMessage, const bool oq_IsZip,
                                    const std::vector<uint8_t> & orc_DecryptNodes = std::vector<uint8_t>(),
                                    const std::vector<std::string> & orc_DecryptNodesPassword = std::vector<std::string>(), const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys = std::vector<std::vector<uint8_t> >());

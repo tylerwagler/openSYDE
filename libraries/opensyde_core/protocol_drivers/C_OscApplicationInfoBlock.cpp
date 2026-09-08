@@ -374,54 +374,54 @@ std::string C_OscApplicationInfoBlock::m_GetNonTerminatedString(const char_t * c
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void C_OscApplicationInfoBlock::AddInfoToList(C_SclStringList & orc_List) const
+void C_OscApplicationInfoBlock::AddInfoToList(std::vector<std::string> & orc_List) const
 {
-   (void)orc_List.Add("Block type:      " + GetInfoLevelAsString());
-   (void)orc_List.Add("Version:         " + std::to_string(u8_StructVersion));
+   (void)orc_List.push_back("Block type:      " + GetInfoLevelAsString());
+   (void)orc_List.push_back("Version:         " + std::to_string(u8_StructVersion));
 
    if (ContainsDeviceID() == true)
    {
-      (void)orc_List.Add("DeviceID:        " + GetDeviceID());
+      (void)orc_List.push_back("DeviceID:        " + GetDeviceID());
    }
    else
    {
-      (void)orc_List.Add("DeviceID:        undefined");
+      (void)orc_List.push_back("DeviceID:        undefined");
    }
    if (ContainsDateAndTime() == true)
    {
-      (void)orc_List.Add("Date:            " + GetDate());
-      (void)orc_List.Add("Time:            " + GetTime());
+      (void)orc_List.push_back("Date:            " + GetDate());
+      (void)orc_List.push_back("Time:            " + GetTime());
    }
    else
    {
-      (void)orc_List.Add("Date and Time:   undefined");
+      (void)orc_List.push_back("Date and Time:   undefined");
    }
 
    if (ContainsProjectName() == true)
    {
-      (void)orc_List.Add("Project name:    " + GetProjectName());
+      (void)orc_List.push_back("Project name:    " + GetProjectName());
    }
    else
    {
-      (void)orc_List.Add("Project name:    undefined");
+      (void)orc_List.push_back("Project name:    undefined");
    }
 
    if (ContainsProjectVersion() == true)
    {
-      (void)orc_List.Add("Project version: " + GetProjectVersion());
+      (void)orc_List.push_back("Project version: " + GetProjectVersion());
    }
    else
    {
-      (void)orc_List.Add("Project version: undefined");
+      (void)orc_List.push_back("Project version: undefined");
    }
 
    if (ContainsAdditionalInfo() == true)
    {
-      (void)orc_List.Add("Additional info: " + GetAdditionalInfo());
+      (void)orc_List.push_back("Additional info: " + GetAdditionalInfo());
    }
    else
    {
-      (void)orc_List.Add("Additional info: undefined");
+      (void)orc_List.push_back("Additional info: undefined");
    }
 }
 

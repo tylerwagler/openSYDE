@@ -23,6 +23,7 @@
 #include "C_OscSecurityPem.hpp"
 #include "C_OscSecurityPemSecUpdate.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringCompat.hpp"
 #include <string>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -583,7 +584,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckUpdatePath()
          std::string c_ErrorMessage;
 
          // C_OscSecurityPemSecUpdate::LoadFromFile checks for correct key usage
-         const int32_t s32_Result = c_Pem.LoadFromFile(this->GetPublicKeyPath().toStdString(), c_ErrorMessage);
+         const int32_t s32_Result = ListLoadFromFile(c_Pem, this->GetPublicKeyPath().toStdString(), c_ErrorMessage);
 
          if (s32_Result != C_NO_ERR)
          {
@@ -674,7 +675,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckAuthPemFiles(QString 
             C_OscSecurityPem c_Pem;
             std::string c_ErrorMessage;
 
-            const int32_t s32_Result = c_Pem.LoadFromFile(rc_CurFile.toStdString(), c_ErrorMessage);
+            const int32_t s32_Result = ListLoadFromFile(c_Pem, rc_CurFile.toStdString(), c_ErrorMessage);
 
             if (s32_Result != C_NO_ERR)
             {

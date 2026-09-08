@@ -17,7 +17,8 @@
 
 #include "stwtypes.hpp"
 #include <string>
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_SclIniFile.hpp"
 #include "C_OscCanOpenEdsInfoBlock.hpp"
 
@@ -164,7 +165,7 @@ public:
    std::map<uint16_t, C_OscCanOpenObject> c_OdObjects;
 
    //Textual content of loaded EDS file to use e.g. for re-saving to file
-   stw::scl::C_SclStringList c_TextFileContent;
+   stw::scl::std::vector<std::string> c_TextFileContent;
 
    C_OscCanOpenObjectDictionary();
 

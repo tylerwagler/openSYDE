@@ -23,6 +23,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscHalcDefStructFiler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -63,7 +64,7 @@ int32_t C_OscHalcDefFiler::h_LoadFile(C_OscHalcDefBase & orc_IoData, const std::
    if (TglFileExists(orc_Path) == true)
    {
       C_OscXmlParserLog c_XmlParser;
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
+      s32_Retval = ListLoadFromFile(c_XmlParser, orc_Path);
       if (s32_Retval == C_NO_ERR)
       {
          c_XmlParser.SetLogHeading("Loading HALC definition");

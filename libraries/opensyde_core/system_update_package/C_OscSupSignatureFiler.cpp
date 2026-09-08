@@ -17,6 +17,7 @@
 #include "stwerrors.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscSupSignatureFiler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -79,7 +80,7 @@ int32_t C_OscSupSignatureFiler::h_CreateSignatureFile(const std::string & orc_Pa
    tgl_assert(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
    // save signature file
-   s32_Result = c_XmlParser.SaveToFile(orc_Path);
+   s32_Result = ListSaveToFile(c_XmlParser, orc_Path);
    if (s32_Result != C_NO_ERR)
    {
       s32_Result = C_RD_WR;
@@ -106,7 +107,7 @@ int32_t C_OscSupSignatureFiler::h_LoadSignatureFile(const std::string & orc_Path
    int32_t s32_Result;
    C_OscXmlParser c_XmlParser;
 
-   s32_Result = c_XmlParser.LoadFromFile(orc_Path);
+   s32_Result = ListLoadFromFile(c_XmlParser, orc_Path);
    if (s32_Result == C_NO_ERR)
    {
       tgl_assert(c_XmlParser.SelectRoot() == mc_ROOT_NAME);

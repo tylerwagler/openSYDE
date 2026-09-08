@@ -87,7 +87,7 @@ C_OscSecurityPemKeyInfo::C_OscSecurityPemKeyInfo()
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSecurityPemKeyInfo::Clear()
 {
-   this->mc_KeyUsageInformation.Clear();
+   this->mc_KeyUsageInformation.clear();
    this->mc_PrivateKey.clear();
    this->mc_X509CertificateData.clear();
    this->mc_CertificateSerialNumber.clear();

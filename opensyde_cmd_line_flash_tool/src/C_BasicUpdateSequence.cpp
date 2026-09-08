@@ -85,15 +85,15 @@ void C_BasicUpdateSequence::m_ReportProgress(const int32_t os32_Result, const st
 void C_BasicUpdateSequence::m_ReportFlashloaderInformationRead(const std::string & orc_DeviceName,
                                                                const C_OscComFlashloaderInformation & orc_Information)
 {
-   C_SclStringList c_Text;
-   const C_SclStringList c_MoreInformation = orc_Information.FlashloaderInformationToText();
+   std::vector<std::string> c_Text;
+   const std::vector<std::string> c_MoreInformation = orc_Information.FlashloaderInformationToText();
 
-   c_Text.Clear();
-   c_Text.Add("Device name: " + orc_DeviceName);
-   c_Text.AddStrings(&c_MoreInformation);
+   c_Text.clear();
+   c_Text.push_back("Device name: " + orc_DeviceName);
+   c_Text.insert(c_Text.end(), c_MoreInformation.begin(), c_MoreInformation.end());
 
    std::cout << "openSYDE device information read: " << "\n";
-   for (uint32_t u32_Line = 0U; u32_Line < c_Text.GetCount(); u32_Line++)
+   for (uint32_t u32_Line = 0U; u32_Line < c_Text.size(); u32_Line++)
    {
       std::cout << "  " << c_Text.Strings[u32_Line].c_str() << "\n";
       osc_write_log_info("Flashloader Info", c_Text.Strings[u32_Line]);

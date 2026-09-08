@@ -13,7 +13,8 @@
 #include <QWidget>
 #include <QAbstractListModel>
 
-#include "C_SclStringList.hpp"
+#include <string>
+#include <vector>
 #include "C_OscDataLoggerJob.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
