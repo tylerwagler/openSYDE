@@ -99,3 +99,19 @@ TEST(SclString, Length)
    EXPECT_EQ(5U, s.length());
    EXPECT_EQ(0U, std::string().length());
 }
+
+TEST(SclString, FloatToStrCompat_MatchesPinnedOutputs)
+{
+   //Pinned from the classic-locale ostringstream implementation that this replaces;
+   //std::format reproduces it exactly (C locale, {:g} default precision 6, {:.{}f} fixed).
+   EXPECT_EQ("1", FloatToStrCompat(1.0));
+   EXPECT_EQ("0.1", FloatToStrCompat(0.1));
+   EXPECT_EQ("3.14159", FloatToStrCompat(3.14159265));
+   EXPECT_EQ("1.23457e+06", FloatToStrCompat(1234567.8));
+   EXPECT_EQ("1e+20", FloatToStrCompat(1e20));
+   EXPECT_EQ("-0.007", FloatToStrCompat(-0.007));
+   EXPECT_EQ("1.000", FloatToStrCompat(1.0, 3));
+   EXPECT_EQ("2.50", FloatToStrCompat(2.5, 2));
+   EXPECT_EQ("0.000123", FloatToStrCompat(0.0001234, 6));
+}
+

@@ -209,6 +209,9 @@ Use `stwtypes.hpp`: `int8_t` … `uint64_t`, `float32_t`, `float64_t`, `char_t`.
 `std::string` and `std::vector`. `C_SclString` and `C_SclDynamicArray` have been
 **removed** — do not reintroduce them. `C_SclStringCompat.hpp` provides transitional
 helpers; prefer idiomatic `std::string` in new code and do not add new compat helpers.
+The compat header's numeric/float helpers are now `std::to_string`/`std::format` and it no
+longer transitively provides `<sstream>`/`<iomanip>`/`<locale>` — consumers must include
+what they use directly.
 `C_SclStringList` has been **retired** (phase 3 follow-up); its string-list
 helpers in `C_SclStringCompat.hpp` (`ListLoadFromFile`, `ListSaveToFile`, `ListGetText`,
 `ListIndexOfName`, `ListAddStrings`) operate on `std::vector<std::string>` and are the

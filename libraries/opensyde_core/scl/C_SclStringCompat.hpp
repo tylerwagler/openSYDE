@@ -17,17 +17,18 @@
 
 #include <string>
 #include <sstream>
-#include <iomanip>
 #include <algorithm>
 #include <cctype>
-#include <cstdlib>
-#include <cstdio>
 #include <cstdarg>
-#include <vector>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <cerrno>
-#include <locale>
 #include <climits>
+#include <format>
 #include <stdexcept>
+#include <type_traits>
+#include <vector>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -42,9 +43,14 @@ namespace scl
 template <typename T>
 inline std::string IntToStrCompat(const T orc_Value)
 {
-   std::ostringstream c_Stream;
-   c_Stream << orc_Value;
-   return c_Stream.str();
+   if constexpr (std::is_enum_v<T>)
+   {
+      return std::to_string(static_cast<std::underlying_type_t<T>>(orc_Value));
+   }
+   else
+   {
+      return std::to_string(orc_Value);
+   }
 }
 
 /// Replacement for C_SclString::IntToHex(value, digits).
@@ -52,28 +58,21 @@ inline std::string IntToStrCompat(const T orc_Value)
 template <typename T>
 inline std::string IntToHexCompat(const T orc_Value, const uint32_t ou32_Digits)
 {
-   std::stringstream c_Stream;
-   c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Value;
-   return c_Stream.str();
+   return std::format("{:0{}X}", orc_Value, ou32_Digits);
 }
 
 /// Replacement for C_SclString::FloatToStr(value).
 inline std::string FloatToStrCompat(const double of64_Value)
 {
-   std::ostringstream c_Stream;
-   c_Stream.imbue(std::locale::classic()); //pin the decimal separator - see ToDoubleCompat
-   c_Stream << of64_Value;
-   return c_Stream.str();
+   //std::format always uses the C locale; {:g} default precision 6 matches the
+   //classic-locale ostringstream default it replaces.
+   return std::format("{:g}", of64_Value);
 }
 
 /// Replacement for C_SclString::FloatToStr(value, digits).
 inline std::string FloatToStrCompat(const double of64_Value, const int32_t os32_Digits)
 {
-   std::stringstream c_Stream;
-   c_Stream.imbue(std::locale::classic()); //pin the decimal separator - see ToDoubleCompat
-   c_Stream.precision(os32_Digits);
-   c_Stream << std::fixed << of64_Value;
-   return c_Stream.str();
+   return std::format("{:.{}f}", of64_Value, os32_Digits);
 }
 
 /// Replacement for C_SclString::StringOfChar(ch, count).
