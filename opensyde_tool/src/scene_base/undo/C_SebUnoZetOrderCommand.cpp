@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <vector>
 #include "stwtypes.hpp"
 #include "gitypes.hpp"
 #include "C_GiBiBase.hpp"
@@ -20,7 +21,7 @@
 #include "C_SebScene.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace std;
+using std::vector;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
 

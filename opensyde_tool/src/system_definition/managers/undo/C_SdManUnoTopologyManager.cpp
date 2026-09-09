@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <vector>
 #include "C_SdManUnoTopologyManager.hpp"
 #include "C_GiUnique.hpp"
 #include "C_SdManUnoTopologySetupStyleCommand.hpp"
@@ -23,7 +24,7 @@
 #include "C_SdManUnoTopologyChangeInterfaceCommand.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace std;
+using std::vector;
 using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui;
 

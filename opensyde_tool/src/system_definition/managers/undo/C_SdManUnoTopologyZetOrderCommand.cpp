@@ -12,12 +12,13 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <vector>
 #include "stwtypes.hpp"
 #include "gitypes.hpp"
 #include "C_SdManUnoTopologyZetOrderCommand.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace std;
+using std::vector;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
 
