@@ -17,7 +17,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscErrorCategory.hpp"
 #include <string>
 #include "C_HexFile.hpp"

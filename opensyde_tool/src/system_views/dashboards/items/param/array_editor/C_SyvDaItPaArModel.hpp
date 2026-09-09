@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QAbstractTableModel>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSvDbDataElementHandler.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"

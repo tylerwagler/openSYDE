@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QWidget>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanMessageIdentificationIndices.hpp"
 #include "C_OscCanMessage.hpp"
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"

@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <array>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeContextMenu.hpp"
 #include "C_OgePopUpContentBase.hpp"
 

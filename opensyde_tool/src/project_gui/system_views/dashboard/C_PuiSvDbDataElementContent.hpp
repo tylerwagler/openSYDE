@@ -12,7 +12,7 @@
 #define C_PUISVDBDATAELEMENTCONTENT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OscNodeDataPoolContent.hpp"
 

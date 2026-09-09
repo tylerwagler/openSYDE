@@ -17,7 +17,7 @@
 #include <QDropEvent>
 #include <QKeyEvent>
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDpListHeaderWidget.hpp"
 #include "C_SdNdeUnoDataPoolManager.hpp"
 #include "C_OgeContextMenu.hpp"

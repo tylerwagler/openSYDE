@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QGraphicsItem>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SebTopologyBaseContextMenuManager.hpp"
 #include "C_OgeContextMenu.hpp"
 #include "C_SdContextMenuEntry.hpp"

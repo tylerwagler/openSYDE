@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDpListTableErrorManager.hpp"
 #include "C_PuiSdHandler.hpp"
 

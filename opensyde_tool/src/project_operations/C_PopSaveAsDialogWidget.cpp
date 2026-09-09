@@ -16,7 +16,7 @@
 #include <limits>
 #include <QFileDialog>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscUtils.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PopErrorHandling.hpp"

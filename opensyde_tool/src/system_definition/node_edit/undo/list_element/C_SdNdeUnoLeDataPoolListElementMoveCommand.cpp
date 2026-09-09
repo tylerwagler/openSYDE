@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_Uti.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscLoggingHandler.hpp"
 #include "C_SdNdeUnoLeDataPoolListElementMoveCommand.hpp"
 #include "C_PuiSdHandler.hpp"

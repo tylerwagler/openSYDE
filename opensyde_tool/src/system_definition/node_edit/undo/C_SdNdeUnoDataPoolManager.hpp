@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDpUtil.hpp"
 #include "C_UtiUndoStack.hpp"
 

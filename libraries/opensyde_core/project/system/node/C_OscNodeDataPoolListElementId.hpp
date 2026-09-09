@@ -12,7 +12,7 @@
 #define C_OSCNODEDATAPOOLLISTELEMENTID_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OscNodeDataPoolListId.hpp"
 

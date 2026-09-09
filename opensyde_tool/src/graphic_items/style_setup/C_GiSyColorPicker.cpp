@@ -16,7 +16,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiSyColorPicker.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

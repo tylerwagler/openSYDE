@@ -13,7 +13,7 @@
 
 #include <QWidget>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SyvDaDashboardContentBaseWidget.hpp"
 #include "C_SyvComDriverDiag.hpp"

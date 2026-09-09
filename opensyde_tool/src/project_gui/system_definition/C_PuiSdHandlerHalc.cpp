@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 #include "C_SclStringUtil.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_PuiSdHandlerHalc.hpp"

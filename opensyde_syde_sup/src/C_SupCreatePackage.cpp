@@ -13,7 +13,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_SupCreatePackage.hpp"
 

@@ -18,7 +18,7 @@
 #include <vector>
 #include <set>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgePopUpDialog.hpp"
 #include "C_SyvComDriverDiag.hpp"

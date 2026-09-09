@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <cstring>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "C_OscProtocolSecuritySubLayer.hpp"

@@ -12,7 +12,7 @@
 #define C_OSCTARGETSUPPORTPACKAGEV2FILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include <system_error>
 #include "C_OscTargetSupportPackageV2.hpp"

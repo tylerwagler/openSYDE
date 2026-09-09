@@ -9,7 +9,7 @@
 #ifndef C_CIEEXPORTREPORTWIDGET_HPP
 #define C_CIEEXPORTREPORTWIDGET_HPP
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePopUpContentBase.hpp"
 #include "C_CieExportDbc.hpp"
 

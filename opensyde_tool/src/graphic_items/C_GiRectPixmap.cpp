@@ -13,7 +13,7 @@
 #include <QPen>
 #include <QPainter>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiRectPixmap.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

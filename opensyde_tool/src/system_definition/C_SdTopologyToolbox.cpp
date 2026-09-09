@@ -19,7 +19,7 @@
 #include "C_SebToolboxUtil.hpp"
 #include "C_OscSystemDefinition.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

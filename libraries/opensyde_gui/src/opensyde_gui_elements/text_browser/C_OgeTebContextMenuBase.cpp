@@ -17,7 +17,7 @@
 #include <QApplication>
 #include <QDesktopServices>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeTebContextMenuBase.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

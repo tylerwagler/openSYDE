@@ -15,7 +15,7 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QSvgRenderer>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

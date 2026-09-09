@@ -9,7 +9,7 @@
 #define C_OSCHALCDEFCONTENTBITMASKITEM_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include <system_error>
 

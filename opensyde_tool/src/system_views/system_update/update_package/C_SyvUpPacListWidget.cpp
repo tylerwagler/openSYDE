@@ -14,7 +14,7 @@
 #include <QPainter>
 #include <QProcess>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_SclStringUtil.hpp"
 #include "constants.hpp"

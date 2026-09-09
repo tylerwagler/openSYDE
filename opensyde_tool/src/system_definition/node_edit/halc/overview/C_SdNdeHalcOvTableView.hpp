@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QScrollBar>
 #include <QSortFilterProxyModel>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_TblViewScroll.hpp"
 #include "C_SdNdeHalcOvTableModel.hpp"
 #include "C_SdNdeHalcOvDelegate.hpp"

@@ -9,7 +9,7 @@
 #define C_PUISDLASTKNOWNHALELEMENTID_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include <QString>
 

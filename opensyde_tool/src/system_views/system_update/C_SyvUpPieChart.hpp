@@ -15,7 +15,7 @@
 
 #include <QWidget>
 #include <QMovie>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

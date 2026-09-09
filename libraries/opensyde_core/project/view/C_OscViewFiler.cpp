@@ -12,7 +12,7 @@
 #include <system_error>
 #include "C_SclStringUtil.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "TglFile.hpp"

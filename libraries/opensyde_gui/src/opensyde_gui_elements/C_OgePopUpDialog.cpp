@@ -20,7 +20,7 @@
 #include <QWindow>
 #include <QDebug>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_HeHandler.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "ui_C_OgePopUpDialog.h"

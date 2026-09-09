@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include "constants.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SdBueJ1939AddMessagesFromCatalogDialog.hpp"
 #include "ui_C_SdBueJ1939AddMessagesFromCatalogDialog.h"

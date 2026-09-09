@@ -21,7 +21,7 @@
 #include "C_PuiProject.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_PopErrorHandling.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_SdUtil.hpp"
 #include "version_config.hpp"

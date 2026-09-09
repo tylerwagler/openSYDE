@@ -14,7 +14,7 @@
 #include <QMimeData>
 #include <QScrollBar>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvUpPacPemFilesListWidget.hpp"
 #include "C_UsHandler.hpp"
 #include "C_Uti.hpp"

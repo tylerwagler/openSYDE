@@ -16,7 +16,7 @@
 #include <set>
 #include <map>
 #include <system_error>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscRoutingRoute.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscIpDispatcher.hpp"

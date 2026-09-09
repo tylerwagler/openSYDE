@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QFileInfo>
 #include "C_OgePopUpContentBase.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

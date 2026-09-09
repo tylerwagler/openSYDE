@@ -17,7 +17,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <deque>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stw_can.hpp"
 #include <string>
 

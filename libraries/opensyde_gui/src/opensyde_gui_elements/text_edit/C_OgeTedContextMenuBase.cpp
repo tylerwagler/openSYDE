@@ -16,7 +16,7 @@
 
 #include <QScrollBar>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeTedContextMenuBase.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

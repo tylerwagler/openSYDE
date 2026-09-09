@@ -17,7 +17,7 @@
 #include <QMouseEvent>
 
 #include "C_Uti.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdHandler.hpp"

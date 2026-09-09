@@ -14,7 +14,7 @@
 #include <QApplication>
 #include <QIcon>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_Uti.hpp"
 #include "C_CamMainWindow.hpp"
 #include "C_PopErrorHandling.hpp"

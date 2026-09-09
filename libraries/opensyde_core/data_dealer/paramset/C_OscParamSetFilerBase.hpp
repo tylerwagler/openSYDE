@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParser.hpp"

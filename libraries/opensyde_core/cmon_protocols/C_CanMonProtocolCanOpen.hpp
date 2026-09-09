@@ -11,7 +11,7 @@
 #ifndef CCMONPROTOCOLCANOPENHPP
 #define CCMONPROTOCOLCANOPENHPP
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CanMonProtocolBase.hpp"
 #include <string>
 

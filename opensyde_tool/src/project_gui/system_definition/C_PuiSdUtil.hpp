@@ -16,7 +16,7 @@
 #include <vector>
 #include <QString>
 #include <string>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNodeSquad.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_OscCanProtocol.hpp"

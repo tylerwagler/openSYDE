@@ -15,7 +15,7 @@
 
 #include <QWidget>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OscCanProtocol.hpp"
 

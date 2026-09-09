@@ -17,7 +17,7 @@
 #include <QApplication>
 #include <QScreen>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgeCbxMultiSelect.hpp"
 

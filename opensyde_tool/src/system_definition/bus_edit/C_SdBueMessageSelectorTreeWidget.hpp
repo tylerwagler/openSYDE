@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QItemSelection>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CieConverter.hpp"
 #include "C_SdBueUnoManager.hpp"
 #include "C_CieImportDataAssignment.hpp"

@@ -13,7 +13,7 @@
 
 #include <QWidget>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SyvSeScene.hpp"
 #include "C_PuiSvData.hpp"

@@ -17,7 +17,7 @@
 #include <QTimer>
 #include <QWidget>
 #include <QTreeWidgetItem>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeUnoDataPoolManager.hpp"
 #include "C_SdNdeDpListModelViewManager.hpp"
 

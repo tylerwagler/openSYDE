@@ -31,7 +31,7 @@
 
 #include "C_HexFile.hpp"
 #include "C_HexFileErrorCategory.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 //------------------------------------------------------------------------
 

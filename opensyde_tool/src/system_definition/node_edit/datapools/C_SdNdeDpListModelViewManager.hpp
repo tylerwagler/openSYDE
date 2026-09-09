@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QObject>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDpListDataSetModel.hpp"
 #include "C_SdNdeDpListArrayEditModel.hpp"
 #include "C_SdNdeDpListTableModel.hpp"

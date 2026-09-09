@@ -18,7 +18,7 @@ extern T_stwerrors_hpp_undefined_type gt_stwerrors_hpp_FailBuild;
 #endif
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Global Constants ---------------------------------------------------------------------------------------------- */
 

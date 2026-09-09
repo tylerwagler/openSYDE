@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CieConverter.hpp"
 #include "C_OscCanMessage.hpp"
 #include "C_CamProMessageData.hpp"

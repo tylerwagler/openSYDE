@@ -15,7 +15,7 @@
 #include <iostream>
 #include <system_error>
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscNodeDataPoolListElement.hpp"
 #include "C_OscNodeDataPoolDataSet.hpp"

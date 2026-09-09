@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QLabel>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_TblViewScroll.hpp"
 #include "C_SyvDaItPaArModel.hpp"
 #include "C_SyvDaItPaArDelegate.hpp"

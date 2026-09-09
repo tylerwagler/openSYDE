@@ -13,7 +13,7 @@
 #include <QObject>
 #include <QTimer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiLiBusConnectorBase.hpp"
 #include "C_GiNode.hpp"

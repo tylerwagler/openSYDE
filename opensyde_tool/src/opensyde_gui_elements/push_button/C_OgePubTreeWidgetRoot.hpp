@@ -15,7 +15,7 @@
 
 #include "C_OgePubToolTipBase.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

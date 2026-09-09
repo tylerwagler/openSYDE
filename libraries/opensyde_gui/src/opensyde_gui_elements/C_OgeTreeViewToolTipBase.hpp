@@ -15,7 +15,7 @@
 #include <QTreeView>
 #include <QStyledItemDelegate>
 #include <QProxyStyle>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeTreeToolTipBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

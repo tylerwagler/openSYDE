@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SyvDaDashboardWidget.hpp"
 #include "C_OgeWiDashboardTab.hpp"

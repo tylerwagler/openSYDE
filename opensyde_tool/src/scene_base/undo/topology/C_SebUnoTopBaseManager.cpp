@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SebUnoTopBaseManager.hpp"
 #include "C_SebUnoTopBusConnectorMoveCommand.hpp"
 #include "C_GiLiBusConnectorBase.hpp"

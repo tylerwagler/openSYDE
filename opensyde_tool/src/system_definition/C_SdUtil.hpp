@@ -17,7 +17,7 @@
 #include <QIcon>
 #include <QLabel>
 #include <QComboBox>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanMessage.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_OscNode.hpp"

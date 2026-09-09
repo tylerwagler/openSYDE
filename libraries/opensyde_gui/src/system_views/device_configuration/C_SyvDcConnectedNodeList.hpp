@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <QListWidget>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscDcDeviceInformation.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

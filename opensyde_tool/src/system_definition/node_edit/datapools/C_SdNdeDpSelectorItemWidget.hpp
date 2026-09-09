@@ -11,7 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgeWiWithToolTip.hpp"
 #include "C_OscNodeDataPoolId.hpp"

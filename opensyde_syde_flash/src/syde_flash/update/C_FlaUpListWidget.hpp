@@ -15,7 +15,7 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeContextMenu.hpp"
 #include "C_Uti.hpp"
 #include "C_FlaUpHexFileInfo.hpp"

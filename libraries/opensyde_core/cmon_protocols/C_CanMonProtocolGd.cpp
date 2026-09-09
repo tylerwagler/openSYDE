@@ -13,7 +13,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp" //pre-compiled headers
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolGd.hpp"
 #include <string>

@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_Uti.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscUtils.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_CamUtiGeneric.hpp"

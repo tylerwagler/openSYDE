@@ -12,7 +12,7 @@
 #define C_CIEEXPORTDBC_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include <string>
 #include <string>

@@ -17,7 +17,7 @@
 #include <cstdio>
 #include <climits>
 #include <windows.h>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
 #include <string>

@@ -31,7 +31,7 @@
 
 #include <string>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscErrorCategory.hpp"
 #include "C_OscViewFiler.hpp"
 #include "C_OscViewNodeUpdate.hpp"

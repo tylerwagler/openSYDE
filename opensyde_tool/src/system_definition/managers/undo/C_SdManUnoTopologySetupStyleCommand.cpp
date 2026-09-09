@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdManUnoTopologySetupStyleCommand.hpp"
 #include "C_GiLiBus.hpp"
 #include "C_SdTopologyDataSnapshot.hpp"

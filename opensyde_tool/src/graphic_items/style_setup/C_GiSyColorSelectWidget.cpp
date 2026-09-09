@@ -20,7 +20,7 @@
 #include "C_GiSyColorSelectWidget.hpp"
 #include "ui_C_GiSyColorSelectWidget.h"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_GiSyScreenColorPickingEventFilter.hpp"
 #include "C_GiSyColorPicker.hpp"

@@ -14,7 +14,7 @@
 
 #include <QAbstractItemView>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_OgeCbxResizingView.hpp"
 

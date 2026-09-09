@@ -15,7 +15,7 @@
 #include <QTimer>
 #include <QListWidget>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

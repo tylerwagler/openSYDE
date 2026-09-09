@@ -14,7 +14,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeWiHover.hpp"
 #include "C_SyvComDriverDiag.hpp"
 #include "C_SyvDaDashboardToolbox.hpp"

@@ -17,7 +17,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <system_error>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
 #include "C_OscIpDispatcher.hpp"

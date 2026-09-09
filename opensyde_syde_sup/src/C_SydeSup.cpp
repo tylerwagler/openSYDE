@@ -19,7 +19,7 @@
 #include <iostream>
 #include <getopt.h> //note: as we use getopt.h this application is not portable to all compilers
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include <string>
 #include "C_SclStringUtil.hpp"

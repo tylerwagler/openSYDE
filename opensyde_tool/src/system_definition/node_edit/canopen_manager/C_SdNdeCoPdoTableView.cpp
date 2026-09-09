@@ -12,7 +12,7 @@
 
 #include <QMouseEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_UsHandler.hpp"
 #include "C_PuiSdHandler.hpp"

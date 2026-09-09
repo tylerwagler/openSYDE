@@ -15,7 +15,7 @@
 #include <QString>
 #include <QList>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscComMessageLogger.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

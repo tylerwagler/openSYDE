@@ -14,7 +14,7 @@
 
 #include <QMouseEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_OgeTreeToolTipBase.hpp"
 

@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <map>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscSystemBus.hpp"
 

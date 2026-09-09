@@ -15,7 +15,7 @@
 #include <vector>
 #include <list>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNodeDataPoolId.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

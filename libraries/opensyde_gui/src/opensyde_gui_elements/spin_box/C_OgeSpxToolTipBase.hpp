@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QSpinBox>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeSpxAllBase.hpp"
 #include "C_OgeContextMenu.hpp"
 

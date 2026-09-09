@@ -15,7 +15,7 @@
 #include <vector>
 #include <map>
 #include <system_error>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OscSecurityEcdhAes.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"

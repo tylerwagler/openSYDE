@@ -16,7 +16,7 @@
 #include <QMovie>
 #include <QSvgRenderer>
 #include <QGraphicsRectItem>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

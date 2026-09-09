@@ -18,7 +18,7 @@
 #include <QGroupBox>
 #include <QKeyEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_NagToolBarWidget.hpp"
 #include "ui_C_NagToolBarWidget.h"

@@ -9,7 +9,7 @@
 #define C_GISYCOLORBRIGHTNESSPICKER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include <QWidget>
 

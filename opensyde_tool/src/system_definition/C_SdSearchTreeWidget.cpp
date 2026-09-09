@@ -13,7 +13,7 @@
 #include <vector>
 #include <QKeyEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_SdSearchTreeWidget.hpp"
 #include "C_PuiSdHandler.hpp"

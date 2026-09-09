@@ -15,7 +15,7 @@
 
 #include <QComboBox>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CamProHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_CamMosDatabaseBusSelectionPopup.hpp"

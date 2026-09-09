@@ -21,7 +21,7 @@
 #include "openssl/pem.h"
 
 #include "TglFile.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"

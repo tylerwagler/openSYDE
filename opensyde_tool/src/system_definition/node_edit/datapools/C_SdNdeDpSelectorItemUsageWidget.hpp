@@ -18,7 +18,7 @@
 #include <QPen>
 #include <QColor>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeWiWithToolTip.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

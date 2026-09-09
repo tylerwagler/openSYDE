@@ -16,7 +16,7 @@
 #include <QGraphicsItem>
 #include <QList>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_UtiUndoStack.hpp"
 

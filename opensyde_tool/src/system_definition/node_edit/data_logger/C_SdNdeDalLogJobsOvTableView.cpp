@@ -12,7 +12,7 @@
 
 #include <QMouseEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDalLogJobsOvTableView.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_UsHandler.hpp"

@@ -10,7 +10,7 @@
 #define C_SYVSEDLLCONFIGURATIONDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanAdapterConfig.hpp"
 #include "C_OgePopUpContentBase.hpp"
 

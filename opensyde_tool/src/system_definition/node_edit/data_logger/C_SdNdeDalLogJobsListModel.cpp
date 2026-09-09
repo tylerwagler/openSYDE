@@ -12,7 +12,7 @@
 
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDalLogJobsListModel.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_Uti.hpp"

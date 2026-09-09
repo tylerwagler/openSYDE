@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QAction>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeContextMenu.hpp"
 
 namespace Ui

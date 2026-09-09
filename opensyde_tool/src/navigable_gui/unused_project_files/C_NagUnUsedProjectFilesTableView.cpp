@@ -12,7 +12,7 @@
 
 #include <QScrollBar>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_NagUnUsedProjectFilesTableView.hpp"
 #include "C_Uti.hpp"
 #include "C_OgeWiCustomMessage.hpp"

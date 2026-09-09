@@ -14,7 +14,7 @@
 #include <QTimer>
 #include <QWindow>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgePopUpDialog.hpp"
 #include "C_GiSyScreenColorPickingEventFilter.hpp"

@@ -17,7 +17,7 @@
 #include <QUndoCommand>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

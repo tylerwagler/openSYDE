@@ -10,7 +10,7 @@
 #define C_SYVDADASHBOARDSETTINGS_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePopUpContentBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

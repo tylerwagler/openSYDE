@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
 #include <QString>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNode.hpp"
 #include "C_OscCanInterfaceId.hpp"
 

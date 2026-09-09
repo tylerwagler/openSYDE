@@ -11,7 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <system_error>
 
 #include "stwerrors.hpp"

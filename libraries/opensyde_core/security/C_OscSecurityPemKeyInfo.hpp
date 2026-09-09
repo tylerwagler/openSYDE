@@ -12,7 +12,7 @@
 #include <vector>
 #include <string>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

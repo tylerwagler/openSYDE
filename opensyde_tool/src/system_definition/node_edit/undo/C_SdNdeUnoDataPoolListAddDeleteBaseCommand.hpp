@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSdNodeDataPoolList.hpp"
 #include "C_OscNodeDataPoolList.hpp"
 #include "C_SdNdeUnoDataPoolListBaseCommand.hpp"

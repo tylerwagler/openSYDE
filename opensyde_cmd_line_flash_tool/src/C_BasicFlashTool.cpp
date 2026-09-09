@@ -34,7 +34,7 @@ static int kbhit(void)
 }
 #endif
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
 #include "TglTime.hpp"

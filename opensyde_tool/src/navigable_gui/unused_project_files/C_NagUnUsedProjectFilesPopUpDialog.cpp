@@ -13,7 +13,7 @@
 #include <QDir>
 #include <QDirIterator>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_NagUnUsedProjectFilesPopUpDialog.hpp"
 #include "ui_C_NagUnUsedProjectFilesPopUpDialog.h"
 #include "constants.hpp"

@@ -19,7 +19,7 @@
 #include <QRegularExpression>
 #endif
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscCanAdapterFactory.hpp"

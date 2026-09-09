@@ -9,7 +9,7 @@
 #define C_POPSERVICEPROJSETTINGSMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_TblTreeModelCheckable.hpp"
 

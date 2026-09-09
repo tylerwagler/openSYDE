@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
 #include <QVBoxLayout>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdTopologyListWidget.hpp"
 #include <QFrame>
 #include "C_OgePubIconOnly.hpp"

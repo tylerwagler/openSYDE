@@ -19,7 +19,7 @@
 #include <QDir>
 #include <QFile>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 
 #include "C_SyvSeDllConfigurationDialog.hpp"

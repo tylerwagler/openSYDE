@@ -19,7 +19,7 @@
 #include "C_OgeChxDefaultSmall.hpp"
 #include "C_OscCanProtocol.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 

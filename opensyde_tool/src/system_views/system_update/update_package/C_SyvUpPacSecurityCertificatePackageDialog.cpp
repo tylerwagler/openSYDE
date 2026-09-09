@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include "stwerrors.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvUpPacSecurityCertificatePackageDialog.hpp"
 #include "ui_C_SyvUpPacSecurityCertificatePackageDialog.h"
 #include "C_OgeWiUtil.hpp"

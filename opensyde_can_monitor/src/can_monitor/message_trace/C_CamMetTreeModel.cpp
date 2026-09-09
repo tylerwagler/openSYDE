@@ -19,7 +19,7 @@
 #include <QDebug>
 
 #include "TglTime.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_SclStringUtil.hpp"
 #include "C_CamMetUtil.hpp"

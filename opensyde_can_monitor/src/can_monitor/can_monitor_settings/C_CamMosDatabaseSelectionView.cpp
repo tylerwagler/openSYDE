@@ -15,7 +15,7 @@
 #include <QScrollBar>
 #include <QMouseEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CamMosDatabaseSelectionView.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

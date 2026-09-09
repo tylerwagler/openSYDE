@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscNodeApplication.hpp"
 #include "C_OscNodeDataPoolList.hpp"

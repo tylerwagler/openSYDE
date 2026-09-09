@@ -16,7 +16,7 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QCryptographicHash>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_PuiProject.hpp"
 #include "C_SyvUpPacHexFileView.hpp"

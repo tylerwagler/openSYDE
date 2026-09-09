@@ -14,7 +14,7 @@
 
 #include <QPixmap>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "gitypes.hpp"
 #include "C_GiArrowCursorButton.hpp"
 

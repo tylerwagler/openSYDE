@@ -12,7 +12,7 @@
 
 #include <QFile>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 
 #include "C_FlaUtiStyleSheets.hpp"

@@ -15,7 +15,7 @@
 #include <QHeaderView>
 #include <QMouseEvent>
 #include <QScrollBar>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_PopFileTableView.hpp"
 #include "constants.hpp"

@@ -21,7 +21,7 @@
 #include <cstdio>
 #include <string>
 #include <system_error>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscErrorCategory.hpp"
 
 namespace stw

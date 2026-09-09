@@ -15,7 +15,7 @@
 
 #include <QScrollArea>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

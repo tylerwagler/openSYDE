@@ -14,7 +14,7 @@
 
 #include <QClipboard>
 #include <QApplication>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_SdClipBoardHelper.hpp"
 #include "C_OscXmlParser.hpp"

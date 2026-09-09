@@ -24,7 +24,7 @@
 #include <QtWidgets>
 
 // Tool-only STW project headers
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdTopologyScene.hpp"

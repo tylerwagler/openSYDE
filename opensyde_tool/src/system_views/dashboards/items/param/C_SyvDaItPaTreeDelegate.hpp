@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QStyledItemDelegate>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNodeDataPoolListElementId.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

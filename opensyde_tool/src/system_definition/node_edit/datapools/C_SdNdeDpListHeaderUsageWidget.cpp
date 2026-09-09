@@ -16,7 +16,7 @@
 #include <QEvent>
 #include <QHelpEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 
 #include "C_SdNdeDpListHeaderUsageWidget.hpp"

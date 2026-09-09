@@ -14,7 +14,7 @@
 
 #include "C_OscErrorCategory.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stw_can.hpp"
 #include "C_CanMonProtocolBase.hpp"
 #include "C_CanMonProtocolCanOpen.hpp"

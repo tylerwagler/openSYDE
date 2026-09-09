@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "gitypes.hpp"
 #include "constants.hpp"
 #include "C_GiSvPcBusConnector.hpp"

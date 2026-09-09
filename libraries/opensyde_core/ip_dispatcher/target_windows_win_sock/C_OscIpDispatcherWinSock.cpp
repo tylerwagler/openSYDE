@@ -17,7 +17,7 @@
 #include <winsock.h> //Windows WinSock
 #include <cstring>
 #include <iphlpapi.h> //Windows IP helper utilities
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "C_OscLoggingHandler.hpp"

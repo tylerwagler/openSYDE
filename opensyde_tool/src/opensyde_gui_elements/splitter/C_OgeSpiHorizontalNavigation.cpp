@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <QPainter>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_OgeSpiHorizontalNavigation.hpp"
 

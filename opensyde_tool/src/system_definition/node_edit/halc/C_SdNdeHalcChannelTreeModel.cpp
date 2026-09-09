@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SdNdeHalcChannelTreeModel.hpp"
 #include "C_TblTreItem.hpp"

@@ -14,7 +14,7 @@
 #include <QWidget>
 #include <QTimer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OscSuSequences.hpp"
 #include "C_SyvUpDeviceInfo.hpp"

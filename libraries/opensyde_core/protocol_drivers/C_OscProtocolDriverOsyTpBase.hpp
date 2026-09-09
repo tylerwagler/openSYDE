@@ -21,7 +21,7 @@
 #include <vector>
 #include <deque>
 #include <system_error>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

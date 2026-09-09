@@ -15,7 +15,7 @@
 #define TGLFILEHPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include <vector>
 

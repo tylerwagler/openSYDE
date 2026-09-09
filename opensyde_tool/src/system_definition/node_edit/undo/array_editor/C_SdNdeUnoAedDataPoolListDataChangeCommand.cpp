@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <limits>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "C_SdNdeUnoAedDataPoolListDataChangeCommand.hpp"

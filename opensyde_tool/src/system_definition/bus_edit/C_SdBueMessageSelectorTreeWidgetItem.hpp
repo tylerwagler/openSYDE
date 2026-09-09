@@ -16,7 +16,7 @@
 #include <QTreeWidgetItem>
 #include <QIcon>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

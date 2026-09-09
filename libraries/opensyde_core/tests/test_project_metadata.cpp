@@ -24,7 +24,7 @@
 
 #include <string>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscProject.hpp"
 #include "C_SclDateTime.hpp"
 

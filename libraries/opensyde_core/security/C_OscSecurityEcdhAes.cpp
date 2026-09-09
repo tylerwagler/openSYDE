@@ -19,7 +19,7 @@
 #include <openssl/param_build.h>
 #include <openssl/sha.h>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "TglUtils.hpp"

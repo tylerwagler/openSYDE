@@ -16,7 +16,7 @@
 #include <QFileDialog>
 
 #include "C_Uti.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_ImpUtil.hpp"

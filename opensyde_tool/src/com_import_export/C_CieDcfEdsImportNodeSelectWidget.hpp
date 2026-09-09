@@ -10,7 +10,7 @@
 #define C_CIEDCFEDSIMPORTNODESELECTWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CieDcfEdsImportNodeSelectWidget.hpp"
 #include "C_OgePopUpContentBase.hpp"
 #include "C_CieConverter.hpp"

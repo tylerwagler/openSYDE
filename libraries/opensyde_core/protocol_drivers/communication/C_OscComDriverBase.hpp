@@ -17,7 +17,7 @@
 #include <list>
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stw_can.hpp"
 #include "C_CanDispatcher.hpp"
 #include "C_OscComMessageLogger.hpp"

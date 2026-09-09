@@ -9,7 +9,7 @@
 #define C_OSCHALCCONFIGCHANNEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscHalcDefBase.hpp"
 #include "C_OscHalcConfigParameterStruct.hpp"

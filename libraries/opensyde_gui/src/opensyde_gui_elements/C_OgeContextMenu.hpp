@@ -15,7 +15,7 @@
 
 #include <QPaintEvent>
 #include <QMenu>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

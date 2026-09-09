@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include "constants.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SdNdeDalLogJobDataSelectionTableModel.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"

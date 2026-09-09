@@ -10,7 +10,7 @@
 #define C_SDNDEHALCCONFIGIMPORTVIEW_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgeTreeViewToolTipBase.hpp"
 

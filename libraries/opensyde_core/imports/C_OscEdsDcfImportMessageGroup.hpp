@@ -9,7 +9,7 @@
 #define C_OSCEDSDCFIMPORTMESSAGEGROUP_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanMessage.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
 

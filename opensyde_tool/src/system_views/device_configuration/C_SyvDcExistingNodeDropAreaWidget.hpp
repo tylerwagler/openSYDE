@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscProtocolSerialNumber.hpp"
 #include "C_SyvDcSequences.hpp"
 

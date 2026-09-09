@@ -14,7 +14,7 @@
 
 #include <windows.h>
 #include <lmcons.h> //for UNLEN
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include <string>
 

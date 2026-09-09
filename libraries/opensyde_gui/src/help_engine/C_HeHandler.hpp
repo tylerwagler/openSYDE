@@ -18,7 +18,7 @@
 #include <QWidget>
 #include <QString>
 #include <QMap>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

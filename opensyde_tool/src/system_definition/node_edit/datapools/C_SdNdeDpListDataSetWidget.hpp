@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QUndoCommand>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePopUpContentBase.hpp"
 #include "C_SdNdeDpListModelViewManager.hpp"
 #include "C_OgeContextMenu.hpp"

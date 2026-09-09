@@ -9,7 +9,7 @@
 #define C_BASICFLASHTOOL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_CanDispatcher.hpp"
 

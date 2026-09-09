@@ -12,7 +12,7 @@
 #define C_NAGVIEWLIST_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_NagViewItem.hpp"
 #include "C_NagViewListModel.hpp"
 #include "C_NagViewListDelegate.hpp"

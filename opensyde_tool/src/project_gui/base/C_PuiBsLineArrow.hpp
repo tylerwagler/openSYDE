@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QColor>
 #include <QPointF>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiBsLineBase.hpp"
 #include <string>
 

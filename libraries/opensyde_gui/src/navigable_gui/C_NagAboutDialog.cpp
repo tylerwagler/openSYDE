@@ -14,7 +14,7 @@
 
 #include <QtGlobal>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_NagAboutDialog.hpp"
 #include "ui_C_NagAboutDialog.h"
 #include "C_HeHandler.hpp"

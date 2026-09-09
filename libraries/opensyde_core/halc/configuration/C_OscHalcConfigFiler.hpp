@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscXmlParser.hpp"
 #include "C_OscHalcConfig.hpp"
 #include "C_OscHalcDefStruct.hpp"

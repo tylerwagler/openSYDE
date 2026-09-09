@@ -14,7 +14,7 @@
 
 #include <QPixmap>
 #include <QBuffer>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "C_PuiBsElementsFiler.hpp"

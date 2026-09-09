@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <pthread.h>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscIpDispatcherLinuxSock.hpp"
 #include "C_SydeSup.hpp"

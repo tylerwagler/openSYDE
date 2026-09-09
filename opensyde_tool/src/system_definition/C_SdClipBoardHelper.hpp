@@ -16,7 +16,7 @@
 #include <vector>
 #include <QString>
 #include <QModelIndexList>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNodeDataPool.hpp"
 #include "C_PuiSdNodeDataPool.hpp"
 #include "C_OscNodeDataPoolList.hpp"

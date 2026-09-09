@@ -13,7 +13,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <QPainter>
 #include "constants.hpp"
 #include "C_TblTreDelegateUtil.hpp"

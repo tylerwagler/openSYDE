@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QObject>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_TblTreeModelCheckable.hpp"
 #include "C_CieConverter.hpp"
 

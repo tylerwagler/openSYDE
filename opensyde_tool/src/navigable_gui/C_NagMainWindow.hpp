@@ -18,7 +18,7 @@
 #include <QMimeData>
 #include <vector>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvManager.hpp"
 #include "C_NagMainWidget.hpp"
 #include "C_NagUseCaseViewWidget.hpp"

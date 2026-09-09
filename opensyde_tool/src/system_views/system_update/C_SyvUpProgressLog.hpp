@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QLabel>
 #include <QWidget>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvUpProgressLogEntry.hpp"
 #include "C_OgeContextMenu.hpp"
 

@@ -13,7 +13,7 @@
 #include <QWidget>
 #include <QTimer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui

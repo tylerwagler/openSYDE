@@ -20,7 +20,7 @@
 #endif
 
 #include "version_config.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscProjectFiler.hpp"
 #include "C_OscProject.hpp"

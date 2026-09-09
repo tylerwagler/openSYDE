@@ -12,7 +12,7 @@
 #define C_SDBUEMLVEMPTYITEM_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include <QPixmap>
 

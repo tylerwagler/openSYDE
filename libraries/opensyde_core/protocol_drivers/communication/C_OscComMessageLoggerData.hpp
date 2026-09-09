@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <algorithm>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stw_can.hpp"
 #include <string>
 #include "C_OscCanSignal.hpp"

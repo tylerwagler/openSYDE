@@ -15,7 +15,7 @@
 #include <cstddef>
 #include <algorithm>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_TblTreSimpleItem.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

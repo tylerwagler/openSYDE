@@ -40,7 +40,7 @@
 #define C_OSCUTILCHECKSUMMEDINIFILE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SclIniFile.hpp"
 #include <string>
 

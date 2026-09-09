@@ -15,7 +15,7 @@
 #include <QMap>
 #include <QDir>
 #include "C_Uti.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "C_PuiUtil.hpp"

@@ -13,7 +13,7 @@
 #include <QMouseEvent>
 #include <QCursor>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvDaDashboardSelectorTabBar.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

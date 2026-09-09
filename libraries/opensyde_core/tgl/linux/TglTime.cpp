@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <unistd.h>
 #include <ctime>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglTime.hpp"
 #include "TglUtils.hpp"
 

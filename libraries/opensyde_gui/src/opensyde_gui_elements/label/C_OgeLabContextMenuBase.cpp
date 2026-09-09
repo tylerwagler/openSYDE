@@ -18,7 +18,7 @@
 #include <QClipboard>
 
 #include "C_OgeLabContextMenuBase.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_elements;

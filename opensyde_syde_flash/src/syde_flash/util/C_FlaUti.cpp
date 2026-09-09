@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_Uti.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_FlaUti.hpp"
 #include "C_OscUtils.hpp"
 #include "fla_constants.hpp"

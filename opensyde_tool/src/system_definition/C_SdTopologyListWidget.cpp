@@ -16,7 +16,7 @@
 #include <QHelpEvent>
 #include <QFileInfo>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_SdTopologyListWidget.hpp"
 #include "C_OgeWiCustomMessage.hpp"

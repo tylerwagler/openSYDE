@@ -16,7 +16,7 @@
 #include <QPoint>
 #include <QTimer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 

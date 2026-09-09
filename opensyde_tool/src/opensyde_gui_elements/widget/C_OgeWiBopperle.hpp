@@ -14,7 +14,7 @@
 #include <QWidget>
 #include <QColor>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

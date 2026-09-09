@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_SclIniFile.hpp"
 

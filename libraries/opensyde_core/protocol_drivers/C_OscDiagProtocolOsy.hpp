@@ -22,7 +22,7 @@
 #define C_OSCDIAGPROTOCOLOSY_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscDiagProtocolBase.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
 #include <string>

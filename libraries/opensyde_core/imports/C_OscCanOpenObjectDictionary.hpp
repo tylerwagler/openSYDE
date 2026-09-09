@@ -17,7 +17,7 @@
 #include <set>
 #include <map>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include <string>
 #include <vector>

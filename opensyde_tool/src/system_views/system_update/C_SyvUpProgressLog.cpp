@@ -14,7 +14,7 @@
 #include <QScrollBar>
 #include <QDesktopServices>
 #include <QClipboard>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OgeLabToolTipBase.hpp"

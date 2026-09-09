@@ -11,7 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgePopUpContentBase.hpp"
 #include "C_PuiSvDashboard.hpp"

@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QObject>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_PuiSdBus.hpp"
 #include "C_PuiSdNode.hpp"

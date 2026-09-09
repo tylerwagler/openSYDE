@@ -18,7 +18,7 @@
 #include <QTextCursor>
 #include <QGraphicsSceneMouseEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiText.hpp"
 #include "gitypes.hpp"
 #include "C_Uti.hpp"

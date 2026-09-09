@@ -13,7 +13,7 @@
 
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_HexFile.hpp"
 #include "C_OscApplicationInfoBlock.hpp"
 #include <string>

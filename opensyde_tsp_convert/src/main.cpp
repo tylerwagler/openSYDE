@@ -22,7 +22,7 @@
 #include <vector>
 
 #include "stwerrors.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include <string>
 #include "TglFile.hpp"

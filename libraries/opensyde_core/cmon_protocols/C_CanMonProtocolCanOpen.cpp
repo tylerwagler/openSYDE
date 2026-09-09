@@ -5,7 +5,7 @@
 #include <iomanip>
 #include "stw_can.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CanMonProtocolCanOpen.hpp"
 
 //---------------------------------------------------------------------------

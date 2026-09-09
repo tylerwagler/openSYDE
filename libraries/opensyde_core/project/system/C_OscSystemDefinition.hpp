@@ -19,7 +19,7 @@
 #include "C_OscNodeSquad.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_OscCanMessageIdentificationIndices.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscDeviceManager.hpp"
 #include "C_OscCanProtocol.hpp"

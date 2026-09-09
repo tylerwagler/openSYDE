@@ -24,7 +24,7 @@
 #include <QUrl>
 #include <QDesktopServices>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OgePubIconText.hpp"
 #include "C_OgePubIconEvents.hpp"

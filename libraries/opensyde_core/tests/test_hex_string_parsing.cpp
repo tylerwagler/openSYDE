@@ -28,7 +28,7 @@
 #include <stdexcept>
 #include <clocale>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SclStringUtil.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

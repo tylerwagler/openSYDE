@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OscHalcDef.hpp"
 #include "C_OscHalcConfig.hpp"

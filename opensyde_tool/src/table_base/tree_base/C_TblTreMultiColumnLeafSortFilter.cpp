@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 #include <QRegularExpression>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_TblTreMultiColumnLeafSortFilter.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

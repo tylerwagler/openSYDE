@@ -19,7 +19,7 @@
 #include <deque>
 #include <vector>
 #include <system_error>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CanBase.hpp"
 #include "stw_can.hpp"
 #include "C_OscErrorCategory.hpp"

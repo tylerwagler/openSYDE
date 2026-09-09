@@ -13,7 +13,7 @@
 #include <system_error>
 #include <vector>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 
 #include "C_OscNode.hpp"

@@ -11,7 +11,7 @@
 #ifndef CCMONPROTOCOLJ1939HPP
 #define CCMONPROTOCOLJ1939HPP
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CanMonProtocolBase.hpp"
 #include <string>
 

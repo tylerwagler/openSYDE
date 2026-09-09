@@ -12,7 +12,7 @@
 #define C_SYVUPPACCONFIGFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SyvUpPacConfig.hpp"
 

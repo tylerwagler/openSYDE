@@ -21,7 +21,7 @@
 #include "ui_C_NagUseCaseViewWidget.h"
 
 #include "constants.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

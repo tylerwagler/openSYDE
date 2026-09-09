@@ -9,7 +9,7 @@
 #define C_GISVSUBNODEDATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscHexFile.hpp"
 #include "C_SyvUtil.hpp"
 #include "C_SyvUpDeviceInfo.hpp"

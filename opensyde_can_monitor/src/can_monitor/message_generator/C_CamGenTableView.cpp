@@ -20,7 +20,7 @@
 
 #include "C_Uti.hpp"
 #include "TglTime.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_UsHandler.hpp"
 #include "cam_constants.hpp"

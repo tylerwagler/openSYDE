@@ -10,7 +10,7 @@
 #define C_IMPCODEGENERATIONREPORTWIDGET_HPP
 
 #include <QWidget>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePopUpDialog.hpp"
 
 namespace Ui

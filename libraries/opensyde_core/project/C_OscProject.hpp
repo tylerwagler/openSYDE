@@ -16,7 +16,7 @@
 #define C_OSCPROJECT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SclDateTime.hpp"
 #include <string>
 #include "C_OscXmlParser.hpp"

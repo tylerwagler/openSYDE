@@ -12,7 +12,7 @@
 #include "precomp_headers.hpp"
 #include <QAbstractTableModel>
 #include "C_SdNdeCoPdoTableModel.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "TglUtils.hpp"

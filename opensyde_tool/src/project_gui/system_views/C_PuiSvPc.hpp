@@ -12,7 +12,7 @@
 #define C_PUISVPC_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiBsBox.hpp"
 #include "C_PuiBsLineBase.hpp"
 #include "C_OscCanAdapterConfig.hpp"

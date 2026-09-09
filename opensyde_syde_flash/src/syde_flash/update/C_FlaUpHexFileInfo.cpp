@@ -16,7 +16,7 @@
 #include <QCryptographicHash>
 
 #include "precomp_headers.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_FlaUpHexFileInfo.hpp"
 #include "C_OscHexFile.hpp"
 #include "C_SclStringUtil.hpp"

@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 #include "C_SclStringUtil.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanMessageContainer.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscUtils.hpp"

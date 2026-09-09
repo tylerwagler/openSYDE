@@ -14,7 +14,7 @@
 #include <QLabel>
 #include <QMimeData>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SyvUpDeviceInfo.hpp"
 #include "C_SyvUpPacConfig.hpp"

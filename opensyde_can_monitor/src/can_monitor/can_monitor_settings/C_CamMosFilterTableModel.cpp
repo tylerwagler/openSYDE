@@ -15,7 +15,7 @@
 #include <QIcon>
 #include <QFileInfo>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_CamMosFilterTableModel.hpp"
 #include "C_CamProHandler.hpp"

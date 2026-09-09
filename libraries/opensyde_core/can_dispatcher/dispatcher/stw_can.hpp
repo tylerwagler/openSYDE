@@ -13,7 +13,7 @@
 #ifndef STWCAN_H
 #define STWCAN_H
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 namespace stw
 {

@@ -18,7 +18,7 @@
 #include <ctime>
 #include <sstream>
 #include <iomanip>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SclDateTime.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

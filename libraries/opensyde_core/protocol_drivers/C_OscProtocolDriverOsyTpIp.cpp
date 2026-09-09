@@ -19,7 +19,7 @@
 #include <sstream>
 #include <iomanip>
 #include <system_error>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "TglTime.hpp"

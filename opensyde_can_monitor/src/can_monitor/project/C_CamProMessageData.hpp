@@ -15,7 +15,7 @@
 #include <array>
 #include <QString>
 #include "stw_can.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

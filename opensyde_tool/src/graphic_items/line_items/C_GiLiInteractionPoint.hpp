@@ -17,7 +17,7 @@
 
 #include "C_GiPointInteraction.hpp"
 #include "C_GiBiCustomMouseItem.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

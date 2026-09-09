@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscHalcConfig.hpp"
 #include "C_OgePopUpContentBase.hpp"
 

@@ -15,7 +15,7 @@
 #include <iostream>
 #include <getopt.h> //note: as we use getopt.h this application is not portable to all compilers
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscProjectFiler.hpp"
 #include "C_OscProject.hpp"

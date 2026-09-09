@@ -15,7 +15,7 @@
 #include <string>
 #include <system_error>
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscViewNodeUpdateParamInfo.hpp"
 #include "C_OscNodeApplication.hpp"
 

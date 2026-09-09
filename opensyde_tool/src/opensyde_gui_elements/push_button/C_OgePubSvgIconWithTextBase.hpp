@@ -9,7 +9,7 @@
 #define C_OGEPUBSVGICONWITHTEXTBASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePubSvgIconOnly.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

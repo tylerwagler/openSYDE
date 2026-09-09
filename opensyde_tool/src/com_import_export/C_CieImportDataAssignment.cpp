@@ -13,7 +13,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "C_CieImportDataAssignment.hpp"
 

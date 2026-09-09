@@ -14,7 +14,7 @@
 #include <QFrame>
 #include <QListWidget>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeCbxToolTipBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

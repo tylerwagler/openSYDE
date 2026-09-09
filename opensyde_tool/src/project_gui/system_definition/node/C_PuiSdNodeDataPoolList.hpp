@@ -15,7 +15,7 @@
 
 #include <vector>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_PuiSdNodeDataPoolListElement.hpp"
 

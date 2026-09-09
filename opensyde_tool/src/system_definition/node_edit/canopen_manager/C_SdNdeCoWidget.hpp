@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanProtocol.hpp"
 #include "C_OscCanMessageIdentificationIndices.hpp"
 #include "C_OscCanInterfaceId.hpp"

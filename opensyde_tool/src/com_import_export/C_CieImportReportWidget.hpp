@@ -11,7 +11,7 @@
 #ifndef C_CIEIMPORTREPORTWIDGET_HPP
 #define C_CIEIMPORTREPORTWIDGET_HPP
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNode.hpp"
 #include "C_OscCanMessage.hpp"
 #include "C_OgePopUpContentBase.hpp"

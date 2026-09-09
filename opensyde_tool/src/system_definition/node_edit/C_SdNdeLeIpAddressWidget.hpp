@@ -12,7 +12,7 @@
 #include <QWidget>
 #include <QLineEdit>
 #include <QRegularExpressionValidator>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui

@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QFileInfo>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNode.hpp"
 #include "C_OgePopUpContentBase.hpp"
 #include "C_OscCanInterfaceId.hpp"

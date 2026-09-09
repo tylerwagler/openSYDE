@@ -16,7 +16,7 @@
 
 #include "constants.hpp"
 #include "C_OgeCbxIconDelegate.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_Uti.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

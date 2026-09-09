@@ -13,7 +13,7 @@
 #include <QHeaderView>
 
 #include "precomp_headers.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SdNdeDpUtil.hpp"
 #include "C_Uti.hpp"

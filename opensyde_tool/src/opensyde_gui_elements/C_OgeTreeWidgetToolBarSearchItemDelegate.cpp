@@ -13,7 +13,7 @@
 #include <QPainter>
 #include <QStyleOptionViewItem>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 
 #include "C_OgeTreeWidgetToolBarSearchItemDelegate.hpp"

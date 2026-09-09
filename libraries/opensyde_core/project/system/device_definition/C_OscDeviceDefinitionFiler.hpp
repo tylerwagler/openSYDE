@@ -12,7 +12,7 @@
 #define C_OSCDEVICEDEFINITIONFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include <system_error>
 #include "C_OscDeviceDefinition.hpp"

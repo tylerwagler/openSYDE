@@ -15,7 +15,7 @@
 #include <memory>
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CanDispatcher.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "can/i_can_backend.h"

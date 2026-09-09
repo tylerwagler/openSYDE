@@ -12,7 +12,7 @@
 
 #include <QPainter>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvUpPacListDelegate.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

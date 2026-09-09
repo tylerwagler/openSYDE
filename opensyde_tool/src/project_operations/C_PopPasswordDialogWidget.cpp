@@ -13,7 +13,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include "constants.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeWiUtil.hpp"
 #include <QGraphicsDropShadowEffect>
 #include "C_PopPasswordDialogWidget.hpp"

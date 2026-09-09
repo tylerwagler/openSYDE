@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "TglUtils.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_TblTreItem.hpp"
 #include "C_TblTreModel.hpp"

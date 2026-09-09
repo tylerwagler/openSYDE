@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <limits>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_SdNdeUnoDasDataPoolListDataChangeCommand.hpp"
 #include "C_PuiSdHandler.hpp"

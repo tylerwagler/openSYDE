@@ -16,7 +16,7 @@
 #include <QPointF>
 #include <QColor>
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiBsLineBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

@@ -17,7 +17,7 @@
 
 #include <QKeyEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeLeNavigation.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

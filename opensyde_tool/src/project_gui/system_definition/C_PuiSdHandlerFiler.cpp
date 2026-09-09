@@ -15,7 +15,7 @@
 
 #include <QBuffer>
 #include <QFileInfo>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "C_PuiSdHandler.hpp"

@@ -21,7 +21,7 @@
 #include <QSpinBox>
 #include <QHBoxLayout>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 

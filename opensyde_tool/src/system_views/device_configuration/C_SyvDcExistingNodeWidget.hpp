@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QListWidgetItem>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvDcSequences.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

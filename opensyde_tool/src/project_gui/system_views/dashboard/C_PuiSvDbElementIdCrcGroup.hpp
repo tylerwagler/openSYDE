@@ -9,7 +9,7 @@
 #define C_PUISVDBELEMENTIDCRCGROUP_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDalCopElementIdCrcGroupBase.hpp"
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
 

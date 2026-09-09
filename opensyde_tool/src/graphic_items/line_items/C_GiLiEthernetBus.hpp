@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QGraphicsItem>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OscSystemBus.hpp"
 #include "C_GiLiBus.hpp"

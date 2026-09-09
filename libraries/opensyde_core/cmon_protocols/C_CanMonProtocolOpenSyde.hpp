@@ -16,7 +16,7 @@
 #include <system_error>
 #include "C_OscErrorCategory.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CanMonProtocolBase.hpp"
 #include <string>
 

@@ -14,7 +14,7 @@
 #include <QColor>
 #include <QLabel>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiSyBaseWidget.hpp"
 #include "C_PuiBsLineArrow.hpp"

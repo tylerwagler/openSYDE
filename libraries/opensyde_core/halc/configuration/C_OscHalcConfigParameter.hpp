@@ -9,7 +9,7 @@
 #define C_OSCHALCCONFIGPARAMETER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscHalcDefContent.hpp"
 

@@ -15,7 +15,7 @@
 #include <QFileDialog>
 #include <QListWidget>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_NagToolSettingsPopupDialog.hpp"
 #include "ui_C_NagToolSettingsPopupDialog.h"
 #include "C_OscUtils.hpp"

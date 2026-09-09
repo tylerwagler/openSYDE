@@ -18,7 +18,7 @@
 #include "C_CamMosDatabaseWidget.hpp"
 #include "ui_C_CamMosDatabaseWidget.h"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeWiUtil.hpp"
 #include "TglUtils.hpp"
 #include "C_CamProHandler.hpp"

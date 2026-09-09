@@ -14,7 +14,7 @@
 
 #include <QSvgRenderer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_TblTreDelegateUtil.hpp"
 

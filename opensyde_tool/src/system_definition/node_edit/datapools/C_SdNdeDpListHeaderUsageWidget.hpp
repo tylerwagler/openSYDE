@@ -17,7 +17,7 @@
 #include <QPen>
 #include <QColor>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgeWiProgressBar.hpp"
 

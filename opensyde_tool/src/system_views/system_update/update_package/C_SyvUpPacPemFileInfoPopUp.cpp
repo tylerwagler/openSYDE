@@ -15,7 +15,7 @@
 #include <QFileInfo>
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscSecurityPem.hpp"
 #include "C_SyvUpPacPemFileInfoPopUp.hpp"

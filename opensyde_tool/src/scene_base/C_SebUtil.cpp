@@ -14,7 +14,7 @@
 #include <QFileInfo>
 #include <QImageReader>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SebUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

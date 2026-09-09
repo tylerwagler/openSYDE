@@ -9,7 +9,7 @@
 #ifndef C_RTFEXPORTWIDGET_HPP
 #define C_RTFEXPORTWIDGET_HPP
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePopUpContentBase.hpp"
 #include <string>
 #include <string>

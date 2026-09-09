@@ -13,7 +13,7 @@
 #include <QPainter>
 #include <QTextLayout>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgeTedElided.hpp"
 

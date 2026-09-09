@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <map>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgePopUpContentBase.hpp"
 #include "C_OscNodeDataPool.hpp"

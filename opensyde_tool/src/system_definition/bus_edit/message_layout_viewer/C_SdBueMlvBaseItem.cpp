@@ -14,7 +14,7 @@
 
 #include <QPainter>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "constants.hpp"
 

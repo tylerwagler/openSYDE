@@ -15,7 +15,7 @@
 #include <system_error>
 
 #include "TglUtils.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "C_SclChecksums.hpp"

@@ -15,7 +15,7 @@
 #include <QFont>
 #include <QColor>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_PuiBsBox.hpp"
 

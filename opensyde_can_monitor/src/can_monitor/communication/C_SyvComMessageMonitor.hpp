@@ -19,7 +19,7 @@
 #include <QVector>
 #include <QMutex>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stw_can.hpp"
 
 #include "C_OscComMessageLogger.hpp"

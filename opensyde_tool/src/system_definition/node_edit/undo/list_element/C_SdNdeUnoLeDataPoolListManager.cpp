@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeUnoLeDataPoolListManager.hpp"
 #include "C_SdNdeUnoLeDataPoolListElementMoveCommand.hpp"
 #include "C_SdNdeUnoLeDataPoolListElementDeleteCommand.hpp"

@@ -17,7 +17,7 @@
 #endif
 #include <QWidget>
 #include <QString>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNodeApplication.hpp"
 #include "C_ImpCodeGenerationReportWidget.hpp"
 

@@ -15,7 +15,7 @@
 #include <vector>
 #include <QObject>
 #include <QString>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanMessageIdentificationIndices.hpp"
 #include "C_OscCanProtocol.hpp"
 #include "C_PuiSdNodeDataPoolListElement.hpp"

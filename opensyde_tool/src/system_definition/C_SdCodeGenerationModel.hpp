@@ -10,7 +10,7 @@
 #define C_SDCODEGENERATIONMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_TblTreeModelCheckable.hpp"
 

@@ -21,7 +21,7 @@
 
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscUtils.hpp"
 #include "TglFile.hpp"
 #include "C_OscSecurityPemSecUpdate.hpp"

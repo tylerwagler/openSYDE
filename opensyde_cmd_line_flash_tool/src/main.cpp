@@ -14,7 +14,7 @@
 
 #include <iostream>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_BasicFlashTool.hpp"
 

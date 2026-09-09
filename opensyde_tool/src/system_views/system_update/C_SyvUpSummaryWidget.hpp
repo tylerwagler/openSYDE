@@ -13,7 +13,7 @@
 #include <QTimer>
 #include <QWidget>
 #include <QElapsedTimer>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscSuSequences.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

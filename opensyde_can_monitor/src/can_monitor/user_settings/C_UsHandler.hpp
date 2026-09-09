@@ -20,7 +20,7 @@
 #include <QPoint>
 #include <QSize>
 #include <QMap>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 

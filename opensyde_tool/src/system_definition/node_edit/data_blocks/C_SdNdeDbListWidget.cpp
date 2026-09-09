@@ -13,7 +13,7 @@
 #include <QApplication>
 #include <QScrollBar>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDbListWidget.hpp"
 #include "C_SdNdeDbWidget.hpp"
 #include "C_PuiSdHandler.hpp"

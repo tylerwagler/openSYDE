@@ -17,7 +17,7 @@
 #include <QHeaderView>
 #include "C_OgeWiSpinBoxGroup.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_UsHandler.hpp"
 #include "C_CamGenSigTableView.hpp"
 

@@ -12,7 +12,7 @@
 #define C_SYVUPPACPARAMSETFILEADDPOPUP_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePopUpContentBase.hpp"
 #include "C_SyvUpPacParamSetFileInfo.hpp"
 

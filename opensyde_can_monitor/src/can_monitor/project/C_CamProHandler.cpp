@@ -17,7 +17,7 @@
 #include <QFileInfo>
 
 #include "TglUtils.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
 #include "C_UsHandler.hpp"

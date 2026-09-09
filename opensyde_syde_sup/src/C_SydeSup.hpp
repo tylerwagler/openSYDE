@@ -12,7 +12,7 @@
 #define C_SYDESUP_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_SupSuSequences.hpp"
 #include "C_CanDispatcher.hpp"

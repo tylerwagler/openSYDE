@@ -16,7 +16,7 @@
 #include <QMouseEvent>
 #include <QGraphicsView>
 #include "gitypes.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_OgeWiUtil.hpp"

@@ -10,7 +10,7 @@
 #define C_SDNDEHALCCONFIGIMPORTMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_TblTreModel.hpp"
 #include "C_TblTreItem.hpp"

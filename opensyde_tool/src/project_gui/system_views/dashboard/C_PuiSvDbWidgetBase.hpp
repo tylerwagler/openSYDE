@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_PuiBsBox.hpp"
 #include "C_PuiSvDbNodeDataElementConfig.hpp"

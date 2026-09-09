@@ -17,7 +17,7 @@
 #include <QAction>
 #include <QList>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SdNdeDpSelectorItemWidget.hpp"
 #include "C_OgeContextMenu.hpp"

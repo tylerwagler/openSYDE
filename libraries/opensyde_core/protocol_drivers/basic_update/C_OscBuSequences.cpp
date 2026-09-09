@@ -17,7 +17,7 @@
 
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.h"
 #include "C_OscErrorCategory.hpp"
 #include "TglTime.hpp"

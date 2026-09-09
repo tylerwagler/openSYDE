@@ -12,7 +12,7 @@
 #define C_CAMGENTABLEMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_TblModelAction.hpp"
 #include "C_CamProMessageData.hpp"
 #include "C_OgeWiCustomMessage.hpp"

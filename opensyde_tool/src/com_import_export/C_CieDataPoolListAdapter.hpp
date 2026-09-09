@@ -15,7 +15,7 @@
 
 #include <QString>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CieDataPoolListStructure.hpp"
 #include "C_OscCanMessage.hpp"
 #include "C_CieConverter.hpp"

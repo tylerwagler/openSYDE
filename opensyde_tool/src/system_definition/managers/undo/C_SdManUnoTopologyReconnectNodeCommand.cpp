@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdManUnoTopologyReconnectNodeCommand.hpp"
 #include "C_SdManUnoTopologyDeleteCommand.hpp"
 #include "C_GiNode.hpp"

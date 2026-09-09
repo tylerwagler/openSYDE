@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscViewNodeUpdateParamInfo.hpp"
 #include "C_OscParamSetInterpretedData.hpp"
 #include "C_SyvUpPacParamSetFileInfoComparisonDescription.hpp"

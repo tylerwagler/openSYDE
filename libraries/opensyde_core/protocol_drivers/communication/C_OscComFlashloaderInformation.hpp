@@ -9,7 +9,7 @@
 #define C_OSCCOMFLASHLOADERINFORMATION_H
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include <vector>
 #include "C_OscProtocolSerialNumber.hpp"

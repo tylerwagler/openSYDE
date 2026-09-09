@@ -14,7 +14,7 @@
 #include <QList>
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OscErrorCategory.hpp"
 #include "C_OscDataDealerNvmSafe.hpp"

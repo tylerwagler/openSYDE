@@ -22,7 +22,7 @@
 #include <list>
 #include <winsock.h>
 #include <system_error>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscErrorCategory.hpp"
 #include "C_OscIpDispatcher.hpp"
 #include <string>

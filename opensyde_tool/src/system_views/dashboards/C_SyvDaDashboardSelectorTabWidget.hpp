@@ -12,7 +12,7 @@
 #define C_SYVDADASHBOARDSELECTORTABWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include <QTabWidget>
 #include <QList>

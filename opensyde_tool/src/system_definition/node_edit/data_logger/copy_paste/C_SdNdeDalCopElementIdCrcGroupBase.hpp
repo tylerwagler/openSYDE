@@ -9,7 +9,7 @@
 #define C_SDNDEDALCOPELEMENTIDCRCGROUPBASE_H
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNodeDataPoolListElementOptArrayId.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

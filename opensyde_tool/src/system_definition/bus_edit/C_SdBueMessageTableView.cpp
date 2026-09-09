@@ -16,7 +16,7 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_SdBueMessageTableView.hpp"
 #include "C_SdBueMessageSignalTableDelegate.hpp"

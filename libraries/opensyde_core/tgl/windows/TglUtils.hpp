@@ -12,7 +12,7 @@
 #define TGLUTILSHPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 
 #if __cplusplus >= 201103L //C++11 ?

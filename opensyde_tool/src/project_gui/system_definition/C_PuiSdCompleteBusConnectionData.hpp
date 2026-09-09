@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSdNodeConnectionId.hpp"
 #include "C_PuiSdNode.hpp"
 

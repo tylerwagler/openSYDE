@@ -14,7 +14,7 @@
 #include <QWidget>
 #include <QVector>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 

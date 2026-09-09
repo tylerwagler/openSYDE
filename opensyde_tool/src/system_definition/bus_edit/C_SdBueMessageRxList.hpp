@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QButtonGroup>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdBueMessageRxEntry.hpp"
 #include "C_PuiSdNodeCanMessage.hpp"
 

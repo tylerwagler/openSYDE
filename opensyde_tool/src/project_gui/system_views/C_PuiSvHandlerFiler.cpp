@@ -14,7 +14,7 @@
 #include "C_SclStringUtil.hpp"
 
 #include <QMap>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include <string>

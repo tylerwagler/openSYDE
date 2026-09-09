@@ -17,7 +17,7 @@
 #include <QColor>
 #include <vector>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
 #include "C_SyvDaChaDataItemWidget.hpp"

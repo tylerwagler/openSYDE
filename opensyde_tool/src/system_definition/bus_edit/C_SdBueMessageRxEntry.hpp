@@ -15,7 +15,7 @@
 #include <QIcon>
 #include <QWidget>
 #include <QRadioButton>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_PuiSdNodeCanMessage.hpp"
 

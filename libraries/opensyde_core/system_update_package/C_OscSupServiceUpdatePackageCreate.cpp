@@ -14,7 +14,7 @@
 
 #include <fstream>
 #include <iterator>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include <string>
 #include <system_error>

@@ -14,7 +14,7 @@
 
 #include <QScrollBar>
 #include "C_Uti.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvDaItPaArView.hpp"
 #include "C_SdNdeSingleHeaderView.hpp"
 #include "TglUtils.hpp"

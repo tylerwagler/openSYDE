@@ -13,7 +13,7 @@
 #include <vector>
 #include <list>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OscRoutingCalculation.hpp"
 #include "C_OscRoutingRoute.hpp"

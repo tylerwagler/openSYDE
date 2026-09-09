@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <system_error>
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanMessageContainer.hpp"
 #include "C_OscNodeDataPool.hpp"
 

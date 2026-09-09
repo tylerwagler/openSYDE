@@ -16,7 +16,7 @@
 #include <QTimer>
 #include <QMouseEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgeWiOnlyBackground.hpp"
 

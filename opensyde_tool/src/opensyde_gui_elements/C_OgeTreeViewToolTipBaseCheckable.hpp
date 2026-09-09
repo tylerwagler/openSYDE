@@ -10,7 +10,7 @@
 #define C_OGETREEVIEWTOOLTIPBASECHECKABLE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include <QModelIndex>
 #include <QVector>

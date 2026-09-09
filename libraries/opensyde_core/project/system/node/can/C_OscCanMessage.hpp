@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <set>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscCanSignal.hpp"
 #include "C_OscNodeDataPoolList.hpp"

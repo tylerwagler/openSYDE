@@ -19,7 +19,7 @@
 #include "miniz.h"
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscZipFile.hpp"
 #include "C_OscErrorCategory.hpp"

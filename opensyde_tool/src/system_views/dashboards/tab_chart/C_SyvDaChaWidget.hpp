@@ -13,7 +13,7 @@
 #include "C_SyvDaDashboardContentBaseWidget.hpp"
 #include "C_PuiSvDbDataElementHandler.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgeContextMenu.hpp"
 #include "C_PuiSvDbTabChart.hpp"

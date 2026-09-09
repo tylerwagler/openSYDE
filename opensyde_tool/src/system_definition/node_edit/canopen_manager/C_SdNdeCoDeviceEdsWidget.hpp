@@ -12,7 +12,7 @@
 #include <QWidget>
 #include <QFileInfo>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanInterfaceId.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

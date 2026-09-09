@@ -15,7 +15,7 @@
 #define C_OSCPROJECTFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include <system_error>
 #include "C_OscProject.hpp"

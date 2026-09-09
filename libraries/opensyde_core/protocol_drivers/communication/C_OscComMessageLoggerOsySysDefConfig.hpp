@@ -12,7 +12,7 @@
 #define C_OSCCOMMESSAGELOGGEROSYSYSDEFCONFIG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OscSystemDefinition.hpp"
 

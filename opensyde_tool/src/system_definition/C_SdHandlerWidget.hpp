@@ -11,7 +11,7 @@
 #define C_SDHANDLERWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_NagUseCaseWidget.hpp"
 

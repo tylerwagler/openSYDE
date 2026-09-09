@@ -15,7 +15,7 @@
 
 #include <QVariant>
 #include <QAbstractSpinBox>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

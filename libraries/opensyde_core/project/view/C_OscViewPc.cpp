@@ -14,7 +14,7 @@
 
 #include <limits>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscViewPc.hpp"
 #include "C_SclChecksums.hpp"
 

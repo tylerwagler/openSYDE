@@ -30,7 +30,7 @@
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 

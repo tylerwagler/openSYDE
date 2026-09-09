@@ -21,7 +21,7 @@
 #include "C_NagNaviBarWidget.hpp"
 #include "ui_C_NagNaviBarWidget.h"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 
 #include "C_UsHandler.hpp"

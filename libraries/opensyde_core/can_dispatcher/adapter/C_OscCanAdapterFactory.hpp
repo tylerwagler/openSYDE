@@ -12,7 +12,7 @@
 #define C_OSCCANADAPTERFACTORYHPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_CanDispatcher.hpp"
 #include "C_OscCanAdapterConfig.hpp"

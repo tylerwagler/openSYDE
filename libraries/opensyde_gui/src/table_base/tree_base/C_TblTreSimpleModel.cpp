@@ -14,7 +14,7 @@
 
 #include <QTimer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_TblTreSimpleModel.hpp"
 

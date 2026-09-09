@@ -14,7 +14,7 @@
 
 #include "precomp_headers.hpp"
 #include "C_OgePubStandard.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 

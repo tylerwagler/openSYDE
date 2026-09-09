@@ -15,7 +15,7 @@
 #include <vector>
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_HexFileErrorCategory.hpp"
 
 namespace stw

@@ -19,7 +19,7 @@
 #include <QDir>
 #include <QMimeData>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_Uti.hpp"
 #include "constants.hpp"
 #include "C_OgeLeFilePathBase.hpp"

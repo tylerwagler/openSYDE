@@ -20,7 +20,7 @@
 #include "C_PuiSdNodeConnectionId.hpp"
 #include "C_PuiSdNodeDataPool.hpp"
 #include "C_PuiSdNodeCanProtocol.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

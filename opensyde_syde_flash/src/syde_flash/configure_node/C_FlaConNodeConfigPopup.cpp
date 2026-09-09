@@ -16,7 +16,7 @@
 #include "ui_C_FlaConNodeConfigPopup.h"
 
 #include "stwerrors.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscLoggingHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_Uti.hpp"

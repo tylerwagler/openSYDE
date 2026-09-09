@@ -29,7 +29,7 @@
 #include <fstream>
 #include <string>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_HexFile.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

@@ -12,7 +12,7 @@
 #define C_SDNDEPROGRAMMINGOPTIONS_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePopUpContentBase.hpp"
 
 namespace Ui

@@ -14,7 +14,7 @@
 
 #include <QFont>
 #include <QFontMetrics>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_PopListItem.hpp"
 

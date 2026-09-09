@@ -14,7 +14,7 @@
 
 #include <QFileInfo>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_SyvUpPacParamSetFileAddPopUp.hpp"
 #include "ui_C_SyvUpPacParamSetFileAddPopUp.h"

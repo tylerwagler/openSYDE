@@ -17,7 +17,7 @@
 #include <QIcon>
 #include <vector>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SdBueNodeSelectorCheckBoxItemWidget.hpp"
 #include "C_OscCanProtocol.hpp"

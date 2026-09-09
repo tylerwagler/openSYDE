@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QAbstractTableModel>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNodeDataPoolList.hpp"
 #include "C_PuiSdNodeDataPoolList.hpp"
 #include "C_SdNdeDpUtil.hpp"

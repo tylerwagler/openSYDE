@@ -16,7 +16,7 @@
 #include <QWidget>
 #include <QTreeWidgetItem>
 #include <QUndoStack>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSdNodeDataPoolList.hpp"
 #include "C_OscNodeDataPoolList.hpp"
 #include "C_SdNdeUnoDataPoolManager.hpp"

@@ -15,7 +15,7 @@
 #include <QScreen>
 #include <QGuiApplication>
 #include <QAbstractTextDocumentLayout>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "constants.hpp"
 #include "C_OgeWiUtil.hpp"

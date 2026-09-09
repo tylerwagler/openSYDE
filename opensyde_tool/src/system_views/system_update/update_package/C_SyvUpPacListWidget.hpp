@@ -13,7 +13,7 @@
 
 #include <QAction>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgeHorizontalListWidget.hpp"
 #include "C_SyvUpPacListDelegate.hpp"

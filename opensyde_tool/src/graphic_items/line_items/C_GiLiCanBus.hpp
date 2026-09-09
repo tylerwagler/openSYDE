@@ -15,7 +15,7 @@
 #include <QGraphicsItem>
 
 #include "C_GiLiBus.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

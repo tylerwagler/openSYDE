@@ -14,7 +14,7 @@
 
 #include <limits>
 #include <QPainter>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDpListDataSetDelegate.hpp"
 #include "C_OgeTedTable.hpp"
 #include "C_OgeLeContextMenuBase.hpp"

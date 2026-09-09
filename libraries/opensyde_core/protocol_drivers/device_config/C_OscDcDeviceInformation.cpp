@@ -11,7 +11,7 @@
 #include "precomp_headers.hpp"
 
 #include <cstring>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscDcDeviceInformation.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

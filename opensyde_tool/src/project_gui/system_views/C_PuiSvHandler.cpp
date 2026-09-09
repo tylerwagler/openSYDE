@@ -17,7 +17,7 @@
 
 #include <QFileInfo>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_Uti.hpp"

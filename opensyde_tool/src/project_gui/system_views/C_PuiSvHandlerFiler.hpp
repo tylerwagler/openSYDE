@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <QDir>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNode.hpp"
 #include "C_PuiSvData.hpp"
 #include "C_OscXmlParser.hpp"

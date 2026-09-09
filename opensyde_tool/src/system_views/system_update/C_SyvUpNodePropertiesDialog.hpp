@@ -12,7 +12,7 @@
 #define C_SYVUPNODEPROPERTIESDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvUtil.hpp"
 #include "C_OgePopUpContentBase.hpp"
 #include "C_SyvUpDeviceInfo.hpp"

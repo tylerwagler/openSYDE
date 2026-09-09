@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QTreeWidget>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePopUpDialog.hpp"
 #include "C_SdNdeDpListModelViewManager.hpp"
 #include "C_SdNdeUnoDataPoolManager.hpp"

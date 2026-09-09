@@ -15,7 +15,7 @@
 #include <QRect>
 #include <QPainter>
 #include <QModelIndex>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

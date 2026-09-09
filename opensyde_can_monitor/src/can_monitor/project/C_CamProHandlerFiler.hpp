@@ -12,7 +12,7 @@
 #define C_CAMPROHANDLERFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscXmlParser.hpp"
 #include "C_CamProHandler.hpp"
 

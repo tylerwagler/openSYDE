@@ -17,7 +17,7 @@
 #include "C_Uti.hpp"
 #include "C_SclStringUtil.hpp"
 #include "TglUtils.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_CieUtil.hpp"
 #include "C_PuiUtil.hpp"

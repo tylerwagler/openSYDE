@@ -26,7 +26,7 @@
 #include <system_error>
 #include <vector>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscErrorCategory.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
 

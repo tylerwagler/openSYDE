@@ -12,7 +12,7 @@
 #define C_OGECBXTEXT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_OgeCbxIconOnly.hpp"
 #include "C_OgeLeContextMenuBase.hpp"

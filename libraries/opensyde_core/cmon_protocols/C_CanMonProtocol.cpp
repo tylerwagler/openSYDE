@@ -4,7 +4,7 @@
 #include "stw_can.hpp"
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_CanMonProtocol.hpp"
 #include "C_OscErrorCategory.hpp"

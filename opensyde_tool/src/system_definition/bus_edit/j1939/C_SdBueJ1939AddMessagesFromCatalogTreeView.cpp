@@ -16,7 +16,7 @@
 #include <QList>
 
 #include "precomp_headers.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdBueJ1939AddMessagesFromCatalogTreeView.hpp"
 #include "C_Uti.hpp"
 

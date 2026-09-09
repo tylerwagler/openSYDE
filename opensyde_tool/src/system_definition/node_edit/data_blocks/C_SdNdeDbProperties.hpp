@@ -12,7 +12,7 @@
 #define C_SDNDEDBPROPERTIES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePopUpContentBase.hpp"
 #include "C_OgeLeFilePath.hpp"
 #include "C_OscNodeApplication.hpp"

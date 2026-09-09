@@ -10,7 +10,7 @@
 #define C_SDNDECOCONFIGTREEVIEW_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_UsNode.hpp"
 #include "C_OgeContextMenu.hpp"
 #include "C_OgeTreeViewToolTipBase.hpp"

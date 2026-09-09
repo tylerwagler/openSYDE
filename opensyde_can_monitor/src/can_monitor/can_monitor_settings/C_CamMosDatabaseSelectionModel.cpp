@@ -14,7 +14,7 @@
 
 #include <QFileInfo>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CamDbHandler.hpp"
 #include "C_CamGenSigUtil.hpp"
 #include "C_SdTooltipUtil.hpp"

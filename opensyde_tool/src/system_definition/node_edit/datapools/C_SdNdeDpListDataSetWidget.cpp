@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_SdNdeDpListDataSetWidget.hpp"
 #include "ui_C_SdNdeDpListDataSetWidget.h"

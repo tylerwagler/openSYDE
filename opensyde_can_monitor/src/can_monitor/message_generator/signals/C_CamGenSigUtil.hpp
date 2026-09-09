@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanSignal.hpp"
 #include "C_CieConverter.hpp"
 #include "C_CamProMessageData.hpp"

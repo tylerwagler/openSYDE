@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_SclChecksums.hpp"
 #include "C_OscViewNodeUpdateParamInfo.hpp"

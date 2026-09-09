@@ -12,7 +12,7 @@
 #define C_CMONPROTOCOLUDS_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CanMonProtocolBase.hpp"
 #include <string>
 

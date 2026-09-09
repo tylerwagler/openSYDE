@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscUpdateUtil.hpp"

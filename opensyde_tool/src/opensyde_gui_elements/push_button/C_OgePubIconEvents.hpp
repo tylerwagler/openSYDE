@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include "C_OgePubIconText.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_Uti.hpp"
 #include <QMouseEvent>
 

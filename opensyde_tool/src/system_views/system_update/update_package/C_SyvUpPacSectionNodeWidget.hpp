@@ -13,7 +13,7 @@
 #include <QWidget>
 #include <QMovie>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SyvUpPacListNodeItemWidget.hpp"
 #include "C_SyvUpPacConfig.hpp"

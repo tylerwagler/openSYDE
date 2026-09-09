@@ -12,7 +12,7 @@
 #define C_OSCSYSTEMBUS_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscCanProtocol.hpp"
 #include "C_OscNodeDataPool.hpp"

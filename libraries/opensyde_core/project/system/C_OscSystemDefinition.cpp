@@ -16,7 +16,7 @@
 #include <map>
 #include <algorithm>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <system_error>
 
 #include "stwerrors.hpp"

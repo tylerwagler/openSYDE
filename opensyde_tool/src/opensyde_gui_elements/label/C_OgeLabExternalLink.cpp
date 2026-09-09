@@ -20,7 +20,7 @@
 #include "C_OgeLabExternalLink.hpp"
 #include "C_Uti.hpp"
 #include "constants.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_elements;

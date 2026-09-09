@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_NagToolTip.hpp"
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
 #include "C_PuiSvDbWriteWidgetBase.hpp"

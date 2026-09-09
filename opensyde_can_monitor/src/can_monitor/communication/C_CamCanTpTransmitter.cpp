@@ -15,7 +15,7 @@
 
 #include <cstring>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "TglTime.hpp"
 

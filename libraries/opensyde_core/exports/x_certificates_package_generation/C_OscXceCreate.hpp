@@ -12,7 +12,7 @@
 #include <set>
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscXceBase.hpp"
 #include "C_OscXceManifest.hpp"
 

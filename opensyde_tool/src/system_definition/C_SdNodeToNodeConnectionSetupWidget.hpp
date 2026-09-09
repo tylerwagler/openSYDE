@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QRadioButton>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePopUpContentBase.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_OscNodeComInterfaceSettings.hpp"

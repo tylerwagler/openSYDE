@@ -9,7 +9,7 @@
 #define C_OSCCANOPENMANAGERDEVICEINFO_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanOpenObjectDictionary.hpp"
 #include "C_OscCanOpenManagerMappableSignal.hpp"
 

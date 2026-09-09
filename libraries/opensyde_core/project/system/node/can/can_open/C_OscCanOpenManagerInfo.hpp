@@ -12,7 +12,7 @@
 #include <map>
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscCanInterfaceId.hpp"
 #include "C_OscCanOpenManagerDeviceInfo.hpp"
 

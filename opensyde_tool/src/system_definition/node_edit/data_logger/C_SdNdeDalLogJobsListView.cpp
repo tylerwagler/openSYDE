@@ -12,7 +12,7 @@
 #include <QScrollBar>
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDalLogJobsListView.hpp"
 #include "C_OgeWiUtil.hpp"
 

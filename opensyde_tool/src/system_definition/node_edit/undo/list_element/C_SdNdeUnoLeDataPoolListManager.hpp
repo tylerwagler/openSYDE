@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QUndoStack>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDpUtil.hpp"
 #include "C_UtiUndoStack.hpp"
 #include "C_SdNdeDpListModelViewManager.hpp"

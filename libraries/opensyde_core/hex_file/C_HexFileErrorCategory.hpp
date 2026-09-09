@@ -26,7 +26,7 @@
 #include <system_error>
 #include <type_traits>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

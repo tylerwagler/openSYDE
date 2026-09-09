@@ -20,7 +20,7 @@
 #include <limits.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
 #include <string>

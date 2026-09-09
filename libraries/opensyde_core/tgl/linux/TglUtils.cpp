@@ -16,7 +16,7 @@
 #include <err.h>
 #include <pwd.h>
 #include <climits>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 
 

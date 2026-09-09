@@ -23,7 +23,7 @@
 #include <QDrag>
 #include <QDropEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "C_SdUtil.hpp"
 #include "stwerrors.hpp"
