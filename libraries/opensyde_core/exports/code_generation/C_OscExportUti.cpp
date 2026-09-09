@@ -22,7 +22,8 @@
 
 #include "C_OscLoggingHandler.hpp"
 #include <iomanip>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
+#include <sstream>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

@@ -24,7 +24,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

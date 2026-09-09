@@ -25,7 +25,7 @@
 #include "C_OscExportDataPool.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

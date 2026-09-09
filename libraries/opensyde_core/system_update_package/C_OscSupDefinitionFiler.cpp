@@ -22,7 +22,7 @@
 #include "C_OscXmlParser.hpp"
 #include "C_OscSupDefinitionFiler.hpp"
 #include "C_OscSupNodeDefinitionFiler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;

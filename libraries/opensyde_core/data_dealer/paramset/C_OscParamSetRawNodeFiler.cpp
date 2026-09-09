@@ -23,7 +23,7 @@
 #include "C_OscChecksummedXml.hpp"
 #include "C_OscParamSetRawNodeFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;

@@ -25,7 +25,7 @@
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscHalcConfigFiler.hpp"
 #include "C_OscHalcDefStructFiler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;

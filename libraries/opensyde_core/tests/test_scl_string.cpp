@@ -3,7 +3,8 @@
 #include <vector>
 #include <cstdio>
 #include <cstring>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
+#include <sstream>
 
 using namespace stw::scl;
 

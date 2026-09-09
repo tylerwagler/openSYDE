@@ -31,7 +31,7 @@
 #include "C_OscCanOpenManagerInfo.hpp"
 #include "C_OscImportEdsDcf.hpp"
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;

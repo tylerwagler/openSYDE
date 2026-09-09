@@ -30,7 +30,7 @@
 #include "C_OscSecurityAesFile.hpp"
 #include "C_OscZipFile.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

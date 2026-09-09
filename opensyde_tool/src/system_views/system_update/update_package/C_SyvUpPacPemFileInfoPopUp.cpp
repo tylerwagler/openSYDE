@@ -20,7 +20,7 @@
 #include "C_OscSecurityPem.hpp"
 #include "C_SyvUpPacPemFileInfoPopUp.hpp"
 #include "ui_C_SyvUpPacPemFileInfoPopUp.h"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;

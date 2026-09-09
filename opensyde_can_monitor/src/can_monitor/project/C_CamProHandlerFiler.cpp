@@ -17,7 +17,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_CamProHandlerFiler.hpp"
 #include "can/i_can_backend.h"

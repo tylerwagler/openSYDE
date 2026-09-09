@@ -26,7 +26,7 @@
 #include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscSecurityPem.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;

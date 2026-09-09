@@ -16,7 +16,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "constants.hpp"
 
 #include "C_SyvUpPacListWidget.hpp"

@@ -20,7 +20,7 @@
 #include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParser.hpp"
 #include "tinyxml2.h"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;

@@ -20,7 +20,7 @@
 #include "C_OscNode.hpp"
 
 #include "constants.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "TglUtils.hpp"
 #include "C_HeHandler.hpp"
 #include "C_UsHandler.hpp"

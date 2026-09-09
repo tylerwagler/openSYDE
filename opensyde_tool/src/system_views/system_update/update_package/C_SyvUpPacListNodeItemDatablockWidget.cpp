@@ -27,7 +27,7 @@
 #include "C_PuiSvHandler.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "C_OscHexFile.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_SyvUpPacHexFileView.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

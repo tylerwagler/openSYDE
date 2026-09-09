@@ -29,7 +29,7 @@
 #include <clocale>
 
 #include "stwtypes.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 using namespace stw::scl;

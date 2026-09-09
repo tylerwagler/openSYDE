@@ -25,7 +25,7 @@
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscSpaServicePackageCreateUtil.hpp"
 #include "C_OscErrorCategory.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;

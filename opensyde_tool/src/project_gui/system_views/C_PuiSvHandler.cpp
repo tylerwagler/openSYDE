@@ -37,7 +37,7 @@
 #include "C_OscRoutingCalculation.hpp"
 #include "C_OscHalcMagicianUtil.hpp"
 #include "C_PuiSdNodeDataPoolListElementIdSyncUtil.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;

@@ -28,7 +28,7 @@
 #include "C_PuiSvHandler.hpp"
 #include "TglUtils.hpp"
 #include <string>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"

@@ -19,7 +19,7 @@
 #include "stwtypes.hpp"
 #include "C_FlaUpHexFileInfo.hpp"
 #include "C_OscHexFile.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;

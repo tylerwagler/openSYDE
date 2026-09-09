@@ -15,7 +15,7 @@
 #include <QScrollBar>
 
 #include "C_Uti.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "TglUtils.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"

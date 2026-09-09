@@ -22,7 +22,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include <string>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_SydeSup.hpp"
 #include "C_OscSupServiceUpdatePackageLoad.hpp"
 #include "C_OscLoggingHandler.hpp"

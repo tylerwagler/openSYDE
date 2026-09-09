@@ -21,7 +21,7 @@
 #include "TglTime.hpp"
 #include "stwtypes.hpp"
 #include "constants.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_CamMetUtil.hpp"
 #include "cam_constants.hpp"
 #include "C_CanMonProtocol.hpp"

@@ -15,7 +15,7 @@
 #include "C_OscErrorCategory.hpp"
 #include <system_error>
 #include <string>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_PuiSdHandler.hpp"

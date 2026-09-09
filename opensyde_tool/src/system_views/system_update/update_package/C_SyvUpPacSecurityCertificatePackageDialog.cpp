@@ -23,7 +23,7 @@
 #include "C_OscSecurityPem.hpp"
 #include "C_OscSecurityPemSecUpdate.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include <string>
 #include <system_error>
 

@@ -24,7 +24,8 @@
 #include "TglUtils.hpp"
 #include "C_OscNodeSquadFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
+#include <sstream>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;

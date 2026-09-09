@@ -16,7 +16,7 @@
 #include "C_CanMonProtocolUds.hpp"
 
 #include <string>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_SclIniFile.hpp"
 #include "TglFile.hpp"
 #include "TglUtils.hpp"

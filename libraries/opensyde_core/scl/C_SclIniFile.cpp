@@ -20,7 +20,7 @@
 
 #include "C_SclIniFile.hpp"
 #include "stwtypes.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

@@ -21,7 +21,7 @@
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include <string>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscProtocolDriverOsy.hpp"

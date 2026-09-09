@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;

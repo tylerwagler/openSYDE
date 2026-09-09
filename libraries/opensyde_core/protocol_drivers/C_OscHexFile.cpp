@@ -17,7 +17,7 @@
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "C_OscHexFile.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include <string>
 #include "C_SclChecksums.hpp"
 #include "TglUtils.hpp"

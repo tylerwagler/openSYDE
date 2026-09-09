@@ -20,7 +20,7 @@
 #include "C_OscUtils.hpp"
 #include "C_OscXceCreate.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_OscXceManifestFiler.hpp"
 #include "C_OscSpaServicePackageCreateUtil.hpp"
 

@@ -24,7 +24,7 @@
 #include "C_OscChecksummedXml.hpp"
 #include "C_OscParamSetFilerBase.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;

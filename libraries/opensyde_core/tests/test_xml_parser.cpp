@@ -2,7 +2,7 @@
 #include "gtest/gtest.h"
 #include "C_OscXmlParser.hpp"
 #include "C_OscErrorCategory.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 // Key API semantics:
 // - CreateNodeChild() appends a child but does NOT select it (current node unchanged)

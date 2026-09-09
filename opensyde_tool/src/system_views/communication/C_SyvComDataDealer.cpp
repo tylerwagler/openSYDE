@@ -21,7 +21,7 @@
 
 #include "C_SyvComDataDealer.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_PuiSvDbDataElementContent.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

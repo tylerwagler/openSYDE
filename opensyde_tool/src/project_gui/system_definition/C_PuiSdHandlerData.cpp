@@ -25,7 +25,7 @@
 #include "C_PuiSdHandlerFiler.hpp"
 #include "C_PuiBsElementsFiler.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;

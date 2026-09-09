@@ -18,7 +18,7 @@
 #include "C_OscErrorCategory.hpp"
 
 #include <string>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 //---------------------------------------------------------------------------
 

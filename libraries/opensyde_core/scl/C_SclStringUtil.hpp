@@ -1,19 +1,20 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief    Compatibility helpers for migrating from C_SclString to std::string
+   \brief    String utility helpers for std::string
 
-   This header provides inline helper functions that map C_SclString methods to
-   std::string equivalents. Include it in files being migrated from C_SclString
-   to std::string to ease the transition.
-
-   Once a file no longer uses any C_SclString type, this include can be removed.
+   Inline helpers for operations that std::string does not provide directly:
+   printf-style formatting, hex/float/parse conversions with the legacy
+   conventions, 1-based position/substring semantics inherited from the retired
+   C_SclString class, case/trimming, tokenizing, and string-list file I/O.
+   Files that include this header must include what they use (it does NOT transitively provide <iomanip>/<locale>;
+   it still needs <sstream> for its own number parsing).
 
    \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef CSCLSTRINGCOMPATH
-#define CSCLSTRINGCOMPATH
+#ifndef CSCLSTRINGUTILH
+#define CSCLSTRINGUTILH
 
 #include <string>
 #include <sstream>

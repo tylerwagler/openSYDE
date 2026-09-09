@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <system_error>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 #include "TglFile.hpp"
 #include "stwtypes.hpp"

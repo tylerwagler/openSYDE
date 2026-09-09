@@ -30,7 +30,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscIpDispatcherLinuxSock.hpp"
 #include <string>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 //A few module-wide PC-lint definitions.
 //The macros from the socket API have a few non-compliant issues.

@@ -27,7 +27,7 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_Uti.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "TglTime.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscLoggingHandler.hpp"

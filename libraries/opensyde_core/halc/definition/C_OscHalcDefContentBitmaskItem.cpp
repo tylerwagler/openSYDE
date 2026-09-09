@@ -19,7 +19,7 @@
 #include "C_OscErrorCategory.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscHalcDefContentBitmaskItem.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

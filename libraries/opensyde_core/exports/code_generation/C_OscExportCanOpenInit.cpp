@@ -19,7 +19,7 @@
 #include "C_OscErrorCategory.hpp"
 #include "C_OscExportCanOpenInit.hpp"
 #include "C_OscExportUti.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

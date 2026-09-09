@@ -23,7 +23,7 @@
 #include "C_OscProjectFiler.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;

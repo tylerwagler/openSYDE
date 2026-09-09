@@ -21,7 +21,7 @@
 #include "C_OscXmlParser.hpp"
 #include <string>
 #include <system_error>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

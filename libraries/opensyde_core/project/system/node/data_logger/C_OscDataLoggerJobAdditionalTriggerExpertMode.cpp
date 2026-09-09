@@ -14,7 +14,7 @@
 
 #include "C_SclChecksums.hpp"
 #include "C_OscDataLoggerJobAdditionalTriggerExpertMode.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;

@@ -10,7 +10,7 @@
 
    The leading-zero cases are deliberate. This function parses with std::stoi,
    which is base 10, so "08" is 8. Switching it to base 0 -- an easy-looking
-   "fix", and the exact thing ScanBaseCompat in C_SclStringCompat warns about --
+   "fix", and the exact thing ScanBaseCompat in C_SclStringUtil warns about --
    would make "08" an invalid octal literal and throw, silently resetting every
    August and September timestamp to the current time.
 

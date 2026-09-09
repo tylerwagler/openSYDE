@@ -28,7 +28,7 @@
 #include "C_CamProHandlerFiler.hpp"
 #include "cam_constants.hpp"
 #include "C_SclChecksums.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;

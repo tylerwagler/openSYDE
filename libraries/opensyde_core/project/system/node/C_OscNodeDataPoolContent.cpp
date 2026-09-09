@@ -29,7 +29,7 @@
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include <string>
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscUtils.hpp"

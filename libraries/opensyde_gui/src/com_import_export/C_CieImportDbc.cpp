@@ -14,7 +14,7 @@
 #include <cmath>
 
 #include "precomp_headers.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"

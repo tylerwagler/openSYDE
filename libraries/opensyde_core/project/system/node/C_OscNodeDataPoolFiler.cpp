@@ -20,7 +20,7 @@
 #include "C_OscErrorCategory.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
 

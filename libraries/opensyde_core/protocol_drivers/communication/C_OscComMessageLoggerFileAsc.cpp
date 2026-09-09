@@ -23,7 +23,7 @@
 #include "C_OscComMessageLoggerFileAsc.hpp"
 #include "TglFile.hpp"
 #include "TglTime.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

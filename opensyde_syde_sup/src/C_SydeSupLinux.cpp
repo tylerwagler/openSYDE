@@ -16,7 +16,7 @@
 #include <string>
 #include "stwerrors.hpp"
 #include "C_SydeSupLinux.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;

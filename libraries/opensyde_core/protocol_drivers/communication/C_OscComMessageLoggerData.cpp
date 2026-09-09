@@ -11,7 +11,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscComMessageLoggerData.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

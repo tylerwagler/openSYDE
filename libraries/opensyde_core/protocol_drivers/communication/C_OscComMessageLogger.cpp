@@ -33,7 +33,7 @@
 #include "C_CanMonProtocol.hpp"
 #include "C_OscCanUtil.hpp"
 #include "C_OscComMessageLoggerFileAsc.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

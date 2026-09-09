@@ -42,7 +42,7 @@
 #include "C_OscTargetSupportPackageV2Filer.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscZipFile.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;

@@ -42,7 +42,7 @@ C_SdNdeDalTriggerCheckHelper::C_SdNdeDalTriggerCheckHelper() {}
 #else // _WIN32
 
 #include "TglUtils.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 #include "C_OscUtils.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"

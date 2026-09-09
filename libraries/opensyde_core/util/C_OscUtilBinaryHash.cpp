@@ -16,7 +16,7 @@
 #include "C_OscUtilBinaryHash.hpp"
 #include "TglFile.hpp"
 #include "C_Md5Checksum.hpp"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;

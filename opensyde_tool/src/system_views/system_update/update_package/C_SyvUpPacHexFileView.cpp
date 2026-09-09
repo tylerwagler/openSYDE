@@ -22,7 +22,7 @@
 #include "C_SyvUpPacHexFileView.hpp"
 #include "C_PuiUtil.hpp"
 #include "ui_C_SyvUpPacHexFileView.h"
-#include "C_SclStringCompat.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
