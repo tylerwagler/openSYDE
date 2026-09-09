@@ -96,6 +96,11 @@ Consequence: **the embedded target is a separate, constrained domain.**
   diverges from a "standard `<cstdint>`-style" naming. Type-identical on every relevant target.
   **This is the only option that also works for generated controller C.**
 
+**FOLLOW-UP (2026-09-09):** the generated controller code is slated to be converted to C++.
+Until then `stwtypes.h` stays as the embedded C type contract. Once the controller code is C++ it
+can use `<cstdint>`/`float`/`double`/`char` directly, at which point `stwtypes.h` is retired and
+`stw_compid.c` (still C) is migrated to `<stdint.h>`.
+
 **DECISION (2026-09-09): Option B for the host side.** Verified that on GCC, `std::float64_t`
 and `std::float32_t` are **distinct** `_Float64`/`_Float32` types, *not* the same as `double`/`float`
 (`std::is_same_v<std::float64_t,double> == false`). Since STW's `float64_t` is literally

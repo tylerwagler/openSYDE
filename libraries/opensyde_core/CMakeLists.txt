@@ -153,7 +153,6 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/stwerrors.h
    ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/C_OscErrorCategory.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/C_OscErrorCategory.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/stwtypes/stwtypes.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwtypes/stwtypes.h
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscXmlParser.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscXmlParserLog.hpp

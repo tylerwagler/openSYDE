@@ -202,7 +202,10 @@ Example: `const uint16_t ou16_Length` = "object, unsigned 16-bit, Length".
 
 ### Types
 
-Use `stwtypes.hpp`: `int8_t` … `uint64_t`, `float32_t`, `float64_t`, `char_t`.
+Use `<cstdint>` fixed-width types (`int8_t` … `uint64_t`) for integers and the native `float`,
+`double`, and `char` for floats/characters. The `stwtypes.hpp` C++ header has been removed;
+`stwtypes.h` (C, with the legacy no-`_t` names) remains only as the contract for generated
+controller C code, to be retired when that code is converted to C++.
 
 ### Strings and containers
 

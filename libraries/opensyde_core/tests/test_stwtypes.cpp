@@ -12,10 +12,10 @@
 #include <limits>
 #include <type_traits>
 #include "gtest/gtest.h"
-#include <cstdint>
 
-// stwtypes.hpp defines int8_t/uint8_t/... (with _t suffix, C++ style).
-// stwtypes.h defines sint8/uint8/... (C style). We test the C++ names here.
+// Verify the C++ fixed-width types (<cstdint>) are globally available with the
+// expected size/signedness. stwtypes.hpp has been removed; these are the standard
+// library types now.
 
 TEST(STWTypes, SizeOf_int8_t)    { EXPECT_EQ(1, sizeof(int8_t)); }
 TEST(STWTypes, SizeOf_uint8_t)   { EXPECT_EQ(1, sizeof(uint8_t)); }

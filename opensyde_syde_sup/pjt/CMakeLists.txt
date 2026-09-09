@@ -69,10 +69,6 @@ set(SYDESUP_API_HEADERS
    ${PROJECT_ROOT}/src/C_SydeSupLinux.hpp
 )
 
-set(SYDESUP_API_HEADERS_STWTYPES
-   ${PROJECT_ROOT}/../libraries/opensyde_core/stwtypes/stwtypes.hpp
-)
-
 # --- COMPILER FLAGS AND LIBRARIES -------------------------------------------------------------------------------------
 
 # OPENSYDE CORE
@@ -187,7 +183,6 @@ install(TARGETS SYDEsup DESTINATION ${INSTALL_DIR})
 if (${INSTALL_SYDESUP_LIB})
    install(TARGETS sydesuplib DESTINATION ${INSTALL_DIR}/sydesup_lib)
    install(FILES ${SYDESUP_API_HEADERS} DESTINATION ${INSTALL_DIR}/sydesup_lib)
-   install(FILES ${SYDESUP_API_HEADERS_STWTYPES} DESTINATION ${INSTALL_DIR}/sydesup_lib/stwtypes)
 endif()
 
 # --- WARNINGS AS ERRORS -----------------------------------------------------------------------------------------------
