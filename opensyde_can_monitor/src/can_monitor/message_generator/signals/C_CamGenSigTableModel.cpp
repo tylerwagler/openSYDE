@@ -14,7 +14,7 @@
 
 #include <limits>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
@@ -694,8 +694,8 @@ bool C_CamGenSigTableModel::setData(const QModelIndex & orc_Index, const QVarian
             else
             {
                //Handle generic spin box
-               float64_t f64_Factor;
-               float64_t f64_Offset;
+               double f64_Factor;
+               double f64_Offset;
                //Handle current scaling values
                if (e_Col == C_CamGenSigTableModel::ePHYSICAL)
                {
@@ -1905,7 +1905,7 @@ C_OscNodeDataPoolContent C_CamGenSigTableModel::mh_GetBorderValue(const C_OscNod
    }
    else
    {
-      float64_t f64_Base;
+      double f64_Base;
       uint64_t u64_Base;
       int64_t s64_Base;
 
@@ -2070,11 +2070,11 @@ C_OscNodeDataPoolContent C_CamGenSigTableModel::mh_GetBorderValue(const C_OscNod
             //Special handling for 64 bit
             if (ou16_BitLength >= 64)
             {
-               f64_Base = std::numeric_limits<float64_t>::lowest();
+               f64_Base = std::numeric_limits<double>::lowest();
             }
             else
             {
-               f64_Base = static_cast<float64_t>(std::numeric_limits<float32_t>::lowest());
+               f64_Base = static_cast<double>(std::numeric_limits<float>::lowest());
             }
          }
          else
@@ -2082,11 +2082,11 @@ C_OscNodeDataPoolContent C_CamGenSigTableModel::mh_GetBorderValue(const C_OscNod
             //Special handling for 64 bit
             if (ou16_BitLength >= 64)
             {
-               f64_Base = std::numeric_limits<float64_t>::max();
+               f64_Base = std::numeric_limits<double>::max();
             }
             else
             {
-               f64_Base = static_cast<float64_t>(std::numeric_limits<float32_t>::max());
+               f64_Base = static_cast<double>(std::numeric_limits<float>::max());
             }
          }
          //Apply value

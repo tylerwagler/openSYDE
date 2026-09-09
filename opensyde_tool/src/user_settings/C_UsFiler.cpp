@@ -405,7 +405,7 @@ void C_UsFiler::mh_SaveView(QSettings & orc_Ini, const C_UsSystemView & orc_View
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsFiler::mh_SaveDataRatesPerNode(QSettings & orc_Ini, const C_UsSystemViewNode & orc_Node)
 {
-   const QMap<uint32_t, float64_t> & rc_UpdateDataRateHistory = orc_Node.GetUpdateDataRateHistory();
+   const QMap<uint32_t, double> & rc_UpdateDataRateHistory = orc_Node.GetUpdateDataRateHistory();
 
    h_SaveArray(orc_Ini, "UpdateDataRates", rc_UpdateDataRateHistory, [&orc_Ini] (auto c_It)
    {
@@ -1167,7 +1167,7 @@ void C_UsFiler::mh_LoadDataRatesPerNode(QSettings & orc_Ini, const QString & orc
    {
       orc_Ini.setArrayIndex(s32_It);
       const QString c_Checksum = orc_Ini.value("Checksum", "").toString();
-      const float64_t f64_Value = orc_Ini.value("Value", 0.0).toDouble();
+      const double f64_Value = orc_Ini.value("Value", 0.0).toDouble();
       if (c_Checksum.isEmpty() == false)
       {
          bool q_Ok;

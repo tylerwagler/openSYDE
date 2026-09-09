@@ -95,8 +95,8 @@ void C_SebBaseCopyPasteManager::m_CalcOriginalPosition(const C_PuiBsElements * c
    {
       uint32_t u32_ItElem;
 
-      this->mc_OriginalPosition.setX(std::numeric_limits<float64_t>::max());
-      this->mc_OriginalPosition.setY(std::numeric_limits<float64_t>::max());
+      this->mc_OriginalPosition.setX(std::numeric_limits<double>::max());
+      this->mc_OriginalPosition.setY(std::numeric_limits<double>::max());
 
       for (u32_ItElem = 0; u32_ItElem < opc_Data->c_Boundaries.size(); ++u32_ItElem)
       {
@@ -161,10 +161,10 @@ void C_SebBaseCopyPasteManager::m_MinToOrgPos(const QPointF & orc_Point)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebBaseCopyPasteManager::mh_HandleZetValueBox(const QGraphicsItem * const opc_Item,
                                                      const QMap<const QGraphicsItem *,
-                                                                float64_t> & orc_NormalizedZetValues,
+                                                                double> & orc_NormalizedZetValues,
                                                      C_PuiBsBox & orc_Box)
 {
-   const QMap<const QGraphicsItem *, float64_t>::const_iterator c_ItItem = orc_NormalizedZetValues.find(opc_Item);
+   const QMap<const QGraphicsItem *, double>::const_iterator c_ItItem = orc_NormalizedZetValues.find(opc_Item);
 
    if (c_ItItem != orc_NormalizedZetValues.end())
    {
@@ -182,10 +182,10 @@ void C_SebBaseCopyPasteManager::mh_HandleZetValueBox(const QGraphicsItem * const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebBaseCopyPasteManager::mh_HandleZetValueLine(const QGraphicsItem * const opc_Item,
                                                       const QMap<const QGraphicsItem *,
-                                                                 float64_t> & orc_NormalizedZetValues,
+                                                                 double> & orc_NormalizedZetValues,
                                                       C_PuiBsLineBase & orc_Line)
 {
-   const QMap<const QGraphicsItem *, float64_t>::const_iterator c_ItItem = orc_NormalizedZetValues.find(opc_Item);
+   const QMap<const QGraphicsItem *, double>::const_iterator c_ItItem = orc_NormalizedZetValues.find(opc_Item);
 
    if (c_ItItem != orc_NormalizedZetValues.end())
    {

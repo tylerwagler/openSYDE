@@ -19,7 +19,7 @@
 #include <algorithm>
 #include <qcustomplot.h>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
 #include "C_PuiSvDbDataElementScaling.hpp"
 #include "C_PuiSvDbDataElementDisplayFormatterConfig.hpp"
@@ -81,7 +81,7 @@ public:
    bool GetCurrentGraph(uint32_t & oru32_DataPoolElementConfigIndex) const;
    bool IsAnyDataSerieOnPosition(const QPoint & orc_Pos) const;
    void AddGraphContent(const stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId & orc_DataPoolElementId,
-                        const QString & orc_FormattedLastValue, const QVector<float64_t> & orc_Values,
+                        const QString & orc_FormattedLastValue, const QVector<double> & orc_Values,
                         const QVector<uint32_t> & orc_Timestamps);
    void SetScaling(const uint32_t ou32_DataPoolElementConfigIndex, const QString & orc_DisplayName,
                    const stw::opensyde_gui_logic::C_PuiSvDbDataElementScaling & orc_ElementScaling);
@@ -144,8 +144,8 @@ private:
    static const int32_t mhs32_WIDTH_LINE_SELECTED;
    static const int32_t mhs32_WIDTH_LINE_DEFAULT;
 
-   float64_t mf64_MaxValue;
-   float64_t mf64_MinValue;
+   double mf64_MaxValue;
+   double mf64_MinValue;
    uint32_t mu32_TimeStampOfStart;
 
    // Saving for each datapool element the minimum content to have the type
@@ -174,8 +174,8 @@ private:
    E_SettingCursorMode me_SettingCursorMode;
    C_SyvDaChaPlotCursorItem * mpc_FirstCursor;
    C_SyvDaChaPlotCursorItem * mpc_SecondCursor;
-   float64_t mf64_MeasuredTimeFirstCursor;
-   float64_t mf64_MeasuredTimeSecondCursor;
+   double mf64_MeasuredTimeFirstCursor;
+   double mf64_MeasuredTimeSecondCursor;
    bool mq_IsSecondCursorClicked;
 
    // Index of list equals data element config index
@@ -219,7 +219,7 @@ private:
    void m_CursorItemClicked(const C_SyvDaChaPlotCursorItem * const opc_CursorItem);
    void m_CursorItemReleased(C_SyvDaChaPlotCursorItem * const opc_CursorItem);
    void m_CursorItemMovedOnHorizontalAxis(const C_SyvDaChaPlotCursorItem * const opc_CursorItem,
-                                          const float64_t of64_PosHorizontal);
+                                          const double of64_PosHorizontal);
    void m_UpdateMeasurementCursors(void);
    void m_CheckMeasurementCursorsVisibility(void);
 
@@ -256,7 +256,7 @@ private:
    void m_CursorModeTwoDiffCursor(void);
    void m_AdaptCursorMode(void);
    void m_ConfigureCursorMode(const E_SettingCursorMode oe_SettingCursorMode);
-   void m_CreateCursor(C_SyvDaChaPlotCursorItem ** const oppc_ItemCursor, const float64_t of64_InitHorizontalPos,
+   void m_CreateCursor(C_SyvDaChaPlotCursorItem ** const oppc_ItemCursor, const double of64_InitHorizontalPos,
                        const QColor & orc_Color, const QString & orc_LabelText);
 
    // Chart communication handling
@@ -273,10 +273,10 @@ private:
    void m_ShowSamplePoints(const bool oq_ShowSamplePoints);
 
    // load and save
-   void m_LoadState(const bool oq_IsPaused, const bool orq_AreSamplePointsShown, const std::vector<std::array<float64_t,
+   void m_LoadState(const bool oq_IsPaused, const bool orq_AreSamplePointsShown, const std::vector<std::array<double,
                                                                                                               4> > & orc_ScreenState);
    void m_SaveState(bool & orq_IsPaused, int32_t & ors32_SplitterLeftWidth, bool & orq_AreSamplePointsShown,
-                    std::vector<std::array<float64_t, 4> > & orc_ScreenState);
+                    std::vector<std::array<double, 4> > & orc_ScreenState);
    void m_ExtractDataToCsv(void);
    void m_SetSaveLocationToCsv(void);
    QString m_SaveCsvAs(void) const;

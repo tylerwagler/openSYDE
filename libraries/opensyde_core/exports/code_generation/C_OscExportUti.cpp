@@ -14,7 +14,7 @@
 
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "TglFile.hpp"
@@ -395,14 +395,14 @@ std::string C_OscExportUti::h_GetElementCeName(const std::string & orc_Name, con
    Value converted to string
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::string C_OscExportUti::h_FloatToStrGe(const float32_t of32_Value, bool * const opq_InfOrNan)
+std::string C_OscExportUti::h_FloatToStrGe(const float of32_Value, bool * const opq_InfOrNan)
 {
    std::string c_Return;
    bool q_InfOrNan;
 
    {
       std::ostringstream ss;
-      ss << std::setprecision(9) << std::defaultfloat << static_cast<float64_t>(of32_Value);
+      ss << std::setprecision(9) << std::defaultfloat << static_cast<double>(of32_Value);
       c_Return = ss.str();
    }
    // do not use '#' option of print formatted, as it also adds trailing zeroes
@@ -445,7 +445,7 @@ std::string C_OscExportUti::h_FloatToStrGe(const float32_t of32_Value, bool * co
    Value converted to string
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::string C_OscExportUti::h_FloatToStrGe(const float64_t of64_Value, bool * const opq_InfOrNan)
+std::string C_OscExportUti::h_FloatToStrGe(const double of64_Value, bool * const opq_InfOrNan)
 {
    std::string c_Return;
    bool q_InfOrNan;

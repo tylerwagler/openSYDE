@@ -17,7 +17,7 @@
 #include <iomanip>
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 
@@ -518,14 +518,14 @@ std::error_code C_OscExportDataPool::mh_AddDefinesHeader(std::vector<std::string
                {
                   // use f32 variant if f32 scaling values are requested!
                   c_Factor = C_OscExportUti::h_FloatToStrGe(
-                     static_cast<float32_t>(rc_List.c_Elements[u16_ElementIndex].f64_Factor), &q_InfOrNanFactor);
+                     static_cast<float>(rc_List.c_Elements[u16_ElementIndex].f64_Factor), &q_InfOrNanFactor);
                   c_Offset = C_OscExportUti::h_FloatToStrGe(
-                     static_cast<float32_t>(rc_List.c_Elements[u16_ElementIndex].f64_Offset), &q_InfOrNanOffset);
+                     static_cast<float>(rc_List.c_Elements[u16_ElementIndex].f64_Offset), &q_InfOrNanOffset);
                }
 
                if (((rc_List.c_Elements[u16_ElementIndex].f64_Factor <= 0.0) || (c_Factor == "0.0")) ||
                    ((oe_ScalingSupport == C_OscNodeCodeExportSettings::eFLOAT32) &&
-                    (static_cast<float32_t>(rc_List.c_Elements[u16_ElementIndex].f64_Factor) <= 0.0F)))
+                    (static_cast<float>(rc_List.c_Elements[u16_ElementIndex].f64_Factor) <= 0.0F)))
                {
                   osc_write_log_error("Creating source code",
                                       "Did not generate code because factor of element \"" + orc_DataPool.c_Name +

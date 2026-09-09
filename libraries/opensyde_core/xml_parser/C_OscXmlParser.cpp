@@ -15,7 +15,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParser.hpp"
@@ -634,9 +634,9 @@ bool C_OscXmlParserBase::GetAttributeBool(const std::string & orc_Name, const bo
    value (0.0F on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-float32_t C_OscXmlParserBase::GetAttributeFloat32(const std::string & orc_Name, const float32_t of32_Default) const
+float C_OscXmlParserBase::GetAttributeFloat32(const std::string & orc_Name, const float of32_Default) const
 {
-   float32_t f32_Value = of32_Default;
+   float f32_Value = of32_Default;
 
    if (mpc_CurrentNode != nullptr)
    {
@@ -661,9 +661,9 @@ float32_t C_OscXmlParserBase::GetAttributeFloat32(const std::string & orc_Name, 
    value (0.0 on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_OscXmlParserBase::GetAttributeFloat64(const std::string & orc_Name, const float64_t of64_Default) const
+double C_OscXmlParserBase::GetAttributeFloat64(const std::string & orc_Name, const double of64_Default) const
 {
-   float64_t f64_Value = of64_Default;
+   double f64_Value = of64_Default;
 
    if (mpc_CurrentNode != nullptr)
    {
@@ -883,7 +883,7 @@ std::error_code C_OscXmlParserBase::GetAttributeBoolError(const std::string & or
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscXmlParserBase::GetAttributeFloat32Error(const std::string & orc_Name,
-                                                             float32_t & orf32_Value) const
+                                                             float & orf32_Value) const
 {
    std::error_code c_Retval = Errc::success;
 
@@ -915,7 +915,7 @@ std::error_code C_OscXmlParserBase::GetAttributeFloat32Error(const std::string &
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscXmlParserBase::GetAttributeFloat64Error(const std::string & orc_Name,
-                                                             float64_t & orf64_Value) const
+                                                             double & orf64_Value) const
 {
    std::error_code c_Retval = Errc::success;
 
@@ -1255,7 +1255,7 @@ void C_OscXmlParserBase::SetAttributeBool(const std::string & orc_Name, const bo
    \param[in]  of32_Value  new value of attribute
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::SetAttributeFloat32(const std::string & orc_Name, const float32_t of32_Value)
+void C_OscXmlParserBase::SetAttributeFloat32(const std::string & orc_Name, const float of32_Value)
 {
    if (mpc_CurrentNode != nullptr)
    {
@@ -1272,7 +1272,7 @@ void C_OscXmlParserBase::SetAttributeFloat32(const std::string & orc_Name, const
    \param[in]  of64_Value  new value of attribute
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::SetAttributeFloat64(const std::string & orc_Name, const float64_t of64_Value)
+void C_OscXmlParserBase::SetAttributeFloat64(const std::string & orc_Name, const double of64_Value)
 {
    if (mpc_CurrentNode != nullptr)
    {

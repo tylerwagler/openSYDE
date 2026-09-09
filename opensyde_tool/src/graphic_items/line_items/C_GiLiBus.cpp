@@ -337,7 +337,7 @@ void C_GiLiBus::CopyStyle(const QGraphicsItem * const opc_GuidelineItem)
    \param[in]  of64_ZetValue    New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiBus::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiLiBus::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiLiLineGroup::SetZetValueCustom(of64_ZetValue);
    //Apply to data

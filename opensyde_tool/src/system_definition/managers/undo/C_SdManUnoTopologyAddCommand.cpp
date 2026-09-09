@@ -118,7 +118,7 @@ void C_SdManUnoTopologyAddCommand::m_AddNew(void)
       {
          C_GiNode * pc_Node;
          C_GiLiBus * pc_Bus;
-         float64_t f64_BusZetValue;
+         double f64_BusZetValue;
          C_GiTextElementBus * pc_TextElementBus;
 
          switch (this->me_Type)

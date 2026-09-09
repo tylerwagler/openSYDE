@@ -16,7 +16,7 @@
 #include <set>
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscSuSequences.hpp"
 #include <string>
@@ -1313,8 +1313,8 @@ std::error_code C_OscSuSequences::m_WriteNvmOpenSyde(
          {
             C_OscSuSequencesNodePsiFileStates & rc_State = orc_StatePsiFiles[u16_File];
             //logic: split 80% (between 10% and 90%) by the number of files
-            const float32_t f32_Percent = (((80.0F / static_cast<float32_t>(orc_FilesToWrite.size()))) *
-                                           static_cast<float32_t>(u16_File));
+            const float f32_Percent = (((80.0F / static_cast<float>(orc_FilesToWrite.size()))) *
+                                           static_cast<float>(u16_File));
             const uint8_t u8_Percent = 10U + static_cast<uint8_t>(f32_Percent);
             bool q_Abort = m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_OPEN_FILE_START, C_NO_ERR, u8_Percent,
                                             mc_CurrentNode,

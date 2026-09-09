@@ -31,12 +31,12 @@ class C_GiSvgGraphicsItem :
    public C_GiBiSizeableItem
 {
 public:
-   C_GiSvgGraphicsItem(const QString & orc_ImagePath, const float64_t of64_Width, const float64_t of64_Height,
+   C_GiSvgGraphicsItem(const QString & orc_ImagePath, const double of64_Width, const double of64_Height,
                        QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiSvgGraphicsItem(void) override;
 
    void SetSvg(const QString & orc_ImagePath);
-   void SetNewSize(const float64_t of64_Width, const float64_t of64_Height);
+   void SetNewSize(const double of64_Width, const double of64_Height);
    void Redraw(void) override;
 
    void paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,

@@ -15,7 +15,7 @@
 #include <QGraphicsView>
 
 #include "gitypes.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -525,7 +525,7 @@ void C_GiSvDaLabelBase::m_UpdateStaticValue(const stw::opensyde_gui_logic::C_Pui
                                                                           rc_Config.c_ElementId.u32_ElementIndex);
             if (pc_Element != nullptr)
             {
-               float64_t f64_Value;
+               double f64_Value;
                uint32_t u32_Index;
                if (rc_Config.c_ElementId.GetUseArrayElementIndex())
                {

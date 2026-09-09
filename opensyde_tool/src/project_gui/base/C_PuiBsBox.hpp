@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QPointF>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -33,9 +33,9 @@ public:
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
    QPointF c_UiPosition;   ///< Position of box based item in relation to scene
-   float64_t f64_Width;    ///< Width of box based item in scene
-   float64_t f64_Height;   ///< Height of box based item in scene
-   float64_t f64_ZetOrder; ///< Z Position of box based item in scene
+   double f64_Width;    ///< Width of box based item in scene
+   double f64_Height;   ///< Height of box based item in scene
+   double f64_ZetOrder; ///< Z Position of box based item in scene
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

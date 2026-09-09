@@ -17,7 +17,7 @@
 #include <QGraphicsItem>
 #include <QTimer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SebUtil.hpp"
 #include "C_NagToolTipWithImage.hpp"
@@ -52,7 +52,7 @@ public:
    ~C_SebScene() override;
 
    void FilterChangableZetValues(QList<QGraphicsItem *> & orc_ZetValues) const;
-   float64_t GetHighestUsedZetValueList(const QList<QGraphicsItem *> & orc_Items) const;
+   double GetHighestUsedZetValueList(const QList<QGraphicsItem *> & orc_Items) const;
 
    void SetDrawingBackground(const bool oq_Active);
    QRectF GetMinimumSceneRect(void) const;
@@ -235,7 +235,7 @@ private:
 
    QTimer mc_ToolTipTimer;
 
-   static const float64_t mhf64_MOVING_RANGE;
+   static const double mhf64_MOVING_RANGE;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

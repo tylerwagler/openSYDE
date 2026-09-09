@@ -9,7 +9,7 @@
 #define C_GIBIBASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -26,7 +26,7 @@ public:
    C_GiBiBase(void);
    virtual ~C_GiBiBase(void);
 
-   virtual void SetZetValueCustom(const float64_t of64_ZetValue) = 0;
+   virtual void SetZetValueCustom(const double of64_ZetValue) = 0;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

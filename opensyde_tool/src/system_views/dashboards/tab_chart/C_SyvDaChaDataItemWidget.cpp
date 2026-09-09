@@ -207,7 +207,7 @@ void C_SyvDaChaDataItemWidget::InitWidget(const uint32_t ou32_DataPoolElementCon
       if (pc_OscElement != nullptr)
       {
          // Set default value
-         float64_t f64_Value;
+         double f64_Value;
          C_OscNodeDataPoolContent c_Tmp = pc_OscElement->c_MinValue;
 
          c_Tmp.GetAnyValueAsFloat64(f64_Value, 0);

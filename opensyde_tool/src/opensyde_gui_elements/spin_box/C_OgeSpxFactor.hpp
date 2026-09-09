@@ -12,7 +12,7 @@
 #define C_OGESPXFACTOR_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeSpxDoubleToolTipBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -34,7 +34,7 @@ public:
    void stepBy(const int32_t os32_Steps) override;
    QValidator::State validate(QString & orc_Text, int32_t & ors32_Pos) const override;
 
-   static const float64_t mhf64_FACTOR_MIN;
+   static const double mhf64_FACTOR_MIN;
 
 protected:
    StepEnabled stepEnabled(void) const override;

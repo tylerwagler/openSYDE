@@ -1303,7 +1303,7 @@ void C_OscComMessageLogger::mh_InterpretCanSignalValue(C_OscComMessageLoggerData
                                                        const uint8_t(&orau8_CanDb)[8], const uint8_t ou8_CanDlc,
                                                        const C_OscCanSignal & orc_OscSignal,
                                                        const C_OscNodeDataPoolContent & orc_OscValue,
-                                                       const float64_t of64_Factor, const float64_t of64_Offset)
+                                                       const double of64_Factor, const double of64_Offset)
 {
    const bool q_SignalFits = C_OscCanUtil::h_IsSignalInMessage(ou8_CanDlc, orc_OscSignal);
 

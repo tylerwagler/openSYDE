@@ -12,7 +12,7 @@
 
 #include <QtGlobal>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvDaItUtil.hpp"
 #include "C_SyvDaItDashboardSliderWidget.hpp"
 #include "ui_C_SyvDaItDashboardSliderWidget.h"
@@ -116,10 +116,10 @@ void C_SyvDaItDashboardSliderWidget::AdjustFontToSize(void)
 {
    // Constants
    const int32_t s32_WidgetHeight = this->height();
-   const float32_t f32_FONT_MODIFIER = 0.3F;
+   const float f32_FONT_MODIFIER = 0.3F;
 
-   const float32_t f32_MaxLabelFontSize = static_cast<float32_t>(s32_WidgetHeight) * f32_FONT_MODIFIER;
-   const float32_t f32_MinLabelFontSize = static_cast<float32_t>(s32_WidgetHeight) * f32_FONT_MODIFIER;
+   const float f32_MaxLabelFontSize = static_cast<float>(s32_WidgetHeight) * f32_FONT_MODIFIER;
+   const float f32_MinLabelFontSize = static_cast<float>(s32_WidgetHeight) * f32_FONT_MODIFIER;
 
    const uint32_t u32_MaxLabelFontSize = static_cast<uint32_t>(f32_MaxLabelFontSize);
    const uint32_t u32_MinLabelFontSize = static_cast<uint32_t>(f32_MinLabelFontSize);
@@ -213,8 +213,8 @@ int32_t C_SyvDaItDashboardSliderWidget::GetValue(void) const
    \param[in]  orc_FormatterConfig                 Formatter config
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItDashboardSliderWidget::SetToolTipParameters(const float64_t of64_ToolTipSliderRangeValueFactor,
-                                                          const float64_t of64_ToolTipValueOffset,
+void C_SyvDaItDashboardSliderWidget::SetToolTipParameters(const double of64_ToolTipSliderRangeValueFactor,
+                                                          const double of64_ToolTipValueOffset,
                                                           const C_PuiSvDbDataElementScaling & orc_ToolTipUserScaling,
                                                           const C_OscNodeDataPoolContent::E_Type oe_RepresentationType,
                                                           const C_PuiSvDbDataElementDisplayFormatterConfig & orc_FormatterConfig)

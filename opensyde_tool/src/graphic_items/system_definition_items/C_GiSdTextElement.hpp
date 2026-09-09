@@ -37,7 +37,7 @@ public:
    void DeleteData(void) override;
 
    //GI base
-   void SetZetValueCustom(const float64_t of64_ZetValue) override;
+   void SetZetValueCustom(const double of64_ZetValue) override;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

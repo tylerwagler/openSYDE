@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "TglUtils.hpp"
 #include "C_SyvDaPeSpinBox.hpp"
@@ -175,15 +175,15 @@ void C_SyvDaPeSpinBox::SetType(const C_PuiSvDbSpinBox::E_Type oe_Type) const
 void C_SyvDaPeSpinBox::m_UpdatePreview(void)
 {
    //Also include the fix offset to the right
-   const float64_t f64_IconOffset = C_SyvDaPeBase::h_GetFixIconOffset();
+   const double f64_IconOffset = C_SyvDaPeBase::h_GetFixIconOffset();
    const QSize c_ViewSize = C_SyvDaPeBase::h_GetSceneViewSize();
    C_GiSvDaSpinBoxBase * const pc_Item = new C_GiSvDaSpinBoxBase(0UL, 0UL, -1L, 0ULL, nullptr);
-   const QSizeF c_ItemSize(static_cast<float64_t>(c_ViewSize.width()) / 1.5,
-                           static_cast<float64_t>(c_ViewSize.height()) / 3.0);
+   const QSizeF c_ItemSize(static_cast<double>(c_ViewSize.width()) / 1.5,
+                           static_cast<double>(c_ViewSize.height()) / 3.0);
    // 10 =  Vertical center adjustment
    const QPointF c_ItemPos(
-      ((static_cast<float64_t>(c_ViewSize.width()) - c_ItemSize.width()) / 2.0) + (f64_IconOffset / 2.0),
-      ((static_cast<float64_t>(c_ViewSize.height()) - c_ItemSize.height()) / 2.0) - 10.0);
+      ((static_cast<double>(c_ViewSize.width()) - c_ItemSize.width()) / 2.0) + (f64_IconOffset / 2.0),
+      ((static_cast<double>(c_ViewSize.height()) - c_ItemSize.height()) / 2.0) - 10.0);
 
    pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme());
    pc_Item->UpdateTypePe(this->GetType(), this->GetShowUnit());

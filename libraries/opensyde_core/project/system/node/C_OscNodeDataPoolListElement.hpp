@@ -16,7 +16,7 @@
 #include <map>
 #include <system_error>
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscNodeDataPoolContent.hpp"
 
@@ -50,8 +50,8 @@ public:
    std::string c_Comment;                       ///< Element comment
    C_OscNodeDataPoolContent c_MinValue;                   ///< Minimum value(s) for complete data element
    C_OscNodeDataPoolContent c_MaxValue;                   ///< Maximum value(s) for complete data element
-   float64_t f64_Factor;                                  ///< Adaptation factor for display
-   float64_t f64_Offset;                                  ///< Offset factor for display
+   double f64_Factor;                                  ///< Adaptation factor for display
+   double f64_Offset;                                  ///< Offset factor for display
    std::string c_Unit;                          ///< Variable unit
    std::map<int64_t, std::string> c_ValueDescription; ///< Optional named value table (raw value -> display name)
    E_Access e_Access;                                     ///< Defined access level

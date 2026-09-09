@@ -54,7 +54,7 @@ public:
    bool q_IsZoomModeActive;
    bool q_IsPaused;
    bool q_AreSamplePointsShown;
-   std::vector<std::array<float64_t, 4> > c_VisibleScreen; ///< Store range values for visible screen for
+   std::vector<std::array<double, 4> > c_VisibleScreen; ///< Store range values for visible screen for
    // each
    // axis
 };

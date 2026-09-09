@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "TglUtils.hpp"
 #include "C_SyvDaPeSlider.hpp"
@@ -208,14 +208,14 @@ void C_SyvDaPeSlider::m_UpdatePreview(void)
 {
    const QSize c_ViewSize = C_SyvDaPeBase::h_GetSceneViewSize();
    //Also include the fix offset to the right
-   const float64_t f64_IconOffset = C_SyvDaPeBase::h_GetFixIconOffset();
+   const double f64_IconOffset = C_SyvDaPeBase::h_GetFixIconOffset();
    C_GiSvDaSliderBase * const pc_Item = new C_GiSvDaSliderBase(0UL, 0UL, -1L, 0ULL, nullptr);
    //Do not use view center
-   const QSizeF c_ItemSize((static_cast<float64_t>(c_ViewSize.width()) / 1.2) + f64_IconOffset,
-                           static_cast<float64_t>(c_ViewSize.height()) / 5.0);
+   const QSizeF c_ItemSize((static_cast<double>(c_ViewSize.width()) / 1.2) + f64_IconOffset,
+                           static_cast<double>(c_ViewSize.height()) / 5.0);
    const QPointF c_ItemPos(
-      ((static_cast<float64_t>(c_ViewSize.width()) - c_ItemSize.width()) / 2.0) + (f64_IconOffset / 2.0),
-      (static_cast<float64_t>(c_ViewSize.height()) - c_ItemSize.height()) / 2.0);
+      ((static_cast<double>(c_ViewSize.width()) - c_ItemSize.width()) / 2.0) + (f64_IconOffset / 2.0),
+      (static_cast<double>(c_ViewSize.height()) - c_ItemSize.height()) / 2.0);
 
    pc_Item->ApplySizeChange(c_ItemPos, c_ItemSize);
    pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme());

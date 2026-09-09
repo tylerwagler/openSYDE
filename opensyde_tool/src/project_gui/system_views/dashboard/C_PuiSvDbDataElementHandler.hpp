@@ -17,7 +17,7 @@
 #include <QMap>
 #include <QMutex>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_PuiSvDbDataElement.hpp"
 #include "C_PuiSvDbWidgetBase.hpp"
@@ -71,8 +71,8 @@ public:
                                 const C_PuiSvDbDataElementContent & orc_NewValue);
    void AddNewNvmValueIntoQueue(const C_PuiSvDbNodeDataPoolListElementId & orc_WidgetDataPoolElementId,
                                 const C_PuiSvDbDataElementContent & orc_NewValue);
-   QString GetUnscaledValueAsScaledString(const float64_t of64_Value, const uint32_t ou32_IndexElement = 0UL) const;
-   QString GetUnscaledValueInRangeAsScaledString(const float64_t of64_Value, const uint32_t ou32_IndexElement = 0UL, float64_t * const opf64_Progress =
+   QString GetUnscaledValueAsScaledString(const double of64_Value, const uint32_t ou32_IndexElement = 0UL) const;
+   QString GetUnscaledValueInRangeAsScaledString(const double of64_Value, const uint32_t ou32_IndexElement = 0UL, double * const opf64_Progress =
                                                     nullptr) const;
    virtual void SetErrorForInvalidDlc(const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_ElementId,
                                       const uint8_t ou8_Dlc) = 0;
@@ -81,20 +81,20 @@ protected:
    virtual void m_OnDataElementRegistered(const uint32_t ou32_WidgetDataPoolElementIndex);
 
    virtual int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, QString & orc_ScaledValue,
-                                  float64_t * const opf64_UnscaledValueAsFloat,
-                                  float64_t * const opf64_ScaledValueAsFloat);
+                                  double * const opf64_UnscaledValueAsFloat,
+                                  double * const opf64_ScaledValueAsFloat);
    virtual int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                  std::vector<QString> & orc_ScaledValues, std::vector<float64_t> & orc_UnscaledValues);
+                                  std::vector<QString> & orc_ScaledValues, std::vector<double> & orc_UnscaledValues);
 
-   virtual int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<float64_t> & orc_Values,
+   virtual int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<double> & orc_Values,
                                   const bool oq_UseScaling);
    int32_t m_GetAllValues(const uint32_t ou32_WidgetDataPoolElementIndex, QString & orc_ScaledFormattedLastValue,
-                          QVector<float64_t> & orc_ScaledValues, QVector<uint32_t> & orc_Timestamps);
+                          QVector<double> & orc_ScaledValues, QVector<uint32_t> & orc_Timestamps);
    int32_t m_GetLastNvmValue(const uint32_t ou32_WidgetDataPoolElementIndex,
                              stw::opensyde_core::C_OscNodeDataPoolContent & orc_Value);
    int32_t m_GetTimoutPercentage100(const uint32_t ou32_DataElementIndex, uint8_t & oru8_TimoutPercentage100) const;
-   int32_t m_ScaleMinMax(const uint32_t ou32_WidgetDataPoolElementIndex, float64_t & orf64_Min,
-                         float64_t & orf64_Max) const;
+   int32_t m_ScaleMinMax(const uint32_t ou32_WidgetDataPoolElementIndex, double & orf64_Min,
+                         double & orf64_Max) const;
    void m_UpdateDataPoolElementTimeoutAndValidFlag(void);
    void m_UpdateDataPoolElementTimeoutAndValidFlag(
       const stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId & orc_Id);
@@ -130,10 +130,10 @@ private:
       }
 
       QString GetSingleValueContentFormatted(const C_PuiSvDbDataElementContent & orc_Value, const uint32_t ou32_Index,
-                                             float64_t * const opf64_UnscaledValueAsFloat,
-                                             float64_t * const opf64_ScaledValueAsFloat = nullptr) const;
+                                             double * const opf64_UnscaledValueAsFloat,
+                                             double * const opf64_ScaledValueAsFloat = nullptr) const;
       std::vector<QString> GetValuesContentFormatted(const C_PuiSvDbDataElementContent & orc_Value,
-                                                     std::vector<float64_t> & orc_UnscaledValueAsFloat) const;
+                                                     std::vector<double> & orc_UnscaledValueAsFloat) const;
 
       C_PuiSvDbDataElementScaling c_Scaling;
       C_PuiSvDbDataElementDisplayFormatterConfig c_FormatterConfig;
@@ -170,7 +170,7 @@ private:
    mutable QMutex mc_CriticalSection;
 
    void m_SetWidgetDataPoolElementCount(const uint32_t ou32_Count);
-   static QString mh_GetStringForScaledValue(const float64_t of64_Value,
+   static QString mh_GetStringForScaledValue(const double of64_Value,
                                              const stw::opensyde_core::C_OscNodeDataPoolContent::E_Type oe_Type);
 
    void m_SaveTimeStamp(const uint32_t ou32_WidgetDataPoolElementIndex, const int32_t os32_ValueIndex);

@@ -989,7 +989,7 @@ bool C_SyvDaChaPlotHandlerWidget::IsAnyDataSerieOnPosition(const QPoint & orc_Po
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::AddGraphContent(const C_PuiSvDbNodeDataPoolListElementId & orc_DataPoolElementId,
                                                   const QString & orc_FormattedLastValue,
-                                                  const QVector<float64_t> & orc_Values,
+                                                  const QVector<double> & orc_Values,
                                                   const QVector<uint32_t> & orc_Timestamps)
 {
    // Find the correct data series
@@ -1010,7 +1010,7 @@ void C_SyvDaChaPlotHandlerWidget::AddGraphContent(const C_PuiSvDbNodeDataPoolLis
             if (pc_Graph != nullptr)
             {
                int32_t s32_ValueCounter;
-               float64_t f64_Value;
+               double f64_Value;
 
                tgl_assert(orc_Values.size() == orc_Timestamps.size());
 
@@ -1018,12 +1018,12 @@ void C_SyvDaChaPlotHandlerWidget::AddGraphContent(const C_PuiSvDbNodeDataPoolLis
                {
                   // Start time must be zero, adapt the read timestamp
                   const uint32_t u32_TimeStamp = orc_Timestamps[s32_ValueCounter];
-                  float64_t f64_Timestamp;
+                  double f64_Timestamp;
 
                   if (u32_TimeStamp > this->mu32_TimeStampOfStart)
                   {
-                     f64_Timestamp = static_cast<float64_t>(u32_TimeStamp);
-                     f64_Timestamp -= static_cast<float64_t>(this->mu32_TimeStampOfStart);
+                     f64_Timestamp = static_cast<double>(u32_TimeStamp);
+                     f64_Timestamp -= static_cast<double>(this->mu32_TimeStampOfStart);
                   }
                   else
                   {
@@ -1036,10 +1036,10 @@ void C_SyvDaChaPlotHandlerWidget::AddGraphContent(const C_PuiSvDbNodeDataPoolLis
                   if (pc_Graph->visible() == true)
                   {
                      // Add a little free space to the values
-                     const float64_t f64_FAC_HIGH = 1.1;
-                     const float64_t f64_FAC_LOW = 0.9;
-                     const float64_t f64_ValueFactorHigh = f64_Value * f64_FAC_HIGH;
-                     const float64_t f64_ValueFactorLow = f64_Value * f64_FAC_LOW;
+                     const double f64_FAC_HIGH = 1.1;
+                     const double f64_FAC_LOW = 0.9;
+                     const double f64_ValueFactorHigh = f64_Value * f64_FAC_HIGH;
+                     const double f64_ValueFactorLow = f64_Value * f64_FAC_LOW;
 
                      // Adapt range for value
                      if (f64_Value >= 0.0)
@@ -1161,10 +1161,10 @@ void C_SyvDaChaPlotHandlerWidget::FitDefault(void)
          if (pc_Elem != nullptr)
          {
             //Scaling
-            float64_t f64_Factor;
-            float64_t f64_Offset;
-            float64_t f64_CurMin;
-            float64_t f64_CurMax;
+            double f64_Factor;
+            double f64_Offset;
+            double f64_CurMin;
+            double f64_CurMax;
             if (rc_CurConfig.c_ElementScaling.q_UseDefault)
             {
                f64_Factor = pc_Elem->f64_Factor;
@@ -1426,8 +1426,8 @@ void C_SyvDaChaPlotHandlerWidget::m_ResetChart(void)
 {
    int32_t s32_CounterItem;
 
-   const QVector<float64_t> c_EmptyKeys;
-   const QVector<float64_t> c_EmptyValues;
+   const QVector<double> c_EmptyKeys;
+   const QVector<double> c_EmptyValues;
 
    for (s32_CounterItem = 0;
         s32_CounterItem < this->mpc_Ui->pc_Plot->graphCount();
@@ -1580,9 +1580,9 @@ void C_SyvDaChaPlotHandlerWidget::m_CyclicUpdateHorizontalAxis(void)
 {
    const uint32_t u32_CurTime = stw::tgl::TglGetTickCount() - this->mu32_TimeStampOfStart;
 
-   if (static_cast<float64_t>(u32_CurTime) > this->mpc_Ui->pc_Plot->xAxis->range().upper)
+   if (static_cast<double>(u32_CurTime) > this->mpc_Ui->pc_Plot->xAxis->range().upper)
    {
-      this->mpc_Ui->pc_Plot->xAxis->setRange(static_cast<float64_t>(u32_CurTime),
+      this->mpc_Ui->pc_Plot->xAxis->setRange(static_cast<double>(u32_CurTime),
                                              this->mpc_Ui->pc_Plot->xAxis->range().size(), Qt::AlignRight);
 
       m_RedrawGraph();
@@ -2058,9 +2058,9 @@ void C_SyvDaChaPlotHandlerWidget::mh_AdaptAxisGridColor(const QCPAxis * const op
 void C_SyvDaChaPlotHandlerWidget::m_AdaptVerticalAxisWithSpace(QCPAxis * const opc_Axis)
 {
    // Offset of free space above and below the measurement points summed
-   const float64_t f64_PIXEL_OFFSET = 10.0;
-   const float64_t f64_Height = static_cast<float64_t>(this->mpc_Ui->pc_Plot->axisRect()->height());
-   const float64_t f64_ScaleFactor = (f64_Height + f64_PIXEL_OFFSET) / f64_Height;
+   const double f64_PIXEL_OFFSET = 10.0;
+   const double f64_Height = static_cast<double>(this->mpc_Ui->pc_Plot->axisRect()->height());
+   const double f64_ScaleFactor = (f64_Height + f64_PIXEL_OFFSET) / f64_Height;
 
    if (opc_Axis != nullptr)
    {
@@ -2135,7 +2135,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemReleased(C_SyvDaChaPlotCursorItem 
       QCPItemTracer * const pc_Tracer = this->mc_ItemTracers.at(static_cast<int32_t>(u32_SelectedElement));
       if (pc_Tracer != nullptr)
       {
-         const float64_t f64_TimeOfPoint = pc_Tracer->position->key();
+         const double f64_TimeOfPoint = pc_Tracer->position->key();
          opc_CursorItem->UpdatePosition(f64_TimeOfPoint);
          this->m_CursorItemMovedOnHorizontalAxis(opc_CursorItem, f64_TimeOfPoint);
          this->m_RedrawGraph();
@@ -2163,9 +2163,9 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemReleased(C_SyvDaChaPlotCursorItem 
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::m_CursorItemMovedOnHorizontalAxis(
-   const C_SyvDaChaPlotCursorItem * const opc_CursorItem, const float64_t of64_PosHorizontal)
+   const C_SyvDaChaPlotCursorItem * const opc_CursorItem, const double of64_PosHorizontal)
 {
-   float64_t f64_TracerTimeSelectedElement = of64_PosHorizontal;
+   double f64_TracerTimeSelectedElement = of64_PosHorizontal;
 
    // Update the values in the selector widget
    if ((opc_CursorItem == this->mpc_FirstCursor) ||
@@ -2212,7 +2212,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemMovedOnHorizontalAxis(
 
          if (pc_Tracer != nullptr)
          {
-            float64_t f64_Value;
+            double f64_Value;
             C_OscNodeDataPoolContent c_Tmp = this->mc_DataPoolElementContentMin[u32_ElementCounter];
             const C_PuiSvDbDataElementScaling c_TmpScaling;
             f64_Value = pc_Tracer->position->value();
@@ -2268,7 +2268,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemMovedOnHorizontalAxis(
    // If the second cursor exist, the difference is available and possible
    if (this->mpc_SecondCursor != nullptr)
    {
-      const float64_t f64_Diff = this->mf64_MeasuredTimeSecondCursor - this->mf64_MeasuredTimeFirstCursor;
+      const double f64_Diff = this->mf64_MeasuredTimeSecondCursor - this->mf64_MeasuredTimeFirstCursor;
 
       QString c_Text = static_cast<QString>("dt = %1 ms").arg(f64_Diff);
       c_Text.replace(QLocale::c().decimalPoint(), QLocale::system().decimalPoint(), Qt::CaseInsensitive);
@@ -2286,12 +2286,12 @@ void C_SyvDaChaPlotHandlerWidget::m_UpdateMeasurementCursors(void)
    if (this->me_SettingCursorMode != eSETTING_CM_NO_CURSOR)
    {
       // In case of active measurement, the measurement must be repeated when zoomed or dragged
-      const float64_t f64_CurrPosFirstCursorHorizontal = this->mpc_FirstCursor->start->coords().x();
+      const double f64_CurrPosFirstCursorHorizontal = this->mpc_FirstCursor->start->coords().x();
       this->m_CursorItemMovedOnHorizontalAxis(this->mpc_FirstCursor, f64_CurrPosFirstCursorHorizontal);
 
       if (this->me_SettingCursorMode == eSETTING_CM_TWO_DIFF_CURSOR)
       {
-         const float64_t f64_CurrPosSecondCursorHorizontal = this->mpc_SecondCursor->start->coords().x();
+         const double f64_CurrPosSecondCursorHorizontal = this->mpc_SecondCursor->start->coords().x();
          this->m_CursorItemMovedOnHorizontalAxis(this->mpc_SecondCursor, f64_CurrPosSecondCursorHorizontal);
       }
    }
@@ -2307,7 +2307,7 @@ void C_SyvDaChaPlotHandlerWidget::m_UpdateMeasurementCursors(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::m_CheckMeasurementCursorsVisibility(void)
 {
-   const float64_t f64_HorizontalAxisLower = this->mpc_Ui->pc_Plot->xAxis->range().lower;
+   const double f64_HorizontalAxisLower = this->mpc_Ui->pc_Plot->xAxis->range().lower;
 
    if (this->mpc_FirstCursor != nullptr)
    {
@@ -2354,7 +2354,7 @@ void C_SyvDaChaPlotHandlerWidget::m_Zoom(const bool oq_ZoomIn)
    tgl_assert(pc_AxisRect != nullptr);
    if (pc_AxisRect != nullptr)
    {
-      float64_t f64_Factor;
+      double f64_Factor;
       QRectF c_RectChart = pc_AxisRect->rect();
       const QPoint c_Center = pc_AxisRect->center();
 
@@ -2749,10 +2749,10 @@ void C_SyvDaChaPlotHandlerWidget::m_AdaptCursorMode(void)
 void C_SyvDaChaPlotHandlerWidget::m_ConfigureCursorMode(const E_SettingCursorMode oe_SettingCursorMode)
 {
    // Calculate start position depending on x axis range
-   const float64_t f64_StartHorizontalAxis = this->mpc_Ui->pc_Plot->xAxis->range().lower;
-   const float64_t f64_RangeHorizontalAxis = this->mpc_Ui->pc_Plot->xAxis->range().upper - f64_StartHorizontalAxis;
-   const float64_t f64_InitHorizontalPosFirstCursor = f64_StartHorizontalAxis + (f64_RangeHorizontalAxis * 0.3);
-   const float64_t f64_InitHorizontalPosSecondCursor = f64_StartHorizontalAxis + (f64_RangeHorizontalAxis * 0.6);
+   const double f64_StartHorizontalAxis = this->mpc_Ui->pc_Plot->xAxis->range().lower;
+   const double f64_RangeHorizontalAxis = this->mpc_Ui->pc_Plot->xAxis->range().upper - f64_StartHorizontalAxis;
+   const double f64_InitHorizontalPosFirstCursor = f64_StartHorizontalAxis + (f64_RangeHorizontalAxis * 0.3);
+   const double f64_InitHorizontalPosSecondCursor = f64_StartHorizontalAxis + (f64_RangeHorizontalAxis * 0.6);
 
    // No real change, do nothing
    if (this->me_SettingCursorMode != oe_SettingCursorMode)
@@ -2886,7 +2886,7 @@ void C_SyvDaChaPlotHandlerWidget::m_ConfigureCursorMode(const E_SettingCursorMod
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::m_CreateCursor(C_SyvDaChaPlotCursorItem ** const oppc_ItemCursor,
-                                                 const float64_t of64_InitHorizontalPos, const QColor & orc_Color,
+                                                 const double of64_InitHorizontalPos, const QColor & orc_Color,
                                                  const QString & orc_LabelText)
 {
    C_SyvDaChaPlotCursorItem * const pc_Cursor = new C_SyvDaChaPlotCursorItem(this->mpc_Ui->pc_Plot,
@@ -3042,7 +3042,7 @@ void C_SyvDaChaPlotHandlerWidget::m_ShowSamplePoints(const bool oq_ShowSamplePoi
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::m_LoadState(const bool oq_IsPaused, const bool orq_AreSamplePointsShown,
-                                              const std::vector<std::array<float64_t, 4> > & orc_ScreenState)
+                                              const std::vector<std::array<double, 4> > & orc_ScreenState)
 {
    uint32_t u32_ScreenStateCounter;
 
@@ -3052,7 +3052,7 @@ void C_SyvDaChaPlotHandlerWidget::m_LoadState(const bool oq_IsPaused, const bool
    if (orc_ScreenState.size() > 0UL)
    {
       // Adapt X axis
-      const std::array<float64_t, 4> & rc_DisplayRange = orc_ScreenState[0UL];
+      const std::array<double, 4> & rc_DisplayRange = orc_ScreenState[0UL];
       this->mpc_Ui->pc_Plot->xAxis->setRange(rc_DisplayRange[0UL], rc_DisplayRange[1UL]);
    }
    else
@@ -3066,7 +3066,7 @@ void C_SyvDaChaPlotHandlerWidget::m_LoadState(const bool oq_IsPaused, const bool
       const QCPAxis * const pc_VerticalAxis = this->m_GetVerticalAxis(u32_ScreenStateCounter);
       if (pc_VerticalAxis != nullptr)
       {
-         const std::array<float64_t, 4> & rc_DisplayRange = orc_ScreenState[u32_ScreenStateCounter];
+         const std::array<double, 4> & rc_DisplayRange = orc_ScreenState[u32_ScreenStateCounter];
          if (u32_ScreenStateCounter == 0U)
          {
             this->mpc_Ui->pc_Plot->yAxis->setRange(rc_DisplayRange[2UL], rc_DisplayRange[3UL]);
@@ -3090,14 +3090,14 @@ void C_SyvDaChaPlotHandlerWidget::m_LoadState(const bool oq_IsPaused, const bool
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::m_SaveState(bool & orq_IsPaused, int32_t & ors32_SplitterLeftWidth,
-                                              bool & orq_AreSamplePointsShown, std::vector<std::array<float64_t, 4> > &
+                                              bool & orq_AreSamplePointsShown, std::vector<std::array<double, 4> > &
                                               orc_ScreenState)
 {
    int32_t s32_VerticalAxisCounter;
    const QList<int32_t> c_Sizes = this->mpc_Ui->pc_Splitter->sizes();
 
    // The values for the X axis are always the same
-   std::array<float64_t, 4> c_DisplayRange =
+   std::array<double, 4> c_DisplayRange =
    {
       {this->mpc_Ui->pc_Plot->xAxis->range().lower, this->mpc_Ui->pc_Plot->xAxis->range().upper, 0.0, 0.0}
    };

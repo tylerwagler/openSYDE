@@ -50,7 +50,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueMlvSignalManager::C_SdBueMlvSignalManager(C_PuiSdNodeCanMessageSyncManager * const opc_SyncManager,
                                                  const C_OscCanMessageIdentificationIndices & orc_MessageId,
-                                                 const uint16_t ou16_MaximumCountBits, const float64_t of64_Space,
+                                                 const uint16_t ou16_MaximumCountBits, const double of64_Space,
                                                  QObject * const opc_Parent) :
    QObject(opc_Parent),
    C_GiBiCustomToolTip(),
@@ -286,7 +286,7 @@ bool C_SdBueMlvSignalManager::SetLastBit(const uint16_t ou16_Position)
    \param[in]     of64_ZetOrder      New ZOrder value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMlvSignalManager::SetZeOrder(const float64_t of64_ZetOrder) const
+void C_SdBueMlvSignalManager::SetZeOrder(const double of64_ZetOrder) const
 {
    int32_t s32_Counter;
 
@@ -303,9 +303,9 @@ void C_SdBueMlvSignalManager::SetZeOrder(const float64_t of64_ZetOrder) const
    Actual ZOrder value
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_SdBueMlvSignalManager::GetZeOrder(void) const
+double C_SdBueMlvSignalManager::GetZeOrder(void) const
 {
-   float64_t f64_Return = 0.0;
+   double f64_Return = 0.0;
 
    if (this->mc_VecSignalItems.size() > 0)
    {
@@ -544,7 +544,7 @@ void C_SdBueMlvSignalManager::GenerateHint(void)
    \param[in]     of64_SingleItemHeight     New item height
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMlvSignalManager::Update(const float64_t of64_SingleItemWidth, const float64_t of64_SingleItemHeight)
+void C_SdBueMlvSignalManager::Update(const double of64_SingleItemWidth, const double of64_SingleItemHeight)
 {
    QVector<C_SdBueMlvSignalItem *>::const_iterator pc_ItItem;
 

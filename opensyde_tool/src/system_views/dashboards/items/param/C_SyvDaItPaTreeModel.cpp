@@ -2900,11 +2900,11 @@ void C_SyvDaItPaTreeModel::h_AdaptFloatRangeOfValueAndAppendResults(C_OscNodeDat
    if (pc_Element != nullptr)
    {
       bool q_WasChanged = false;
-      std::vector<float64_t> c_Values;
+      std::vector<double> c_Values;
       C_SdNdeDpContentUtil::h_GetValuesAsFloat64(orc_Content, c_Values);
       for (uint32_t u32_ItVal = 0UL; u32_ItVal < c_Values.size(); ++u32_ItVal)
       {
-         const float64_t f64_Val = C_OscUtils::h_GetValueScaled(c_Values[u32_ItVal],
+         const double f64_Val = C_OscUtils::h_GetValueScaled(c_Values[u32_ItVal],
                                                                 pc_Element->f64_Factor,
                                                                 pc_Element->f64_Offset, false);
          if (std::isnan(f64_Val) || std::isinf(f64_Val))
@@ -2942,11 +2942,11 @@ void C_SyvDaItPaTreeModel::h_AdaptFloatRangeOfValueAndAppendResults(C_OscNodeDat
 void C_SyvDaItPaTreeModel::h_AdaptFloatRangeOfValue(C_OscNodeDataPoolContent & orc_Content,
                                                     const C_OscNodeDataPoolListElement & orc_Description)
 {
-   std::vector<float64_t> c_Values;
+   std::vector<double> c_Values;
    C_SdNdeDpContentUtil::h_GetValuesAsFloat64(orc_Content, c_Values);
    for (uint32_t u32_ItVal = 0UL; u32_ItVal < c_Values.size(); ++u32_ItVal)
    {
-      float64_t f64_Val = C_OscUtils::h_GetValueScaled(c_Values[u32_ItVal],
+      double f64_Val = C_OscUtils::h_GetValueScaled(c_Values[u32_ItVal],
                                                        orc_Description.f64_Factor,
                                                        orc_Description.f64_Offset, false);
       if (std::isnan(f64_Val) || std::isinf(f64_Val))
@@ -2965,7 +2965,7 @@ void C_SyvDaItPaTreeModel::h_AdaptFloatRangeOfValue(C_OscNodeDataPoolContent & o
    \param[out]  orf64_Value   Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaTreeModel::h_FixInvalidFloatValue(float64_t & orf64_Value)
+void C_SyvDaItPaTreeModel::h_FixInvalidFloatValue(double & orf64_Value)
 {
    if (std::isnan(orf64_Value))
    {

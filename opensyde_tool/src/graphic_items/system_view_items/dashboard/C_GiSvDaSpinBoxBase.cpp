@@ -17,7 +17,7 @@
 #include <cmath>
 #include <limits>
 #include "gitypes.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
@@ -200,7 +200,7 @@ void C_GiSvDaSpinBoxBase::UpdateShowValue(void)
       if (this->mq_ManualReadStarted == true)
       {
          QString c_Value;
-         float64_t f64_ScaledValue;
+         double f64_ScaledValue;
          if (this->m_GetLastValue(0UL, c_Value, nullptr, &f64_ScaledValue) == C_NO_ERR)
          {
             this->mpc_SpinBoxWidget->SetValue(f64_ScaledValue);
@@ -511,7 +511,7 @@ void C_GiSvDaSpinBoxBase::m_UpdateStaticValues(void)
             this->mpc_SpinBoxWidget->SetUnit(c_Scaling.c_Unit);
             tgl_assert(C_SdNdeDpContentUtil::h_SimpleConvertToVariant(pc_Box->c_Value, c_VariantValue) == C_NO_ERR);
 
-            float64_t f64_Test;
+            double f64_Test;
             pc_Box->c_Value.GetAnyValueAsFloat64(f64_Test, 0);
             this->mpc_SpinBoxWidget->SetValue(c_VariantValue);
          }

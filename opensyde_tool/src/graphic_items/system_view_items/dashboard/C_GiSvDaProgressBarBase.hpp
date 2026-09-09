@@ -56,8 +56,8 @@ public:
 
 private:
    C_SyvDaItDashboardProgressBarWidget * const mpc_ProgressBarWidget;
-   float64_t mf64_UnscaledMin;
-   float64_t mf64_UnscaledMax;
+   double mf64_UnscaledMin;
+   double mf64_UnscaledMax;
 
    //Avoid call
    C_GiSvDaProgressBarBase(const C_GiSvDaProgressBarBase &);

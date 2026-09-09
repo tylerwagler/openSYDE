@@ -207,10 +207,10 @@ void C_GiInfo::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsIte
    const int32_t s32_IconOffset = (static_cast<int32_t>(opc_Option->rect.height()) - this->ms32_IconSize) / 2;
    const int32_t s32_IconRectHorizontal = static_cast<int32_t>(opc_Option->rect.topLeft().x()) + s32_IconOffset;
    const int32_t s32_IconRectVertical = static_cast<int32_t>(opc_Option->rect.topLeft().y()) + s32_IconOffset;
-   const QRectF c_IconRect(static_cast<float64_t>(s32_IconRectHorizontal),
-                           static_cast<float64_t>(s32_IconRectVertical),
-                           static_cast<float64_t>(this->ms32_IconSize),
-                           static_cast<float64_t>(this->ms32_IconSize));
+   const QRectF c_IconRect(static_cast<double>(s32_IconRectHorizontal),
+                           static_cast<double>(s32_IconRectVertical),
+                           static_cast<double>(this->ms32_IconSize),
+                           static_cast<double>(this->ms32_IconSize));
 
    //Background
    if (this->mc_BackgroundColor.alpha() > 0)
@@ -219,9 +219,9 @@ void C_GiInfo::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsIte
       opc_Painter->setBrush(static_cast<QBrush>(this->mc_BackgroundColor));
       opc_Painter->setPen(Qt::NoPen);
       opc_Painter->drawRoundedRect(opc_Option->rect,
-                                   std::min(static_cast<float64_t>(opc_Option->rect.width()) / 2.0,
-                                            static_cast<float64_t>(opc_Option->rect.height()) / 2.0),
-                                   static_cast<float64_t>(opc_Option->rect.height()) / 2.0);
+                                   std::min(static_cast<double>(opc_Option->rect.width()) / 2.0,
+                                            static_cast<double>(opc_Option->rect.height()) / 2.0),
+                                   static_cast<double>(opc_Option->rect.height()) / 2.0);
       opc_Painter->restore();
    }
 
@@ -252,7 +252,7 @@ void C_GiInfo::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsIte
    opc_Painter->setPen(QPen(this->mc_TextColor, this->mc_TextFont.pointSizeF()));
    opc_Painter->drawText(QRect(QPoint(s32_TextHorizontal, s32_TextVertical), QSize(s32_TextWidth,
                                                                                    s32_TextHeight)), ms32_TextAlignment,
-                         C_Uti::h_AdaptStringToSize(this->mc_Text, c_Metrics, static_cast<float64_t>(s32_TextWidth)));
+                         C_Uti::h_AdaptStringToSize(this->mc_Text, c_Metrics, static_cast<double>(s32_TextWidth)));
    opc_Painter->restore();
 }
 

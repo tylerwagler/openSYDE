@@ -644,8 +644,8 @@ void C_SyvUpInformationWidget::m_UpdateDataTransfer(const uint64_t & oru64_Overa
    QString c_Progress;
    QString c_Complete;
    QString c_Unit;
-   const float64_t f64_OverallFlashedBytes = static_cast<float64_t>(oru64_OverallFlashedBytes);
-   const float64_t f64_OverallFilesSize = static_cast<float64_t>(this->mc_FileSizeInformation.GetOverallFilesSize());
+   const double f64_OverallFlashedBytes = static_cast<double>(oru64_OverallFlashedBytes);
+   const double f64_OverallFilesSize = static_cast<double>(this->mc_FileSizeInformation.GetOverallFilesSize());
 
    this->mu64_CurrentFlashedBytes = oru64_OverallFlashedBytes;
    this->mq_ShowDataRateBytesPerSecond = oq_ShowDataRate;
@@ -669,7 +669,7 @@ void C_SyvUpInformationWidget::m_UpdateDataTransfer(const uint64_t & oru64_Overa
       //kB
       c_Unit = "kB";
       c_Progress = QString::number(f64_OverallFlashedBytes / 1024.0, 'f', 1);
-      c_Complete = QString::number(f64_OverallFilesSize / static_cast<float32_t>(1024ULL), 'f', 1);
+      c_Complete = QString::number(f64_OverallFilesSize / static_cast<float>(1024ULL), 'f', 1);
    }
    else
    {
@@ -791,11 +791,11 @@ void C_SyvUpInformationWidget::m_UpdateDataRate()
       QString c_DataTransferRate;
       QString c_Unit;
       const uint64_t u64_Timespan = this->mu64_FlashedBytesTimestampPrev - this->mu64_FlashedBytesTimestampPrevPrev;
-      const float64_t f64_Timespan = static_cast<float64_t>(u64_Timespan);
+      const double f64_Timespan = static_cast<double>(u64_Timespan);
       const uint64_t u64_NumberOfFlashedBytesInTimeSpan = this->mu64_FlashedBytesHistoryPrev -
                                                           this->mu64_FlashedBytesHistoryPrevPrev;
-      const float64_t f64_NumberOfFlashedBytesInTimeSpan = static_cast<float64_t>(u64_NumberOfFlashedBytesInTimeSpan);
-      const float64_t f64_NumberOfFlashedBytesThisSecond = f64_NumberOfFlashedBytesInTimeSpan / (f64_Timespan * 0.001);
+      const double f64_NumberOfFlashedBytesInTimeSpan = static_cast<double>(u64_NumberOfFlashedBytesInTimeSpan);
+      const double f64_NumberOfFlashedBytesThisSecond = f64_NumberOfFlashedBytesInTimeSpan / (f64_Timespan * 0.001);
       const uint64_t u64_NumberOfFlashedBytesThisSecond = static_cast<uint64_t>(f64_NumberOfFlashedBytesThisSecond);
 
       //Remember last value

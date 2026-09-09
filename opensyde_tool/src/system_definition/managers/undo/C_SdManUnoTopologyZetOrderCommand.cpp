@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "gitypes.hpp"
 #include "C_SdManUnoTopologyZetOrderCommand.hpp"
 
@@ -45,7 +45,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyZetOrderCommand::C_SdManUnoTopologyZetOrderCommand(QGraphicsScene * const opc_Scene,
                                                                      const vector<uint64_t> & orc_Ids,
-                                                                     const vector<float64_t> & orc_NewZetValues,
+                                                                     const vector<double> & orc_NewZetValues,
                                                                      QUndoCommand * const opc_Parent) :
    C_SebUnoZetOrderCommand(opc_Scene, orc_Ids, orc_NewZetValues, opc_Parent)
 {
@@ -63,7 +63,7 @@ C_SdManUnoTopologyZetOrderCommand::~C_SdManUnoTopologyZetOrderCommand()
 void C_SdManUnoTopologyZetOrderCommand::h_CheckZetOrderPriority(const QList<QGraphicsItem *> & orc_SelectedItems,
                                                                 const QList<QGraphicsItem *> & orc_Items,
                                                                 QMap<QGraphicsItem *,
-                                                                     float64_t> & orc_NewZetValues)
+                                                                     double> & orc_NewZetValues)
 {
    QList<QGraphicsItem *>::const_iterator c_ItSelectedItem;
    QList<QGraphicsItem *>::const_iterator c_ItItem;
@@ -117,7 +117,7 @@ void C_SdManUnoTopologyZetOrderCommand::h_CheckZetOrderPriority(const QList<QGra
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManUnoTopologyZetOrderCommand::mh_CheckZetOrderOfBusConnectors(C_GiLiBusConnector * const opc_Item,
                                                                         QMap<QGraphicsItem *,
-                                                                             float64_t> & orc_NewZetValues)
+                                                                             double> & orc_NewZetValues)
 {
    if (opc_Item != nullptr)
    {
@@ -143,15 +143,15 @@ void C_SdManUnoTopologyZetOrderCommand::mh_CheckZetOrderOfBusConnectors(C_GiLiBu
    \param[in]     orf64_Value New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdManUnoTopologyZetOrderCommand::mh_InsertOrReplaceByMinimum(QMap<QGraphicsItem *, float64_t> & orc_Map,
+void C_SdManUnoTopologyZetOrderCommand::mh_InsertOrReplaceByMinimum(QMap<QGraphicsItem *, double> & orc_Map,
                                                                     QGraphicsItem * const opc_Key,
-                                                                    const float64_t & orf64_Value)
+                                                                    const double & orf64_Value)
 {
-   const QMap<QGraphicsItem *, float64_t>::iterator c_Found = orc_Map.find(opc_Key);
+   const QMap<QGraphicsItem *, double>::iterator c_Found = orc_Map.find(opc_Key);
 
    if (c_Found != orc_Map.end())
    {
-      const float64_t f64_Improved = std::min(*c_Found, orf64_Value);
+      const double f64_Improved = std::min(*c_Found, orf64_Value);
       orc_Map.erase(c_Found);
       orc_Map.insert(opc_Key, f64_Improved);
    }

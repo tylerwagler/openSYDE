@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "C_SdTooltipUtil.hpp"
@@ -151,7 +151,7 @@ QString C_SdTooltipUtil::h_GetToolTipContentSignal(const C_OscCanSignal & orc_Si
                                                    const QString & orc_AdditionalInformation)
 {
    QString c_ToolTipContent = "";
-   float64_t f64_Value = 0.0;
+   double f64_Value = 0.0;
 
    // Object Dictionary (only CANopen Protocol)
    if (oe_ProtocolType == C_OscCanProtocol::eCAN_OPEN)

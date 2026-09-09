@@ -27,7 +27,7 @@ public:
    C_SyvDaDashboardSnapshot(void);
 
    void SetDataPositionOffset(const QPointF & orc_NewPos) override;
-   void SetDataZetOffset(const float64_t of64_HighestUsedZetValue) override;
+   void SetDataZetOffset(const double of64_HighestUsedZetValue) override;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

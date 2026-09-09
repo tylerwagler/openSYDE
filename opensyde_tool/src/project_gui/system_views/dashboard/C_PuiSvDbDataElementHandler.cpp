@@ -562,7 +562,7 @@ void C_PuiSvDbDataElementHandler::AddNewNvmValueIntoQueue(
    Value as scaled string
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_PuiSvDbDataElementHandler::GetUnscaledValueAsScaledString(const float64_t of64_Value,
+QString C_PuiSvDbDataElementHandler::GetUnscaledValueAsScaledString(const double of64_Value,
                                                                     const uint32_t ou32_IndexElement) const
 {
    QString c_Retval;
@@ -602,9 +602,9 @@ QString C_PuiSvDbDataElementHandler::GetUnscaledValueAsScaledString(const float6
    Value as scaled string
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_PuiSvDbDataElementHandler::GetUnscaledValueInRangeAsScaledString(const float64_t of64_Value,
+QString C_PuiSvDbDataElementHandler::GetUnscaledValueInRangeAsScaledString(const double of64_Value,
                                                                            const uint32_t ou32_IndexElement,
-                                                                           float64_t * const opf64_Progress)
+                                                                           double * const opf64_Progress)
 const
 {
    QString c_Retval;
@@ -630,9 +630,9 @@ const
          c_Retval = c_FormatterConfig.GetSingleValueContentFormatted(c_Tmp, 0UL, c_Scaling, nullptr);
          if (opf64_Progress != nullptr)
          {
-            float64_t f64_Min;
-            float64_t f64_Max;
-            float64_t f64_Value;
+            double f64_Min;
+            double f64_Max;
+            double f64_Value;
             const uint32_t u32_Index = c_Id.GetArrayElementIndexOrZero();
             //Get restricted value "progress"
             C_SdNdeDpContentUtil::h_GetValueAsFloat64(pc_Element->c_MinValue, f64_Min, u32_Index);
@@ -684,8 +684,8 @@ void C_PuiSvDbDataElementHandler::m_OnDataElementRegistered(const uint32_t ou32_
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
                                                     QString & orc_ScaledValue,
-                                                    float64_t * const opf64_UnscaledValueAsFloat,
-                                                    float64_t * const opf64_ScaledValueAsFloat)
+                                                    double * const opf64_UnscaledValueAsFloat,
+                                                    double * const opf64_ScaledValueAsFloat)
 {
    int32_t s32_Return = C_RANGE;
    C_PuiSvDbNodeDataPoolListElementId c_Id;
@@ -746,7 +746,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
                                                     std::vector<QString> & orc_ScaledValues,
-                                                    std::vector<float64_t> & orc_UnscaledValues)
+                                                    std::vector<double> & orc_UnscaledValues)
 {
    int32_t s32_Return = C_RANGE;
 
@@ -804,7 +804,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                                    std::vector<float64_t> & orc_Values, const bool oq_UseScaling)
+                                                    std::vector<double> & orc_Values, const bool oq_UseScaling)
 {
    int32_t s32_Return = C_RANGE;
 
@@ -817,7 +817,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
       if (this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() > 0)
       {
          const int32_t s32_LastIndex = this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() - 1;
-         float64_t f64_Temp;
+         double f64_Temp;
 
          // Get the newest value
          C_SdNdeDpContentUtil::h_GetValuesAsFloat64(
@@ -871,7 +871,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDbDataElementHandler::m_GetAllValues(const uint32_t ou32_WidgetDataPoolElementIndex,
                                                     QString & orc_ScaledFormattedLastValue,
-                                                    QVector<float64_t> & orc_ScaledValues,
+                                                    QVector<double> & orc_ScaledValues,
                                                     QVector<uint32_t> & orc_Timestamps)
 {
    int32_t s32_Return = C_RANGE;
@@ -896,7 +896,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetAllValues(const uint32_t ou32_WidgetDa
               c_ItItem != this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].end();
               ++c_ItItem)
          {
-            float64_t f64_Temp;
+            double f64_Temp;
             C_SdNdeDpContentUtil::h_GetValueAsFloat64(*c_ItItem, f64_Temp, u32_ArrayIndex);
             orc_ScaledValues[u32_Counter] = C_OscUtils::h_GetValueScaled(
                f64_Temp,
@@ -1061,7 +1061,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetTimoutPercentage100(const uint32_t ou3
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDbDataElementHandler::m_ScaleMinMax(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                                   float64_t & orf64_Min, float64_t & orf64_Max) const
+                                                   double & orf64_Min, double & orf64_Max) const
 {
    int32_t s32_Return = C_RANGE;
 
@@ -1770,7 +1770,7 @@ void C_PuiSvDbDataElementHandler::m_GetAllRegisteredElements(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_PuiSvDbDataElementHandler::C_DpElementConfig::GetSingleValueContentFormatted(
    const C_PuiSvDbDataElementContent & orc_Value, const uint32_t ou32_Index,
-   float64_t * const opf64_UnscaledValueAsFloat, float64_t * const opf64_ScaledValueAsFloat) const
+   double * const opf64_UnscaledValueAsFloat, double * const opf64_ScaledValueAsFloat) const
 {
    return this->c_FormatterConfig.GetSingleValueContentFormatted(orc_Value, ou32_Index, this->c_Scaling,
                                                                  opf64_UnscaledValueAsFloat,
@@ -1795,7 +1795,7 @@ QString C_PuiSvDbDataElementHandler::C_DpElementConfig::GetSingleValueContentFor
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::vector<QString> C_PuiSvDbDataElementHandler::C_DpElementConfig::GetValuesContentFormatted(
-   const C_PuiSvDbDataElementContent & orc_Value, std::vector<float64_t> & orc_UnscaledValueAsFloat)
+   const C_PuiSvDbDataElementContent & orc_Value, std::vector<double> & orc_UnscaledValueAsFloat)
 const
 {
    return this->c_FormatterConfig.GetValuesContentFormatted(orc_Value, this->c_Scaling, orc_UnscaledValueAsFloat);
@@ -1826,7 +1826,7 @@ void C_PuiSvDbDataElementHandler::m_SetWidgetDataPoolElementCount(const uint32_t
    String for value
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_PuiSvDbDataElementHandler::mh_GetStringForScaledValue(const float64_t of64_Value,
+QString C_PuiSvDbDataElementHandler::mh_GetStringForScaledValue(const double of64_Value,
                                                                 const C_OscNodeDataPoolContent::E_Type oe_Type)
 {
    QString c_Retval;

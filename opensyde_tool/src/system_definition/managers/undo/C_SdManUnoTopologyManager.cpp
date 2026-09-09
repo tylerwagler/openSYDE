@@ -75,9 +75,9 @@ C_SdManUnoTopologyManager::~C_SdManUnoTopologyManager(void)
 void C_SdManUnoTopologyManager::AdaptZetOrder(const QList<QGraphicsItem *> & orc_SelectedItems,
                                               const QList<QGraphicsItem *> & orc_Items, const bool oq_BringToFront)
 {
-   QMap<QGraphicsItem *, float64_t> c_Changes;
+   QMap<QGraphicsItem *, double> c_Changes;
    vector<uint64_t> c_Ids;
-   vector<float64_t> c_Values;
+   vector<double> c_Values;
    QList<QGraphicsItem *> c_List;
    C_SdManUnoTopologyZetOrderCommand * pc_ZetOrderCommand;
 
@@ -85,7 +85,7 @@ void C_SdManUnoTopologyManager::AdaptZetOrder(const QList<QGraphicsItem *> & orc
                                                       c_Changes);
    C_SdManUnoTopologyZetOrderCommand::h_CheckZetOrderPriority(orc_SelectedItems, orc_Items, c_Changes);
 
-   for (QMap<QGraphicsItem *, float64_t>::const_iterator c_ItChanges = c_Changes.begin();
+   for (QMap<QGraphicsItem *, double>::const_iterator c_ItChanges = c_Changes.begin();
         c_ItChanges != c_Changes.end();
         ++c_ItChanges)
    {
@@ -336,7 +336,7 @@ void C_SdManUnoTopologyManager::DoAddNodeToNodeConnectionUsingExistingBus(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManUnoTopologyManager::DoAddSnapshot(const std::vector<uint64_t> & orc_UniqueIds,
                                               const C_SdTopologyDataSnapshot & orc_Snapshot, const QPointF & orc_NewPos,
-                                              const float64_t of64_HighestUsedZetValue)
+                                              const double of64_HighestUsedZetValue)
 {
    C_SdManUnoTopologyAddSnapshotCommand * pc_AddCommand;
 

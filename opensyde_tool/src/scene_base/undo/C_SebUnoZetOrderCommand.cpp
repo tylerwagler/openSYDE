@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "gitypes.hpp"
 #include "C_GiBiBase.hpp"
 #include "C_SebUnoZetOrderSortHelper.hpp"
@@ -47,7 +47,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoZetOrderCommand::C_SebUnoZetOrderCommand(QGraphicsScene * const opc_Scene, const vector<uint64_t> & orc_Ids,
-                                                 const vector<float64_t> & orc_NewZetValues,
+                                                 const vector<double> & orc_NewZetValues,
                                                  QUndoCommand * const opc_Parent) :
    C_SebUnoBaseCommand(opc_Scene, orc_Ids, "Reorder drawing element(s)", opc_Parent),
    mc_NewZetValues(orc_NewZetValues)
@@ -105,7 +105,7 @@ void C_SebUnoZetOrderCommand::h_AdaptZetOrder(const QGraphicsScene * const opc_S
                                               const QList<QGraphicsItem *> & orc_Items,
                                               const QList<QGraphicsItem *> & orc_SelectedItems,
                                               const bool oq_BringToFront, QMap<QGraphicsItem *,
-                                                                               float64_t> & orc_NewZetValues)
+                                                                               double> & orc_NewZetValues)
 {
    const C_SebScene * const pc_Scene = dynamic_cast<const C_SebScene * const>(opc_Scene);
 
@@ -128,7 +128,7 @@ void C_SebUnoZetOrderCommand::h_AdaptZetOrder(const QGraphicsScene * const opc_S
    \param[in] orc_Values New Z values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SebUnoZetOrderCommand::m_ApplyZetValues(const std::vector<float64_t> & orc_Values) const
+void C_SebUnoZetOrderCommand::m_ApplyZetValues(const std::vector<double> & orc_Values) const
 {
    const vector<QGraphicsItem *> c_AffectedItems = this->m_GetSceneItems();
 
@@ -163,7 +163,7 @@ void C_SebUnoZetOrderCommand::mh_CreateZetValueMap(const QGraphicsScene * const 
                                                    const QList<QGraphicsItem *> & orc_Items,
                                                    const QList<QGraphicsItem *> & orc_SelectedItems,
                                                    const bool oq_BringToFront, QMap<QGraphicsItem *,
-                                                                                    float64_t> & orc_NewZetValues)
+                                                                                    double> & orc_NewZetValues)
 {
    if (oq_BringToFront)
    {
@@ -171,7 +171,7 @@ void C_SebUnoZetOrderCommand::mh_CreateZetValueMap(const QGraphicsScene * const 
 
       if (pc_Scene != nullptr)
       {
-         float64_t f64_Value = pc_Scene->GetHighestUsedZetValueList(orc_Items);
+         double f64_Value = pc_Scene->GetHighestUsedZetValueList(orc_Items);
          //Start with first item -> most obscured one
          for (QList<QGraphicsItem *>::const_iterator c_ItItem = orc_SelectedItems.begin();
               c_ItItem != orc_SelectedItems.end(); ++c_ItItem)
@@ -186,7 +186,7 @@ void C_SebUnoZetOrderCommand::mh_CreateZetValueMap(const QGraphicsScene * const 
    }
    else
    {
-      float64_t f64_Value = C_SebUnoZetOrderCommand::mh_GetLowestUsedZetValueList(opc_Scene, orc_Items);
+      double f64_Value = C_SebUnoZetOrderCommand::mh_GetLowestUsedZetValueList(opc_Scene, orc_Items);
       //Start with last item -> most visible one
       for (QList<QGraphicsItem *>::const_reverse_iterator c_ItItem = orc_SelectedItems.rbegin();
            c_ItItem != orc_SelectedItems.rend(); ++c_ItItem)
@@ -210,11 +210,11 @@ void C_SebUnoZetOrderCommand::mh_CreateZetValueMap(const QGraphicsScene * const 
    Lowest used Z value of all scene items
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_SebUnoZetOrderCommand::mh_GetLowestUsedZetValueList(const QGraphicsScene * const opc_Scene,
+double C_SebUnoZetOrderCommand::mh_GetLowestUsedZetValueList(const QGraphicsScene * const opc_Scene,
                                                                 const QList<QGraphicsItem *> & orc_Items)
 {
    bool q_NothingFound = true;
-   float64_t f64_Retval = std::numeric_limits<float64_t>::max();
+   double f64_Retval = std::numeric_limits<double>::max();
    const C_SebScene * const pc_Scene = dynamic_cast<const C_SebScene * const>(opc_Scene);
 
    if (pc_Scene != nullptr)

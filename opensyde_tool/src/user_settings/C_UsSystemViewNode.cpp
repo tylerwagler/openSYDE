@@ -70,7 +70,7 @@ void C_UsSystemViewNode::SetSectionsExpanded(const QVector<bool> & orc_SectionsE
    Update data rate history
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QMap<uint32_t, float64_t> & C_UsSystemViewNode::GetUpdateDataRateHistory() const
+const QMap<uint32_t, double> & C_UsSystemViewNode::GetUpdateDataRateHistory() const
 {
    return this->mc_UpdateDataRateHistory;
 }
@@ -82,7 +82,7 @@ const QMap<uint32_t, float64_t> & C_UsSystemViewNode::GetUpdateDataRateHistory()
    \param[in]  of64_Value     Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsSystemViewNode::AddUpdateDataRate(const uint32_t ou32_Checksum, const float64_t of64_Value)
+void C_UsSystemViewNode::AddUpdateDataRate(const uint32_t ou32_Checksum, const double of64_Value)
 {
    this->mc_UpdateDataRateHistory.insert(ou32_Checksum, of64_Value);
 }

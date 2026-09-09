@@ -228,8 +228,8 @@ void C_GiSyBoundaryWidget::m_UpdatePreview(void)
    C_GiBiBoundary * const pc_Item = new C_GiBiBoundary(0ULL, 200.0, 70.0);
    const QSizeF c_ItemSize = pc_Item->GetSize();
 
-   pc_Item->setPos((static_cast<float64_t>(c_ViewSize.width()) - c_ItemSize.width()) / 2.0,
-                   (static_cast<float64_t>(c_ViewSize.height()) - c_ItemSize.height()) / 2.0);
+   pc_Item->setPos((static_cast<double>(c_ViewSize.width()) - c_ItemSize.width()) / 2.0,
+                   (static_cast<double>(c_ViewSize.height()) - c_ItemSize.height()) / 2.0);
 
    pc_Item->SetBorderColor(this->mc_BorderColor);
    pc_Item->SetBackgroundColor(this->mc_BackgroundColor);

@@ -27,7 +27,7 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const float64_t C_OscNodeDataPoolContentUtil::mhf64_EPSILON = 1e-5; // to check for a 6 digit precision (openSYDE
+const double C_OscNodeDataPoolContentUtil::mhf64_EPSILON = 1e-5; // to check for a 6 digit precision (openSYDE
                                                                     // default)
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
@@ -143,19 +143,19 @@ void C_OscNodeDataPoolContentUtil::h_ZeroContent(C_OscNodeDataPoolContent & orc_
    \param[in]     ou32_ArrayIndex Optional index for array position if content class has an array
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Value,
+void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const double of64_Value,
                                                        C_OscNodeDataPoolContent & orc_Content,
                                                        const uint32_t ou32_ArrayIndex)
 {
    bool q_ValueAssigned = false;
    //Use this instead of +0.5 because this also works with negative numbers
-   const float64_t f64_IntegerValue = std::floor((of64_Value * 10.0) + 0.5) / 10.0;
+   const double f64_IntegerValue = std::floor((of64_Value * 10.0) + 0.5) / 10.0;
 
    //Handle maximum values for integer type
    switch (orc_Content.GetType())
    {
    case C_OscNodeDataPoolContent::eUINT8:
-      if (of64_Value <= static_cast<float64_t>(std::numeric_limits<uint8_t>::min()))
+      if (of64_Value <= static_cast<double>(std::numeric_limits<uint8_t>::min()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -167,7 +167,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
          }
          q_ValueAssigned = true;
       }
-      if (f64_IntegerValue >= static_cast<float64_t>(std::numeric_limits<uint8_t>::max()))
+      if (f64_IntegerValue >= static_cast<double>(std::numeric_limits<uint8_t>::max()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -181,7 +181,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
       }
       break;
    case C_OscNodeDataPoolContent::eUINT16:
-      if (of64_Value <= static_cast<float64_t>(std::numeric_limits<uint16_t>::min()))
+      if (of64_Value <= static_cast<double>(std::numeric_limits<uint16_t>::min()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -193,7 +193,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
          }
          q_ValueAssigned = true;
       }
-      if (f64_IntegerValue >= static_cast<float64_t>(std::numeric_limits<uint16_t>::max()))
+      if (f64_IntegerValue >= static_cast<double>(std::numeric_limits<uint16_t>::max()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -207,7 +207,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
       }
       break;
    case C_OscNodeDataPoolContent::eUINT32:
-      if (of64_Value <= static_cast<float64_t>(std::numeric_limits<uint32_t>::min()))
+      if (of64_Value <= static_cast<double>(std::numeric_limits<uint32_t>::min()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -219,7 +219,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
          }
          q_ValueAssigned = true;
       }
-      if (f64_IntegerValue >= static_cast<float64_t>(std::numeric_limits<uint32_t>::max()))
+      if (f64_IntegerValue >= static_cast<double>(std::numeric_limits<uint32_t>::max()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -233,7 +233,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
       }
       break;
    case C_OscNodeDataPoolContent::eUINT64:
-      if (of64_Value <= static_cast<float64_t>(std::numeric_limits<uint64_t>::min()))
+      if (of64_Value <= static_cast<double>(std::numeric_limits<uint64_t>::min()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -245,7 +245,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
          }
          q_ValueAssigned = true;
       }
-      if (f64_IntegerValue >= static_cast<float64_t>(std::numeric_limits<uint64_t>::max()))
+      if (f64_IntegerValue >= static_cast<double>(std::numeric_limits<uint64_t>::max()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -259,7 +259,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
       }
       break;
    case C_OscNodeDataPoolContent::eSINT8:
-      if (of64_Value <= static_cast<float64_t>(std::numeric_limits<int8_t>::min()))
+      if (of64_Value <= static_cast<double>(std::numeric_limits<int8_t>::min()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -271,7 +271,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
          }
          q_ValueAssigned = true;
       }
-      if (f64_IntegerValue >= static_cast<float64_t>(std::numeric_limits<int8_t>::max()))
+      if (f64_IntegerValue >= static_cast<double>(std::numeric_limits<int8_t>::max()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -285,7 +285,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
       }
       break;
    case C_OscNodeDataPoolContent::eSINT16:
-      if (of64_Value <= static_cast<float64_t>(std::numeric_limits<int16_t>::min()))
+      if (of64_Value <= static_cast<double>(std::numeric_limits<int16_t>::min()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -297,7 +297,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
          }
          q_ValueAssigned = true;
       }
-      if (f64_IntegerValue >= static_cast<float64_t>(std::numeric_limits<int16_t>::max()))
+      if (f64_IntegerValue >= static_cast<double>(std::numeric_limits<int16_t>::max()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -311,7 +311,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
       }
       break;
    case C_OscNodeDataPoolContent::eSINT32:
-      if (of64_Value <= static_cast<float64_t>(std::numeric_limits<int32_t>::min()))
+      if (of64_Value <= static_cast<double>(std::numeric_limits<int32_t>::min()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -323,7 +323,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
          }
          q_ValueAssigned = true;
       }
-      if (f64_IntegerValue >= static_cast<float64_t>(std::numeric_limits<int32_t>::max()))
+      if (f64_IntegerValue >= static_cast<double>(std::numeric_limits<int32_t>::max()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -337,7 +337,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
       }
       break;
    case C_OscNodeDataPoolContent::eSINT64:
-      if (of64_Value <= static_cast<float64_t>(std::numeric_limits<int64_t>::min()))
+      if (of64_Value <= static_cast<double>(std::numeric_limits<int64_t>::min()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -349,7 +349,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
          }
          q_ValueAssigned = true;
       }
-      if (f64_IntegerValue >= static_cast<float64_t>(std::numeric_limits<int64_t>::max()))
+      if (f64_IntegerValue >= static_cast<double>(std::numeric_limits<int64_t>::max()))
       {
          if (orc_Content.GetArray() == true)
          {
@@ -400,7 +400,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
             orc_Content.SetValueArrS64Element(static_cast<int64_t>(f64_IntegerValue), ou32_ArrayIndex);
             break;
          case C_OscNodeDataPoolContent::eFLOAT32:
-            orc_Content.SetValueArrF32Element(static_cast<float32_t>(of64_Value), ou32_ArrayIndex);
+            orc_Content.SetValueArrF32Element(static_cast<float>(of64_Value), ou32_ArrayIndex);
             break;
          case C_OscNodeDataPoolContent::eFLOAT64:
             orc_Content.SetValueArrF64Element(of64_Value, ou32_ArrayIndex);
@@ -438,7 +438,7 @@ void C_OscNodeDataPoolContentUtil::h_SetValueInContent(const float64_t of64_Valu
             orc_Content.SetValueS64(static_cast<int64_t>(f64_IntegerValue));
             break;
          case C_OscNodeDataPoolContent::eFLOAT32:
-            orc_Content.SetValueF32(static_cast<float32_t>(of64_Value));
+            orc_Content.SetValueF32(static_cast<float>(of64_Value));
             break;
          case C_OscNodeDataPoolContent::eFLOAT64:
             orc_Content.SetValueF64(of64_Value);
@@ -505,9 +505,9 @@ std::error_code C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(const C_Os
    {
       for (uint32_t u32_ItElement = 0; u32_ItElement < orc_Min.GetArraySize(); ++u32_ItElement)
       {
-         float64_t f64_Min;
-         float64_t f64_Max;
-         float64_t f64_Value;
+         double f64_Min;
+         double f64_Max;
+         double f64_Value;
 
          orc_Min.GetAnyValueAsFloat64(f64_Min, u32_ItElement);
          orc_Max.GetAnyValueAsFloat64(f64_Max, u32_ItElement);

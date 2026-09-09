@@ -16,7 +16,7 @@
 #include <QPointF>
 #include <vector>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -37,7 +37,7 @@ public:
 
    QColor c_UiColor;                           ///< color of line based item
    int32_t s32_UiWidthPixels;                  ///< width of line based item in pixels
-   float64_t f64_ZetOrder;                     ///< Z Position of line based item in scene
+   double f64_ZetOrder;                     ///< Z Position of line based item in scene
    std::vector<QPointF> c_UiInteractionPoints; ///< interaction points of line based item in relation to scene
 };
 

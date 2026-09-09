@@ -100,8 +100,8 @@ QWidget * C_TblDelegate::createEditor(QWidget * const opc_Parent, const QStyleOp
             {
                C_OscNodeDataPoolContent c_Min;
                C_OscNodeDataPoolContent c_Max;
-               float64_t f64_Factor;
-               float64_t f64_Offset;
+               double f64_Factor;
+               double f64_Offset;
                bool q_Ok;
                const QString & rc_Factor = c_StringList.at(2);
                const QString & rc_Offset = c_StringList.at(3);
@@ -131,8 +131,8 @@ QWidget * C_TblDelegate::createEditor(QWidget * const opc_Parent, const QStyleOp
          {
             C_OscNodeDataPoolContent c_Min;
             C_OscNodeDataPoolContent c_Max;
-            float64_t f64_Factor;
-            float64_t f64_Offset;
+            double f64_Factor;
+            double f64_Offset;
             bool q_Ok;
             const QString & rc_Factor = c_StringList.at(2);
             const QString & rc_Offset = c_StringList.at(3);
@@ -399,8 +399,8 @@ E_UserRoleInteractionElementValue C_TblDelegate::mh_GetInteractionElementValue(c
 //----------------------------------------------------------------------------------------------------------------------
 QWidget * C_TblDelegate::m_CreateGenericEditor(QWidget * const opc_Parent, const QModelIndex & orc_Index,
                                                const C_OscNodeDataPoolContent & orc_Min,
-                                               const C_OscNodeDataPoolContent & orc_Max, const float64_t of64_Factor,
-                                               const float64_t of64_Offset, const uint32_t & oru32_ArrayIndex) const
+                                               const C_OscNodeDataPoolContent & orc_Max, const double of64_Factor,
+                                               const double of64_Offset, const uint32_t & oru32_ArrayIndex) const
 {
    QWidget * pc_Retval = nullptr;
 

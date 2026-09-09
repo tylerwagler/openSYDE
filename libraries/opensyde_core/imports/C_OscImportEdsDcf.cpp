@@ -1331,7 +1331,7 @@ void C_OscImportEdsDcf::mh_LoadInhibitTimeSectionCanOpen(const uint32_t ou32_Sta
                               u32_InhibitTime))
       {
          orc_Message.u16_DelayTimeMs =
-            static_cast<uint16_t>(std::ceil(static_cast<float32_t>(u32_InhibitTime) / 10.0F));
+            static_cast<uint16_t>(std::ceil(static_cast<float>(u32_InhibitTime) / 10.0F));
          if ((u32_InhibitTime % 10) != 0)
          {
             mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Inhibit-time",
@@ -2109,13 +2109,13 @@ std::error_code C_OscImportEdsDcf::mh_CalcMinMaxInit(const C_OscCanOpenObjectDat
             switch (orc_Element.GetType()) //lint !e788 not all enum constants used; this is for float only
             {
             case C_OscNodeDataPoolContent::eFLOAT32:
-               orc_Element.c_MinValue.SetValueF32(-std::numeric_limits<float32_t>::max());
-               orc_Element.c_MaxValue.SetValueF32(std::numeric_limits<float32_t>::max());
+               orc_Element.c_MinValue.SetValueF32(-std::numeric_limits<float>::max());
+               orc_Element.c_MaxValue.SetValueF32(std::numeric_limits<float>::max());
                orc_Element.c_DataSetValues[0].SetValueF32(0.0F);
                break;
             case C_OscNodeDataPoolContent::eFLOAT64:
-               orc_Element.c_MinValue.SetValueF64(-std::numeric_limits<float64_t>::max());
-               orc_Element.c_MaxValue.SetValueF64(std::numeric_limits<float64_t>::max());
+               orc_Element.c_MinValue.SetValueF64(-std::numeric_limits<double>::max());
+               orc_Element.c_MaxValue.SetValueF64(std::numeric_limits<double>::max());
                orc_Element.c_DataSetValues[0].SetValueF64(0.0);
                break;
             default:

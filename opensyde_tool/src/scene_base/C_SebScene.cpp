@@ -18,7 +18,7 @@
 #include <QImageReader>
 #include <QElapsedTimer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "gitypes.hpp"
 #include "constants.hpp"
 
@@ -38,12 +38,12 @@ using namespace stw::opensyde_gui_logic;
 using namespace stw::tgl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const float64_t mf64_SCENE_RECT_BORDER = 0.0; //SSI: no border needed so far
+const double mf64_SCENE_RECT_BORDER = 0.0; //SSI: no border needed so far
 const QString C_SebScene::mhc_BOUNDARY = "Boundary";
 const QString C_SebScene::mhc_TEXT_ELEMENT = "Text element";
 const QString C_SebScene::mhc_LINE = "Line/Arrow";
 const QString C_SebScene::mhc_IMAGE = "Image";
-const float64_t C_SebScene::mhf64_MOVING_RANGE = 10.0;
+const double C_SebScene::mhf64_MOVING_RANGE = 10.0;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -127,9 +127,9 @@ void C_SebScene::FilterChangableZetValues(QList<QGraphicsItem *> & orc_ZetValues
    Highest used Z value of all scene items
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_SebScene::GetHighestUsedZetValueList(const QList<QGraphicsItem *> & orc_Items) const
+double C_SebScene::GetHighestUsedZetValueList(const QList<QGraphicsItem *> & orc_Items) const
 {
-   float64_t f64_Retval = std::numeric_limits<float64_t>::lowest();
+   double f64_Retval = std::numeric_limits<double>::lowest();
    bool q_NothingFound = true;
 
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = orc_Items.begin(); c_ItItem != orc_Items.end(); ++c_ItItem)
@@ -1329,8 +1329,8 @@ void C_SebScene::m_CopyItemsToCopyPasteManager(const QList<QGraphicsItem *> & or
    {
       //Special handling for Z order
       //Start counting at one to compensate usage of highest used Z value
-      float64_t f64_ZetValue = 1.0;
-      QMap<const QGraphicsItem *, float64_t> c_NewZetValues;
+      double f64_ZetValue = 1.0;
+      QMap<const QGraphicsItem *, double> c_NewZetValues;
 
       QList<QGraphicsItem *> c_SelectedItems = orc_SelectedItems;
       //Step 1: filter all relevant items for z order
@@ -1755,7 +1755,7 @@ void C_SebScene::m_MoveSelectedItems(const QPointF & orc_Delta)
       // Is the item movable?
       if (this->IsItemMovable((*c_ItItem)) == true)
       {
-         float64_t f64_NewValue = (*c_ItItem)->mapToScene((*c_ItItem)->boundingRect().topLeft()).x() +
+         double f64_NewValue = (*c_ItItem)->mapToScene((*c_ItItem)->boundingRect().topLeft()).x() +
                                   c_AdaptedDelta.x();
 
          if (f64_NewValue < C_GiCustomFunctions::hf64_SCENE_MIN_BORDER_SIZE)

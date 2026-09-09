@@ -158,8 +158,8 @@ private:
    uint16_t mu16_MultiplexerValue;
    uint16_t mu16_MaximumCountBits;
 
-   float64_t mf64_SingleItemWidth;
-   float64_t mf64_SingleItemHeight;
+   double mf64_SingleItemWidth;
+   double mf64_SingleItemHeight;
 
    // Border items
    C_SdBueMlvBorderItem * mpc_BorderItemUpperLeft;
@@ -183,12 +183,12 @@ private:
    int32_t ms32_LastGridIndex;
    bool mq_SignalChanged;
 
-   static const float64_t mhf64_SPACE;
-   static const float64_t mhf64_Z_ORDER_BELOW_ALL_ITEMS;
-   static const float64_t mhf64_Z_ORDER_DEFAULT;
-   static const float64_t mhf64_Z_ORDER_INTERACTION;
-   static const float64_t mhf64_Z_ORDER_EMPTY_ITEM;
-   static const float64_t mhf64_Z_ORDER_HINT_ITEM;
+   static const double mhf64_SPACE;
+   static const double mhf64_Z_ORDER_BELOW_ALL_ITEMS;
+   static const double mhf64_Z_ORDER_DEFAULT;
+   static const double mhf64_Z_ORDER_INTERACTION;
+   static const double mhf64_Z_ORDER_EMPTY_ITEM;
+   static const double mhf64_Z_ORDER_HINT_ITEM;
    static const uint8_t mhu8_MAX_NUM_BITS;
 
    // Array for grid states. It saves the pointer to the signals on each bit

@@ -567,10 +567,10 @@ QVariant C_SyvDaPeUpdateModeTableModel::data(const QModelIndex & orc_Index, cons
                   c_Retval = std::numeric_limits<qlonglong>::max();
                   break;
                case C_OscNodeDataPoolContent::eFLOAT32:
-                  c_Retval = static_cast<float64_t>(std::numeric_limits<float32_t>::max());
+                  c_Retval = static_cast<double>(std::numeric_limits<float>::max());
                   break;
                case C_OscNodeDataPoolContent::E_Type::eFLOAT64:
-                  c_Retval = std::numeric_limits<float64_t>::max();
+                  c_Retval = std::numeric_limits<double>::max();
                   break;
                default:
                   //Nothing to do

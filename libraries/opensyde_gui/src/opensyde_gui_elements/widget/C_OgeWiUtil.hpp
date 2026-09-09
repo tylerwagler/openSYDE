@@ -18,7 +18,7 @@
 #include <QKeyEvent>
 #include <QFileDialog>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -43,11 +43,11 @@ public:
                                                   const uint32_t ou32_ScreenIndex, const QSize & orc_DefaultSize,
                                                   const bool oq_AddLogEntryForWindowSize = false);
    static int32_t h_UpdateFontSize(QWidget * const opc_Widget, const QString & orc_Text,
-                                   const float32_t of32_HeightScaling = 1.0F,
+                                   const float of32_HeightScaling = 1.0F,
                                    const bool oq_IgnoreContentMargins = false,
                                    const QSize * const opc_ImprovedSize = nullptr);
    static int32_t h_GetNextOptimalPointSize(const QFont & orc_Font, const QSize & orc_Size, const QString & orc_Text,
-                                            const float32_t of32_HeightScaling = 1.0F);
+                                            const float of32_HeightScaling = 1.0F);
    static QWidget * h_GetWidgetUnderNextPopUp(QWidget * const opc_Input);
    static bool h_CheckGlobalKey(const QKeyEvent * const opc_Event);
    static QString h_GetOpenFileName(QWidget * const opc_Parent, const QString & orc_Heading,

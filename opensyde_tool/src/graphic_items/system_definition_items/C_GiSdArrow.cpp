@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiSdArrow.hpp"
 #include "C_PuiSdHandler.hpp"
 
@@ -110,7 +110,7 @@ void C_GiSdArrow::DeleteData(void)
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSdArrow::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiSdArrow::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiBiArrow::SetZetValueCustom(of64_ZetValue);
    //Apply to data

@@ -15,7 +15,7 @@
 #include <QVariant>
 #include "C_OgeLeToolTipBase.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -43,7 +43,7 @@ private:
    QString mc_MaxValue;
 
    void m_UpdateToolTip(void);
-   static float64_t mh_GetStringAsFloat(const QString & orc_Value, bool & orq_Worked);
+   static double mh_GetStringAsFloat(const QString & orc_Value, bool & orq_Worked);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

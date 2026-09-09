@@ -37,7 +37,7 @@ public:
    const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration> * GetRails(void) const;
    void PrepareCopyFromSceneToManager(const uint32_t ou32_ViewIndex, const uint32_t ou32_DashboardIndex);
    void CopyFromSceneToManager(const QList<QGraphicsItem *> & orc_SelectedItems, const QMap<const QGraphicsItem *,
-                                                                                            float64_t> & orc_NormalizedZetValues)
+                                                                                            double> & orc_NormalizedZetValues)
    override;
    bool CheckValidContentAndPrepareData(void) override;
 

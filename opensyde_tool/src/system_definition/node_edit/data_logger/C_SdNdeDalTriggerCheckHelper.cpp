@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDalTriggerCheckHelper.hpp"
 
 #ifndef _WIN32
@@ -257,7 +257,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_ReplaceChannelTokens(std::vector<data::mon
          {
             const std::string c_Tmp(std::get<std::string>(rc_Token.value.value()));
             //lint -e{529} Variable is used
-            const float32_t f32_Value = static_cast<float32_t>(ToDoubleCompat(c_Tmp));
+            const float f32_Value = static_cast<float>(ToDoubleCompat(c_Tmp));
             rc_Token.value.emplace(f32_Value);
          }
          else
@@ -294,7 +294,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_ReplaceChannelTokens(std::vector<data::mon
 //----------------------------------------------------------------------------------------------------------------------
 ChannelDataContainer C_SdNdeDalTriggerCheckHelper::mh_InitializeDataContainer(void)
 {
-   const Scalar<float32_t> c_Value(0.0F);
+   const Scalar<float> c_Value(0.0F);
    ChannelDataContainer c_Container;
 
    c_Container.create_initialized_channel(mhu32_DUMMY_CHANNEL_ID, c_Value);

@@ -14,7 +14,7 @@
 #include <QMap>
 #include <QTransform>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SebTopologyBaseScene.hpp"
 #include "C_GiNode.hpp"
@@ -55,13 +55,13 @@ public:
    ~C_SdTopologyScene() override;
 
    void AddNode(const QString & orc_NodeType, const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId);
-   void AddCanBus(const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId, const float64_t of64_ZetValue,
+   void AddCanBus(const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId, const double of64_ZetValue,
                   C_GiTextElementBus * const opc_TextElementBus, const QString * const opc_NameProposal = nullptr);
-   void AddEthernetBus(const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId, const float64_t of64_ZetValue,
+   void AddEthernetBus(const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId, const double of64_ZetValue,
                        C_GiTextElementBus * const opc_TextElementBus, const QString * const opc_NameProposal = nullptr);
    void AddBoundary(const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId);
    void AddTextElement(const QString & orc_Text, const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId);
-   C_GiTextElementBus * AddTextElementBus(const uint64_t * const opu64_UniqueId, float64_t & orf64_BusZetValue);
+   C_GiTextElementBus * AddTextElementBus(const uint64_t * const opu64_UniqueId, double & orf64_BusZetValue);
    void AddLine(const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId);
    void AddImage(const QString & orc_FilePath, const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId);
    void AddBusConnector(C_GiNode * const opc_Node, const C_GiLiBus * const opc_Bus,
@@ -127,8 +127,8 @@ protected:
    //lint -e{1735} Suppression, because default parameters are identical
    void m_PasteOfClipBoard(const QPointF * const opc_Pos = nullptr) override;
 
-   C_GiNode * m_CreateNode(const int32_t & ors32_Index, const uint64_t & oru64_Id, const float64_t & orf64_Width,
-                           const float64_t & orf64_Height, QGraphicsItem * const opc_Parent) override;
+   C_GiNode * m_CreateNode(const int32_t & ors32_Index, const uint64_t & oru64_Id, const double & orf64_Width,
+                           const double & orf64_Height, QGraphicsItem * const opc_Parent) override;
    C_GiLiCanBus * m_CreateCanBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                                  C_GiTextElementBus * const opc_TextElementName,
                                  const std::vector<QPointF> * const opc_Points,

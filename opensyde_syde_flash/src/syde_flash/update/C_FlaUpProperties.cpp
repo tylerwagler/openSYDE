@@ -313,8 +313,8 @@ void C_FlaUpProperties::UpdateDataTransfer(void) const
    QString c_Unit;
    QString c_DataTransfer;
 
-   const float64_t f64_BYTE = 1024.0;
-   const float64_t f64_OverallFilesSize = static_cast<float64_t>(this->mu64_TotalHexFileSizeInBytes);
+   const double f64_BYTE = 1024.0;
+   const double f64_OverallFilesSize = static_cast<double>(this->mu64_TotalHexFileSizeInBytes);
 
    if (f64_OverallFilesSize > (pow(f64_BYTE, 3.)))
    {
@@ -332,7 +332,7 @@ void C_FlaUpProperties::UpdateDataTransfer(void) const
    {
       //kB
       c_Unit = "kB";
-      c_Complete = QString::number(f64_OverallFilesSize / static_cast<float32_t>(f64_BYTE), 'f', 1);
+      c_Complete = QString::number(f64_OverallFilesSize / static_cast<float>(f64_BYTE), 'f', 1);
    }
    else
    {
@@ -367,13 +367,13 @@ void C_FlaUpProperties::UpdateDataTransfer(const uint64_t & oru64_FlashedBytes) 
    QString c_Unit;
    QString c_DataTransfer;
 
-   const float64_t f64_BYTE = 1024.0;
-   const float64_t f64_OverallFlashedBytes = static_cast<float64_t>(oru64_FlashedBytes);
-   const float64_t f64_OverallFilesSize = static_cast<float64_t>(mu64_TotalHexFileSizeInBytes);
+   const double f64_BYTE = 1024.0;
+   const double f64_OverallFlashedBytes = static_cast<double>(oru64_FlashedBytes);
+   const double f64_OverallFilesSize = static_cast<double>(mu64_TotalHexFileSizeInBytes);
 
    if (f64_OverallFilesSize > (pow(f64_BYTE, 3.)))
    {
-      const float64_t f64_BytePowThree = pow(f64_BYTE, 3.);
+      const double f64_BytePowThree = pow(f64_BYTE, 3.);
       //GB
       c_Unit = "GB";
       c_Progress = QString::number(f64_OverallFlashedBytes / (f64_BytePowThree), 'f', 1);
@@ -381,7 +381,7 @@ void C_FlaUpProperties::UpdateDataTransfer(const uint64_t & oru64_FlashedBytes) 
    }
    else if (f64_OverallFilesSize > (pow(f64_BYTE, 2.)))
    {
-      const float64_t f64_BytePowTwo = pow(f64_BYTE, 2.);
+      const double f64_BytePowTwo = pow(f64_BYTE, 2.);
 
       //MB
       c_Unit = "MB";

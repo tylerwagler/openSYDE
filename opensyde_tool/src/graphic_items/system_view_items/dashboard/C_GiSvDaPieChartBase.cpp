@@ -15,7 +15,7 @@
 #include <QGraphicsView>
 
 #include "gitypes.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -178,12 +178,12 @@ void C_GiSvDaPieChartBase::UpdateData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaPieChartBase::UpdateShowValue(void)
 {
-   float64_t f64_UnscaledValue;
+   double f64_UnscaledValue;
    QString c_ScaledValue;
 
    if (this->m_GetLastValue(0UL, c_ScaledValue, &f64_UnscaledValue, nullptr) == C_NO_ERR)
    {
-      const float64_t f64_Progress =
+      const double f64_Progress =
          ((f64_UnscaledValue - this->mf64_UnscaledMin) / (this->mf64_UnscaledMax - this->mf64_UnscaledMin)) *
          2000000.0;
       const int32_t s32_Progress = static_cast<int32_t>(f64_Progress);
@@ -418,11 +418,11 @@ void C_GiSvDaPieChartBase::m_UpdateStaticValues(void)
 
          if (this->mpc_PieChartWidget != nullptr)
          {
-            float64_t f64_Progress;
+            double f64_Progress;
             const QString c_Value = this->GetUnscaledValueInRangeAsScaledString(0.0, 0UL, &f64_Progress);
             this->mpc_PieChartWidget->SetUnit(c_Scaling.c_Unit);
             //Update value
-            const float64_t f64_Temp = f64_Progress * 2000000.0;
+            const double f64_Temp = f64_Progress * 2000000.0;
             this->mpc_PieChartWidget->SetValue(c_Value, static_cast<int32_t>(f64_Temp));
          }
       }

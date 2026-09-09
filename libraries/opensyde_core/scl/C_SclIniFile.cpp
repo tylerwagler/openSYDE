@@ -19,7 +19,7 @@
 #include <string>
 
 #include "C_SclIniFile.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -413,7 +413,7 @@ void C_SclIniFile::WriteBool(const std::string & orc_Section, const std::string 
    \param[in]  oq_ForceAppend  append at the end without checking whether key already exists
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::WriteFloat(const std::string & orc_Section, const std::string & orc_Key, const float64_t of64_Value,
+void C_SclIniFile::WriteFloat(const std::string & orc_Section, const std::string & orc_Key, const double of64_Value,
                               const bool oq_ForceAppend)
 {
    bool q_Return;
@@ -640,11 +640,11 @@ bool C_SclIniFile::ReadBool(const std::string & orc_Section, const std::string &
    float64 value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_SclIniFile::ReadFloat(const std::string & orc_Section, const std::string & orc_Key,
-                                  const float64_t of64_Default)
+double C_SclIniFile::ReadFloat(const std::string & orc_Section, const std::string & orc_Key,
+                                  const double of64_Default)
 {
    std::string c_String;
-   float64_t f64_Return;
+   double f64_Return;
 
    c_String = m_GetValue(orc_Key, orc_Section);
    if (c_String == "") //not found or empty

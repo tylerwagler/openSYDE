@@ -44,8 +44,8 @@ using namespace stw::opensyde_core;
    \param[in]  orf64_InteractionPointWidth   Interaction point width
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiBiLineBounding::C_GiBiLineBounding(const QVector<QPointF> & orc_Points, const float64_t & orf64_Width,
-                                       const float64_t & orf64_InteractionPointWidth) :
+C_GiBiLineBounding::C_GiBiLineBounding(const QVector<QPointF> & orc_Points, const double & orf64_Width,
+                                       const double & orf64_InteractionPointWidth) :
    mc_Points(orc_Points),
    mf64_Width(orf64_Width),
    mf64_InteractionPointWidth(orf64_InteractionPointWidth)
@@ -60,8 +60,8 @@ C_GiBiLineBounding::C_GiBiLineBounding(const QVector<QPointF> & orc_Points, cons
    \param[in]  orf64_InteractionPointWidth   Interaction point width
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiBiLineBounding::C_GiBiLineBounding(const QLineF & orc_Line, const float64_t & orf64_Width,
-                                       const float64_t & orf64_InteractionPointWidth) :
+C_GiBiLineBounding::C_GiBiLineBounding(const QLineF & orc_Line, const double & orf64_Width,
+                                       const double & orf64_InteractionPointWidth) :
    mc_Points(
 {
    orc_Line.p1(), orc_Line.p2()
@@ -150,7 +150,7 @@ QPainterPath C_GiBiLineBounding::GetShape(void)
 //----------------------------------------------------------------------------------------------------------------------
 QPointF C_GiBiLineBounding::h_GetNorm(const QPointF & orc_Point)
 {
-   const float64_t f64_Length = mh_GetLength(orc_Point);
+   const double f64_Length = mh_GetLength(orc_Point);
    QPointF c_Retval;
 
    if (std::abs(f64_Length) > 0.0)
@@ -175,7 +175,7 @@ QPointF C_GiBiLineBounding::h_GetNorm(const QPointF & orc_Point)
    Input vetor with length of width
 */
 //----------------------------------------------------------------------------------------------------------------------
-QPointF C_GiBiLineBounding::h_AdaptVecToWidth(const QPointF & orc_Point, const float64_t & orf64_Length)
+QPointF C_GiBiLineBounding::h_AdaptVecToWidth(const QPointF & orc_Point, const double & orf64_Length)
 {
    const QPointF c_Retval = h_GetNorm(orc_Point);
 
@@ -206,9 +206,9 @@ QPointF C_GiBiLineBounding::h_GetPerpendicular(const QPointF & orc_Point)
    Result
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_GiBiLineBounding::h_CrossProduct(const QPointF & orc_P1, const QPointF & orc_P2)
+double C_GiBiLineBounding::h_CrossProduct(const QPointF & orc_P1, const QPointF & orc_P2)
 {
-   const float64_t f64_Retval = (orc_P1.x() * orc_P2.y()) - (orc_P1.y() * orc_P2.x());
+   const double f64_Retval = (orc_P1.x() * orc_P2.y()) - (orc_P1.y() * orc_P2.x());
 
    return f64_Retval;
 }
@@ -247,7 +247,7 @@ void C_GiBiLineBounding::m_AppendLineBoundingPointsTop(const int32_t & ors32_Ind
 //----------------------------------------------------------------------------------------------------------------------
 QPointF C_GiBiLineBounding::m_AdaptVecToWidth(const QPointF & orc_Point) const
 {
-   const float64_t f64_Factor = (this->mf64_Width + this->mf64_InteractionPointWidth) / 2.0;
+   const double f64_Factor = (this->mf64_Width + this->mf64_InteractionPointWidth) / 2.0;
 
    return h_AdaptVecToWidth(orc_Point, f64_Factor);
 }
@@ -261,9 +261,9 @@ QPointF C_GiBiLineBounding::m_AdaptVecToWidth(const QPointF & orc_Point) const
    Length of input vector
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_GiBiLineBounding::mh_GetLength(const QPointF & orc_Point)
+double C_GiBiLineBounding::mh_GetLength(const QPointF & orc_Point)
 {
-   const float64_t f64_Retval = std::sqrt((orc_Point.x() * orc_Point.x()) + (orc_Point.y() * orc_Point.y()));
+   const double f64_Retval = std::sqrt((orc_Point.x() * orc_Point.x()) + (orc_Point.y() * orc_Point.y()));
 
    return f64_Retval;
 }
@@ -341,16 +341,16 @@ bool C_GiBiLineBounding::mh_CalcIntersection(const QPointF & orc_Start1, const Q
    bool q_Retval;
    const QPointF c_Diff1 = orc_End1 - orc_Start1;
    const QPointF c_Diff2 = orc_End2 - orc_Start2;
-   const float64_t f64_Cross1 = h_CrossProduct(c_Diff1, c_Diff2);
+   const double f64_Cross1 = h_CrossProduct(c_Diff1, c_Diff2);
 
    if (C_OscUtils::h_IsFloat64NearlyEqual(f64_Cross1, 0.0) == true)
    {
-      const float64_t f64_Cross2 = h_CrossProduct(orc_Start2 - orc_Start1, c_Diff1);
+      const double f64_Cross2 = h_CrossProduct(orc_Start2 - orc_Start1, c_Diff1);
       if (C_OscUtils::h_IsFloat64NearlyEqual(f64_Cross2, 0.0) == true)
       {
-         const float64_t f64_T0 = QPointF::dotProduct((orc_Start2 - orc_Start1), c_Diff1) / QPointF::dotProduct(c_Diff1,
+         const double f64_T0 = QPointF::dotProduct((orc_Start2 - orc_Start1), c_Diff1) / QPointF::dotProduct(c_Diff1,
                                                                                                                 c_Diff1);
-         const float64_t f64_T1 =
+         const double f64_T1 =
             QPointF::dotProduct(((orc_Start2 + c_Diff2) - orc_Start1), c_Diff1) / QPointF::dotProduct(
                c_Diff1, c_Diff1);
          if ((mh_Within(f64_T0, 0.0, 1.0) == true) && (mh_Within(f64_T1, 0.0, 1.0) == true))
@@ -370,9 +370,9 @@ bool C_GiBiLineBounding::mh_CalcIntersection(const QPointF & orc_Start1, const Q
    }
    else
    {
-      const float64_t f64_T =
+      const double f64_T =
          h_CrossProduct(orc_Start2 - orc_Start1, c_Diff2) / h_CrossProduct(c_Diff1, c_Diff2);
-      const float64_t f64_U =
+      const double f64_U =
          h_CrossProduct(orc_Start1 - orc_Start2, c_Diff1) / h_CrossProduct(c_Diff2, c_Diff1);
       if ((mh_Within(f64_T, 0.0, 1.0) == true) && (mh_Within(f64_U, 0.0, 1.0) == true))
       {
@@ -399,8 +399,8 @@ bool C_GiBiLineBounding::mh_CalcIntersection(const QPointF & orc_Start1, const Q
    false: Outside boundaries
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_GiBiLineBounding::mh_Within(const float64_t & orf64_Eval, const float64_t & orf64_Start,
-                                   const float64_t & orf64_End)
+bool C_GiBiLineBounding::mh_Within(const double & orf64_Eval, const double & orf64_Start,
+                                   const double & orf64_End)
 {
    bool q_Retval;
 

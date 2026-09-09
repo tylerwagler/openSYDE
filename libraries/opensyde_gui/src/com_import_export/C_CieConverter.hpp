@@ -15,7 +15,7 @@
 #include <string>
 #include <string>
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscSystemBus.hpp"
 #include "C_OscNode.hpp"
 
@@ -59,8 +59,8 @@ public:
                                                                                  // element
       stw::opensyde_core::C_OscNodeDataPoolContent c_MaxValue;                   ///< Maximum value(s) for complete data
                                                                                  // element
-      float64_t f64_Factor;                                                      ///< Adaptation factor for display
-      float64_t f64_Offset;                                                      ///< Offset factor for display
+      double f64_Factor;                                                      ///< Adaptation factor for display
+      double f64_Offset;                                                      ///< Offset factor for display
       std::string c_Unit;                                              ///< Variable unit
       std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> c_DataSetValues; ///< Only one element which is initial
                                                                                  // value

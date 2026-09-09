@@ -32,14 +32,14 @@ public:
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiSvDaBoundary(const uint32_t & oru32_ViewIndex, const uint32_t & oru32_DashboardIndex,
                     const int32_t & ors32_DataIndex, const uint64_t & oru64_Id,
-                    const float64_t of64_Width = mhf64_MIN_WIDTH_BOUNDARY,
-                    const float64_t of64_Height = mhf64_MIN_HEIGHT_BOUNDARY, QGraphicsItem * const opc_Parent = nullptr);
+                    const double of64_Width = mhf64_MIN_WIDTH_BOUNDARY,
+                    const double of64_Height = mhf64_MIN_HEIGHT_BOUNDARY, QGraphicsItem * const opc_Parent = nullptr);
    void LoadData(void) override;
    void UpdateData(void) override;
    void DeleteData(void) override;
 
    //GI base
-   void SetZetValueCustom(const float64_t of64_ZetValue) override;
+   void SetZetValueCustom(const double of64_ZetValue) override;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

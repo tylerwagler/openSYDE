@@ -14,7 +14,7 @@
 #include <QImageReader>
 #include <QImageWriter>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiImage.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -58,8 +58,8 @@ C_GiImage::C_GiImage(const QString & orc_ImagePath, QGraphicsItem * const opc_Pa
       this->mc_OriginalImageFormat = "png";
    }
 
-   this->f64_Width = static_cast<float64_t>(this->mc_OriginalPixmap.width());
-   this->f64_Height = static_cast<float64_t>(this->mc_OriginalPixmap.height());
+   this->f64_Width = static_cast<double>(this->mc_OriginalPixmap.width());
+   this->f64_Height = static_cast<double>(this->mc_OriginalPixmap.height());
 
    this->setPixmap(this->mc_OriginalPixmap);
 }
@@ -76,8 +76,8 @@ C_GiImage::C_GiImage(const QString & orc_ImagePath, QGraphicsItem * const opc_Pa
    \param[in,out]  opc_Parent    Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiImage::C_GiImage(const QPixmap & orc_Pixmap, const QByteArray & orc_Format, const float64_t of64_Width,
-                     const float64_t of64_Height, QGraphicsItem * const opc_Parent) :
+C_GiImage::C_GiImage(const QPixmap & orc_Pixmap, const QByteArray & orc_Format, const double of64_Width,
+                     const double of64_Height, QGraphicsItem * const opc_Parent) :
    QGraphicsPixmapItem(opc_Parent),
    C_GiBiSizeableItem(of64_Width, of64_Height),
    mc_OriginalPixmap(orc_Pixmap),

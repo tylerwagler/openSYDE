@@ -38,13 +38,13 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItUtil::h_CopyFontSize(const QLabel * const opc_SourceLabel, QLabel * const opc_TargetLabel,
-                                   const float32_t of32_Factor)
+                                   const float of32_Factor)
 {
    if ((opc_SourceLabel != nullptr) && (opc_TargetLabel != nullptr))
    {
       QFont c_Font;
-      const float32_t f32_SourcePointSize = static_cast<float32_t>(opc_SourceLabel->font().pointSize());
-      const float32_t f32_SourcePointSizeWithFactor = f32_SourcePointSize * of32_Factor;
+      const float f32_SourcePointSize = static_cast<float>(opc_SourceLabel->font().pointSize());
+      const float f32_SourcePointSizeWithFactor = f32_SourcePointSize * of32_Factor;
       const int32_t s32_PointSize = std::max(static_cast<int32_t>(f32_SourcePointSizeWithFactor), 1);
 
       c_Font = opc_TargetLabel->font();

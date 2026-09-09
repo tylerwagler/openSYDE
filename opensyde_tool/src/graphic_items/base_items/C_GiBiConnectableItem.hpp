@@ -15,7 +15,7 @@
 
 #include <QObject>
 #include <QPointF>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -37,9 +37,9 @@ public:
    virtual void TriggerSigChangedGraphic(void);
 
    static void h_DistToLine(const QPointF & orc_LineStart, const QPointF & orc_LineEnd, const QPointF & orc_EvPoint,
-                            float64_t * const opf64_Distance = nullptr, QPointF * const opc_Projection = nullptr,
-                            float64_t * const opf64_RestrictPosition = nullptr);
-   static void h_DistToPoint(const QPointF & orc_Point1, const QPointF & orc_Point2, float64_t & orf64_Distance);
+                            double * const opf64_Distance = nullptr, QPointF * const opc_Projection = nullptr,
+                            double * const opf64_RestrictPosition = nullptr);
+   static void h_DistToPoint(const QPointF & orc_Point1, const QPointF & orc_Point2, double & orf64_Distance);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

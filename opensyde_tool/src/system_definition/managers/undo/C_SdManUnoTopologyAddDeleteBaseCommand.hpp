@@ -64,7 +64,7 @@ protected:
    int32_t m_GetTextElementType(void) const override;
 
    void m_SetDataPositionOffset(const QPointF & orc_NewPos);
-   void m_SetDataZetOffset(const float64_t of64_HighestUsedZetValue);
+   void m_SetDataZetOffset(const double of64_HighestUsedZetValue);
 
 private:
    QMap<C_PuiBsTemporaryDataId, uint64_t> mc_MapTypeAndIndexToId;

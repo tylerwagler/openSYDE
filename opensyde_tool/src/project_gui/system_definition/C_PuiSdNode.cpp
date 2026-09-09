@@ -53,7 +53,7 @@ C_PuiSdNodeConnection::C_PuiSdNodeConnection()
 void C_PuiSdNodeConnection::CalcHash(uint32_t & oru32_HashValue) const
 {
    uint32_t u32_Counter;
-   float64_t f64_Value;
+   double f64_Value;
 
    this->c_ConnectionId.CalcHash(oru32_HashValue);
 

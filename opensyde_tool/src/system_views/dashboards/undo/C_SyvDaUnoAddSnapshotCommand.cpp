@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -54,7 +54,7 @@ C_SyvDaUnoAddSnapshotCommand::C_SyvDaUnoAddSnapshotCommand(QGraphicsScene * cons
                                                            const C_SyvDaDashboardSnapshot & orc_InitialSnapshotData,
                                                            const std::vector<uint64_t> & orc_Ids,
                                                            const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
-                                                                      C_PuiSvReadDataConfiguration> & orc_RestoredRails, const QPointF & orc_NewPos, const float64_t of64_HighestUsedZetValue,
+                                                                      C_PuiSvReadDataConfiguration> & orc_RestoredRails, const QPointF & orc_NewPos, const double of64_HighestUsedZetValue,
                                                            QUndoCommand * const opc_Parent) :
    C_SyvDaUnoAddBaseCommand(opc_Scene, orc_Ids, "Paste drawing element(s)",
                             opc_Parent, orc_InitialSnapshotData)

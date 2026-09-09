@@ -29,7 +29,7 @@ class C_GiWiProxyBase :
    public C_GiBiSizeableItem
 {
 public:
-   C_GiWiProxyBase(const float64_t of64_InitWidth, const float64_t of64_InitHeight,
+   C_GiWiProxyBase(const double of64_InitWidth, const double of64_InitHeight,
                    QGraphicsItem * const opc_Parent = nullptr);
 
    void Redraw(void) override;

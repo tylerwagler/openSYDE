@@ -225,10 +225,10 @@ void C_SdBueMlvEmptyItem::paint(QPainter * const opc_Painter, const QStyleOption
    // draw the error icon if an error was set
    if (this->mq_ErrorActive == true)
    {
-      const float64_t f64_PosHorizontal = (this->mc_Size.width() / 2.0) -
-                                          (static_cast<float64_t>(this->mc_ErrorIcon.width()) / 2.0);
-      const float64_t f64_PosVertical = (this->mc_Size.height() / 2.0) -
-                                        (static_cast<float64_t>(this->mc_ErrorIcon.height()) / 2.0);
+      const double f64_PosHorizontal = (this->mc_Size.width() / 2.0) -
+                                          (static_cast<double>(this->mc_ErrorIcon.width()) / 2.0);
+      const double f64_PosVertical = (this->mc_Size.height() / 2.0) -
+                                        (static_cast<double>(this->mc_ErrorIcon.height()) / 2.0);
       opc_Painter->drawPixmap(QPointF(f64_PosHorizontal, f64_PosVertical), this->mc_ErrorIcon);
    }
 }

@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <system_error>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNodeDataPoolContent.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -42,7 +42,7 @@ public:
    };
 
    static void h_ZeroContent(stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content);
-   static void h_SetValueInContent(const float64_t of64_Value,
+   static void h_SetValueInContent(const double of64_Value,
                                    stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
                                    const uint32_t ou32_ArrayIndex = 0U);
    // set a value in min and max range
@@ -56,7 +56,7 @@ public:
 private:
    C_OscNodeDataPoolContentUtil(void);
 
-   static const float64_t mhf64_EPSILON;
+   static const double mhf64_EPSILON;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

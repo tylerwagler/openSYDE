@@ -74,7 +74,7 @@ bool C_OgeSpxDoubleToolTipBase::event(QEvent * const opc_Event)
    \param[in] orc_Display String display value for minimum
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeSpxDoubleToolTipBase::SetMinimumCustom(const float64_t of64_Value, const QString & orc_Display)
+void C_OgeSpxDoubleToolTipBase::SetMinimumCustom(const double of64_Value, const QString & orc_Display)
 {
    this->setMinimum(of64_Value);
    this->mc_UserMinValString = orc_Display;
@@ -88,7 +88,7 @@ void C_OgeSpxDoubleToolTipBase::SetMinimumCustom(const float64_t of64_Value, con
    \param[in] orc_Display String display value for maximum
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeSpxDoubleToolTipBase::SetMaximumCustom(const float64_t of64_Value, const QString & orc_Display)
+void C_OgeSpxDoubleToolTipBase::SetMaximumCustom(const double of64_Value, const QString & orc_Display)
 {
    this->setMaximum(of64_Value);
    this->mc_UserMaxValString = orc_Display;

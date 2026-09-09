@@ -196,16 +196,16 @@ void C_SyvDaPeUpdateModeTableDelegate::setEditorData(QWidget * const opc_Editor,
                pc_DoubleSpinBox->setValue(c_Data.toDouble());
                break;
             case QVariant::Int:
-               pc_DoubleSpinBox->setValue(static_cast<float64_t>(c_Data.toInt()));
+               pc_DoubleSpinBox->setValue(static_cast<double>(c_Data.toInt()));
                break;
             case QVariant::UInt:
-               pc_DoubleSpinBox->setValue(static_cast<float64_t>(c_Data.toUInt()));
+               pc_DoubleSpinBox->setValue(static_cast<double>(c_Data.toUInt()));
                break;
             case QVariant::LongLong:
-               pc_DoubleSpinBox->setValue(static_cast<float64_t>(c_Data.toLongLong()));
+               pc_DoubleSpinBox->setValue(static_cast<double>(c_Data.toLongLong()));
                break;
             case QVariant::ULongLong:
-               pc_DoubleSpinBox->setValue(static_cast<float64_t>(c_Data.toULongLong()));
+               pc_DoubleSpinBox->setValue(static_cast<double>(c_Data.toULongLong()));
                break;
             default:
                //No handling possible

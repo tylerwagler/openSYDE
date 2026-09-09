@@ -15,7 +15,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsDropShadowEffect>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiPort.hpp"
 #include "C_OscNode.hpp"
 #include "C_GiRectPixmap.hpp"
@@ -44,8 +44,8 @@ class C_GiNode :
 public:
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiNode(const int32_t & ors32_Index, const uint64_t & oru64_Id,
-            const float64_t & orf64_Width = mhf64_INITIAL_WIDTH_NODE,
-            const float64_t & orf64_Height = mhf64_INITIAL_HEIGHT_NODE, QGraphicsItem * const opc_Parent = nullptr);
+            const double & orf64_Width = mhf64_INITIAL_WIDTH_NODE,
+            const double & orf64_Height = mhf64_INITIAL_HEIGHT_NODE, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiNode() override;
    void FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Closest) const override;
    virtual void FindClosestPort(const QPointF &orc_ScenePoint, C_GiPort * (&orpc_Closest)) const;
@@ -89,7 +89,7 @@ public:
    void SetDrawWhiteFilter(const bool oq_Active);
 
    //GI base
-   void SetZetValueCustom(const float64_t of64_ZetValue) override;
+   void SetZetValueCustom(const double of64_ZetValue) override;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
@@ -106,17 +106,17 @@ protected:
 
    virtual bool m_UpdateError(void);
    bool m_GetErrorStatus(void) const;
-   void m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight) override;
+   void m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight) override;
 
    void m_SetDrawBorder(const bool oq_Active);
    const C_GiNodeBoundary * m_GetBoundary(void) const;
    int32_t m_GetIconSize(void) const;
    uint32_t m_GetScaleCategory(void) const;
 
-   static const float64_t mhf64_MIN_WIDTH_NODE;
-   static const float64_t mhf64_MIN_HEIGHT_NODE;
-   static const float64_t mhf64_INITIAL_WIDTH_NODE;
-   static const float64_t mhf64_INITIAL_HEIGHT_NODE;
+   static const double mhf64_MIN_WIDTH_NODE;
+   static const double mhf64_MIN_HEIGHT_NODE;
+   static const double mhf64_INITIAL_WIDTH_NODE;
+   static const double mhf64_INITIAL_HEIGHT_NODE;
    static const uint32_t mhu32_SCALE_CATEGORY_0;
    static const uint32_t mhu32_SCALE_CATEGORY_1;
    static const uint32_t mhu32_SCALE_CATEGORY_2;
@@ -147,10 +147,10 @@ private:
    void m_InitConflictIcon(void);
    void m_DetectIconSize(void);
 
-   void m_UpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight, const bool oq_Initial);
+   void m_UpdateItems(const double of64_DiffWidth, const double of64_DiffHeight, const bool oq_Initial);
 
-   static const float64_t mhaf64_SCALE_MIN_WIDTH_NODE[7];
-   static const float64_t mhaf64_SCALE_MIN_HEIGHT_NODE[7];
+   static const double mhaf64_SCALE_MIN_WIDTH_NODE[7];
+   static const double mhaf64_SCALE_MIN_HEIGHT_NODE[7];
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

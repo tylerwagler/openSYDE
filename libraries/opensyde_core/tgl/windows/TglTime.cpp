@@ -15,7 +15,7 @@
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include <windows.h>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglTime.hpp"
 #include "TglUtils.hpp"
 
@@ -126,7 +126,7 @@ void stw::tgl::TglSleepPolling()
 uint64_t stw::tgl::TglGetTickCountUs(void)
 {
    static bool hq_FirstCall = true;
-   static float64_t hf64_CountsPer1US;
+   static double hf64_CountsPer1US;
    LARGE_INTEGER u_Counts;
 
    if (hq_FirstCall == true)
@@ -134,13 +134,13 @@ uint64_t stw::tgl::TglGetTickCountUs(void)
       bool q_Test;
       q_Test = (QueryPerformanceFrequency(&u_Counts) == 0) ? false : true;
       tgl_assert(q_Test == true);
-      hf64_CountsPer1US = static_cast<float64_t>(u_Counts.QuadPart) / 1000000.0; //we want the result in us not in
+      hf64_CountsPer1US = static_cast<double>(u_Counts.QuadPart) / 1000000.0; //we want the result in us not in
                                                                                  // seconds
       hq_FirstCall = false;
    }
 
    (void)QueryPerformanceCounter(&u_Counts);
-   return static_cast<uint64_t>(static_cast<float64_t>(u_Counts.QuadPart) / hf64_CountsPer1US); //lint !e1960
+   return static_cast<uint64_t>(static_cast<double>(u_Counts.QuadPart) / hf64_CountsPer1US); //lint !e1960
    //dropping the decimals is precise enough
 }
 

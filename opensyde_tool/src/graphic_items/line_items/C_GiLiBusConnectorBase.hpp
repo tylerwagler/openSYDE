@@ -60,7 +60,7 @@ public:
                   const stw::opensyde_gui::C_GiLiBus * const opc_LastBus, const QPointF & orc_ScenePos);
 
    //GI base
-   void SetZetValueCustom(const float64_t of64_ZetValue) override;
+   void SetZetValueCustom(const double of64_ZetValue) override;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
@@ -79,7 +79,7 @@ protected:
    int32_t ms32_ConnIndex;      ///< Connection item this connection is connected to
    int32_t ms32_KnownLineCount; ///< Number of known bus segments to detect new / deleted
    ///< points
-   float64_t mf64_ConnProgress;                            ///< Connection item progress
+   double mf64_ConnProgress;                            ///< Connection item progress
    const C_GiLiBus * mpc_LastKnownBusItem;                 ///< Last valid bus item this was connected to
    C_GiBiConnectableItem * mpc_GenericSignalItem;          ///< Generic item this connection is connected to (signals)
    C_GiBiConnectableItem * mpc_LastKnownGenericSignalItem; ///< Last generic node item this was connected to (signals)

@@ -14,7 +14,7 @@
 
 #include <QScrollBar>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "TglUtils.hpp"
 #include "C_OgeCbxText.hpp"
@@ -62,8 +62,8 @@ C_SdBueMlvWidget::C_SdBueMlvWidget(QWidget * const opc_Parent) :
 
    this->mpc_Ui->pc_GraphicsView->setScene(this->mpc_Scene);
 
-   this->mpc_Scene->setSceneRect(0.0, 0.0, static_cast<float64_t>(this->mpc_Ui->pc_GraphicsView->width()),
-                                 static_cast<float64_t>(this->mpc_Ui->pc_GraphicsView->height()));
+   this->mpc_Scene->setSceneRect(0.0, 0.0, static_cast<double>(this->mpc_Ui->pc_GraphicsView->width()),
+                                 static_cast<double>(this->mpc_Ui->pc_GraphicsView->height()));
 
    this->mpc_Ui->pc_GraphicsView->horizontalScrollBar()->setValue(0);
    this->mpc_Ui->pc_GraphicsView->verticalScrollBar()->setValue(0);
@@ -222,8 +222,8 @@ void C_SdBueMlvWidget::resizeEvent(QResizeEvent * const opc_Event)
    if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->setSceneRect(0.0, 0.0,
-                                    static_cast<float64_t>(this->mpc_Ui->pc_GraphicsView->width()),
-                                    static_cast<float64_t>(this->mpc_Ui->pc_GraphicsView->height()));
+                                    static_cast<double>(this->mpc_Ui->pc_GraphicsView->width()),
+                                    static_cast<double>(this->mpc_Ui->pc_GraphicsView->height()));
    }
 }
 

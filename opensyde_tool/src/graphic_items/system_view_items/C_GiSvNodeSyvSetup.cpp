@@ -55,8 +55,8 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_GiSvNodeSyvSetup::C_GiSvNodeSyvSetup(const uint32_t ou32_ViewIndex, const int32_t & ors32_NodeIndex,
-                                       const uint64_t & oru64_Id, const float64_t & orf64_Width,
-                                       const float64_t & orf64_Height, QGraphicsItem * const opc_Parent) :
+                                       const uint64_t & oru64_Id, const double & orf64_Width,
+                                       const double & orf64_Height, QGraphicsItem * const opc_Parent) :
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiSvNodeSyvBase(ou32_ViewIndex, ors32_NodeIndex, oru64_Id, orf64_Width, orf64_Height, opc_Parent),
    mq_EditMode(false)

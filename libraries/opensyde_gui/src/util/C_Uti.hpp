@@ -19,7 +19,7 @@
 #include <QKeyEvent>
 #include <QStyle>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include <string>
 
@@ -38,9 +38,9 @@ public:
    static void h_Uniqueify(std::vector<uint32_t> & orc_Indices);
    static std::vector<std::vector<uint32_t> > h_GetContiguousSectionsAscending(
       const std::vector<uint32_t> & orc_Indices);
-   static bool h_CheckFloatHasNoFractionPart(const float64_t of64_Value);
-   static int32_t h_GetNumberOfDecimals(const float64_t of64_Value);
-   static QString h_GetStringFromDouble(const float64_t of64_Value);
+   static bool h_CheckFloatHasNoFractionPart(const double of64_Value);
+   static int32_t h_GetNumberOfDecimals(const double of64_Value);
+   static QString h_GetStringFromDouble(const double of64_Value);
    static std::vector<uint32_t> h_UniquifyAndSortAscending(const std::vector<uint32_t> & orc_Items);
    static std::vector<uint32_t> h_UniquifyAndSortDescending(const std::vector<uint32_t> & orc_Items);
    static QColor h_ScaleColor(const QColor & orc_Color, const uint32_t ou32_Percentage);
@@ -48,7 +48,7 @@ public:
    static QString h_AdaptStringToSize(const QString & orc_String, const QFontMetrics & orc_FontMetrics,
                                       const int32_t os32_Width);
    static QString h_AdaptStringToSize(const QString & orc_String, const QFontMetrics & orc_FontMetrics,
-                                      const float64_t of64_Width);
+                                      const double of64_Width);
    static QString h_GetByteCountAsString(const uint32_t ou32_ByteCount);
    static bool h_CheckKeyModifier(const Qt::KeyboardModifiers & orc_ActiveKeyModifiers,
                                   const Qt::KeyboardModifier & ore_CheckKeyModifier);

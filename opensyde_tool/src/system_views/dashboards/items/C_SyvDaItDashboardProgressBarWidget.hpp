@@ -15,7 +15,7 @@
 #include <QWidget>
 #include <QPixmap>
 #include <QGroupBox>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeLabDashboardDefault.hpp"
 #include "C_PuiSvDbProgressBar.hpp"
 #include "C_OgeDashboardProgressBar.hpp"
@@ -82,10 +82,10 @@ private:
    int32_t ms32_Transparency;
 
    //-------Constants---------------------------------------------------------------------------------------------------
-   const float32_t mf32_MinimumFontSize = 15.0F;
-   const float32_t mf32_BorderOffset = 5.0F;
+   const float mf32_MinimumFontSize = 15.0F;
+   const float mf32_BorderOffset = 5.0F;
 
-   const float32_t mf32_ArrowOffset = 10.0F;
+   const float mf32_ArrowOffset = 10.0F;
    const QString mc_ArrowSpacerString = "8";
 };
 

@@ -748,7 +748,7 @@ void C_SdBueSignalPropertiesWidget::m_InitValueDescriptionsTable(void) const
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdBueSignalPropertiesWidget::m_LoadGeneric(C_OgeWiSpinBoxGroup * const opc_Widget,
                                                      const C_OscNodeDataPoolContent & orc_Content,
-                                                     const float64_t of64_Factor, const float64_t of64_Offset,
+                                                     const double of64_Factor, const double of64_Offset,
                                                      const uint16_t ou16_BitLength,
                                                      const C_OscNodeDataPoolContent * const opc_Min,
                                                      const C_OscNodeDataPoolContent * const opc_Max) const
@@ -823,7 +823,7 @@ int32_t C_SdBueSignalPropertiesWidget::m_LoadGeneric(C_OgeWiSpinBoxGroup * const
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdBueSignalPropertiesWidget::m_SaveGeneric(const C_OgeWiSpinBoxGroup * const opc_Widget,
                                                      C_OscNodeDataPoolContent & orc_Content,
-                                                     const float64_t of64_Factor, const float64_t of64_Offset) const
+                                                     const double of64_Factor, const double of64_Offset) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1607,7 +1607,7 @@ void C_SdBueSignalPropertiesWidget::m_AdaptOtherValues(const C_SdBueSignalProper
          bool q_MessageAdapt;
          const C_OscCanMessage * const pc_Message =
             C_PuiSdHandler::h_GetInstance()->GetCanMessage(this->mc_MessageId);
-         float64_t f64_CurrentInitVal;
+         double f64_CurrentInitVal;
 
          // The init value will be set to 0.0 later than the other values
          this->mc_DataOscSignalCommon.c_DataSetValues[0].GetAnyValueAsFloat64(f64_CurrentInitVal, 0);
@@ -2065,7 +2065,7 @@ void C_SdBueSignalPropertiesWidget::m_UpdateUiForChange(const E_Change oe_Change
       //Factor needs to be above zero
       //lint -e{1938}  static const is guaranteed preinitialized before main
       this->mpc_Ui->pc_DoubleSpinBoxFactor->SetMinimumCustom(C_OgeSpxFactor::mhf64_FACTOR_MIN);
-      this->mpc_Ui->pc_DoubleSpinBoxFactor->SetMaximumCustom(std::numeric_limits<float64_t>::max());
+      this->mpc_Ui->pc_DoubleSpinBoxFactor->SetMaximumCustom(std::numeric_limits<double>::max());
       //Value
       this->mpc_Ui->pc_DoubleSpinBoxFactor->setValue(this->mc_DataOscSignalCommon.f64_Factor);
       break;
@@ -2079,8 +2079,8 @@ void C_SdBueSignalPropertiesWidget::m_UpdateUiForChange(const E_Change oe_Change
       {
          this->mpc_Ui->pc_DoubleSpinBoxOffset->setEnabled(true);
       }
-      this->mpc_Ui->pc_DoubleSpinBoxOffset->SetMinimumCustom(std::numeric_limits<float64_t>::lowest());
-      this->mpc_Ui->pc_DoubleSpinBoxOffset->SetMaximumCustom(std::numeric_limits<float64_t>::max());
+      this->mpc_Ui->pc_DoubleSpinBoxOffset->SetMinimumCustom(std::numeric_limits<double>::lowest());
+      this->mpc_Ui->pc_DoubleSpinBoxOffset->SetMaximumCustom(std::numeric_limits<double>::max());
       //Value
       this->mpc_Ui->pc_DoubleSpinBoxOffset->setValue(this->mc_DataOscSignalCommon.f64_Offset);
       break;
@@ -2241,11 +2241,11 @@ void C_SdBueSignalPropertiesWidget::m_ConnectAll(void) const
            &C_SdBueSignalPropertiesWidget::m_HandleCommentChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_DoubleSpinBoxFactor, static_cast<void (QDoubleSpinBox::*)(
-                                                                float64_t)>(&QDoubleSpinBox::valueChanged), this,
+                                                                double)>(&QDoubleSpinBox::valueChanged), this,
            &C_SdBueSignalPropertiesWidget::m_HandleFactorChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_DoubleSpinBoxOffset, static_cast<void (QDoubleSpinBox::*)(
-                                                                float64_t)>(&QDoubleSpinBox::valueChanged), this,
+                                                                double)>(&QDoubleSpinBox::valueChanged), this,
            &C_SdBueSignalPropertiesWidget::m_HandleOffsetChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_ComboBoxByteOrder, static_cast<void (QComboBox::*)(
@@ -2309,11 +2309,11 @@ void C_SdBueSignalPropertiesWidget::m_DisconnectAll(void) const
               &C_SdBueSignalPropertiesWidget::m_HandleCommentChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    disconnect(this->mpc_Ui->pc_DoubleSpinBoxFactor, static_cast<void (QDoubleSpinBox::*)(
-                                                                   float64_t)>(&QDoubleSpinBox::valueChanged), this,
+                                                                   double)>(&QDoubleSpinBox::valueChanged), this,
               &C_SdBueSignalPropertiesWidget::m_HandleFactorChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    disconnect(this->mpc_Ui->pc_DoubleSpinBoxOffset, static_cast<void (QDoubleSpinBox::*)(
-                                                                   float64_t)>(&QDoubleSpinBox::valueChanged), this,
+                                                                   double)>(&QDoubleSpinBox::valueChanged), this,
               &C_SdBueSignalPropertiesWidget::m_HandleOffsetChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    disconnect(this->mpc_Ui->pc_ComboBoxByteOrder, static_cast<void (QComboBox::*)(

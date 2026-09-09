@@ -95,7 +95,7 @@ private:
    QWidget * m_CreateGenericEditor(QWidget * const opc_Parent, const QModelIndex & orc_Index,
                                    const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Min,
                                    const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Max,
-                                   const float64_t of64_Factor, const float64_t of64_Offset,
+                                   const double of64_Factor, const double of64_Offset,
                                    const uint32_t & oru32_ArrayIndex) const;
    void m_SetGenericEditorDataVariable(QWidget * const opc_Editor, const QModelIndex & orc_Index) const;
    void m_CommitData(void);

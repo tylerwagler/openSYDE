@@ -32,7 +32,7 @@ using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const float64_t C_SyvUpScene::mhf64_BUS_ANIMATION_TOLERANCE = 0.001;
+const double C_SyvUpScene::mhf64_BUS_ANIMATION_TOLERANCE = 0.001;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -588,7 +588,7 @@ C_SebUnoBaseManager * C_SyvUpScene::m_GetUndoManager(void)
 
 //----------------------------------------------------------------------------------------------------------------------
 C_GiNode * C_SyvUpScene::m_CreateNode(const int32_t & ors32_Index, const uint64_t & oru64_Id,
-                                      const float64_t & orf64_Width, const float64_t & orf64_Height,
+                                      const double & orf64_Width, const double & orf64_Height,
                                       QGraphicsItem * const opc_Parent)
 {
    return new C_GiSvNodeSyvUpdate(this->mu32_ViewIndex, ors32_Index, oru64_Id, orf64_Width, orf64_Height, opc_Parent);
@@ -1010,8 +1010,8 @@ int32_t C_SyvUpScene::mh_GetAnimationPath(const QPointF & orc_PointStart, const 
       const QPointF & rc_LineStart = orc_UiInteractionPoints[u64_ItBusConnection];
       const QPointF & rc_LineEnd =
          orc_UiInteractionPoints[static_cast<std::vector< QPointF>::size_type > (u64_ItBusConnection + 1UL)];
-      float64_t f64_Dist1;
-      float64_t f64_Dist2;
+      double f64_Dist1;
+      double f64_Dist2;
       C_GiBiConnectableItem::h_DistToLine(rc_LineStart, rc_LineEnd, orc_PointStart, &f64_Dist1);
       C_GiBiConnectableItem::h_DistToLine(rc_LineStart, rc_LineEnd, orc_PointEnd, &f64_Dist2);
       if (std::abs(f64_Dist1) < C_SyvUpScene::mhf64_BUS_ANIMATION_TOLERANCE)

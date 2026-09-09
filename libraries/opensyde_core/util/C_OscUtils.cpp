@@ -21,7 +21,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <string>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
 #include "TglFile.hpp"
@@ -36,7 +36,7 @@ using namespace stw::scl;
 using namespace stw::tgl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const float64_t C_OscUtils::mhf64_EPSILON = 1e-5;
+const double C_OscUtils::mhf64_EPSILON = 1e-5;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -150,7 +150,7 @@ bool C_OscUtils::h_CheckValidCeName(const std::string & orc_Name, const bool oq_
    false Not equal
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscUtils::h_IsFloat64NearlyEqual(const float64_t & orf64_Float1, const float64_t & orf64_Float2)
+bool C_OscUtils::h_IsFloat64NearlyEqual(const double & orf64_Float1, const double & orf64_Float2)
 {
    //From Marshall Cline's C++ FAQ Lite document
    return std::abs(orf64_Float1 - orf64_Float2) <= (C_OscUtils::mhf64_EPSILON * std::abs(orf64_Float1));
@@ -167,11 +167,11 @@ bool C_OscUtils::h_IsFloat64NearlyEqual(const float64_t & orf64_Float1, const fl
    false Not equal
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscUtils::h_IsFloat32NearlyEqual(const float32_t & orf32_Float1, const float32_t & orf32_Float2)
+bool C_OscUtils::h_IsFloat32NearlyEqual(const float & orf32_Float1, const float & orf32_Float2)
 {
    //From Marshall Cline's C++ FAQ Lite document
    return std::abs(orf32_Float1 - orf32_Float2) <=
-          (static_cast<float32_t>(C_OscUtils::mhf64_EPSILON) * std::abs(orf32_Float1));
+          (static_cast<float>(C_OscUtils::mhf64_EPSILON) * std::abs(orf32_Float1));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -474,7 +474,7 @@ bool C_OscUtils::h_CheckValidFilePath(const std::string & orc_String)
    False Scaling inactive
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscUtils::h_IsScalingActive(const float64_t of64_Factor, const float64_t of64_Offset)
+bool C_OscUtils::h_IsScalingActive(const double of64_Factor, const double of64_Offset)
 {
    bool q_Return = (C_OscUtils::h_IsFloat64NearlyEqual(of64_Factor, 1.0) == false);
 
@@ -497,10 +497,10 @@ bool C_OscUtils::h_IsScalingActive(const float64_t of64_Factor, const float64_t 
    Scaled value
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_OscUtils::h_GetValueScaled(const float64_t of64_Value, const float64_t of64_Factor,
-                                       const float64_t of64_Offset, const bool oq_AllowRangeAdaptation)
+double C_OscUtils::h_GetValueScaled(const double of64_Value, const double of64_Factor,
+                                       const double of64_Offset, const bool oq_AllowRangeAdaptation)
 {
-   float64_t f64_Result;
+   double f64_Result;
 
    f64_Result = of64_Value * of64_Factor;
    f64_Result += of64_Offset;
@@ -526,10 +526,10 @@ float64_t C_OscUtils::h_GetValueScaled(const float64_t of64_Value, const float64
    Origin value
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_OscUtils::h_GetValueUnscaled(const float64_t of64_Value, const float64_t of64_Factor,
-                                         const float64_t of64_Offset)
+double C_OscUtils::h_GetValueUnscaled(const double of64_Value, const double of64_Factor,
+                                         const double of64_Offset)
 {
-   float64_t f64_Result;
+   double f64_Result;
 
    f64_Result = of64_Value - of64_Offset;
    f64_Result /= of64_Factor;
@@ -668,10 +668,10 @@ void C_OscUtils::h_FileToString(const std::string & orc_FilePath, std::string & 
    \param[out]  orf64_Value   Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscUtils::h_RangeCheckFloat(float64_t & orf64_Value)
+void C_OscUtils::h_RangeCheckFloat(double & orf64_Value)
 {
-   orf64_Value = std::min(orf64_Value, std::numeric_limits<float64_t>::max());
-   orf64_Value = std::max(orf64_Value, -std::numeric_limits<float64_t>::max());
+   orf64_Value = std::min(orf64_Value, std::numeric_limits<double>::max());
+   orf64_Value = std::max(orf64_Value, -std::numeric_limits<double>::max());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

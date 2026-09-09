@@ -14,7 +14,7 @@
 
 #include <cmath>
 #include <QPainter>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvDaItUtil.hpp"
 #include "C_GiBiLineBounding.hpp"
 #include "C_GiBiConnectableItem.hpp"
@@ -287,7 +287,7 @@ void C_SyvDaItDashboardProgressBarWidget::paintEvent(QPaintEvent * const opc_Eve
    if (this->me_Type == stw::opensyde_gui_logic::C_PuiSvDbProgressBar::eTYPE_1)
    {
       QRect c_ValueRect;
-      const float32_t f32_FontSize = C_GiProgressBarUtil::h_GetType1FontSizeValue(this->rect(),
+      const float f32_FontSize = C_GiProgressBarUtil::h_GetType1FontSizeValue(this->rect(),
                                                                                   this->mf32_MinimumFontSize);
       c_TextFont.setPixelSize(static_cast<int32_t>(f32_FontSize));
       c_Painter.setFont(c_TextFont);
@@ -327,7 +327,7 @@ void C_SyvDaItDashboardProgressBarWidget::paintEvent(QPaintEvent * const opc_Eve
    else if (this->me_Type == stw::opensyde_gui_logic::C_PuiSvDbProgressBar::eTYPE_2)
    {
       const QRect c_Rect = this->rect();
-      const float32_t f32_MinMaxFontSize = C_GiProgressBarUtil::h_GetType2FontSizeValue(
+      const float f32_MinMaxFontSize = C_GiProgressBarUtil::h_GetType2FontSizeValue(
          c_Rect, this->mf32_MinimumFontSize);
 
       QRect c_ValueRect;
@@ -367,10 +367,10 @@ void C_SyvDaItDashboardProgressBarWidget::paintEvent(QPaintEvent * const opc_Eve
    else if (this->me_Type == stw::opensyde_gui_logic::C_PuiSvDbProgressBar::eTYPE_3)
    {
       const QRect c_Rect = this->rect();
-      const float32_t f32_FontValueSize = C_GiProgressBarUtil::h_GetType3FontSizeValue(c_Rect,
+      const float f32_FontValueSize = C_GiProgressBarUtil::h_GetType3FontSizeValue(c_Rect,
                                                                                        this->mf32_MinimumFontSize);
 
-      const float32_t f32_FontMinMaxSize = C_GiProgressBarUtil::h_GetType3FontSizeMaxMin(
+      const float f32_FontMinMaxSize = C_GiProgressBarUtil::h_GetType3FontSizeMaxMin(
          c_Rect, this->mf32_MinimumFontSize);
 
       c_TextFont.setPixelSize(static_cast<int32_t>(f32_FontMinMaxSize));

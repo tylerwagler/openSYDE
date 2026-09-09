@@ -13,7 +13,7 @@
 
 #include <QMap>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -51,8 +51,8 @@ private:
    uint64_t mu64_OverallFilesSize;
    std::vector<std::vector<uint64_t> > mc_FileSizesByte;
    std::vector<std::vector<uint64_t> > mc_ParamFileSizesByte;
-   QMap<uint32_t, float64_t> mc_FileSizesByteMapPerNode;
-   QMap<uint32_t, float64_t> mc_BytesPerMsMapPerNode;
+   QMap<uint32_t, double> mc_FileSizesByteMapPerNode;
+   QMap<uint32_t, double> mc_BytesPerMsMapPerNode;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

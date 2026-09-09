@@ -379,7 +379,7 @@ QString C_FlaUpListItemWidget::m_UpdateToolTipContent(const int32_t os32_Index)
    {
       const uint32_t u32_FileSize =
          static_cast<uint32_t>(this->pc_HexFileInfo->c_HexFileInfo.c_Size.split(' ').at(0).toUInt());
-      const float64_t f64_FileSize = std::ceil(static_cast<float64_t>(u32_FileSize) / 1024.0);
+      const double f64_FileSize = std::ceil(static_cast<double>(u32_FileSize) / 1024.0);
 
       c_Content += "Project Name: ";
       c_Content += this->pc_HexFileInfo->c_BlockInfo.at(os32_Index).c_ProjectName;

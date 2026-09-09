@@ -21,7 +21,7 @@
 #include <QMap>
 #include <QVector>
 #include <QColor>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_UsCommunication.hpp"
 #include "C_UsNode.hpp"
 #include "C_UsSystemView.hpp"
@@ -241,7 +241,7 @@ public:
    void SetProjSvParamImport(const QString & orc_ViewName, const QString & orc_Path);
    void SetProjSvParamRecord(const QString & orc_ViewName, const QString & orc_Path, const QString & orc_FileName);
    void AddProjSvNodeUpdateDataRate(const QString & orc_ViewName, const QString & orc_NodeName,
-                                    const uint32_t ou32_Checksum, const float64_t of64_DataRateBytesPerMs);
+                                    const uint32_t ou32_Checksum, const double of64_DataRateBytesPerMs);
    void SetProjSvUpdateSplitterHorizontal(const QString & orc_ViewName, const int32_t os32_Value);
    void SetProjSvUpdateHorizontalSplitterVertical(const QString & orc_ViewName, const int32_t os32_Value);
    void SetProjSvUpdateProgressLog(const QString & orc_ViewName, const QPoint & orc_Position, const QSize & orc_Size,

@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QDoubleSpinBox>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -32,7 +32,7 @@ class C_OgeSpxDoubleDynamicDecimalsBase :
 public:
    C_OgeSpxDoubleDynamicDecimalsBase(QWidget * const opc_Parent = nullptr);
 
-   QString textFromValue(const float64_t of64_Value) const override;
+   QString textFromValue(const double of64_Value) const override;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiLiLineGroup.hpp"
 #include "C_GiUnique.hpp"
 #include "C_PuiBsLineArrow.hpp"
@@ -75,9 +75,9 @@ private:
 
    QGraphicsPathItem * mpc_ArrowHeadStart;
    QGraphicsPathItem * mpc_ArrowHeadEnd;
-   float64_t mf64_ArrowLength;
-   float64_t mf64_ArrowHeight;
-   static const float64_t mhf64_SHAPE_OFFSET_FACTOR;
+   double mf64_ArrowLength;
+   double mf64_ArrowHeight;
+   static const double mhf64_SHAPE_OFFSET_FACTOR;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

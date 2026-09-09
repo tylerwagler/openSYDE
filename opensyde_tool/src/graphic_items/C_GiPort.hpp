@@ -14,7 +14,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsDropShadowEffect>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiBiConnectableItem.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -44,7 +44,7 @@ public:
    void RemoveConnectorFromRegistry(void);
    void TemporaryUnregister(void);
    void AbortTemporaryUnregister(void);
-   void StretchPort(const float64_t of64_Difference);
+   void StretchPort(const double of64_Difference);
    void ResizePortToDefault(void);
    void ResetConnectorCount(void);
    void SetDrawBorder(const bool oq_Active);

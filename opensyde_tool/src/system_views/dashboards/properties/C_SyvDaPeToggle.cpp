@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "TglUtils.hpp"
 #include "C_SyvDaPeToggle.hpp"
@@ -157,14 +157,14 @@ void C_SyvDaPeToggle::SetType(const C_PuiSvDbToggle::E_Type oe_Type) const
 void C_SyvDaPeToggle::m_UpdatePreview(void)
 {
    //Also include the fix offset to the right
-   const float64_t f64_IconOffset = C_SyvDaPeBase::h_GetFixIconOffset();
+   const double f64_IconOffset = C_SyvDaPeBase::h_GetFixIconOffset();
    const QSize c_ViewSize = C_SyvDaPeBase::h_GetSceneViewSize();
    C_GiSvDaToggleBase * const pc_Item = new C_GiSvDaToggleBase(0UL, 0UL, -1L, 0ULL, nullptr);
    const QSizeF c_ITEM_SIZE(150.0, 100.0);
    // 20 =  Vertical center adjustment
    const QPointF c_ItemPos(
-      ((static_cast<float64_t>(c_ViewSize.width()) - c_ITEM_SIZE.width()) / 2.0) + (f64_IconOffset / 2.0),
-      ((static_cast<float64_t>(c_ViewSize.height()) - c_ITEM_SIZE.height()) / 2.0) + 20.0);
+      ((static_cast<double>(c_ViewSize.width()) - c_ITEM_SIZE.width()) / 2.0) + (f64_IconOffset / 2.0),
+      ((static_cast<double>(c_ViewSize.height()) - c_ITEM_SIZE.height()) / 2.0) + 20.0);
 
    pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme());
    pc_Item->UpdateType(this->GetType());

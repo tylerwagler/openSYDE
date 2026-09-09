@@ -21,7 +21,7 @@
 #include <QStyleOptionViewItem>
 #include <QModelIndex>
 #include <QAbstractTableModel>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSdNodeDataPoolListElement.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
@@ -95,7 +95,7 @@ public:
    static QWidget * h_CreateGenericEditor(QWidget * const opc_Parent, const QModelIndex & orc_Index,
                                           const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Min,
                                           const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Max,
-                                          const float64_t of64_Factor, const float64_t of64_Offset,
+                                          const double of64_Factor, const double of64_Offset,
                                           const uint32_t & oru32_ArrayIndex, const bool oq_UseParamVariant);
    static void h_SetGenericEditorDataVariable(QWidget * const opc_Editor, const QModelIndex & orc_Index);
    static void h_SetModelGenericDataVariable(QWidget * const opc_Editor, QAbstractItemModel * const opc_Model,

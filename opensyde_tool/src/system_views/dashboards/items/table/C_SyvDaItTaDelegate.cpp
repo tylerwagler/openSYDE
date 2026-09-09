@@ -14,7 +14,7 @@
 
 #include <QSvgRenderer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_SyvDaItTaModel.hpp"
 #include "C_SdNdeDpUtil.hpp"
@@ -121,11 +121,11 @@ void C_SyvDaItTaDelegate::paint(QPainter * const opc_Painter, const QStyleOption
       const int32_t s32_OFFSET_X = 7;
       const int32_t s32_OFFSET_Y = 1;
       //Expected progress [0;1]
-      const float32_t f32_Progress = orc_Index.data(static_cast<int32_t>(Qt::EditRole)).toFloat();
+      const float f32_Progress = orc_Index.data(static_cast<int32_t>(Qt::EditRole)).toFloat();
       //Complete rectangle with padding
       const QRect c_RectBarBase = orc_Option.rect.adjusted(s32_OFFSET_X, s32_OFFSET_Y, -s32_OFFSET_X, -s32_OFFSET_Y);
-      const float32_t f32_RectBarBaseWidth = static_cast<float32_t>(c_RectBarBase.width());
-      const float32_t f32_RectBarWidth = f32_Progress * f32_RectBarBaseWidth;
+      const float f32_RectBarBaseWidth = static_cast<float>(c_RectBarBase.width());
+      const float f32_RectBarWidth = f32_Progress * f32_RectBarBaseWidth;
       //Progress rectangle
       const QRect c_RectBar(c_RectBarBase.topLeft(),
                             QSize(static_cast<int32_t>(f32_RectBarWidth), c_RectBarBase.height()));

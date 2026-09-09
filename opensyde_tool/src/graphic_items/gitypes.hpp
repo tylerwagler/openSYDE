@@ -15,7 +15,7 @@
 
 #include <limits>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -50,25 +50,25 @@ const int32_t ms32_GRAPHICS_ITEM_DB_PIE_CHART     = static_cast<int32_t>(QGraphi
 const int32_t ms32_GRAPHICS_ITEM_DB_TABLE         = static_cast<int32_t>(QGraphicsItem::UserType) + 26;
 const int32_t ms32_GRAPHICS_ITEM_DB_PARAM         = static_cast<int32_t>(QGraphicsItem::UserType) + 27;
 
-const float64_t mf64_ZORDER_INIT_LOW                 = 10000.0;
-const float64_t mf64_ZORDER_INIT_IMAGE               = mf64_ZORDER_INIT_LOW;
-const float64_t mf64_ZORDER_INIT_BOUNDARY            = mf64_ZORDER_INIT_LOW + 1.0;
-const float64_t mf64_ZORDER_INIT_BUS_CONNECT         = mf64_ZORDER_INIT_LOW + 2.0;
-const float64_t mf64_ZORDER_INIT_BUS                 = mf64_ZORDER_INIT_LOW + 3.0;
-const float64_t mf64_ZORDER_INIT_NODE                = mf64_ZORDER_INIT_LOW + 4.0;
-const float64_t mf64_ZORDER_INIT_TEXT_ELEMENT        = mf64_ZORDER_INIT_LOW + 5.0;
-const float64_t mf64_ZORDER_INIT_LINE_ARROW          = mf64_ZORDER_INIT_LOW + 6.0;
-const float64_t mf64_ZORDER_INIT_LABEL_WIDGET        = mf64_ZORDER_INIT_LOW + 7.0;
-const float64_t mf64_ZORDER_INIT_SPIN_BOX_WIDGET     = mf64_ZORDER_INIT_LOW + 8.0;
-const float64_t mf64_ZORDER_INIT_SLIDER_WIDGET       = mf64_ZORDER_INIT_LOW + 9.0;
-const float64_t mf64_ZORDER_INIT_PROGRESS_BAR_WIDGET = mf64_ZORDER_INIT_LOW + 10.0;
-const float64_t mf64_ZORDER_INIT_TOGGLE_WIDGET       = mf64_ZORDER_INIT_LOW + 11.0;
-const float64_t mf64_ZORDER_INIT_CHART_WIDGET        = mf64_ZORDER_INIT_LOW + 12.0;
-const float64_t mf64_ZORDER_INIT_PIE_CHART_WIDGET    = mf64_ZORDER_INIT_LOW + 13.0;
-const float64_t mf64_ZORDER_INIT_TABLE_WIDGET        = mf64_ZORDER_INIT_LOW + 14.0;
-const float64_t mf64_ZORDER_INIT_PARAM_WIDGET        = mf64_ZORDER_INIT_LOW + 15.0;
-const float64_t mf64_ZORDER_INIT_HIGH                = mf64_ZORDER_INIT_PARAM_WIDGET;
-const float64_t mf64_ZORDER_MAX                      = std::numeric_limits<float64_t>::max();
+const double mf64_ZORDER_INIT_LOW                 = 10000.0;
+const double mf64_ZORDER_INIT_IMAGE               = mf64_ZORDER_INIT_LOW;
+const double mf64_ZORDER_INIT_BOUNDARY            = mf64_ZORDER_INIT_LOW + 1.0;
+const double mf64_ZORDER_INIT_BUS_CONNECT         = mf64_ZORDER_INIT_LOW + 2.0;
+const double mf64_ZORDER_INIT_BUS                 = mf64_ZORDER_INIT_LOW + 3.0;
+const double mf64_ZORDER_INIT_NODE                = mf64_ZORDER_INIT_LOW + 4.0;
+const double mf64_ZORDER_INIT_TEXT_ELEMENT        = mf64_ZORDER_INIT_LOW + 5.0;
+const double mf64_ZORDER_INIT_LINE_ARROW          = mf64_ZORDER_INIT_LOW + 6.0;
+const double mf64_ZORDER_INIT_LABEL_WIDGET        = mf64_ZORDER_INIT_LOW + 7.0;
+const double mf64_ZORDER_INIT_SPIN_BOX_WIDGET     = mf64_ZORDER_INIT_LOW + 8.0;
+const double mf64_ZORDER_INIT_SLIDER_WIDGET       = mf64_ZORDER_INIT_LOW + 9.0;
+const double mf64_ZORDER_INIT_PROGRESS_BAR_WIDGET = mf64_ZORDER_INIT_LOW + 10.0;
+const double mf64_ZORDER_INIT_TOGGLE_WIDGET       = mf64_ZORDER_INIT_LOW + 11.0;
+const double mf64_ZORDER_INIT_CHART_WIDGET        = mf64_ZORDER_INIT_LOW + 12.0;
+const double mf64_ZORDER_INIT_PIE_CHART_WIDGET    = mf64_ZORDER_INIT_LOW + 13.0;
+const double mf64_ZORDER_INIT_TABLE_WIDGET        = mf64_ZORDER_INIT_LOW + 14.0;
+const double mf64_ZORDER_INIT_PARAM_WIDGET        = mf64_ZORDER_INIT_LOW + 15.0;
+const double mf64_ZORDER_INIT_HIGH                = mf64_ZORDER_INIT_PARAM_WIDGET;
+const double mf64_ZORDER_MAX                      = std::numeric_limits<double>::max();
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 

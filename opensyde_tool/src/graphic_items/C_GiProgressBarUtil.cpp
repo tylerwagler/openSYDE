@@ -24,7 +24,7 @@
 #include <QPainter>
 #include <array>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiProgressBarUtil.hpp"
 #include "C_GiBiLineBounding.hpp"
 #include "C_GiBiConnectableItem.hpp"
@@ -81,7 +81,7 @@ void C_GiProgressBarUtil::h_DrawArrow(QPainter * const opc_Painter, const std::a
    }
 
    QPainterPath c_Path;
-   const float64_t f64_HalfWidth = orc_Pen.widthF() / 2.0;
+   const double f64_HalfWidth = orc_Pen.widthF() / 2.0;
    //Rects
    const QPolygonF c_Poly1To3 = mh_GetOuterRect(c_ArrowCornerPoint1, c_P3, c_P2, f64_HalfWidth);
    const QPolygonF c_Poly3To2 = mh_GetOuterRect(c_P3, c_P2, c_ArrowCornerPoint1, f64_HalfWidth);
@@ -136,8 +136,8 @@ void C_GiProgressBarUtil::h_DefineType1Margins(const QRect & orc_Rect, QHBoxLayo
                                                const bool & orq_ShowMinMax, const QString & orc_MaxValue,
                                                const QString & orc_MinValue, const QString & orc_Unit,
                                                const C_PuiSvDbProgressBar::E_Alignment & ore_Alignment,
-                                               const float32_t & orf32_MinimumFontSize,
-                                               const float32_t & orf32_ArrowOffset)
+                                               const float & orf32_MinimumFontSize,
+                                               const float & orf32_ArrowOffset)
 {
    const QMarginsF c_Margins = h_GetType1Margins(orc_Rect, orq_ShowMinMax, orc_MaxValue, orc_MinValue, orc_Unit,
                                                  ore_Alignment,
@@ -160,15 +160,15 @@ void C_GiProgressBarUtil::h_DefineType1Margins(const QRect & orc_Rect, QHBoxLayo
    Font size
 */
 //----------------------------------------------------------------------------------------------------------------------
-float32_t C_GiProgressBarUtil::h_GetType1FontSizeValue(const QRect & orc_Rect, const float32_t & orf32_MinimumFontSize)
+float C_GiProgressBarUtil::h_GetType1FontSizeValue(const QRect & orc_Rect, const float & orf32_MinimumFontSize)
 {
    //Constants
-   const float32_t f32_MODIFIER = 0.35F;
+   const float f32_MODIFIER = 0.35F;
 
-   const float32_t f32_FontSize =
-      ((static_cast<float32_t>(orc_Rect.height()) * f32_MODIFIER) < orf32_MinimumFontSize) ?
+   const float f32_FontSize =
+      ((static_cast<float>(orc_Rect.height()) * f32_MODIFIER) < orf32_MinimumFontSize) ?
       (orf32_MinimumFontSize) :
-      (static_cast<float32_t>(orc_Rect.height()) * f32_MODIFIER);
+      (static_cast<float>(orc_Rect.height()) * f32_MODIFIER);
 
    return f32_FontSize;
 }
@@ -306,17 +306,17 @@ QRect C_GiProgressBarUtil::h_SetType1Value(const C_OgeDashboardProgressBar * con
 
    //Variables
    QRect c_ValueRect;
-   float64_t f64_CurrentValueXposition = mh_GetCurrentValueWidthPosition(opc_ProgressBar,
+   double f64_CurrentValueXposition = mh_GetCurrentValueWidthPosition(opc_ProgressBar,
                                                                          orc_MaxValue,
                                                                          orc_MinValue,
                                                                          orc_CurrentValue);
 
    f64_CurrentValueXposition -=
-      static_cast<float64_t>(c_FONT_METRICS.horizontalAdvance(orc_CurrentValue + orc_Unit)) /
-      static_cast<float64_t>(u32_MODIFIER); // Get center
+      static_cast<double>(c_FONT_METRICS.horizontalAdvance(orc_CurrentValue + orc_Unit)) /
+      static_cast<double>(u32_MODIFIER); // Get center
 
-   const float32_t f32_ArrowSpacer =
-      static_cast<float32_t>(c_FONT_METRICS.horizontalAdvance(orc_ArrowSpacerString)) / mhf32_ARROW_SIZE_H;
+   const float f32_ArrowSpacer =
+      static_cast<float>(c_FONT_METRICS.horizontalAdvance(orc_ArrowSpacerString)) / mhf32_ARROW_SIZE_H;
 
    // Define font height and width
    const uint32_t u32_FontWidth = static_cast<uint32_t>(c_FONT_METRICS.horizontalAdvance(orc_CurrentValue + orc_Unit));
@@ -416,14 +416,14 @@ QMarginsF C_GiProgressBarUtil::h_GetType1Margins(const QRect & orc_Rect, const b
                                                  const QString & orc_MaxValue, const QString & orc_MinValue,
                                                  const QString & orc_Unit,
                                                  const C_PuiSvDbProgressBar::E_Alignment & ore_Alignment,
-                                                 const float32_t & orf32_MinimumFontSize,
-                                                 const float32_t & orf32_ArrowOffset)
+                                                 const float & orf32_MinimumFontSize,
+                                                 const float & orf32_ArrowOffset)
 {
    //Variables
-   float32_t f32_BarMarginTop = .0F;
-   float32_t f32_BarMarginBottom = .0F;
-   float32_t f32_BarMarginLeft = .0F;
-   float32_t f32_BarMarginRight = .0F;
+   float f32_BarMarginTop = .0F;
+   float f32_BarMarginBottom = .0F;
+   float f32_BarMarginLeft = .0F;
+   float f32_BarMarginRight = .0F;
 
    // Getting the font size is very important to set the correct margin
    // Otherwise, there is not enough or too much margin
@@ -464,7 +464,7 @@ QMarginsF C_GiProgressBarUtil::h_GetType1Margins(const QRect & orc_Rect, const b
 void C_GiProgressBarUtil::h_DefineType2Margins(const QRect & orc_Rect, QHBoxLayout * const opc_Layout,
                                                const bool & orq_ShowMinMax,
                                                const C_PuiSvDbProgressBar::E_Alignment & ore_Alignment,
-                                               const float32_t & orf32_MinimumFontSize)
+                                               const float & orf32_MinimumFontSize)
 {
    const QMarginsF c_Margin = h_GetType2Margins(orc_Rect,
                                                 orq_ShowMinMax, ore_Alignment,
@@ -489,12 +489,12 @@ void C_GiProgressBarUtil::h_DefineType2Margins(const QRect & orc_Rect, QHBoxLayo
    Font size
 */
 //----------------------------------------------------------------------------------------------------------------------
-float32_t C_GiProgressBarUtil::h_GetType2FontSizeValue(const QRect & orc_Rect, const float32_t & orf32_MinimumFontSize)
+float C_GiProgressBarUtil::h_GetType2FontSizeValue(const QRect & orc_Rect, const float & orf32_MinimumFontSize)
 {
    //Constants
-   const float32_t f32_FONT_MODIFIERT = 5.0F;
+   const float f32_FONT_MODIFIERT = 5.0F;
 
-   float32_t f32_FontSize = (static_cast<float32_t>(orc_Rect.width()) / f32_FONT_MODIFIERT);
+   float f32_FontSize = (static_cast<float>(orc_Rect.width()) / f32_FONT_MODIFIERT);
 
    if (f32_FontSize < orf32_MinimumFontSize)
    {
@@ -535,8 +535,8 @@ QRect C_GiProgressBarUtil::h_SetType2Value(const QRect & orc_Rect,
    //Constants
    const QFontMetrics c_FONT_METRICS = orc_Painter.fontMetrics();
 
-   const float32_t f32_ArrowSpacer =
-      static_cast<float32_t>(c_FONT_METRICS.horizontalAdvance(orc_ArrowSpacerString)) / mhf32_ARROW_SIZE_V;
+   const float f32_ArrowSpacer =
+      static_cast<float>(c_FONT_METRICS.horizontalAdvance(orc_ArrowSpacerString)) / mhf32_ARROW_SIZE_V;
 
    //Define font height and width
    const uint32_t u32_FontWidth =
@@ -557,12 +557,12 @@ QRect C_GiProgressBarUtil::h_SetType2Value(const QRect & orc_Rect,
 
    // Variables
    QRect c_ValueRect;
-   float64_t f64_CurrentValueYposition = mh_GetCurrentValueHeightPosition(orc_Rect, opc_ProgressBar, orc_MaxValue,
+   double f64_CurrentValueYposition = mh_GetCurrentValueHeightPosition(orc_Rect, opc_ProgressBar, orc_MaxValue,
                                                                           orc_MinValue, orc_CurrentValue,
                                                                           ors32_BottomMargin);
 
-   f64_CurrentValueYposition -= (static_cast<float64_t>(c_FONT_METRICS.height()) /
-                                 static_cast<float64_t>(mhf32_ARROW_MODIFIER));
+   f64_CurrentValueYposition -= (static_cast<double>(c_FONT_METRICS.height()) /
+                                 static_cast<double>(mhf32_ARROW_MODIFIER));
    c_ValueRect = QRect(u32_CurrentValueRectXposition,
                        static_cast<uint32_t>(f64_CurrentValueYposition),
                        u32_FontWidth,
@@ -648,19 +648,19 @@ void C_GiProgressBarUtil::h_SetType2Arrow(const C_OgeDashboardProgressBar * cons
 //----------------------------------------------------------------------------------------------------------------------
 QMarginsF C_GiProgressBarUtil::h_GetType2Margins(const QRect & orc_Rect, const bool & orq_ShowMinMax,
                                                  const C_PuiSvDbProgressBar::E_Alignment & ore_Alignment,
-                                                 const float32_t & orf32_MinimumFontSize)
+                                                 const float & orf32_MinimumFontSize)
 {
    //Constants
-   const float32_t f32_FontSize = h_GetType2FontSizeValue(orc_Rect, orf32_MinimumFontSize);
+   const float f32_FontSize = h_GetType2FontSizeValue(orc_Rect, orf32_MinimumFontSize);
    // 35% of the rect can have the progress bar. The other 65% are reserved for the current value that is placed
    // left or right from the progress bar
-   const float32_t f32_RESERVED_CURRENT_VALUE_SPACING = 0.65F;
+   const float f32_RESERVED_CURRENT_VALUE_SPACING = 0.65F;
 
    //Variables
-   float32_t f32_BarMarginTop = .0F;
-   float32_t f32_BarMarginBottom = .0F;
-   float32_t f32_BarMarginLeft = .0F;
-   float32_t f32_BarMarginRight = .0F;
+   float f32_BarMarginTop = .0F;
+   float f32_BarMarginBottom = .0F;
+   float f32_BarMarginLeft = .0F;
+   float f32_BarMarginRight = .0F;
 
    // Getting the font size is very important to set the correct margin
    // Otherwise, there is not enough or too much margin
@@ -701,7 +701,7 @@ QMarginsF C_GiProgressBarUtil::h_GetType2Margins(const QRect & orc_Rect, const b
 void C_GiProgressBarUtil::h_DefineType3Margins(const QRect & orc_Rect, QHBoxLayout * const opc_Layout,
                                                const bool & orq_ShowMinMax,
                                                const C_PuiSvDbProgressBar::E_Alignment & ore_Alignment,
-                                               const float32_t & orf32_MinimumFontSize)
+                                               const float & orf32_MinimumFontSize)
 {
    const QMarginsF c_Margins = h_GetType3Margins(orc_Rect,
                                                  orq_ShowMinMax,
@@ -721,14 +721,14 @@ void C_GiProgressBarUtil::h_DefineType3Margins(const QRect & orc_Rect, QHBoxLayo
     \param[in]       orf32_MinimumFontSize    Minimum font size defines the minimum font size of the current, maximum, and minimum labels
 
    \return
-   float32_t - Font size
+   float - Font size
 */
 //----------------------------------------------------------------------------------------------------------------------
-float32_t C_GiProgressBarUtil::h_GetType3FontSizeValue(const QRect & orc_Rect, const float32_t & orf32_MinimumFontSize)
+float C_GiProgressBarUtil::h_GetType3FontSizeValue(const QRect & orc_Rect, const float & orf32_MinimumFontSize)
 {
-   const float32_t f32_FONT_WIDTH_MODIFIER = 3.0F;
+   const float f32_FONT_WIDTH_MODIFIER = 3.0F;
 
-   float32_t f32_FontSize = (static_cast<float32_t>(orc_Rect.width()) / f32_FONT_WIDTH_MODIFIER);
+   float f32_FontSize = (static_cast<float>(orc_Rect.width()) / f32_FONT_WIDTH_MODIFIER);
 
    if (f32_FontSize < orf32_MinimumFontSize)
    {
@@ -746,15 +746,15 @@ float32_t C_GiProgressBarUtil::h_GetType3FontSizeValue(const QRect & orc_Rect, c
                                               and minimum labels
 
    \return
-   float32_t - Font size
+   float - Font size
 */
 //----------------------------------------------------------------------------------------------------------------------
-float32_t C_GiProgressBarUtil::h_GetType3FontSizeMaxMin(const QRect & orc_Rect, const float32_t & orf32_MinimumFontSize)
+float C_GiProgressBarUtil::h_GetType3FontSizeMaxMin(const QRect & orc_Rect, const float & orf32_MinimumFontSize)
 {
    //Constants
-   const float32_t f32_FONT_MODIFIER = 4.0F;
+   const float f32_FONT_MODIFIER = 4.0F;
 
-   float32_t f32_FontSize = (static_cast<float32_t>(orc_Rect.width()) / f32_FONT_MODIFIER);
+   float f32_FontSize = (static_cast<float>(orc_Rect.width()) / f32_FONT_MODIFIER);
 
    if (f32_FontSize <= orf32_MinimumFontSize)
    {
@@ -779,7 +779,7 @@ float32_t C_GiProgressBarUtil::h_GetType3FontSizeMaxMin(const QRect & orc_Rect, 
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiProgressBarUtil::h_SetType3Value(
    const opensyde_gui_elements::C_OgeDashboardProgressBar * const opc_ProgressBar, const QString & orc_CurrentValue,
-   const QString & orc_Unit, const C_PuiSvDbProgressBar::E_Alignment & ore_Alignment, const float32_t orf32_FontSize,
+   const QString & orc_Unit, const C_PuiSvDbProgressBar::E_Alignment & ore_Alignment, const float orf32_FontSize,
    QPainter & orc_Painter)
 {
    //Define specific progress bar variables
@@ -847,20 +847,20 @@ void C_GiProgressBarUtil::h_SetType3Value(
 //----------------------------------------------------------------------------------------------------------------------
 QMarginsF C_GiProgressBarUtil::h_GetType3Margins(const QRect & orc_Rect, const bool & orq_ShowMinMax,
                                                  const C_PuiSvDbProgressBar::E_Alignment & ore_Alignment,
-                                                 const float32_t & orf32_MinimumFontSize)
+                                                 const float & orf32_MinimumFontSize)
 {
    //Constants
    // 20% of the rect can have the progress bar. the other 80% are reserved for the current value that is placed
    // left or right from the progress bar
-   const float32_t f32_RESERVED_CURRENT_VALUE_SPACING = 0.80F;
+   const float f32_RESERVED_CURRENT_VALUE_SPACING = 0.80F;
    // MaxMin font size is used because only the bottom and top
    // values are interesting. The values there are minimum and maximum value
 
    //Variables
-   float32_t f32_BarMarginTop = .0F;
-   float32_t f32_BarMarginBottom = .0F;
-   float32_t f32_BarMarginLeft = .0F;
-   float32_t f32_BarMarginRight = .0F;
+   float f32_BarMarginTop = .0F;
+   float f32_BarMarginBottom = .0F;
+   float f32_BarMarginLeft = .0F;
+   float f32_BarMarginRight = .0F;
 
    // Getting the font size is very important to set the correct margin
    // Otherwise, there is not enough or too much margin
@@ -943,7 +943,7 @@ void C_GiProgressBarUtil::h_SetType23MinimumMaximumValue(const QRect & orc_Rect,
 */
 //----------------------------------------------------------------------------------------------------------------------
 QPolygonF C_GiProgressBarUtil::mh_GetOuterRect(const QPointF & orc_P1, const QPointF & orc_P2,
-                                               const QPointF & orc_PointOpposite, const float64_t of64_Width)
+                                               const QPointF & orc_PointOpposite, const double of64_Width)
 {
    QPolygonF c_Retval;
    /*
@@ -986,13 +986,13 @@ QPolygonF C_GiProgressBarUtil::mh_GetOuterRect(const QPointF & orc_P1, const QPo
    */
    const QPointF c_P1ToP2 = orc_P2 - orc_P1;
    const QPointF c_Perpendicular = C_GiBiLineBounding::h_GetPerpendicular(c_P1ToP2);
-   const float64_t f64_LengthP1Perpendicular = sqrt(
+   const double f64_LengthP1Perpendicular = sqrt(
       (c_Perpendicular.x() * c_Perpendicular.x()) + (c_Perpendicular.y() * c_Perpendicular.y()));
    const QPointF c_PerpendicularToNewPoints = (c_Perpendicular / f64_LengthP1Perpendicular) * of64_Width;
    const QPointF c_P3Plus = orc_PointOpposite + c_PerpendicularToNewPoints;
    const QPointF c_P3Minus = orc_PointOpposite - c_PerpendicularToNewPoints;
-   float64_t f64_Dist1;
-   float64_t f64_Dist2;
+   double f64_Dist1;
+   double f64_Dist2;
 
    C_GiBiConnectableItem::h_DistToPoint(orc_P1, c_P3Plus, f64_Dist1);
    C_GiBiConnectableItem::h_DistToPoint(orc_P1, c_P3Minus, f64_Dist2);
@@ -1026,7 +1026,7 @@ QPolygonF C_GiProgressBarUtil::mh_GetOuterRect(const QPointF & orc_P1, const QPo
    Rectangle for circle
 */
 //----------------------------------------------------------------------------------------------------------------------
-QRectF C_GiProgressBarUtil::mh_GetCircle(const QPointF & orc_P1, const float64_t of64_Width)
+QRectF C_GiProgressBarUtil::mh_GetCircle(const QPointF & orc_P1, const double of64_Width)
 {
    return QRectF(orc_P1.x() - of64_Width, orc_P1.y() - of64_Width, of64_Width * 2.0, of64_Width * 2.0);
 }
@@ -1042,9 +1042,9 @@ QRectF C_GiProgressBarUtil::mh_GetCircle(const QPointF & orc_P1, const float64_t
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiProgressBarUtil::mh_SetArc(QPainterPath & orc_Path, const QPointF & orc_PointCenter, const QPointF & orc_P2,
-                                    const QPointF & orc_P3, const float64_t of64_Radius)
+                                    const QPointF & orc_P3, const double of64_Radius)
 {
-   const float64_t f64_FULL_360 = 2.0 * M_PI;
+   const double f64_FULL_360 = 2.0 * M_PI;
    QPointF c_P1;
    QPointF c_P2;
 
@@ -1098,10 +1098,10 @@ void C_GiProgressBarUtil::mh_SetArc(QPainterPath & orc_Path, const QPointF & orc
       // --------------------------------------------------------------
       // P2                                                           P1
       */
-      const float64_t f64_Beta = mh_GetArc(orc_PointCenter - c_P1, QPointF(1.0, 0.0));
-      const float64_t f64_Alpha = mh_GetArc(orc_PointCenter - c_P2, QPointF(1.0, 0.0));
-      const float64_t f64_Start = f64_Beta - (f64_FULL_360 / 4.0);
-      const float64_t f64_Sweep =  ((f64_FULL_360 / 2.0) + f64_Alpha) - f64_Beta;
+      const double f64_Beta = mh_GetArc(orc_PointCenter - c_P1, QPointF(1.0, 0.0));
+      const double f64_Alpha = mh_GetArc(orc_PointCenter - c_P2, QPointF(1.0, 0.0));
+      const double f64_Start = f64_Beta - (f64_FULL_360 / 4.0);
+      const double f64_Sweep =  ((f64_FULL_360 / 2.0) + f64_Alpha) - f64_Beta;
 
       orc_Path.arcTo(mh_GetCircle(orc_PointCenter,
                                   of64_Radius), f64_Start * (360.0 / f64_FULL_360), f64_Sweep * (360.0 / f64_FULL_360));
@@ -1118,11 +1118,11 @@ void C_GiProgressBarUtil::mh_SetArc(QPainterPath & orc_Path, const QPointF & orc
    Angle between vectors
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_GiProgressBarUtil::mh_GetArc(const QPointF & orc_V1, const QPointF & orc_V2)
+double C_GiProgressBarUtil::mh_GetArc(const QPointF & orc_V1, const QPointF & orc_V2)
 {
-   const float64_t f64_DotProduct = (orc_V1.x() * orc_V2.x()) + (orc_V1.y() * orc_V2.y());
-   const float64_t f64_Determinant = (orc_V1.x() * orc_V2.y()) - (orc_V1.y() * orc_V2.x());
-   const float64_t f64_Angle = atan2(f64_Determinant, f64_DotProduct);
+   const double f64_DotProduct = (orc_V1.x() * orc_V2.x()) + (orc_V1.y() * orc_V2.y());
+   const double f64_Determinant = (orc_V1.x() * orc_V2.y()) - (orc_V1.y() * orc_V2.x());
+   const double f64_Angle = atan2(f64_Determinant, f64_DotProduct);
 
    return f64_Angle;
 }
@@ -1150,27 +1150,27 @@ std::array<QPointF, 3> C_GiProgressBarUtil::mh_GetType1ArrowCornerPoints(
    std::array<QPointF, 3> ac_ArrowPoints;
 
    // Progress bar values
-   const float64_t f64_ProgressBarYposition = static_cast<float64_t>(opc_ProgressBar->y());
-   const float64_t f64_ProgressBarHeight = static_cast<float64_t>(opc_ProgressBar->height());
-   const float64_t f64_ProgressBarBottomYcorner = f64_ProgressBarYposition + f64_ProgressBarHeight;
+   const double f64_ProgressBarYposition = static_cast<double>(opc_ProgressBar->y());
+   const double f64_ProgressBarHeight = static_cast<double>(opc_ProgressBar->height());
+   const double f64_ProgressBarBottomYcorner = f64_ProgressBarYposition + f64_ProgressBarHeight;
 
    // Rectangular values
    const QPoint c_ValueRectCenterPoint = orc_ValueRect.center();
-   const float64_t f64_ValueRectYposition = static_cast<float64_t>(orc_ValueRect.y());
-   const float64_t f64_ValueRectHeight = static_cast<float64_t>(orc_ValueRect.height());
-   const float64_t f64_ValueRectBottomYcorner = f64_ValueRectYposition + f64_ValueRectHeight;
+   const double f64_ValueRectYposition = static_cast<double>(orc_ValueRect.y());
+   const double f64_ValueRectHeight = static_cast<double>(orc_ValueRect.height());
+   const double f64_ValueRectBottomYcorner = f64_ValueRectYposition + f64_ValueRectHeight;
 
-   float32_t f32_ProgressBarPointDistance = .0F;
+   float f32_ProgressBarPointDistance = .0F;
 
    if (ore_Alignment == C_PuiSvDbProgressBar::eTOP)
    {
       f32_ProgressBarPointDistance =
-         abs(static_cast<float32_t>(f64_ProgressBarYposition) - static_cast<float32_t>(f64_ValueRectBottomYcorner));
+         abs(static_cast<float>(f64_ProgressBarYposition) - static_cast<float>(f64_ValueRectBottomYcorner));
    }
    else if (ore_Alignment == C_PuiSvDbProgressBar::eBOTTOM)
    {
       f32_ProgressBarPointDistance =
-         abs(static_cast<float32_t>(f64_ProgressBarBottomYcorner) - static_cast<float32_t>(f64_ValueRectYposition));
+         abs(static_cast<float>(f64_ProgressBarBottomYcorner) - static_cast<float>(f64_ValueRectYposition));
    }
    else
    {
@@ -1181,14 +1181,14 @@ std::array<QPointF, 3> C_GiProgressBarUtil::mh_GetType1ArrowCornerPoints(
 
    // Others
    const QFontMetrics c_FONT_METRICS = orc_Painter.fontMetrics();
-   const float32_t f32_HorizonalFontMetrics =
-      static_cast<float32_t>(c_FONT_METRICS.horizontalAdvance(orc_ArrowSpacerString));
+   const float f32_HorizonalFontMetrics =
+      static_cast<float>(c_FONT_METRICS.horizontalAdvance(orc_ArrowSpacerString));
 
-   const float32_t f32_PossibleHorizonalSpace = f32_HorizonalFontMetrics / mhf32_ARROW_SIZE_H;
+   const float f32_PossibleHorizonalSpace = f32_HorizonalFontMetrics / mhf32_ARROW_SIZE_H;
 
-   const float64_t f64_Point1Xposition = static_cast<float64_t>(c_ValueRectCenterPoint.x()) +
-                                         static_cast<float64_t>(f32_PossibleHorizonalSpace);
-   float64_t f64_Point1Yposition = f64_ValueRectBottomYcorner + mhf32_ARROW_BAR_SPACER;
+   const double f64_Point1Xposition = static_cast<double>(c_ValueRectCenterPoint.x()) +
+                                         static_cast<double>(f32_PossibleHorizonalSpace);
+   double f64_Point1Yposition = f64_ValueRectBottomYcorner + mhf32_ARROW_BAR_SPACER;
 
    if (ore_Alignment == C_PuiSvDbProgressBar::eTOP)
    {
@@ -1206,15 +1206,15 @@ std::array<QPointF, 3> C_GiProgressBarUtil::mh_GetType1ArrowCornerPoints(
    ac_ArrowPoints[0] = QPointF(f64_Point1Xposition,
                                f64_Point1Yposition);
 
-   const float64_t f64_Point2Xposition = static_cast<float64_t>(c_ValueRectCenterPoint.x()) -
-                                         static_cast<float64_t>(f32_PossibleHorizonalSpace);
-   const float64_t f64_Point2Yposition = f64_Point1Yposition;
+   const double f64_Point2Xposition = static_cast<double>(c_ValueRectCenterPoint.x()) -
+                                         static_cast<double>(f32_PossibleHorizonalSpace);
+   const double f64_Point2Yposition = f64_Point1Yposition;
 
    ac_ArrowPoints[1] = QPointF(f64_Point2Xposition,
                                f64_Point2Yposition);
 
-   const float64_t f64_Point3Xposition = static_cast<float64_t>(c_ValueRectCenterPoint.x());
-   float64_t f64_Point3Yposition = .0F;
+   const double f64_Point3Xposition = static_cast<double>(c_ValueRectCenterPoint.x());
+   double f64_Point3Yposition = .0F;
    if (ore_Alignment == C_PuiSvDbProgressBar::eTOP)
    {
       f64_Point3Yposition = f64_ValueRectBottomYcorner + f32_ProgressBarPointDistance;
@@ -1259,31 +1259,31 @@ std::array<QPointF, 3> C_GiProgressBarUtil::mh_GetType23ArrowCornerPoints(const 
 
    // Constants
    // Progress bar values
-   const float64_t f64_ProgressBarXposition = static_cast<float64_t>(opc_ProgressBar->x());
-   const float64_t f64_ProgressBarWidth = static_cast<float64_t>(opc_ProgressBar->width());
-   const float64_t f64_PROGRESS_BAR_RIGHT_X_CORNER = f64_ProgressBarXposition + f64_ProgressBarWidth;
+   const double f64_ProgressBarXposition = static_cast<double>(opc_ProgressBar->x());
+   const double f64_ProgressBarWidth = static_cast<double>(opc_ProgressBar->width());
+   const double f64_PROGRESS_BAR_RIGHT_X_CORNER = f64_ProgressBarXposition + f64_ProgressBarWidth;
 
    // Rectangular values
    const uint32_t u32_RectangularxPosition = orc_ValueRect.x();
    const uint32_t u32_RectangularWidth = orc_ValueRect.width();
-   const float64_t f64_RECTANGULAR_RIGHT_X_CORNER = static_cast<float64_t>(u32_RectangularxPosition) +
-                                                    static_cast<float64_t>(u32_RectangularWidth);
+   const double f64_RECTANGULAR_RIGHT_X_CORNER = static_cast<double>(u32_RectangularxPosition) +
+                                                    static_cast<double>(u32_RectangularWidth);
 
    const QPoint c_ValueRectCenterPoint = orc_ValueRect.center();
-   float32_t f32_ProgressBarPointDistance = .0F;
+   float f32_ProgressBarPointDistance = .0F;
 
    if (ore_Alignment == C_PuiSvDbProgressBar::eLEFT)
    {
       f32_ProgressBarPointDistance = abs(
-         static_cast<float32_t>(f64_ProgressBarXposition) -
-         static_cast<float32_t>(f64_RECTANGULAR_RIGHT_X_CORNER));
+         static_cast<float>(f64_ProgressBarXposition) -
+         static_cast<float>(f64_RECTANGULAR_RIGHT_X_CORNER));
    }
 
    else if (ore_Alignment == C_PuiSvDbProgressBar::eRIGHT)
    {
       f32_ProgressBarPointDistance =
-         abs(static_cast<float32_t>(f64_PROGRESS_BAR_RIGHT_X_CORNER) -
-             static_cast<float32_t>(u32_RectangularxPosition));
+         abs(static_cast<float>(f64_PROGRESS_BAR_RIGHT_X_CORNER) -
+             static_cast<float>(u32_RectangularxPosition));
    }
    else
    {
@@ -1292,18 +1292,18 @@ std::array<QPointF, 3> C_GiProgressBarUtil::mh_GetType23ArrowCornerPoints(const 
    f32_ProgressBarPointDistance = mh_ShrinkCornerPointsDistance(f32_ProgressBarPointDistance);
 
    // Spacer
-   const float32_t f32_PossibleSpaceVertical =
-      static_cast<float32_t>(orc_FontMetrics.horizontalAdvance(orc_ArrowSpacerString)) / mhf32_ARROW_SIZE_V;
+   const float f32_PossibleSpaceVertical =
+      static_cast<float>(orc_FontMetrics.horizontalAdvance(orc_ArrowSpacerString)) / mhf32_ARROW_SIZE_V;
 
    // Calculates the corner point of the arrow located at the bottom
    //from the progress bar position a bit left
 
-   float64_t f64_Point1Xposition = 0.F;
+   double f64_Point1Xposition = 0.F;
    if (ore_Alignment == C_PuiSvDbProgressBar::eRIGHT)
    {
       //from the progress bar x-position I have to add the width to be at the bottom of the bar and add the spacer
-      f64_Point1Xposition = static_cast<float64_t>(orc_ValueRect.x()) -
-                            static_cast<float64_t>(mhf32_ARROW_BAR_SPACER);
+      f64_Point1Xposition = static_cast<double>(orc_ValueRect.x()) -
+                            static_cast<double>(mhf32_ARROW_BAR_SPACER);
    }
    else if (ore_Alignment == C_PuiSvDbProgressBar::eLEFT)
    {
@@ -1314,23 +1314,23 @@ std::array<QPointF, 3> C_GiProgressBarUtil::mh_GetType23ArrowCornerPoints(const 
       //nothing to do here
    }
    //from the value rectangle center point y a bit to the bottom
-   const float64_t f64_POINT_1_Y_POSTION = static_cast<float64_t>(c_ValueRectCenterPoint.y()) +
-                                           static_cast<float64_t>(f32_PossibleSpaceVertical);
+   const double f64_POINT_1_Y_POSTION = static_cast<double>(c_ValueRectCenterPoint.y()) +
+                                           static_cast<double>(f32_PossibleSpaceVertical);
 
    ac_ArrowPoints[0] = QPointF(f64_Point1Xposition,
                                f64_POINT_1_Y_POSTION);
 
    // Calculates the corner point of the arrow located at the top
    //from the progress bar position a bit right
-   const float64_t f64_Point2Xposition = f64_Point1Xposition;
+   const double f64_Point2Xposition = f64_Point1Xposition;
    //from the value rectangle center point y a bit to the top
-   const float64_t f64_POINT_2_Y_POSITION = static_cast<float64_t>(c_ValueRectCenterPoint.y()) -
-                                            static_cast<float64_t>(f32_PossibleSpaceVertical);
+   const double f64_POINT_2_Y_POSITION = static_cast<double>(c_ValueRectCenterPoint.y()) -
+                                            static_cast<double>(f32_PossibleSpaceVertical);
 
    ac_ArrowPoints[1] = QPointF(f64_Point2Xposition,
                                f64_POINT_2_Y_POSITION);
 
-   float64_t f64_Point3Xposition = 0.F;
+   double f64_Point3Xposition = 0.F;
 
    if (ore_Alignment == C_PuiSvDbProgressBar::eLEFT)
    {
@@ -1345,7 +1345,7 @@ std::array<QPointF, 3> C_GiProgressBarUtil::mh_GetType23ArrowCornerPoints(const 
    {
       //nothing to do here
    }
-   const float64_t f64_Point3Yposition = static_cast<float64_t>(c_ValueRectCenterPoint.y());
+   const double f64_Point3Yposition = static_cast<double>(c_ValueRectCenterPoint.y());
    ac_ArrowPoints[2] = QPointF(f64_Point3Xposition,
                                f64_Point3Yposition);
 
@@ -1364,26 +1364,26 @@ std::array<QPointF, 3> C_GiProgressBarUtil::mh_GetType23ArrowCornerPoints(const 
    \param[in]          orc_TextFontMetric       Provides font metrics information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiProgressBarUtil::mh_GetMarginType1TopBottom(float32_t * const opf32_MarginTop,
-                                                     float32_t * const opf32_MarginBottom,
-                                                     const float32_t orf32_ArrowOffset,
+void C_GiProgressBarUtil::mh_GetMarginType1TopBottom(float * const opf32_MarginTop,
+                                                     float * const opf32_MarginBottom,
+                                                     const float orf32_ArrowOffset,
                                                      const C_PuiSvDbProgressBar::E_Alignment & ore_Alignment,
                                                      const QFontMetrics & orc_TextFontMetric)
 {
    // magic number needed after Qt6 upgrade to make the progress bar height look like before;
    // independently from the alignment top-bottom/left-right only the top and bottom margin is affected, so
    // just adapting the font size calculation did not do it.
-   const float32_t f32_MODIFIER = 0.9F;
+   const float f32_MODIFIER = 0.9F;
 
    //Define top and bottom margin
    if (ore_Alignment == C_PuiSvDbProgressBar::eTOP)
    {
-      *opf32_MarginTop = (static_cast<float32_t>(orc_TextFontMetric.height()) * f32_MODIFIER) + orf32_ArrowOffset;
+      *opf32_MarginTop = (static_cast<float>(orc_TextFontMetric.height()) * f32_MODIFIER) + orf32_ArrowOffset;
       *opf32_MarginBottom = mhf32_DEFAULT_MARGIN;
    }
    else
    {
-      *opf32_MarginBottom = (static_cast<float32_t>(orc_TextFontMetric.height()) * f32_MODIFIER) + orf32_ArrowOffset;
+      *opf32_MarginBottom = (static_cast<float>(orc_TextFontMetric.height()) * f32_MODIFIER) + orf32_ArrowOffset;
       *opf32_MarginTop = mhf32_DEFAULT_MARGIN;
    }
 }
@@ -1401,8 +1401,8 @@ void C_GiProgressBarUtil::mh_GetMarginType1TopBottom(float32_t * const opf32_Mar
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiProgressBarUtil::mh_GetMarginType1LeftRight(float32_t * const opf32_MarginLeft,
-                                                     float32_t * const opf32_MarginRight, const QString orc_MaxValue,
+void C_GiProgressBarUtil::mh_GetMarginType1LeftRight(float * const opf32_MarginLeft,
+                                                     float * const opf32_MarginRight, const QString orc_MaxValue,
                                                      const QString orc_MinValue, const QString orc_Unit,
                                                      const bool & orq_ShowMinMax,
                                                      const QFontMetrics & orc_TextFontMetric)
@@ -1412,16 +1412,16 @@ void C_GiProgressBarUtil::mh_GetMarginType1LeftRight(float32_t * const opf32_Mar
    if (orq_ShowMinMax)
    {
       *opf32_MarginLeft =
-         static_cast<float32_t>(orc_TextFontMetric.horizontalAdvance(orc_MinValue + orc_Unit));
+         static_cast<float>(orc_TextFontMetric.horizontalAdvance(orc_MinValue + orc_Unit));
       *opf32_MarginRight =
-         static_cast<float32_t>(orc_TextFontMetric.horizontalAdvance(orc_MaxValue + orc_Unit));
+         static_cast<float>(orc_TextFontMetric.horizontalAdvance(orc_MaxValue + orc_Unit));
    }
    // If no minimum and maximum value should be visible
    else
    {
-      *opf32_MarginLeft = static_cast<float32_t>(orc_TextFontMetric.horizontalAdvance(orc_MinValue + orc_Unit)) /
+      *opf32_MarginLeft = static_cast<float>(orc_TextFontMetric.horizontalAdvance(orc_MinValue + orc_Unit)) /
                           mhf32_HALF_MODIFIER;
-      *opf32_MarginRight = static_cast<float32_t>(orc_TextFontMetric.horizontalAdvance(orc_MaxValue + orc_Unit)) /
+      *opf32_MarginRight = static_cast<float>(orc_TextFontMetric.horizontalAdvance(orc_MaxValue + orc_Unit)) /
                            mhf32_HALF_MODIFIER;
    }
 }
@@ -1439,20 +1439,20 @@ void C_GiProgressBarUtil::mh_GetMarginType1LeftRight(float32_t * const opf32_Mar
    is used to define the space 0.80 (80%) is reserved for the progress bar
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiProgressBarUtil::mh_GetMarginType23LeftRight(float32_t * const opf32_MarginLeft,
-                                                      float32_t * const opf32_MarginRight, const QRect & orc_Rect,
+void C_GiProgressBarUtil::mh_GetMarginType23LeftRight(float * const opf32_MarginLeft,
+                                                      float * const opf32_MarginRight, const QRect & orc_Rect,
                                                       const C_PuiSvDbProgressBar::E_Alignment & ore_Alignment,
-                                                      const float32_t & orf32_ReservedCurrentValueSpace)
+                                                      const float & orf32_ReservedCurrentValueSpace)
 {
    // Define left and right margin
    if (ore_Alignment == C_PuiSvDbProgressBar::eLEFT)
    {
-      *opf32_MarginLeft = static_cast<float32_t>(orc_Rect.width()) * orf32_ReservedCurrentValueSpace;
+      *opf32_MarginLeft = static_cast<float>(orc_Rect.width()) * orf32_ReservedCurrentValueSpace;
       *opf32_MarginRight = mhf32_DEFAULT_MARGIN;
    }
    else
    {
-      *opf32_MarginRight = static_cast<float32_t>(orc_Rect.width()) * orf32_ReservedCurrentValueSpace;
+      *opf32_MarginRight = static_cast<float>(orc_Rect.width()) * orf32_ReservedCurrentValueSpace;
       *opf32_MarginLeft = mhf32_DEFAULT_MARGIN;
    }
 }
@@ -1466,26 +1466,26 @@ void C_GiProgressBarUtil::mh_GetMarginType23LeftRight(float32_t * const opf32_Ma
    \param[in]           orc_TextFontMetric     Provides font metrics information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiProgressBarUtil::mh_GetMarginTyp23TopBottom(float32_t * const opf32_MarginTop,
-                                                     float32_t * const opf32_MarginBottom, const bool & orq_ShowMinMax,
+void C_GiProgressBarUtil::mh_GetMarginTyp23TopBottom(float * const opf32_MarginTop,
+                                                     float * const opf32_MarginBottom, const bool & orq_ShowMinMax,
                                                      const QFontMetrics & orc_TextFontMetric)
 {
    // magic number needed after Qt6 upgrade to make the progress bar height look like before;
    // independently from the alignment top-bottom/left-right only the top and bottom margin is affected, so
    // just adapting the font size calculation did not do it.
-   const float32_t f32_MODIFIER = 0.92F;
+   const float f32_MODIFIER = 0.92F;
 
    // Define top and bottom margin
    if (orq_ShowMinMax)
    {
-      *opf32_MarginBottom = static_cast<float32_t>(orc_TextFontMetric.height()) * f32_MODIFIER;
-      *opf32_MarginTop = static_cast<float32_t>(orc_TextFontMetric.height()) * f32_MODIFIER;
+      *opf32_MarginBottom = static_cast<float>(orc_TextFontMetric.height()) * f32_MODIFIER;
+      *opf32_MarginTop = static_cast<float>(orc_TextFontMetric.height()) * f32_MODIFIER;
    }
    // If no minimum and maximum value should be visible
    else
    {
-      *opf32_MarginBottom = (static_cast<float32_t>(orc_TextFontMetric.height()) * f32_MODIFIER) / mhf32_HALF_MODIFIER;
-      *opf32_MarginTop = (static_cast<float32_t>(orc_TextFontMetric.height()) * f32_MODIFIER) / mhf32_HALF_MODIFIER;
+      *opf32_MarginBottom = (static_cast<float>(orc_TextFontMetric.height()) * f32_MODIFIER) / mhf32_HALF_MODIFIER;
+      *opf32_MarginTop = (static_cast<float>(orc_TextFontMetric.height()) * f32_MODIFIER) / mhf32_HALF_MODIFIER;
    }
 }
 
@@ -1502,10 +1502,10 @@ void C_GiProgressBarUtil::mh_GetMarginTyp23TopBottom(float32_t * const opf32_Mar
    \param[in]   ors32_BottomMargin  Bottom margin of the layout
 
    \return
-   float64_t - x position without right/left alignment check
+   double - x position without right/left alignment check
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_GiProgressBarUtil::mh_GetCurrentValueHeightPosition(const QRect & orc_Rect,
+double C_GiProgressBarUtil::mh_GetCurrentValueHeightPosition(const QRect & orc_Rect,
                                                                 const C_OgeDashboardProgressBar * const opc_ProgressBar,
                                                                 const QString & orc_MaxValue,
                                                                 const QString & orc_MinValue,
@@ -1515,12 +1515,12 @@ float64_t C_GiProgressBarUtil::mh_GetCurrentValueHeightPosition(const QRect & or
    // Constants
    const uint32_t u32_PROGRESS_BAR_HEIGHT = opc_ProgressBar->height();
 
-   const float32_t f32_DECIMAL_PERCENTAGE = mh_GetValueInPercentageDecimal(orc_MaxValue,
+   const float f32_DECIMAL_PERCENTAGE = mh_GetValueInPercentageDecimal(orc_MaxValue,
                                                                            orc_MinValue,
                                                                            orc_CurrentValue); //e.g. 0.5
 
    // Percentage has to be multiplied with progress bar height to get current height position
-   const float64_t f64_HEIGHT_PERCENTAGE_PROGRESSBAR = static_cast<float64_t>(u32_PROGRESS_BAR_HEIGHT) *
+   const double f64_HEIGHT_PERCENTAGE_PROGRESSBAR = static_cast<double>(u32_PROGRESS_BAR_HEIGHT) *
                                                        f32_DECIMAL_PERCENTAGE;
 
    const int64_t s64_TOTAL_HEIGHT = static_cast<int64_t>(orc_Rect.height()) -
@@ -1528,7 +1528,7 @@ float64_t C_GiProgressBarUtil::mh_GetCurrentValueHeightPosition(const QRect & or
 
    // Since the minimum value is placed at the bottom of the bar, 0% has to be define at the bottom of the progress bar
    // as well.
-   const float64_t f64_CURRENT_HEIGHT = static_cast<float64_t>(s64_TOTAL_HEIGHT) - f64_HEIGHT_PERCENTAGE_PROGRESSBAR;
+   const double f64_CURRENT_HEIGHT = static_cast<double>(s64_TOTAL_HEIGHT) - f64_HEIGHT_PERCENTAGE_PROGRESSBAR;
 
    return f64_CURRENT_HEIGHT;
 }
@@ -1544,10 +1544,10 @@ float64_t C_GiProgressBarUtil::mh_GetCurrentValueHeightPosition(const QRect & or
    \param[in]   orc_CurrentValue   Current value
 
    \return
-   float64_t - y position without left/ right alignment check
+   double - y position without left/ right alignment check
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_GiProgressBarUtil::mh_GetCurrentValueWidthPosition(const C_OgeDashboardProgressBar * const opc_ProgressBar,
+double C_GiProgressBarUtil::mh_GetCurrentValueWidthPosition(const C_OgeDashboardProgressBar * const opc_ProgressBar,
                                                                const QString & orc_MaxValue,
                                                                const QString & orc_MinValue,
                                                                const QString & orc_CurrentValue)
@@ -1555,17 +1555,17 @@ float64_t C_GiProgressBarUtil::mh_GetCurrentValueWidthPosition(const C_OgeDashbo
    const uint32_t u32_PROGRESS_BAR_WIDTH = opc_ProgressBar->width();
    const uint32_t u32_PROGRESS_BAR_X_POSITION = opc_ProgressBar->pos().x();
 
-   const float32_t f32_DECIMAL_PERCENTAGE = mh_GetValueInPercentageDecimal(orc_MaxValue,
+   const float f32_DECIMAL_PERCENTAGE = mh_GetValueInPercentageDecimal(orc_MaxValue,
                                                                            orc_MinValue,
                                                                            orc_CurrentValue); //e.g. 0.5
 
    // Percentage has to be multiplied with progress bar width to get current position
-   const float64_t f64_WIDTH_PERCENTAGE_PROGRESSBAR = static_cast<float64_t>(u32_PROGRESS_BAR_WIDTH) *
+   const double f64_WIDTH_PERCENTAGE_PROGRESSBAR = static_cast<double>(u32_PROGRESS_BAR_WIDTH) *
                                                       (f32_DECIMAL_PERCENTAGE);
 
    // Since I want that the 0 position is at the beginning of the progress bar I have to add the x position of the
    // progress bar
-   const float64_t f64_CURRENT_WIDTH = static_cast<float64_t>(u32_PROGRESS_BAR_X_POSITION) +
+   const double f64_CURRENT_WIDTH = static_cast<double>(u32_PROGRESS_BAR_X_POSITION) +
                                        f64_WIDTH_PERCENTAGE_PROGRESSBAR;
 
    return f64_CURRENT_WIDTH;
@@ -1582,20 +1582,20 @@ float64_t C_GiProgressBarUtil::mh_GetCurrentValueWidthPosition(const C_OgeDashbo
    percentage e.g 5%
 */
 //----------------------------------------------------------------------------------------------------------------------
-float32_t C_GiProgressBarUtil::mh_GetValueInPercentageDecimal(const QString & orc_MaxValue,
+float C_GiProgressBarUtil::mh_GetValueInPercentageDecimal(const QString & orc_MaxValue,
                                                               const QString & orc_MinValueString,
                                                               const QString & orc_CurrentValue)
 {
-   const float64_t f64_VALUE = orc_CurrentValue.toDouble();
-   const float64_t f64_MAXIMUM_VALUE = orc_MaxValue.toDouble();
-   const float64_t f64_MINIMUM_VALUE = orc_MinValueString.toDouble();
-   const float32_t f32_MAX_PERCENT = 100.0F;
+   const double f64_VALUE = orc_CurrentValue.toDouble();
+   const double f64_MAXIMUM_VALUE = orc_MaxValue.toDouble();
+   const double f64_MINIMUM_VALUE = orc_MinValueString.toDouble();
+   const float f32_MAX_PERCENT = 100.0F;
 
-   const float32_t f32_PERCENT =
-      static_cast<float32_t>(((f64_VALUE - f64_MINIMUM_VALUE) / (f64_MAXIMUM_VALUE - f64_MINIMUM_VALUE)) *
+   const float f32_PERCENT =
+      static_cast<float>(((f64_VALUE - f64_MINIMUM_VALUE) / (f64_MAXIMUM_VALUE - f64_MINIMUM_VALUE)) *
                              f32_MAX_PERCENT);
 
-   const float32_t f32_DECIMAL_PERCENTAGE = f32_PERCENT / f32_MAX_PERCENT;
+   const float f32_DECIMAL_PERCENTAGE = f32_PERCENT / f32_MAX_PERCENT;
 
    return f32_DECIMAL_PERCENTAGE;
 }
@@ -1659,9 +1659,9 @@ void C_GiProgressBarUtil::mh_SetType23MinimumValue(const QRect & orc_Rect, const
       //Constants
       const uint32_t u32_RectHeight = orc_Rect.height();
 
-      const float32_t f32_HALF_PROGRESS_BAR_WIDTH = static_cast<float32_t>(oru32_ProgressBarWidth) /
+      const float f32_HALF_PROGRESS_BAR_WIDTH = static_cast<float>(oru32_ProgressBarWidth) /
                                                     mhf32_HALF_MODIFIER;
-      const float32_t f32_HALF_FONT_WIDTH = static_cast<float32_t>(oru32_FontWidthMinValue) / mhf32_HALF_MODIFIER;
+      const float f32_HALF_FONT_WIDTH = static_cast<float>(oru32_FontWidthMinValue) / mhf32_HALF_MODIFIER;
 
       u32_MinRectXposition = (oru32_ProgressBarXposition +
                               static_cast<uint32_t>(f32_HALF_PROGRESS_BAR_WIDTH)) -
@@ -1755,15 +1755,15 @@ void C_GiProgressBarUtil::mh_SetType23MaximumValue(const QString & orc_MaxValue,
    \param[in]       orf32_ProgressBarPointDistance     Current calculated corner points distance
 
    \return
-   float32_t
+   float
 */
 //----------------------------------------------------------------------------------------------------------------------
-float32_t C_GiProgressBarUtil::mh_ShrinkCornerPointsDistance(const float32_t & orf32_ProgressBarPointDistance)
+float C_GiProgressBarUtil::mh_ShrinkCornerPointsDistance(const float & orf32_ProgressBarPointDistance)
 {
-   const float32_t f32_ZERO_DISTANCE = 0.F;
-   const float32_t f32_SPACER_MODIFIER = 2.0F;
+   const float f32_ZERO_DISTANCE = 0.F;
+   const float f32_SPACER_MODIFIER = 2.0F;
 
-   float32_t f32_ProgressBarPointDistance = orf32_ProgressBarPointDistance;
+   float f32_ProgressBarPointDistance = orf32_ProgressBarPointDistance;
 
    if ((f32_ProgressBarPointDistance - (f32_SPACER_MODIFIER * mhf32_ARROW_BAR_SPACER)) > f32_ZERO_DISTANCE)
    {
@@ -1784,10 +1784,10 @@ float32_t C_GiProgressBarUtil::mh_ShrinkCornerPointsDistance(const float32_t & o
 */
 //----------------------------------------------------------------------------------------------------------------------
 QFontMetrics C_GiProgressBarUtil::mh_GetType1FontMetrics(const QRect & orc_Rect,
-                                                         const float32_t & orf32_MinimumFontSize)
+                                                         const float & orf32_MinimumFontSize)
 {
    QFont c_TextFont;
-   const float32_t f32_FontSize = h_GetType1FontSizeValue(orc_Rect, orf32_MinimumFontSize);
+   const float f32_FontSize = h_GetType1FontSizeValue(orc_Rect, orf32_MinimumFontSize);
 
    QFontMetrics c_TextFontMetric(c_TextFont);
 
@@ -1811,9 +1811,9 @@ QFontMetrics C_GiProgressBarUtil::mh_GetType1FontMetrics(const QRect & orc_Rect,
 */
 //----------------------------------------------------------------------------------------------------------------------
 QFontMetrics C_GiProgressBarUtil::mh_GetType3FontMetrics(const QRect & orc_Rect,
-                                                         const float32_t & orf32_MinimumFontSize)
+                                                         const float & orf32_MinimumFontSize)
 {
-   const float32_t f32_FontSize = h_GetType3FontSizeMaxMin(orc_Rect, orf32_MinimumFontSize);
+   const float f32_FontSize = h_GetType3FontSizeMaxMin(orc_Rect, orf32_MinimumFontSize);
 
    QFont c_TextFont;
    QFontMetrics c_TextFontMetric(c_TextFont);

@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "TglUtils.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_GiSvDaRectBaseGroup.hpp"
@@ -202,7 +202,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SetDataPositionOffset(const QPointF & orc
    \param[in] of64_HighestUsedZetValue Highest used Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaUnoAddDeleteBaseCommand::m_SetDataZetOffset(const float64_t of64_HighestUsedZetValue)
+void C_SyvDaUnoAddDeleteBaseCommand::m_SetDataZetOffset(const double of64_HighestUsedZetValue)
 {
    this->mc_DataBackup.SetDataZetOffset(of64_HighestUsedZetValue);
 }

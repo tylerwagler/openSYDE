@@ -159,7 +159,7 @@ QString C_PuiSvDbDataElementDisplayFormatter::GetValueFormatted(const int64_t os
    Formatted value
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_PuiSvDbDataElementDisplayFormatter::GetValueFormatted(const float64_t of64_Value) const
+QString C_PuiSvDbDataElementDisplayFormatter::GetValueFormatted(const double of64_Value) const
 {
    return QString::asprintf(this->c_FormatterString.toStdString().c_str(), of64_Value);
 }

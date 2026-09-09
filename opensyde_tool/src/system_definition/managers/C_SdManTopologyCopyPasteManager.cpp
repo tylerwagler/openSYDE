@@ -95,7 +95,7 @@ const C_PuiBsElements * C_SdManTopologyCopyPasteManager::GetSnapshot(QWidget * c
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *> & orc_SelectedItems,
                                                              const QMap<const QGraphicsItem *,
-                                                                        float64_t> & orc_NormalizedZetValues)
+                                                                        double> & orc_NormalizedZetValues)
 {
    C_SdTopologyDataSnapshot c_Snapshot;
    uint32_t u32_Index;
@@ -389,7 +389,7 @@ void C_SdManTopologyCopyPasteManager::m_CalcOriginalPosition(const C_PuiBsElemen
 void C_SdManTopologyCopyPasteManager::mh_CopyFromSceneToManagerHandleNode(const C_GiNode * const opc_UiNodeItem,
                                                                           C_SdTopologyDataSnapshot & orc_Snapshot,
                                                                           const QMap<const QGraphicsItem *,
-                                                                                     float64_t> & orc_NormalizedZetValues,
+                                                                                     double> & orc_NormalizedZetValues,
                                                                           const QGraphicsItem * const opc_NodeItemOrigin)
 {
    if (opc_UiNodeItem != nullptr)
@@ -434,7 +434,7 @@ void C_SdManTopologyCopyPasteManager::mh_CopyFromSceneToManagerHandleNode(const 
 void C_SdManTopologyCopyPasteManager::mh_CopyFromSceneToManagerHandleMultiNode(const uint32_t ou32_NodeIndex,
                                                                                C_SdTopologyDataSnapshot & orc_Snapshot,
                                                                                const QMap<const QGraphicsItem *,
-                                                                                          float64_t> & orc_NormalizedZetValues,
+                                                                                          double> & orc_NormalizedZetValues,
                                                                                const QGraphicsItem * const opc_NodeItemOrigin)
 {
    const bool q_IsFirst = C_PuiSdUtil::h_CheckIsFirstInAnyGroupOrNotInAny(ou32_NodeIndex,

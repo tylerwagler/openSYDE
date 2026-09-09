@@ -64,8 +64,8 @@ C_SyvDaDashboardSceneWidget::C_SyvDaDashboardSceneWidget(const uint32_t ou32_Vie
 
    // configure scene
    this->mpc_Scene->setSceneRect(0.0, 0.0,
-                                 static_cast<float64_t>(this->mpc_Ui->pc_GraphicsView->width()),
-                                 static_cast<float64_t>(this->mpc_Ui->pc_GraphicsView->height()));
+                                 static_cast<double>(this->mpc_Ui->pc_GraphicsView->width()),
+                                 static_cast<double>(this->mpc_Ui->pc_GraphicsView->height()));
    this->mpc_Ui->pc_GraphicsView->SetSceneAndConnect(this->mpc_Scene);
 
    // make all generic connects

@@ -15,7 +15,7 @@
 #include <QObject>
 #include <QColor>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SdBueMlvBaseItem.hpp"
 
@@ -36,11 +36,11 @@ class C_SdBueMlvSignalItem :
 
 public:
    C_SdBueMlvSignalItem(const QColor & orc_BackgroundColor, const QColor & orc_FontColor,
-                        const QColor & orc_ResizeItemColor, const QString & orc_Name, const float64_t of64_Space,
+                        const QColor & orc_ResizeItemColor, const QString & orc_Name, const double of64_Space,
                         QGraphicsItem * const opc_Parent = nullptr);
    ~C_SdBueMlvSignalItem() override;
 
-   void Update(const float64_t of64_SingleItemWidth, const float64_t of64_SingleItemHeight);
+   void Update(const double of64_SingleItemWidth, const double of64_SingleItemHeight);
    void SetBitPosition(const uint16_t ou16_ByteRow, const uint16_t ou16_StartBit, const uint16_t ou16_LastBit);
    void SetShowSignificantBit(const bool oq_Msb, const bool oq_Lsb);
    void SetResizeItem(const bool oq_LeftResizeItem, const bool oq_RightResizeItem, const bool oq_IsResizeable);
@@ -90,9 +90,9 @@ private:
    QRectF mc_LeftResizeItemRectClick;
    QRectF mc_RightResizeItemRectClick;
 
-   const float64_t mf64_Space;
-   static const float64_t mhf64_RESIZE_ITEM_HEIGHT;
-   static const float64_t mhf64_RESIZE_ITEM_CLICK_OFFSET;
+   const double mf64_Space;
+   static const double mhf64_RESIZE_ITEM_HEIGHT;
+   static const double mhf64_RESIZE_ITEM_CLICK_OFFSET;
    QColor mc_DrawReizeItemColor;
 };
 

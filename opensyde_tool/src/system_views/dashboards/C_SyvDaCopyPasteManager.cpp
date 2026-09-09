@@ -14,7 +14,7 @@
 
 #include "gitypes.hpp"
 #include "TglUtils.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_PuiSvDashboard.hpp"
 #include "C_SyvClipBoardHelper.hpp"
@@ -132,7 +132,7 @@ void C_SyvDaCopyPasteManager::PrepareCopyFromSceneToManager(const uint32_t ou32_
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *> & orc_SelectedItems,
                                                      const QMap<const QGraphicsItem *,
-                                                                float64_t> & orc_NormalizedZetValues)
+                                                                double> & orc_NormalizedZetValues)
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 

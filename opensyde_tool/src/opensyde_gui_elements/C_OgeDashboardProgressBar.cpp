@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <QPainter>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "C_OgeDashboardProgressBar.hpp"
 
@@ -90,16 +90,16 @@ void C_OgeDashboardProgressBar::paintEvent(QPaintEvent * const opc_Event)
    if ((this->me_Style == C_PuiSvDbWidgetBase::eOPENSYDE) || (this->me_Style == C_PuiSvDbWidgetBase::eFLAT))
    {
       const int32_t s32_ValueToMinimumDistance = this->value() - this->minimum();
-      const float32_t f32_ValueToMinimumDistance = static_cast<float32_t>(s32_ValueToMinimumDistance);
+      const float f32_ValueToMinimumDistance = static_cast<float>(s32_ValueToMinimumDistance);
       const int32_t s32_MinimumToMaximumDistance = this->maximum() - this->minimum();
-      const float32_t f32_MinimumToMaximumDistance = static_cast<float32_t>(s32_MinimumToMaximumDistance);
+      const float f32_MinimumToMaximumDistance = static_cast<float>(s32_MinimumToMaximumDistance);
 
       Q_UNUSED(opc_Event)
       if (this->orientation() == Qt::Horizontal)
       {
          const int32_t s32_SegmentCount = std::max(this->rect().width() / 50, 1);
-         const float32_t f32_RectWidth = static_cast<float32_t>(this->rect().width());
-         const float32_t f32_ProgressHorizontal = f32_RectWidth *
+         const float f32_RectWidth = static_cast<float>(this->rect().width());
+         const float f32_ProgressHorizontal = f32_RectWidth *
                                                   (f32_ValueToMinimumDistance / f32_MinimumToMaximumDistance);
          const int32_t s32_ProgressHorizontal = static_cast<int32_t>(f32_ProgressHorizontal);
          QPainter c_Painter(this);
@@ -107,17 +107,17 @@ void C_OgeDashboardProgressBar::paintEvent(QPaintEvent * const opc_Event)
          //Paint segments
          if (s32_SegmentCount > 1)
          {
-            const float32_t f32_SegmentWidth = static_cast<float32_t>(this->rect().width()) /
-                                               static_cast<float32_t>(s32_SegmentCount);
+            const float f32_SegmentWidth = static_cast<float>(this->rect().width()) /
+                                               static_cast<float>(s32_SegmentCount);
 
             //Each segment
             for (int32_t s32_Segment = 0; s32_Segment < s32_SegmentCount; ++s32_Segment)
             {
-               const float32_t f32_Segment = static_cast<float32_t>(s32_Segment);
+               const float f32_Segment = static_cast<float>(s32_Segment);
                const int32_t s32_NextSegment = s32_Segment + 1;
-               const float32_t f32_NextSegment = static_cast<float32_t>(s32_NextSegment);
-               const float32_t f32_StartHorizontal = f32_Segment * f32_SegmentWidth;
-               const float32_t f32_EndHorizontal = f32_NextSegment * f32_SegmentWidth;
+               const float f32_NextSegment = static_cast<float>(s32_NextSegment);
+               const float f32_StartHorizontal = f32_Segment * f32_SegmentWidth;
+               const float f32_EndHorizontal = f32_NextSegment * f32_SegmentWidth;
                const int32_t s32_StartHorizontal = static_cast<int32_t>(f32_StartHorizontal);
                const int32_t s32_EndHorizontal = static_cast<int32_t>(f32_EndHorizontal);
                const QRect c_Rect =
@@ -201,8 +201,8 @@ void C_OgeDashboardProgressBar::paintEvent(QPaintEvent * const opc_Event)
       else
       {
          const int32_t s32_SegmentCount = std::max(this->rect().height() / 12, 1);
-         const float32_t f32_RectHeight = static_cast<float32_t>(this->rect().height());
-         const float32_t f32_ProgressVertical = f32_RectHeight *
+         const float f32_RectHeight = static_cast<float>(this->rect().height());
+         const float f32_ProgressVertical = f32_RectHeight *
                                                 (f32_ValueToMinimumDistance / f32_MinimumToMaximumDistance);
          const int32_t s32_ProgressVertical = static_cast<int32_t>(f32_ProgressVertical);
          QPainter c_Painter(this);
@@ -210,17 +210,17 @@ void C_OgeDashboardProgressBar::paintEvent(QPaintEvent * const opc_Event)
          //Paint segments
          if (s32_SegmentCount > 1)
          {
-            const float32_t f32_SegmentHeight = static_cast<float32_t>(this->rect().height()) /
-                                                static_cast<float32_t>(s32_SegmentCount);
+            const float f32_SegmentHeight = static_cast<float>(this->rect().height()) /
+                                                static_cast<float>(s32_SegmentCount);
 
             //Each segment
             for (int32_t s32_Segment = 0; s32_Segment < s32_SegmentCount; ++s32_Segment)
             {
-               const float32_t f32_Segment = static_cast<float32_t>(s32_Segment);
+               const float f32_Segment = static_cast<float>(s32_Segment);
                const int32_t s32_NextSegment = s32_Segment + 1;
-               const float32_t f32_NextSegment = static_cast<float32_t>(s32_NextSegment);
-               const float32_t f32_StartVertical = f32_Segment * f32_SegmentHeight;
-               const float32_t f32_EndVertical = f32_NextSegment * f32_SegmentHeight;
+               const float f32_NextSegment = static_cast<float>(s32_NextSegment);
+               const float f32_StartVertical = f32_Segment * f32_SegmentHeight;
+               const float f32_EndVertical = f32_NextSegment * f32_SegmentHeight;
                const int32_t s32_StartVertical = static_cast<int32_t>(f32_StartVertical);
                const int32_t s32_EndVertical = static_cast<int32_t>(f32_EndVertical);
                const QRect c_Rect =

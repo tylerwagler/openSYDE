@@ -103,7 +103,7 @@ QString C_OgeWiSpinBoxGroup::GetText(void) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeWiSpinBoxGroup::Init(const C_OscNodeDataPoolContent & orc_Min, const C_OscNodeDataPoolContent & orc_Max,
-                               const float64_t of64_Factor, const float64_t of64_Offset, const uint32_t ou32_Index)
+                               const double of64_Factor, const double of64_Offset, const uint32_t ou32_Index)
 {
    std::vector<C_OscNodeDataPoolContent::E_Type> c_Types;
    m_DeactivateConnections();
@@ -189,20 +189,20 @@ void C_OgeWiSpinBoxGroup::SetValue(const QVariant & orc_Value) const
    }
    else
    {
-      float64_t f64_Value;
+      double f64_Value;
       switch (orc_Value.type()) //lint !e788  //we do not need to handle all types here
       {
       case QVariant::Int:
-         f64_Value = static_cast<float64_t>(orc_Value.toInt());
+         f64_Value = static_cast<double>(orc_Value.toInt());
          break;
       case QVariant::UInt:
-         f64_Value = static_cast<float64_t>(orc_Value.toUInt());
+         f64_Value = static_cast<double>(orc_Value.toUInt());
          break;
       case QVariant::LongLong:
-         f64_Value = static_cast<float64_t>(orc_Value.toLongLong());
+         f64_Value = static_cast<double>(orc_Value.toLongLong());
          break;
       case QVariant::ULongLong:
-         f64_Value = static_cast<float64_t>(orc_Value.toULongLong());
+         f64_Value = static_cast<double>(orc_Value.toULongLong());
          break;
       case QVariant::Double:
          f64_Value = orc_Value.toDouble();

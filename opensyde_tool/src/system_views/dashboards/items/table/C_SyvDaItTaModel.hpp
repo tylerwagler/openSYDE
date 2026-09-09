@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_TblModelAction.hpp"
 #include <QIcon>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSvDbTable.hpp"
 #include "C_PuiSvDbWidgetBase.hpp"
 #include "C_PuiSvDbDataElementHandler.hpp"
@@ -92,9 +92,9 @@ private:
    std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> mc_RemovedDataPoolElementIds;
    stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const mpc_Data;
    std::vector<std::vector<QString> > mc_ScaledDisplayDataValues;
-   std::vector<std::vector<float64_t> > mc_UnscaledLastDataValues;
-   std::vector<std::vector<float64_t> > mc_UnscaledMinValues;
-   std::vector<std::vector<float64_t> > mc_UnscaledMaxValues;
+   std::vector<std::vector<double> > mc_UnscaledLastDataValues;
+   std::vector<std::vector<double> > mc_UnscaledMinValues;
+   std::vector<std::vector<double> > mc_UnscaledMaxValues;
    std::vector<uint32_t> mc_ArrayItemIndex;
    std::vector<QString> mc_Names;
    std::vector<QString> mc_Units;
@@ -126,7 +126,7 @@ private:
       const stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId & orc_DataPoolElementId);
    stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId m_RemoveItem(const uint32_t ou32_Index,
                                                                             std::vector<C_PuiSvDbNodeDataElementConfig> & orc_AdaptedItems);
-   float32_t m_GetPercentage(const uint32_t ou32_Index) const;
+   float m_GetPercentage(const uint32_t ou32_Index) const;
    QString m_GetValue(const uint32_t ou32_Index) const;
    static std::vector<uint32_t> mh_GetSelectedRows(const QModelIndexList & orc_Indices);
    void m_InitMinMaxAndNameForOneRow(const C_PuiSvDbNodeDataPoolListElementId & orc_ElementId,

@@ -15,7 +15,7 @@
 #include <QPointF>
 #include <QList>
 #include <QGraphicsItem>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiBsElements.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -36,7 +36,7 @@ public:
    QPointF GetDiff(const QPointF & orc_Position) const;
    virtual void CopyFromSceneToManager(const QList<QGraphicsItem *> & orc_SelectedItems,
                                        const QMap<const QGraphicsItem *,
-                                                  float64_t> & orc_NormalizedZetValues)
+                                                  double> & orc_NormalizedZetValues)
       =
          0;
    virtual bool CheckValidContentAndPrepareData(void) = 0;
@@ -49,9 +49,9 @@ protected:
    static QPointF mh_Min(const QPointF & orc_P1, const QPointF & orc_P2);
    void m_MinToOrgPos(const QPointF & orc_Point);
    static void mh_HandleZetValueBox(const QGraphicsItem * const opc_Item, const QMap<const QGraphicsItem *,
-                                                                                     float64_t> & orc_NormalizedZetValues, C_PuiBsBox & orc_Box);
+                                                                                     double> & orc_NormalizedZetValues, C_PuiBsBox & orc_Box);
    static void mh_HandleZetValueLine(const QGraphicsItem * const opc_Item, const QMap<const QGraphicsItem *,
-                                                                                      float64_t> & orc_NormalizedZetValues, C_PuiBsLineBase & orc_Line);
+                                                                                      double> & orc_NormalizedZetValues, C_PuiBsLineBase & orc_Line);
 
    QPointF mc_OriginalPosition;
    uint32_t mu32_PasteCounter;

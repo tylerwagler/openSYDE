@@ -61,7 +61,7 @@ C_PuiBsLineBase::~C_PuiBsLineBase(void)
 void C_PuiBsLineBase::CalcHash(uint32_t & oru32_HashValue) const
 {
    int32_t s32_Value;
-   float64_t f64_Value;
+   double f64_Value;
    uint32_t u32_Counter;
 
    s32_Value = this->c_UiColor.red();

@@ -15,7 +15,7 @@
 
 #include <QLineEdit>
 #include <QKeyEvent>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_Uti.hpp"
 #include "constants.hpp"
 #include "C_OgeSpxDoubleDynamicDecimalsBase.hpp"
@@ -63,7 +63,7 @@ C_OgeSpxDoubleDynamicDecimalsBase::C_OgeSpxDoubleDynamicDecimalsBase(QWidget * c
    Spinbox text
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OgeSpxDoubleDynamicDecimalsBase::textFromValue(const float64_t of64_Value) const
+QString C_OgeSpxDoubleDynamicDecimalsBase::textFromValue(const double of64_Value) const
 {
    QString c_StringFromValue;
    QString c_DecimalSeparator;

@@ -16,7 +16,7 @@
 #include <QPixmap>
 #include <QGraphicsSvgItem>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiBiRectBaseGroup.hpp"
 #include "C_GiImage.hpp"
@@ -38,7 +38,7 @@ public:
    C_GiImageGroupWithoutData(const uint64_t & oru64_Id, const QString & orc_ImagePath,
                              const bool oq_RequestLateImageInit, QGraphicsItem * const opc_Parent = nullptr);
 
-   C_GiImageGroupWithoutData(const uint64_t & oru64_Id, const float64_t of64_Width, const float64_t of64_Height,
+   C_GiImageGroupWithoutData(const uint64_t & oru64_Id, const double of64_Width, const double of64_Height,
                              const QPixmap & orc_Image, const QByteArray & orc_Format,
                              QGraphicsItem * const opc_Parent = nullptr);
 
@@ -53,13 +53,13 @@ public:
 
 protected:
    void m_LateImageInit(const QString & orc_ImagePath);
-   void m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight) override;
+   void m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight) override;
 
    C_GiImage * mpc_Image;
    C_GiSvgGraphicsItem * mpc_SvgGraphicsItem;
    bool mq_IsSvgFlag;
-   static const float64_t mhf64_MIN_WIDTH_IMAGE;
-   static const float64_t mhf64_MIN_HEIGHT_IMAGE;
+   static const double mhf64_MIN_WIDTH_IMAGE;
+   static const double mhf64_MIN_HEIGHT_IMAGE;
 
 private:
    //Avoid call
@@ -70,7 +70,7 @@ private:
    void m_Init(void);
    void m_InitSvg(void);
 
-   static const float64_t mhf64_ACTION_POINT_OFFSET_IMAGE;
+   static const double mhf64_ACTION_POINT_OFFSET_IMAGE;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

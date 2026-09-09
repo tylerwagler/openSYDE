@@ -13,7 +13,7 @@
 #include <QGraphicsItemGroup>
 #include <QTimer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiLiLine.hpp"
 #include "C_GiBiBase.hpp"
@@ -53,7 +53,7 @@ public:
    virtual void CopyStyle(const QGraphicsItem * const opc_GuidelineItem);
 
    //GI base
-   void SetZetValueCustom(const float64_t of64_ZetValue) override;
+   void SetZetValueCustom(const double of64_ZetValue) override;
 
    // Wrapper calls for C_GiLiLine
    virtual void SetWidth(const int32_t & ors32_Width);
@@ -126,7 +126,7 @@ protected:
    E_MoveMode me_ActiveResizeMode; ///< Currently active resize mode
    int32_t ms32_ActiveItemIndex;   ///< Currently active item index (Mainly for resize mode)
 
-   static const float64_t mhf64_MAX_DIST_TO_ALIGN;
+   static const double mhf64_MAX_DIST_TO_ALIGN;
 
 private:
    //Avoid call
@@ -136,7 +136,7 @@ private:
    void m_SetInteractionVisibility(const bool & orq_Visible);
    void m_HideInteraction(const bool & orq_Invisible);
    void m_CheckLineGrid(const QPointF & orc_MouseScenePos);
-   static bool mh_Near(const float64_t of64_Exact, const float64_t of64_Eval);
+   static bool mh_Near(const double of64_Exact, const double of64_Eval);
 
    QPointF mc_LastKnownPosition;
    bool mq_BlockChangeSignal;

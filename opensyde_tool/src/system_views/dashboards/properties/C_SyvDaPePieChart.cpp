@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SyvDaPePieChart.hpp"
 #include "ui_C_SyvDaPePieChart.h"
@@ -145,12 +145,12 @@ void C_SyvDaPePieChart::m_UpdatePreview(void)
 {
    const QSize c_ViewSize = C_SyvDaPeBase::h_GetSceneViewSize();
    C_GiSvDaPieChartBase * const pc_Item = new C_GiSvDaPieChartBase(0UL, 0UL, -1L, 0ULL, nullptr);
-   const QSizeF c_ItemSize(static_cast<float64_t>(c_ViewSize.height()),
-                           static_cast<float64_t>(c_ViewSize.height()));
+   const QSizeF c_ItemSize(static_cast<double>(c_ViewSize.height()),
+                           static_cast<double>(c_ViewSize.height()));
    //20.0 to center the chart
    const QPointF c_ItemPos(
-      ((static_cast<float64_t>(c_ViewSize.width()) - static_cast<float64_t>(c_ItemSize.width())) / 2.0) + 20.0,
-      (static_cast<float64_t>(c_ViewSize.height()) - static_cast<float64_t>(c_ItemSize.height())) / 2.0);
+      ((static_cast<double>(c_ViewSize.width()) - static_cast<double>(c_ItemSize.width())) / 2.0) + 20.0,
+      (static_cast<double>(c_ViewSize.height()) - static_cast<double>(c_ItemSize.height())) / 2.0);
 
    pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme());
    pc_Item->UpdateTypePe(this->GetShowUnit(), this->GetShowValue());

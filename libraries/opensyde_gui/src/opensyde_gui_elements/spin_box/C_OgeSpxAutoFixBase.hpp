@@ -31,15 +31,15 @@ public:
    virtual ~C_OgeSpxAutoFixBase(void);
 
    void Init(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Min,
-             const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Max, const float64_t of64_Factor = 1.0,
-             const float64_t of64_Offset = 0.0, const uint32_t ou32_Index = 0);
+             const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Max, const double of64_Factor = 1.0,
+             const double of64_Offset = 0.0, const uint32_t ou32_Index = 0);
 
 protected:
    stw::opensyde_core::C_OscNodeDataPoolContent mc_UnscaledMin;
    stw::opensyde_core::C_OscNodeDataPoolContent mc_UnscaledMax;
    uint64_t mu64_NumberOfStepsAvailable;
-   float64_t mf64_Factor;
-   float64_t mf64_Offset;
+   double mf64_Factor;
+   double mf64_Offset;
    uint32_t mu32_Index;
 
    virtual void m_Init(void) = 0;

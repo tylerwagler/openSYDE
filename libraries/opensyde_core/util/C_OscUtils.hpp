@@ -15,7 +15,7 @@
 #include <map>
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "C_OscErrorCategory.hpp"
 
@@ -34,23 +34,23 @@ public:
    static bool h_CheckValidCeName(const std::string & orc_Name,
                                   const bool oq_AutomaticCeStringAdaptation = false,
                                   const uint16_t ou16_MaxLength = 31U);
-   static bool h_IsFloat64NearlyEqual(const float64_t & orf64_Float1, const float64_t & orf64_Float2);
-   static bool h_IsFloat32NearlyEqual(const float32_t & orf32_Float1, const float32_t & orf32_Float2);
+   static bool h_IsFloat64NearlyEqual(const double & orf64_Float1, const double & orf64_Float2);
+   static bool h_IsFloat32NearlyEqual(const float & orf32_Float1, const float & orf32_Float2);
    static std::error_code h_CreateFolderRecursively(const std::string & orc_Folder);
    static std::string h_NiceifyStringForFileName(const std::string & orc_String);
    static std::string h_NiceifyStringForCeComment(const std::string & orc_String);
    static bool h_CheckValidFileName(const std::string & orc_String);
    static bool h_CheckValidFilePath(const std::string & orc_String);
-   static bool h_IsScalingActive(const float64_t of64_Factor, const float64_t of64_Offset);
-   static float64_t h_GetValueScaled(const float64_t of64_Value, const float64_t of64_Factor,
-                                     const float64_t of64_Offset, const bool oq_AllowRangeAdaptation = true);
-   static float64_t h_GetValueUnscaled(const float64_t of64_Value, const float64_t of64_Factor,
-                                       const float64_t of64_Offset);
+   static bool h_IsScalingActive(const double of64_Factor, const double of64_Offset);
+   static double h_GetValueScaled(const double of64_Value, const double of64_Factor,
+                                     const double of64_Offset, const bool oq_AllowRangeAdaptation = true);
+   static double h_GetValueUnscaled(const double of64_Value, const double of64_Factor,
+                                       const double of64_Offset);
    static std::string h_PosSerialNumberToString(const uint8_t * const opu8_SerialNumber);
    static std::string h_FsnSerialNumberToString(const uint8_t ou8_ManufacturerFormat,
                                                           const std::string & orc_RawSerialNumber);
    static void h_FileToString(const std::string & orc_FilePath, std::string & orc_OutputString);
-   static void h_RangeCheckFloat(float64_t & orf64_Value);
+   static void h_RangeCheckFloat(double & orf64_Value);
 
    static std::error_code h_CopyFile(const std::string & orc_SourceFile, const std::string & orc_TargetFile,
                                      std::string * const opc_ErrorPath = nullptr,
@@ -84,7 +84,7 @@ public:
    static const std::string hc_PATH_VARIABLE_COMPUTER_NAME;
 
 private:
-   static const float64_t mhf64_EPSILON;
+   static const double mhf64_EPSILON;
 
 
    static void mh_GetBaseNameAndCurrentConflictNumberFromString(const std::string & orc_ConflictingValue,

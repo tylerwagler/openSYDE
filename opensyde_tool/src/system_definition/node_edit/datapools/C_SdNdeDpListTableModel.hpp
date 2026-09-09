@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QAbstractTableModel>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscNodeDataPoolList.hpp"
 #include "C_PuiSdNodeDataPoolList.hpp"
 #include "C_SdNdeDpUtil.hpp"
@@ -201,7 +201,7 @@ private:
    void m_OnErrorChange(void);
    void m_MoveItems(const std::vector<uint32_t> & orc_ContiguousIndices, const uint32_t ou32_TargetIndex) const;
    void m_MoveItem(const uint32_t ou32_SourceIndex, const uint32_t ou32_TargetIndex) const;
-   QString m_GetFloatAsString(const float64_t of64_Value);
+   QString m_GetFloatAsString(const double of64_Value);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

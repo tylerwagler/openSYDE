@@ -40,7 +40,7 @@
 
 #include <string>
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -149,7 +149,7 @@ public:
                            const std::string & orc_Default);
    int32_t   ReadInteger(const std::string & orc_Section, const std::string & orc_Key, const int32_t os32_Default);
    bool      ReadBool   (const std::string & orc_Section, const std::string & orc_Key, const bool oq_Default);
-   float64_t ReadFloat  (const std::string & orc_Section, const std::string & orc_Key, const float64_t of64_Default);
+   double ReadFloat  (const std::string & orc_Section, const std::string & orc_Key, const double of64_Default);
 
    //convenience shortcuts for commonly used stw_types:
    uint8_t   ReadUint8 (const std::string & orc_Section, const std::string & orc_Key, const uint8_t ou8_Default);
@@ -161,7 +161,7 @@ public:
                      const bool oq_ForceAppend = false);
    void WriteBool   (const std::string & orc_Section, const std::string & orc_Key, const bool oq_Value,
                      const bool oq_ForceAppend = false);
-   void WriteFloat  (const std::string & orc_Section, const std::string & orc_Key, const float64_t of64_Value,
+   void WriteFloat  (const std::string & orc_Section, const std::string & orc_Key, const double of64_Value,
                      const bool oq_ForceAppend = false);
 
    void EraseSection(const std::string & orc_Section);

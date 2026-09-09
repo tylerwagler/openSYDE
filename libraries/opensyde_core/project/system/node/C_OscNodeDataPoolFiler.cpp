@@ -15,7 +15,7 @@
 #include <limits>
 #include <sstream>
 #include <system_error>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "C_OscSystemFilerUtil.hpp"
@@ -1561,7 +1561,7 @@ std::error_code C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
    //Load value
    const uint64_t u64_Val = orc_XmlParser.GetAttributeUint64("value");
    const int64_t s64_Val = orc_XmlParser.GetAttributeSint64("value");
-   const float64_t f64_Val = orc_XmlParser.GetAttributeFloat64("value");
+   const double f64_Val = orc_XmlParser.GetAttributeFloat64("value");
 
    switch (oe_ContentType)
    {
@@ -1569,8 +1569,8 @@ std::error_code C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
       if ((((u64_Val <= std::numeric_limits<uint8_t>::max())) &&
            ((s64_Val >= static_cast<int64_t>(std::numeric_limits<uint8_t>::min())) &&
             (s64_Val <= std::numeric_limits<uint8_t>::max()))) &&
-          (((f64_Val >= static_cast<float64_t>(std::numeric_limits<uint8_t>::min())) &&
-            (f64_Val <= static_cast<float64_t>(std::numeric_limits<uint8_t>::max())))))
+          (((f64_Val >= static_cast<double>(std::numeric_limits<uint8_t>::min())) &&
+            (f64_Val <= static_cast<double>(std::numeric_limits<uint8_t>::max())))))
       {
          c_Retval = Errc::success;
       }
@@ -1579,8 +1579,8 @@ std::error_code C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
       if ((((u64_Val <= std::numeric_limits<uint16_t>::max())) &&
            ((s64_Val >= static_cast<int64_t>(std::numeric_limits<uint16_t>::min())) &&
             (s64_Val <= std::numeric_limits<uint16_t>::max()))) &&
-          ((f64_Val >= static_cast<float64_t>(std::numeric_limits<uint16_t>::min())) &&
-           (f64_Val <= static_cast<float64_t>(std::numeric_limits<uint16_t>::max()))))
+          ((f64_Val >= static_cast<double>(std::numeric_limits<uint16_t>::min())) &&
+           (f64_Val <= static_cast<double>(std::numeric_limits<uint16_t>::max()))))
       {
          c_Retval = Errc::success;
       }
@@ -1589,8 +1589,8 @@ std::error_code C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
       if ((((u64_Val <= std::numeric_limits<uint32_t>::max())) &&
            ((s64_Val >= static_cast<int64_t>(std::numeric_limits<uint32_t>::min())) &&
             (s64_Val <= std::numeric_limits<uint32_t>::max()))) &&
-          ((f64_Val >= static_cast<float64_t>(std::numeric_limits<uint32_t>::min())) &&
-           (f64_Val <= static_cast<float64_t>(std::numeric_limits<uint32_t>::max()))))
+          ((f64_Val >= static_cast<double>(std::numeric_limits<uint32_t>::min())) &&
+           (f64_Val <= static_cast<double>(std::numeric_limits<uint32_t>::max()))))
       {
          c_Retval = Errc::success;
       }
@@ -1598,8 +1598,8 @@ std::error_code C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
    case C_OscNodeDataPoolContent::eUINT64:
       //Sint64 check not reliable as the range of uint64 and sint64 don't completely overlap
       // and overflows might mess up the check
-      if (((f64_Val >= static_cast<float64_t>(std::numeric_limits<uint64_t>::min())) &&
-           (f64_Val <= static_cast<float64_t>(std::numeric_limits<uint64_t>::max()))))
+      if (((f64_Val >= static_cast<double>(std::numeric_limits<uint64_t>::min())) &&
+           (f64_Val <= static_cast<double>(std::numeric_limits<uint64_t>::max()))))
       {
          c_Retval = Errc::success;
       }
@@ -1609,8 +1609,8 @@ std::error_code C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
       // and overflows might mess up the check
       if ((((s64_Val >= std::numeric_limits<int8_t>::min()) &&
             (s64_Val <= std::numeric_limits<int8_t>::max()))) &&
-          ((f64_Val >= static_cast<float64_t>(std::numeric_limits<int8_t>::min())) &&
-           (f64_Val <= static_cast<float64_t>(std::numeric_limits<int8_t>::max()))))
+          ((f64_Val >= static_cast<double>(std::numeric_limits<int8_t>::min())) &&
+           (f64_Val <= static_cast<double>(std::numeric_limits<int8_t>::max()))))
       {
          c_Retval = Errc::success;
       }
@@ -1620,8 +1620,8 @@ std::error_code C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
       // and overflows might mess up the check
       if ((((s64_Val >= std::numeric_limits<int16_t>::min()) &&
             (s64_Val <= std::numeric_limits<int16_t>::max()))) &&
-          ((f64_Val >= static_cast<float64_t>(std::numeric_limits<int16_t>::min())) &&
-           (f64_Val <= static_cast<float64_t>(std::numeric_limits<int16_t>::max()))))
+          ((f64_Val >= static_cast<double>(std::numeric_limits<int16_t>::min())) &&
+           (f64_Val <= static_cast<double>(std::numeric_limits<int16_t>::max()))))
       {
          c_Retval = Errc::success;
       }
@@ -1631,8 +1631,8 @@ std::error_code C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
       // and overflows might mess up the check
       if ((((s64_Val >= std::numeric_limits<int32_t>::min()) &&
             (s64_Val <= std::numeric_limits<int32_t>::max()))) &&
-          ((f64_Val >= static_cast<float64_t>(std::numeric_limits<int32_t>::min())) &&
-           (f64_Val <= static_cast<float64_t>(std::numeric_limits<int32_t>::max()))))
+          ((f64_Val >= static_cast<double>(std::numeric_limits<int32_t>::min())) &&
+           (f64_Val <= static_cast<double>(std::numeric_limits<int32_t>::max()))))
       {
          c_Retval = Errc::success;
       }
@@ -1640,8 +1640,8 @@ std::error_code C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
    case C_OscNodeDataPoolContent::eSINT64:
       //All unsigned checks not reliable as the range of uint64 and any signed value don't completely overlap
       // and overflows might mess up the check
-      if ((f64_Val >= static_cast<float64_t>(std::numeric_limits<int64_t>::min())) &&
-          (f64_Val <= static_cast<float64_t>(std::numeric_limits<int64_t>::max())))
+      if ((f64_Val >= static_cast<double>(std::numeric_limits<int64_t>::min())) &&
+          (f64_Val <= static_cast<double>(std::numeric_limits<int64_t>::max())))
       {
          c_Retval = Errc::success;
       }

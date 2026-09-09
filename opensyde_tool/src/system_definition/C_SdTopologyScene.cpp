@@ -278,7 +278,7 @@ void C_SdTopologyScene::AddNode(const QString & orc_NodeType, const QPointF & or
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyScene::AddCanBus(const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId,
-                                  const float64_t of64_ZetValue, C_GiTextElementBus * const opc_TextElementBus,
+                                  const double of64_ZetValue, C_GiTextElementBus * const opc_TextElementBus,
                                   const QString * const opc_NameProposal)
 {
    std::vector<QPointF> c_Points;
@@ -338,7 +338,7 @@ void C_SdTopologyScene::AddCanBus(const QPointF & orc_Pos, const uint64_t * cons
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyScene::AddEthernetBus(const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId,
-                                       const float64_t of64_ZetValue, C_GiTextElementBus * const opc_TextElementBus,
+                                       const double of64_ZetValue, C_GiTextElementBus * const opc_TextElementBus,
                                        const QString * const opc_NameProposal)
 {
    std::vector<QPointF> c_Points;
@@ -489,7 +489,7 @@ void C_SdTopologyScene::AddTextElement(const QString & orc_Text, const QPointF &
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_GiTextElementBus * C_SdTopologyScene::AddTextElementBus(const uint64_t * const opu64_UniqueId,
-                                                          float64_t & orf64_BusZetValue)
+                                                          double & orf64_BusZetValue)
 {
    C_GiTextElementBus * pc_Item;
    int32_t s32_Index;
@@ -717,7 +717,7 @@ void C_SdTopologyScene::CopyFromManagerToScene(const QPointF * const opc_Pos)
       {
          //Add point offset
          this->mc_CopyPasteManager.IncrementPasteCounter();
-         c_TotalOffset = static_cast<float64_t>(this->mc_CopyPasteManager.GetPasteCounter()) * c_OFFSET;
+         c_TotalOffset = static_cast<double>(this->mc_CopyPasteManager.GetPasteCounter()) * c_OFFSET;
       }
       else
       {
@@ -1751,7 +1751,7 @@ void C_SdTopologyScene::m_PasteOfClipBoard(const QPointF * const opc_Pos)
 
 //----------------------------------------------------------------------------------------------------------------------
 C_GiNode * C_SdTopologyScene::m_CreateNode(const int32_t & ors32_Index, const uint64_t & oru64_Id,
-                                           const float64_t & orf64_Width, const float64_t & orf64_Height,
+                                           const double & orf64_Width, const double & orf64_Height,
                                            QGraphicsItem * const opc_Parent)
 {
    return new C_GiNode(ors32_Index, oru64_Id, orf64_Width, orf64_Height, opc_Parent);

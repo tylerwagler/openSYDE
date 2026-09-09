@@ -362,7 +362,7 @@ void C_GiSyLineWidget::SetEndArrow(const stw::opensyde_gui_logic::C_PuiBsLineArr
 void C_GiSyLineWidget::m_UpdatePreview(void)
 {
    const QSize c_ViewSize = C_GiSyBaseWidget::h_GetSceneViewSize();
-   const float64_t f64_PLACEMENT_OFFSET = 25.0;
+   const double f64_PLACEMENT_OFFSET = 25.0;
 
    std::vector<QPointF> c_Points;
 
@@ -376,7 +376,7 @@ void C_GiSyLineWidget::m_UpdatePreview(void)
 
       // Main line
       c_Points.emplace_back(QPointF(f64_PLACEMENT_OFFSET, 70.0));
-      c_Points.emplace_back(QPointF(static_cast<float64_t>(c_ViewSize.width()) - f64_PLACEMENT_OFFSET, 70.0));
+      c_Points.emplace_back(QPointF(static_cast<double>(c_ViewSize.width()) - f64_PLACEMENT_OFFSET, 70.0));
 
       if (me_Mode == eETHERNET_BUS)
       {
@@ -417,22 +417,22 @@ void C_GiSyLineWidget::m_UpdatePreview(void)
    {
       C_GiBiArrow * pc_Arrow;
       C_PuiBsLineArrow::E_ArrowHeadType e_ArrowHeadType = this->GetStartArrow();
-      float64_t f64_HorizontalOffset = 0.0;
+      double f64_HorizontalOffset = 0.0;
       if (C_GiBiArrow::h_HasOffsetInteractionPoint(e_ArrowHeadType) == true)
       {
-         f64_HorizontalOffset = static_cast<float64_t>(this->mpc_Ui->pc_SpinBoxWidth->value()) * 2.0;
+         f64_HorizontalOffset = static_cast<double>(this->mpc_Ui->pc_SpinBoxWidth->value()) * 2.0;
       }
 
       c_Points.emplace_back(QPointF(f64_PLACEMENT_OFFSET + f64_HorizontalOffset,
-                                    static_cast<float64_t>(c_ViewSize.height()) / 2.0));
+                                    static_cast<double>(c_ViewSize.height()) / 2.0));
       e_ArrowHeadType = this->GetEndArrow();
       if (C_GiBiArrow::h_HasOffsetInteractionPoint(e_ArrowHeadType) == true)
       {
-         f64_HorizontalOffset = static_cast<float64_t>(this->mpc_Ui->pc_SpinBoxWidth->value()) * 2.0;
+         f64_HorizontalOffset = static_cast<double>(this->mpc_Ui->pc_SpinBoxWidth->value()) * 2.0;
       }
-      c_Points.emplace_back(QPointF((static_cast<float64_t>(c_ViewSize.width()) - f64_PLACEMENT_OFFSET) -
+      c_Points.emplace_back(QPointF((static_cast<double>(c_ViewSize.width()) - f64_PLACEMENT_OFFSET) -
                                     f64_HorizontalOffset,
-                                    static_cast<float64_t>(c_ViewSize.height()) / 2.0));
+                                    static_cast<double>(c_ViewSize.height()) / 2.0));
 
       pc_Arrow = new C_GiBiArrow(0ULL, &c_Points);
 

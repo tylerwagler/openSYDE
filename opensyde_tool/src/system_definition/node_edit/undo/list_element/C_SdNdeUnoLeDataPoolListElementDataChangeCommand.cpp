@@ -14,7 +14,7 @@
 
 #include <limits>
 #include <QChar>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_SdNdeUnoLeDataPoolListElementDataChangeCommand.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -574,10 +574,10 @@ C_OscNodeDataPoolContent C_SdNdeUnoLeDataPoolListElementDataChangeCommand::m_Get
          c_Retval.SetValueS64(std::numeric_limits<int64_t>::lowest());
          break;
       case C_OscNodeDataPoolContent::E_Type::eFLOAT32:
-         c_Retval.SetValueF32(std::numeric_limits<float32_t>::lowest());
+         c_Retval.SetValueF32(std::numeric_limits<float>::lowest());
          break;
       case C_OscNodeDataPoolContent::E_Type::eFLOAT64:
-         c_Retval.SetValueF64(std::numeric_limits<float64_t>::lowest());
+         c_Retval.SetValueF64(std::numeric_limits<double>::lowest());
          break;
       default:
          //Unknown min/max
@@ -634,10 +634,10 @@ C_OscNodeDataPoolContent C_SdNdeUnoLeDataPoolListElementDataChangeCommand::m_Get
          c_Retval.SetValueS64(std::numeric_limits<int64_t>::max());
          break;
       case C_OscNodeDataPoolContent::E_Type::eFLOAT32:
-         c_Retval.SetValueF32(std::numeric_limits<float32_t>::max());
+         c_Retval.SetValueF32(std::numeric_limits<float>::max());
          break;
       case C_OscNodeDataPoolContent::E_Type::eFLOAT64:
-         c_Retval.SetValueF64(std::numeric_limits<float64_t>::max());
+         c_Retval.SetValueF64(std::numeric_limits<double>::max());
          break;
       default:
          //Unknown min/max

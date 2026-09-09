@@ -15,7 +15,7 @@
 #include <cmath>
 #include <QLineEdit>
 #include "C_Uti.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
@@ -85,14 +85,14 @@ void C_OgeSpxDoubleAutoFix::fixup(QString & orc_String) const
 
    if ((validate(orc_String, s32_Pos) == QValidator::Intermediate) && (this->mu64_NumberOfStepsAvailable > 0))
    {
-      float64_t f64_Value;
+      double f64_Value;
       const QString c_ValueOnly = this->m_ExtractSpinBoxValue(orc_String);
       if (C_OgeSpxDoubleAutoFix::mh_GetValue(c_ValueOnly, f64_Value) == C_NO_ERR)
       {
          //Get the value in the data type range
-         const float64_t f64_RangeValue = f64_Value - this->mf64_ScaledMin;
+         const double f64_RangeValue = f64_Value - this->mf64_ScaledMin;
          //Check if the value fits in the step width and round if necessary
-         const float64_t f64_Steps = std::round(f64_RangeValue / this->mf64_StepWidth);
+         const double f64_Steps = std::round(f64_RangeValue / this->mf64_StepWidth);
          //Apply improved value
          orc_String =
             this->m_PrepareSpinBoxValue(this->textFromValue(this->mf64_ScaledMin + (f64_Steps * this->mf64_StepWidth)));
@@ -127,12 +127,12 @@ QValidator::State C_OgeSpxDoubleAutoFix::validate(QString & orc_Input, int32_t &
    QValidator::State e_Retval = C_OgeSpxDoubleToolTipBase::validate(orc_Input, ors32_Pos);
    if ((e_Retval == QValidator::Acceptable) && (this->mu64_NumberOfStepsAvailable > 0))
    {
-      float64_t f64_Value;
+      double f64_Value;
       const QString c_ValueOnly = this->m_ExtractSpinBoxValue(orc_Input);
       if (C_OgeSpxDoubleAutoFix::mh_GetValue(c_ValueOnly, f64_Value) == C_NO_ERR)
       {
-         const float64_t f64_RangeValue = f64_Value - this->mf64_ScaledMin;
-         const float64_t f64_Steps = f64_RangeValue / this->mf64_StepWidth;
+         const double f64_RangeValue = f64_Value - this->mf64_ScaledMin;
+         const double f64_Steps = f64_RangeValue / this->mf64_StepWidth;
          if (C_Uti::h_CheckFloatHasNoFractionPart(f64_Steps) == true)
          {
             e_Retval = QValidator::Acceptable;
@@ -156,7 +156,7 @@ QValidator::State C_OgeSpxDoubleAutoFix::validate(QString & orc_Input, int32_t &
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeSpxDoubleAutoFix::m_Init(void)
 {
-   std::vector<float64_t> c_Tmp;
+   std::vector<double> c_Tmp;
    int32_t s32_DecimalsFactor;
    int32_t s32_DecimalsOffset;
 
@@ -207,7 +207,7 @@ void C_OgeSpxDoubleAutoFix::m_Init(void)
    if (this->mu64_NumberOfStepsAvailable > 0)
    {
       this->mf64_StepWidth = (this->mf64_ScaledMax - this->mf64_ScaledMin) /
-                             static_cast<float64_t>(this->mu64_NumberOfStepsAvailable);
+                             static_cast<double>(this->mu64_NumberOfStepsAvailable);
       if (this->mf64_StepWidth > 0.0)
       {
          //Fine
@@ -276,7 +276,7 @@ QString C_OgeSpxDoubleAutoFix::m_ExtractSpinBoxValue(const QString & orc_Text) c
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OgeSpxDoubleAutoFix::mh_GetValue(const QString & orc_Input, float64_t & orf64_Output)
+int32_t C_OgeSpxDoubleAutoFix::mh_GetValue(const QString & orc_Input, double & orf64_Output)
 {
    int32_t s32_Retval = C_NO_ERR;
    bool q_Ok;

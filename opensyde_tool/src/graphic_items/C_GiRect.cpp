@@ -59,7 +59,7 @@ void C_GiRect::Redraw(void)
 {
    QRectF c_Rect = this->GetSizeRect();
    const QPen c_Pen = this->pen();
-   const float64_t f64_PenWidth = static_cast<float64_t>(c_Pen.width());
+   const double f64_PenWidth = static_cast<double>(c_Pen.width());
 
    //Resize
    //Move top left and bottom right inside by the pen width

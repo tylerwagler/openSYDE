@@ -13,7 +13,7 @@
 #include <QGraphicsItemGroup>
 #include <QSizeF>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_PuiBsBox.hpp"
 #include "C_GiUnique.hpp"
@@ -42,8 +42,8 @@ class C_GiBiRectBaseGroup :
    Q_OBJECT
 
 public:
-   C_GiBiRectBaseGroup(const uint64_t & oru64_Id, const float64_t of64_MinWidth, const float64_t of64_MinHeight,
-                       const float64_t of64_ActionPointOffset, const bool oq_KeepAspectRatio,
+   C_GiBiRectBaseGroup(const uint64_t & oru64_Id, const double of64_MinWidth, const double of64_MinHeight,
+                       const double of64_ActionPointOffset, const bool oq_KeepAspectRatio,
                        QGraphicsItem * const opc_Parent = nullptr, const QPointF & orc_PosOffset = QPointF(-1.0, -1.0));
    ~C_GiBiRectBaseGroup() override;
 
@@ -59,7 +59,7 @@ public:
    void FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Closest) const override;
 
    //GI base
-   void SetZetValueCustom(const float64_t of64_ZetValue) override;
+   void SetZetValueCustom(const double of64_ZetValue) override;
 
    void SetResizing(const bool oq_Active);
    QSizeF GetSize(void) const;
@@ -90,12 +90,12 @@ protected:
    bool sceneEventFilter(QGraphicsItem * const opc_Watched, QEvent * const opc_Event) override;
 
    void m_SetBiggestItem(C_GiBiSizeableItem & orc_Item);
-   virtual void m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight) = 0;
+   virtual void m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight) = 0;
 
    void m_BiggestItemChanged(void);
    void m_BlockMoveAndResize(void);
 
-   float64_t m_GetInteractionPointSceneWidth(void) const;
+   double m_GetInteractionPointSceneWidth(void) const;
 
 private:
    //Avoid call
@@ -112,15 +112,15 @@ private:
    int32_t ms32_ActiveResizeMode;
    QRectF mc_ShowBoundingRect;
    C_GiBiSizeableItem * mpc_BiggestSubItem;
-   float64_t mf64_AspectRatio;
+   double mf64_AspectRatio;
    QPointF mc_LastKnownPosition;
    QSizeF mc_LastKnownSize;
    bool mq_BlockMoveAndResize;
 
    bool mq_KeepAspectRatio;
-   const float64_t mf64_ActionPointOffset;
-   const float64_t mf64_MinWidth;
-   const float64_t mf64_MinHeight;
+   const double mf64_ActionPointOffset;
+   const double mf64_MinWidth;
+   const double mf64_MinHeight;
    const QPointF mc_PosOffset;
 };
 

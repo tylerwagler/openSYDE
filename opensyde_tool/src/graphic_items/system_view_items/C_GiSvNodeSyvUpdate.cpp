@@ -60,8 +60,8 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_GiSvNodeSyvUpdate::C_GiSvNodeSyvUpdate(const uint32_t ou32_ViewIndex, const int32_t & ors32_NodeIndex,
-                                         const uint64_t & oru64_Id, const float64_t & orf64_Width,
-                                         const float64_t & orf64_Height, QGraphicsItem * const opc_Parent) :
+                                         const uint64_t & oru64_Id, const double & orf64_Width,
+                                         const double & orf64_Height, QGraphicsItem * const opc_Parent) :
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiSvNodeSyvBase(ou32_ViewIndex, ors32_NodeIndex, oru64_Id, orf64_Width, orf64_Height, opc_Parent),
    mpc_IconTopRight(nullptr),
@@ -686,7 +686,7 @@ void C_GiSvNodeSyvUpdate::m_InitIcons(void)
    int32_t s32_PosHorizontal;
    int32_t s32_PosVertical;
    //Helper Variable to avoid pc lint warnings
-   float64_t f64_HelpVar;
+   double f64_HelpVar;
 
    //Create + placement
 
@@ -708,10 +708,10 @@ void C_GiSvNodeSyvUpdate::m_InitIcons(void)
    //   0.77: vertical position factor
    //   0.75: icon size factor
 
-   f64_HelpVar = static_cast<float64_t>(c_Rect.height() * 0.77);
+   f64_HelpVar = static_cast<double>(c_Rect.height() * 0.77);
    s32_PosVertical = static_cast<int32_t>(f64_HelpVar) - s32_IconSize;
 
-   f64_HelpVar = static_cast<float64_t>(s32_IconSize) * 0.75;
+   f64_HelpVar = static_cast<double>(s32_IconSize) * 0.75;
    this->mpc_IconBottom =
       new C_GiInfo(QRect(static_cast<int32_t>(s32_PosHorizontal), static_cast<int32_t>(s32_PosVertical),
                          static_cast<int32_t>(static_cast<int32_t>(c_Rect.width()) -
@@ -760,7 +760,7 @@ void C_GiSvNodeSyvUpdate::m_InitIcons(void)
    //Icons
    this->mpc_IconTopRight->SetIconSize(s32_IconSize);
    this->mpc_IconTopLeft->SetIconSize(s32_TOP_LEFT_ICON_SIZE);
-   f64_HelpVar = static_cast<float64_t>(s32_IconSize) * 0.75;
+   f64_HelpVar = static_cast<double>(s32_IconSize) * 0.75;
    this->mpc_IconBottom->SetIconSize(static_cast<int32_t>(f64_HelpVar));
 
    //Defaults

@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SyvDaDashboardSnapshot.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -104,7 +104,7 @@ void C_SyvDaDashboardSnapshot::SetDataPositionOffset(const QPointF & orc_NewPos)
    \param[in] of64_HighestUsedZetValue Highest used Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardSnapshot::SetDataZetOffset(const float64_t of64_HighestUsedZetValue)
+void C_SyvDaDashboardSnapshot::SetDataZetOffset(const double of64_HighestUsedZetValue)
 {
    C_PuiBsElements::SetDataZetOffset(of64_HighestUsedZetValue);
    //Labels

@@ -44,8 +44,8 @@ public:
    C_GiSvDaRectBaseGroup(const uint32_t & oru32_ViewIndex, const uint32_t & oru32_DashboardIndex,
                          const int32_t & ors32_DataIndex, const C_PuiSvDbDataElement::E_Type & ore_Type,
                          const uint32_t ou32_MaximumDataElements, const uint64_t & oru64_Id,
-                         const float64_t of64_MinWidth, const float64_t of64_MinHeight, const float64_t of64_InitWidth,
-                         const float64_t of64_InitHeight, const bool oq_KeepAspectRatio, const bool oq_ReadItem,
+                         const double of64_MinWidth, const double of64_MinHeight, const double of64_InitWidth,
+                         const double of64_InitHeight, const bool oq_KeepAspectRatio, const bool oq_ReadItem,
                          QGraphicsItem * const opc_Parent = nullptr, const QPointF & orc_PosOffset = QPointF(-1.0, -1.0));
    ~C_GiSvDaRectBaseGroup(void) override;
 
@@ -91,7 +91,7 @@ public:
    void GenerateHint(void) override;
 
    //GI base
-   void SetZetValueCustom(const float64_t of64_ZetValue) override;
+   void SetZetValueCustom(const double of64_ZetValue) override;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
@@ -112,14 +112,14 @@ protected:
    const stw::opensyde_gui_logic::C_PuiSvDashboard * m_GetSvDashboard(void) const;
 
    int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, QString & orc_ScaledValue,
-                          float64_t * const opf64_UnscaledValueAsFloat,
-                          float64_t * const opf64_ScaledValueAsFloat) override;
+                          double * const opf64_UnscaledValueAsFloat,
+                          double * const opf64_ScaledValueAsFloat) override;
    int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<QString> & orc_ScaledValues,
-                          std::vector<float64_t> & orc_UnscaledValues) override;
+                          std::vector<double> & orc_UnscaledValues) override;
 
-   int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<float64_t> & orc_Values,
+   int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<double> & orc_Values,
                           const bool oq_UseScaling) override;
-   void m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight) override;
+   void m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight) override;
    virtual void m_ForceWidgetResize(const QSizeF & orc_NewSize);
    bool m_GetViewNodeEncrypted(
       const stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId & orc_DataPoolElementId) const;
@@ -149,7 +149,7 @@ protected:
    bool mq_AutoWriteOnConnect;
    stw::opensyde_gui_logic::C_PuiSvDbWriteWidgetBase::E_WriteMode me_WriteMode;
    stw::opensyde_gui_logic::C_PuiSvDbWriteWidgetBase::E_InitialValueModeType me_WriteInitialValueMode;
-   float64_t mf64_WriteValue;
+   double mf64_WriteValue;
    QMap<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId, QString> mc_CommmunicationErrors;
    QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId, uint8_t> mc_InvalidDlcSignals;
    bool mq_InitialStyleCall;
@@ -165,7 +165,7 @@ private:
    C_GiSvgGraphicsItem * mpc_SendIcon;
    QGraphicsItemGroup * mpc_ButtonGroup;
    int32_t ms32_IconSize;
-   static const float64_t mhf64_ACTION_POINT_OFFSET;
+   static const double mhf64_ACTION_POINT_OFFSET;
    QSizeF mc_CurrentSize;
    bool mq_ProxyWidgetInteractionActive;
    std::vector<int32_t> mc_LastTransparencyValue;

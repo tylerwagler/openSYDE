@@ -81,13 +81,13 @@ void C_OgeSliToolTipBase::SetValueCustom(const int32_t os32_Value)
    \param[in]  orc_FormatterConfig                 Formatter config
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeSliToolTipBase::SetToolTipParameters(const float64_t of64_ToolTipSliderRangeValueFactor,
-                                               const float64_t of64_ToolTipValueOffset,
+void C_OgeSliToolTipBase::SetToolTipParameters(const double of64_ToolTipSliderRangeValueFactor,
+                                               const double of64_ToolTipValueOffset,
                                                const C_PuiSvDbDataElementScaling & orc_ToolTipUserScaling,
                                                const C_OscNodeDataPoolContent::E_Type oe_RepresentationType,
                                                const C_PuiSvDbDataElementDisplayFormatterConfig & orc_FormatterConfig)
 {
-   this->mf64_ToolTipSliderRangeOffset = static_cast<float64_t>(this->minimum());
+   this->mf64_ToolTipSliderRangeOffset = static_cast<double>(this->minimum());
    this->mf64_ToolTipSliderRangeValueFactor = of64_ToolTipSliderRangeValueFactor;
    this->mf64_ToolTipValueOffset = of64_ToolTipValueOffset;
    this->mc_ToolTipUserScaling = orc_ToolTipUserScaling;
@@ -174,7 +174,7 @@ void C_OgeSliToolTipBase::m_OnValueChange(void)
 
    //set slider value in content (c_Tmp)
    C_OscNodeDataPoolContentUtil::h_SetValueInContent(
-      ((static_cast<float64_t>(this->value()) - this->mf64_ToolTipSliderRangeOffset) *
+      ((static_cast<double>(this->value()) - this->mf64_ToolTipSliderRangeOffset) *
        this->mf64_ToolTipSliderRangeValueFactor) + this->mf64_ToolTipValueOffset,
       c_Tmp);
 

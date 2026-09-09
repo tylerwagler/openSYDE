@@ -16,7 +16,7 @@
 #include <QLineEdit>
 #include "C_Uti.hpp"
 #include "TglUtils.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OgeSpxInt64AutoFix.hpp"
@@ -100,8 +100,8 @@ void C_OgeSpxInt64AutoFix::fixup(QString & orc_Input) const
             else
             {
                const uint64_t u64_RangeValue = u64_Value - u64_Min;
-               const float64_t f64_Steps =
-                  std::round(static_cast<float64_t>(u64_RangeValue) / static_cast<float64_t>(this->GetStepWidth()));
+               const double f64_Steps =
+                  std::round(static_cast<double>(u64_RangeValue) / static_cast<double>(this->GetStepWidth()));
                u64_Value = u64_Min + (static_cast<uint64_t>(f64_Steps) * this->GetStepWidth());
             }
             orc_Input = this->m_PrepareSpinBoxValue(QString::number(u64_Value));
@@ -129,9 +129,9 @@ void C_OgeSpxInt64AutoFix::fixup(QString & orc_Input) const
             else
             {
                const uint64_t u64_RangeValue = static_cast<uint64_t>(s64_Value - s64_Min);
-               const float64_t f64_Steps =
-                  std::round(static_cast<float64_t>(u64_RangeValue) / static_cast<float64_t>(this->GetStepWidth()));
-               const float64_t f64_RangeOffset = f64_Steps * static_cast<float64_t>(this->GetStepWidth());
+               const double f64_Steps =
+                  std::round(static_cast<double>(u64_RangeValue) / static_cast<double>(this->GetStepWidth()));
+               const double f64_RangeOffset = f64_Steps * static_cast<double>(this->GetStepWidth());
                s64_Value = s64_Min + static_cast<int64_t>(f64_RangeOffset);
             }
             orc_Input = this->m_PrepareSpinBoxValue(QString::number(s64_Value));
@@ -175,8 +175,8 @@ QValidator::State C_OgeSpxInt64AutoFix::validate(QString & orc_Input, int32_t & 
          {
             const uint64_t u64_Min = this->GetMinimum().toULongLong();
             const uint64_t u64_RangeValue = u64_Value - u64_Min;
-            const float64_t f64_Steps = static_cast<float64_t>(u64_RangeValue) /
-                                        static_cast<float64_t>(this->GetStepWidth());
+            const double f64_Steps = static_cast<double>(u64_RangeValue) /
+                                        static_cast<double>(this->GetStepWidth());
             if (C_Uti::h_CheckFloatHasNoFractionPart(f64_Steps) == true)
             {
                if ((this->m_GetSuffix().isEmpty() == false) && (orc_Input.endsWith(this->m_GetSuffix()) == false))
@@ -205,8 +205,8 @@ QValidator::State C_OgeSpxInt64AutoFix::validate(QString & orc_Input, int32_t & 
          {
             const int64_t s64_Min = this->GetMinimum().toLongLong();
             const uint64_t u64_RangeValue = static_cast<uint64_t>(s64_Value - s64_Min);
-            const float64_t f64_Steps = static_cast<float64_t>(u64_RangeValue) /
-                                        static_cast<float64_t>(this->GetStepWidth());
+            const double f64_Steps = static_cast<double>(u64_RangeValue) /
+                                        static_cast<double>(this->GetStepWidth());
             if (C_Uti::h_CheckFloatHasNoFractionPart(f64_Steps) == true)
             {
                if ((this->m_GetSuffix().isEmpty() == false) && (orc_Input.endsWith(this->m_GetSuffix()) == false))
@@ -248,7 +248,7 @@ void C_OgeSpxInt64AutoFix::m_Init(void)
       int64_t s64_ScaledMin = 0;
       int64_t s64_ScaledMax = 0;
       uint64_t u64_StepWidth;
-      float64_t f64_Tmp;
+      double f64_Tmp;
 
       if (C_OscUtils::h_IsScalingActive(this->mf64_Factor, this->mf64_Offset) == true)
       {

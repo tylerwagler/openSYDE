@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "qcustomplot.h"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -35,7 +35,7 @@ public:
    void UpdateColor(const QColor & orc_Color);
 
    //lint -e{8001,8011,9272}  //name of function and parameters dictated by base class
-   float64_t selectTest(const QPointF & orc_Pos, bool oq_OnlySelectable, QVariant * const opc_Details) const override;
+   double selectTest(const QPointF & orc_Pos, bool oq_OnlySelectable, QVariant * const opc_Details) const override;
 
    QCPItemPosition * const pc_Position;
 
@@ -58,7 +58,7 @@ public:
    ~C_SyvDaChaPlotCursorTag(void) override;
 
    void UpdateColors(const QColor & orc_LabelColor, const QColor & orc_LineColor);
-   void UpdatePosition(const float64_t of64_PosHorizontal);
+   void UpdatePosition(const double of64_PosHorizontal);
    void SetVisible(const bool oq_Visible);
    bool ContainsItem(const QCPAbstractItem * const opc_Item) const;
 
@@ -77,12 +77,12 @@ class C_SyvDaChaPlotCursorItem :
    Q_OBJECT
 
 public:
-   C_SyvDaChaPlotCursorItem(QCustomPlot * const opc_ParentPlot, const float64_t of64_InitHorizontalPos,
+   C_SyvDaChaPlotCursorItem(QCustomPlot * const opc_ParentPlot, const double of64_InitHorizontalPos,
                             const QString & orc_LabelText);
    ~C_SyvDaChaPlotCursorItem(void) override;
 
    void UpdateColors(const QColor & orc_LabelColor, const QColor & orc_LineColor);
-   void UpdatePosition(const float64_t of64_PosHorizontal);
+   void UpdatePosition(const double of64_PosHorizontal);
    bool ContainsItem(const QCPAbstractItem * const opc_Item) const;
    void SetItemsNextToPlotVisible(const bool oq_Visible);
 
@@ -113,7 +113,7 @@ Q_SIGNALS:
    //lint -restore
    void SigCursorItemClicked(const C_SyvDaChaPlotCursorItem * const opc_Line);
    void SigCursorItemMovedOnHorizontalAxis(const C_SyvDaChaPlotCursorItem * const opc_Line,
-                                           const float64_t of64_PosHorizontal);
+                                           const double of64_PosHorizontal);
    void SigCursorItemReleased(C_SyvDaChaPlotCursorItem * const opc_Line);
 
 protected:

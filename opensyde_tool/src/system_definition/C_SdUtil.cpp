@@ -2806,8 +2806,8 @@ void C_SdUtil::mh_AdaptSignalMaxToUnsignedType(C_OscNodeDataPoolContent & orc_Co
 
    if (orc_Content != c_Max)
    {
-      float64_t f64_MaxValPrev;
-      float64_t f64_MaxValNew;
+      double f64_MaxValPrev;
+      double f64_MaxValNew;
 
       tgl_assert(C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Content, f64_MaxValPrev,
                                                            0UL) == C_NO_ERR);
@@ -2835,7 +2835,7 @@ void C_SdUtil::mh_AdaptDataElementToUnsignedType(C_OscNodeDataPoolContent & orc_
                                                  QStringList & orc_AdaptationInfos, const QString & orc_ContentType,
                                                  const QString & orc_SignalName)
 {
-   float64_t f64_MinVal;
+   double f64_MinVal;
 
    tgl_assert(C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Content, f64_MinVal,
                                                         0UL) == C_NO_ERR);

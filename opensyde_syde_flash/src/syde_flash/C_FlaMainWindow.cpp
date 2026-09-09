@@ -566,9 +566,9 @@ const
    const uint8_t u8_MAX_PERCENTAGE = 100;
 
    const uint64_t u64_FlashableBytesPerFile = this->mu64_TotalHexFileSizeInBytes;
-   const float64_t f64_PercentageDecimal = static_cast<float64_t>(oru8_ProgressInPercentage) /
-                                           static_cast<float64_t>(u8_MAX_PERCENTAGE);
-   const float64_t f64_FlashedBytes = f64_PercentageDecimal * static_cast<float64_t>(u64_FlashableBytesPerFile);
+   const double f64_PercentageDecimal = static_cast<double>(oru8_ProgressInPercentage) /
+                                           static_cast<double>(u8_MAX_PERCENTAGE);
+   const double f64_FlashedBytes = f64_PercentageDecimal * static_cast<double>(u64_FlashableBytesPerFile);
    const uint64_t u64_FlashedBytes = static_cast<uint64_t>(f64_FlashedBytes);
 
    return u64_FlashedBytes;

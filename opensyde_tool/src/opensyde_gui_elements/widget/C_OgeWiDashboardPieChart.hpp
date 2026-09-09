@@ -65,22 +65,22 @@ private:
    bool mq_TransparentBackground;
    stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style me_Style;
    void m_SetPie(QPainter & orc_Painter, const QBrush oc_PieBrush, const Qt::PenCapStyle oe_CapStyle,
-                 const QRect & orc_PieCircleRect, const float32_t of32_PieWidth, const float32_t of32_TotalPixels,
-                 const float32_t of32_Progress) const;
+                 const QRect & orc_PieCircleRect, const float of32_PieWidth, const float of32_TotalPixels,
+                 const float of32_Progress) const;
    void m_SetPieDot(QPainter & orc_Painter, const QColor & orc_PieDotColor, const QRect & orc_PieRect,
-                    const float32_t of32_DotSize, const float32_t of32_TotalPixels,
-                    const float32_t of32_Progress) const;
+                    const float of32_DotSize, const float of32_TotalPixels,
+                    const float of32_Progress) const;
    void m_SetPieRim(QPainter & orc_Painter, const QBrush oc_RimBrush, const QRect & orc_RimCircleRect,
-                    const float32_t of32_RimSize, const float32_t of32_TotalPixels,
-                    const float32_t of32_ReductionFactor =  static_cast<float32_t>(0.0)) const;
+                    const float of32_RimSize, const float of32_TotalPixels,
+                    const float of32_ReductionFactor =  static_cast<float>(0.0)) const;
    void m_SetInnerCircle(QPainter & orc_Painter, const QBrush oc_InnerCircleBrush,
                          const QRect & orc_InnerCircleRect) const;
    void m_SetPieText(QPainter & orc_Painter, const QColor & orc_TextColor, const QRect & orc_InnerCircleRect,
                      const QString & orc_DisplayString) const;
    void m_SetAllPieRects(QRect & orc_InnerCircleRect, QRect & orc_RimCircleRect, QRect & orc_PieCircleRect,
-                         const float32_t of32_PieGap, const float32_t of32_PieSize, const float32_t of32_RimSize,
-                         const float32_t of32_TotalPixels,
-                         const float32_t of32_AdditionalFactor = static_cast<float32_t>(0.0)) const;
+                         const float of32_PieGap, const float of32_PieSize, const float of32_RimSize,
+                         const float of32_TotalPixels,
+                         const float of32_AdditionalFactor = static_cast<float>(0.0)) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -49,8 +49,8 @@ public:
    void SetValue(const int32_t os32_Value) const;
    int32_t GetMinValue(void) const;
    int32_t GetValue(void) const;
-   void SetToolTipParameters(const float64_t of64_ToolTipSliderRangeValueFactor,
-                             const float64_t of64_ToolTipValueOffset,
+   void SetToolTipParameters(const double of64_ToolTipSliderRangeValueFactor,
+                             const double of64_ToolTipValueOffset,
                              const stw::opensyde_gui_logic::C_PuiSvDbDataElementScaling & orc_ToolTipUserScaling,
                              const stw::opensyde_core::C_OscNodeDataPoolContent::E_Type oe_RepresentationType,
                              const stw::opensyde_gui_logic::C_PuiSvDbDataElementDisplayFormatterConfig & orc_FormatterConfig)

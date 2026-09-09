@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSdUtil.hpp"
 #include "C_SdTopologyScene.hpp"
 #include "C_SdManUnoTopologyAddSnapshotCommand.hpp"
@@ -47,7 +47,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyAddSnapshotCommand::C_SdManUnoTopologyAddSnapshotCommand(QGraphicsScene * const opc_Scene,
                                                                            const C_SdTopologyDataSnapshot & orc_InitialSnapshotData,
-                                                                           const std::vector<uint64_t> & orc_Ids, const QPointF & orc_NewPos, const float64_t of64_HighestUsedZetValue,
+                                                                           const std::vector<uint64_t> & orc_Ids, const QPointF & orc_NewPos, const double of64_HighestUsedZetValue,
                                                                            QUndoCommand * const opc_Parent) :
    C_SdManUnoTopologyAddBaseCommand(opc_Scene, orc_Ids, "Paste drawing element(s)",
                                     opc_Parent, orc_InitialSnapshotData)

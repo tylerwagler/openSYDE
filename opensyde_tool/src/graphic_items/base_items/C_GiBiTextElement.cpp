@@ -31,10 +31,10 @@ using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const float64_t mf64_ACTION_POINT_OFFSET_BOUNDARY = 10.0;
+const double mf64_ACTION_POINT_OFFSET_BOUNDARY = 10.0;
 
-const float64_t C_GiBiTextElement::mhf64_MIN_WIDTH_TEXT_ELEMENT = 70.0;
-const float64_t C_GiBiTextElement::mhf64_MIN_HEIGHT_TEXT_ELEMENT = 20.0;
+const double C_GiBiTextElement::mhf64_MIN_WIDTH_TEXT_ELEMENT = 70.0;
+const double C_GiBiTextElement::mhf64_MIN_HEIGHT_TEXT_ELEMENT = 20.0;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -361,7 +361,7 @@ void C_GiBiTextElement::m_UpdateTextElementData(C_PuiBsTextElement * const opc_D
 
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_GiBiTextElement::m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight)
+void C_GiBiTextElement::m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight)
 {
    Q_UNUSED(of64_DiffWidth)
    Q_UNUSED(of64_DiffHeight)

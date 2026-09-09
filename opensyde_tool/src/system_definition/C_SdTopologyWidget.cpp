@@ -15,7 +15,7 @@
 #include <QGraphicsItem>
 #include <QGuiApplication>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SdTopologyWidget.hpp"
 #include "ui_C_SdTopologyWidget.h"
@@ -70,8 +70,8 @@ C_SdTopologyWidget::C_SdTopologyWidget(QWidget * const opc_Parent) :
 
    // configure scene
    this->mpc_Scene->setSceneRect(0.0, 0.0,
-                                 static_cast<float64_t>(this->mpc_Ui->pc_GraphicsView->width()),
-                                 static_cast<float64_t>(this->mpc_Ui->pc_GraphicsView->height()));
+                                 static_cast<double>(this->mpc_Ui->pc_GraphicsView->width()),
+                                 static_cast<double>(this->mpc_Ui->pc_GraphicsView->height()));
    this->mpc_Ui->pc_GraphicsView->SetSceneAndConnect(this->mpc_Scene);
 
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_DrawFrame, "OpenRight", true);

@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_PuiSvDbDataElementContent.hpp"
 #include "C_PuiSvDbDataElementScaling.hpp"
@@ -43,7 +43,7 @@ public:
    bool IsFormatterCompatible(const E_TypeCategory oe_Category) const;
 
    QString GetValueFormatted(const int64_t os64_Value) const;
-   QString GetValueFormatted(const float64_t of64_Value) const;
+   QString GetValueFormatted(const double of64_Value) const;
    QString GetValueFormatted(const QString & orc_Value) const;
 
    static E_TypeCategory h_GetTypeCategory(const C_PuiSvDbDataElementContent & orc_Content,

@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_UsHandler.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -71,15 +71,15 @@ uint64_t C_SyvUpFileSizeInformation::GetEstimatedTimeSeconds(bool * const opq_Ok
       *opq_Ok = true;
    }
    //Sum up all times for each node
-   for (QMap<uint32_t, float64_t>::const_iterator c_ItNode = this->mc_FileSizesByteMapPerNode.begin();
+   for (QMap<uint32_t, double>::const_iterator c_ItNode = this->mc_FileSizesByteMapPerNode.begin();
         c_ItNode != this->mc_FileSizesByteMapPerNode.end(); ++c_ItNode)
    {
-      const QMap<uint32_t, float64_t>::const_iterator c_ItDataRate = this->mc_BytesPerMsMapPerNode.find(c_ItNode.key());
+      const QMap<uint32_t, double>::const_iterator c_ItDataRate = this->mc_BytesPerMsMapPerNode.find(c_ItNode.key());
       //See if that node has a known data rate
       if ((c_ItDataRate != this->mc_BytesPerMsMapPerNode.end()) && (c_ItDataRate.value() > 0.0))
       {
          //file size [byte] / Last data rate [byte/ms] -> divide by 1000 to get seconds
-         const float64_t f64_EstimatedTimeNode = (c_ItNode.value() / 1000.0) / c_ItDataRate.value();
+         const double f64_EstimatedTimeNode = (c_ItNode.value() / 1000.0) / c_ItDataRate.value();
          u64_Retval += static_cast<uint64_t>(f64_EstimatedTimeNode);
       }
       else
@@ -146,7 +146,7 @@ void C_SyvUpFileSizeInformation::AppendFiles(const uint32_t ou32_NodeIndex,
       u64_SizeOfNewFiles += orc_ParamFiles[u32_ItFile];
    }
    this->mu64_OverallFilesSize += u64_SizeOfNewFiles;
-   this->mc_FileSizesByteMapPerNode.insert(ou32_NodeIndex, static_cast<float64_t>(u64_SizeOfNewFiles));
+   this->mc_FileSizesByteMapPerNode.insert(ou32_NodeIndex, static_cast<double>(u64_SizeOfNewFiles));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -298,12 +298,12 @@ uint64_t C_SyvUpFileSizeInformation::GetOtherFileSizeForDevice(const uint32_t ou
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpFileSizeInformation::SetElapsedTimeForNode(const uint32_t ou32_NodeIndex, const uint64_t ou64_ElapsedTimeMs)
 {
-   const QMap<uint32_t, float64_t>::const_iterator c_ItFiles = this->mc_FileSizesByteMapPerNode.find(
+   const QMap<uint32_t, double>::const_iterator c_ItFiles = this->mc_FileSizesByteMapPerNode.find(
       ou32_NodeIndex);
 
    if ((c_ItFiles != this->mc_FileSizesByteMapPerNode.end()) && (ou64_ElapsedTimeMs > 0ULL))
    {
-      const float64_t f64_Tmp = c_ItFiles.value() / static_cast<float64_t>(ou64_ElapsedTimeMs);
+      const double f64_Tmp = c_ItFiles.value() / static_cast<double>(ou64_ElapsedTimeMs);
       this->mc_BytesPerMsMapPerNode.insert(ou32_NodeIndex, f64_Tmp);
    }
 }
@@ -339,8 +339,8 @@ void C_SyvUpFileSizeInformation::LoadUserSettings(const uint32_t ou32_ViewIndex)
                                                                          u32_Crc) == C_NO_ERR)
             {
                const C_UsSystemViewNode c_Node = c_UserView.GetSvNode(c_Name);
-               const QMap<uint32_t, float64_t> & rc_UpdateDataRateHistory = c_Node.GetUpdateDataRateHistory();
-               const QMap<uint32_t, float64_t>::const_iterator c_It = rc_UpdateDataRateHistory.find(u32_Crc);
+               const QMap<uint32_t, double> & rc_UpdateDataRateHistory = c_Node.GetUpdateDataRateHistory();
+               const QMap<uint32_t, double>::const_iterator c_It = rc_UpdateDataRateHistory.find(u32_Crc);
                if (c_It != rc_UpdateDataRateHistory.end())
                {
                   this->mc_BytesPerMsMapPerNode.insert(u32_ItNode, c_It.value());
@@ -374,7 +374,7 @@ void C_SyvUpFileSizeInformation::SaveUserSettings(const uint32_t ou32_ViewIndex)
       {
          if (c_NodeActiveFlags[u32_ItNode] == 1)
          {
-            const QMap<uint32_t, float64_t>::const_iterator c_It = this->mc_BytesPerMsMapPerNode.find(
+            const QMap<uint32_t, double>::const_iterator c_It = this->mc_BytesPerMsMapPerNode.find(
                u32_ItNode);
             if (c_It != this->mc_BytesPerMsMapPerNode.end())
             {

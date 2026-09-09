@@ -21,7 +21,7 @@
 #include <limits>
 #include <iostream>
 #include <system_error>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include <string>
@@ -74,7 +74,7 @@ C_OscComDriverProtocol::C_OscComDriverProtocol(void) :
    mpc_SecurityPemDb(nullptr)
 {
    //Check if client and server use same float standard, see #84517 for more details
-   tgl_assert(std::numeric_limits<float32_t>::is_iec559);
+   tgl_assert(std::numeric_limits<float>::is_iec559);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

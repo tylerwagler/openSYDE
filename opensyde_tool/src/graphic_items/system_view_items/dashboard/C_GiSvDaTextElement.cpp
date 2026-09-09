@@ -14,7 +14,7 @@
 
 #include <QTextCursor>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiSvDaTextElement.hpp"
 #include "C_PuiSvHandler.hpp"
 
@@ -152,7 +152,7 @@ void C_GiSvDaTextElement::DeleteData(void)
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaTextElement::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiSvDaTextElement::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiBiTextElement::SetZetValueCustom(of64_ZetValue);
    //Apply to data

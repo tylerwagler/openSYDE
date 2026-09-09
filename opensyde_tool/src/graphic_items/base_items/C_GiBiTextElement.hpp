@@ -14,7 +14,7 @@
 #include <QFont>
 #include <QSvgRenderer>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiBiRectBaseGroup.hpp"
 #include "C_GiText.hpp"
@@ -68,7 +68,7 @@ protected:
    void m_LoadTextElementData(const stw::opensyde_gui_logic::C_PuiBsTextElement * const opc_Data);
    void m_UpdateTextElementData(stw::opensyde_gui_logic::C_PuiBsTextElement * const opc_Data) const;
 
-   void m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight) override;
+   void m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight) override;
 
    void keyPressEvent(QKeyEvent * const opc_Event) override;
    void mouseMoveEvent(QGraphicsSceneMouseEvent * const opc_Event) override;
@@ -87,8 +87,8 @@ private:
 
    bool mq_Editable;
 
-   static const float64_t mhf64_MIN_WIDTH_TEXT_ELEMENT;
-   static const float64_t mhf64_MIN_HEIGHT_TEXT_ELEMENT;
+   static const double mhf64_MIN_WIDTH_TEXT_ELEMENT;
+   static const double mhf64_MIN_HEIGHT_TEXT_ELEMENT;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiSdBoundary.hpp"
 #include "C_PuiSdHandler.hpp"
 
@@ -44,8 +44,8 @@ using namespace stw::opensyde_gui_logic;
    \param[in,out] opc_Parent  Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiSdBoundary::C_GiSdBoundary(const int32_t & ors32_Index, const uint64_t & oru64_Id, const float64_t of64_Width,
-                               const float64_t of64_Height, QGraphicsItem * const opc_Parent) :
+C_GiSdBoundary::C_GiSdBoundary(const int32_t & ors32_Index, const uint64_t & oru64_Id, const double of64_Width,
+                               const double of64_Height, QGraphicsItem * const opc_Parent) :
    C_GiBiBoundary(oru64_Id, of64_Width, of64_Height, opc_Parent),
    C_PuiSdDataElement(ors32_Index, C_PuiSdDataElement::eBOUNDARY)
 {
@@ -93,7 +93,7 @@ void C_GiSdBoundary::DeleteData(void)
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSdBoundary::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiSdBoundary::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiBiBoundary::SetZetValueCustom(of64_ZetValue);
    //Apply to data

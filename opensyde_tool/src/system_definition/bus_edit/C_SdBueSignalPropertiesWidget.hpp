@@ -13,7 +13,7 @@
 
 #include <QWidget>
 #include <QDoubleSpinBox>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSdNodeCanUtil.hpp"
 #include "C_OgeWiSpinBoxGroup.hpp"
 #include "C_OscCanMessageIdentificationIndices.hpp"
@@ -123,13 +123,13 @@ private:
    void m_HandleValueDescriptionCellChange(void);
    void m_InitValueDescriptionsTable(void) const;
    int32_t m_LoadGeneric(stw::opensyde_gui_elements::C_OgeWiSpinBoxGroup * const opc_Widget,
-                         const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content, const float64_t of64_Factor,
-                         const float64_t of64_Offset, const uint16_t ou16_BitLength,
+                         const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content, const double of64_Factor,
+                         const double of64_Offset, const uint16_t ou16_BitLength,
                          const stw::opensyde_core::C_OscNodeDataPoolContent * const opc_Min,
                          const stw::opensyde_core::C_OscNodeDataPoolContent * const opc_Max) const;
    int32_t m_SaveGeneric(const stw::opensyde_gui_elements::C_OgeWiSpinBoxGroup * const opc_Widget,
-                         stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content, const float64_t of64_Factor,
-                         const float64_t of64_Offset) const;
+                         stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content, const double of64_Factor,
+                         const double of64_Offset) const;
    stw::opensyde_core::C_OscNodeDataPoolContent::E_Type m_GetCurrentType(void) const;
    void m_SaveToData(const E_Change oe_Change);
    stw::opensyde_core::C_OscCanSignal::E_MultiplexerType m_GetMuxType(void) const;

@@ -15,7 +15,7 @@
 
 #include <QString>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_PuiSdDataElement.hpp"
 #include "C_GiBiCustomToolTip.hpp"
@@ -61,7 +61,7 @@ public:
    void CopyStyle(const QGraphicsItem * const opc_GuidelineItem) override;
 
    //GI base
-   void SetZetValueCustom(const float64_t of64_ZetValue) override;
+   void SetZetValueCustom(const double of64_ZetValue) override;
 
    void SetDisabledLook(const bool oq_Disabled) override;
    void ApplyStyle(const QColor & orc_LineColor, const int32_t os32_Width);

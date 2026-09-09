@@ -18,7 +18,7 @@
 #include <QGraphicsScene>
 #include <QPointF>
 #include <QSizeF>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSdDataElement.hpp"
 #include "C_SdManUnoTopologyAddCommand.hpp"
 #include "C_SdTopologyDataSnapshot.hpp"
@@ -69,7 +69,7 @@ public:
                                                   const uint8_t & oru8_Node1InterfaceNumber,
                                                   const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node1Properties);
    void DoAddSnapshot(const std::vector<uint64_t> & orc_UniqueIds, const C_SdTopologyDataSnapshot & orc_Snapshot,
-                      const QPointF & orc_NewPos, const float64_t of64_HighestUsedZetValue);
+                      const QPointF & orc_NewPos, const double of64_HighestUsedZetValue);
    void DoReconnectNode(const stw::opensyde_gui::C_GiLiBusConnector * const opc_BusConnector,
                         const stw::opensyde_gui::C_GiNode * const opc_StartingNode,
                         const stw::opensyde_gui::C_GiNode * const opc_LastNode, const QPointF & orc_ConnectionPos,

@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiImageGroupWithoutData.hpp"
 #include "C_PuiBsImage.hpp"
@@ -34,13 +34,13 @@ class C_GiBiImageGroup :
 public:
    C_GiBiImageGroup(const uint64_t & oru64_Id, const QString & orc_ImagePath, QGraphicsItem * const opc_Parent = nullptr);
 
-   C_GiBiImageGroup(const uint64_t & oru64_Id, const float64_t of64_Width, const float64_t of64_Height,
+   C_GiBiImageGroup(const uint64_t & oru64_Id, const double of64_Width, const double of64_Height,
                     const QPixmap & orc_Image, const QByteArray & orc_Format, QGraphicsItem * const opc_Parent = nullptr);
 
    int32_t type() const override;
 
    //GI base
-   void SetZetValueCustom(const float64_t of64_ZetValue) override;
+   void SetZetValueCustom(const double of64_ZetValue) override;
 
 protected:
    void m_UpdateData(stw::opensyde_gui_logic::C_PuiBsImage & orc_Data) const;

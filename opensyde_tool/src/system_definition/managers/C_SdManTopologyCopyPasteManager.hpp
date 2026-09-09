@@ -35,7 +35,7 @@ public:
    ~C_SdManTopologyCopyPasteManager(void) override;
    const C_PuiBsElements * GetSnapshot(QWidget * const opc_Parent) override;
    void CopyFromSceneToManager(const QList<QGraphicsItem *> & orc_SelectedItems, const QMap<const QGraphicsItem *,
-                                                                                            float64_t> & orc_NormalizedZetValues)
+                                                                                            double> & orc_NormalizedZetValues)
    override;
    bool CheckValidContentAndPrepareData(void) override;
 
@@ -48,12 +48,12 @@ private:
    static void mh_CopyFromSceneToManagerHandleNode(const stw::opensyde_gui::C_GiNode * const opc_UiNodeItem,
                                                    C_SdTopologyDataSnapshot & orc_Snapshot,
                                                    const QMap<const QGraphicsItem *,
-                                                              float64_t> & orc_NormalizedZetValues,
+                                                              double> & orc_NormalizedZetValues,
                                                    const QGraphicsItem * const opc_NodeItemOrigin);
    static void mh_CopyFromSceneToManagerHandleMultiNode(const uint32_t ou32_NodeIndex,
                                                         C_SdTopologyDataSnapshot & orc_Snapshot,
                                                         const QMap<const QGraphicsItem *,
-                                                                   float64_t> & orc_NormalizedZetValues,
+                                                                   double> & orc_NormalizedZetValues,
                                                         const QGraphicsItem * const opc_NodeItemOrigin);
    static void mh_RemoveConnection(C_SdTopologyDataSnapshot & orc_Data, const uint32_t & oru32_NodeIndex,
                                    const C_PuiSdNodeConnectionId & orc_ConnectionId);

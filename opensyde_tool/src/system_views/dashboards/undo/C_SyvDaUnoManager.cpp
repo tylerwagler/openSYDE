@@ -85,7 +85,7 @@ void C_SyvDaUnoManager::DoDelete(const QList<QGraphicsItem *> & orc_Items)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaUnoManager::DoAddGeneric(const C_PuiSvDbDataElement::E_Type & ore_Type, const uint64_t & oru64_UniqueId,
-                                     const QPointF & orc_NewPos, const float64_t of64_ZetValue,
+                                     const QPointF & orc_NewPos, const double of64_ZetValue,
                                      const QString & orc_AdditionalInformation)
 {
    std::vector<uint64_t> c_Ids;
@@ -113,7 +113,7 @@ void C_SyvDaUnoManager::DoAddSnapshot(const std::vector<uint64_t> & orc_UniqueId
                                       const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
                                                  C_PuiSvReadDataConfiguration> & orc_RestoredRails,
                                       const QPointF & orc_NewPos,
-                                      const float64_t of64_HighestUsedZetValue)
+                                      const double of64_HighestUsedZetValue)
 {
    C_SyvDaUnoAddSnapshotCommand * pc_AddCommand;
 

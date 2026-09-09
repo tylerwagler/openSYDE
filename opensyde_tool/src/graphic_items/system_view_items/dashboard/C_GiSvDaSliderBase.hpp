@@ -56,8 +56,8 @@ protected:
 
 private:
    C_SyvDaItDashboardSliderWidget * mpc_SliderWidget;
-   float64_t mf64_SliderFactor;
-   float64_t mf64_UnscaledMinValue;
+   double mf64_SliderFactor;
+   double mf64_UnscaledMinValue;
 
    static const int32_t mhs32_SLIDER_MIN;
    static const int32_t mhs32_SLIDER_RANGE;
@@ -68,8 +68,8 @@ private:
 
    void m_UpdateStaticValues(void);
    bool m_IsOnChange(void) const;
-   void m_SetUnscaledValueToSliderWidget(const float64_t of64_NewValue) const;
-   float64_t m_GetCurrentUnscaledValue(void) const;
+   void m_SetUnscaledValueToSliderWidget(const double of64_NewValue) const;
+   double m_GetCurrentUnscaledValue(void) const;
    int32_t m_GetSliderValueFromContent(const opensyde_core::C_OscNodeDataPoolContent & orc_Content) const;
 };
 

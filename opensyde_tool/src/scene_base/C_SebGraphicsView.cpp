@@ -132,8 +132,8 @@ C_SebGraphicsView::~C_SebGraphicsView()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebGraphicsView::SetZoomValue(const int32_t os32_Percent, const bool & orq_Silent)
 {
-   const float64_t f64_TargetScale = static_cast<float64_t>(os32_Percent) / 100.0;
-   const float64_t f64_ScaleFactor = f64_TargetScale / transform().m11();
+   const double f64_TargetScale = static_cast<double>(os32_Percent) / 100.0;
+   const double f64_ScaleFactor = f64_TargetScale / transform().m11();
 
    m_ScaleBy(f64_ScaleFactor, orq_Silent);
 }
@@ -325,15 +325,15 @@ void C_SebGraphicsView::drawBackground(QPainter * const opc_Painter, const QRect
       QPen c_Pen;
       QRectF c_Rect;
       QLinearGradient c_Gradient;
-      float64_t f64_RectWidth;
+      double f64_RectWidth;
 
       if (mq_SubtleSurroundGradient == false)
       {
-         f64_RectWidth = static_cast<float64_t>(ms32_WHITE_EDGE_WIDTH);
+         f64_RectWidth = static_cast<double>(ms32_WHITE_EDGE_WIDTH);
       }
       else
       {
-         f64_RectWidth = static_cast<float64_t>(ms32_WHITE_EDGE_WIDTH) / 2.0;
+         f64_RectWidth = static_cast<double>(ms32_WHITE_EDGE_WIDTH) / 2.0;
       }
 
       c_GradientColorStart = C_SebGraphicsView::mhc_GRADIENT_COLOR_LIGHT;
@@ -349,7 +349,7 @@ void C_SebGraphicsView::drawBackground(QPainter * const opc_Painter, const QRect
 
       // draw the first rectangle
       c_Gradient.setStart(0.0, 0.0);
-      c_Gradient.setFinalStop(static_cast<float64_t>(f64_RectWidth), 0.0);
+      c_Gradient.setFinalStop(static_cast<double>(f64_RectWidth), 0.0);
       opc_Painter->setBrush(c_Gradient);
 
       c_Rect.setX(orc_Rect.x());
@@ -763,28 +763,28 @@ void C_SebGraphicsView::m_ZoomNotificationTimerEvent()
    \param[in]  orq_Silent        Flag if user notification should be shown
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SebGraphicsView::m_ScaleBy(const float64_t of64_ScaleFactor, const bool & orq_Silent)
+void C_SebGraphicsView::m_ScaleBy(const double of64_ScaleFactor, const bool & orq_Silent)
 {
    QTransform c_Tranform = this->transform();
 
    //get absolute factor
-   const float64_t f64_Factor =
+   const double f64_Factor =
       c_Tranform.scale(of64_ScaleFactor, of64_ScaleFactor).mapRect(QRectF(0.0, 0.0, 1.0, 1.0)).width();
-   const float64_t f64_Value = f64_Factor * 100.0;
+   const double f64_Value = f64_Factor * 100.0;
 
    //min limit reached?
-   if (f64_Value < static_cast<float64_t>(ms32_MIN_ZOOM_IN_PERCENT))
+   if (f64_Value < static_cast<double>(ms32_MIN_ZOOM_IN_PERCENT))
    {
-      if (C_OscUtils::h_IsFloat64NearlyEqual(f64_Value, static_cast<float64_t>(ms32_MIN_ZOOM_IN_PERCENT)) == false)
+      if (C_OscUtils::h_IsFloat64NearlyEqual(f64_Value, static_cast<double>(ms32_MIN_ZOOM_IN_PERCENT)) == false)
       {
          //set min and return
          SetZoomValue(ms32_MIN_ZOOM_IN_PERCENT, orq_Silent);
       }
    }
    //max limit reached?
-   else if ((f64_Factor * 100.0) > static_cast<float64_t>(ms32_MAX_ZOOM_IN_PERCENT))
+   else if ((f64_Factor * 100.0) > static_cast<double>(ms32_MAX_ZOOM_IN_PERCENT))
    {
-      if (C_OscUtils::h_IsFloat64NearlyEqual(f64_Value, static_cast<float64_t>(ms32_MAX_ZOOM_IN_PERCENT)) == false)
+      if (C_OscUtils::h_IsFloat64NearlyEqual(f64_Value, static_cast<double>(ms32_MAX_ZOOM_IN_PERCENT)) == false)
       {
          //set max and return
          SetZoomValue(ms32_MAX_ZOOM_IN_PERCENT, orq_Silent);

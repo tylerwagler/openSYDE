@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSvHandler.hpp"
 #include "C_GiSvNodeSyvBase.hpp"
 
@@ -46,8 +46,8 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_GiSvNodeSyvBase::C_GiSvNodeSyvBase(const uint32_t ou32_ViewIndex, const int32_t & ors32_NodeIndex,
-                                     const uint64_t & oru64_Id, const float64_t & orf64_Width,
-                                     const float64_t & orf64_Height, QGraphicsItem * const opc_Parent) :
+                                     const uint64_t & oru64_Id, const double & orf64_Width,
+                                     const double & orf64_Height, QGraphicsItem * const opc_Parent) :
    C_GiNode(ors32_NodeIndex, oru64_Id, orf64_Width, orf64_Height, opc_Parent),
    mu32_ViewIndex(ou32_ViewIndex),
    mq_ViewConnected(false)

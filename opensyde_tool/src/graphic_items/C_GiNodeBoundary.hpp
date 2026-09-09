@@ -15,7 +15,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QPixmap>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiBiSizeableItem.hpp"
 
@@ -33,7 +33,7 @@ class C_GiNodeBoundary :
    public C_GiBiSizeableItem
 {
 public:
-   C_GiNodeBoundary(const QString & orc_Text, const float64_t of64_Width, const float64_t of64_Height,
+   C_GiNodeBoundary(const QString & orc_Text, const double of64_Width, const double of64_Height,
                     const uint32_t ou32_SubNodesCount, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiNodeBoundary() override;
 

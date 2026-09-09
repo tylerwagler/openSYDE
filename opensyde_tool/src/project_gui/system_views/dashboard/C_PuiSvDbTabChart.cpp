@@ -69,11 +69,11 @@ void C_PuiSvDbTabChart::CalcHash(uint32_t & oru32_HashValue) const
    }
    for (uint32_t u32_ItOuter = 0; u32_ItOuter < this->c_VisibleScreen.size(); ++u32_ItOuter)
    {
-      const std::array<float64_t, 4> & orc_Inner = this->c_VisibleScreen[u32_ItOuter];
+      const std::array<double, 4> & orc_Inner = this->c_VisibleScreen[u32_ItOuter];
       for (uint32_t u32_ItInner = 0; u32_ItInner < orc_Inner.size(); ++u32_ItInner)
       {
          //lint -e{736,9120} C++ interface
-         const float32_t f32_Val = orc_Inner[u32_ItInner];
+         const float f32_Val = orc_Inner[u32_ItInner];
          //lint -e{9110} Usual way
          stw::scl::C_SclChecksums::CalcCRC32(&f32_Val, sizeof(f32_Val), oru32_HashValue);
       }

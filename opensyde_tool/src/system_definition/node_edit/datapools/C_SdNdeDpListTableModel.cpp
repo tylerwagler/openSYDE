@@ -2410,7 +2410,7 @@ void C_SdNdeDpListTableModel::m_MoveItem(const uint32_t ou32_SourceIndex, const 
    Float as string
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_SdNdeDpListTableModel::m_GetFloatAsString(const float64_t of64_Value)
+QString C_SdNdeDpListTableModel::m_GetFloatAsString(const double of64_Value)
 {
    QString c_Precison = QString::number(of64_Value, 'g', 17);
 

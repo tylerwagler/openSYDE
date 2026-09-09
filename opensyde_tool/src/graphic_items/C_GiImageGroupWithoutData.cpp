@@ -14,7 +14,7 @@
 
 #include <QFileInfo>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiBiImageGroup.hpp"
 #include "C_PuiSdDataElement.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -26,10 +26,10 @@ using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const float64_t C_GiImageGroupWithoutData::mhf64_ACTION_POINT_OFFSET_IMAGE = 8.0;
+const double C_GiImageGroupWithoutData::mhf64_ACTION_POINT_OFFSET_IMAGE = 8.0;
 
-const float64_t C_GiImageGroupWithoutData::mhf64_MIN_WIDTH_IMAGE = 10.0;
-const float64_t C_GiImageGroupWithoutData::mhf64_MIN_HEIGHT_IMAGE = 10.0;
+const double C_GiImageGroupWithoutData::mhf64_MIN_WIDTH_IMAGE = 10.0;
+const double C_GiImageGroupWithoutData::mhf64_MIN_HEIGHT_IMAGE = 10.0;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -81,8 +81,8 @@ C_GiImageGroupWithoutData::C_GiImageGroupWithoutData(const uint64_t & oru64_Id, 
    \param[in,out]  opc_Parent       Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiImageGroupWithoutData::C_GiImageGroupWithoutData(const uint64_t & oru64_Id, const float64_t of64_Width,
-                                                     const float64_t of64_Height, const QPixmap & orc_Image,
+C_GiImageGroupWithoutData::C_GiImageGroupWithoutData(const uint64_t & oru64_Id, const double of64_Width,
+                                                     const double of64_Height, const QPixmap & orc_Image,
                                                      const QByteArray & orc_Format, QGraphicsItem * const opc_Parent) :
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiBiRectBaseGroup(oru64_Id, mhf64_MIN_WIDTH_IMAGE,
@@ -176,7 +176,7 @@ void C_GiImageGroupWithoutData::m_LateImageInit(const QString & orc_ImagePath)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiImageGroupWithoutData::m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight)
+void C_GiImageGroupWithoutData::m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight)
 {
    Q_UNUSED(of64_DiffWidth)
    Q_UNUSED(of64_DiffHeight)

@@ -1703,7 +1703,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamColumns(std::vector<int32_t> & orc_Va
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadTabChartScreenRegion(std::vector<std::array<float64_t, 4> > & orc_ScreenRegion,
+int32_t C_PuiSvDashboardFiler::mh_LoadTabChartScreenRegion(std::vector<std::array<double, 4> > & orc_ScreenRegion,
                                                            C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1719,11 +1719,11 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChartScreenRegion(std::vector<std::arra
             if (((orc_XmlParser.AttributeExists("value1") && orc_XmlParser.AttributeExists("value2")) &&
                  orc_XmlParser.AttributeExists("value3")) && orc_XmlParser.AttributeExists("value4"))
             {
-               const float64_t f64_Value1 = orc_XmlParser.GetAttributeFloat64("value1");
-               const float64_t f64_Value2 = orc_XmlParser.GetAttributeFloat64("value2");
-               const float64_t f64_Value3 = orc_XmlParser.GetAttributeFloat64("value3");
-               const float64_t f64_Value4 = orc_XmlParser.GetAttributeFloat64("value4");
-               const std::array<float64_t, 4> c_ScreenRegion = {
+               const double f64_Value1 = orc_XmlParser.GetAttributeFloat64("value1");
+               const double f64_Value2 = orc_XmlParser.GetAttributeFloat64("value2");
+               const double f64_Value3 = orc_XmlParser.GetAttributeFloat64("value3");
+               const double f64_Value4 = orc_XmlParser.GetAttributeFloat64("value4");
+               const std::array<double, 4> c_ScreenRegion = {
                   {f64_Value1, f64_Value2, f64_Value3, f64_Value4}
                };
                orc_ScreenRegion.push_back(c_ScreenRegion);
@@ -2264,14 +2264,14 @@ void C_PuiSvDashboardFiler::mh_SaveDataFormatterConfig(const C_PuiSvDbDataElemen
    \param[in,out]  orc_XmlParser       XML parser
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveTabChartScreenRegion(const std::vector<std::array<float64_t, 4> > & orc_ScreenRegion,
+void C_PuiSvDashboardFiler::mh_SaveTabChartScreenRegion(const std::vector<std::array<double, 4> > & orc_ScreenRegion,
                                                         C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("screen-regions");
-   for (std::vector<std::array<float64_t, 4> >::const_iterator c_It = orc_ScreenRegion.begin();
+   for (std::vector<std::array<double, 4> >::const_iterator c_It = orc_ScreenRegion.begin();
         c_It != orc_ScreenRegion.end(); ++c_It)
    {
-      const std::array<float64_t, 4> & rc_Vals = *c_It;
+      const std::array<double, 4> & rc_Vals = *c_It;
       orc_XmlParser.CreateAndSelectNodeChild("screen-region");
       orc_XmlParser.SetAttributeFloat64("value1", rc_Vals[0]);
       orc_XmlParser.SetAttributeFloat64("value2", rc_Vals[1]);
@@ -2307,10 +2307,10 @@ void C_PuiSvDashboardFiler::mh_HandlePreviousSliderValue(const int32_t os32_Prev
          if (pc_Element != nullptr)
          {
             uint64_t u64_Steps;
-            float64_t f64_UnscaledValue;
-            float64_t f64_SliderMin;
-            float64_t f64_SliderFactor;
-            float64_t f64_UnscaledMin;
+            double f64_UnscaledValue;
+            double f64_SliderMin;
+            double f64_SliderFactor;
+            double f64_UnscaledMin;
             tgl_assert(C_SdNdeDpContentUtil::h_GetValueAsFloat64(pc_Element->c_MinValue, f64_UnscaledMin,
                                                                  0UL) == C_NO_ERR);
             if (C_SdNdeDpContentUtil::h_GetNumberOfAvailableSteps(pc_Element->c_MinValue,
@@ -2322,7 +2322,7 @@ void C_PuiSvDashboardFiler::mh_HandlePreviousSliderValue(const int32_t os32_Prev
                   if (u64_Steps <= static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()))
                   {
                      //Standard
-                     f64_SliderMin = static_cast<float64_t>(std::numeric_limits<int32_t>::lowest());
+                     f64_SliderMin = static_cast<double>(std::numeric_limits<int32_t>::lowest());
                      //Default
                      f64_SliderFactor = 1.0;
                   }
@@ -2332,13 +2332,13 @@ void C_PuiSvDashboardFiler::mh_HandlePreviousSliderValue(const int32_t os32_Prev
                      //Step reduction necessary
                      //In this case we have to skip a few steps (determined by this->mf64_SliderFactor)
                      for (f64_SliderFactor = 2.0;
-                          (static_cast<float64_t>(u64_Steps) / f64_SliderFactor) >
-                          static_cast<float64_t>(std::numeric_limits<uint32_t>::max());
+                          (static_cast<double>(u64_Steps) / f64_SliderFactor) >
+                          static_cast<double>(std::numeric_limits<uint32_t>::max());
                           f64_SliderFactor *= 2.0)
                      {
                         //All in for :)
                      }
-                     f64_SliderMin = static_cast<float64_t>(std::numeric_limits<int32_t>::lowest());
+                     f64_SliderMin = static_cast<double>(std::numeric_limits<int32_t>::lowest());
                   }
                }
                else
@@ -2351,13 +2351,13 @@ void C_PuiSvDashboardFiler::mh_HandlePreviousSliderValue(const int32_t os32_Prev
             }
             else
             {
-               float64_t f64_UnscaledMax;
+               double f64_UnscaledMax;
                tgl_assert(C_SdNdeDpContentUtil::h_GetValueAsFloat64(pc_Element->c_MaxValue, f64_UnscaledMax,
                                                                     0UL) == C_NO_ERR);
-               f64_SliderMin = static_cast<float64_t>(std::numeric_limits<int32_t>::lowest());
+               f64_SliderMin = static_cast<double>(std::numeric_limits<int32_t>::lowest());
                //factor for uint32_t::max steps
                f64_SliderFactor = (f64_UnscaledMax - f64_UnscaledMin) /
-                                  static_cast<float64_t>(std::numeric_limits<uint32_t>::max());
+                                  static_cast<double>(std::numeric_limits<uint32_t>::max());
             }
 
             // Prepare the value
@@ -2365,15 +2365,15 @@ void C_PuiSvDashboardFiler::mh_HandlePreviousSliderValue(const int32_t os32_Prev
             if (C_OscUtils::h_IsFloat64NearlyEqual(f64_SliderFactor, 1.0) == true)
             {
                f64_UnscaledValue = f64_UnscaledMin  +
-                                   (static_cast<float64_t>(os32_PrevInternalValue) -
-                                    static_cast<float64_t>(f64_SliderMin));
+                                   (static_cast<double>(os32_PrevInternalValue) -
+                                    static_cast<double>(f64_SliderMin));
             }
             else
             {
                //In this case we have to skip a few steps (determined by this->mf64_SliderFactor)
                f64_UnscaledValue = f64_UnscaledMin +
-                                   ((static_cast<float64_t>(os32_PrevInternalValue) -
-                                     static_cast<float64_t>(f64_SliderMin)) *
+                                   ((static_cast<double>(os32_PrevInternalValue) -
+                                     static_cast<double>(f64_SliderMin)) *
                                     f64_SliderFactor);
             }
             orc_Slider.c_Value = pc_Element->c_MinValue;

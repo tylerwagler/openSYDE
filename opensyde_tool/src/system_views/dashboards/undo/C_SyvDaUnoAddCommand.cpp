@@ -14,7 +14,7 @@
 
 #include "gitypes.hpp"
 #include "TglUtils.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "stwerrors.hpp"
 #include "C_SyvDaDashboardScene.hpp"
@@ -52,7 +52,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaUnoAddCommand::C_SyvDaUnoAddCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
                                            const C_PuiSvDbDataElement::E_Type & ore_Type, const QPointF & orc_NewPos,
-                                           const float64_t of64_ZetValue, const QString & orc_AdditionalInformation,
+                                           const double of64_ZetValue, const QString & orc_AdditionalInformation,
                                            QUndoCommand * const opc_Parent,
                                            const bool & orq_ForceUseAdditionalInformation) :
    C_SyvDaUnoAddBaseCommand(opc_Scene, orc_Ids, "Add drawing element(s)",
@@ -211,8 +211,8 @@ void C_SyvDaUnoAddCommand::m_AddNew(void)
             {
                const QPixmap c_Image(this->mc_AdditionalInformation);
                c_ImageData.c_UiPosition = mc_NewPos;
-               c_ImageData.f64_Height = static_cast<float64_t>(c_Image.height());
-               c_ImageData.f64_Width = static_cast<float64_t>(c_Image.width());
+               c_ImageData.f64_Height = static_cast<double>(c_Image.height());
+               c_ImageData.f64_Width = static_cast<double>(c_Image.width());
                c_ImageData.c_UiImagePixmap = c_Image;
                c_ImageData.f64_ZetOrder = this->mf64_ZetValue;
                c_InitialData.AddImage(c_ImageData);

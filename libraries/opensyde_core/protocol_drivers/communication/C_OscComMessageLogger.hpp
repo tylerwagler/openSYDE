@@ -15,7 +15,7 @@
 #include <vector>
 #include <map>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include <string>
 #include "stw_can.hpp"
 
@@ -121,7 +121,7 @@ protected:
                                           const uint8_t(&orau8_CanDb)[8], const uint8_t ou8_CanDlc,
                                           const stw::opensyde_core::C_OscCanSignal & orc_OscSignal,
                                           const stw::opensyde_core::C_OscNodeDataPoolContent & orc_OscValue,
-                                          const float64_t of64_Factor, const float64_t of64_Offset);
+                                          const double of64_Factor, const double of64_Offset);
 
    virtual std::string m_GetProtocolStringHexHook(void) const;
    virtual std::string m_GetProtocolStringDecHook(void) const;

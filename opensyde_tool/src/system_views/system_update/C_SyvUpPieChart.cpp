@@ -130,7 +130,7 @@ void C_SyvUpPieChart::paintEvent(QPaintEvent * const opc_Event)
    }
    else
    {
-      const float32_t f32_Height = static_cast<float32_t>(s32_Height);
+      const float f32_Height = static_cast<float>(s32_Height);
       //const QColor c_Invalid(mc_STYLE_GUIDE_COLOR_24);
       const QBrush c_BackgroundBrush(mc_STYLE_GUIDE_COLOR_10);
       const QBrush c_ForegroundBrush(mc_STYLE_GUIDE_COLOR_0);
@@ -139,8 +139,8 @@ void C_SyvUpPieChart::paintEvent(QPaintEvent * const opc_Event)
       QFont c_Font;
       QRect c_Rect;
       int16_t s16_StartAngle;
-      float32_t f32_SpanAngle;
-      const float32_t f32_InnerCircleOffset = ((f32_Height * 12.0F) / 180.0F) / 2.0F;
+      float f32_SpanAngle;
+      const float f32_InnerCircleOffset = ((f32_Height * 12.0F) / 180.0F) / 2.0F;
       const int32_t s32_InnerCircleOffset = static_cast<int32_t>(f32_InnerCircleOffset);
       QString c_String;
 
@@ -161,7 +161,7 @@ void C_SyvUpPieChart::paintEvent(QPaintEvent * const opc_Event)
       //pie
       c_Rect.setRect(s32_X, s32_Y, s32_Height, s32_Height);
       s16_StartAngle = 90 * 16;
-      f32_SpanAngle = (-1.0F * (360.0F / 100.0F) * static_cast<float32_t>(mu16_ValueInPercent)  * 16.0F);
+      f32_SpanAngle = (-1.0F * (360.0F / 100.0F) * static_cast<float>(mu16_ValueInPercent)  * 16.0F);
 
       c_Painter.setBrush(c_PieBrush);
       c_Painter.drawPie(c_Rect, s16_StartAngle, static_cast<int32_t>(f32_SpanAngle));

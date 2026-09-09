@@ -24,7 +24,7 @@ using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const float64_t C_OgeSpxFactor::mhf64_FACTOR_MIN = std::pow(10, -ms32_DOUBLE_SPIN_BOX_DECIMAL_COUNT);
+const double C_OgeSpxFactor::mhf64_FACTOR_MIN = std::pow(10, -ms32_DOUBLE_SPIN_BOX_DECIMAL_COUNT);
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -47,8 +47,8 @@ const float64_t C_OgeSpxFactor::mhf64_FACTOR_MIN = std::pow(10, -ms32_DOUBLE_SPI
 C_OgeSpxFactor::C_OgeSpxFactor(QWidget * const opc_Parent) :
    C_OgeSpxDoubleToolTipBase(opc_Parent)
 {
-   this->SetMinimumCustom(std::numeric_limits<float64_t>::lowest());
-   this->SetMaximumCustom(std::numeric_limits<float64_t>::max());
+   this->SetMinimumCustom(std::numeric_limits<double>::lowest());
+   this->SetMaximumCustom(std::numeric_limits<double>::max());
    this->setValue(1.0); // default value
 }
 
@@ -63,7 +63,7 @@ C_OgeSpxFactor::C_OgeSpxFactor(QWidget * const opc_Parent) :
 void C_OgeSpxFactor::stepBy(const int32_t os32_Steps)
 {
    //Only allow step if resulting value is ABOVE zero
-   float64_t f64_CurValue = this->value();
+   double f64_CurValue = this->value();
 
    if (os32_Steps > 0)
    {
@@ -72,7 +72,7 @@ void C_OgeSpxFactor::stepBy(const int32_t os32_Steps)
    else
    {
       const int32_t s32_StepsPos = std::abs(os32_Steps);
-      if (f64_CurValue > (static_cast<float64_t>(s32_StepsPos) * 1.0))
+      if (f64_CurValue > (static_cast<double>(s32_StepsPos) * 1.0))
       {
          C_OgeSpxDoubleToolTipBase::stepBy(os32_Steps);
       }

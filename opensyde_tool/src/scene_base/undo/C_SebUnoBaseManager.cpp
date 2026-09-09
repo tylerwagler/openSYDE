@@ -14,7 +14,7 @@
 
 #include <vector>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SebUnoBaseManager.hpp"
 
@@ -282,9 +282,9 @@ void C_SebUnoBaseManager::DoAlign(const QList<QGraphicsItem *> & orc_Items, cons
 void C_SebUnoBaseManager::AdaptZetOrder(const QList<QGraphicsItem *> & orc_SelectedItems,
                                         const QList<QGraphicsItem *> & orc_Items, const bool oq_BringToFront)
 {
-   QMap<QGraphicsItem *, float64_t> c_Changes;
+   QMap<QGraphicsItem *, double> c_Changes;
    vector<uint64_t> c_Ids;
-   vector<float64_t> c_Values;
+   vector<double> c_Values;
    QList<QGraphicsItem *> c_List;
    C_SebUnoZetOrderCommand * pc_ZetOrderCommand;
 
@@ -292,7 +292,7 @@ void C_SebUnoBaseManager::AdaptZetOrder(const QList<QGraphicsItem *> & orc_Selec
 
    C_SebUnoZetOrderCommand::h_AdaptZetOrder(this->mpc_Scene, orc_Items, orc_SelectedItems, oq_BringToFront, c_Changes);
 
-   for (QMap<QGraphicsItem *, float64_t>::const_iterator c_ItChanges = c_Changes.begin();
+   for (QMap<QGraphicsItem *, double>::const_iterator c_ItChanges = c_Changes.begin();
         c_ItChanges != c_Changes.end(); ++c_ItChanges)
    {
       c_List.push_back(c_ItChanges.key());

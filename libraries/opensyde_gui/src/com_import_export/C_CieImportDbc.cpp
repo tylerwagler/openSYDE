@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 #include "C_SclStringUtil.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 
 #include "C_CieImportDbc.hpp"
@@ -52,7 +52,7 @@ const std::string C_CieImportDbc::mhc_INITIAL_VALUE = "GenSigStartValue";
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 Vector::DBC::AttributeDefinition C_CieImportDbc::mhc_AttributeSendType;
 std::string C_CieImportDbc::mhc_DefaultSendTypeValue; // get value from network attribute default values
-float32_t C_CieImportDbc::mhf32_DefaultInitialValue;  // default initial value of DBC file or openSYDE
+float C_CieImportDbc::mhf32_DefaultInitialValue;  // default initial value of DBC file or openSYDE
 bool C_CieImportDbc::mhq_DefaultValueDefined;         // in DBC file
 std::vector<std::string> C_CieImportDbc::mhc_WarningMessages;  // empty list
 std::string C_CieImportDbc::mhc_ErrorMessage = "";    // empty string
@@ -757,13 +757,13 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                                     // maximumRawValue()
 
    C_OscNodeDataPoolContent::E_Type e_CurrentType; // guarantees the same type for min, max and initial value
-   const float64_t f64_DEFAULT = mhf32_DefaultInitialValue;
-   float64_t f64_MinValue = f64_DEFAULT;     // default
-   float64_t f64_MaxValue = f64_DEFAULT;     // default
-   float64_t f64_InitialValue = f64_DEFAULT; // default
-   float64_t f64_MinValuePhy;                // used to display warning messages with physical values to user
-   float64_t f64_MaxValuePhy;                //                             -"-
-   float64_t f64_InitialValuePhy;            //                             -"-
+   const double f64_DEFAULT = mhf32_DefaultInitialValue;
+   double f64_MinValue = f64_DEFAULT;     // default
+   double f64_MaxValue = f64_DEFAULT;     // default
+   double f64_InitialValue = f64_DEFAULT; // default
+   double f64_MinValuePhy;                // used to display warning messages with physical values to user
+   double f64_MaxValuePhy;                //                             -"-
+   double f64_InitialValuePhy;            //                             -"-
 
    // Check if adaptions are necessary due to a multiplexer signal
    if (oq_MultiplexerSignal == true)
@@ -980,7 +980,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
          // check type of initial value, is already raw value
          if (c_IterType->second.valueType.type == Vector::DBC::AttributeValueType::Type::Int)
          {
-            f64_InitialValue = static_cast<float64_t>(c_StartValue.integerValue);
+            f64_InitialValue = static_cast<double>(c_StartValue.integerValue);
          }
          else if (c_IterType->second.valueType.type == Vector::DBC::AttributeValueType::Type::Float)
          {
@@ -990,15 +990,15 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
                                                                                                    // representation
          // as int
          {
-            f64_InitialValue = static_cast<float64_t>(c_StartValue.hexValue);
+            f64_InitialValue = static_cast<double>(c_StartValue.hexValue);
          }
          else if (c_IterType->second.valueType.type == Vector::DBC::AttributeValueType::Type::Enum)
          {
-            f64_InitialValue = static_cast<float64_t>(c_StartValue.enumValue);
+            f64_InitialValue = static_cast<double>(c_StartValue.enumValue);
          }
          else
          {
-            const float64_t f64_DefaultPhy = (f64_DEFAULT * c_DbcSignal.factor) + c_DbcSignal.offset;
+            const double f64_DefaultPhy = (f64_DEFAULT * c_DbcSignal.factor) + c_DbcSignal.offset;
             const std::string c_Message = "Signal \"" + c_String +
                                           "\": Type for initial value unknown. Initial value set to default value \"" +
                                           QString::number(f64_DefaultPhy).toStdString() + "\".";
@@ -1183,7 +1183,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
 
             if (mhq_DefaultValueDefined == true)
             {
-               const float64_t f64_DefaultPhy = (f64_DEFAULT * c_DbcSignal.factor) + c_DbcSignal.offset;
+               const double f64_DefaultPhy = (f64_DEFAULT * c_DbcSignal.factor) + c_DbcSignal.offset;
                const std::string c_Message = "Signal \"" + c_String + "\": Global initial value \"" +
                                              QString::number(f64_DefaultPhy).toStdString() +
                                              "\" is not between minimum \"" +
@@ -1291,22 +1291,22 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(const Vector::DBC::Network & 
       {
          if (c_IterType->second.valueType.type == Vector::DBC::AttributeValueType::Type::Int)
          {
-            mhf32_DefaultInitialValue = static_cast<float32_t>((c_DbcAttributeDefaultsInit->second).integerValue);
+            mhf32_DefaultInitialValue = static_cast<float>((c_DbcAttributeDefaultsInit->second).integerValue);
             mhq_DefaultValueDefined = true;
          }
          else if (c_IterType->second.valueType.type == Vector::DBC::AttributeValueType::Type::Hex)
          {
-            mhf32_DefaultInitialValue = static_cast<float32_t>((c_DbcAttributeDefaultsInit->second).hexValue);
+            mhf32_DefaultInitialValue = static_cast<float>((c_DbcAttributeDefaultsInit->second).hexValue);
             mhq_DefaultValueDefined = true;
          }
          else if (c_IterType->second.valueType.type == Vector::DBC::AttributeValueType::Type::Float)
          {
-            mhf32_DefaultInitialValue = static_cast<float32_t>((c_DbcAttributeDefaultsInit->second).floatValue);
+            mhf32_DefaultInitialValue = static_cast<float>((c_DbcAttributeDefaultsInit->second).floatValue);
             mhq_DefaultValueDefined = true;
          }
          else if (c_IterType->second.valueType.type == Vector::DBC::AttributeValueType::Type::Enum)
          {
-            mhf32_DefaultInitialValue = static_cast<float32_t>((c_DbcAttributeDefaultsInit->second).enumValue);
+            mhf32_DefaultInitialValue = static_cast<float>((c_DbcAttributeDefaultsInit->second).enumValue);
             mhq_DefaultValueDefined = true;
          }
          else if (c_IterType->second.valueType.type == Vector::DBC::AttributeValueType::Type::String)
@@ -1315,7 +1315,7 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(const Vector::DBC::Network & 
             // try to convert to DBC standard raw float value
             try
             {
-               mhf32_DefaultInitialValue = static_cast<float32_t>(ToDoubleCompat(c_DefaultInitialValue));
+               mhf32_DefaultInitialValue = static_cast<float>(ToDoubleCompat(c_DefaultInitialValue));
                mhq_DefaultValueDefined = true;
             }
             catch (...)
@@ -1501,7 +1501,7 @@ void C_CieImportDbc::mh_GetTransmission(const Vector::DBC::Network & orc_DbcNetw
    C_RANGE     value can't be stored fully for this datatype
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CieImportDbc::mh_CheckRange(const float64_t of64_Value, const C_OscNodeDataPoolContent::E_Type oe_Datatype)
+int32_t C_CieImportDbc::mh_CheckRange(const double of64_Value, const C_OscNodeDataPoolContent::E_Type oe_Datatype)
 {
    int32_t s32_Return;
 

@@ -15,7 +15,7 @@
 #include <QGraphicsView>
 
 #include "gitypes.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
@@ -208,7 +208,7 @@ void C_GiSvDaToggleBase::UpdateShowValue(void)
       if (this->mq_ManualReadStarted == true)
       {
          QString c_Value;
-         float64_t f64_UnscaledValue;
+         double f64_UnscaledValue;
          if (this->m_GetLastValue(0UL, c_Value, &f64_UnscaledValue, nullptr) == C_NO_ERR)
          {
             this->mpc_CheckBoxWidget->setChecked(static_cast<bool>(f64_UnscaledValue));
@@ -232,7 +232,7 @@ void C_GiSvDaToggleBase::SendCurrentValue(void)
       tgl_assert(this->GetDataPoolElementScaling(0, c_Scaling) == C_NO_ERR);
 
       // Prepare the value
-      this->mf64_WriteValue = static_cast<float64_t>(this->mpc_CheckBoxWidget->isChecked());
+      this->mf64_WriteValue = static_cast<double>(this->mpc_CheckBoxWidget->isChecked());
       if (C_OscUtils::h_IsScalingActive(c_Scaling.f64_Factor, c_Scaling.f64_Offset) == true)
       {
          // Scaling necessary to prevent a rounding error to get 0 instead of 1
@@ -560,15 +560,15 @@ bool C_GiSvDaToggleBase::m_CheckHasValidElements(QString & orc_FirstInvalidEleme
                                                                              c_ElementId.u32_ElementIndex);
                if ((pc_Element != nullptr) && (this->GetDataPoolElementScaling(u32_Index, c_Scaling) == C_NO_ERR))
                {
-                  std::vector<float64_t> c_Min;
-                  std::vector<float64_t> c_Max;
+                  std::vector<double> c_Min;
+                  std::vector<double> c_Max;
                   C_SdNdeDpContentUtil::h_GetValuesAsFloat64(pc_Element->c_MinValue, c_Min);
                   C_SdNdeDpContentUtil::h_GetValuesAsFloat64(pc_Element->c_MaxValue, c_Max);
                   if ((c_Min.size() == c_Max.size()) && (c_Min.size() == 1UL))
                   {
-                     const float64_t f64_MinScaled = C_OscUtils::h_GetValueScaled(c_Min[0], c_Scaling.f64_Factor,
+                     const double f64_MinScaled = C_OscUtils::h_GetValueScaled(c_Min[0], c_Scaling.f64_Factor,
                                                                                   c_Scaling.f64_Offset);
-                     const float64_t f64_MaxScaled = C_OscUtils::h_GetValueScaled(c_Max[0], c_Scaling.f64_Factor,
+                     const double f64_MaxScaled = C_OscUtils::h_GetValueScaled(c_Max[0], c_Scaling.f64_Factor,
                                                                                   c_Scaling.f64_Offset);
                      //Check if out of range
                      if ((f64_MinScaled > 0.0) || (f64_MaxScaled < 1.0))

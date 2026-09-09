@@ -16,7 +16,7 @@
 #include <QGraphicsView>
 
 #include "gitypes.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -564,7 +564,7 @@ void C_GiSvDaTableBase::ConfigureContextMenu(C_SyvDaContextMenuManager * const o
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_GiSvDaTableBase::GetLastValueUnscaled(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                                std::vector<float64_t> & orc_Values,
+                                                std::vector<double> & orc_Values,
                                                 std::vector<QString> & orc_DisplayValues)
 {
    uint32_t u32_InternalIndex;

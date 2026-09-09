@@ -441,8 +441,8 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnXappSettingsChanged()
       this->mc_Properties.e_LocalLogTrigger =
          static_cast<C_OscDataLoggerJobProperties::E_LocalLogTrigger>(this->mpc_Ui->pc_ComboBoxLocalData->
                                                                       currentIndex());
-      const float64_t f64_DurationSec =
-         (static_cast<float64_t>(this->mpc_Ui->pc_SpinBoxLoggingInterval->value()) + 999.0) / 1000.0;
+      const double f64_DurationSec =
+         (static_cast<double>(this->mpc_Ui->pc_SpinBoxLoggingInterval->value()) + 999.0) / 1000.0;
       this->mpc_Ui->pc_SpinBoxLogDuration->SetMinimumCustom(static_cast<int32_t>(f64_DurationSec));
 
       this->mc_Properties.u32_LogIntervalMs = this->mpc_Ui->pc_SpinBoxLoggingInterval->value();

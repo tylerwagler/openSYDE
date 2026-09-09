@@ -12,7 +12,7 @@
 #define C_GINODESYVUPDATE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiInfo.hpp"
 #include "C_SyvUtil.hpp"
@@ -37,7 +37,7 @@ class C_GiSvNodeSyvUpdate :
 
 public:
    C_GiSvNodeSyvUpdate(const uint32_t ou32_ViewIndex, const int32_t & ors32_NodeIndex, const uint64_t & oru64_Id,
-                       const float64_t & orf64_Width, const float64_t & orf64_Height,
+                       const double & orf64_Width, const double & orf64_Height,
                        QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiSvNodeSyvUpdate() override;
 

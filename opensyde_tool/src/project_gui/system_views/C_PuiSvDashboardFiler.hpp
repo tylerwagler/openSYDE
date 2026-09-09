@@ -9,7 +9,7 @@
 #define C_PUISVDASHBOARDFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscXmlParser.hpp"
 #include "C_PuiSvDashboard.hpp"
 
@@ -81,7 +81,7 @@ private:
                                      stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadParamColumns(std::vector<int32_t> & orc_Values,
                                       stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadTabChartScreenRegion(std::vector<std::array<float64_t,
+   static int32_t mh_LoadTabChartScreenRegion(std::vector<std::array<double,
                                                                      4> > & orc_ScreenRegion,
                                               stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
 
@@ -117,7 +117,7 @@ private:
                                         stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveDataFormatterConfig(const C_PuiSvDbDataElementDisplayFormatter & orc_Config,
                                           stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveTabChartScreenRegion(const std::vector<std::array<float64_t, 4> > & orc_ScreenRegion,
+   static void mh_SaveTabChartScreenRegion(const std::vector<std::array<double, 4> > & orc_ScreenRegion,
                                            stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
 
    static void mh_HandlePreviousSliderValue(const int32_t os32_PrevInternalValue, C_PuiSvDbSlider & orc_Slider);

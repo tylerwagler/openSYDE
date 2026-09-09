@@ -15,7 +15,7 @@
 #include <QGraphicsView>
 
 #include "gitypes.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -202,13 +202,13 @@ void C_GiSvDaProgressBarBase::DeleteData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaProgressBarBase::UpdateShowValue(void)
 {
-   float64_t f64_UnscaledValue;
+   double f64_UnscaledValue;
    QString c_ScaledValue;
 
    if ((this->mpc_ProgressBarWidget != nullptr) &&
        (this->m_GetLastValue(0, c_ScaledValue, &f64_UnscaledValue, nullptr) == C_NO_ERR))
    {
-      const float64_t f64_Progress =
+      const double f64_Progress =
          ((f64_UnscaledValue - this->mf64_UnscaledMin) / (this->mf64_UnscaledMax - this->mf64_UnscaledMin)) * 2000000.0;
       this->mpc_ProgressBarWidget->SetValue(static_cast<int32_t>(f64_Progress), c_ScaledValue);
    }
@@ -437,7 +437,7 @@ void C_GiSvDaProgressBarBase::m_UpdateStaticValues(void)
          if (pc_Element != nullptr)
          {
             QString c_Text;
-            float64_t f64_Value;
+            double f64_Value;
             const uint32_t u32_Index = c_Id.GetArrayElementIndexOrZero();
             const QString c_Value = this->GetUnscaledValueInRangeAsScaledString(0.0, u32_Index, &f64_Value);
             this->mpc_ProgressBarWidget->SetUnit(c_Scaling.c_Unit);
@@ -448,7 +448,7 @@ void C_GiSvDaProgressBarBase::m_UpdateStaticValues(void)
                                                                       &this->mf64_UnscaledMax);
             this->mpc_ProgressBarWidget->SetMax(2000000, c_Text);
             //Update value
-            const float64_t f64_Temp = f64_Value * 2000000.0;
+            const double f64_Temp = f64_Value * 2000000.0;
             this->mpc_ProgressBarWidget->SetValue(static_cast<int32_t>(f64_Temp), c_Value);
          }
       }

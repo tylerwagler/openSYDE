@@ -13,7 +13,7 @@
 #include <QVariant>
 #include <QGraphicsItem>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -40,11 +40,11 @@ public:
                                 const QPointF & orc_Offset = QPointF(0.0, 0.0));
    static void h_AdaptMouseRangePos(QPointF & orc_Pos, const QPointF & orc_Offset = QPointF(0.0, 0.0),
                                     bool * const opq_Changed = nullptr);
-   static QPointF h_AdaptDeltaForAspectRatio(const float64_t of64_AspectRatio,
+   static QPointF h_AdaptDeltaForAspectRatio(const double of64_AspectRatio,
                                              const E_AspectRatioMovement oe_AspectRatioMovement,
                                              const QPointF & orc_Delta);
 
-   static const float64_t hf64_SCENE_MIN_BORDER_SIZE;
+   static const double hf64_SCENE_MIN_BORDER_SIZE;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

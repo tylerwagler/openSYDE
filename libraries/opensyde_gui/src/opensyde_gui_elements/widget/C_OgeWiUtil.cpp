@@ -192,7 +192,7 @@ void C_OgeWiUtil::h_CheckAndFixDialogPositionAndSize(QPoint & orc_GlobalPosition
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OgeWiUtil::h_UpdateFontSize(QWidget * const opc_Widget, const QString & orc_Text,
-                                      const float32_t of32_HeightScaling, const bool oq_IgnoreContentMargins,
+                                      const float of32_HeightScaling, const bool oq_IgnoreContentMargins,
                                       const QSize * const opc_ImprovedSize)
 {
    int32_t s32_Retval = -1;
@@ -245,21 +245,21 @@ int32_t C_OgeWiUtil::h_UpdateFontSize(QWidget * const opc_Widget, const QString 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OgeWiUtil::h_GetNextOptimalPointSize(const QFont & orc_Font, const QSize & orc_Size, const QString & orc_Text,
-                                               const float32_t of32_HeightScaling)
+                                               const float of32_HeightScaling)
 {
    int32_t s32_Retval;
    static QMap<QString, int32_t> hc_PreviousResults;
    //Find some way to uniquely identify the input parameter situation
    const QString c_CompleteInput =
       static_cast<QString>("%1,%2,%3,%4,%5").arg(orc_Font.toString()).arg(orc_Size.width()).arg(
-         orc_Size.height()).arg(orc_Text).arg(static_cast<float64_t>(of32_HeightScaling));
+         orc_Size.height()).arg(orc_Text).arg(static_cast<double>(of32_HeightScaling));
    //Look up
    const QMap<QString, int32_t>::const_iterator c_It = hc_PreviousResults.find(c_CompleteInput);
 
    //Check if anything found
    if (c_It == hc_PreviousResults.end())
    {
-      const float32_t f32_WidgetHeight = static_cast<float32_t>(orc_Size.height()) * of32_HeightScaling;
+      const float f32_WidgetHeight = static_cast<float>(orc_Size.height()) * of32_HeightScaling;
       const int32_t s32_WidgetHeight = static_cast<int32_t>(f32_WidgetHeight);
       const int32_t s32_Init = std::max(std::max(orc_Font.pointSize(), orc_Font.pixelSize()), 1);
       QFont c_Font(orc_Font.family(), s32_Init, orc_Font.weight(), orc_Font.italic());

@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QSlider>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeToolTipBase.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_PuiSvDbDataElementDisplayFormatterConfig.hpp"
@@ -35,8 +35,8 @@ public:
    C_OgeSliToolTipBase(QWidget * const opc_Parent = nullptr);
 
    void SetValueCustom(const int32_t os32_Value);
-   void SetToolTipParameters(const float64_t of64_ToolTipSliderRangeValueFactor,
-                             const float64_t of64_ToolTipValueOffset,
+   void SetToolTipParameters(const double of64_ToolTipSliderRangeValueFactor,
+                             const double of64_ToolTipValueOffset,
                              const stw::opensyde_gui_logic::C_PuiSvDbDataElementScaling & orc_ToolTipUserScaling,
                              const stw::opensyde_core::C_OscNodeDataPoolContent::E_Type oe_RepresentationType,
                              const stw::opensyde_gui_logic::C_PuiSvDbDataElementDisplayFormatterConfig & orc_FormatterConfig);
@@ -47,9 +47,9 @@ protected:
    void m_OnValueChange(void);
 
 private:
-   float64_t mf64_ToolTipSliderRangeOffset;
-   float64_t mf64_ToolTipSliderRangeValueFactor;
-   float64_t mf64_ToolTipValueOffset;
+   double mf64_ToolTipSliderRangeOffset;
+   double mf64_ToolTipSliderRangeValueFactor;
+   double mf64_ToolTipValueOffset;
    stw::opensyde_gui_logic::C_PuiSvDbDataElementScaling mc_ToolTipUserScaling;
    stw::opensyde_core::C_OscNodeDataPoolContent::E_Type me_RepresentationType;
    int32_t ms32_ToolTipCoordVertical;

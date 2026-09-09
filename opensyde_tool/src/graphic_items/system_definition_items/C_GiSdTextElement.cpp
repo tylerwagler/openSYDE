@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiSdTextElement.hpp"
 #include "C_PuiSdHandler.hpp"
 
@@ -116,7 +116,7 @@ void C_GiSdTextElement::DeleteData(void)
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSdTextElement::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiSdTextElement::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiBiTextElement::SetZetValueCustom(of64_ZetValue);
    //Apply to data

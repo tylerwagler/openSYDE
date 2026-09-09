@@ -155,12 +155,12 @@ void C_OgeLabFrameError::m_OnSizeChange(const QSize * const opc_SizeToUse)
    if (opc_SizeToUse != nullptr)
    {
       c_DisplayedString =
-         C_Uti::h_AdaptStringToSize(this->mc_Text, c_Metrics, static_cast<float64_t>(opc_SizeToUse->width()));
+         C_Uti::h_AdaptStringToSize(this->mc_Text, c_Metrics, static_cast<double>(opc_SizeToUse->width()));
    }
    else
    {
       c_DisplayedString =
-         C_Uti::h_AdaptStringToSize(this->mc_Text, c_Metrics, static_cast<float64_t>(this->width()));
+         C_Uti::h_AdaptStringToSize(this->mc_Text, c_Metrics, static_cast<double>(this->width()));
    }
 
    this->setText(c_DisplayedString);

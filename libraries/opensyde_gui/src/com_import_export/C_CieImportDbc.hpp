@@ -15,7 +15,7 @@
 #include <string>
 #include <string>
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CieConverter.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
 
@@ -38,7 +38,7 @@ private:
    static Vector::DBC::AttributeDefinition mhc_AttributeSendType;
    static std::string mhc_DefaultSendTypeValue;
    static const std::string mhc_INITIAL_VALUE;
-   static float32_t mhf32_DefaultInitialValue;
+   static float mhf32_DefaultInitialValue;
    static bool mhq_DefaultValueDefined;
    static std::vector<std::string> mhc_WarningMessages; // global warnings e.g. why some messages could not be imported
    static std::string mhc_ErrorMessage;        // description of error which caused the import to fail
@@ -67,7 +67,7 @@ private:
    static void mh_GetTransmission(const Vector::DBC::Network & orc_DbcNetwork,
                                   const Vector::DBC::Message & orc_DbcMessage,
                                   C_CieConverter::C_CieNodeMessage & orc_Message);
-   static int32_t mh_CheckRange(const float64_t of64_Value,
+   static int32_t mh_CheckRange(const double of64_Value,
                                 const stw::opensyde_core::C_OscNodeDataPoolContent::E_Type oe_Datatype);
    static std::string mh_ReEscapeCriticalSymbols(const std::string & orc_String);
 

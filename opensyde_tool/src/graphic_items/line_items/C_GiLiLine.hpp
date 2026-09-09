@@ -21,7 +21,7 @@
 #include "C_GiLiInteractionPoint.hpp"
 #include "C_GiLiLineConnection.hpp"
 #include "C_PuiBsLineArrow.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -53,8 +53,8 @@ public:
    void SetMiddleLineColor(const QColor & orc_Color);
    void SetMiddleLine(const bool & orq_MiddleLine);
    void SetLineStyle(const stw::opensyde_gui_logic::C_PuiBsLineArrow::E_LineType & ore_Type);
-   void SetOffsetStart(const float64_t & orf64_Offset);
-   void SetOffsetEnd(const float64_t & orf64_Offset);
+   void SetOffsetStart(const double & orf64_Offset);
+   void SetOffsetEnd(const double & orf64_Offset);
    void SetDisabledLook(const bool oq_Disabled);
 
    int32_t GetWidth(void) const;
@@ -73,7 +73,7 @@ public:
 
    void FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Closest) const override;
 
-   void SetInteractionWidth(const float64_t & orf64_Value);
+   void SetInteractionWidth(const double & orf64_Value);
 
 protected:
    QVector<QPointF> mc_Points;               ///< Interaction points of segmented line
@@ -95,9 +95,9 @@ private:
    bool mq_MiddleLine;        ///< Indicator if middle line should be drawn
    QColor mc_LineColor;       ///< Main line color
    QColor mc_MiddleLineColor; ///< Middle line color
-   float64_t mf64_OffsetStart;
-   float64_t mf64_OffsetEnd;
-   float64_t mf64_InteractionWidth;
+   double mf64_OffsetStart;
+   double mf64_OffsetEnd;
+   double mf64_InteractionWidth;
    bool mq_DisabledLook;
    bool mq_Animated;
    bool mq_InverseAnimation;

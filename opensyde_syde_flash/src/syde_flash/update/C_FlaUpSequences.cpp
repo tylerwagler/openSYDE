@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_FlaUpSequences.hpp"
@@ -278,16 +278,16 @@ void C_FlaUpSequences::m_ReportProgressPercentage(const uint8_t ou8_ProgressInPe
    if (mu64_TotalHexFilesSizeInBytes > 0)
    {
       // Calculate bytes flashed in current file
-      const float64_t f64_CurrentFileProgressBytes =
-         (static_cast<float64_t>(ou8_ProgressInPercentage) / 100.0) *
-         static_cast<float64_t>(mu64_CurrentHexFileSizeInBytes);
+      const double f64_CurrentFileProgressBytes =
+         (static_cast<double>(ou8_ProgressInPercentage) / 100.0) *
+         static_cast<double>(mu64_CurrentHexFileSizeInBytes);
 
-      const float64_t f64_TotalFlashedBytes = static_cast<float64_t>(mu64_PreviousFilesSizeInBytes) +
+      const double f64_TotalFlashedBytes = static_cast<double>(mu64_PreviousFilesSizeInBytes) +
                                               f64_CurrentFileProgressBytes;
 
       u8_TotalProgress = static_cast<uint8_t>(std::round(
                                                  (f64_TotalFlashedBytes /
-                                                  static_cast<float64_t>(mu64_TotalHexFilesSizeInBytes)) * 100.0
+                                                  static_cast<double>(mu64_TotalHexFilesSizeInBytes)) * 100.0
                                                  ));
 
       if (u8_TotalProgress > 100)

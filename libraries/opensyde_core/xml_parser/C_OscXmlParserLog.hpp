@@ -45,8 +45,8 @@ public:
    virtual std::error_code GetAttributeSint64Error(const std::string & orc_Name, int64_t & ors64_Value) const;
    virtual std::error_code GetAttributeUint64Error(const std::string & orc_Name, uint64_t & oru64_Value) const;
    virtual std::error_code GetAttributeBoolError(const std::string & orc_Name, bool & orq_Value) const;
-   virtual std::error_code GetAttributeFloat32Error(const std::string & orc_Name, float32_t & orf32_Value) const;
-   virtual std::error_code GetAttributeFloat64Error(const std::string & orc_Name, float64_t & orf64_Value) const;
+   virtual std::error_code GetAttributeFloat32Error(const std::string & orc_Name, float & orf32_Value) const;
+   virtual std::error_code GetAttributeFloat64Error(const std::string & orc_Name, double & orf64_Value) const;
 
    //Base error reporting functions
    virtual void ReportErrorForNodeContentAppendXmlContext(const std::string & orc_ErrorMessage)

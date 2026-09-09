@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_UsSystemView.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -96,7 +96,7 @@ C_UsSystemView::C_UsSystemView(const int32_t os32_SetupViewZoom, const QPoint & 
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsSystemView::AddNodeUpdateDataRate(const QString & orc_NodeName, const uint32_t ou32_Checksum,
-                                           const float64_t of64_DataRateBytesPerMs)
+                                           const double of64_DataRateBytesPerMs)
 {
    if (this->mc_Nodes.contains(orc_NodeName) == true)
    {

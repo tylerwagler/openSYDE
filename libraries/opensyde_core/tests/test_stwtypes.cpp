@@ -12,7 +12,7 @@
 #include <limits>
 #include <type_traits>
 #include "gtest/gtest.h"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 // stwtypes.hpp defines int8_t/uint8_t/... (with _t suffix, C++ style).
 // stwtypes.h defines sint8/uint8/... (C style). We test the C++ names here.
@@ -25,8 +25,8 @@ TEST(STWTypes, SizeOf_int32_t)   { EXPECT_EQ(4, sizeof(int32_t)); }
 TEST(STWTypes, SizeOf_uint32_t)  { EXPECT_EQ(4, sizeof(uint32_t)); }
 TEST(STWTypes, SizeOf_int64_t)   { EXPECT_EQ(8, sizeof(int64_t)); }
 TEST(STWTypes, SizeOf_uint64_t)  { EXPECT_EQ(8, sizeof(uint64_t)); }
-TEST(STWTypes, SizeOf_float32_t) { EXPECT_EQ(4, sizeof(float32_t)); }
-TEST(STWTypes, SizeOf_float64_t) { EXPECT_EQ(8, sizeof(float64_t)); }
+TEST(STWTypes, SizeOf_float32_t) { EXPECT_EQ(4, sizeof(float)); }
+TEST(STWTypes, SizeOf_float64_t) { EXPECT_EQ(8, sizeof(double)); }
 
 TEST(STWTypes, Signedness_int8_t)    { EXPECT_TRUE(std::is_signed<int8_t>::value); }
 TEST(STWTypes, Signedness_uint8_t)   { EXPECT_FALSE(std::is_signed<uint8_t>::value); }
@@ -94,10 +94,10 @@ TEST(STWTypes, Char_t_Size)
 
 TEST(STWTypes, FloatCharacteristics)
 {
-   EXPECT_EQ(24,  std::numeric_limits<float32_t>::digits);
-   EXPECT_EQ(53,  std::numeric_limits<float64_t>::digits);
-   EXPECT_FLOAT_EQ(std::numeric_limits<float32_t>::epsilon(), std::numeric_limits<float>::epsilon());
-   EXPECT_DOUBLE_EQ(std::numeric_limits<float64_t>::epsilon(), std::numeric_limits<double>::epsilon());
+   EXPECT_EQ(24,  std::numeric_limits<float>::digits);
+   EXPECT_EQ(53,  std::numeric_limits<double>::digits);
+   EXPECT_FLOAT_EQ(std::numeric_limits<float>::epsilon(), std::numeric_limits<float>::epsilon());
+   EXPECT_DOUBLE_EQ(std::numeric_limits<double>::epsilon(), std::numeric_limits<double>::epsilon());
 }
 
 TEST(STWTypes, CompilationGuard_Passed)

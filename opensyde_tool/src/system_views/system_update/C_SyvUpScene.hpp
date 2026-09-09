@@ -11,7 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiNode.hpp"
 #include "C_PuiSvData.hpp"
@@ -72,15 +72,15 @@ protected:
    C_SebBaseContextMenuManager * m_GetContextMenuManager(void) override;
    stw::opensyde_gui_logic::C_SebUnoBaseManager * m_GetUndoManager(void) override;
 
-   C_GiNode * m_CreateNode(const int32_t & ors32_Index, const uint64_t & oru64_Id, const float64_t & orf64_Width,
-                           const float64_t & orf64_Height, QGraphicsItem * const opc_Parent) override;
+   C_GiNode * m_CreateNode(const int32_t & ors32_Index, const uint64_t & oru64_Id, const double & orf64_Width,
+                           const double & orf64_Height, QGraphicsItem * const opc_Parent) override;
 
    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * const opc_Event) override;
 
    void m_AddNodeToScene(C_GiNode * const opc_NodeGraphicsItem) override;
 
 private:
-   static const float64_t mhf64_BUS_ANIMATION_TOLERANCE;
+   static const double mhf64_BUS_ANIMATION_TOLERANCE;
 
    //Avoid call
    C_SyvUpScene(const C_SyvUpScene &);

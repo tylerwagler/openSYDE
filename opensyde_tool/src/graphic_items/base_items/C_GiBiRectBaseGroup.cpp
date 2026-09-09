@@ -43,7 +43,7 @@ const int32_t ms32_INDEX_LEFT = 6;
 const int32_t ms32_INDEX_RIGHT = 7;
 const int32_t ms32_INDEX_ELEMENT_MAX = 8;
 
-const float64_t mf64_BOUNDINGRECT_BORDER = 10.0;
+const double mf64_BOUNDINGRECT_BORDER = 10.0;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -71,8 +71,8 @@ const float64_t mf64_BOUNDINGRECT_BORDER = 10.0;
                                          Negative value deactivates the function
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiBiRectBaseGroup::C_GiBiRectBaseGroup(const uint64_t & oru64_Id, const float64_t of64_MinWidth,
-                                         const float64_t of64_MinHeight, const float64_t of64_ActionPointOffset,
+C_GiBiRectBaseGroup::C_GiBiRectBaseGroup(const uint64_t & oru64_Id, const double of64_MinWidth,
+                                         const double of64_MinHeight, const double of64_ActionPointOffset,
                                          const bool oq_KeepAspectRatio, QGraphicsItem * const opc_Parent,
                                          const QPointF & orc_PosOffset) :
    C_GiBiConnectableItem(),
@@ -325,9 +325,9 @@ void C_GiBiRectBaseGroup::m_BlockMoveAndResize(void)
    Interaction point width
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_GiBiRectBaseGroup::m_GetInteractionPointSceneWidth(void) const
+double C_GiBiRectBaseGroup::m_GetInteractionPointSceneWidth(void) const
 {
-   float64_t f64_Retval = 1.0;
+   double f64_Retval = 1.0;
 
    if (this->mc_ActionPoints.size() > 0)
    {
@@ -385,7 +385,7 @@ void C_GiBiRectBaseGroup::paint(QPainter * const opc_Painter, const QStyleOption
 QRectF C_GiBiRectBaseGroup::boundingRect() const
 {
    QRectF c_BoundingRect = this->mc_ShowBoundingRect;
-   float64_t f64_Border = mf64_BOUNDINGRECT_BORDER;
+   double f64_Border = mf64_BOUNDINGRECT_BORDER;
 
    if (this->mc_ActionPoints.size() > 0)
    {
@@ -429,7 +429,7 @@ void C_GiBiRectBaseGroup::FindClosestPoint(const QPointF & orc_ScenePoint, QPoin
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiBiRectBaseGroup::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiBiRectBaseGroup::SetZetValueCustom(const double of64_ZetValue)
 {
    this->setZValue(of64_ZetValue);
 }
@@ -522,8 +522,8 @@ void C_GiBiRectBaseGroup::ApplySizeChange(const QPointF & orc_NewPos, const QSiz
 {
    QPointF c_Pos = orc_NewPos;
    QSizeF c_Size = orc_NewSize;
-   float64_t f64_DiffWidth;
-   float64_t f64_DiffHeight;
+   double f64_DiffWidth;
+   double f64_DiffHeight;
 
    // keep GraphicsScene up to date and get a clean drawing
    this->prepareGeometryChange();

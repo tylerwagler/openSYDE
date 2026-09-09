@@ -48,8 +48,8 @@ public:
                                                    const C_OscNodeDataPoolContent::E_Type oe_Type,
                                                    const std::string & orc_ArrayPos = "0");
 
-   static std::string h_FloatToStrGe(const float32_t of32_Value,  bool * const opq_InfOrNan = nullptr);
-   static std::string h_FloatToStrGe(const float64_t of64_Value, bool * const opq_InfOrNan = nullptr);
+   static std::string h_FloatToStrGe(const float of32_Value,  bool * const opq_InfOrNan = nullptr);
+   static std::string h_FloatToStrGe(const double of64_Value, bool * const opq_InfOrNan = nullptr);
    static bool h_CheckInfOrNan(const std::string & orc_String);
    static void h_AddDecimalPointIfNone(std::string & orc_FloatString);
 };

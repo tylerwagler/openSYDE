@@ -14,7 +14,7 @@
 
 #include <limits>
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_SdManUnoTopologyAddDeleteBaseCommand.hpp"
 #include "C_SebUtil.hpp"
@@ -228,7 +228,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SetDataPositionOffset(const QPoin
    \param[in]  of64_HighestUsedZetValue  Highest used Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdManUnoTopologyAddDeleteBaseCommand::m_SetDataZetOffset(const float64_t of64_HighestUsedZetValue)
+void C_SdManUnoTopologyAddDeleteBaseCommand::m_SetDataZetOffset(const double of64_HighestUsedZetValue)
 {
    this->mc_DataBackup.SetDataZetOffset(of64_HighestUsedZetValue);
 }

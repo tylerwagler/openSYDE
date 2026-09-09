@@ -211,11 +211,11 @@ void C_GiSyTextElementWidget::m_UpdatePreview(void)
       c_ItemSize = pc_Item->GetSize();
 
       //Set centered position
-      pc_Item->setPos((static_cast<float64_t>(c_ViewSize.width()) - c_ItemSize.width()) / 2.0,
-                      (static_cast<float64_t>(c_ViewSize.height()) - c_ItemSize.height()) / 2.0);
+      pc_Item->setPos((static_cast<double>(c_ViewSize.width()) - c_ItemSize.width()) / 2.0,
+                      (static_cast<double>(c_ViewSize.height()) - c_ItemSize.height()) / 2.0);
       //Check item size valid
-      if ((static_cast<float64_t>(pc_Item->boundingRect().width()) +
-           (2.0 * C_GiCustomFunctions::hf64_SCENE_MIN_BORDER_SIZE)) > static_cast<float64_t>(c_ViewSize.width()))
+      if ((static_cast<double>(pc_Item->boundingRect().width()) +
+           (2.0 * C_GiCustomFunctions::hf64_SCENE_MIN_BORDER_SIZE)) > static_cast<double>(c_ViewSize.width()))
       {
          q_SizeInvalid = true;
       }

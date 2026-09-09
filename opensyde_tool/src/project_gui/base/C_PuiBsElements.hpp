@@ -39,7 +39,7 @@ public:
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
    virtual uint32_t Count(void) const;
    virtual void SetDataPositionOffset(const QPointF & orc_NewPos);
-   virtual void SetDataZetOffset(const float64_t of64_HighestUsedZetValue);
+   virtual void SetDataZetOffset(const double of64_HighestUsedZetValue);
 
    //Add
    void AddBoundary(const C_PuiBsBoundary & orc_Data);

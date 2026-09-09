@@ -334,7 +334,7 @@ QString C_SyvUtil::h_GetUpdateModeDescription(const uint32_t ou32_ViewIndex,
                         c_ThresholdText = QString::number(rc_Content.GetValueS64());
                         break;
                      case C_OscNodeDataPoolContent::E_Type::eFLOAT32:
-                        c_ThresholdText = QString::number(static_cast<float64_t>(rc_Content.GetValueF32()));
+                        c_ThresholdText = QString::number(static_cast<double>(rc_Content.GetValueF32()));
                         break;
                      case C_OscNodeDataPoolContent::E_Type::eFLOAT64:
                         c_ThresholdText = QString::number(rc_Content.GetValueF64());

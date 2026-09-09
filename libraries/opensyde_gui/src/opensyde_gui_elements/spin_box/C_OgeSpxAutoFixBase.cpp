@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OgeSpxAutoFixBase.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
@@ -66,7 +66,7 @@ C_OgeSpxAutoFixBase::~C_OgeSpxAutoFixBase(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeSpxAutoFixBase::Init(const C_OscNodeDataPoolContent & orc_Min, const C_OscNodeDataPoolContent & orc_Max,
-                               const float64_t of64_Factor, const float64_t of64_Offset, const uint32_t ou32_Index)
+                               const double of64_Factor, const double of64_Offset, const uint32_t ou32_Index)
 {
    this->mc_UnscaledMin = orc_Min;
    this->mc_UnscaledMax = orc_Max;

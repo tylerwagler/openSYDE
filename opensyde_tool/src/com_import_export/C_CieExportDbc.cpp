@@ -20,7 +20,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_CieExportDbc.hpp"
 #include <string>
 #include <Vector/DBC.h>
@@ -561,10 +561,10 @@ int32_t C_CieExportDbc::mh_SetSignalValues(const C_CieConverter::C_CieDataPoolEl
    orc_DbcSignal.factor = orc_Element.f64_Factor;
    orc_DbcSignal.offset = orc_Element.f64_Offset;
    orc_DbcSignal.unit = orc_Element.c_Unit.c_str();
-   float64_t f64_MinVal;
+   double f64_MinVal;
    C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Element.c_MinValue, f64_MinVal, 0UL); // raw value
    orc_DbcSignal.minimum = orc_DbcSignal.rawToPhysicalValue(f64_MinVal);               // phy value
-   float64_t f64_MaxVal;
+   double f64_MaxVal;
    C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Element.c_MaxValue, f64_MaxVal, 0UL); // raw value
    orc_DbcSignal.maximum = orc_DbcSignal.rawToPhysicalValue(f64_MaxVal);               // phy value
 
@@ -633,7 +633,7 @@ int32_t C_CieExportDbc::mh_SetSignalValues(const C_CieConverter::C_CieDataPoolEl
    Vector::DBC::Attribute c_Attribute;
    c_Attribute.name = mhc_SIG_INITIAL_VALUE;
 
-   float64_t f64_Value;
+   double f64_Value;
    C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Element.c_DataSetValues.at(0), f64_Value, 0UL); // raw value
 
    //raw value shall be used for export

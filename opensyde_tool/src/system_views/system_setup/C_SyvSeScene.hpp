@@ -11,7 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <list>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SyvTopologyBaseScene.hpp"
 #include "C_SebUnoTopBaseManager.hpp"
@@ -64,8 +64,8 @@ protected:
    C_SebBaseContextMenuManager * m_GetContextMenuManager(void) override;
    stw::opensyde_gui_logic::C_SebUnoBaseManager * m_GetUndoManager(void) override;
 
-   C_GiNode * m_CreateNode(const int32_t & ors32_Index, const uint64_t & oru64_Id, const float64_t & orf64_Width,
-                           const float64_t & orf64_Height, QGraphicsItem * const opc_Parent) override;
+   C_GiNode * m_CreateNode(const int32_t & ors32_Index, const uint64_t & oru64_Id, const double & orf64_Width,
+                           const double & orf64_Height, QGraphicsItem * const opc_Parent) override;
 
    void m_AddNodeToScene(C_GiNode * const opc_NodeGraphicsItem) override;
    void m_AddPcBusConnectorToScene(C_GiSvPcBusConnector * const opc_PcBusConnectorGraphicsItem) override;

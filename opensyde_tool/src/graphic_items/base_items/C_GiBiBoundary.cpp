@@ -15,7 +15,7 @@
 #include <QPen>
 #include <QGraphicsView>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiBiBoundary.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_GiSyBaseWidget.hpp"
@@ -29,10 +29,10 @@ using namespace stw::opensyde_gui_elements;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const float64_t mf64_ACTION_POINT_OFFSET_BOUNDARY = 8.0;
+const double mf64_ACTION_POINT_OFFSET_BOUNDARY = 8.0;
 
-const float64_t C_GiBiBoundary::mhf64_MIN_WIDTH_BOUNDARY = 50.0;
-const float64_t C_GiBiBoundary::mhf64_MIN_HEIGHT_BOUNDARY = 50.0;
+const double C_GiBiBoundary::mhf64_MIN_WIDTH_BOUNDARY = 50.0;
+const double C_GiBiBoundary::mhf64_MIN_HEIGHT_BOUNDARY = 50.0;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -55,7 +55,7 @@ const float64_t C_GiBiBoundary::mhf64_MIN_HEIGHT_BOUNDARY = 50.0;
    \param[in,out] opc_Parent  Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiBiBoundary::C_GiBiBoundary(const uint64_t & oru64_Id, const float64_t of64_Width, const float64_t of64_Height,
+C_GiBiBoundary::C_GiBiBoundary(const uint64_t & oru64_Id, const double of64_Width, const double of64_Height,
                                QGraphicsItem * const opc_Parent) :
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiBiRectBaseGroup(oru64_Id,
@@ -264,7 +264,7 @@ QColor C_GiBiBoundary::GetBackgroundColor() const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiBiBoundary::m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight)
+void C_GiBiBoundary::m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight)
 {
    Q_UNUSED(of64_DiffWidth)
    Q_UNUSED(of64_DiffHeight)

@@ -298,7 +298,7 @@ void C_GiLiBusConnectorBase::RevertBus(const stw::opensyde_gui::C_GiLiBus * cons
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiBusConnectorBase::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiLiBusConnectorBase::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiLiLineGroup::SetZetValueCustom(of64_ZetValue);
    //For bus connectors no data update should happen for the z value

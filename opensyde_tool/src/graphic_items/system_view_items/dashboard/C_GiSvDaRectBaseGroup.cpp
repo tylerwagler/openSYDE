@@ -19,7 +19,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsView>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "constants.hpp"
 
@@ -46,7 +46,7 @@ using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const float64_t C_GiSvDaRectBaseGroup::mhf64_ACTION_POINT_OFFSET = 10.0;
+const double C_GiSvDaRectBaseGroup::mhf64_ACTION_POINT_OFFSET = 10.0;
 const uint8_t C_GiSvDaRectBaseGroup::mhu8_START_GREY_TIMEOUT_PERCENTAGE = 20U;
 const QString C_GiSvDaRectBaseGroup::mhc_ICON_READ = "://images/system_views/dashboards/icons/IconUpdateValueRead.svg";
 const QString C_GiSvDaRectBaseGroup::mhc_ICON_READ_ABORT =
@@ -95,8 +95,8 @@ const QString C_GiSvDaRectBaseGroup::mhc_ICON_WRITE_DISABLED =
 C_GiSvDaRectBaseGroup::C_GiSvDaRectBaseGroup(const uint32_t & oru32_ViewIndex, const uint32_t & oru32_DashboardIndex,
                                              const int32_t & ors32_DataIndex, const E_Type & ore_Type,
                                              const uint32_t ou32_MaximumDataElements, const uint64_t & oru64_Id,
-                                             const float64_t of64_MinWidth, const float64_t of64_MinHeight,
-                                             const float64_t of64_InitWidth, const float64_t of64_InitHeight,
+                                             const double of64_MinWidth, const double of64_MinHeight,
+                                             const double of64_InitWidth, const double of64_InitHeight,
                                              const bool oq_KeepAspectRatio, const bool oq_ReadItem,
                                              QGraphicsItem * const opc_Parent, const QPointF & orc_PosOffset) :
    //lint -e{1938}  static const is guaranteed preinitialized before main
@@ -976,7 +976,7 @@ void C_GiSvDaRectBaseGroup::GenerateHint(void)
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaRectBaseGroup::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiSvDaRectBaseGroup::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiBiRectBaseGroup::SetZetValueCustom(of64_ZetValue);
    //Apply to data
@@ -1028,8 +1028,8 @@ const C_PuiSvDashboard * C_GiSvDaRectBaseGroup::m_GetSvDashboard(void) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, QString & orc_ScaledValue,
-                                              float64_t * const opf64_UnscaledValueAsFloat,
-                                              float64_t * const opf64_ScaledValueAsFloat)
+                                              double * const opf64_UnscaledValueAsFloat,
+                                              double * const opf64_ScaledValueAsFloat)
 {
    C_PuiSvDbNodeDataPoolListElementId c_Id;
    const int32_t s32_Retval = C_PuiSvDbDataElementHandler::m_GetLastValue(ou32_WidgetDataPoolElementIndex,
@@ -1071,7 +1071,7 @@ int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPool
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
                                               std::vector<QString> & orc_ScaledValues,
-                                              std::vector<float64_t> & orc_UnscaledValues)
+                                              std::vector<double> & orc_UnscaledValues)
 {
    C_PuiSvDbNodeDataPoolListElementId c_Id;
    const int32_t s32_Retval = C_PuiSvDbDataElementHandler::m_GetLastValue(ou32_WidgetDataPoolElementIndex,
@@ -1111,7 +1111,7 @@ int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPool
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                              std::vector<float64_t> & orc_Values, const bool oq_UseScaling)
+                                              std::vector<double> & orc_Values, const bool oq_UseScaling)
 {
    C_PuiSvDbNodeDataPoolListElementId c_Id;
    const int32_t s32_Retval = C_PuiSvDbDataElementHandler::m_GetLastValue(ou32_WidgetDataPoolElementIndex, orc_Values,
@@ -1135,7 +1135,7 @@ int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPool
    \param[in] of64_DiffHeight Height
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaRectBaseGroup::m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight)
+void C_GiSvDaRectBaseGroup::m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight)
 {
    this->mc_CurrentSize = QSizeF(this->mc_CurrentSize.width() + of64_DiffWidth,
                                  this->mc_CurrentSize.height() + of64_DiffHeight);
@@ -1180,9 +1180,9 @@ void C_GiSvDaRectBaseGroup::m_ForceWidgetResize(const QSizeF & orc_NewSize)
    {
       //Map scene size to widget size
       const QRectF c_CurrentRect = this->mpc_ProxyWidget->subWidgetRect(this->mpc_Widget);
-      const float64_t f64_WidthDiff = orc_NewSize.width() - c_CurrentRect.width();
+      const double f64_WidthDiff = orc_NewSize.width() - c_CurrentRect.width();
       const int32_t s32_Width = this->mpc_Widget->width() + static_cast<int32_t>(f64_WidthDiff);
-      const float64_t f64_HeightDiff = orc_NewSize.height() - c_CurrentRect.height();
+      const double f64_HeightDiff = orc_NewSize.height() - c_CurrentRect.height();
       const int32_t s32_Height = this->mpc_Widget->height() + static_cast<int32_t>(f64_HeightDiff);
       const QSize c_New = QSize(std::max(s32_Width, 1), std::max(s32_Height, 1));
 
@@ -1804,14 +1804,14 @@ QString C_GiSvDaRectBaseGroup::m_GetCommonToolTipContent(void) const
 void C_GiSvDaRectBaseGroup::m_InitConflictIcon(void)
 {
    //Offset to have icon inside widget
-   const float64_t f64_PosHorizontal =
-      (this->GetVisibleBoundingRect().width() - (static_cast<float64_t>(this->ms32_IconSize) * 1.8125));
-   const float64_t f64_POS_Y = 0.0;
+   const double f64_PosHorizontal =
+      (this->GetVisibleBoundingRect().width() - (static_cast<double>(this->ms32_IconSize) * 1.8125));
+   const double f64_POS_Y = 0.0;
 
    // create the conflict icon
    mpc_ConflictIcon =
-      new C_GiSvgGraphicsItem("://images/Error_iconV2.svg", static_cast<float64_t>(this->ms32_IconSize),
-                              static_cast<float64_t>(this->ms32_IconSize));
+      new C_GiSvgGraphicsItem("://images/Error_iconV2.svg", static_cast<double>(this->ms32_IconSize),
+                              static_cast<double>(this->ms32_IconSize));
 
    this->mpc_ConflictIcon->moveBy(f64_PosHorizontal - this->mpc_ConflictIcon->pos().x(),
                                   f64_POS_Y - this->mpc_ConflictIcon->pos().y());
@@ -1825,8 +1825,8 @@ void C_GiSvDaRectBaseGroup::m_InitConflictIcon(void)
    // create the warning icon
    this->mpc_WarningIcon =
       new C_GiSvgGraphicsItem("://images/system_views/IconConfigWarning.svg",
-                              static_cast<float64_t>(this->ms32_IconSize),
-                              static_cast<float64_t>(this->ms32_IconSize));
+                              static_cast<double>(this->ms32_IconSize),
+                              static_cast<double>(this->ms32_IconSize));
 
    this->mpc_WarningIcon->moveBy(f64_PosHorizontal - this->mpc_WarningIcon->pos().x(),
                                  f64_POS_Y - this->mpc_WarningIcon->pos().y());
@@ -1844,13 +1844,13 @@ void C_GiSvDaRectBaseGroup::m_InitButton(void)
    QRectF c_Rect;
    QGraphicsRectItem * pc_RectItem;
    //Offset to have icon inside widget
-   const float64_t f64_PosHorizontal =
-      (this->GetVisibleBoundingRect().width() - (static_cast<float64_t>(this->ms32_IconSize) * 1.8125));
-   const float64_t f64_POS_Y_ICON_1 = 0.0;
-   const float64_t f64_POS_Y_ICON_2 = static_cast<float64_t>(this->ms32_IconSize);
-   const float64_t f64_POS_WRITE_ICON = f64_POS_Y_ICON_1;
-   const float64_t f64_POS_READ_ICON = this->mq_ReadItem ? f64_POS_Y_ICON_1 : f64_POS_Y_ICON_2;
-   float64_t f64_Width = static_cast<float64_t>(this->ms32_IconSize);
+   const double f64_PosHorizontal =
+      (this->GetVisibleBoundingRect().width() - (static_cast<double>(this->ms32_IconSize) * 1.8125));
+   const double f64_POS_Y_ICON_1 = 0.0;
+   const double f64_POS_Y_ICON_2 = static_cast<double>(this->ms32_IconSize);
+   const double f64_POS_WRITE_ICON = f64_POS_Y_ICON_1;
+   const double f64_POS_READ_ICON = this->mq_ReadItem ? f64_POS_Y_ICON_1 : f64_POS_Y_ICON_2;
+   double f64_Width = static_cast<double>(this->ms32_IconSize);
 
    // create 'button' with points
    mpc_ButtonGroup = new QGraphicsItemGroup();
@@ -1861,13 +1861,13 @@ void C_GiSvDaRectBaseGroup::m_InitButton(void)
       // create the write icon
       mpc_SendIcon =
          new C_GiSvgGraphicsItem(C_GiSvDaRectBaseGroup::mhc_ICON_WRITE_DISABLED,
-                                 static_cast<float64_t>(this->ms32_IconSize),
-                                 static_cast<float64_t>(this->ms32_IconSize));
+                                 static_cast<double>(this->ms32_IconSize),
+                                 static_cast<double>(this->ms32_IconSize));
 
       this->mpc_SendIcon->moveBy(f64_PosHorizontal - this->mpc_SendIcon->pos().x(),
                                  f64_POS_WRITE_ICON - this->mpc_SendIcon->pos().y());
       this->mpc_ButtonGroup->addToGroup(this->mpc_SendIcon);
-      f64_Width += static_cast<float64_t>(this->ms32_IconSize);
+      f64_Width += static_cast<double>(this->ms32_IconSize);
    }
    else
    {
@@ -1877,8 +1877,8 @@ void C_GiSvDaRectBaseGroup::m_InitButton(void)
    // create the read icon
    mpc_ReadIcon =
       new C_GiSvgGraphicsItem(C_GiSvDaRectBaseGroup::mhc_ICON_READ_DISABLED,
-                              static_cast<float64_t>(this->ms32_IconSize),
-                              static_cast<float64_t>(this->ms32_IconSize));
+                              static_cast<double>(this->ms32_IconSize),
+                              static_cast<double>(this->ms32_IconSize));
    this->mpc_ReadIcon->moveBy(f64_PosHorizontal - this->mpc_ReadIcon->pos().x(),
                               f64_POS_READ_ICON - this->mpc_ReadIcon->pos().y());
    this->mpc_ButtonGroup->addToGroup(this->mpc_ReadIcon);
@@ -1888,7 +1888,7 @@ void C_GiSvDaRectBaseGroup::m_InitButton(void)
    c_Rect.setX(f64_PosHorizontal);
    c_Rect.setY(f64_POS_Y_ICON_1);
    c_Rect.setWidth(f64_Width);
-   c_Rect.setHeight(static_cast<float64_t>(this->ms32_IconSize));
+   c_Rect.setHeight(static_cast<double>(this->ms32_IconSize));
    pc_RectItem = new QGraphicsRectItem(c_Rect);
    pc_RectItem->setPen(static_cast<QPen>(Qt::NoPen));
    pc_RectItem->setBrush(static_cast<QBrush>(Qt::NoBrush));

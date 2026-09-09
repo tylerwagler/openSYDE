@@ -42,13 +42,13 @@ protected:
    void m_Init(void) override;
 
 private:
-   float64_t mf64_ScaledMin;
-   float64_t mf64_ScaledMax;
-   float64_t mf64_StepWidth;
+   double mf64_ScaledMin;
+   double mf64_ScaledMax;
+   double mf64_StepWidth;
 
    QString m_PrepareSpinBoxValue(const QString & orc_Text) const;
    QString m_ExtractSpinBoxValue(const QString & orc_Text) const;
-   static int32_t mh_GetValue(const QString & orc_Input, float64_t & orf64_Output);
+   static int32_t mh_GetValue(const QString & orc_Input, double & orf64_Output);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

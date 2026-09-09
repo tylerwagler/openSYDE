@@ -31,8 +31,8 @@ class C_GiImage :
 {
 public:
    C_GiImage(const QString & orc_ImagePath = "", QGraphicsItem * const opc_Parent = nullptr);
-   C_GiImage(const QPixmap & orc_Pixmap, const QByteArray & orc_Format, const float64_t of64_Width,
-             const float64_t of64_Height, QGraphicsItem * const opc_Parent = nullptr);
+   C_GiImage(const QPixmap & orc_Pixmap, const QByteArray & orc_Format, const double of64_Width,
+             const double of64_Height, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiImage() override;
 
    void Redraw(void) override;

@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiRectBaseGroup.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -47,8 +47,8 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_GiRectBaseGroup::C_GiRectBaseGroup(const int32_t & ors32_Index, const E_Type & ore_Type, const uint64_t & oru64_Id,
-                                     const float64_t of64_MinWidth, const float64_t of64_MinHeight,
-                                     const float64_t of64_ActionPointOffset, const bool oq_KeepAspectRatio,
+                                     const double of64_MinWidth, const double of64_MinHeight,
+                                     const double of64_ActionPointOffset, const bool oq_KeepAspectRatio,
                                      QGraphicsItem * const opc_Parent) :
    C_GiBiRectBaseGroup(oru64_Id, of64_MinWidth, of64_MinHeight, of64_ActionPointOffset, oq_KeepAspectRatio, opc_Parent),
    C_PuiSdDataElement(ors32_Index, ore_Type)
@@ -71,7 +71,7 @@ C_GiRectBaseGroup::~C_GiRectBaseGroup(void)
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiRectBaseGroup::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiRectBaseGroup::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiBiRectBaseGroup::SetZetValueCustom(of64_ZetValue);
    //Apply to data

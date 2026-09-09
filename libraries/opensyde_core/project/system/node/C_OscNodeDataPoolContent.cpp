@@ -25,7 +25,7 @@
 #include <system_error>
 #include <sstream>
 #include <limits>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include <string>
@@ -142,7 +142,7 @@ void C_OscNodeDataPoolContent::CalcHashElement(uint32_t & oru32_HashValue, const
    {
       uint64_t u64_Val = 0ULL;
       int64_t s64_Val = 0LL;
-      float64_t f64_Val = 0.0;
+      double f64_Val = 0.0;
       switch (this->me_Type)
       {
       case C_OscNodeDataPoolContent::eUINT8:
@@ -178,7 +178,7 @@ void C_OscNodeDataPoolContent::CalcHashElement(uint32_t & oru32_HashValue, const
          stw::scl::C_SclChecksums::CalcCRC32(&s64_Val, sizeof(s64_Val), oru32_HashValue);
          break;
       case C_OscNodeDataPoolContent::eFLOAT32:
-         f64_Val = static_cast<float64_t>(this->GetValueArrF32Element(ou32_Index));
+         f64_Val = static_cast<double>(this->GetValueArrF32Element(ou32_Index));
          //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
          stw::scl::C_SclChecksums::CalcCRC32(&f64_Val, sizeof(f64_Val), oru32_HashValue);
          break;
@@ -593,7 +593,7 @@ int64_t C_OscNodeDataPoolContent::GetValueS64(void) const
    \param[in]  of32_Value  New assignment value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueF32(const float32_t of32_Value)
+void C_OscNodeDataPoolContent::SetValueF32(const float of32_Value)
 {
    m_SetValue(of32_Value, C_OscNodeDataPoolContent::eFLOAT32);
 }
@@ -606,9 +606,9 @@ void C_OscNodeDataPoolContent::SetValueF32(const float32_t of32_Value)
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-float32_t C_OscNodeDataPoolContent::GetValueF32(void) const
+float C_OscNodeDataPoolContent::GetValueF32(void) const
 {
-   float32_t f32_Retval = 0.0F;
+   float f32_Retval = 0.0F;
 
    m_GetValue(C_OscNodeDataPoolContent::eFLOAT32, f32_Retval);
    return f32_Retval;
@@ -620,7 +620,7 @@ float32_t C_OscNodeDataPoolContent::GetValueF32(void) const
    \param[in]  of64_Value  New assignment value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueF64(const float64_t of64_Value)
+void C_OscNodeDataPoolContent::SetValueF64(const double of64_Value)
 {
    m_SetValue(of64_Value, C_OscNodeDataPoolContent::eFLOAT64);
 }
@@ -633,9 +633,9 @@ void C_OscNodeDataPoolContent::SetValueF64(const float64_t of64_Value)
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_OscNodeDataPoolContent::GetValueF64(void) const
+double C_OscNodeDataPoolContent::GetValueF64(void) const
 {
-   float64_t f64_Retval = 0.0;
+   double f64_Retval = 0.0;
 
    m_GetValue(C_OscNodeDataPoolContent::eFLOAT64, f64_Retval);
    return f64_Retval;
@@ -1261,7 +1261,7 @@ int64_t C_OscNodeDataPoolContent::GetValueArrS64Element(const uint32_t ou32_Inde
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrF32(const std::vector<float32_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrF32(const std::vector<float> & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eFLOAT32);
 }
@@ -1273,7 +1273,7 @@ void C_OscNodeDataPoolContent::SetValueArrF32(const std::vector<float32_t> & orc
    \param[in]  ou32_Index  Index to access
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrF32Element(const float32_t of32_Value, const uint32_t ou32_Index)
+void C_OscNodeDataPoolContent::SetValueArrF32Element(const float of32_Value, const uint32_t ou32_Index)
 {
    m_SetValueArrayElement(of32_Value, ou32_Index, C_OscNodeDataPoolContent::eFLOAT32);
 }
@@ -1286,9 +1286,9 @@ void C_OscNodeDataPoolContent::SetValueArrF32Element(const float32_t of32_Value,
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<float32_t> C_OscNodeDataPoolContent::GetValueArrF32(void) const
+const std::vector<float> C_OscNodeDataPoolContent::GetValueArrF32(void) const
 {
-   std::vector<float32_t> c_RetVal;
+   std::vector<float> c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eFLOAT32, c_RetVal);
    return c_RetVal;
@@ -1304,9 +1304,9 @@ const std::vector<float32_t> C_OscNodeDataPoolContent::GetValueArrF32(void) cons
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-float32_t C_OscNodeDataPoolContent::GetValueArrF32Element(const uint32_t ou32_Index) const
+float C_OscNodeDataPoolContent::GetValueArrF32Element(const uint32_t ou32_Index) const
 {
-   float32_t f32_Value = 0.0F;
+   float f32_Value = 0.0F;
 
    m_GetValueArrayElement(C_OscNodeDataPoolContent::eFLOAT32, ou32_Index, f32_Value);
    return f32_Value;
@@ -1318,7 +1318,7 @@ float32_t C_OscNodeDataPoolContent::GetValueArrF32Element(const uint32_t ou32_In
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrF64(const std::vector<float64_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrF64(const std::vector<double> & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eFLOAT64);
 }
@@ -1330,7 +1330,7 @@ void C_OscNodeDataPoolContent::SetValueArrF64(const std::vector<float64_t> & orc
    \param[in]  ou32_Index  Index to access
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrF64Element(const float64_t of64_Value, const uint32_t ou32_Index)
+void C_OscNodeDataPoolContent::SetValueArrF64Element(const double of64_Value, const uint32_t ou32_Index)
 {
    m_SetValueArrayElement(of64_Value, ou32_Index, C_OscNodeDataPoolContent::eFLOAT64);
 }
@@ -1343,9 +1343,9 @@ void C_OscNodeDataPoolContent::SetValueArrF64Element(const float64_t of64_Value,
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<float64_t> C_OscNodeDataPoolContent::GetValueArrF64(void) const
+const std::vector<double> C_OscNodeDataPoolContent::GetValueArrF64(void) const
 {
-   std::vector<float64_t> c_RetVal;
+   std::vector<double> c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eFLOAT64, c_RetVal);
    return c_RetVal;
@@ -1361,9 +1361,9 @@ const std::vector<float64_t> C_OscNodeDataPoolContent::GetValueArrF64(void) cons
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_OscNodeDataPoolContent::GetValueArrF64Element(const uint32_t ou32_Index) const
+double C_OscNodeDataPoolContent::GetValueArrF64Element(const uint32_t ou32_Index) const
 {
-   float64_t f64_Value = 0.0;
+   double f64_Value = 0.0;
 
    m_GetValueArrayElement(C_OscNodeDataPoolContent::eFLOAT64, ou32_Index, f64_Value);
    return f64_Value;
@@ -1472,10 +1472,10 @@ void C_OscNodeDataPoolContent::SetType(const E_Type & ore_Value)
       bool q_FloatNewBase = false;
       uint64_t u64_PreviousValue = 0;
       int64_t s64_PreviousValue = 0;
-      float64_t f64_PreviousValue = 0.0;
+      double f64_PreviousValue = 0.0;
       uint64_t u64_NewValue = 0;
       int64_t s64_NewValue = 0;
-      float64_t f64_NewValue = 0.0;
+      double f64_NewValue = 0.0;
 
       //Get previous value
       m_GetBaseType(q_UnsignedPreviousBase, q_SignedPreviousBase, q_FloatPreviousBase, u64_PreviousValue,
@@ -1557,11 +1557,11 @@ void C_OscNodeDataPoolContent::SetType(const E_Type & ore_Value)
       {
          if (q_UnsignedPreviousBase == true)
          {
-            f64_NewValue = static_cast<float64_t>(u64_PreviousValue);
+            f64_NewValue = static_cast<double>(u64_PreviousValue);
          }
          else if (q_SignedPreviousBase == true)
          {
-            f64_NewValue = static_cast<float64_t>(s64_PreviousValue);
+            f64_NewValue = static_cast<double>(s64_PreviousValue);
          }
          else if (q_FloatPreviousBase == true)
          {
@@ -1605,7 +1605,7 @@ void C_OscNodeDataPoolContent::SetType(const E_Type & ore_Value)
          this->SetValueS64(s64_NewValue);
          break;
       case eFLOAT32:
-         this->SetValueF32(static_cast<float32_t>(f64_NewValue));
+         this->SetValueF32(static_cast<float>(f64_NewValue));
          break;
       case eFLOAT64:
          this->SetValueF64(f64_NewValue);
@@ -1654,10 +1654,10 @@ void C_OscNodeDataPoolContent::SetType(const E_Type & ore_Value)
       {
          uint64_t u64_PreviousValue = 0;
          int64_t s64_PreviousValue = 0;
-         float64_t f64_PreviousValue = 0.0;
+         double f64_PreviousValue = 0.0;
          uint64_t u64_NewValue = 0;
          int64_t s64_NewValue = 0;
-         float64_t f64_NewValue = 0.0;
+         double f64_NewValue = 0.0;
          bool q_UnsignedPreviousBase = false;
          bool q_SignedPreviousBase = false;
          bool q_FloatPreviousBase = false;
@@ -1715,11 +1715,11 @@ void C_OscNodeDataPoolContent::SetType(const E_Type & ore_Value)
          {
             if (q_UnsignedPreviousBase == true)
             {
-               f64_NewValue = static_cast<float64_t>(u64_PreviousValue);
+               f64_NewValue = static_cast<double>(u64_PreviousValue);
             }
             else if (q_SignedPreviousBase == true)
             {
-               f64_NewValue = static_cast<float64_t>(s64_PreviousValue);
+               f64_NewValue = static_cast<double>(s64_PreviousValue);
             }
             else if (q_FloatPreviousBase == true)
             {
@@ -1763,7 +1763,7 @@ void C_OscNodeDataPoolContent::SetType(const E_Type & ore_Value)
             this->SetValueArrS64Element(s64_NewValue, u32_ItArray);
             break;
          case eFLOAT32:
-            this->SetValueArrF32Element(static_cast<float32_t>(f64_NewValue), u32_ItArray);
+            this->SetValueArrF32Element(static_cast<float>(f64_NewValue), u32_ItArray);
             break;
          case eFLOAT64:
             this->SetValueArrF64Element(f64_NewValue, u32_ItArray);
@@ -1872,7 +1872,7 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
    bool q_ThisBaseIsFloatingPoint = false;
    uint64_t u64_Value = 0;
    int64_t s64_Value = 0;
-   float64_t f64_Value = 0.0;
+   double f64_Value = 0.0;
 
    for (uint32_t u32_ItElement = 0; u32_ItElement < this->GetArraySize(); ++u32_ItElement)
    {
@@ -1914,8 +1914,8 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
          }
          else if (q_ThisBaseIsFloatingPoint == true)
          {
-            if ((static_cast<float64_t>(std::numeric_limits<uint8_t>::min()) <= f64_Value) &&
-                (f64_Value <= static_cast<float64_t>(std::numeric_limits<uint8_t>::max())))
+            if ((static_cast<double>(std::numeric_limits<uint8_t>::min()) <= f64_Value) &&
+                (f64_Value <= static_cast<double>(std::numeric_limits<uint8_t>::max())))
             {
                q_Retval = true;
             }
@@ -1955,8 +1955,8 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
          }
          else if (q_ThisBaseIsFloatingPoint == true)
          {
-            if ((static_cast<float64_t>(std::numeric_limits<uint16_t>::min()) <= f64_Value) &&
-                (f64_Value <= static_cast<float64_t>(std::numeric_limits<uint16_t>::max())))
+            if ((static_cast<double>(std::numeric_limits<uint16_t>::min()) <= f64_Value) &&
+                (f64_Value <= static_cast<double>(std::numeric_limits<uint16_t>::max())))
             {
                q_Retval = true;
             }
@@ -1996,8 +1996,8 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
          }
          else if (q_ThisBaseIsFloatingPoint == true)
          {
-            if ((static_cast<float64_t>(std::numeric_limits<uint32_t>::min()) <= f64_Value) &&
-                (f64_Value <= static_cast<float64_t>(std::numeric_limits<uint32_t>::max())))
+            if ((static_cast<double>(std::numeric_limits<uint32_t>::min()) <= f64_Value) &&
+                (f64_Value <= static_cast<double>(std::numeric_limits<uint32_t>::max())))
             {
                q_Retval = true;
             }
@@ -2029,8 +2029,8 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
          }
          else if (q_ThisBaseIsFloatingPoint == true)
          {
-            if ((static_cast<float64_t>(std::numeric_limits<uint64_t>::min()) <= f64_Value) &&
-                (f64_Value <= static_cast<float64_t>(std::numeric_limits<uint64_t>::max())))
+            if ((static_cast<double>(std::numeric_limits<uint64_t>::min()) <= f64_Value) &&
+                (f64_Value <= static_cast<double>(std::numeric_limits<uint64_t>::max())))
             {
                q_Retval = true;
             }
@@ -2070,8 +2070,8 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
          }
          else if (q_ThisBaseIsFloatingPoint == true)
          {
-            if ((static_cast<float64_t>(std::numeric_limits<int8_t>::min()) <= f64_Value) &&
-                (f64_Value <= static_cast<float64_t>(std::numeric_limits<int8_t>::max())))
+            if ((static_cast<double>(std::numeric_limits<int8_t>::min()) <= f64_Value) &&
+                (f64_Value <= static_cast<double>(std::numeric_limits<int8_t>::max())))
             {
                q_Retval = true;
             }
@@ -2111,8 +2111,8 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
          }
          else if (q_ThisBaseIsFloatingPoint == true)
          {
-            if ((static_cast<float64_t>(std::numeric_limits<int16_t>::min()) <= f64_Value) &&
-                (f64_Value <= static_cast<float64_t>(std::numeric_limits<int16_t>::max())))
+            if ((static_cast<double>(std::numeric_limits<int16_t>::min()) <= f64_Value) &&
+                (f64_Value <= static_cast<double>(std::numeric_limits<int16_t>::max())))
             {
                q_Retval = true;
             }
@@ -2152,8 +2152,8 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
          }
          else if (q_ThisBaseIsFloatingPoint == true)
          {
-            if ((static_cast<float64_t>(std::numeric_limits<int32_t>::min()) <= f64_Value) &&
-                (f64_Value <= static_cast<float64_t>(std::numeric_limits<int32_t>::max())))
+            if ((static_cast<double>(std::numeric_limits<int32_t>::min()) <= f64_Value) &&
+                (f64_Value <= static_cast<double>(std::numeric_limits<int32_t>::max())))
             {
                q_Retval = true;
             }
@@ -2185,8 +2185,8 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
          }
          else if (q_ThisBaseIsFloatingPoint == true)
          {
-            if ((static_cast<float64_t>(std::numeric_limits<int64_t>::min()) <= f64_Value) &&
-                (f64_Value <= static_cast<float64_t>(std::numeric_limits<int64_t>::max())))
+            if ((static_cast<double>(std::numeric_limits<int64_t>::min()) <= f64_Value) &&
+                (f64_Value <= static_cast<double>(std::numeric_limits<int64_t>::max())))
             {
                q_Retval = true;
             }
@@ -2203,7 +2203,7 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
       case C_OscNodeDataPoolContent::eFLOAT32:
          if (q_ThisBaseIsUnsigned == true)
          {
-            if (u64_Value <= static_cast<uint64_t>(std::numeric_limits<float32_t>::max()))
+            if (u64_Value <= static_cast<uint64_t>(std::numeric_limits<float>::max()))
             {
                q_Retval = true;
             }
@@ -2214,8 +2214,8 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
          }
          else if (q_ThisBaseIsSigned == true)
          {
-            if (((-std::numeric_limits<float32_t>::max()) <= static_cast<float32_t>(s64_Value)) &&
-                (static_cast<float32_t>(s64_Value) <= std::numeric_limits<float32_t>::max()))
+            if (((-std::numeric_limits<float>::max()) <= static_cast<float>(s64_Value)) &&
+                (static_cast<float>(s64_Value) <= std::numeric_limits<float>::max()))
             {
                q_Retval = true;
             }
@@ -2226,8 +2226,8 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
          }
          else if (q_ThisBaseIsFloatingPoint == true)
          {
-            if ((-static_cast<float64_t>(std::numeric_limits<float32_t>::max()) <= f64_Value) &&
-                (f64_Value <= static_cast<float64_t>(std::numeric_limits<float32_t>::max())))
+            if ((-static_cast<double>(std::numeric_limits<float>::max()) <= f64_Value) &&
+                (f64_Value <= static_cast<double>(std::numeric_limits<float>::max())))
             {
                q_Retval = true;
             }
@@ -2244,7 +2244,7 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
       case C_OscNodeDataPoolContent::eFLOAT64:
          if (q_ThisBaseIsUnsigned == true)
          {
-            if (u64_Value <= static_cast<uint64_t>(std::numeric_limits<float64_t>::max()))
+            if (u64_Value <= static_cast<uint64_t>(std::numeric_limits<double>::max()))
             {
                q_Retval = true;
             }
@@ -2255,8 +2255,8 @@ bool C_OscNodeDataPoolContent::CheckInsideRange(const C_OscNodeDataPoolContent::
          }
          else if (q_ThisBaseIsSigned == true)
          {
-            if (((-std::numeric_limits<float64_t>::max()) <= static_cast<float64_t>(s64_Value)) &&
-                (static_cast<float64_t>(s64_Value) <= std::numeric_limits<float64_t>::max()))
+            if (((-std::numeric_limits<double>::max()) <= static_cast<double>(s64_Value)) &&
+                (static_cast<double>(s64_Value) <= std::numeric_limits<double>::max()))
             {
                q_Retval = true;
             }
@@ -2947,7 +2947,7 @@ bool C_OscNodeDataPoolContent::CompareArrayGreater(const C_OscNodeDataPoolConten
    \param[in]   oq_AllowSpecialHandling   Allow special handling
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Factor, const float64_t of64_Offset,
+void C_OscNodeDataPoolContent::GetValueAsScaledString(const double of64_Factor, const double of64_Offset,
                                                       std::string & orc_Output, const uint32_t ou32_Index,
                                                       const bool oq_AllowRangeAdaptation,
                                                       const bool oq_AllowSpecialHandling) const
@@ -2956,7 +2956,7 @@ void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Facto
 
    if (C_OscUtils::h_IsScalingActive(of64_Factor, of64_Offset) == true)
    {
-      float64_t f64_Tmp;
+      double f64_Tmp;
       this->GetAnyValueAsFloat64(f64_Tmp, ou32_Index);
       f64_Tmp = C_OscUtils::h_GetValueScaled(f64_Tmp, of64_Factor, of64_Offset, oq_AllowRangeAdaptation);
       c_Stream << f64_Tmp;
@@ -3068,7 +3068,7 @@ void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Facto
    \param[in]  ou32_Index     Optional fallback index if array
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::GetAnyValueAsFloat32(float32_t & orf32_Output, const uint32_t ou32_Index) const
+void C_OscNodeDataPoolContent::GetAnyValueAsFloat32(float & orf32_Output, const uint32_t ou32_Index) const
 {
    orf32_Output = 0.0F;
    m_GetAnyValueAsTemplate(orf32_Output, ou32_Index);
@@ -3081,7 +3081,7 @@ void C_OscNodeDataPoolContent::GetAnyValueAsFloat32(float32_t & orf32_Output, co
    \param[in]  ou32_Index     Optional fallback index if array
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::GetAnyValueAsFloat64(float64_t & orf64_Output, const uint32_t ou32_Index) const
+void C_OscNodeDataPoolContent::GetAnyValueAsFloat64(double & orf64_Output, const uint32_t ou32_Index) const
 {
    orf64_Output = 0.0;
    m_GetAnyValueAsTemplate(orf64_Output, ou32_Index);
@@ -3227,7 +3227,7 @@ bool C_OscNodeDataPoolContent::m_CompareArrayNotEqual(const C_OscNodeDataPoolCon
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolContent::m_GetBaseType(bool & orq_IsUintBase, bool & orq_IsSintBase, bool & orq_IsFloatBase,
                                              uint64_t & oru64_UintValue, int64_t & ors64_SintValue,
-                                             float64_t & orf64_FloatValue) const
+                                             double & orf64_FloatValue) const
 {
    orq_IsUintBase = false;
    orq_IsSintBase = false;
@@ -3303,7 +3303,7 @@ void C_OscNodeDataPoolContent::m_GetBaseType(bool & orq_IsUintBase, bool & orq_I
 void C_OscNodeDataPoolContent::m_GetBaseTypeArray(const uint32_t & oru32_Index, bool & orq_IsUintBase,
                                                   bool & orq_IsSintBase, bool & orq_IsFloatBase,
                                                   uint64_t & oru64_UintValue, int64_t & ors64_SintValue,
-                                                  float64_t & orf64_FloatValue) const
+                                                  double & orf64_FloatValue) const
 {
    orq_IsUintBase = false;
    orq_IsSintBase = false;
@@ -3383,14 +3383,14 @@ std::error_code C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::v
    union U_Union32
    {
       uint32_t u32_Value;
-      float32_t f32_Value;
+      float f32_Value;
    };
 
    //lint -e{9018}  //cf. comment above
    union U_Union64
    {
       uint64_t u64_Value;
-      float64_t f64_Value;
+      double f64_Value;
    };
 
    //is size correct ?
@@ -3456,8 +3456,8 @@ std::error_code C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::v
          std::vector<int16_t> c_DataS16;
          std::vector<int32_t> c_DataS32;
          std::vector<int64_t> c_DataS64;
-         std::vector<float32_t> c_DataF32;
-         std::vector<float64_t> c_DataF64;
+         std::vector<float> c_DataF32;
+         std::vector<double> c_DataF64;
          switch (this->me_Type)
          {
          case eUINT8:
@@ -3579,14 +3579,14 @@ std::error_code C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std
    union U_Union32
    {
       uint32_t u32_Value;
-      float32_t f32_Value;
+      float f32_Value;
    };
 
    //lint -e{9018}  //cf. comment above
    union U_Union64
    {
       uint64_t u64_Value;
-      float64_t f64_Value;
+      double f64_Value;
    };
 
    //is size correct ?
@@ -3652,8 +3652,8 @@ std::error_code C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std
          std::vector<int16_t> c_DataS16;
          std::vector<int32_t> c_DataS32;
          std::vector<int64_t> c_DataS64;
-         std::vector<float32_t> c_DataF32;
-         std::vector<float64_t> c_DataF64;
+         std::vector<float> c_DataF32;
+         std::vector<double> c_DataF64;
          switch (this->me_Type)
          {
          case eUINT8:
@@ -3772,14 +3772,14 @@ void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(std::vector<uint8_t> & or
    union U_Union32
    {
       uint32_t u32_Value;
-      float32_t f32_Value;
+      float f32_Value;
    };
 
    //lint -e{9018}  //cf. comment above
    union U_Union64
    {
       uint64_t u64_Value;
-      float64_t f64_Value;
+      double f64_Value;
    };
 
    //set size ...
@@ -3845,8 +3845,8 @@ void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(std::vector<uint8_t> & or
       std::vector<int16_t> c_DataS16;
       std::vector<int32_t> c_DataS32;
       std::vector<int64_t> c_DataS64;
-      std::vector<float32_t> c_DataF32;
-      std::vector<float64_t> c_DataF64;
+      std::vector<float> c_DataF32;
+      std::vector<double> c_DataF64;
       switch (this->me_Type)
       {
       case eUINT8:
@@ -4092,14 +4092,14 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> &
    union U_Union32
    {
       uint32_t u32_Value;
-      float32_t f32_Value;
+      float f32_Value;
    };
 
    //lint -e{9018}  //cf. comment above
    union U_Union64
    {
       uint64_t u64_Value;
-      float64_t f64_Value;
+      double f64_Value;
    };
 
    //set size ...
@@ -4165,8 +4165,8 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> &
       std::vector<int16_t> c_DataS16;
       std::vector<int32_t> c_DataS32;
       std::vector<int64_t> c_DataS64;
-      std::vector<float32_t> c_DataF32;
-      std::vector<float64_t> c_DataF64;
+      std::vector<float> c_DataF32;
+      std::vector<double> c_DataF64;
       switch (this->me_Type)
       {
       case eUINT8:

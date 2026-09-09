@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "TglUtils.hpp"
 #include "C_SyvDaPeProgressBar.hpp"
@@ -289,8 +289,8 @@ void C_SyvDaPeProgressBar::m_FillAlignmentComboBox(const int32_t os32_Type) cons
 void C_SyvDaPeProgressBar::m_UpdatePreview(void)
 {
    // Constants
-   const float32_t f32_SCENE_WIDTH = 260.0F;
-   const float32_t f32_SCENE_HEIGHT = 160.0F;
+   const float f32_SCENE_WIDTH = 260.0F;
+   const float f32_SCENE_HEIGHT = 160.0F;
    const QSizeF c_SCENE_SIZE(f32_SCENE_WIDTH, f32_SCENE_HEIGHT);
    const int32_t s32_DEFAULT_VALUE = 50;
 
@@ -338,8 +338,8 @@ void C_SyvDaPeProgressBar::m_GetProgressBarPreviewSizeLocation(const QSizeF & or
    uint32_t u32_TemporaryRectangularWidth;
    uint32_t u32_TemporaryRectangularHeight;
 
-   float32_t f32_ProgressBarXposition = .0F;
-   float32_t f32_ProgressBarYposition = .0F;
+   float f32_ProgressBarXposition = .0F;
+   float f32_ProgressBarYposition = .0F;
 
    QMarginsF c_Margins;
    QRect c_Rectangular;
@@ -350,7 +350,7 @@ void C_SyvDaPeProgressBar::m_GetProgressBarPreviewSizeLocation(const QSizeF & or
       const QString c_MinimumValue = "0";
       const QString c_MaximumValue = "100";
       const QString c_Unit = "";
-      const float32_t f32_ARROW_OFFSET = 15.0F;
+      const float f32_ARROW_OFFSET = 15.0F;
 
       u32_TemporaryRectangularWidth = 200;
       u32_TemporaryRectangularHeight = 50;
@@ -394,45 +394,45 @@ void C_SyvDaPeProgressBar::m_GetProgressBarPreviewSizeLocation(const QSizeF & or
       }
    }
 
-   const float32_t f32_ProgressBarHeight = static_cast<float32_t>(c_Rectangular.height()) -
-                                           (static_cast<float32_t>(c_Margins.bottom()) +
-                                            static_cast<float32_t>(c_Margins.top()));
-   const float32_t f32_ProgressBarWidth = static_cast<float32_t>(c_Rectangular.width()) -
-                                          (static_cast<float32_t>(c_Margins.left()) +
-                                           static_cast<float32_t>(c_Margins.right()));
+   const float f32_ProgressBarHeight = static_cast<float>(c_Rectangular.height()) -
+                                           (static_cast<float>(c_Margins.bottom()) +
+                                            static_cast<float>(c_Margins.top()));
+   const float f32_ProgressBarWidth = static_cast<float>(c_Rectangular.width()) -
+                                          (static_cast<float>(c_Margins.left()) +
+                                           static_cast<float>(c_Margins.right()));
    const QSizeF c_ProgressBarSize(f32_ProgressBarWidth, f32_ProgressBarHeight);
 
    if (e_ProgressBarAlignment == C_PuiSvDbProgressBar::eTOP)
    {
-      f32_ProgressBarXposition = (static_cast<float32_t>(orc_SceneSize.width()) / mf32_HalfModifier) -
-                                 (static_cast<float32_t>(c_ProgressBarSize.width()) / mf32_HalfModifier);
-      f32_ProgressBarYposition = ((static_cast<float32_t>(orc_SceneSize.height()) / mf32_HalfModifier) -
-                                  (static_cast<float32_t>(c_ProgressBarSize.height()) / mf32_HalfModifier)) -
-                                 static_cast<float32_t>(c_Margins.top());
+      f32_ProgressBarXposition = (static_cast<float>(orc_SceneSize.width()) / mf32_HalfModifier) -
+                                 (static_cast<float>(c_ProgressBarSize.width()) / mf32_HalfModifier);
+      f32_ProgressBarYposition = ((static_cast<float>(orc_SceneSize.height()) / mf32_HalfModifier) -
+                                  (static_cast<float>(c_ProgressBarSize.height()) / mf32_HalfModifier)) -
+                                 static_cast<float>(c_Margins.top());
    }
    else if (e_ProgressBarAlignment == C_PuiSvDbProgressBar::eBOTTOM)
    {
-      f32_ProgressBarXposition = (static_cast<float32_t>(orc_SceneSize.width()) / mf32_HalfModifier) -
-                                 (static_cast<float32_t>(c_ProgressBarSize.width()) / mf32_HalfModifier);
-      f32_ProgressBarYposition = (static_cast<float32_t>(orc_SceneSize.height()) / mf32_HalfModifier) -
-                                 (static_cast<float32_t>(c_ProgressBarSize.height()) / mf32_HalfModifier);
+      f32_ProgressBarXposition = (static_cast<float>(orc_SceneSize.width()) / mf32_HalfModifier) -
+                                 (static_cast<float>(c_ProgressBarSize.width()) / mf32_HalfModifier);
+      f32_ProgressBarYposition = (static_cast<float>(orc_SceneSize.height()) / mf32_HalfModifier) -
+                                 (static_cast<float>(c_ProgressBarSize.height()) / mf32_HalfModifier);
    }
    else if (e_ProgressBarAlignment == C_PuiSvDbProgressBar::eLEFT)
    {
-      f32_ProgressBarXposition = ((static_cast<float32_t>(orc_SceneSize.width()) / mf32_HalfModifier) -
-                                  (static_cast<float32_t>(c_ProgressBarSize.width()) / mf32_HalfModifier)) -
-                                 static_cast<float32_t>(c_Margins.left());
-      f32_ProgressBarYposition = ((static_cast<float32_t>(orc_SceneSize.height()) / mf32_HalfModifier) -
-                                  (static_cast<float32_t>(c_ProgressBarSize.height()) / mf32_HalfModifier)) -
-                                 static_cast<float32_t>(c_Margins.top());
+      f32_ProgressBarXposition = ((static_cast<float>(orc_SceneSize.width()) / mf32_HalfModifier) -
+                                  (static_cast<float>(c_ProgressBarSize.width()) / mf32_HalfModifier)) -
+                                 static_cast<float>(c_Margins.left());
+      f32_ProgressBarYposition = ((static_cast<float>(orc_SceneSize.height()) / mf32_HalfModifier) -
+                                  (static_cast<float>(c_ProgressBarSize.height()) / mf32_HalfModifier)) -
+                                 static_cast<float>(c_Margins.top());
    }
    else if (e_ProgressBarAlignment == C_PuiSvDbProgressBar::eRIGHT)
    {
-      f32_ProgressBarXposition = (static_cast<float32_t>(orc_SceneSize.width()) / mf32_HalfModifier) -
-                                 (static_cast<float32_t>(c_ProgressBarSize.width()) / mf32_HalfModifier);
-      f32_ProgressBarYposition = ((static_cast<float32_t>(orc_SceneSize.height()) / mf32_HalfModifier) -
-                                  (static_cast<float32_t>(c_ProgressBarSize.height()) / mf32_HalfModifier)) -
-                                 static_cast<float32_t>(c_Margins.top());
+      f32_ProgressBarXposition = (static_cast<float>(orc_SceneSize.width()) / mf32_HalfModifier) -
+                                 (static_cast<float>(c_ProgressBarSize.width()) / mf32_HalfModifier);
+      f32_ProgressBarYposition = ((static_cast<float>(orc_SceneSize.height()) / mf32_HalfModifier) -
+                                  (static_cast<float>(c_ProgressBarSize.height()) / mf32_HalfModifier)) -
+                                 static_cast<float>(c_Margins.top());
    }
    else
    {
@@ -440,8 +440,8 @@ void C_SyvDaPeProgressBar::m_GetProgressBarPreviewSizeLocation(const QSizeF & or
    }
 
    // Set final values
-   opc_ProgressBarRecSize->setWidth(static_cast<float32_t>(u32_TemporaryRectangularWidth));
-   opc_ProgressBarRecSize->setHeight(static_cast<float32_t>(u32_TemporaryRectangularHeight));
+   opc_ProgressBarRecSize->setWidth(static_cast<float>(u32_TemporaryRectangularWidth));
+   opc_ProgressBarRecSize->setHeight(static_cast<float>(u32_TemporaryRectangularHeight));
 
    opc_ProgressBarPosition->setX(f32_ProgressBarXposition);
    opc_ProgressBarPosition->setY(f32_ProgressBarYposition);

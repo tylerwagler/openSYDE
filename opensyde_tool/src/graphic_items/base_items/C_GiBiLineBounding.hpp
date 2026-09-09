@@ -18,7 +18,7 @@
 #include <QPolygonF>
 #include <QPainterPath>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -33,29 +33,29 @@ namespace opensyde_gui_logic
 class C_GiBiLineBounding
 {
 public:
-   C_GiBiLineBounding(const QVector<QPointF> & orc_Points, const float64_t & orf64_Width, const float64_t & orf64_InteractionPointWidth =
+   C_GiBiLineBounding(const QVector<QPointF> & orc_Points, const double & orf64_Width, const double & orf64_InteractionPointWidth =
                          stw::opensyde_gui::mf64_INTERACTION_POINT_WIDTH);
-   C_GiBiLineBounding(const QLineF & orc_Line, const float64_t & orf64_Width, const float64_t & orf64_InteractionPointWidth =
+   C_GiBiLineBounding(const QLineF & orc_Line, const double & orf64_Width, const double & orf64_InteractionPointWidth =
                          stw::opensyde_gui::mf64_INTERACTION_POINT_WIDTH);
    QPainterPath GetShape(void);
    static QPointF h_GetNorm(const QPointF & orc_Point);
-   static QPointF h_AdaptVecToWidth(const QPointF & orc_Point, const float64_t & orf64_Length);
+   static QPointF h_AdaptVecToWidth(const QPointF & orc_Point, const double & orf64_Length);
    static QPointF h_GetPerpendicular(const QPointF & orc_Point);
-   static float64_t h_CrossProduct(const QPointF & orc_P1, const QPointF & orc_P2);
+   static double h_CrossProduct(const QPointF & orc_P1, const QPointF & orc_P2);
 
 private:
    C_GiBiLineBounding();
    void m_AppendLineBoundingPointsTop(const int32_t & ors32_IndexStart, const int32_t & ors32_IndexEnd);
    QPointF m_AdaptVecToWidth(const QPointF & orc_Point) const;
-   static float64_t mh_GetLength(const QPointF & orc_Point);
+   static double mh_GetLength(const QPointF & orc_Point);
    void m_ConsolidateLine(const int32_t & ors32_RangeIndexStart, const int32_t & ors32_RangeIndexEnd);
    static bool mh_CalcIntersection(const QPointF & orc_Start1, const QPointF & orc_End1, const QPointF & orc_Start2,
                                    const QPointF & orc_End2, QPointF & orc_Intersection);
-   static bool mh_Within(const float64_t & orf64_Eval, const float64_t & orf64_Start, const float64_t & orf64_End);
+   static bool mh_Within(const double & orf64_Eval, const double & orf64_Start, const double & orf64_End);
 
    const QVector<QPointF> mc_Points;
-   const float64_t mf64_Width;
-   const float64_t mf64_InteractionPointWidth;
+   const double mf64_Width;
+   const double mf64_InteractionPointWidth;
    QPolygonF mc_Bounding;
 };
 

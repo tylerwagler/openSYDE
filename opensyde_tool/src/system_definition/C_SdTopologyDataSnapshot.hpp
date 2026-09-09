@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_PuiSdNode.hpp"
 #include "C_OscNodeSquad.hpp"
 #include "C_PuiSdBus.hpp"
@@ -55,7 +55,7 @@ public:
    uint32_t Count(void) const override;
 
    void SetDataPositionOffset(const QPointF & orc_NewPos) override;
-   void SetDataZetOffset(const float64_t of64_HighestUsedZetValue) override;
+   void SetDataZetOffset(const double of64_HighestUsedZetValue) override;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

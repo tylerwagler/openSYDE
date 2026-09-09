@@ -23,7 +23,7 @@
 #include <QStorageInfo>
 #include <QStringList>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_Uti.hpp"
@@ -128,7 +128,7 @@ std::vector<std::vector<uint32_t> > C_Uti::h_GetContiguousSectionsAscending(cons
    False Fraction part exists
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_Uti::h_CheckFloatHasNoFractionPart(const float64_t of64_Value)
+bool C_Uti::h_CheckFloatHasNoFractionPart(const double of64_Value)
 {
    bool q_Retval;
 
@@ -162,7 +162,7 @@ bool C_Uti::h_CheckFloatHasNoFractionPart(const float64_t of64_Value)
    Else Detected number of decimals (Restricted to maximum ms32_DOUBLE_SPIN_BOX_DECIMAL_COUNT)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_Uti::h_GetNumberOfDecimals(const float64_t of64_Value)
+int32_t C_Uti::h_GetNumberOfDecimals(const double of64_Value)
 {
    int32_t s32_Retval = -1;
    const QString c_String = h_GetStringFromDouble(of64_Value);
@@ -218,12 +218,12 @@ int32_t C_Uti::h_GetNumberOfDecimals(const float64_t of64_Value)
    Obtained QString.
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_Uti::h_GetStringFromDouble(const float64_t of64_Value)
+QString C_Uti::h_GetStringFromDouble(const double of64_Value)
 {
    QString c_StringFromValue;
    QStringList c_SplitString;
 
-   int32_t s32_Precision = std::numeric_limits<float64_t>::digits10 - 1;
+   int32_t s32_Precision = std::numeric_limits<double>::digits10 - 1;
 
    // -1 because of:
    // at maximum precision the last decimal digit may be rounded because of first meaningless digit
@@ -460,7 +460,7 @@ QString C_Uti::h_AdaptStringToSize(const QString & orc_String, const QFontMetric
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString C_Uti::h_AdaptStringToSize(const QString & orc_String, const QFontMetrics & orc_FontMetrics,
-                                   const float64_t of64_Width)
+                                   const double of64_Width)
 {
    return C_Uti::h_AdaptStringToSize(orc_String, orc_FontMetrics, static_cast<int32_t>(of64_Width));
 }

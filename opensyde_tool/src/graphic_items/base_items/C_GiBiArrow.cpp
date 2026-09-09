@@ -34,7 +34,7 @@ using namespace stw::opensyde_gui_elements;
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-const float64_t C_GiBiArrow::mhf64_SHAPE_OFFSET_FACTOR = 4.0;
+const double C_GiBiArrow::mhf64_SHAPE_OFFSET_FACTOR = 4.0;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -108,8 +108,8 @@ C_GiBiArrow::~C_GiBiArrow(void)
 //----------------------------------------------------------------------------------------------------------------------
 QPainterPath C_GiBiArrow::shape() const
 {
-   const float64_t f64_AdaptedWidth = static_cast<float64_t>(this->GetWidth()) * mhf64_SHAPE_OFFSET_FACTOR;
-   float64_t f64_InteractioWidth = 0.0;
+   const double f64_AdaptedWidth = static_cast<double>(this->GetWidth()) * mhf64_SHAPE_OFFSET_FACTOR;
+   double f64_InteractioWidth = 0.0;
 
    //Copy points for interface
    QVector<QPointF> c_Points;
@@ -134,8 +134,8 @@ QPainterPath C_GiBiArrow::shape() const
 void C_GiBiArrow::SetWidth(const int32_t & ors32_Width)
 {
    C_GiLiLineGroup::SetWidth(ors32_Width);
-   mf64_ArrowLength = mhf64_SHAPE_OFFSET_FACTOR * static_cast<float64_t>(ors32_Width);
-   mf64_ArrowHeight = mhf64_SHAPE_OFFSET_FACTOR * static_cast<float64_t>(ors32_Width);
+   mf64_ArrowLength = mhf64_SHAPE_OFFSET_FACTOR * static_cast<double>(ors32_Width);
+   mf64_ArrowHeight = mhf64_SHAPE_OFFSET_FACTOR * static_cast<double>(ors32_Width);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -536,16 +536,16 @@ void C_GiBiArrow::m_GenerateArrow(QGraphicsPathItem * const opc_ArrowItem,
       case C_PuiBsLineArrow::E_ArrowHeadType::eLINE:
          s32_Width = this->GetWidth();
          //Offsets to include pen width and still half a 45 degree angle
-         c_WidthAdaptedLineDiff = C_GiBiLineBounding::h_AdaptVecToWidth(c_LineDiff, static_cast<float64_t>(s32_Width));
+         c_WidthAdaptedLineDiff = C_GiBiLineBounding::h_AdaptVecToWidth(c_LineDiff, static_cast<double>(s32_Width));
          c_WidthAdaptedWingVector =
-            C_GiBiLineBounding::h_AdaptVecToWidth(c_ArrowWingVector, static_cast<float64_t>(s32_Width) / 2.0);
+            C_GiBiLineBounding::h_AdaptVecToWidth(c_ArrowWingVector, static_cast<double>(s32_Width) / 2.0);
          if (orq_Start == true)
          {
-            this->mpc_LinePath->SetOffsetStart(static_cast<float64_t>(s32_Width));
+            this->mpc_LinePath->SetOffsetStart(static_cast<double>(s32_Width));
          }
          else
          {
-            this->mpc_LinePath->SetOffsetEnd(static_cast<float64_t>(s32_Width));
+            this->mpc_LinePath->SetOffsetEnd(static_cast<double>(s32_Width));
          }
          //Adapt for pen width
          c_Poly.append(c_ArrowLeft - c_WidthAdaptedWingVector);

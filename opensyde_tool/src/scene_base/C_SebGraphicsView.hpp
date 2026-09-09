@@ -21,7 +21,7 @@
 #include <QColor>
 #include <QRubberBand>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_NagToolTipWithImage.hpp"
 
@@ -93,7 +93,7 @@ private:
 
    // zoom functionality
    void m_ZoomNotificationTimerEvent(void);
-   void m_ScaleBy(const float64_t of64_ScaleFactor, const bool & orq_Silent = false);
+   void m_ScaleBy(const double of64_ScaleFactor, const bool & orq_Silent = false);
    void m_ZoomIn(void);
    void m_ZoomOut(void);
    void m_UpdateZoomValue(const bool & orq_Silent = false);

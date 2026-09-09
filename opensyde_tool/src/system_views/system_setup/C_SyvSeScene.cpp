@@ -417,7 +417,7 @@ C_SebUnoBaseManager * C_SyvSeScene::m_GetUndoManager(void)
 
 //----------------------------------------------------------------------------------------------------------------------
 C_GiNode * C_SyvSeScene::m_CreateNode(const int32_t & ors32_Index, const uint64_t & oru64_Id,
-                                      const float64_t & orf64_Width, const float64_t & orf64_Height,
+                                      const double & orf64_Width, const double & orf64_Height,
                                       QGraphicsItem * const opc_Parent)
 {
    return new C_GiSvNodeSyvSetup(this->mu32_ViewIndex, ors32_Index, oru64_Id, orf64_Width, orf64_Height, opc_Parent);

@@ -149,12 +149,12 @@ int32_t C_TblEditLineEditBase::GetValueAsVariant(QVariant & orc_Value, QString &
    {
       //Range checks
       //for range checks only the floating point conversion should be relevant
-      const float64_t f64_Value = C_TblEditLineEditBase::mh_GetStringAsFloat(this->text(), q_Worked);
+      const double f64_Value = C_TblEditLineEditBase::mh_GetStringAsFloat(this->text(), q_Worked);
       if (q_Worked == true)
       {
          if (this->mc_MinValue.isEmpty() == false)
          {
-            const float64_t f64_MinValue = C_TblEditLineEditBase::mh_GetStringAsFloat(this->mc_MinValue, q_Worked);
+            const double f64_MinValue = C_TblEditLineEditBase::mh_GetStringAsFloat(this->mc_MinValue, q_Worked);
             if (q_Worked == true)
             {
                if (f64_Value < f64_MinValue)
@@ -165,7 +165,7 @@ int32_t C_TblEditLineEditBase::GetValueAsVariant(QVariant & orc_Value, QString &
          }
          if (this->mc_MaxValue.isEmpty() == false)
          {
-            const float64_t f64_MaxValue = C_TblEditLineEditBase::mh_GetStringAsFloat(this->mc_MaxValue, q_Worked);
+            const double f64_MaxValue = C_TblEditLineEditBase::mh_GetStringAsFloat(this->mc_MaxValue, q_Worked);
             if (q_Worked == true)
             {
                if (f64_MaxValue < f64_Value)
@@ -232,16 +232,16 @@ void C_TblEditLineEditBase::m_UpdateToolTip(void)
    Value as float if it worked
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_TblEditLineEditBase::mh_GetStringAsFloat(const QString & orc_Value, bool & orq_Worked)
+double C_TblEditLineEditBase::mh_GetStringAsFloat(const QString & orc_Value, bool & orq_Worked)
 {
-   float64_t f64_Retval = orc_Value.toDouble(&orq_Worked);
+   double f64_Retval = orc_Value.toDouble(&orq_Worked);
 
    if (orq_Worked == false)
    {
-      f64_Retval = static_cast<float64_t>(orc_Value.toULongLong(&orq_Worked, 0));
+      f64_Retval = static_cast<double>(orc_Value.toULongLong(&orq_Worked, 0));
       if (orq_Worked == false)
       {
-         f64_Retval = static_cast<float64_t>(orc_Value.toLongLong(&orq_Worked, 0));
+         f64_Retval = static_cast<double>(orc_Value.toLongLong(&orq_Worked, 0));
       }
    }
    return f64_Retval;

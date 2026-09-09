@@ -156,15 +156,15 @@ int32_t C_PuiSvReadDataConfiguration::InitDefaultThreshold(const stw::opensyde_c
             }
          case C_OscNodeDataPoolContent::eFLOAT32:
             {
-               const float32_t f32_Min = orc_Min.GetValueF32();
-               const float32_t f32_Max = orc_Max.GetValueF32();
+               const float f32_Min = orc_Min.GetValueF32();
+               const float f32_Max = orc_Max.GetValueF32();
                this->c_ChangeThreshold.SetValueF32((f32_Max - f32_Min) / 10.0F);
                break;
             }
          case C_OscNodeDataPoolContent::eFLOAT64:
             {
-               const float64_t f64_Min = orc_Min.GetValueF64();
-               const float64_t f64_Max = orc_Max.GetValueF64();
+               const double f64_Min = orc_Min.GetValueF64();
+               const double f64_Max = orc_Max.GetValueF64();
                this->c_ChangeThreshold.SetValueF64((f64_Max - f64_Min) / 10.0);
                break;
             }
@@ -248,15 +248,15 @@ int32_t C_PuiSvReadDataConfiguration::InitDefaultThreshold(const stw::opensyde_c
                   }
                case C_OscNodeDataPoolContent::eFLOAT32:
                   {
-                     const float32_t f32_Min = orc_Min.GetValueArrF32Element(u32_ItElement);
-                     const float32_t f32_Max = orc_Max.GetValueArrF32Element(u32_ItElement);
+                     const float f32_Min = orc_Min.GetValueArrF32Element(u32_ItElement);
+                     const float f32_Max = orc_Max.GetValueArrF32Element(u32_ItElement);
                      this->c_ChangeThreshold.SetValueArrF32Element((f32_Max - f32_Min) / 10.0F, u32_ItElement);
                      break;
                   }
                case C_OscNodeDataPoolContent::eFLOAT64:
                   {
-                     const float64_t f64_Min = orc_Min.GetValueArrF64Element(u32_ItElement);
-                     const float64_t f64_Max = orc_Max.GetValueArrF64Element(u32_ItElement);
+                     const double f64_Min = orc_Min.GetValueArrF64Element(u32_ItElement);
+                     const double f64_Max = orc_Max.GetValueArrF64Element(u32_ItElement);
                      this->c_ChangeThreshold.SetValueArrF64Element((f64_Max - f64_Min) / 10.0, u32_ItElement);
                      break;
                   }

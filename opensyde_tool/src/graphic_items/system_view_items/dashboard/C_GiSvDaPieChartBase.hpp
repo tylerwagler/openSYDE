@@ -53,8 +53,8 @@ public:
 
 private:
    stw::opensyde_gui_elements::C_OgeWiDashboardPieChart * mpc_PieChartWidget;
-   float64_t mf64_UnscaledMin;
-   float64_t mf64_UnscaledMax;
+   double mf64_UnscaledMin;
+   double mf64_UnscaledMax;
 
    //Avoid call
    C_GiSvDaPieChartBase(const C_GiSvDaPieChartBase &);

@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiSdImageGroup.hpp"
 #include "C_PuiSdHandler.hpp"
 
@@ -64,8 +64,8 @@ C_GiSdImageGroup::C_GiSdImageGroup(const int32_t & ors32_Index, const uint64_t &
    \param[in,out]  opc_Parent    Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiSdImageGroup::C_GiSdImageGroup(const int32_t & ors32_Index, const uint64_t & oru64_Id, const float64_t of64_Width,
-                                   const float64_t of64_Height, const QPixmap & orc_Image,
+C_GiSdImageGroup::C_GiSdImageGroup(const int32_t & ors32_Index, const uint64_t & oru64_Id, const double of64_Width,
+                                   const double of64_Height, const QPixmap & orc_Image,
                                    const QByteArray & orc_Format, QGraphicsItem * const opc_Parent) :
    C_GiBiImageGroup(oru64_Id, of64_Width, of64_Height, orc_Image, orc_Format, opc_Parent),
    C_PuiSdDataElement(ors32_Index, C_PuiSdDataElement::eIMAGE)

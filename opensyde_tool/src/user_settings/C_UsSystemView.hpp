@@ -15,7 +15,7 @@
 #include <QString>
 #include <QMap>
 #include <QPoint>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_UsSystemViewDashboard.hpp"
 #include "C_UsSystemViewNode.hpp"
 
@@ -39,7 +39,7 @@ public:
 
    // Update
    void AddNodeUpdateDataRate(const QString & orc_NodeName, const uint32_t ou32_Checksum,
-                              const float64_t of64_DataRateBytesPerMs);
+                              const double of64_DataRateBytesPerMs);
    int32_t GetUpdateSplitterHorizontal(void) const;
    int32_t GetUpdateHorizontalSplitterVertical(void) const;
    void SetUpdateSplitterHorizontal(const int32_t os32_Value);

@@ -41,12 +41,12 @@ const int32_t ms32_INDEX_RIGHT = 1;
 const int32_t ms32_INDEX_LEFT = 2;
 const int32_t ms32_INDEX_BOTTOM = 3;
 
-const float64_t mf64_ACTION_POINT_OFFSET_NODE = 15.0;
+const double mf64_ACTION_POINT_OFFSET_NODE = 15.0;
 
-const float64_t C_GiNode::mhf64_MIN_WIDTH_NODE = 107.0;
-const float64_t C_GiNode::mhf64_MIN_HEIGHT_NODE = 71.0;
-const float64_t C_GiNode::mhf64_INITIAL_WIDTH_NODE = 165.0;
-const float64_t C_GiNode::mhf64_INITIAL_HEIGHT_NODE = 110.0;
+const double C_GiNode::mhf64_MIN_WIDTH_NODE = 107.0;
+const double C_GiNode::mhf64_MIN_HEIGHT_NODE = 71.0;
+const double C_GiNode::mhf64_INITIAL_WIDTH_NODE = 165.0;
+const double C_GiNode::mhf64_INITIAL_HEIGHT_NODE = 110.0;
 
 const uint32_t C_GiNode::mhu32_SCALE_CATEGORY_0 = 7U;
 const uint32_t C_GiNode::mhu32_SCALE_CATEGORY_1 = 0U; // no scaling -> default
@@ -57,11 +57,11 @@ const uint32_t C_GiNode::mhu32_SCALE_CATEGORY_5 = 4U;
 const uint32_t C_GiNode::mhu32_SCALE_CATEGORY_6 = 5U;
 const uint32_t C_GiNode::mhu32_SCALE_CATEGORY_7 = 6U;
 
-const float64_t C_GiNode::mhaf64_SCALE_MIN_WIDTH_NODE[7] =
+const double C_GiNode::mhaf64_SCALE_MIN_WIDTH_NODE[7] =
 {
    150.0, 200.0, 250.0, 300.0, 350.0, 400.0, 450.0
 };
-const float64_t C_GiNode::mhaf64_SCALE_MIN_HEIGHT_NODE[7] =
+const double C_GiNode::mhaf64_SCALE_MIN_HEIGHT_NODE[7] =
 {
    100.0, 130.0, 165.0, 200.0, 230.0, 265.0, 300.0
 };
@@ -88,8 +88,8 @@ const float64_t C_GiNode::mhaf64_SCALE_MIN_HEIGHT_NODE[7] =
    \param[in,out]  opc_Parent    Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiNode::C_GiNode(const int32_t & ors32_Index, const uint64_t & oru64_Id, const float64_t & orf64_Width,
-                   const float64_t & orf64_Height, QGraphicsItem * const opc_Parent) :
+C_GiNode::C_GiNode(const int32_t & ors32_Index, const uint64_t & oru64_Id, const double & orf64_Width,
+                   const double & orf64_Height, QGraphicsItem * const opc_Parent) :
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiRectBaseGroup(ors32_Index, C_PuiSdDataElement::eNODE, oru64_Id, mhf64_MIN_WIDTH_NODE,
                      mhf64_MIN_HEIGHT_NODE, mf64_ACTION_POINT_OFFSET_NODE, false, opc_Parent),
@@ -223,15 +223,15 @@ void C_GiNode::m_InitPorts()
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiNode::m_InitConflictIcon(void)
 {
-   const float64_t f64_PosHorizontal = (this->mpc_Boundary->boundingRect().width() - 33.0) - // static offset for
+   const double f64_PosHorizontal = (this->mpc_Boundary->boundingRect().width() - 33.0) - // static offset for
                                                                                              // correct
                                                                                              // position
-                                       (static_cast<float64_t>(this->ms32_IconSize) - 24.0); // offset of scaled icon
+                                       (static_cast<double>(this->ms32_IconSize) - 24.0); // offset of scaled icon
 
    // create the conflict icon
    this->mpc_ConflictIcon = new C_GiRectPixmap(QRectF(f64_PosHorizontal, 9.0,
-                                                      static_cast<float64_t>(this->ms32_IconSize),
-                                                      static_cast<float64_t>(this->ms32_IconSize)));
+                                                      static_cast<double>(this->ms32_IconSize),
+                                                      static_cast<double>(this->ms32_IconSize)));
 
    this->mpc_ConflictIcon->SetSvg("://images/Error_iconV2.svg");
 
@@ -281,7 +281,7 @@ void C_GiNode::m_DetectIconSize(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiNode::m_UpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight, const bool oq_Initial)
+void C_GiNode::m_UpdateItems(const double of64_DiffWidth, const double of64_DiffHeight, const bool oq_Initial)
 {
    const uint32_t u32_ScaleCategory = this->m_GetScaleCategory();
    QFont c_BoundaryFont;
@@ -296,9 +296,9 @@ void C_GiNode::m_UpdateItems(const float64_t of64_DiffWidth, const float64_t of6
    if (oq_Initial == false)
    {
       const int32_t s32_IconSizeDiff = this->ms32_IconSize - s32_OldIconSize;
-      this->mpc_ConflictIcon->moveBy(of64_DiffWidth - static_cast<float64_t>(s32_IconSizeDiff), 0.0);
-      this->mpc_ConflictIcon->SetNewSize(QSizeF(static_cast<float64_t>(this->ms32_IconSize),
-                                                static_cast<float64_t>(this->ms32_IconSize)));
+      this->mpc_ConflictIcon->moveBy(of64_DiffWidth - static_cast<double>(s32_IconSizeDiff), 0.0);
+      this->mpc_ConflictIcon->SetNewSize(QSizeF(static_cast<double>(this->ms32_IconSize),
+                                                static_cast<double>(this->ms32_IconSize)));
       this->mpc_ConflictIcon->update();
 
       // move only by mouse movements
@@ -408,8 +408,8 @@ void C_GiNode::FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Cl
 {
    //
    QPointF c_CurClosest;
-   float64_t f64_CurDist;
-   float64_t f64_Best = std::numeric_limits<float64_t>::max();
+   double f64_CurDist;
+   double f64_Best = std::numeric_limits<double>::max();
 
    for (int32_t s32_ItPort = 0; s32_ItPort < this->mc_Ports.size(); ++s32_ItPort)
    {
@@ -433,8 +433,8 @@ void C_GiNode::FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Cl
 void C_GiNode::FindClosestPort(const QPointF & orc_ScenePoint, C_GiPort * (&orpc_Closest)) const
 {
    QPointF c_CurClosest;
-   float64_t f64_CurDist;
-   float64_t f64_Best = std::numeric_limits<float64_t>::max();
+   double f64_CurDist;
+   double f64_Best = std::numeric_limits<double>::max();
 
    for (int32_t s32_ItPort = 0; s32_ItPort < this->mc_Ports.size(); ++s32_ItPort)
    {
@@ -934,7 +934,7 @@ bool C_GiNode::m_GetErrorStatus(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiNode::m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight)
+void C_GiNode::m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight)
 {
    this->m_UpdateItems(of64_DiffWidth, of64_DiffHeight, false);
 }
@@ -1075,7 +1075,7 @@ void C_GiNode::SetDrawWhiteFilter(const bool oq_Active)
    \param[in]  of64_ZetValue    New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiNode::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiNode::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiRectBaseGroup::SetZetValueCustom(of64_ZetValue);
    Q_EMIT this->SigChangedZeOrder();

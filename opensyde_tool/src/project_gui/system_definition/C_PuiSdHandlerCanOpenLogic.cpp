@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
@@ -511,8 +511,8 @@ int32_t C_PuiSdHandlerCanOpenLogic::SetCanOpenManagerProducerHeartbeat(const uin
             if (c_ItDevice->second.q_EnableHeartbeatConsumingAutoCalculation == true)
             {
                //auto calculation of consumer time
-               const float32_t f32_Temp = static_cast<float32_t>(ou16_HeartbeatProducerTimeMs);
-               const float32_t f32_Result = f32_Temp * mf32_HEARTBEAT_CONSUMER_TIME_FACTOR;
+               const float f32_Temp = static_cast<float>(ou16_HeartbeatProducerTimeMs);
+               const float f32_Result = f32_Temp * mf32_HEARTBEAT_CONSUMER_TIME_FACTOR;
                const uint16_t u16_Result = static_cast<uint16_t>(f32_Result);
 
                c_ItDevice->second.u16_HeartbeatConsumerTimeMs = u16_Result;

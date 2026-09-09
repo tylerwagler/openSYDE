@@ -12,7 +12,7 @@
 
 #include <QRectF>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiBiSizeableItem.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -47,7 +47,7 @@ C_GiBiSizeableItem::C_GiBiSizeableItem() :
    \param[in] of64_Height Height
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiBiSizeableItem::C_GiBiSizeableItem(const float64_t of64_Width, const float64_t of64_Height) :
+C_GiBiSizeableItem::C_GiBiSizeableItem(const double of64_Width, const double of64_Height) :
    f64_Width(of64_Width),
    f64_Height(of64_Height)
 {

@@ -10,7 +10,7 @@
 #define C_GIBOUNDARY_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiBiRectBaseGroup.hpp"
 #include "C_GiRect.hpp"
@@ -30,8 +30,8 @@ class C_GiBiBoundary :
 {
 public:
    //lint -e{1938}  static const is guaranteed preinitialized before main
-   C_GiBiBoundary(const uint64_t & oru64_Id = 0U, const float64_t of64_Width = mhf64_MIN_WIDTH_BOUNDARY,
-                  const float64_t of64_Height = mhf64_MIN_HEIGHT_BOUNDARY, QGraphicsItem * const opc_Parent = nullptr);
+   C_GiBiBoundary(const uint64_t & oru64_Id = 0U, const double of64_Width = mhf64_MIN_WIDTH_BOUNDARY,
+                  const double of64_Height = mhf64_MIN_HEIGHT_BOUNDARY, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiBiBoundary(void) override;
 
    int32_t type() const override;
@@ -47,15 +47,15 @@ public:
    QColor GetBackgroundColor(void) const;
 
 protected:
-   void m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight) override;
+   void m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight) override;
 
    void m_LoadFromData(const stw::opensyde_gui_logic::C_PuiBsBoundary & orc_Data);
    void m_UpdateData(stw::opensyde_gui_logic::C_PuiBsBoundary & orc_Data) const;
 
    C_GiRect * mpc_Rectangle;
 
-   static const float64_t mhf64_MIN_WIDTH_BOUNDARY;
-   static const float64_t mhf64_MIN_HEIGHT_BOUNDARY;
+   static const double mhf64_MIN_WIDTH_BOUNDARY;
+   static const double mhf64_MIN_HEIGHT_BOUNDARY;
 
 private:
    //Avoid call

@@ -16,7 +16,7 @@
 #include <QEvent>
 #include <QHelpEvent>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 #include "TglUtils.hpp"
 
@@ -159,9 +159,9 @@ void C_SdNdeDpViewUsageWidget::SetUsage(const uint32_t ou32_NodeIndex, const uin
             if (rc_Area.u32_Size > 0U)
             {
                const uint32_t u32_AreaPercentage = (rc_Area.u32_Size * 100U) / ou32_MaximumSize;
-               const float32_t f32_AreaPercentage =
-                  static_cast<float32_t>(((static_cast<float32_t>(rc_Area.u32_Size) * 100.0)) /
-                                         static_cast<float32_t>(ou32_MaximumSize));
+               const float f32_AreaPercentage =
+                  static_cast<float>(((static_cast<float>(rc_Area.u32_Size) * 100.0)) /
+                                         static_cast<float>(ou32_MaximumSize));
 
                if (u32_AreaPercentage > 1U)
                {
@@ -182,8 +182,8 @@ void C_SdNdeDpViewUsageWidget::SetUsage(const uint32_t ou32_NodeIndex, const uin
                      pc_Node->c_DataPools[rc_Area.c_DataPoolIndexes[0]].u32_NvmStartAddress;
                   c_UsageArea.u32_SizeDatapool = pc_Node->c_DataPools[rc_Area.c_DataPoolIndexes[0]].u32_NvmSize;
                   c_UsageArea.f32_PercentageFloatDatapool =
-                     static_cast<float32_t>(((static_cast<float32_t>(c_UsageArea.u32_SizeDatapool) * 100.0)) /
-                                            static_cast<float32_t>(ou32_MaximumSize));
+                     static_cast<float>(((static_cast<float>(c_UsageArea.u32_SizeDatapool) * 100.0)) /
+                                            static_cast<float>(ou32_MaximumSize));
                }
                else
                {
@@ -630,7 +630,7 @@ void C_SdNdeDpViewUsageWidget::m_UpdateTooltip(const int32_t os32_MouseHorizonta
       QString c_MemoryState;
       uint32_t u32_UsedSize = 0U;
       uint32_t u32_ShowStartAddress = 0U;
-      float32_t f32_ShowPercentage = 0.0F;
+      float f32_ShowPercentage = 0.0F;
       bool q_ShowFree = true;
       QString c_Percentage;
       QString c_Text;

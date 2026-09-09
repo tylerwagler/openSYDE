@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QVector>
 #include <QMap>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -33,12 +33,12 @@ public:
    const QVector<bool> & GetSectionsExpanded(void) const;
    void SetSectionsExpanded(const QVector<bool> & orc_SectionsExpanded);
 
-   const QMap<uint32_t, float64_t> & GetUpdateDataRateHistory() const;
-   void AddUpdateDataRate(const uint32_t ou32_Checksum, const float64_t of64_Value);
+   const QMap<uint32_t, double> & GetUpdateDataRateHistory() const;
+   void AddUpdateDataRate(const uint32_t ou32_Checksum, const double of64_Value);
 
 private:
    QVector<bool> mc_SectionsExpanded;
-   QMap<uint32_t, float64_t > mc_UpdateDataRateHistory;
+   QMap<uint32_t, double > mc_UpdateDataRateHistory;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

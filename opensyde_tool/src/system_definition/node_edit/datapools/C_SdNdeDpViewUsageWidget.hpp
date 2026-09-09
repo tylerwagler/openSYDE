@@ -19,7 +19,7 @@
 #include <QColor>
 #include <vector>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_NagToolTip.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -65,8 +65,8 @@ private:
       QString c_ShowedString;
       QColor c_Color;
       uint32_t u32_Percentage;
-      float32_t f32_PercentageFloat;
-      float32_t f32_PercentageFloatDatapool; // In case of a Datapool over multiple areas different to
+      float f32_PercentageFloat;
+      float f32_PercentageFloatDatapool; // In case of a Datapool over multiple areas different to
       // f32_PercentageFloat
       uint32_t u32_StartAddressDatapool; // In case of a Datapool over multiple areas different to
       // c_NvmArea.u32_StartAddress

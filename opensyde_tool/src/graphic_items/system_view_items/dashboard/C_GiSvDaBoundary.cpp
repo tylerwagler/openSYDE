@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiSvDaBoundary.hpp"
 #include "C_PuiSvHandler.hpp"
 
@@ -48,7 +48,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_GiSvDaBoundary::C_GiSvDaBoundary(const uint32_t & oru32_ViewIndex, const uint32_t & oru32_DashboardIndex,
                                    const int32_t & ors32_DataIndex, const uint64_t & oru64_Id,
-                                   const float64_t of64_Width, const float64_t of64_Height,
+                                   const double of64_Width, const double of64_Height,
                                    QGraphicsItem * const opc_Parent) :
    C_GiBiBoundary(oru64_Id, of64_Width, of64_Height, opc_Parent),
    C_PuiSvDbDataElement(oru32_ViewIndex, oru32_DashboardIndex, ors32_DataIndex, C_PuiSvDbDataElement::eBOUNDARY)
@@ -127,7 +127,7 @@ void C_GiSvDaBoundary::DeleteData(void)
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaBoundary::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiSvDaBoundary::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiBiBoundary::SetZetValueCustom(of64_ZetValue);
    //Apply to data

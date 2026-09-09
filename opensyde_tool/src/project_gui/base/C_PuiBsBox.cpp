@@ -63,7 +63,7 @@ C_PuiBsBox::~C_PuiBsBox(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiBsBox::CalcHash(uint32_t & oru32_HashValue) const
 {
-   float64_t f64_Value;
+   double f64_Value;
 
    f64_Value = this->c_UiPosition.x();
    //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type

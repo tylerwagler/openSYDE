@@ -14,7 +14,7 @@
 #include <QColor>
 #include <QFont>
 #include <QSize>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -47,7 +47,7 @@ const uint32_t mu32_FLAG_OPEN_SYSDEF_CANOPENMANAGER = 0x40000000U;
 const uint32_t mu32_FLAG_OPEN_SYSDEF_DEVICENODE_IN_CANOPENMANAGER = 0x80000000U;
 
 //CANopen Manager
-const float32_t mf32_HEARTBEAT_CONSUMER_TIME_FACTOR = 1.5F;
+const float mf32_HEARTBEAT_CONSUMER_TIME_FACTOR = 1.5F;
 
 //Animation timer
 const int32_t ms32_ANIMATION_STEPS = 10;
@@ -61,7 +61,7 @@ const uint32_t mu32_DASHBOARD_TIMEOUT_FACTOR = 10U;
 const uint32_t mu32_DASHBOARD_TIMEOUT_TOLERANCE = 20; // Tolerance in percentage
 
 //Interaction point size
-const float64_t mf64_INTERACTION_POINT_WIDTH = 12.0;
+const double mf64_INTERACTION_POINT_WIDTH = 12.0;
 
 //Colors
 const QColor mc_HOVER_SHADOW_COLOR = QColor(180, 180, 180, 180);

@@ -19,7 +19,7 @@
 #include <list>
 #include <system_error>
 #include "tinyxml2.h"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OscErrorCategory.hpp"
 #include <string>
 
@@ -100,8 +100,8 @@ public:
    void SetAttributeSint64(const std::string & orc_Name, const int64_t os64_Value);
    void SetAttributeUint64(const std::string & orc_Name, const uint64_t ou64_Value);
    void SetAttributeBool(const std::string & orc_Name, const bool oq_Value);
-   void SetAttributeFloat32(const std::string & orc_Name, const float32_t of32_Value);
-   void SetAttributeFloat64(const std::string & orc_Name, const float64_t of64_Value);
+   void SetAttributeFloat32(const std::string & orc_Name, const float of32_Value);
+   void SetAttributeFloat64(const std::string & orc_Name, const double of64_Value);
 
    // get attribute values
    std::string GetAttributeString(const std::string & orc_Name,
@@ -111,8 +111,8 @@ public:
    int64_t GetAttributeSint64(const std::string & orc_Name, const int64_t os64_Default = 0LL) const;
    uint64_t GetAttributeUint64(const std::string & orc_Name, const uint64_t ou64_Default = 0ULL) const;
    bool GetAttributeBool(const std::string & orc_Name, const bool oq_Default = false) const;
-   float32_t GetAttributeFloat32(const std::string & orc_Name, const float32_t of32_Default = 0.0F) const;
-   float64_t GetAttributeFloat64(const std::string & orc_Name, const float64_t of64_Default = 0.0) const;
+   float GetAttributeFloat32(const std::string & orc_Name, const float of32_Default = 0.0F) const;
+   double GetAttributeFloat64(const std::string & orc_Name, const double of64_Default = 0.0) const;
 
    // get attribute values (includes error check)
    virtual std::error_code GetAttributeStringError(const std::string & orc_Name,
@@ -122,8 +122,8 @@ public:
    virtual std::error_code GetAttributeSint64Error(const std::string & orc_Name, int64_t & ors64_Value) const;
    virtual std::error_code GetAttributeUint64Error(const std::string & orc_Name, uint64_t & oru64_Value) const;
    virtual std::error_code GetAttributeBoolError(const std::string & orc_Name, bool & orq_Value) const;
-   virtual std::error_code GetAttributeFloat32Error(const std::string & orc_Name, float32_t & orf32_Value) const;
-   virtual std::error_code GetAttributeFloat64Error(const std::string & orc_Name, float64_t & orf64_Value) const;
+   virtual std::error_code GetAttributeFloat32Error(const std::string & orc_Name, float & orf32_Value) const;
+   virtual std::error_code GetAttributeFloat64Error(const std::string & orc_Name, double & orf64_Value) const;
 
    //Base reporting functions
    virtual void ReportErrorForNodeContentAppendXmlContext(const std::string & orc_ErrorMessage)

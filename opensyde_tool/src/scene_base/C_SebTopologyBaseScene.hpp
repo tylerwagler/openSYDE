@@ -65,7 +65,7 @@ protected:
                                             nullptr);
 
    virtual C_GiNode * m_CreateNode(const int32_t & ors32_Index, const uint64_t & oru64_Id,
-                                   const float64_t & orf64_Width, const float64_t & orf64_Height,
+                                   const double & orf64_Width, const double & orf64_Height,
                                    QGraphicsItem * const opc_Parent) = 0;
    virtual C_GiLiCanBus * m_CreateCanBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                                          C_GiTextElementBus * const opc_TextElementName,

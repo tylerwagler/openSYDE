@@ -16,7 +16,7 @@
 #include "C_GiWiProxyBase.hpp"
 
 #include "gitypes.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 
 #include "TglUtils.hpp"
@@ -194,7 +194,7 @@ bool C_SyvDaDashboardScene::IsOverrideCursorNecessary(const QPointF & orc_SceneP
    {
       QList<QGraphicsItem *>::const_iterator c_ItItem;
       const QList<QGraphicsItem *> & rc_Items = this->items();
-      float64_t f64_HighestZeOrderUnderCursor = 0.0;
+      double f64_HighestZeOrderUnderCursor = 0.0;
       bool q_AtLeastOneFound = false;
 
       // Reset cursor to default
@@ -638,7 +638,7 @@ void C_SyvDaDashboardScene::CopyFromManagerToScene(const QPointF * const opc_Pos
       {
          //Add point offset
          this->mc_CopyPasteManager.IncrementPasteCounter();
-         c_TotalOffset = static_cast<float64_t>(this->mc_CopyPasteManager.GetPasteCounter()) * c_OFFSET;
+         c_TotalOffset = static_cast<double>(this->mc_CopyPasteManager.GetPasteCounter()) * c_OFFSET;
       }
       else
       {

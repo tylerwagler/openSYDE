@@ -191,7 +191,7 @@ void C_SyvDaItTaModel::UpdateValue(void)
             C_PuiSvDbNodeDataPoolListElementId c_Id;
             if (pc_TableWidget->GetDataPoolElementIndex(u32_ItElement, c_Id) == C_NO_ERR)
             {
-               std::vector<float64_t> c_UnscaledValues;
+               std::vector<double> c_UnscaledValues;
                std::vector<QString> c_ScaledDisplayValues;
                if ((pc_TableWidget->GetLastValueUnscaled(u32_ItElement, c_UnscaledValues,
                                                          c_ScaledDisplayValues) == C_NO_ERR) &&
@@ -1485,9 +1485,9 @@ C_PuiSvDbNodeDataPoolListElementId C_SyvDaItTaModel::m_RemoveItem(const uint32_t
    Value in percent
 */
 //----------------------------------------------------------------------------------------------------------------------
-float32_t C_SyvDaItTaModel::m_GetPercentage(const uint32_t ou32_Index) const
+float C_SyvDaItTaModel::m_GetPercentage(const uint32_t ou32_Index) const
 {
-   float32_t f32_Retval = 0.0F;
+   float f32_Retval = 0.0F;
 
    if (((((((((ou32_Index < this->mc_UnscaledLastDataValues.size()) &&
               (ou32_Index < this->mc_UnscaledMinValues.size())) &&
@@ -1499,14 +1499,14 @@ float32_t C_SyvDaItTaModel::m_GetPercentage(const uint32_t ou32_Index) const
         (ou32_Index < this->mc_ShowPercentage.size())) &&
        (this->mc_ShowPercentage[ou32_Index] == true))
    {
-      const float64_t & rf64_Value = this->mc_UnscaledLastDataValues[ou32_Index][this->mc_ArrayItemIndex[ou32_Index]];
-      const float64_t & rf64_Min = this->mc_UnscaledMinValues[ou32_Index][this->mc_ArrayItemIndex[ou32_Index]];
-      const float64_t & rf64_Max = this->mc_UnscaledMaxValues[ou32_Index][this->mc_ArrayItemIndex[ou32_Index]];
-      const float64_t f64_Range = rf64_Max - rf64_Min;
+      const double & rf64_Value = this->mc_UnscaledLastDataValues[ou32_Index][this->mc_ArrayItemIndex[ou32_Index]];
+      const double & rf64_Min = this->mc_UnscaledMinValues[ou32_Index][this->mc_ArrayItemIndex[ou32_Index]];
+      const double & rf64_Max = this->mc_UnscaledMaxValues[ou32_Index][this->mc_ArrayItemIndex[ou32_Index]];
+      const double f64_Range = rf64_Max - rf64_Min;
       if (f64_Range > 0.0)
       {
          //Convert
-         f32_Retval = static_cast<float32_t>((rf64_Value - rf64_Min) / f64_Range);
+         f32_Retval = static_cast<float>((rf64_Value - rf64_Min) / f64_Range);
 
          //Limit
          f32_Retval = std::max(f32_Retval, 0.0F);
@@ -1675,7 +1675,7 @@ void C_SyvDaItTaModel::m_InitMinMaxAndNameForOneRow(const C_PuiSvDbNodeDataPoolL
    }
    else
    {
-      const std::vector<float64_t> c_Empty;
+      const std::vector<double> c_Empty;
       //Fill up values with dummies
       this->mc_Names[ou32_Index] = orc_ElementId.GetInvalidNamePlaceholder();
       this->mc_Units[ou32_Index] = "";
@@ -1703,7 +1703,7 @@ void C_SyvDaItTaModel::m_InitValuesForOneRow(const C_PuiSvDbNodeDataPoolListElem
                                              const C_OscNodeDataPoolListElement & orc_OscElement,
                                              const uint32_t ou32_Index)
 {
-   std::vector<float64_t> c_Values;
+   std::vector<double> c_Values;
    C_SdNdeDpContentUtil::h_GetValuesAsFloat64(orc_OscElement.c_MinValue, c_Values);
    this->mc_UnscaledMinValues[ou32_Index] = c_Values;
    C_SdNdeDpContentUtil::h_GetValuesAsFloat64(orc_OscElement.c_MaxValue, c_Values);
@@ -1746,7 +1746,7 @@ void C_SyvDaItTaModel::m_InitStartValueForOneRow(const C_PuiSvDbNodeDataElementC
 {
    C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_FullyUsefulAndTotallyNecessaryVariable;
    C_OscNodeDataPoolContent c_Val = orc_OscElement.c_MinValue;
-   std::vector<float64_t> c_Values;
+   std::vector<double> c_Values;
    std::vector<QString> c_Formatted;
    C_PuiSvDbDataElementDisplayFormatterConfig c_Formatter;
    //Formatter
@@ -1789,9 +1789,9 @@ void C_SyvDaItTaModel::m_AddAndInitMinMaxAndNameForItem(const uint32_t ou32_Inde
          this->mc_ScaledDisplayDataValues.insert(this->mc_ScaledDisplayDataValues.begin() + ou32_Index,
                                                  std::vector<QString>());
          this->mc_UnscaledLastDataValues.insert(this->mc_UnscaledLastDataValues.begin() + ou32_Index,
-                                                std::vector<float64_t>());
-         this->mc_UnscaledMaxValues.insert(this->mc_UnscaledMaxValues.begin() + ou32_Index, std::vector<float64_t>());
-         this->mc_UnscaledMinValues.insert(this->mc_UnscaledMinValues.begin() + ou32_Index, std::vector<float64_t>());
+                                                std::vector<double>());
+         this->mc_UnscaledMaxValues.insert(this->mc_UnscaledMaxValues.begin() + ou32_Index, std::vector<double>());
+         this->mc_UnscaledMinValues.insert(this->mc_UnscaledMinValues.begin() + ou32_Index, std::vector<double>());
          this->mc_ArrayItemIndex.insert(this->mc_ArrayItemIndex.begin() + ou32_Index, 0UL);
          this->mc_Names.insert(this->mc_Names.begin() + ou32_Index, "");
          this->mc_Units.insert(this->mc_Units.begin() + ou32_Index, "");

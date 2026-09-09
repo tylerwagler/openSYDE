@@ -16,7 +16,7 @@
 #include <sstream>
 #include <system_error>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
@@ -1530,11 +1530,11 @@ void C_OscHalcDefStructFiler::mh_SetMaxValForType(const std::string & orc_TypeSt
 {
    if (orc_TypeStr == "float64")
    {
-      orc_Content.SetValueF64(std::numeric_limits<float64_t>::max());
+      orc_Content.SetValueF64(std::numeric_limits<double>::max());
    }
    else if (orc_TypeStr == "float32")
    {
-      orc_Content.SetValueF32(std::numeric_limits<float32_t>::max());
+      orc_Content.SetValueF32(std::numeric_limits<float>::max());
    }
    else if (orc_TypeStr == "sint64")
    {
@@ -1597,11 +1597,11 @@ void C_OscHalcDefStructFiler::mh_SetMinValForType(const std::string & orc_TypeSt
 {
    if (orc_TypeStr == "float64")
    {
-      orc_Content.SetValueF64(-std::numeric_limits<float64_t>::max());
+      orc_Content.SetValueF64(-std::numeric_limits<double>::max());
    }
    else if (orc_TypeStr == "float32")
    {
-      orc_Content.SetValueF32(-std::numeric_limits<float32_t>::max());
+      orc_Content.SetValueF32(-std::numeric_limits<float>::max());
    }
    else if (orc_TypeStr == "sint64")
    {
@@ -1847,7 +1847,7 @@ std::error_code C_OscHalcDefStructFiler::mh_CheckValidSint(const std::string & o
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscHalcDefStructFiler::mh_CheckValidDouble(const std::string & orc_Item)
 {
-   float64_t f64_Value;
+   double f64_Value;
    std::error_code c_Retval = Errc::success;
 
    std::stringstream c_Stream(orc_Item.c_str());

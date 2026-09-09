@@ -31,8 +31,8 @@ class C_GiSdImageGroup :
 public:
    C_GiSdImageGroup(const int32_t & ors32_Index, const uint64_t & oru64_Id, const QString & orc_ImagePath,
                     QGraphicsItem * const opc_Parent = nullptr);
-   C_GiSdImageGroup(const int32_t & ors32_Index, const uint64_t & oru64_Id, const float64_t of64_Width,
-                    const float64_t of64_Height, const QPixmap & orc_Image, const QByteArray & orc_Format,
+   C_GiSdImageGroup(const int32_t & ors32_Index, const uint64_t & oru64_Id, const double of64_Width,
+                    const double of64_Height, const QPixmap & orc_Image, const QByteArray & orc_Format,
                     QGraphicsItem * const opc_Parent = nullptr);
 
    void LoadData(void) override;

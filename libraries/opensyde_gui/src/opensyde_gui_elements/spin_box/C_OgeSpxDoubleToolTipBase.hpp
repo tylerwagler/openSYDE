@@ -12,7 +12,7 @@
 #define C_OGESPXDOUBLETOOLTIPBASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeSpxAllBase.hpp"
 #include "C_OgeContextMenu.hpp"
 #include "C_OgeSpxDoubleDynamicDecimalsBase.hpp"
@@ -37,8 +37,8 @@ public:
 
    bool event(QEvent * const opc_Event) override;
 
-   void SetMinimumCustom(const float64_t of64_Value, const QString & orc_Display = "");
-   void SetMaximumCustom(const float64_t of64_Value, const QString & orc_Display = "");
+   void SetMinimumCustom(const double of64_Value, const QString & orc_Display = "");
+   void SetMaximumCustom(const double of64_Value, const QString & orc_Display = "");
 
 protected:
    bool m_IsEnabled(void) const override;

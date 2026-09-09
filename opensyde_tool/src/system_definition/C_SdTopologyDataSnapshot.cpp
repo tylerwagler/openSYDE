@@ -197,7 +197,7 @@ void C_SdTopologyDataSnapshot::SetDataPositionOffset(const QPointF & orc_NewPos)
    \param[in]  of64_HighestUsedZetValue  Highest used Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdTopologyDataSnapshot::SetDataZetOffset(const float64_t of64_HighestUsedZetValue)
+void C_SdTopologyDataSnapshot::SetDataZetOffset(const double of64_HighestUsedZetValue)
 {
    C_PuiBsElements::SetDataZetOffset(of64_HighestUsedZetValue);
    //Buses

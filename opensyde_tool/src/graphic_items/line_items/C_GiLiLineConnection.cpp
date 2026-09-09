@@ -165,7 +165,7 @@ void C_GiLiLineConnection::paint(QPainter * const opc_Painter, const QStyleOptio
 //----------------------------------------------------------------------------------------------------------------------
 QPainterPath C_GiLiLineConnection::shape() const
 {
-   stw::opensyde_gui_logic::C_GiBiLineBounding c_LineBounding(this->line(), static_cast<float64_t>(this->GetWidth()),
+   stw::opensyde_gui_logic::C_GiBiLineBounding c_LineBounding(this->line(), static_cast<double>(this->GetWidth()),
                                                               this->mf64_InteractionWidth);
    return c_LineBounding.GetShape();
 }
@@ -190,7 +190,7 @@ void C_GiLiLineConnection::FindClosestPoint(const QPointF & orc_ScenePoint, QPoi
    \param[out] orf64_Relative Relative position
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiLineConnection::FindClosestPointRelative(const QPointF & orc_ScenePoint, float64_t & orf64_Relative) const
+void C_GiLiLineConnection::FindClosestPointRelative(const QPointF & orc_ScenePoint, double & orf64_Relative) const
 {
    C_GiBiConnectableItem::h_DistToLine(this->mapToScene(this->line().p1()), this->mapToScene(this->line().p2()),
                                        orc_ScenePoint, nullptr, nullptr, &orf64_Relative);
@@ -219,7 +219,7 @@ QVariant C_GiLiLineConnection::itemChange(const GraphicsItemChange oe_Change, co
    \param[in] orf64_Value New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiLineConnection::SetInteractionWidth(const float64_t & orf64_Value)
+void C_GiLiLineConnection::SetInteractionWidth(const double & orf64_Value)
 {
    this->prepareGeometryChange();
    this->mf64_InteractionWidth = orf64_Value;

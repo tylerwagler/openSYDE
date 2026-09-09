@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParserLog.hpp"
@@ -289,7 +289,7 @@ std::error_code C_OscXmlParserLog::GetAttributeBoolError(const std::string & orc
    \retval   Errc::config    Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::error_code C_OscXmlParserLog::GetAttributeFloat32Error(const std::string & orc_Name, float32_t & orf32_Value) const
+std::error_code C_OscXmlParserLog::GetAttributeFloat32Error(const std::string & orc_Name, float & orf32_Value) const
 {
    const std::error_code c_Retval = C_OscXmlParser::GetAttributeFloat32Error(orc_Name, orf32_Value);
 
@@ -316,7 +316,7 @@ std::error_code C_OscXmlParserLog::GetAttributeFloat32Error(const std::string & 
    \retval   Errc::config    Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::error_code C_OscXmlParserLog::GetAttributeFloat64Error(const std::string & orc_Name, float64_t & orf64_Value) const
+std::error_code C_OscXmlParserLog::GetAttributeFloat64Error(const std::string & orc_Name, double & orf64_Value) const
 {
    const std::error_code c_Retval = C_OscXmlParser::GetAttributeFloat64Error(orc_Name, orf64_Value);
 

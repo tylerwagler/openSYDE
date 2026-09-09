@@ -92,7 +92,7 @@ void C_OgeCbxTableBase::InitFromStringList(const QStringList & orc_Strings, cons
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeCbxTableBase::InitMinMaxAndScaling(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Min,
                                              const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Max,
-                                             const float64_t of64_Factor, const float64_t of64_Offset)
+                                             const double of64_Factor, const double of64_Offset)
 {
    this->mc_UnscaledMin = orc_Min;
    this->mc_UnscaledMax = orc_Max;
@@ -116,7 +116,7 @@ int32_t C_OgeCbxTableBase::GetValue(int64_t & ors64_Value, QString & orc_ErrorDe
    int32_t s32_Retval = C_CONFIG;
    QString c_CurText = this->currentText();
    bool q_Ok;
-   float64_t f64_Tmp;
+   double f64_Tmp;
 
    // default
    ors64_Value = -1;
@@ -157,11 +157,11 @@ int32_t C_OgeCbxTableBase::GetValue(int64_t & ors64_Value, QString & orc_ErrorDe
       // check minimum and maximum (only for editable comboboxes)
       if (this->isEditable() == true)
       {
-         float64_t f64_Min;
-         float64_t f64_Max;
+         double f64_Min;
+         double f64_Max;
          this->mc_UnscaledMin.GetAnyValueAsFloat64(f64_Min, 0);
          this->mc_UnscaledMax.GetAnyValueAsFloat64(f64_Max, 0);
-         if ((static_cast<float64_t>(ors64_Value) < f64_Min) || (static_cast<float64_t>(ors64_Value) > f64_Max))
+         if ((static_cast<double>(ors64_Value) < f64_Min) || (static_cast<double>(ors64_Value) > f64_Max))
          {
             QString c_Min;
             QString c_Max;
@@ -209,7 +209,7 @@ void C_OgeCbxTableBase::SetValue(const int64_t os64_Value)
       else
       {
          QString c_Temp =
-            QString::number(C_OscUtils::h_GetValueScaled(static_cast<float64_t>(os64_Value),
+            QString::number(C_OscUtils::h_GetValueScaled(static_cast<double>(os64_Value),
                                                          this->mf64_Factor, this->mf64_Offset));
          c_Temp.replace(QLocale::c().decimalPoint(), QLocale::system().decimalPoint(), Qt::CaseInsensitive);
          this->setCurrentText(c_Temp);

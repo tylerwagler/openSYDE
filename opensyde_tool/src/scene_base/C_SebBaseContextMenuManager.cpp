@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_SebBaseContextMenuManager.hpp"
 
@@ -179,7 +179,7 @@ void C_SebBaseContextMenuManager::HandleContextMenuEvent(QGraphicsSceneContextMe
       }
       else
       {
-         float64_t f64_CurZet = std::numeric_limits<float64_t>::max() * -1.0;
+         double f64_CurZet = std::numeric_limits<double>::max() * -1.0;
          // more than one element was selected. only common functionality is available
          this->mpc_ActionCut->setVisible(true);
          this->mpc_ActionCopy->setVisible(true);

@@ -291,7 +291,7 @@ void C_GiTextElementBus::HandleMouseMoveToolTip(const QPointF & orc_ScenePos)
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiTextElementBus::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiTextElementBus::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiBiTextElement::SetZetValueCustom(of64_ZetValue);
    //Apply to data
@@ -322,5 +322,5 @@ void C_GiTextElementBus::hoverLeaveEvent(QGraphicsSceneHoverEvent * const opc_Ev
 //----------------------------------------------------------------------------------------------------------------------
 QRectF C_GiTextElementBus::m_GetErrorIconRect(void) const
 {
-   return QRectF(QPointF(static_cast<float64_t>(this->boundingRect().width()) - 55.0, -6.0), QSizeF(24.0, 24.0));
+   return QRectF(QPointF(static_cast<double>(this->boundingRect().width()) - 55.0, -6.0), QSizeF(24.0, 24.0));
 }

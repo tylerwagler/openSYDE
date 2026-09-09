@@ -40,8 +40,8 @@ public:
 
    QString GetText(void) const;
    void Init(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Min,
-             const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Max,  const float64_t of64_Factor = 1.0,
-             const float64_t of64_Offset = 0.0, const uint32_t ou32_Index = 0);
+             const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Max,  const double of64_Factor = 1.0,
+             const double of64_Offset = 0.0, const uint32_t ou32_Index = 0);
    void SetSuffix(const QString & orc_Value) const;
    void SetValue(const QVariant & orc_Value) const;
    QVariant GetValue(void) const;

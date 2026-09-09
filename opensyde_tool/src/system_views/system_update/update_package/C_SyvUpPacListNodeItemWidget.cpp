@@ -619,11 +619,11 @@ void C_SyvUpPacListNodeItemWidget::m_LoadFileInformation(bool & orq_FileExists, 
 
    if (orq_FileExists == true)
    {
-      float64_t f64_SizeFloat;
+      double f64_SizeFloat;
       const QDateTime c_DateTime = c_FileInfo.lastModified();
 
       // File size in kB
-      f64_SizeFloat = std::ceil(static_cast<float64_t>(c_FileInfo.size()) / 1024.0);
+      f64_SizeFloat = std::ceil(static_cast<double>(c_FileInfo.size()) / 1024.0);
       // 64 Bit is not necessary for our hex files
       this->mu32_FileSize = static_cast<uint32_t>(f64_SizeFloat);
 

@@ -14,7 +14,7 @@
 
 #include <limits>
 #include <QPainter>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_SdNdeDpListTableDelegate.hpp"
 #include "C_OgeTedTable.hpp"
 #include "C_OgeLeContextMenuBase.hpp"
@@ -181,8 +181,8 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
       case C_SdNdeDpListTableModel::eOFFSET:
          pc_DoubleSpinBox = new C_OgeSpxDoubleToolTipBase(opc_Parent);
          pc_DoubleSpinBox->setProperty("styleRole", "spx-table-double");
-         pc_DoubleSpinBox->SetMinimumCustom(static_cast<float64_t>(std::numeric_limits<float64_t>::lowest()));
-         pc_DoubleSpinBox->SetMaximumCustom(static_cast<float64_t>(std::numeric_limits<float64_t>::max()));
+         pc_DoubleSpinBox->SetMinimumCustom(static_cast<double>(std::numeric_limits<double>::lowest()));
+         pc_DoubleSpinBox->SetMaximumCustom(static_cast<double>(std::numeric_limits<double>::max()));
          pc_Retval = pc_DoubleSpinBox;
          break;
       case C_SdNdeDpListTableModel::eUNIT:

@@ -10,7 +10,7 @@
 #define C_GIBISIZEABLEITEM_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include <QObject>
 
@@ -27,11 +27,11 @@ class C_GiBiSizeableItem
 {
 public:
    C_GiBiSizeableItem();
-   C_GiBiSizeableItem(const float64_t of64_Width, const float64_t of64_Height);
+   C_GiBiSizeableItem(const double of64_Width, const double of64_Height);
    virtual ~C_GiBiSizeableItem();
 
-   float64_t f64_Width;
-   float64_t f64_Height;
+   double f64_Width;
+   double f64_Height;
 
    QRectF GetSizeRect(void) const;
 

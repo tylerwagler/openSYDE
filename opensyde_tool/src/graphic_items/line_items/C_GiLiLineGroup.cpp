@@ -26,7 +26,7 @@ using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const float64_t C_GiLiLineGroup::mhf64_MAX_DIST_TO_ALIGN = 10.0;
+const double C_GiLiLineGroup::mhf64_MAX_DIST_TO_ALIGN = 10.0;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -152,8 +152,8 @@ void C_GiLiLineGroup::m_CheckLineGrid(const QPointF & orc_MouseScenePos)
       {
          //Not aligned
          //Check degree
-         const float64_t f64_DistHorizontal = c_LineEnd.x() - c_LineStart.x();
-         const float64_t f64_DistVertical = c_LineEnd.y() - c_LineStart.y();
+         const double f64_DistHorizontal = c_LineEnd.x() - c_LineStart.x();
+         const double f64_DistVertical = c_LineEnd.y() - c_LineStart.y();
          if (C_GiLiLineGroup::mh_Near(f64_DistVertical, 0.0))
          {
             //Align y
@@ -196,7 +196,7 @@ void C_GiLiLineGroup::m_CheckLineGrid(const QPointF & orc_MouseScenePos)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-bool C_GiLiLineGroup::mh_Near(const float64_t of64_Exact, const float64_t of64_Eval)
+bool C_GiLiLineGroup::mh_Near(const double of64_Exact, const double of64_Eval)
 {
    bool q_Retval;
 
@@ -237,8 +237,8 @@ int32_t C_GiLiLineGroup::BendLine(const QPointF & orc_ScenePos, const int32_t * 
    if (ops32_Index == nullptr)
    {
       QVector<C_GiLiLineConnection *>::const_iterator pc_ItLine;
-      float64_t f64_ResultDist;
-      float64_t f64_MinDist = 1000000.0;
+      double f64_ResultDist;
+      double f64_MinDist = 1000000.0;
 
       // get the next line to the point
       for (pc_ItLine = rc_VecLines.begin(); pc_ItLine != rc_VecLines.end(); ++pc_ItLine)
@@ -306,8 +306,8 @@ int32_t C_GiLiLineGroup::RemoveBend(const QPointF & orc_ScenePos, const int32_t 
    if (ops32_Index == nullptr)
    {
       QVector<C_GiLiInteractionPoint *>::const_iterator pc_ItPoint;
-      float64_t f64_ResultDist;
-      float64_t f64_MinDist = 1000000.0;
+      double f64_ResultDist;
+      double f64_MinDist = 1000000.0;
 
       // get the next point to the point
       for (pc_ItPoint = rc_VecPoints.begin(); pc_ItPoint != rc_VecPoints.end(); ++pc_ItPoint)
@@ -447,7 +447,7 @@ void C_GiLiLineGroup::CopyStyle(const QGraphicsItem * const opc_GuidelineItem)
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiLineGroup::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiLiLineGroup::SetZetValueCustom(const double of64_ZetValue)
 {
    this->setZValue(of64_ZetValue);
 }
@@ -1019,13 +1019,13 @@ void C_GiLiLineGroup::SetResizing(const bool & orq_ResizeActive)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiLineGroup::FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Closest) const
 {
-   float64_t f64_Best = std::numeric_limits<float64_t>::max();
+   double f64_Best = std::numeric_limits<double>::max();
 
    orc_Closest = orc_ScenePoint;
    if (mc_Points.size() > 0)
    {
       QPointF c_CurProj;
-      float64_t f64_CurDist;
+      double f64_CurDist;
       QPointF c_CurP2;
       QPointF c_CurP1 = mc_Points[0]->scenePos();
       for (int32_t s32_ItPoint = 1; s32_ItPoint < mc_Points.size(); ++s32_ItPoint)
@@ -1053,13 +1053,13 @@ void C_GiLiLineGroup::FindClosestConnection(const QPointF & orc_ScenePoint, int3
 {
    if (this->mpc_LinePath != nullptr)
    {
-      float64_t f64_Best = std::numeric_limits<float64_t>::max();
+      double f64_Best = std::numeric_limits<double>::max();
       const QVector<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
 
       ors32_Index = -1;
       if (mc_Points.size() > 0)
       {
-         float64_t f64_CurDist;
+         double f64_CurDist;
          QPointF c_CurP2;
          QPointF c_CurP1 = mc_Points[0]->scenePos();
          for (int32_t s32_ItPoint = 1; s32_ItPoint < mc_Points.size(); ++s32_ItPoint)
@@ -1243,7 +1243,7 @@ void C_GiLiLineGroup::UpdateTransform(const QTransform & orc_Transform)
 {
    if (this->mpc_LinePath != nullptr)
    {
-      float64_t f64_Width = 0.0;
+      double f64_Width = 0.0;
       C_GiPointInteraction * pc_ActionPoint;
 
       this->prepareGeometryChange();

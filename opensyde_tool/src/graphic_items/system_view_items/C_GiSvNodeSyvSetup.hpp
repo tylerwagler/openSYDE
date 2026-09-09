@@ -12,7 +12,7 @@
 #define C_GINODESYVSETUP_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiSvNodeSyvBase.hpp"
 #include "C_GiCheckBox.hpp"
@@ -35,8 +35,8 @@ class C_GiSvNodeSyvSetup :
 public:
    //lint -e{1938} //we don't create global objects of this class; no race conditions can occur
    C_GiSvNodeSyvSetup(const uint32_t ou32_ViewIndex, const int32_t & ors32_NodeIndex, const uint64_t & oru64_Id,
-                      const float64_t & orf64_Width = mhf64_MIN_WIDTH_NODE,
-                      const float64_t & orf64_Height = mhf64_MIN_HEIGHT_NODE, QGraphicsItem * const opc_Parent = nullptr);
+                      const double & orf64_Width = mhf64_MIN_WIDTH_NODE,
+                      const double & orf64_Height = mhf64_MIN_HEIGHT_NODE, QGraphicsItem * const opc_Parent = nullptr);
 
    void SetViewConnected(const bool oq_Connected) override;
    bool IsViewConnected(void) const;

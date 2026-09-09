@@ -30,13 +30,13 @@ class C_GiRectBaseGroup :
 {
 public:
    C_GiRectBaseGroup(const int32_t & ors32_Index, const C_PuiSdDataElement::E_Type & ore_Type,
-                     const uint64_t & oru64_Id, const float64_t of64_MinWidth, const float64_t of64_MinHeight,
-                     const float64_t of64_ActionPointOffset, const bool oq_KeepAspectRatio,
+                     const uint64_t & oru64_Id, const double of64_MinWidth, const double of64_MinHeight,
+                     const double of64_ActionPointOffset, const bool oq_KeepAspectRatio,
                      QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiRectBaseGroup(void) override;
 
    //GI base
-   void SetZetValueCustom(const float64_t of64_ZetValue) override;
+   void SetZetValueCustom(const double of64_ZetValue) override;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

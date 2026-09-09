@@ -424,8 +424,8 @@ QString C_SdNdeDpUtil::h_ConvertElementAccessToString(const C_OscNodeDataPoolLis
 //----------------------------------------------------------------------------------------------------------------------
 QWidget * C_SdNdeDpUtil::h_CreateGenericEditor(QWidget * const opc_Parent, const QModelIndex & orc_Index,
                                                const C_OscNodeDataPoolContent & orc_Min,
-                                               const C_OscNodeDataPoolContent & orc_Max, const float64_t of64_Factor,
-                                               const float64_t of64_Offset, const uint32_t & oru32_ArrayIndex,
+                                               const C_OscNodeDataPoolContent & orc_Max, const double of64_Factor,
+                                               const double of64_Offset, const uint32_t & oru32_ArrayIndex,
                                                const bool oq_UseParamVariant)
 {
    QWidget * pc_Retval = nullptr;
@@ -663,8 +663,8 @@ bool C_SdNdeDpUtil::h_CompareSpecifiedItemSmaller(const C_OscNodeDataPoolContent
                                                   const uint32_t & oru32_Index)
 {
    bool q_Retval;
-   float64_t f64_Value1;
-   float64_t f64_Value2;
+   double f64_Value1;
+   double f64_Value2;
 
    orc_Content1.GetAnyValueAsFloat64(f64_Value1, oru32_Index);
    orc_Content2.GetAnyValueAsFloat64(f64_Value2, oru32_Index);

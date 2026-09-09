@@ -33,7 +33,7 @@ public:
                                 const std::vector<uint64_t> & orc_Ids,
                                 const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
                                            C_PuiSvReadDataConfiguration> & orc_RestoredRails,
-                                const QPointF & orc_NewPos, const float64_t of64_HighestUsedZetValue,
+                                const QPointF & orc_NewPos, const double of64_HighestUsedZetValue,
                                 QUndoCommand * const opc_Parent = nullptr);
    ~C_SyvDaUnoAddSnapshotCommand(void) override;
 

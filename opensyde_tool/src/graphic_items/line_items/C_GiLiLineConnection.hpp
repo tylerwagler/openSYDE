@@ -16,7 +16,7 @@
 #include "C_GiLiSimpleLine.hpp"
 #include "C_GiBiCustomMouseItem.hpp"
 #include "C_GiBiConnectableItem.hpp"
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -51,16 +51,16 @@ public:
 
    QPainterPath shape(void) const override;
    void FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Closest) const override;
-   virtual void FindClosestPointRelative(const QPointF & orc_ScenePoint, float64_t & orf64_Relative) const;
+   virtual void FindClosestPointRelative(const QPointF & orc_ScenePoint, double & orf64_Relative) const;
 
-   void SetInteractionWidth(const float64_t & orf64_Value);
+   void SetInteractionWidth(const double & orf64_Value);
 
 protected:
    QVariant itemChange(const GraphicsItemChange oe_Change, const QVariant & orc_Value) override;
 
 private:
    int32_t ms32_LineIndex; ///< Index of this line in the segmented line
-   float64_t mf64_InteractionWidth;
+   double mf64_InteractionWidth;
 
    //Avoid call
    C_GiLiLineConnection(const C_GiLiLineConnection &);

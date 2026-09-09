@@ -156,8 +156,8 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
 
    // configure background drawing
    this->mpc_Scene->setSceneRect(0.0, 0.0,
-                                 static_cast<float64_t>(c_Size.width()),
-                                 static_cast<float64_t>(c_Size.height()));
+                                 static_cast<double>(c_Size.width()),
+                                 static_cast<double>(c_Size.height()));
    this->mpc_Ui->pc_GraphicsView->setScene(this->mpc_Scene);
    this->mpc_Ui->pc_GraphicsView->setEnabled(false);
    this->mpc_Ui->pc_GraphicsView->SetSubtleSurroundGradient(true);
@@ -176,8 +176,8 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
    }
 
    //Spin box
-   this->mpc_Ui->pc_DoubleSpinBoxOffset->SetMinimumCustom(std::numeric_limits<float64_t>::lowest());
-   this->mpc_Ui->pc_DoubleSpinBoxOffset->SetMaximumCustom(std::numeric_limits<float64_t>::max());
+   this->mpc_Ui->pc_DoubleSpinBoxOffset->SetMinimumCustom(std::numeric_limits<double>::lowest());
+   this->mpc_Ui->pc_DoubleSpinBoxOffset->SetMaximumCustom(std::numeric_limits<double>::max());
 
    // connects
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SyvDaPeBase::m_OkClicked);
@@ -205,10 +205,10 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
            this, &C_SyvDaPeBase::m_UpdateSpinboxMetaData);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_DoubleSpinBoxFactor,
-           static_cast<void (QDoubleSpinBox::*)(float64_t)>(&QDoubleSpinBox::valueChanged),
+           static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
            this, &C_SyvDaPeBase::m_UpdateSpinboxMetaData);
    connect(this->mpc_Ui->pc_DoubleSpinBoxOffset,
-           static_cast<void (QDoubleSpinBox::*)(float64_t)>(&QDoubleSpinBox::valueChanged),
+           static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
            this, &C_SyvDaPeBase::m_UpdateSpinboxMetaData);
 }
 
@@ -429,7 +429,7 @@ QSize C_SyvDaPeBase::h_GetSceneViewSize(void)
    Offset for icon placement
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_SyvDaPeBase::h_GetFixIconOffset(void)
+double C_SyvDaPeBase::h_GetFixIconOffset(void)
 {
    return 25.0;
 }
@@ -451,16 +451,16 @@ void C_SyvDaPeBase::h_GetIdealItemRect(QPointF & orc_ItemPos, QSizeF & orc_ItemS
    {
       const QSize c_ViewSize = C_SyvDaPeBase::h_GetSceneViewSize();
       //To be really centered we also have to include the borders into the size
-      const float64_t f64_DoubleInteractionPointOffset =
+      const double f64_DoubleInteractionPointOffset =
          (pc_GiItem->boundingRect().width() - pc_GiItem->GetVisibleBoundingRect().width());
       //Also include the fix offset to the right
-      const float64_t f64_IconOffset = C_SyvDaPeBase::h_GetFixIconOffset();
+      const double f64_IconOffset = C_SyvDaPeBase::h_GetFixIconOffset();
       orc_ItemSize = QSizeF(
-         ((static_cast<float64_t>(c_ViewSize.width()) / 1.5) + f64_IconOffset) + f64_DoubleInteractionPointOffset,
-         (static_cast<float64_t>(c_ViewSize.height()) / 1.5) + f64_DoubleInteractionPointOffset);
+         ((static_cast<double>(c_ViewSize.width()) / 1.5) + f64_IconOffset) + f64_DoubleInteractionPointOffset,
+         (static_cast<double>(c_ViewSize.height()) / 1.5) + f64_DoubleInteractionPointOffset);
       orc_ItemPos = QPointF(
-         ((static_cast<float64_t>(c_ViewSize.width()) - orc_ItemSize.width()) / 2.0) + (f64_IconOffset / 2.0),
-         (static_cast<float64_t>(c_ViewSize.height()) - orc_ItemSize.height()) / 2.0);
+         ((static_cast<double>(c_ViewSize.width()) - orc_ItemSize.width()) / 2.0) + (f64_IconOffset / 2.0),
+         (static_cast<double>(c_ViewSize.height()) - orc_ItemSize.height()) / 2.0);
    }
 }
 
@@ -785,7 +785,7 @@ C_OscNodeDataPoolContent C_SyvDaPeBase::GetDashboardConnectInitialValue(void) co
       // differ between spinbox (for spinbox and slider widget) and toggle (for toggle widget)
       if (this->mpc_Ui->pc_ToggleInitialValue->isVisibleTo(this->mpc_Ui->pc_WidgetConstValue) == true)
       {
-         float64_t f64_Value = static_cast<float64_t>(this->mpc_Ui->pc_ToggleInitialValue->isChecked());
+         double f64_Value = static_cast<double>(this->mpc_Ui->pc_ToggleInitialValue->isChecked());
 
          if (C_OscUtils::h_IsScalingActive(c_Scaling.f64_Factor, c_Scaling.f64_Offset) == true)
          {
@@ -1319,7 +1319,7 @@ void C_SyvDaPeBase::m_CheckFormatterString(void) const
 void C_SyvDaPeBase::m_SetDashboardConnectInitialValue(const C_OscNodeDataPoolContent & orc_InitialValue) const
 {
    const C_PuiSvDbDataElementScaling c_Scaling = this->GetScalingInformation();
-   float64_t f64_UnscaledValue;
+   double f64_UnscaledValue;
 
    this->mpc_Ui->pc_SpinBoxInitialValue->SetValue(
       C_SdNdeDpContentUtil::h_ConvertScaledContentToGeneric(orc_InitialValue, c_Scaling.f64_Factor,

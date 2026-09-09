@@ -17,7 +17,7 @@
 #include <QColor>
 #include <set>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiBiCustomToolTip.hpp"
 #include "C_SdBueMlvSignalItem.hpp"
@@ -65,7 +65,7 @@ public:
 
    C_SdBueMlvSignalManager(stw::opensyde_gui_logic::C_PuiSdNodeCanMessageSyncManager * const opc_SyncManager,
                            const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-                           const uint16_t ou16_MaximumCountBits, const float64_t of64_Space,
+                           const uint16_t ou16_MaximumCountBits, const double of64_Space,
                            QObject * const opc_Parent = nullptr);
    ~C_SdBueMlvSignalManager() override;
 
@@ -75,8 +75,8 @@ public:
    void SetName(const QString & orc_Name);
    bool SetStartBit(const uint16_t ou16_Position);
    bool SetLastBit(const uint16_t ou16_Position);
-   void SetZeOrder(const float64_t of64_ZetOrder) const;
-   float64_t GetZeOrder(void) const;
+   void SetZeOrder(const double of64_ZetOrder) const;
+   double GetZeOrder(void) const;
    void SetSelected(const bool oq_Selected);
 
    bool MoveSignal(const int32_t os32_Offset);
@@ -92,7 +92,7 @@ public:
    bool IsHovered(void) const;
    void GenerateHint(void) override;
 
-   void Update(const float64_t of64_SingleItemWidth, const float64_t of64_SingleItemHeight);
+   void Update(const double of64_SingleItemWidth, const double of64_SingleItemHeight);
    void ClearItems(void);
    void SaveSignal(void) const;
 
@@ -140,7 +140,7 @@ private:
    stw::opensyde_gui_logic::C_PuiSdNodeCanSignal mc_UiSignal;
    bool mq_Resizeable;
    bool mq_Hovered;
-   const float64_t mf64_Space;
+   const double mf64_Space;
    const int16_t ms16_MaximumLength;
    const int16_t ms16_MaximumLengthMultiplexer;
 };

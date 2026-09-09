@@ -55,7 +55,7 @@ public:
    void SetTheme(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style) const;
    C_SyvDaDashboardScene * GetPreviewScene(void);
    static QSize h_GetSceneViewSize(void);
-   static float64_t h_GetFixIconOffset(void);
+   static double h_GetFixIconOffset(void);
    static void h_GetIdealItemRect(QPointF & orc_ItemPos, QSizeF & orc_ItemSize, const QGraphicsItem * const opc_Item);
    stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId GetDataElementId(void) const;
    stw::opensyde_gui_logic::C_PuiSvDbDataElementScaling GetScalingInformation(void) const;

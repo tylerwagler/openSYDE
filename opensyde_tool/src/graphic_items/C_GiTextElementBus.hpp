@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QPixmap>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 
 #include "C_GiBiTextElement.hpp"
 #include "C_GiBiCustomToolTip.hpp"
@@ -62,7 +62,7 @@ public:
    void HandleMouseMoveToolTip(const QPointF & orc_ScenePos);
 
    //GI base
-   void SetZetValueCustom(const float64_t of64_ZetValue) override;
+   void SetZetValueCustom(const double of64_ZetValue) override;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

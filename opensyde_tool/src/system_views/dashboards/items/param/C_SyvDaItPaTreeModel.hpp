@@ -108,7 +108,7 @@ public:
                                                         const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_DescriptionId, std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, std::vector<QString> & orc_InvalidValues, std::vector<QString> & orc_NewValues);
    static void h_AdaptFloatRangeOfValue(stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
                                         const stw::opensyde_core::C_OscNodeDataPoolListElement & orc_Description);
-   static void h_FixInvalidFloatValue(float64_t & orf64_Value);
+   static void h_FixInvalidFloatValue(double & orf64_Value);
 
 private:
    C_PuiSvDbDataElementHandler * mpc_DataWidget;

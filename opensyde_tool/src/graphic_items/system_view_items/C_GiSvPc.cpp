@@ -39,16 +39,16 @@ const uint32_t C_GiSvPc::mhu32_SCALE_CATEGORY_1 = 0U;
 const uint32_t C_GiSvPc::mhu32_SCALE_CATEGORY_2 = 1U;
 const uint32_t C_GiSvPc::mhu32_SCALE_CATEGORY_3 = 2U;
 
-const float64_t C_GiSvPc::mhaf64_SCALE_MIN_WIDTH_NODE[3] =
+const double C_GiSvPc::mhaf64_SCALE_MIN_WIDTH_NODE[3] =
 {
    250.0, 350.0, 450.0
 };
-const float64_t C_GiSvPc::mhaf64_SCALE_MIN_HEIGHT_NODE[3] =
+const double C_GiSvPc::mhaf64_SCALE_MIN_HEIGHT_NODE[3] =
 {
    165.0, 230.0, 300.0
 };
 
-const float64_t C_GiSvPc::mhf64_INIT_SIZE_OF_PC = 150.0;
+const double C_GiSvPc::mhf64_INIT_SIZE_OF_PC = 150.0;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -173,12 +173,12 @@ void C_GiSvPc::FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Cl
    if ((q_HorizontalOk == true) && (q_VerticalOk == true))
    {
       //Evaluate which border is the closest one
-      const float64_t f64_HorizontalRightDist = std::abs(orc_ScenePoint.x() - c_Bounding.bottomRight().x());
-      const float64_t f64_HorizontalLeftDist = std::abs(orc_ScenePoint.x() - c_Bounding.topLeft().x());
-      const float64_t f64_VerticalBottomDist = std::abs(orc_ScenePoint.y() - c_Bounding.bottomRight().y());
-      const float64_t f64_VerticalTopDist = std::abs(orc_ScenePoint.y() - c_Bounding.topLeft().y());
-      float64_t f64_SmallestHorizontalDist;
-      float64_t f64_SmallestVerticalDist;
+      const double f64_HorizontalRightDist = std::abs(orc_ScenePoint.x() - c_Bounding.bottomRight().x());
+      const double f64_HorizontalLeftDist = std::abs(orc_ScenePoint.x() - c_Bounding.topLeft().x());
+      const double f64_VerticalBottomDist = std::abs(orc_ScenePoint.y() - c_Bounding.bottomRight().y());
+      const double f64_VerticalTopDist = std::abs(orc_ScenePoint.y() - c_Bounding.topLeft().y());
+      double f64_SmallestHorizontalDist;
+      double f64_SmallestVerticalDist;
       if (f64_HorizontalRightDist <= f64_HorizontalLeftDist)
       {
          f64_SmallestHorizontalDist = f64_HorizontalRightDist;
@@ -417,7 +417,7 @@ void C_GiSvPc::GenerateHint()
    \param[in] of64_DiffHeight Height difference
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvPc::m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight)
+void C_GiSvPc::m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight)
 {
    this->m_UpdateItems(of64_DiffWidth, of64_DiffHeight, false);
 }
@@ -542,17 +542,17 @@ bool C_GiSvPc::mh_GetIsLaptop(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvPc::m_InitConflictIcon(void)
 {
-   const float64_t f64_PosHorizontal = (this->mpc_SvgGraphicsItem->boundingRect().width() - 33.0) - // static offset for
+   const double f64_PosHorizontal = (this->mpc_SvgGraphicsItem->boundingRect().width() - 33.0) - // static offset for
                                                                                                     // correct
                                                                                                     // position
-                                       (static_cast<float64_t>(this->ms32_IconSize) - 24.0);        // offset of scaled
+                                       (static_cast<double>(this->ms32_IconSize) - 24.0);        // offset of scaled
 
    // icon
 
    // create the conflict icon
    this->mpc_ConflictIcon = new C_GiRectPixmap(QRectF(f64_PosHorizontal, 9.0,
-                                                      static_cast<float64_t>(this->ms32_IconSize),
-                                                      static_cast<float64_t>(this->ms32_IconSize)));
+                                                      static_cast<double>(this->ms32_IconSize),
+                                                      static_cast<double>(this->ms32_IconSize)));
    this->mpc_ConflictIcon->SetSvg("://images/Error_iconV2.svg");
 
    // set the position of the icon
@@ -599,7 +599,7 @@ void C_GiSvPc::m_DetectIconSize(void)
    \param[in] oq_Initial      Initial flag
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvPc::m_UpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight, const bool oq_Initial)
+void C_GiSvPc::m_UpdateItems(const double of64_DiffWidth, const double of64_DiffHeight, const bool oq_Initial)
 {
    const int32_t s32_OldIconSize = this->ms32_IconSize;
 
@@ -611,9 +611,9 @@ void C_GiSvPc::m_UpdateItems(const float64_t of64_DiffWidth, const float64_t of6
    if (oq_Initial == false)
    {
       const int32_t s32_IconSizeDiff = this->ms32_IconSize - s32_OldIconSize;
-      this->mpc_ConflictIcon->moveBy(of64_DiffWidth - static_cast<float64_t>(s32_IconSizeDiff), 0.0);
-      this->mpc_ConflictIcon->SetNewSize(QSizeF(static_cast<float64_t>(this->ms32_IconSize),
-                                                static_cast<float64_t>(this->ms32_IconSize)));
+      this->mpc_ConflictIcon->moveBy(of64_DiffWidth - static_cast<double>(s32_IconSizeDiff), 0.0);
+      this->mpc_ConflictIcon->SetNewSize(QSizeF(static_cast<double>(this->ms32_IconSize),
+                                                static_cast<double>(this->ms32_IconSize)));
       this->mpc_ConflictIcon->update();
    }
 }

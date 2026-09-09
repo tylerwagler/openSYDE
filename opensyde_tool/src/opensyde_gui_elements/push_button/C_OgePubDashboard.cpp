@@ -17,7 +17,7 @@
 
 #include <QPainter>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgePubDashboard.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -134,11 +134,11 @@ void C_OgePubDashboard::paintEvent(QPaintEvent * const opc_Event)
 QRectF C_OgePubDashboard::mh_AdaptToAspectRatio(const QRect & orc_Target, const QRect & orc_Rect)
 {
    QRectF c_Retval = orc_Rect;
-   const float64_t f64_IdealAspectRatio = static_cast<float64_t>(orc_Target.height()) /
-                                          static_cast<float64_t>(orc_Target.width());
-   const float64_t f64_IdealHeight =
-      std::min(static_cast<float64_t>(orc_Rect.height()),
-               static_cast<float64_t>(orc_Rect.width()) * f64_IdealAspectRatio);
+   const double f64_IdealAspectRatio = static_cast<double>(orc_Target.height()) /
+                                          static_cast<double>(orc_Target.width());
+   const double f64_IdealHeight =
+      std::min(static_cast<double>(orc_Rect.height()),
+               static_cast<double>(orc_Rect.width()) * f64_IdealAspectRatio);
 
    c_Retval.setHeight(f64_IdealHeight);
    c_Retval.setWidth(f64_IdealHeight / f64_IdealAspectRatio);

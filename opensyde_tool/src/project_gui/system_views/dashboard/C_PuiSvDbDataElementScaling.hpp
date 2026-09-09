@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -33,8 +33,8 @@ public:
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
    bool q_UseDefault;
-   float64_t f64_Factor; ///< Adaptation factor for display
-   float64_t f64_Offset; ///< Offset factor for display
+   double f64_Factor; ///< Adaptation factor for display
+   double f64_Offset; ///< Offset factor for display
    QString c_Unit;       ///< Variable unit
 };
 

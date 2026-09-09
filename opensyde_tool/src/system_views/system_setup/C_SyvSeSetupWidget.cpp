@@ -87,8 +87,8 @@ C_SyvSeSetupWidget::C_SyvSeSetupWidget(const uint32_t ou32_ViewIndex, QWidget * 
 
    // configure scene
    this->mpc_Scene->setSceneRect(0.0, 0.0,
-                                 static_cast<float64_t>(this->mpc_Ui->pc_GraphicsView->width()),
-                                 static_cast<float64_t>(this->mpc_Ui->pc_GraphicsView->height()));
+                                 static_cast<double>(this->mpc_Ui->pc_GraphicsView->width()),
+                                 static_cast<double>(this->mpc_Ui->pc_GraphicsView->height()));
    this->mpc_Ui->pc_GraphicsView->SetSceneAndConnect(this->mpc_Scene);
 
    this->InitText();

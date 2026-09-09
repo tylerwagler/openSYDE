@@ -66,8 +66,8 @@ C_GiSyBaseWidget::C_GiSyBaseWidget(C_OgePopUpDialog & orc_Parent, const QString 
 
    // configure background drawing
    this->mpc_Scene->setSceneRect(0.0, 0.0,
-                                 static_cast<float64_t>(c_Size.width()),
-                                 static_cast<float64_t>(c_Size.height()));
+                                 static_cast<double>(c_Size.width()),
+                                 static_cast<double>(c_Size.height()));
    this->mpc_Ui->pc_GraphicsView->setScene(this->mpc_Scene);
    this->mpc_Ui->pc_GraphicsView->setEnabled(false);
    this->mpc_Ui->pc_GraphicsView->SetSubtleSurroundGradient(true);

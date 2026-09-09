@@ -2516,7 +2516,7 @@ void C_UsHandler::SetProjSvParamRecord(const QString & orc_ViewName, const QStri
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::AddProjSvNodeUpdateDataRate(const QString & orc_ViewName, const QString & orc_NodeName,
-                                              const uint32_t ou32_Checksum, const float64_t of64_DataRateBytesPerMs)
+                                              const uint32_t ou32_Checksum, const double of64_DataRateBytesPerMs)
 {
    if (this->mc_ProjSvSetupView.contains(orc_ViewName) == true)
    {

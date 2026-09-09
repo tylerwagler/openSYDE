@@ -14,7 +14,7 @@
 
 #include <cmath>
 #include <QFileInfo>
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "TglUtils.hpp"
@@ -251,7 +251,7 @@ QVariant C_PopFileTableModel::data(const QModelIndex & orc_Index, const int32_t 
             if (c_ProjectFileInfo.exists() == true)
             {
                const uint64_t u64_SizeByte = C_PuiProject::h_GetProjectSize(rc_RecentFilePaths);
-               const float64_t f64_SizeFloat = std::ceil(static_cast<float64_t>(u64_SizeByte) / 1024.0);
+               const double f64_SizeFloat = std::ceil(static_cast<double>(u64_SizeByte) / 1024.0);
 
                c_TooltipContent.append(
                   static_cast<QString>("\nSize: %L1 kB").arg(static_cast

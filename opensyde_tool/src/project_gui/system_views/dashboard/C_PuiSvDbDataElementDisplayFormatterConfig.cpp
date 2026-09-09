@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "TglUtils.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
@@ -89,11 +89,11 @@ void C_PuiSvDbDataElementDisplayFormatterConfig::SetType(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_PuiSvDbDataElementDisplayFormatterConfig::GetSingleValueContentFormatted(
    const C_PuiSvDbDataElementContent & orc_Value, const uint32_t ou32_Index,
-   const C_PuiSvDbDataElementScaling & orc_Scaling, float64_t * const opf64_UnscaledValueAsFloat,
-   float64_t * const opf64_ScaledValueAsFloat) const
+   const C_PuiSvDbDataElementScaling & orc_Scaling, double * const opf64_UnscaledValueAsFloat,
+   double * const opf64_ScaledValueAsFloat) const
 {
    QString c_Return;
-   float64_t f64_Temp = 0.0;
+   double f64_Temp = 0.0;
 
    if (((opf64_UnscaledValueAsFloat != nullptr) || (opf64_ScaledValueAsFloat != nullptr)) &&
        (this->e_TypeCategory != C_PuiSvDbDataElementDisplayFormatter::eSTRING))
@@ -203,7 +203,7 @@ QString C_PuiSvDbDataElementDisplayFormatterConfig::GetSingleValueContentFormatt
 //----------------------------------------------------------------------------------------------------------------------
 std::vector<QString> C_PuiSvDbDataElementDisplayFormatterConfig::GetValuesContentFormatted(
    const C_PuiSvDbDataElementContent & orc_Value, const C_PuiSvDbDataElementScaling & orc_Scaling,
-   std::vector<float64_t> & orc_UnscaledValueAsFloat) const
+   std::vector<double> & orc_UnscaledValueAsFloat) const
 {
    std::vector<QString> c_Return;
 
@@ -256,7 +256,7 @@ std::vector<QString> C_PuiSvDbDataElementDisplayFormatterConfig::GetValuesConten
 
          for (u32_ArrayCounter = 0U; u32_ArrayCounter < orc_Value.GetArraySize(); ++u32_ArrayCounter)
          {
-            const float64_t f64_Temp = C_OscUtils::h_GetValueScaled(orc_UnscaledValueAsFloat[u32_ArrayCounter],
+            const double f64_Temp = C_OscUtils::h_GetValueScaled(orc_UnscaledValueAsFloat[u32_ArrayCounter],
                                                                     orc_Scaling.f64_Factor, orc_Scaling.f64_Offset);
             // Let do the formatter its work
             c_Return.push_back(this->GetValueFormatted(f64_Temp));

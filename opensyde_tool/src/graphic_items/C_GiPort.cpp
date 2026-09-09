@@ -254,12 +254,12 @@ void C_GiPort::AbortTemporaryUnregister(void)
    \param[in]   of64_Difference     Stretch distance
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiPort::StretchPort(const float64_t of64_Difference)
+void C_GiPort::StretchPort(const double of64_Difference)
 {
    if ((this->mc_Points.size() == 4) &&
        (C_OscUtils::h_IsFloat64NearlyEqual(of64_Difference, 0.0) == false))
    {
-      const float64_t f64_DiffHalf = of64_Difference / 2.0;
+      const double f64_DiffHalf = of64_Difference / 2.0;
 
       this->mc_Points[1].setX(this->mc_Points[1].x() + f64_DiffHalf);
       this->mc_Points[2].setX(this->mc_Points[2].x() + f64_DiffHalf);

@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiBiImageGroup.hpp"
 #include "C_PuiSdDataElement.hpp"
 #include "C_PuiBsImage.hpp"
@@ -64,7 +64,7 @@ C_GiBiImageGroup::C_GiBiImageGroup(const uint64_t & oru64_Id, const QString & or
    \param[in,out]  opc_Parent    Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiBiImageGroup::C_GiBiImageGroup(const uint64_t & oru64_Id, const float64_t of64_Width, const float64_t of64_Height,
+C_GiBiImageGroup::C_GiBiImageGroup(const uint64_t & oru64_Id, const double of64_Width, const double of64_Height,
                                    const QPixmap & orc_Image, const QByteArray & orc_Format,
                                    QGraphicsItem * const opc_Parent) :
    //lint -e{1938}  static const is guaranteed preinitialized before main
@@ -89,7 +89,7 @@ int32_t C_GiBiImageGroup::type(void) const
    \param[in] of64_ZetValue New Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiBiImageGroup::SetZetValueCustom(const float64_t of64_ZetValue)
+void C_GiBiImageGroup::SetZetValueCustom(const double of64_ZetValue)
 {
    C_GiImageGroupWithoutData::SetZetValueCustom(of64_ZetValue);
    //Apply to data

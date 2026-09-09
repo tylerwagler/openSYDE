@@ -425,8 +425,8 @@ void C_SdNdeCoDeviceConfigWidget::m_HandleConsumerTimeAutoState(void)
    if (this->mpc_Ui->pc_CheckBoxConsumerTimeAuto->isChecked() == true)
    {
       //auto calculation of consumer time
-      const float32_t f32_Temp = static_cast<float32_t>(pc_CanOpenManagerInfo->u16_HeartbeatProducerTimeMs);
-      const float32_t f32_Result = f32_Temp * mf32_HEARTBEAT_CONSUMER_TIME_FACTOR;
+      const float f32_Temp = static_cast<float>(pc_CanOpenManagerInfo->u16_HeartbeatProducerTimeMs);
+      const float f32_Result = f32_Temp * mf32_HEARTBEAT_CONSUMER_TIME_FACTOR;
       const uint16_t u16_Result = static_cast<uint16_t>(f32_Result);
 
       this->mpc_Ui->pc_SpinBoxConsumerTime->setValue(static_cast<int32_t>(u16_Result));

@@ -331,7 +331,7 @@ uint8_t C_GiLiLine::m_GetAnimationStepCount(void) const
    \param[in] orf64_Value New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiLine::SetInteractionWidth(const float64_t & orf64_Value)
+void C_GiLiLine::SetInteractionWidth(const double & orf64_Value)
 {
    this->prepareGeometryChange();
    this->mf64_InteractionWidth = orf64_Value;
@@ -511,7 +511,7 @@ void C_GiLiLine::SetLineStyle(const stw::opensyde_gui_logic::C_PuiBsLineArrow::E
    \param[in] orf64_Offset New offset
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiLine::SetOffsetStart(const float64_t & orf64_Offset)
+void C_GiLiLine::SetOffsetStart(const double & orf64_Offset)
 {
    this->mf64_OffsetStart = orf64_Offset;
 }
@@ -522,7 +522,7 @@ void C_GiLiLine::SetOffsetStart(const float64_t & orf64_Offset)
    \param[in] orf64_Offset New offset
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiLine::SetOffsetEnd(const float64_t & orf64_Offset)
+void C_GiLiLine::SetOffsetEnd(const double & orf64_Offset)
 {
    this->mf64_OffsetEnd = orf64_Offset;
 }
@@ -693,25 +693,25 @@ void C_GiLiLine::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsI
       if (this->mq_Animated == true)
       {
          //Alternative pattern
-         //const float64_t f64_Length = 200;
+         //const double f64_Length = 200;
          //QVector<qreal> c_Pattern;
          //Point 1
-         //c_Pattern.push_back(static_cast<float64_t>(this->mu8_AnimationStep) /
-         //                    static_cast<float64_t>(C_GiLiLine::mhu8_AnimationStepCount) * f64_Length);
+         //c_Pattern.push_back(static_cast<double>(this->mu8_AnimationStep) /
+         //                    static_cast<double>(C_GiLiLine::mhu8_AnimationStepCount) * f64_Length);
          //Long pause
          //c_Pattern.push_back(f64_Length - c_Pattern[0]);
          //Animated package color
          //QPen c_Pen(QBrush(C_GiLiLine::mhc_AnimationPackageColor), this->GetWidth(), Qt::CustomDashLine);
          //Offset representing the current animation state, f64_Length = sum of pattern
-         //c_Pen.setDashOffset(static_cast<float64_t>(this->mu8_AnimationStep) *
-         //                    (f64_Length / static_cast<float64_t>(C_GiLiLine::mhu8_AnimationStepCount)));
+         //c_Pen.setDashOffset(static_cast<double>(this->mu8_AnimationStep) *
+         //                    (f64_Length / static_cast<double>(C_GiLiLine::mhu8_AnimationStepCount)));
          //c_Pen.setDashPattern(c_Pattern);
 
          QVector<qreal> c_Pattern;
-         float64_t f64_Offset;
+         double f64_Offset;
          QColor c_AnimatedColor;
          const uint8_t u8_ANIMATION_STEP_COUNT_OVERRIDE = C_GiLiLine::mhu8_ANIMATION_STEP_COUNT;
-         const float64_t f64_PenWidth = static_cast<float64_t>(this->GetWidth());
+         const double f64_PenWidth = static_cast<double>(this->GetWidth());
 
          if (this->mq_MiddleLine == true)
          {
@@ -732,14 +732,14 @@ void C_GiLiLine::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsI
          //Offset representing the current animation state, 48 / f64_PenWidth = sum of pattern
          if (this->mq_InverseAnimation == false)
          {
-            f64_Offset = static_cast<float64_t>(this->mu8_AnimationStep) *
-                         ((48.0 / f64_PenWidth) / static_cast<float64_t>(u8_ANIMATION_STEP_COUNT_OVERRIDE));
+            f64_Offset = static_cast<double>(this->mu8_AnimationStep) *
+                         ((48.0 / f64_PenWidth) / static_cast<double>(u8_ANIMATION_STEP_COUNT_OVERRIDE));
          }
          else
          {
             const uint8_t u8_StepsTillFinished = u8_ANIMATION_STEP_COUNT_OVERRIDE - this->mu8_AnimationStep;
-            f64_Offset = static_cast<float64_t>(u8_StepsTillFinished) *
-                         ((48.0 / f64_PenWidth) / static_cast<float64_t>(u8_ANIMATION_STEP_COUNT_OVERRIDE));
+            f64_Offset = static_cast<double>(u8_StepsTillFinished) *
+                         ((48.0 / f64_PenWidth) / static_cast<double>(u8_ANIMATION_STEP_COUNT_OVERRIDE));
          }
          c_Pen.setDashOffset(f64_Offset);
          c_Pen.setDashPattern(c_Pattern);
@@ -769,7 +769,7 @@ void C_GiLiLine::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsI
 QPainterPath C_GiLiLine::shape(void) const
 {
    stw::opensyde_gui_logic::C_GiBiLineBounding c_LineBounding(this->mc_Points,
-                                                              static_cast<float64_t>(this->GetWidth()),
+                                                              static_cast<double>(this->GetWidth()),
                                                               this->mf64_InteractionWidth);
    return c_LineBounding.GetShape();
 }
@@ -783,13 +783,13 @@ QPainterPath C_GiLiLine::shape(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiLine::FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Closest) const
 {
-   float64_t f64_Best = std::numeric_limits<float64_t>::max();
+   double f64_Best = std::numeric_limits<double>::max();
 
    orc_Closest = orc_ScenePoint;
    if (mc_Points.size() > 0)
    {
       QPointF c_CurProj;
-      float64_t f64_CurDist;
+      double f64_CurDist;
       QPointF c_CurP2;
       QPointF c_CurP1 = mc_Points[0];
       for (int32_t s32_ItPoint = 1; s32_ItPoint < mc_Points.size(); ++s32_ItPoint)

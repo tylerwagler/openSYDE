@@ -75,8 +75,8 @@ private:
    static const int32_t mhs32_INDEX_ALIGNMENT_TOP;
    static const int32_t mhs32_INDEX_ALIGNMENT_BOTTOM;
 
-   const float32_t mf32_HalfModifier = 2.0F;
-   const float32_t mf32_MinimumFontSize = 15.0F;
+   const float mf32_HalfModifier = 2.0F;
+   const float mf32_MinimumFontSize = 15.0F;
 };
 }
 }

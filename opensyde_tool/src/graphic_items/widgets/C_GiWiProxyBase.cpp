@@ -37,7 +37,7 @@ using namespace stw::opensyde_gui;
    \param[in,out] opc_Parent        Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiWiProxyBase::C_GiWiProxyBase(const float64_t of64_InitWidth, const float64_t of64_InitHeight,
+C_GiWiProxyBase::C_GiWiProxyBase(const double of64_InitWidth, const double of64_InitHeight,
                                  QGraphicsItem * const opc_Parent) :
    QGraphicsProxyWidget(opc_Parent),
    C_GiBiSizeableItem(of64_InitWidth, of64_InitHeight),

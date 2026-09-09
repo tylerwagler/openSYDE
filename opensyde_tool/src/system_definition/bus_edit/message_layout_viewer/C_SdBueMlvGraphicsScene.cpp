@@ -21,7 +21,7 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QRandomGenerator>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "constants.hpp"
 
 #include "TglUtils.hpp"
@@ -38,12 +38,12 @@ using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const float64_t C_SdBueMlvGraphicsScene::mhf64_SPACE = 2.0;
-const float64_t C_SdBueMlvGraphicsScene::mhf64_Z_ORDER_BELOW_ALL_ITEMS = -1.0;
-const float64_t C_SdBueMlvGraphicsScene::mhf64_Z_ORDER_DEFAULT = 0.0;
-const float64_t C_SdBueMlvGraphicsScene::mhf64_Z_ORDER_INTERACTION = 1.0;
-const float64_t C_SdBueMlvGraphicsScene::mhf64_Z_ORDER_EMPTY_ITEM = 10000.0;
-const float64_t C_SdBueMlvGraphicsScene::mhf64_Z_ORDER_HINT_ITEM = 10001.0;
+const double C_SdBueMlvGraphicsScene::mhf64_SPACE = 2.0;
+const double C_SdBueMlvGraphicsScene::mhf64_Z_ORDER_BELOW_ALL_ITEMS = -1.0;
+const double C_SdBueMlvGraphicsScene::mhf64_Z_ORDER_DEFAULT = 0.0;
+const double C_SdBueMlvGraphicsScene::mhf64_Z_ORDER_INTERACTION = 1.0;
+const double C_SdBueMlvGraphicsScene::mhf64_Z_ORDER_EMPTY_ITEM = 10000.0;
+const double C_SdBueMlvGraphicsScene::mhf64_Z_ORDER_HINT_ITEM = 10001.0;
 const uint8_t C_SdBueMlvGraphicsScene::mhu8_MAX_NUM_BITS = 64U;
 
 const C_SdBueMlvSignalManager::C_SignalItemColors C_SdBueMlvGraphicsScene::mhac_SIGNALS_COLORS[64] =
@@ -968,7 +968,7 @@ void C_SdBueMlvGraphicsScene::m_UpdateBorderItems(void)
    {
       (*pc_ItItem)->SetSize(QSizeF(this->mf64_SingleItemWidth, this->mf64_SingleItemHeight));
       // the first item is at the right side of the scene (Bit 7 - Bit 0)
-      (*pc_ItItem)->setPos(static_cast<float64_t>(s32_Pos) *
+      (*pc_ItItem)->setPos(static_cast<double>(s32_Pos) *
                            (this->mf64_SingleItemWidth + C_SdBueMlvGraphicsScene::mhf64_SPACE), 0.0);
 
       --s32_Pos;
@@ -983,7 +983,7 @@ void C_SdBueMlvGraphicsScene::m_UpdateBorderItems(void)
         ++pc_ItItem)
    {
       (*pc_ItItem)->SetSize(QSizeF(this->mf64_SingleItemWidth, this->mf64_SingleItemHeight));
-      (*pc_ItItem)->setPos(0.0, static_cast<float64_t>(s32_Pos) *
+      (*pc_ItItem)->setPos(0.0, static_cast<double>(s32_Pos) *
                            (this->mf64_SingleItemHeight + C_SdBueMlvGraphicsScene::mhf64_SPACE));
 
       ++s32_Pos;
@@ -1000,8 +1000,8 @@ void C_SdBueMlvGraphicsScene::m_UpdateEmptyItems(void)
    {
       int32_t s32_PosHorizontal;
       int32_t s32_PosVertical;
-      float64_t f64_PosHorizontal;
-      float64_t f64_PosVertical;
+      double f64_PosHorizontal;
+      double f64_PosVertical;
 
       this->mc_VecEmptyItems[s32_BitPosition]->SetSize(QSizeF(this->mf64_SingleItemWidth, this->mf64_SingleItemHeight));
 
@@ -1010,9 +1010,9 @@ void C_SdBueMlvGraphicsScene::m_UpdateEmptyItems(void)
       // compensate the border items
       s32_PosVertical = (s32_BitPosition / 8) + 1;
 
-      f64_PosHorizontal = static_cast<float64_t>(s32_PosHorizontal) *
+      f64_PosHorizontal = static_cast<double>(s32_PosHorizontal) *
                           (this->mf64_SingleItemWidth + C_SdBueMlvGraphicsScene::mhf64_SPACE);
-      f64_PosVertical = (static_cast<float64_t>(s32_PosVertical) *
+      f64_PosVertical = (static_cast<double>(s32_PosVertical) *
                          (this->mf64_SingleItemHeight + C_SdBueMlvGraphicsScene::mhf64_SPACE));
 
       this->mc_VecEmptyItems[s32_BitPosition]->setPos(f64_PosHorizontal, f64_PosVertical);
@@ -1477,8 +1477,8 @@ void C_SdBueMlvGraphicsScene::m_SearchClickedItem(const QPointF & orc_Pos)
       if (this->mac_SetGridState[s32_Counter].size() > 0)
       {
          std::set<C_SdBueMlvSignalManager *>::iterator c_ItSetGridPosition;
-         float64_t f64_ZetOrderActual;
-         float64_t f64_ZetOrderHighest = mhf64_Z_ORDER_BELOW_ALL_ITEMS;
+         double f64_ZetOrderActual;
+         double f64_ZetOrderHighest = mhf64_Z_ORDER_BELOW_ALL_ITEMS;
 
          // search the item with the highest ZOrder
          for (c_ItSetGridPosition = this->mac_SetGridState[s32_Counter].begin();

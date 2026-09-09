@@ -12,7 +12,7 @@
 #define C_GIPC_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_GiImageGroupWithoutData.hpp"
 #include "C_GiRectPixmap.hpp"
 #include "C_PuiSvDbDataElement.hpp"
@@ -57,7 +57,7 @@ Q_SIGNALS:
    void SigHideToolTip(void);
 
 protected:
-   void m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight) override;
+   void m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight) override;
    void mousePressEvent(QGraphicsSceneMouseEvent * const opc_Event) override;
    void hoverLeaveEvent(QGraphicsSceneHoverEvent * const opc_Event) override;
 
@@ -69,9 +69,9 @@ private:
    static const uint32_t mhu32_SCALE_CATEGORY_1;
    static const uint32_t mhu32_SCALE_CATEGORY_2;
    static const uint32_t mhu32_SCALE_CATEGORY_3;
-   static const float64_t mhaf64_SCALE_MIN_WIDTH_NODE[3];
-   static const float64_t mhaf64_SCALE_MIN_HEIGHT_NODE[3];
-   static const float64_t mhf64_INIT_SIZE_OF_PC;
+   static const double mhaf64_SCALE_MIN_WIDTH_NODE[3];
+   static const double mhaf64_SCALE_MIN_HEIGHT_NODE[3];
+   static const double mhf64_INIT_SIZE_OF_PC;
 
    //Avoid call
    C_GiSvPc(const C_GiSvPc &);
@@ -83,7 +83,7 @@ private:
    void m_InitConflictIcon(void);
    void m_DetectIconSize(void);
 
-   void m_UpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight, const bool oq_Initial);
+   void m_UpdateItems(const double of64_DiffWidth, const double of64_DiffHeight, const bool oq_Initial);
    uint32_t m_GetScaleCategory(void) const;
 };
 

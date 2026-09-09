@@ -203,7 +203,7 @@ void C_PuiBsElements::SetDataPositionOffset(const QPointF & orc_NewPos)
    \param[in]  of64_HighestUsedZetValue  Highest used Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiBsElements::SetDataZetOffset(const float64_t of64_HighestUsedZetValue)
+void C_PuiBsElements::SetDataZetOffset(const double of64_HighestUsedZetValue)
 {
    //Boundaries
    for (uint32_t u32_ItItem = 0UL; u32_ItItem < this->c_Boundaries.size(); ++u32_ItItem)

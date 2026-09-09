@@ -37,8 +37,8 @@ using namespace stw::opensyde_gui;
    \param[in,out] opc_Parent     Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiSvgGraphicsItem::C_GiSvgGraphicsItem(const QString & orc_ImagePath, const float64_t of64_Width,
-                                         const float64_t of64_Height, QGraphicsItem * const opc_Parent) :
+C_GiSvgGraphicsItem::C_GiSvgGraphicsItem(const QString & orc_ImagePath, const double of64_Width,
+                                         const double of64_Height, QGraphicsItem * const opc_Parent) :
    QGraphicsRectItem(0.0, 0.0, of64_Width, of64_Height, opc_Parent),
    C_GiBiSizeableItem(of64_Width, of64_Height),
    mc_ImagePath(orc_ImagePath)
@@ -95,7 +95,7 @@ void C_GiSvgGraphicsItem::SetSvg(const QString & orc_ImagePath)
    \param[in]  of64_Height    New height
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvgGraphicsItem::SetNewSize(const float64_t of64_Width, const float64_t of64_Height)
+void C_GiSvgGraphicsItem::SetNewSize(const double of64_Width, const double of64_Height)
 {
    this->f64_Width = of64_Width;
    this->f64_Height = of64_Height;

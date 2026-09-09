@@ -17,7 +17,7 @@
 #include <system_error>
 #include <vector>
 #include <string>
-#include "stwtypes.hpp"
+#include <cstdint>
 
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -74,10 +74,10 @@ public:
    int32_t GetValueS32(void) const;
    void SetValueS64(const int64_t os64_Value);
    int64_t GetValueS64(void) const;
-   void SetValueF32(const float32_t of32_Value);
-   float32_t GetValueF32(void) const;
-   void SetValueF64(const float64_t of64_Value);
-   float64_t GetValueF64(void) const;
+   void SetValueF32(const float of32_Value);
+   float GetValueF32(void) const;
+   void SetValueF64(const double of64_Value);
+   double GetValueF64(void) const;
 
    void SetValueArrU8(const std::vector<uint8_t> & orc_Value);
    void SetValueArrU8Element(const uint8_t ou8_Value, const uint32_t ou32_Index);
@@ -119,15 +119,15 @@ public:
    const std::vector<int64_t> GetValueArrS64(void) const;
    int64_t GetValueArrS64Element(const uint32_t ou32_Index) const;
 
-   void SetValueArrF32(const std::vector<float32_t> & orc_Value);
-   void SetValueArrF32Element(const float32_t of32_Value, const uint32_t ou32_Index);
-   const std::vector<float32_t> GetValueArrF32(void) const;
-   float32_t GetValueArrF32Element(const uint32_t ou32_Index) const;
+   void SetValueArrF32(const std::vector<float> & orc_Value);
+   void SetValueArrF32Element(const float of32_Value, const uint32_t ou32_Index);
+   const std::vector<float> GetValueArrF32(void) const;
+   float GetValueArrF32Element(const uint32_t ou32_Index) const;
 
-   void SetValueArrF64(const std::vector<float64_t> & orc_Value);
-   void SetValueArrF64Element(const float64_t of64_Value, const uint32_t ou32_Index);
-   const std::vector<float64_t> GetValueArrF64(void) const;
-   float64_t GetValueArrF64Element(const uint32_t ou32_Index) const;
+   void SetValueArrF64(const std::vector<double> & orc_Value);
+   void SetValueArrF64Element(const double of64_Value, const uint32_t ou32_Index);
+   const std::vector<double> GetValueArrF64(void) const;
+   double GetValueArrF64Element(const uint32_t ou32_Index) const;
 
    std::error_code SetValueFromBigEndianBlob(const std::vector<uint8_t> & orc_Data);
    std::error_code SetValueFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data);
@@ -158,11 +158,11 @@ public:
    bool CompareArrayGreaterOrEqual(const C_OscNodeDataPoolContent & orc_Cmp, const uint32_t ou32_Index) const;
    bool CompareArrayGreater(const C_OscNodeDataPoolContent & orc_Cmp, const uint32_t ou32_Index) const;
 
-   void GetValueAsScaledString(const float64_t of64_Factor, const float64_t of64_Offset, std::string & orc_Output,
+   void GetValueAsScaledString(const double of64_Factor, const double of64_Offset, std::string & orc_Output,
                                const uint32_t ou32_Index, const bool oq_AllowRangeAdaptation = true,
                                const bool oq_AllowSpecialHandling = false) const;
-   void GetAnyValueAsFloat32(float32_t & orf32_Output, const uint32_t ou32_Index) const;
-   void GetAnyValueAsFloat64(float64_t & orf64_Output, const uint32_t ou32_Index) const;
+   void GetAnyValueAsFloat32(float & orf32_Output, const uint32_t ou32_Index) const;
+   void GetAnyValueAsFloat64(double & orf64_Output, const uint32_t ou32_Index) const;
 
    const std::vector<uint8_t> * GetDataAccessConst(std::mutex ** const oppc_CriticalSection) const;
    std::vector<uint8_t> * GetDataAccess(std::mutex ** const oppc_CriticalSection);
@@ -201,10 +201,10 @@ private:
    mutable std::mutex mc_CriticalSection;
 
    void m_GetBaseType(bool & orq_IsUintBase, bool & orq_IsSintBase, bool & orq_IsFloatBase, uint64_t & oru64_UintValue,
-                      int64_t & ors64_SintValue, float64_t & orf64_FloatValue) const;
+                      int64_t & ors64_SintValue, double & orf64_FloatValue) const;
    void m_GetBaseTypeArray(const uint32_t & oru32_Index, bool & orq_IsUintBase, bool & orq_IsSintBase,
                            bool & orq_IsFloatBase, uint64_t & oru64_UintValue, int64_t & ors64_SintValue,
-                           float64_t & orf64_FloatValue) const;
+                           double & orf64_FloatValue) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

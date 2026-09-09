@@ -87,7 +87,7 @@ void C_OgeWiPieChart::paintEvent(QPaintEvent * const opc_Event)
    QFont c_Font;
    QRect c_Rect(50, 50, 200, 200);
    int16_t s16_StartAngle;
-   float32_t f32_SpanAngle;
+   float f32_SpanAngle;
    std::string c_String;
 
    c_BackgroundBrush.setColor(QColor(2, 155, 136));
@@ -107,7 +107,7 @@ void C_OgeWiPieChart::paintEvent(QPaintEvent * const opc_Event)
    //pie
    c_Rect.setRect(50, 50, 200, 200);
    s16_StartAngle = 90 * 16;
-   f32_SpanAngle = (-1.0F * (360.0F / 100.0F) * static_cast<float32_t>(mu16_ValueInPercent)  * 16.0F);
+   f32_SpanAngle = (-1.0F * (360.0F / 100.0F) * static_cast<float>(mu16_ValueInPercent)  * 16.0F);
 
    c_Painter.setBrush(c_PieBrush);
    c_Painter.drawPie(c_Rect, s16_StartAngle, static_cast<int32_t>(f32_SpanAngle));

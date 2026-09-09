@@ -17,7 +17,7 @@
 
 #include <QPainter>
 
-#include "stwtypes.hpp"
+#include <cstdint>
 #include "C_OgeWiUtil.hpp"
 #include "C_OgeSliDashboard.hpp"
 #include "TglUtils.hpp"
@@ -217,22 +217,22 @@ void C_OgeSliDashboard::m_DrawHandle(const QRect & orc_Rect)
    {
       QPainter c_Painter(this);
       c_Painter.setClipRect(orc_Rect);
-      const float64_t f64_SliderSize = static_cast<float64_t>(std::min(this->rect().width(), this->rect().height()));
-      const float64_t f64_SliderPosVertical = (static_cast<float64_t>(this->rect().height()) - f64_SliderSize) / 2.0;
-      const float64_t f64_Min = static_cast<float64_t>(this->minimum());
-      const float64_t f64_Val = static_cast<float64_t>(this->value());
-      const float64_t f64_Max = static_cast<float64_t>(this->maximum());
-      const float64_t f64_Progress = (f64_Val - f64_Min) / (f64_Max - f64_Min);
-      const float64_t f64_HorizontalMin = static_cast<float64_t>(this->rect().x());
+      const double f64_SliderSize = static_cast<double>(std::min(this->rect().width(), this->rect().height()));
+      const double f64_SliderPosVertical = (static_cast<double>(this->rect().height()) - f64_SliderSize) / 2.0;
+      const double f64_Min = static_cast<double>(this->minimum());
+      const double f64_Val = static_cast<double>(this->value());
+      const double f64_Max = static_cast<double>(this->maximum());
+      const double f64_Progress = (f64_Val - f64_Min) / (f64_Max - f64_Min);
+      const double f64_HorizontalMin = static_cast<double>(this->rect().x());
       //Don't use exact width but consider all possible slider center positions instead 2* half slider offset
-      const float64_t f64_Width = static_cast<float64_t>(this->rect().width()) - f64_SliderSize;
+      const double f64_Width = static_cast<double>(this->rect().width()) - f64_SliderSize;
       //X is top left corner so don't add half slider offset for correct progress information
-      const float64_t f64_HorizontalMidProgress = f64_HorizontalMin + (f64_Width * f64_Progress);
+      const double f64_HorizontalMidProgress = f64_HorizontalMin + (f64_Width * f64_Progress);
       // Qt issue in QStyle::sliderPositionFromValue (https://bugreports.qt.io/browse/QTBUG-29764)
       // This function is actually used to handle the slider interaction,
       // but it is buggy or max values >= 0 in this case:
       // QStyle::sliderPositionFromValue(std::numeric_limits<int>::min(), max, 0, 100,false);
-      //const float64_t f64_HorizontalMidProgress = f64_HorizontalMin + QStyle::sliderPositionFromValue(
+      //const double f64_HorizontalMidProgress = f64_HorizontalMin + QStyle::sliderPositionFromValue(
       // this->minimum(),this->maximum(),this->value(),f64_Width,false);
       const QRectF c_SliderRect(QPointF(f64_HorizontalMidProgress, f64_SliderPosVertical),
                                 QSizeF(f64_SliderSize, f64_SliderSize));
