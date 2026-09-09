@@ -469,7 +469,7 @@ std::error_code C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_Ser
    if ((q_Error == false) && (oq_ServerPort == false))
    {
       //set broadcast permission for UDP client socket
-      const char_t cn_BROADCAST = 'a';
+      const char cn_BROADCAST = 'a';
       x_Return =
          setsockopt(orx_Socket, SOL_SOCKET, SO_BROADCAST, &cn_BROADCAST, sizeof(cn_BROADCAST));
       if (x_Return == SOCKET_ERROR)
@@ -643,7 +643,7 @@ std::error_code C_OscIpDispatcherWinSock::IsTcpConnected(const uint32_t ou32_Han
    }
    else
    {
-      char_t cn_Byte;
+      char cn_Byte;
       // Dummy read to check the connection.
       // The parameter MSG_PEEK avoid that received data will removed from the queue when read
       const int x_BytesRead = //lint !e8080 !e970 //using type to match library interface
@@ -843,7 +843,7 @@ std::error_code C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, co
          //lint -e{9176}  //Side-effect of the "char"-based API.
          const int x_BytesSent = //lint !e8080 !e970 //using type to match library interface
                                  send(this->mc_SocketsTcp[ou32_Handle].x_Socket,
-                                      reinterpret_cast<const char_t *>(&orc_Data[0]), x_BytesToSend, 0);
+                                      reinterpret_cast<const char *>(&orc_Data[0]), x_BytesToSend, 0);
          if (x_BytesSent != x_BytesToSend)
          {
             if (x_BytesSent == SOCKET_ERROR)
@@ -934,7 +934,7 @@ std::error_code C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, st
             // platform.
             const int x_BytesRead = //lint !e8080 !e970 //using type to match library interface
                                     recv(this->mc_SocketsTcp[ou32_Handle].x_Socket,
-                                         reinterpret_cast<char_t *>(&orc_Data[0]), x_BytesToRead, 0);
+                                         reinterpret_cast<char *>(&orc_Data[0]), x_BytesToRead, 0);
             if (x_BytesRead == x_BytesToRead)
             {
                c_Return = Errc::success;
@@ -1156,7 +1156,7 @@ std::error_code C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & o
             //lint -e{9176}  //Side-effect of the POSIX-style API. Match is guaranteed by the API.
             const int x_Return = //lint !e8080 !e970 //using type to match library interface
                                  sendto(mc_SocketsUdpClient[u32_Interface],
-                                        reinterpret_cast<const char_t *>(&orc_Data[0]),
+                                        reinterpret_cast<const char *>(&orc_Data[0]),
                                         x_NumToSend, 0, reinterpret_cast<const sockaddr *>(&c_TargetAddress),
                                         sizeof(c_TargetAddress));
             if (x_Return != x_NumToSend)
@@ -1225,7 +1225,7 @@ std::error_code C_OscIpDispatcherWinSock::ReadUdp(std::vector<uint8_t> & orc_Dat
 
                //lint -e{926,929}  //Side-effect of the "char"-based API. No problems as long as we are on Windows.
                //lint -e{740,9176} //Side-effect of the POSIX-style API. Match is guaranteed by the API.
-               x_Return = recvfrom(mc_SocketsUdpServer[u32_Interface], reinterpret_cast<char_t *>(&orc_Data[0]),
+               x_Return = recvfrom(mc_SocketsUdpServer[u32_Interface], reinterpret_cast<char *>(&orc_Data[0]),
                                    static_cast<int>(orc_Data.size()), //lint !e970 //using expected API type
                                    0, reinterpret_cast<sockaddr *>(&c_Sender),
                                    &x_AddressSize);

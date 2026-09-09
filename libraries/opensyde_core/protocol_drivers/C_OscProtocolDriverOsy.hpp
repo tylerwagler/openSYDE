@@ -201,7 +201,7 @@ private:
 
 protected:
    void m_LogErrorWithHeader(const std::string & orc_Activity, const std::string & orc_Information,
-                             const char_t * const opcn_Function, const bool oq_AsError = true) const;
+                             const char * const opcn_Function, const bool oq_AsError = true) const;
 
    virtual void m_OsyReadDataPoolDataEventReceived(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                    const uint16_t ou16_ElementIndex,

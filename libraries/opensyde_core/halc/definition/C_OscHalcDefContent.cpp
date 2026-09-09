@@ -551,7 +551,7 @@ std::error_code C_OscHalcDefContent::GetStringValue(std::string & orc_Value) con
       orc_Value = "";
       for (uint32_t u32_ItChar = 0UL; u32_ItChar < this->GetArraySize(); ++u32_ItChar)
       {
-         const char_t cn_CurChar = static_cast<char_t>(this->GetValueArrS8Element(u32_ItChar));
+         const char cn_CurChar = static_cast<char>(this->GetValueArrS8Element(u32_ItChar));
          if (cn_CurChar != '\0')
          {
             orc_Value += cn_CurChar;

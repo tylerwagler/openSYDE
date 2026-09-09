@@ -82,7 +82,7 @@ void C_OgeWiUtil::h_DrawBackground(QWidget * const opc_Widget, QPainter * const 
    \param[in,out]  orc_Value     Property value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeWiUtil::h_ApplyStylesheetProperty(QWidget * const opc_Widget, const char_t * const opcn_Name,
+void C_OgeWiUtil::h_ApplyStylesheetProperty(QWidget * const opc_Widget, const char * const opcn_Name,
                                             const QVariant & orc_Value)
 {
    //set property
@@ -102,7 +102,7 @@ void C_OgeWiUtil::h_ApplyStylesheetProperty(QWidget * const opc_Widget, const ch
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(QWidget * const opc_Widget,
-                                                                  const char_t * const opcn_Name,
+                                                                  const char * const opcn_Name,
                                                                   const QVariant & orc_Value)
 {
    h_ApplyStylesheetProperty(opc_Widget, opcn_Name, orc_Value);

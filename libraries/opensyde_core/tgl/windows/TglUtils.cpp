@@ -43,7 +43,7 @@ using namespace stw::tgl;
    \param[in]   os32_Line    Line number where the problem turned up
 */
 //----------------------------------------------------------------------------------------------------------------------
-void stw::tgl::TglReportAssertion(const char_t * const opcn_Module, const char_t * const opcn_Func,
+void stw::tgl::TglReportAssertion(const char * const opcn_Module, const char * const opcn_Func,
                                   const int32_t os32_Line)
 {
    std::string c_Text;
@@ -65,8 +65,8 @@ void stw::tgl::TglReportAssertion(const char_t * const opcn_Module, const char_t
    \param[in]     os32_Line              Line number where the problem turned up
 */
 //----------------------------------------------------------------------------------------------------------------------
-void stw::tgl::TglReportAssertionDetail(const char_t * const opcn_DetailInfo, const char_t * const opcn_Module,
-                                        const char_t * const opcn_Func, const int32_t os32_Line)
+void stw::tgl::TglReportAssertionDetail(const char * const opcn_DetailInfo, const char * const opcn_Module,
+                                        const char * const opcn_Func, const int32_t os32_Line)
 {
    std::string c_Text;
 
@@ -90,7 +90,7 @@ void stw::tgl::TglReportAssertionDetail(const char_t * const opcn_DetailInfo, co
 //----------------------------------------------------------------------------------------------------------------------
 bool stw::tgl::TglGetSystemUserName(std::string & orc_UserName)
 {
-   char_t acn_WinUserName[UNLEN + 1];
+   char acn_WinUserName[UNLEN + 1];
    DWORD u32_Size = sizeof(acn_WinUserName);
    bool q_Return;
 
@@ -120,7 +120,7 @@ bool stw::tgl::TglGetSystemUserName(std::string & orc_UserName)
 //----------------------------------------------------------------------------------------------------------------------
 bool stw::tgl::TglGetSystemMachineName(std::string & orc_MachineName)
 {
-   char_t acn_WinSystemName[MAX_COMPUTERNAME_LENGTH + 1];
+   char acn_WinSystemName[MAX_COMPUTERNAME_LENGTH + 1];
    DWORD u32_Size = sizeof(acn_WinSystemName);
    const bool q_Return = (GetComputerNameA(acn_WinSystemName, &u32_Size) == 0) ? false : true;
 

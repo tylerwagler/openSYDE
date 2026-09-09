@@ -1489,7 +1489,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
                                           {
                                              // FSN format
                                              rc_CurrentResult.c_SerialNumber.c_SerialNumberExt =
-                                                static_cast<char_t>(c_Response.au8_Data[7]);
+                                                static_cast<char>(c_Response.au8_Data[7]);
                                           }
                                           else
                                           {
@@ -1520,7 +1520,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
                                           {
                                              // FSN format
                                              rc_CurrentResult.c_SerialNumber.c_SerialNumberExt +=
-                                                static_cast<char_t>(c_Response.au8_Data[6]);
+                                                static_cast<char>(c_Response.au8_Data[6]);
                                           }
                                           else if (u32_NextSnrSignIndex < 6)
                                           {
@@ -1545,7 +1545,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
                                           if (rc_CurrentResult.c_SerialNumber.q_FsnSerialNumber == true)
                                           {
                                              rc_CurrentResult.c_SerialNumber.c_SerialNumberExt +=
-                                                static_cast<char_t>(c_Response.au8_Data[7]);
+                                                static_cast<char>(c_Response.au8_Data[7]);
                                           }
                                           else if (u32_NextSnrSignIndex < 6U)
                                           {
@@ -2128,7 +2128,7 @@ void C_OscProtocolDriverOsyTpCan::ClearDispatcherQueue(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsyTpCan::m_LogWarningWithHeader(const std::string & orc_Information,
-                                                         const char_t * const opcn_Function) const
+                                                         const char * const opcn_Function) const
 {
    C_OscLoggingHandler::h_WriteLogError("openSYDE CAN-TP", "openSYDE CAN-TP node " + std::to_string(
                                            mc_ServerId.u8_BusIdentifier) + "." +

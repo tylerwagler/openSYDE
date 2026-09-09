@@ -131,7 +131,7 @@ uint32_t C_HexFile::ByteCount(void) const
 //
 //              xxxxxxx = error line number of input file
 //************************************************************************
-std::error_code C_HexFile::LoadFromFile(const char_t * const opcn_FileName)
+std::error_code C_HexFile::LoadFromFile(const char * const opcn_FileName)
 {
    uint32_t u32_Error;
    int32_t s32_FileType;
@@ -222,7 +222,7 @@ std::error_code C_HexFile::LoadFromFile(const char_t * const opcn_FileName)
 uint32_t C_HexFile::m_LoadIntelHex(std::FILE * const opt_File)
 {
    uint32_t u32_Error = NO_ERR;
-   char_t acn_HexBuffer[mu32_HEXBUFFER_SIZE];
+   char acn_HexBuffer[mu32_HEXBUFFER_SIZE];
    uint32_t u32_AdrNew;
    uint8_t u8_Command = mu8_CMD_DATA;
    uint8_t u8_Len = 0U;
@@ -342,8 +342,8 @@ uint32_t C_HexFile::m_LoadIntelHex(std::FILE * const opt_File)
 uint32_t C_HexFile::m_LoadSRecord(std::FILE * const opt_File)
 {
    uint32_t u32_Error = NO_ERR;
-   char_t acn_HexBuffer[mu32_HEXBUFFER_SIZE];
-   char_t acn_IntelBuffer[mu32_HEXBUFFER_SIZE];
+   char acn_HexBuffer[mu32_HEXBUFFER_SIZE];
+   char acn_IntelBuffer[mu32_HEXBUFFER_SIZE];
    uint32_t u32_AdrNew;
    uint8_t u8_RecordType;
    uint8_t u8_Length = 0U;
@@ -437,8 +437,8 @@ uint32_t C_HexFile::m_LoadSRecord(std::FILE * const opt_File)
 uint32_t C_HexFile::m_GetFileType(std::FILE * const opt_File, int32_t & ors32_FileType) const
 {
    uint32_t u32_Error;
-   const char_t * pcn_Ret;
-   char_t acn_HexBuffer[mu32_HEXBUFFER_SIZE];
+   const char * pcn_Ret;
+   char acn_HexBuffer[mu32_HEXBUFFER_SIZE];
    uint8_t u8_Dummy;
 
    ors32_FileType = ms32_HEXFILE_ERR;                           // init type flag
@@ -602,7 +602,7 @@ std::error_code C_HexFile::Optimize(const uint32_t ou32_RecSize)
 //              NO_ERR                  0x00000000
 //              ERR_CANT_OPEN_FILE      0xF0000000
 //************************************************************************
-std::error_code C_HexFile::SaveToFile(const char_t * const opcn_FileName)
+std::error_code C_HexFile::SaveToFile(const char * const opcn_FileName)
 {
    uint32_t u32_Error = NO_ERR;
    const uint8_t  * pu8_HexLine;
@@ -649,9 +649,9 @@ std::error_code C_HexFile::SaveToFile(const char_t * const opcn_FileName)
 // .RETURNVALUE
 //              NULL if no data available
 //************************************************************************
-const char_t * C_HexFile::NextLineString(void)
+const char * C_HexFile::NextLineString(void)
 {
-   const char_t * pcn_String = nullptr;
+   const char * pcn_String = nullptr;
    const uint8_t * pu8_HexLine = NextLine();
 
    if (pu8_HexLine != nullptr)
@@ -865,7 +865,7 @@ std::error_code C_HexFile::CreateHexFile(const uint16_t * const opu16_BinImage, 
    uint32_t u32_Error;
    uint32_t u32_Adr;
    uint32_t u32_RecSize;
-   char_t acn_Record[mu32_HEXBUFFER_SIZE];
+   char acn_Record[mu32_HEXBUFFER_SIZE];
    int32_t s32_Length = 0;
    bool q_RecordOpen = false;
 
@@ -987,7 +987,7 @@ std::error_code C_HexFile::CreateHexFile(const C_HexDataDump & orc_Dump, const u
    uint32_t u32_Error;
    uint32_t u32_AbsoluteAddress;
    uint32_t u32_RecSize;
-   char_t acn_Record[mu32_HEXBUFFER_SIZE];
+   char acn_Record[mu32_HEXBUFFER_SIZE];
    int32_t s32_Length = 0;
    int32_t s32_Block;
    uint32_t u32_OffsetInBlock;
@@ -1107,7 +1107,7 @@ std::error_code C_HexFile::CreateHexFile(const C_HexDataDump & orc_Dump, const u
 //
 //              xxxxxxx = line number of optimized file
 //************************************************************************
-uint32_t C_HexFile::m_CloseRecord(char_t * const opcn_Record, bool & orq_RecordOpen)
+uint32_t C_HexFile::m_CloseRecord(char * const opcn_Record, bool & orq_RecordOpen)
 {
    uint32_t u32_Error = NO_ERR;
 
@@ -1133,9 +1133,9 @@ uint32_t C_HexFile::m_CloseRecord(char_t * const opcn_Record, bool & orq_RecordO
 //------------------------------------------------------------------------
 // .RETURNVALUE pointer to C-String
 //************************************************************************
-const char_t * C_HexFile::mh_HexLineString(const uint8_t * const opu8_HexLine) //const
+const char * C_HexFile::mh_HexLineString(const uint8_t * const opu8_HexLine) //const
 {
-   static char_t hacn_Buffer[mu32_HEXBUFFER_SIZE];
+   static char hacn_Buffer[mu32_HEXBUFFER_SIZE];
    uint32_t u32_Length;
 
    hacn_Buffer[0] = ':'; // begin a new Intel HEX line
@@ -1171,7 +1171,7 @@ const char_t * C_HexFile::mh_HexLineString(const uint8_t * const opu8_HexLine) /
 //
 //              xxxxxxx = line number of input file
 //************************************************************************
-uint32_t C_HexFile::m_GetIHexCommand(const char_t * const opcn_String, uint8_t & oru8_Command) const
+uint32_t C_HexFile::m_GetIHexCommand(const char * const opcn_String, uint8_t & oru8_Command) const
 {
    uint32_t u32_Error = ERR_HEXLINE_SYNTAX;
    uint8_t u8_Data;
@@ -1240,7 +1240,7 @@ uint32_t C_HexFile::m_GetIHexCommand(const char_t * const opcn_String, uint8_t &
 //
 //              xxxxxxx = line number of input file
 //************************************************************************
-uint32_t C_HexFile::m_GetSRecordType(const char_t * const opcn_String, uint8_t & oru8_RecordType) const
+uint32_t C_HexFile::m_GetSRecordType(const char * const opcn_String, uint8_t & oru8_RecordType) const
 {
    uint32_t u32_Error = ERR_HEXLINE_SYNTAX;
    uint8_t u8_Data;
@@ -1307,7 +1307,7 @@ uint32_t C_HexFile::m_GetSRecordType(const char_t * const opcn_String, uint8_t &
 //
 //              xxxxxxx = line number of input file
 //************************************************************************
-uint32_t C_HexFile::m_GetIntelAddress(const char_t * const opcn_String, const uint8_t ou8_Command,
+uint32_t C_HexFile::m_GetIntelAddress(const char * const opcn_String, const uint8_t ou8_Command,
                                       uint32_t & oru32_Adr) const
 {
    uint32_t u32_Error = ERR_HEXLINE_SYNTAX;
@@ -1373,7 +1373,7 @@ uint32_t C_HexFile::m_GetIntelAddress(const char_t * const opcn_String, const ui
 //
 //              xxxxxxx = line number of input file
 //************************************************************************
-uint32_t C_HexFile::m_GetSRecordAddress(const char_t * const opcn_String, const uint8_t ou8_RecordType,
+uint32_t C_HexFile::m_GetSRecordAddress(const char * const opcn_String, const uint8_t ou8_RecordType,
                                         uint32_t & oru32_Adr) const
 {
    uint32_t u32_Error;
@@ -1552,7 +1552,7 @@ void C_HexFile::m_SetEOFPtr(void)
 //
 //              xxxxxxx = line number of input file
 //************************************************************************
-uint32_t C_HexFile::m_AddHexLine(const char_t * const opcn_String)
+uint32_t C_HexFile::m_AddHexLine(const char * const opcn_String)
 {
    uint32_t u32_Error;
    T_HexLine * pt_New;
@@ -1626,7 +1626,7 @@ uint32_t C_HexFile::m_AddHexLine(const char_t * const opcn_String)
 //
 //              xxxxxxx = line number of input file
 //************************************************************************
-uint32_t C_HexFile::m_CopyData(const char_t * const opcn_String, T_HexLine * const opt_HexLine,
+uint32_t C_HexFile::m_CopyData(const char * const opcn_String, T_HexLine * const opt_HexLine,
                                const uint32_t ou32_Length)
 {
    uint32_t u32_Error = NO_ERR;
@@ -1749,7 +1749,7 @@ void C_HexFile::m_RemoveFirst(void)
 //
 //              xxxxxxx = line number of input file
 //************************************************************************
-uint32_t C_HexFile::m_ConvOffs16To32(char_t * const opcn_String) const
+uint32_t C_HexFile::m_ConvOffs16To32(char * const opcn_String) const
 {
    uint32_t u32_Error;
    uint32_t u32_AdrOffs;
@@ -1792,10 +1792,10 @@ uint32_t C_HexFile::m_ConvOffs16To32(char_t * const opcn_String) const
 //
 //              xxxxxxx = line number of input file
 //************************************************************************
-uint32_t C_HexFile::m_ConvRec16ToRec32(char_t * const opcn_String)
+uint32_t C_HexFile::m_ConvRec16ToRec32(char * const opcn_String)
 {
    uint32_t u32_Error;
-   char_t acn_HexLine[mu32_HEXBUFFER_SIZE];
+   char acn_HexLine[mu32_HEXBUFFER_SIZE];
    uint32_t u32_Adr;
    uint8_t u8_Len;
    uint8_t u8_Len1;
@@ -1911,7 +1911,7 @@ uint32_t C_HexFile::m_ConvRec16ToRec32(char_t * const opcn_String)
 uint32_t C_HexFile::m_SetOffset(const uint32_t ou32_Adr)
 {
    uint32_t u32_Error = NO_ERR;
-   char_t acn_Offset[] = ":02000004000000\n";
+   char acn_Offset[] = ":02000004000000\n";
 
    if (m_SetXAdrPtr(ou32_Adr) != 0)
    {
@@ -1936,7 +1936,7 @@ uint32_t C_HexFile::m_SetOffset(const uint32_t ou32_Adr)
 //              NO_ERR                  0x00000000
 //              ERR_HEXLINE_SYNTAX      0x80000000
 //************************************************************************
-uint32_t C_HexFile::mh_CalcCheck(char_t * const opcn_String)
+uint32_t C_HexFile::mh_CalcCheck(char * const opcn_String)
 {
    uint32_t u32_Error;
    uint32_t u32_Length;
@@ -1983,7 +1983,7 @@ uint32_t C_HexFile::mh_CalcCheck(char_t * const opcn_String)
 //              NO_ERR                  0x00000000
 //              ERR_HEXLINE_SYNTAX      0x80000000
 //************************************************************************
-uint32_t C_HexFile::mh_GetByte(const char_t * const opcn_String, const uint32_t ou32_Index, uint8_t & oru8_Data)
+uint32_t C_HexFile::mh_GetByte(const char * const opcn_String, const uint32_t ou32_Index, uint8_t & oru8_Data)
 {
    uint32_t u32_Error = ERR_HEXLINE_SYNTAX;
    uint32_t u32_Index = ou32_Index;
@@ -2045,7 +2045,7 @@ uint32_t C_HexFile::mh_GetByte(const char_t * const opcn_String, const uint32_t 
 //------------------------------------------------------------------------
 // .RETURNVALUE void
 //************************************************************************
-void C_HexFile::mh_SetByte(char_t * const opcn_String, const uint32_t ou32_Index, const uint8_t ou8_Byte)
+void C_HexFile::mh_SetByte(char * const opcn_String, const uint32_t ou32_Index, const uint8_t ou8_Byte)
 {
    uint8_t au8_HexByte[2];
    uint32_t u32_Index;
@@ -2065,8 +2065,8 @@ void C_HexFile::mh_SetByte(char_t * const opcn_String, const uint32_t ou32_Index
    }
 
    u32_Index = (ou32_Index * 2U) + 1U;
-   opcn_String[u32_Index]     = static_cast<char_t>(au8_HexByte[0]);
-   opcn_String[u32_Index + 1] = static_cast<char_t>(au8_HexByte[1]);
+   opcn_String[u32_Index]     = static_cast<char>(au8_HexByte[0]);
+   opcn_String[u32_Index + 1] = static_cast<char>(au8_HexByte[1]);
 }
 
 //************************************************************************
@@ -2084,7 +2084,7 @@ void C_HexFile::mh_SetByte(char_t * const opcn_String, const uint32_t ou32_Index
 //              NO_ERR                  0x00000000
 //              ERR_HEXLINE_SYNTAX      0x80000000
 //************************************************************************
-uint32_t C_HexFile::mh_GetWord(const char_t * const opcn_String, const uint32_t ou32_Index, uint32_t & oru32_Word)
+uint32_t C_HexFile::mh_GetWord(const char * const opcn_String, const uint32_t ou32_Index, uint32_t & oru32_Word)
 {
    uint32_t u32_Error;
    uint8_t u8_Hi;
@@ -2116,7 +2116,7 @@ uint32_t C_HexFile::mh_GetWord(const char_t * const opcn_String, const uint32_t 
 //------------------------------------------------------------------------
 // .RETURNVALUE void
 //************************************************************************
-void C_HexFile::mh_SetWord(char_t * const opcn_String, const uint32_t ou32_Index, const uint32_t ou32_Data)
+void C_HexFile::mh_SetWord(char * const opcn_String, const uint32_t ou32_Index, const uint32_t ou32_Data)
 {
    mh_SetByte(opcn_String, ou32_Index,     static_cast<uint8_t>(ou32_Data >> 8U));
    mh_SetByte(opcn_String, ou32_Index + 1, static_cast<uint8_t>(ou32_Data));

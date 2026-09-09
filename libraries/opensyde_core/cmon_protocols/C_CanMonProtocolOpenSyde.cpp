@@ -799,7 +799,7 @@ std::string C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
 
                c_Text += "  Length: " + std::to_string(opu8_ServiceData[5]);
                c_Text += "  SNR FSN First sign: ";
-               c_Text += static_cast<char_t>(opu8_ServiceData[6]);
+               c_Text += static_cast<char>(opu8_ServiceData[6]);
 
                // Potential STW BCD packed in extended service
                c_Text2 = PrintFormattedCompat("  SNR POS First signs: %02x", opu8_ServiceData[6]);
@@ -811,11 +811,11 @@ std::string C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
 
                // The serial number itself
                c_Text += "  SNR FSN Part: ";
-               c_Text += static_cast<char_t>(opu8_ServiceData[5]);
+               c_Text += static_cast<char>(opu8_ServiceData[5]);
                if (opu8_ServiceData[6] != 0U)
                {
                   // Last byte is 0 if the FSN string is not a multiple of 2
-                  c_Text += static_cast<char_t>(opu8_ServiceData[6]);
+                  c_Text += static_cast<char>(opu8_ServiceData[6]);
                }
 
                // Potential STW BCD packed in extended service
@@ -1556,7 +1556,7 @@ std::string C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
             if (opu8_Payload[0] != 0U)
             {
                c_Text += "  SNR First sign: ";
-               c_Text += static_cast<char_t>(opu8_Payload[2]);
+               c_Text += static_cast<char>(opu8_Payload[2]);
             }
             else
             {
@@ -1861,7 +1861,7 @@ std::string C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
             c_Text += "  SNR FSN Part: ";
             for (u32_SnrSignCounter = 0U; u32_SnrSignCounter < ou8_DataSize; ++u32_SnrSignCounter)
             {
-               c_Text += static_cast<char_t>(opu8_Data[u32_SnrSignCounter]);
+               c_Text += static_cast<char>(opu8_Data[u32_SnrSignCounter]);
             }
 
             if ((ou8_DataSize == 3U) &&
@@ -2138,7 +2138,7 @@ std::string C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
                         for (u32_SnrSignCounter = u32_SnrSignStartIndex; u32_SnrSignCounter < orc_Msg.u8_DLC;
                              ++u32_SnrSignCounter)
                         {
-                           c_Text += static_cast<char_t>(orc_Msg.au8_Data[u32_SnrSignCounter]);
+                           c_Text += static_cast<char>(orc_Msg.au8_Data[u32_SnrSignCounter]);
                         }
                      }
                   }

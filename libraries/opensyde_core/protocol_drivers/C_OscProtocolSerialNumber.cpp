@@ -196,7 +196,7 @@ std::error_code C_OscProtocolSerialNumber::SetExtSerialNumber(const std::vector<
             (orc_SerialNumber.size() > 0) && (orc_SerialNumber.size() <= 29))
    {
       //extract text:
-      std::vector<char_t> c_Text;
+      std::vector<char> c_Text;
       c_Text.resize(orc_SerialNumber.size() + 1); // plus 1 for termination
       (void)std::memcpy(&c_Text[0], &orc_SerialNumber[0], orc_SerialNumber.size());
       c_Text[c_Text.size() - 1] = '\0'; //add termination

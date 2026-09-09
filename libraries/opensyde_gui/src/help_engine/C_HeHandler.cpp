@@ -83,7 +83,7 @@ void C_HeHandler::CallSpecificHelpPage(const QString & orc_ClassName)
       }
       else
       {
-         char_t * const pcn_Text = new char_t[static_cast<uint32_t>(c_PageSearchName.count() + 1)];
+         char * const pcn_Text = new char[static_cast<uint32_t>(c_PageSearchName.count() + 1)];
          HH_AKLINK c_Link;
          for (int32_t s32_It = 0; s32_It < c_PageSearchName.count(); ++s32_It)
          {

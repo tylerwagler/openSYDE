@@ -50,7 +50,7 @@ private:
                                      QString & orc_DrawnText, const QFont & orc_Font, const int32_t os32_CellWidth,
                                      const int32_t os32_MarginFront, const int32_t os32_MarginBack, bool & orq_Changed);
    static QStringList mh_CreateAndStandardizeStringList(const QString & orc_Input, bool & orq_IsHex);
-   static QColor mh_GetColorTransparent(const QColor & orc_ColorBase, const char_t ocn_Transparency);
+   static QColor mh_GetColorTransparent(const QColor & orc_ColorBase, const char ocn_Transparency);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

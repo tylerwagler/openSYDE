@@ -292,7 +292,7 @@ std::error_code C_OscSecurityAesFile::h_EncryptFile(const std::string & orc_Key,
    //read file content
    bool q_HasFailed;
    //lint -e{9176} //no problems as long as char has the same size as uint8; if not we'd be in deep !"=?& anyway
-   c_InputFileStream.read(reinterpret_cast<char_t *>(c_InputData.data()), u32_InputFileSize);
+   c_InputFileStream.read(reinterpret_cast<char *>(c_InputData.data()), u32_InputFileSize);
    //check for error
    q_HasFailed = c_InputFileStream.fail();
    //close file
@@ -351,7 +351,7 @@ std::error_code C_OscSecurityAesFile::h_EncryptFile(const std::string & orc_Key,
    {
       //lint -e{9176} //no problems as long as char has the same size as uint8; if not we'd be in deep
       // !"=?& anyway
-      c_OutputFileStream.write(reinterpret_cast<const char_t *>(c_EncryptedData.data()),
+      c_OutputFileStream.write(reinterpret_cast<const char *>(c_EncryptedData.data()),
                                static_cast<streamsize>(c_EncryptedData.size()));
       q_HasFailed = c_OutputFileStream.fail();
       c_OutputFileStream.close();
@@ -430,7 +430,7 @@ std::error_code C_OscSecurityAesFile::h_DecryptFile(const std::string & orc_Key,
    bool q_HasFailed;
    //lint -e{9176} //no problems as long as char has the same size as uint8; if not we'd be in deep !"=?&
    // anyway
-   c_InputFileStream.read(reinterpret_cast<char_t *>(c_InputData.data()), c_InputData.size());
+   c_InputFileStream.read(reinterpret_cast<char *>(c_InputData.data()), c_InputData.size());
    //check for error
    q_HasFailed = c_InputFileStream.fail();
    //close file
@@ -500,7 +500,7 @@ std::error_code C_OscSecurityAesFile::h_DecryptFile(const std::string & orc_Key,
    {
       //lint -e{9176} //no problems as long as char has the same size as uint8; if not we'd be in deep
       // !"=?& anyway
-      c_OutputFileStream.write(reinterpret_cast<const char_t *>(c_DecryptedData.data()),
+      c_OutputFileStream.write(reinterpret_cast<const char *>(c_DecryptedData.data()),
                                static_cast<streamsize>(c_DecryptedData.size()));
       q_HasFailed = c_OutputFileStream.fail();
       c_OutputFileStream.close();

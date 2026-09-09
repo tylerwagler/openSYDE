@@ -49,7 +49,7 @@
    else: error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t main(int32_t os32_Argc, char_t * opacn_Argv[])
+int32_t main(int32_t os32_Argc, char * opacn_Argv[])
 {
    int32_t s32_Result;
 

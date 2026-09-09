@@ -159,7 +159,7 @@ C_OsyCodeExportBase::~C_OsyCodeExportBase(void)
    \retval eRESULT_ERASE_FILE_LIST_ERROR   could not remove pre-existing file list file
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::Init(const int32_t os32_Argc, char_t * const * const oppcn_Argv)
+C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::Init(const int32_t os32_Argc, char * const * const oppcn_Argv)
 {
    E_ResultCode e_Return = eRESULT_OK;
 
@@ -215,7 +215,7 @@ C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::Init(const int32_t os32_A
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{952}  the function getopt_long expects a non const opacn_Argv parameter
 C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::ParseCommandLine(const int32_t os32_Argc,
-                                                                        char_t * const opacn_Argv[])
+                                                                        char * const opacn_Argv[])
 {
    E_ResultCode e_Return = eRESULT_OK;
    int32_t s32_Result;

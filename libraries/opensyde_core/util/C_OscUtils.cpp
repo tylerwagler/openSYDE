@@ -73,7 +73,7 @@ const std::string C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME = "%{COMPUTER_NAME}
 bool C_OscUtils::h_CheckValidCeName(const std::string & orc_Name, const bool oq_AutomaticCeStringAdaptation,
                                     const uint16_t ou16_MaxLength)
 {
-   char_t cn_Char;
+   char cn_Char;
    bool q_IsValid = true;
 
    if (orc_Name.length() == 0)
@@ -281,7 +281,7 @@ std::string C_OscUtils::h_NiceifyStringForFileName(const std::string & orc_Strin
    {
       for (uint32_t u32_Index = 0U; u32_Index < orc_String.length(); u32_Index++)
       {
-         const char_t cn_Character = orc_String.c_str()[u32_Index];
+         const char cn_Character = orc_String.c_str()[u32_Index];
 
          //If the value of the character is not representable as unsigned char the the behavior of isalnum is
          // undefined. So be as defensive as possible:
@@ -340,7 +340,7 @@ std::string C_OscUtils::h_NiceifyStringForCeComment(const std::string & orc_Stri
 
    for (uint32_t u32_Index = 1U; u32_Index <= orc_String.length(); u32_Index++)
    {
-      const char_t cn_Character = c_Result[u32_Index];
+      const char cn_Character = c_Result[u32_Index];
       const uint32_t u32_NextIndex = u32_Index + 1U;
 
       //If the value of the character is not representable as unsigned char the the behavior of isprint is undefined.
@@ -653,8 +653,8 @@ void C_OscUtils::h_FileToString(const std::string & orc_FilePath, std::string & 
          c_Input.reserve(static_cast<uint32_t>(c_File.tellg()));
          c_File.seekg(0LL, std::ios::beg);
 
-         c_Input.assign(static_cast<std::istreambuf_iterator<char_t> >(c_File),
-                        std::istreambuf_iterator<char_t>());
+         c_Input.assign(static_cast<std::istreambuf_iterator<char> >(c_File),
+                        std::istreambuf_iterator<char>());
          c_File.close();
       }
    }
@@ -767,7 +767,7 @@ std::error_code C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const
    Command line arguments as string
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::string C_OscUtils::h_GetCommandLineAsString(const int32_t os32_Argc, char_t * const * const oppcn_Argv)
+std::string C_OscUtils::h_GetCommandLineAsString(const int32_t os32_Argc, char * const * const oppcn_Argv)
 {
    std::string c_CommandLine;
 

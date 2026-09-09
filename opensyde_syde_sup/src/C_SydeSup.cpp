@@ -189,7 +189,7 @@ void C_SydeSup::m_CloseCan(void)
    eERR_PARSE_COMMAND_LINE    missing or invalid command line parameters or help requested
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t * const * const oppcn_Argv)
+C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char * const * const oppcn_Argv)
 {
    C_SydeSup::E_Result e_Return = eOK;
    int32_t s32_Result;

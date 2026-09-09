@@ -624,7 +624,7 @@ QVariant C_CamGenTableModel::data(const QModelIndex & orc_Index, const int32_t o
                QByteArray c_Array;
                c_Array.resize(static_cast<int32_t>(pc_Message->u16_Dlc));
                //No transparency
-               c_Array.fill(static_cast<char_t>(0));
+               c_Array.fill(static_cast<char>(0));
                c_Retval = c_Array;
             }
          }

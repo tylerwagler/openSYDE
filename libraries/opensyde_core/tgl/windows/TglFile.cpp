@@ -382,7 +382,7 @@ std::string stw::tgl::TglFileIncludeTrailingDelimiter(const std::string & orc_Pa
 std::string stw::tgl::TglExtractFileExtension(const std::string & orc_Path)
 {
    std::string c_Extension;
-   char_t acn_Ext[_MAX_EXT + 1];
+   char acn_Ext[_MAX_EXT + 1];
 
    _splitpath(orc_Path.c_str(), nullptr, nullptr, nullptr, &acn_Ext[0]);
    c_Extension = static_cast<std::string>(acn_Ext);
@@ -427,7 +427,7 @@ std::string stw::tgl::TglChangeFileExtension(const std::string & orc_Path, const
 std::string stw::tgl::TglGetExePath(void)
 {
    uint32_t u32_Return;
-   char_t acn_Path[MAX_PATH];
+   char acn_Path[MAX_PATH];
    std::string c_Path;
 
    u32_Return = GetModuleFileNameA(nullptr, acn_Path, MAX_PATH);
@@ -454,8 +454,8 @@ std::string stw::tgl::TglGetExePath(void)
 std::string stw::tgl::TglExtractFilePath(const std::string & orc_Path)
 {
    std::string c_Path;
-   char_t acn_Drive[_MAX_DRIVE + 1];
-   char_t acn_Dir[_MAX_DIR + 1];
+   char acn_Drive[_MAX_DRIVE + 1];
+   char acn_Dir[_MAX_DIR + 1];
 
    _splitpath(orc_Path.c_str(), acn_Drive, acn_Dir, nullptr, nullptr);
    c_Path = static_cast<std::string>(acn_Drive) + acn_Dir;
@@ -477,8 +477,8 @@ std::string stw::tgl::TglExtractFilePath(const std::string & orc_Path)
 std::string stw::tgl::TglExtractFileName(const std::string & orc_Path)
 {
    std::string c_FileName;
-   char_t acn_Name[_MAX_FNAME + 1];
-   char_t acn_Ext[_MAX_EXT + 1];
+   char acn_Name[_MAX_FNAME + 1];
+   char acn_Ext[_MAX_EXT + 1];
 
    _splitpath(orc_Path.c_str(), nullptr, nullptr, &acn_Name[0], &acn_Ext[0]);
    c_FileName = static_cast<std::string>(acn_Name) + acn_Ext;
@@ -501,7 +501,7 @@ std::string stw::tgl::TglExtractFileName(const std::string & orc_Path)
 std::string stw::tgl::TglExpandFileName(const std::string & orc_RelativePath, const std::string & orc_BasePath)
 {
    uint32_t u32_Return;
-   char_t acn_OriginalDirectory[MAX_PATH];
+   char acn_OriginalDirectory[MAX_PATH];
    std::string c_FullPath = "";
 
    //get original CWD:
@@ -512,7 +512,7 @@ std::string stw::tgl::TglExpandFileName(const std::string & orc_RelativePath, co
       u32_Return = SetCurrentDirectoryA(orc_BasePath.c_str());
       if (u32_Return != 0)
       {
-         char_t acn_AbsolutePath[MAX_PATH];
+         char acn_AbsolutePath[MAX_PATH];
          u32_Return = GetFullPathNameA(orc_RelativePath.c_str(), MAX_PATH, acn_AbsolutePath, nullptr);
          if (u32_Return != 0)
          {

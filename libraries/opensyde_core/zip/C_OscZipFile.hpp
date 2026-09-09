@@ -52,7 +52,7 @@ public:
 
 private:
    static std::error_code mh_AddContentToZipFile(const std::string & orc_ZipArchivePath,
-                                         const std::string & orc_ItemName, const char_t * const opcn_Content,
+                                         const std::string & orc_ItemName, const char * const opcn_Content,
                                          const uint32_t ou32_ContentSize, const std::string & orc_ItemType,
                                          std::string * const opc_ErrorText = nullptr);
 };

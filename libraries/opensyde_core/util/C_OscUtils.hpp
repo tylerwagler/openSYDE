@@ -55,7 +55,7 @@ public:
    static std::error_code h_CopyFile(const std::string & orc_SourceFile, const std::string & orc_TargetFile,
                                      std::string * const opc_ErrorPath = nullptr,
                                      std::string * const opc_ErrorMessage = nullptr);
-   static std::string h_GetCommandLineAsString(const int32_t os32_Argc, char_t * const * const oppcn_Argv);
+   static std::string h_GetCommandLineAsString(const int32_t os32_Argc, char * const * const oppcn_Argv);
 
    //Utilities for path place holder parsing
    static std::string h_MakeIndependentOfDbProjectPath(const std::string & orc_DbProjectPath,

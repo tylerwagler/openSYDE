@@ -30,8 +30,8 @@ using namespace stw::scl;
 using namespace stw::opensyde_core;
 
 //magic for application info block in hex file
-const char_t stw::opensyde_core::APPLICATION_INFO_MAGIC_V1[APPLICATION_INFO_MAGIC_LENGTH_V1 + 1U] = "Lx_?z2.";
-const char_t stw::opensyde_core::APPLICATION_INFO_MAGIC_V2[APPLICATION_INFO_MAGIC_LENGTH_V2] = "Lx_?zg."; /// \0 already
+const char stw::opensyde_core::APPLICATION_INFO_MAGIC_V1[APPLICATION_INFO_MAGIC_LENGTH_V1 + 1U] = "Lx_?z2.";
+const char stw::opensyde_core::APPLICATION_INFO_MAGIC_V2[APPLICATION_INFO_MAGIC_LENGTH_V2] = "Lx_?zg."; /// \0 already
                                                                                                           // included
 
 const uint8_t C_OscApplicationInfoBlock::hau8_LENGTHS_DEVICE_ID[3]       =
@@ -382,13 +382,13 @@ std::error_code C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const o
 
 //----------------------------------------------------------------------------------------------------------------------
 
-std::string C_OscApplicationInfoBlock::m_GetNonTerminatedString(const char_t * const opcn_Chars,
+std::string C_OscApplicationInfoBlock::m_GetNonTerminatedString(const char * const opcn_Chars,
                                                                 const uint8_t ou8_MaxLength) const
 {
    std::string c_Help;
-   char_t * pcn_Text;
+   char * pcn_Text;
 
-   pcn_Text = new char_t[ou8_MaxLength + 1];
+   pcn_Text = new char[ou8_MaxLength + 1];
    pcn_Text[ou8_MaxLength] = '\0';
    (void)memcpy(pcn_Text, opcn_Chars, ou8_MaxLength);
    c_Help = pcn_Text;

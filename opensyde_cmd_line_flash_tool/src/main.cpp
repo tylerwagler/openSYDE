@@ -41,7 +41,7 @@
    \retval   0
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t main(const int32_t os32_Argc, char_t * const oppcn_Argv[])
+int32_t main(const int32_t os32_Argc, char * const oppcn_Argv[])
 {
    C_BasicFlashTool c_TheFlasher;
 

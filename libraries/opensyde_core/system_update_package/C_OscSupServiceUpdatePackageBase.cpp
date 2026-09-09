@@ -369,7 +369,7 @@ std::error_code C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(ifst
    std::vector<uint8_t> c_InputData;
    c_InputData.resize(static_cast<size_t>(ou32_SectionLength));
    //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?& anyway
-   orc_File.read(reinterpret_cast<char_t *>(&c_InputData[0]), c_InputData.size());
+   orc_File.read(reinterpret_cast<char *>(&c_InputData[0]), c_InputData.size());
    //check for error
    q_HasFailed = orc_File.fail();
    if (q_HasFailed == true)

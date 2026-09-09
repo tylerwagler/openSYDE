@@ -29,11 +29,11 @@ using namespace stw::scl;
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 ///This constant contains the character that is checked for to determine if a
 ///line is a comment or not.
-static const char_t mcn_CommentIndicator = ';';
+static const char mcn_CommentIndicator = ';';
 
 ///This constant contains the character that is checked against to determine if
 ///a line contains an assignment ( key = value )
-static const char_t mcn_EqualIndicator = '=';
+static const char mcn_EqualIndicator = '=';
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 

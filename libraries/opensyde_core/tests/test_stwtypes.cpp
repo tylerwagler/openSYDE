@@ -89,7 +89,7 @@ TEST(STWTypes, Limits_uint64_t)
 
 TEST(STWTypes, Char_t_Size)
 {
-   EXPECT_EQ(sizeof(char), sizeof(char_t));
+   EXPECT_EQ(sizeof(char), sizeof(char));
 }
 
 TEST(STWTypes, FloatCharacteristics)

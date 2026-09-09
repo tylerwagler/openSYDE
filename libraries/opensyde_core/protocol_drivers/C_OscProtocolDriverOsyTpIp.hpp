@@ -90,8 +90,8 @@ private:
    void m_ComposeRequest(const C_OscProtocolDriverOsyService & orc_Service, std::vector<uint8_t> & orc_Request) const;
 
 protected:
-   void m_LogWarningWithHeader(const std::string & orc_Information, const char_t * const opcn_Function) const;
-   void m_LogWarningWithHeaderAndIp(const std::string & orc_Information, const char_t * const opcn_Function,
+   void m_LogWarningWithHeader(const std::string & orc_Information, const char * const opcn_Function) const;
+   void m_LogWarningWithHeaderAndIp(const std::string & orc_Information, const char * const opcn_Function,
                                     const uint8_t(&orau8_Ip)[4]) const;
 
 public:

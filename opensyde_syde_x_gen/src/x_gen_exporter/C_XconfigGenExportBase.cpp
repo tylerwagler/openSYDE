@@ -171,15 +171,15 @@ C_XconfigGenExportBase::~C_XconfigGenExportBase(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::Init(const int32_t os32_Argc,
-                                                                  char_t * const * const oppcn_Argv)
+                                                                  char * const * const oppcn_Argv)
 {
    E_ResultCode e_Return = eRESULT_OK;
 #ifdef _WIN32
-   char_t acn_ApplicationName[MAX_PATH + 1];
+   char acn_ApplicationName[MAX_PATH + 1];
    uint32_t u32_Return = GetModuleFileNameA(nullptr, &acn_ApplicationName[0], MAX_PATH + 1);
    tgl_assert(u32_Return != 0);
 #else
-   char_t acn_ApplicationName[PATH_MAX + 1];
+   char acn_ApplicationName[PATH_MAX + 1];
    const ssize_t x_Count = readlink("/proc/self/exe", &acn_ApplicationName[0], PATH_MAX);
    tgl_assert(x_Count > 0);
    acn_ApplicationName[(x_Count < PATH_MAX) ? x_Count : PATH_MAX] = '\0';
@@ -237,7 +237,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::Init(const int32_t 
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{952}  the function getopt_long expects a non const opacn_Argv parameter
 C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::ParseCommandLine(const int32_t os32_Argc,
-                                                                              char_t * const opacn_Argv[])
+                                                                              char * const opacn_Argv[])
 {
    E_ResultCode e_Return = eRESULT_OK;
    int32_t s32_Result;

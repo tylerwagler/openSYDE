@@ -52,8 +52,8 @@ std::string C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
 {
    std::string c_Text;
    std::string c_Help;
-   char_t cn_XTD;
-   char_t cn_RTR;
+   char cn_XTD;
+   char cn_RTR;
    int32_t j;
    uint8_t u8_Len;
 

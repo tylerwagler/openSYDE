@@ -43,7 +43,7 @@ using namespace stw::errors;
    else                                            see C_SydeSup::SelectModeAndStart for precise error descriptions
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t main(const int32_t os32_Argc, char_t * const oppcn_Argv[])
+int32_t main(const int32_t os32_Argc, char * const oppcn_Argv[])
 {
    C_SydeSup::E_Result e_Return;
    C_SydeSupWindows c_SydeServiceUpdater;

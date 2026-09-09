@@ -129,7 +129,7 @@ void C_XconfigGenExport::m_PrintBanner(void)
    else  trouble (see definition of C_XconfigGenExport::E_ResultCode constants)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t main(const int32_t os32_Argc, char_t * const opacn_Argv[])
+int32_t main(const int32_t os32_Argc, char * const opacn_Argv[])
 {
    C_XconfigGenExport c_TheCodeExport;
 

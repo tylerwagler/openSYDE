@@ -121,7 +121,7 @@ std::error_code C_OscZipFile::h_CreateZipFile(const std::string & orc_SourcePath
             c_FileStream.seekg(0LL, ifstream::beg);
 
             // allocate memory
-            char_t * const pcn_FileData = new char_t[static_cast<size_t>(c_FileLength)];
+            char * const pcn_FileData = new char[static_cast<size_t>(c_FileLength)];
 
             // read file content
             c_FileStream.read(pcn_FileData, static_cast<streamsize>(c_FileLength));
@@ -260,7 +260,7 @@ std::error_code C_OscZipFile::h_UnpackZipFile(const std::string & orc_SourcePath
                   if (pc_File != nullptr)
                   {
                      //lint -e{8080} //using type expected by the library for compatibility
-                     const size_t x_SIZE_OF_ELEMENT = sizeof(char_t);
+                     const size_t x_SIZE_OF_ELEMENT = sizeof(char);
                      //lint -e{8080} //using type expected by the library for compatibility
                      const size_t x_NumOfBytesWritten = std::fwrite(pv_Data, x_SIZE_OF_ELEMENT, x_UncompFileSize,
                                                                     pc_File);
@@ -364,10 +364,10 @@ std::error_code C_OscZipFile::h_IsZipFile(const std::string & orc_FilePath)
 
          if (s32_FileLength > 4)
          {
-            //using type to match library interface; if char_t had a size different than a "uint8"
+            //using type to match library interface; if char had a size different than a "uint8"
             //this spot would be the smallest of our problems
-            const char_t acn_ZIP_HEADER[4] = {0x50, 0x4B, 0x03, 0x04}; //lint !e970 !e9128
-            char_t acn_Header[4];
+            const char acn_ZIP_HEADER[4] = {0x50, 0x4B, 0x03, 0x04}; //lint !e970 !e9128
+            char acn_Header[4];
             c_FileStream.seekg(0LL, std::ios::beg);
             c_FileStream.read(&acn_Header[0], 4);
 
@@ -404,7 +404,7 @@ std::error_code C_OscZipFile::h_IsZipFile(const std::string & orc_FilePath)
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscZipFile::mh_AddContentToZipFile(const std::string & orc_ZipArchivePath, const std::string & orc_ItemName,
-                                             const char_t * const opcn_Content, const uint32_t ou32_ContentSize,
+                                             const char * const opcn_Content, const uint32_t ou32_ContentSize,
                                              const std::string & orc_ItemType, std::string * const opc_ErrorText)
 {
    std::error_code c_Return = Errc::success;

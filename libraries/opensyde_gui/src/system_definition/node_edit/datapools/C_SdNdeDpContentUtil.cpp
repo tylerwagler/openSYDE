@@ -2938,7 +2938,7 @@ QString C_SdNdeDpContentUtil::h_ConvertToString(const C_OscNodeDataPoolContent &
       {
          for (uint32_t u32_ItContent = 0; u32_ItContent < orc_Data.GetArraySize(); ++u32_ItContent)
          {
-            const char_t cn_Char = static_cast<char_t>(orc_Data.GetValueArrS8Element(u32_ItContent));
+            const char cn_Char = static_cast<char>(orc_Data.GetValueArrS8Element(u32_ItContent));
             if (cn_Char == '\0')
             {
                break;
@@ -2951,7 +2951,7 @@ QString C_SdNdeDpContentUtil::h_ConvertToString(const C_OscNodeDataPoolContent &
       }
       else
       {
-         c_Retval = static_cast<QString>(static_cast<char_t>(orc_Data.GetValueS8()));
+         c_Retval = static_cast<QString>(static_cast<char>(orc_Data.GetValueS8()));
       }
    }
    return c_Retval;
@@ -2973,7 +2973,7 @@ QString C_SdNdeDpContentUtil::h_ConvertToString(const std::vector<int8_t> & orc_
    //Each element is an character
    for (uint32_t u32_ItContent = 0; u32_ItContent < orc_Data.size(); ++u32_ItContent)
    {
-      const char_t cn_Char = static_cast<char_t>(orc_Data[u32_ItContent]);
+      const char cn_Char = static_cast<char>(orc_Data[u32_ItContent]);
       if (cn_Char == '\0')
       {
          break;

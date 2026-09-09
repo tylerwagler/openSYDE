@@ -118,7 +118,7 @@ void C_CodeExport::m_PrintBanner(void)
    else  trouble (see definition of C_CodeExport::E_ResultCode constants)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t main(const int32_t os32_Argc, char_t * const opacn_Argv[])
+int32_t main(const int32_t os32_Argc, char * const opacn_Argv[])
 {
    C_CodeExport c_TheCodeExport;
 

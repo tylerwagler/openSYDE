@@ -93,7 +93,7 @@ static std::string mh_Sanitize(const std::string & orc_Input)
    std::string c_Result;
    for (uint32_t u32_Index = 1U; u32_Index <= orc_Input.length(); ++u32_Index)
    {
-      const char_t cn_Char = orc_Input[u32_Index];
+      const char cn_Char = orc_Input[u32_Index];
       const bool q_Ok = ((cn_Char >= 'A') && (cn_Char <= 'Z')) ||
                         ((cn_Char >= 'a') && (cn_Char <= 'z')) ||
                         ((cn_Char >= '0') && (cn_Char <= '9')) ||
@@ -303,14 +303,14 @@ static void mh_RemoveTree(const std::string & orc_Path)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int main(const int argc, char_t * const opacn_Argv[])
+int main(const int argc, char * const opacn_Argv[])
 {
    // Parse args: optional `--device-library <dir>` followed by two positional paths.
    std::string c_InputPath;
    std::string c_OutputPath;
    std::string c_DeviceLibPath;
    {
-      const char_t * const pcn_Home = std::getenv("HOME");
+      const char * const pcn_Home = std::getenv("HOME");
       if (pcn_Home != nullptr)
       {
          c_DeviceLibPath = std::string(pcn_Home) + "/.local/opt/openSYDE/devices";

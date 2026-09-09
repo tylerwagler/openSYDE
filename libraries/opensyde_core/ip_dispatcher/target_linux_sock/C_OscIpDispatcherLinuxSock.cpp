@@ -604,7 +604,7 @@ std::error_code C_OscIpDispatcherLinuxSock::IsTcpConnected(const uint32_t ou32_H
    }
    else
    {
-      char_t cn_Byte;
+      char cn_Byte;
       // Dummy read to check the connection.
       // The parameter MSG_PEEK avoids that received data will removed from the queue when read
       const ssize_t x_BytesRead = //lint !e8080 !e970 //using type to match library interface

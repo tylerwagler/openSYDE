@@ -990,7 +990,7 @@ std::string C_CieExportDbc::mh_NiceifyStringForDbcSymbol(const std::string & orc
 
    for (uint32_t u32_Index = 0U; u32_Index < orc_String.length(); u32_Index++)
    {
-      const char_t cn_Character = orc_String.c_str()[u32_Index];
+      const char cn_Character = orc_String.c_str()[u32_Index];
       if ((std::isalnum(cn_Character) == 0) && (cn_Character != '_'))
       {
          c_Result += std::to_string(cn_Character);
@@ -1023,7 +1023,7 @@ std::string C_CieExportDbc::mh_EscapeCriticalSymbols(const std::string & orc_Str
 
    for (int32_t s32_Char = 0; s32_Char < static_cast<int32_t>(orc_String.length()); ++s32_Char)
    {
-      const char_t cn_Char = orc_String[static_cast<uint32_t>(s32_Char + 1)];
+      const char cn_Char = orc_String[static_cast<uint32_t>(s32_Char + 1)];
       if (cn_Char == '\"')
       {
          c_Retval += "\\\"";

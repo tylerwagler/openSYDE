@@ -29,8 +29,8 @@ namespace opensyde_core
 //constants for application information block magic pattern
 const uint8_t APPLICATION_INFO_MAGIC_LENGTH_V1 = 7U;
 const uint8_t APPLICATION_INFO_MAGIC_LENGTH_V2 = 8U;
-extern const char_t APPLICATION_INFO_MAGIC_V1[APPLICATION_INFO_MAGIC_LENGTH_V1 + 1U]; /// +1 for \0
-extern const char_t APPLICATION_INFO_MAGIC_V2[APPLICATION_INFO_MAGIC_LENGTH_V2];      /// \0 already included
+extern const char APPLICATION_INFO_MAGIC_V1[APPLICATION_INFO_MAGIC_LENGTH_V1 + 1U]; /// +1 for \0
+extern const char APPLICATION_INFO_MAGIC_V2[APPLICATION_INFO_MAGIC_LENGTH_V2];      /// \0 already included
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -38,7 +38,7 @@ extern const char_t APPLICATION_INFO_MAGIC_V2[APPLICATION_INFO_MAGIC_LENGTH_V2];
 class C_OscApplicationInfoBlock
 {
 private:
-   std::string m_GetNonTerminatedString(const char_t * opcn_Chars, const uint8_t ou8_MaxLength) const;
+   std::string m_GetNonTerminatedString(const char * opcn_Chars, const uint8_t ou8_MaxLength) const;
 
    std::error_code m_ParsePayload(const uint8_t * const opu8_Data, const uint16_t ou16_NumBytesAvailable,
                                   const uint8_t ou8_BlockVersion);
@@ -58,7 +58,7 @@ public:
 
    std::error_code ParseFromBLOB(const uint8_t * const opu8_Data, const uint16_t ou16_NumBytesAvailable);
 
-   char_t acn_Magic[APPLICATION_INFO_MAGIC_LENGTH_V2]; //Maximum length ...
+   char acn_Magic[APPLICATION_INFO_MAGIC_LENGTH_V2]; //Maximum length ...
    uint8_t u8_StructVersion;                           ///< = 1
    uint8_t u8_ContentMap;                              ///< Bit0 = contains device ID  \n
    ///< Bit1 = contains date+time \n
@@ -66,13 +66,13 @@ public:
    ///< Bit3 = contains project version \n
    ///< Bit4 = contains additional info
    //the lenghts of the char-arrays are set to accomodate the longest possible texts of all defined versions
-   char_t acn_DeviceID[29];       ///< ASCII device ID e.g. "ESX2" (optional; recommended)
-   char_t acn_Date[12];           ///< date of compilation(format: __DATE__ ANSI C macro) (optional)
-   char_t acn_Time[9];            ///< time of compilation (format: __TIME__ ANSI C macro) (optional)
-   char_t acn_ProjectName[33];    ///< short description of project (optional)
-   char_t acn_ProjectVersion[17]; ///< version number of project; (optional)
+   char acn_DeviceID[29];       ///< ASCII device ID e.g. "ESX2" (optional; recommended)
+   char acn_Date[12];           ///< date of compilation(format: __DATE__ ANSI C macro) (optional)
+   char acn_Time[9];            ///< time of compilation (format: __TIME__ ANSI C macro) (optional)
+   char acn_ProjectName[33];    ///< short description of project (optional)
+   char acn_ProjectVersion[17]; ///< version number of project; (optional)
    uint8_t u8_LenAdditionalInfo;
-   char_t acn_AdditionalInfo[255]; ///< does not hurt on PC side, if we simply use the theoretical max. of 255 bytes
+   char acn_AdditionalInfo[255]; ///< does not hurt on PC side, if we simply use the theoretical max. of 255 bytes
 
    std::string GetDeviceID(void) const;
    std::string GetDate(void) const;

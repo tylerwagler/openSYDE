@@ -361,7 +361,7 @@ std::string C_OscXmlParserBase::GetNodeContent(void) const
 
    if (mpc_CurrentNode != nullptr)
    {
-      const char_t * const pcn_Content = mpc_CurrentNode->GetText();
+      const char * const pcn_Content = mpc_CurrentNode->GetText();
       if (pcn_Content != nullptr)
       {
          c_Content = pcn_Content;
@@ -389,7 +389,7 @@ bool C_OscXmlParserBase::AttributeExists(const std::string & orc_Name) const
 
    if (mpc_CurrentNode != nullptr)
    {
-      const char_t * const pcn_Text = mpc_CurrentNode->Attribute(orc_Name.c_str());
+      const char * const pcn_Text = mpc_CurrentNode->Attribute(orc_Name.c_str());
       if (pcn_Text != nullptr)
       {
          q_Return = true;
@@ -440,7 +440,7 @@ std::string C_OscXmlParserBase::GetAttributeString(const std::string & orc_Name,
 
    if (mpc_CurrentNode != nullptr)
    {
-      const char_t * const pcn_Text = mpc_CurrentNode->Attribute(orc_Name.c_str());
+      const char * const pcn_Text = mpc_CurrentNode->Attribute(orc_Name.c_str());
       if (pcn_Text != nullptr)
       {
          c_Value = pcn_Text;

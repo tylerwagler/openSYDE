@@ -105,7 +105,7 @@ C_BasicFlashTool::~C_BasicFlashTool()
    \param[in]  oppcn_Argv  Command line arguments
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_BasicFlashTool::Init(const int32_t os32_Argc, char_t * const * const oppcn_Argv)
+void C_BasicFlashTool::Init(const int32_t os32_Argc, char * const * const oppcn_Argv)
 {
    std::string c_LogFile;
    C_TglDateTime c_DateTime;
@@ -114,7 +114,7 @@ void C_BasicFlashTool::Init(const int32_t os32_Argc, char_t * const * const oppc
    const std::string c_BinaryHash = C_OscUtilBinaryHash::h_CreateBinaryHash();
 #ifdef _WIN32
    {
-      char_t acn_ApplicationName[MAX_PATH + 1];
+      char acn_ApplicationName[MAX_PATH + 1];
       const uint32_t u32_Return = GetModuleFileNameA(nullptr, &acn_ApplicationName[0], MAX_PATH + 1);
       tgl_assert(u32_Return != 0);
       c_ExeName = acn_ApplicationName;
@@ -169,7 +169,7 @@ void C_BasicFlashTool::Init(const int32_t os32_Argc, char_t * const * const oppc
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_BasicFlashTool::E_Result C_BasicFlashTool::ParseCommandLine(const int32_t os32_Argc,
-                                                              char_t * const * const oppcn_Argv)
+                                                              char * const * const oppcn_Argv)
 {
    E_Result e_Result = eRESULT_OK;
    int32_t s32_Result;

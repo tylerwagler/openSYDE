@@ -53,7 +53,7 @@
    else: error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t main(int32_t os32_Argc, char_t * opacn_Argv[])
+int32_t main(int32_t os32_Argc, char * opacn_Argv[])
 {
    const uint16_t u16_Timer = osc_write_log_performance_start();
    int32_t s32_Result;

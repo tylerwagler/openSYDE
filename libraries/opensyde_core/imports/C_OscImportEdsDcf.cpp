@@ -1570,7 +1570,7 @@ std::error_code C_OscImportEdsDcf::mh_GetIntegerValue(const std::string & orc_Co
       //Remove whitespace and $
       for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length(); ++u32_ItChar)
       {
-         const char_t cn_Character = orc_CoValue[u32_ItChar + 1U];
+         const char cn_Character = orc_CoValue[u32_ItChar + 1U];
          if ((cn_Character == ' ') || (cn_Character == '$'))
          {
             //Skip
@@ -1659,7 +1659,7 @@ std::error_code C_OscImportEdsDcf::mh_Get64IntegerValue(const std::string & orc_
       //Remove whitespace and $
       for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length(); ++u32_ItChar)
       {
-         const char_t cn_Character = orc_CoValue[u32_ItChar + 1U];
+         const char cn_Character = orc_CoValue[u32_ItChar + 1U];
          if ((cn_Character == ' ') || (cn_Character == '$'))
          {
             //Skip
@@ -1714,7 +1714,7 @@ std::error_code C_OscImportEdsDcf::mh_GetIntegerValueSimple(const std::string & 
 
    if (orc_CoValue.length() > 0)
    {
-      char_t * pcn_Ptr = nullptr;
+      char * pcn_Ptr = nullptr;
 
       oru32_Value = static_cast<uint32_t>(strtoul(orc_CoValue.c_str(), &pcn_Ptr, 0));
       if (pcn_Ptr != nullptr)

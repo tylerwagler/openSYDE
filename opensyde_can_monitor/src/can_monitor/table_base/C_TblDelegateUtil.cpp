@@ -393,7 +393,7 @@ QStringList C_TblDelegateUtil::mh_CreateAndStandardizeStringList(const QString &
    Color with specified transparency value
 */
 //----------------------------------------------------------------------------------------------------------------------
-QColor C_TblDelegateUtil::mh_GetColorTransparent(const QColor & orc_ColorBase, const char_t ocn_Transparency)
+QColor C_TblDelegateUtil::mh_GetColorTransparent(const QColor & orc_ColorBase, const char ocn_Transparency)
 {
    QColor c_Retval = orc_ColorBase;
    //Subtract of 255 as the value is the transparency value, not the alpha value

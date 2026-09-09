@@ -120,7 +120,7 @@ private:
                                                                     uint8_t * const opu8_NrCode = nullptr) const;
 
 protected:
-   void m_LogWarningWithHeader(const std::string & orc_Information, const char_t * const opcn_Function) const;
+   void m_LogWarningWithHeader(const std::string & orc_Information, const char * const opcn_Function) const;
 
 public:
    ///container for results reported by "ReadSerialNumber" broadcast service

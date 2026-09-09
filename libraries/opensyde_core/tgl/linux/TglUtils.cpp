@@ -45,7 +45,7 @@ using namespace stw::tgl;
    \param[in]     os32_Line      Line number where the problem turned up
 */
 //----------------------------------------------------------------------------------------------------------------------
-void stw::tgl::TglReportAssertion(const char_t * const opcn_Module, const char_t * const opcn_Func,
+void stw::tgl::TglReportAssertion(const char * const opcn_Module, const char * const opcn_Func,
                                   const int32_t os32_Line)
 {
    std::string c_Text;
@@ -66,8 +66,8 @@ void stw::tgl::TglReportAssertion(const char_t * const opcn_Module, const char_t
    \param[in]     os32_Line              Line number where the problem turned up
 */
 //----------------------------------------------------------------------------------------------------------------------
-void stw::tgl::TglReportAssertionDetail(const char_t * const opcn_DetailInfo, const char_t * const opcn_Module,
-                                        const char_t * const opcn_Func, const int32_t os32_Line)
+void stw::tgl::TglReportAssertionDetail(const char * const opcn_DetailInfo, const char * const opcn_Module,
+                                        const char * const opcn_Func, const int32_t os32_Line)
 {
    std::string c_Text;
 
@@ -128,7 +128,7 @@ bool stw::tgl::TglGetSystemUserName(std::string & orc_UserName)
 //----------------------------------------------------------------------------------------------------------------------
 bool stw::tgl::TglGetSystemMachineName(std::string & orc_MachineName)
 {
-   char_t acn_HostName[HOST_NAME_MAX + 1];
+   char acn_HostName[HOST_NAME_MAX + 1];
    const int x_Result = //lint !e8080 !e970  type defined by API we use
                         gethostname(&acn_HostName[0], sizeof(acn_HostName));
 
@@ -193,7 +193,7 @@ int32_t stw::tgl::TglSetEnvironmentVariable(const std::string & orc_Name, const 
 
 #if 0
    int32_t s32_Return = -1;
-   char_t acn_String[1024];
+   char acn_String[1024];
    const std::string c_String = orc_Name + "=" + orc_Value;
 
    if (c_String.length() < sizeof(acn_String))

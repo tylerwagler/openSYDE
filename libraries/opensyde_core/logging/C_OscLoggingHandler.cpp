@@ -137,7 +137,7 @@ const std::string & C_OscLoggingHandler::h_GetCompleteLogFileLocation(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscLoggingHandler::h_WriteLogInfo(const std::string & orc_Activity, const std::string & orc_Message,
-                                           const char_t * const opcn_Class, const char_t * const opcn_Function)
+                                           const char * const opcn_Class, const char * const opcn_Function)
 {
    C_OscLoggingHandler::mh_WriteLog("INFO", orc_Activity, orc_Message, opcn_Class, opcn_Function);
 }
@@ -152,7 +152,7 @@ void C_OscLoggingHandler::h_WriteLogInfo(const std::string & orc_Activity, const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscLoggingHandler::h_WriteLogWarning(const std::string & orc_Activity, const std::string & orc_Message,
-                                              const char_t * const opcn_Class, const char_t * const opcn_Function)
+                                              const char * const opcn_Class, const char * const opcn_Function)
 {
    C_OscLoggingHandler::mh_WriteLog("WARNING", orc_Activity, orc_Message, opcn_Class, opcn_Function);
 }
@@ -167,7 +167,7 @@ void C_OscLoggingHandler::h_WriteLogWarning(const std::string & orc_Activity, co
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscLoggingHandler::h_WriteLogError(const std::string & orc_Activity, const std::string & orc_Message,
-                                            const char_t * const opcn_Class, const char_t * const opcn_Function)
+                                            const char * const opcn_Class, const char * const opcn_Function)
 {
    C_OscLoggingHandler::mh_WriteLog("ERROR", orc_Activity, orc_Message, opcn_Class, opcn_Function);
 }
@@ -184,7 +184,7 @@ void C_OscLoggingHandler::h_WriteLogError(const std::string & orc_Activity, cons
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscLoggingHandler::h_WriteLogPerformance(const uint16_t ou16_TimerId, const std::string & orc_Message,
-                                                  const char_t * const opcn_Class, const char_t * const opcn_Function)
+                                                  const char * const opcn_Class, const char * const opcn_Function)
 {
    if (mhq_MeasureTime == true)
    {
@@ -305,8 +305,8 @@ std::string C_OscLoggingHandler::h_UtilConvertDateTimeToString(const C_TglDateTi
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscLoggingHandler::mh_WriteLog(const std::string & orc_Type, const std::string & orc_Activity,
-                                        const std::string & orc_Message, const char_t * const opcn_Class,
-                                        const char_t * const opcn_Function)
+                                        const std::string & orc_Message, const char * const opcn_Class,
+                                        const char * const opcn_Function)
 {
     std::string c_DateTimeFormatted;
     C_TglDateTime c_DateTime;

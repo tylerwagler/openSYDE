@@ -83,8 +83,8 @@ public:
    virtual ~C_HexFile(void);
 
    void Clear(void);
-   std::error_code LoadFromFile(const char_t * const opcn_FileName);
-   std::error_code SaveToFile(const char_t * const opcn_FileName);
+   std::error_code LoadFromFile(const char * const opcn_FileName);
+   std::error_code SaveToFile(const char * const opcn_FileName);
 
    //Reformat hex file (uses a memory dump internally); only use if you know there are no bigger gaps in the hex file
    //                   data)
@@ -109,7 +109,7 @@ public:
    //Get pointer to data of current hex line as string and advance data pointer to next line.
    //After last line sets data pointer to NULL
    // Error: NULL pointer
-   const char_t * NextLineString(void);
+   const char * NextLineString(void);
 
    //Get total number of hex file lines
    uint32_t LineCount(void) const;
@@ -172,27 +172,27 @@ protected:
    uint32_t m_LoadIntelHex(std::FILE * const opt_File);
    uint32_t m_LoadSRecord(std::FILE * const opt_File);
    uint32_t m_CopyHex2Mem(uint16_t * opu16_BinImage, const uint32_t ou32_Offset);
-   uint32_t m_CloseRecord(char_t * const opcn_Record, bool & orq_RecordOpen);
-   static const char_t * mh_HexLineString(const uint8_t * const opu8_HexLine);
-   uint32_t m_GetIHexCommand(const char_t * const opcn_String, uint8_t & oru8_Command) const;
-   uint32_t m_GetSRecordType(const char_t * const opcn_String, uint8_t & oru8_RecordType) const;
-   uint32_t m_GetIntelAddress(const char_t * const opcn_String, const uint8_t ou8_Command, uint32_t & oru32_Adr) const;
-   uint32_t m_GetSRecordAddress(const char_t * const opcn_String, const uint8_t ou8_RecordType,
+   uint32_t m_CloseRecord(char * const opcn_Record, bool & orq_RecordOpen);
+   static const char * mh_HexLineString(const uint8_t * const opu8_HexLine);
+   uint32_t m_GetIHexCommand(const char * const opcn_String, uint8_t & oru8_Command) const;
+   uint32_t m_GetSRecordType(const char * const opcn_String, uint8_t & oru8_RecordType) const;
+   uint32_t m_GetIntelAddress(const char * const opcn_String, const uint8_t ou8_Command, uint32_t & oru32_Adr) const;
+   uint32_t m_GetSRecordAddress(const char * const opcn_String, const uint8_t ou8_RecordType,
                                 uint32_t & oru32_Adr) const;
    void m_SetEOFPtr(void);
    void m_SetDataPtr(const uint32_t ou32_Adr);
    uint32_t m_SetXAdrPtr(const uint32_t ou32_Adr);
-   uint32_t m_AddHexLine(const char_t * const opcn_String);
+   uint32_t m_AddHexLine(const char * const opcn_String);
    void m_RemoveFirst(void);
-   uint32_t m_ConvOffs16To32(char_t * const opcn_String) const;
-   uint32_t m_ConvRec16ToRec32(char_t * const opcn_String);
+   uint32_t m_ConvOffs16To32(char * const opcn_String) const;
+   uint32_t m_ConvRec16ToRec32(char * const opcn_String);
    uint32_t m_SetOffset(const uint32_t ou32_Adr);
-   static uint32_t mh_CalcCheck(char_t * const opcn_String);
-   uint32_t m_CopyData(const char_t * opcn_String, T_HexLine * const opt_HexLine, const uint32_t ou32_Length);
-   static uint32_t mh_GetByte(const char_t * const opcn_String, const uint32_t ou32_Index, uint8_t & oru8_Data);
-   static void mh_SetByte(char_t * const opcn_String, const uint32_t ou32_Index, const uint8_t ou8_Byte);
-   static uint32_t mh_GetWord(const char_t * const opcn_String, const uint32_t ou32_Index, uint32_t & oru32_Word);
-   static void mh_SetWord(char_t * const opcn_String, const uint32_t ou32_Index, const uint32_t ou32_Data);
+   static uint32_t mh_CalcCheck(char * const opcn_String);
+   uint32_t m_CopyData(const char * opcn_String, T_HexLine * const opt_HexLine, const uint32_t ou32_Length);
+   static uint32_t mh_GetByte(const char * const opcn_String, const uint32_t ou32_Index, uint8_t & oru8_Data);
+   static void mh_SetByte(char * const opcn_String, const uint32_t ou32_Index, const uint8_t ou8_Byte);
+   static uint32_t mh_GetWord(const char * const opcn_String, const uint32_t ou32_Index, uint32_t & oru32_Word);
+   static void mh_SetWord(char * const opcn_String, const uint32_t ou32_Index, const uint32_t ou32_Data);
 
    static int32_t mh_FindPattern(const uint8_t * const opu8_Buffer, const uint8_t * const opu8_Pattern,
                                  const uint32_t ou32_BufSize, const uint16_t ou16_PatternLength);

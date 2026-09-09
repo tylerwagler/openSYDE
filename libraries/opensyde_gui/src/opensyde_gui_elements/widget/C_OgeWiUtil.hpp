@@ -33,10 +33,10 @@ class C_OgeWiUtil
 {
 public:
    static void h_DrawBackground(QWidget * const opc_Widget, QPainter * const opc_Painter = nullptr);
-   static void h_ApplyStylesheetProperty(QWidget * const opc_Widget, const char_t * const opcn_Name,
+   static void h_ApplyStylesheetProperty(QWidget * const opc_Widget, const char * const opcn_Name,
                                          const QVariant & orc_Value);
    static void h_ApplyStylesheetPropertyToItselfAndAllChildren(QWidget * const opc_Widget,
-                                                               const char_t * const opcn_Name,
+                                                               const char * const opcn_Name,
                                                                const QVariant & orc_Value);
    static void h_SetWindowIcon(QWidget * const opc_Widget);
    static void h_CheckAndFixDialogPositionAndSize(QPoint & orc_GlobalPosition, QSize & orc_Size,

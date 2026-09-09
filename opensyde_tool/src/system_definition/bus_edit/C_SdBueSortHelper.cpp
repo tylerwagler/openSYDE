@@ -110,8 +110,8 @@ bool C_SdBueSortHelper::h_CompareString(const std::string & orc_String1,
    {
       if (u32_ItChar <= orc_String2.length())
       {
-         const char_t cn_Char1 = orc_String1[u32_ItChar];
-         const char_t cn_Char2 = orc_String2[u32_ItChar];
+         const char cn_Char1 = orc_String1[u32_ItChar];
+         const char cn_Char2 = orc_String2[u32_ItChar];
          if (cn_Char1 == cn_Char2)
          {
             //Messages equal

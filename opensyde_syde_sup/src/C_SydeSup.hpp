@@ -96,7 +96,7 @@ public:
       eERR_UNKNOWN                     = 100
    };
 
-   E_Result ParseCommandLine(const int32_t os32_Argc, char_t * const * const oppcn_Argv);
+   E_Result ParseCommandLine(const int32_t os32_Argc, char * const * const oppcn_Argv);
    E_Result SelectModeAndStart(void);
    E_Result Update(void);
    E_Result CreatePackage(void);

@@ -1230,7 +1230,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::Cycle(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeader(const std::string & orc_Information,
-                                                        const char_t * const opcn_Function) const
+                                                        const char * const opcn_Function) const
 {
    C_OscLoggingHandler::h_WriteLogError("openSYDE IP-TP",
                                         "openSYDE IP-TP node " + std::to_string(
@@ -1255,7 +1255,7 @@ void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeader(const std::string & orc_
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeaderAndIp(const std::string & orc_Information,
-                                                             const char_t * const opcn_Function,
+                                                             const char * const opcn_Function,
                                                              const uint8_t (&orau8_Ip)[4]) const
 {
    std::string c_Text;
@@ -1380,7 +1380,7 @@ void C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults::ParseFromArray
    (void)std::memcpy(&au8_DeviceName[0], &orc_Data[static_cast<size_t>(ou8_DataStartIndex) + 8U], 28U);
 
    //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?& anyway
-   this->c_DeviceName = reinterpret_cast<const char_t *>(&au8_DeviceName[0]);
+   this->c_DeviceName = reinterpret_cast<const char *>(&au8_DeviceName[0]);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1501,7 +1501,7 @@ void C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults::ParseF
    (void)std::memcpy(&au8_DeviceName[0], &orc_Data[static_cast<size_t>(ou8_DataStartIndex) + 3U], 28U);
 
    //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?& anyway
-   this->c_DeviceName = reinterpret_cast<const char_t *>(&au8_DeviceName[0]);
+   this->c_DeviceName = reinterpret_cast<const char *>(&au8_DeviceName[0]);
 
    this->u8_SubNodeId = orc_Data[static_cast<size_t>(ou8_DataStartIndex) + 32];
 

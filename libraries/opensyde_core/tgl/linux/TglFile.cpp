@@ -42,7 +42,7 @@ using namespace stw::scl;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 //lint -e{8080} //interface defined by C library
-static int m_RemoveFile(const char_t * const opcn_Pathname, const struct stat * const opc_Stat, const int ox_Type,
+static int m_RemoveFile(const char * const opcn_Pathname, const struct stat * const opc_Stat, const int ox_Type,
                         struct FTW * const opc_Ftwb);
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
@@ -318,7 +318,7 @@ std::string stw::tgl::TglChangeFileExtension(const std::string & orc_Path, const
 //----------------------------------------------------------------------------------------------------------------------
 std::string stw::tgl::TglGetExePath(void)
 {
-    std::vector<char_t> c_VecPath;
+    std::vector<char> c_VecPath;
     std::string c_Arg;
     std::string c_Path;
     bool q_Success = false;
@@ -437,11 +437,11 @@ std::string stw::tgl::TglExtractFileName(const std::string & orc_Path)
 //----------------------------------------------------------------------------------------------------------------------
 std::string stw::tgl::TglExpandFileName(const std::string & orc_RelativePath, const std::string & orc_BasePath)
 {
-    char_t acn_Buffer[PATH_MAX];
+    char acn_Buffer[PATH_MAX];
     std::string c_FullPath;
 
     const std::string c_RelPath = orc_BasePath + "/" + orc_RelativePath;
-    const char_t * const pcn_Path = realpath(c_RelPath.c_str(), &acn_Buffer[0]);
+    const char * const pcn_Path = realpath(c_RelPath.c_str(), &acn_Buffer[0]);
 
     if (pcn_Path != nullptr)
     {
@@ -503,7 +503,7 @@ int32_t stw::tgl::TglCreateDirectory(const std::string & orc_Directory)
 */
 //---------------------------------------------------------------------------------------------------------------------
 //lint -e{8080} //interface defined by C library
-static int m_RemoveFile(const char_t * const opcn_Pathname, const struct stat * const opc_Stat, const int ox_Type,
+static int m_RemoveFile(const char * const opcn_Pathname, const struct stat * const opc_Stat, const int ox_Type,
                         struct FTW * const opc_Ftwb)
 {
    int32_t s32_Ret = 0;

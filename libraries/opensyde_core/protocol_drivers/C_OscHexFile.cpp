@@ -94,7 +94,7 @@ std::error_code C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscA
    uint8_t * const pu8_Buffer = new uint8_t[u16_Size];
    uint16_t u16_Help;
 
-   char_t acn_Magic[APPLICATION_INFO_MAGIC_LENGTH_V2];
+   char acn_Magic[APPLICATION_INFO_MAGIC_LENGTH_V2];
 
    orc_InfoBlocks.clear();
 

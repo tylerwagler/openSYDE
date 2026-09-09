@@ -43,9 +43,9 @@ namespace tgl
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-void TglReportAssertion(const char_t * const opcn_Module, const char_t * const opcn_Func, const int32_t os32_Line);
-void TglReportAssertionDetail(const char_t * const opcn_DetailInfo, const char_t * const opcn_Module,
-                              const char_t * const opcn_Func, const int32_t os32_Line);
+void TglReportAssertion(const char * const opcn_Module, const char * const opcn_Func, const int32_t os32_Line);
+void TglReportAssertionDetail(const char * const opcn_DetailInfo, const char * const opcn_Module,
+                              const char * const opcn_Func, const int32_t os32_Line);
 bool TglGetSystemUserName(std::string & orc_UserName);
 bool TglGetSystemMachineName(std::string & orc_MachineName);
 void TglHandleSystemMessages(void);

@@ -787,7 +787,7 @@ std::error_code C_OscProtocolDriverOsy::m_ReadStringDataIdentifier(const uint16_
    if (c_Return == Errc::success)
    {
       //extract text:
-      std::vector<char_t> c_Text;
+      std::vector<char> c_Text;
       c_Text.resize(c_Data.size() + 1); //plus 1 for termination
       c_Text[c_Text.size() - 1] = '\0'; //add termination
       (void)std::memcpy(&c_Text[0], &c_Data[0], c_Data.size());
@@ -1359,7 +1359,7 @@ std::error_code C_OscProtocolDriverOsy::OsyReadApplicationSoftwareFingerprint(ui
       m_ReadDataByIdentifier(mhu16_OSY_DI_APPLICATION_SOFTWARE_FINGERPRINT, 7U, false, c_Data, u8_NrErrorCode);
    if (c_Return == Errc::success)
    {
-      std::vector<char_t> c_Text;
+      std::vector<char> c_Text;
       (void)std::memcpy(&orau8_Date[0], &c_Data[0], 3U);
       (void)std::memcpy(&orau8_Time[0], &c_Data[3], 3U);
       //extract text:
@@ -3007,7 +3007,7 @@ std::error_code C_OscProtocolDriverOsy::OsyReadDataPoolMetaData(const uint8_t ou
                                 0; (u32_ItReceivedData < c_ReceiveData.size()) && (u32_ItName < u32_Count);
                              ++u32_ItName)
                         {
-                           orc_MetaData.c_Name += static_cast<char_t>(c_ReceiveData[u32_ItReceivedData]);
+                           orc_MetaData.c_Name += static_cast<char>(c_ReceiveData[u32_ItReceivedData]);
                            //Iterate segment
                            ++u32_ItReceivedData;
                         }
@@ -3568,7 +3568,7 @@ std::error_code C_OscProtocolDriverOsy::OsyStopTunnelCanMessages(uint8_t * const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsy::m_LogErrorWithHeader(const std::string & orc_Activity,
                                                   const std::string & orc_Information,
-                                                  const char_t * const opcn_Function, const bool oq_AsError) const
+                                                  const char * const opcn_Function, const bool oq_AsError) const
 {
    const std::string c_LogText = "openSYDE protocol driver node " +
                                  std::to_string(mc_ServerId.u8_BusIdentifier) + "." +
@@ -6119,7 +6119,7 @@ std::error_code C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_
 
    std::vector<uint8_t> c_ReceiveData;
    std::vector<uint8_t> c_SendData;
-   std::vector<char_t> c_Text;
+   std::vector<char> c_Text;
    const uint32_t u32_PrevTimeout = this->mu32_TimeoutPollingMs;
 
    c_SendData.resize(1);

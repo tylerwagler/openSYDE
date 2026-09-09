@@ -288,8 +288,8 @@ inline int ScanBaseCompat(const std::string & orc_Str)
 /// \throws std::out_of_range      value does not fit in int32_t
 inline int32_t ToIntCompat(const std::string & orc_Str)
 {
-   const char_t * const opcn_Str = orc_Str.c_str();
-   char_t * pcn_End = nullptr;
+   const char * const opcn_Str = orc_Str.c_str();
+   char * pcn_End = nullptr;
 
    errno = 0;
    const long x_Value = std::strtol(opcn_Str, &pcn_End, ScanBaseCompat(orc_Str));
@@ -308,8 +308,8 @@ inline int32_t ToIntCompat(const std::string & orc_Str)
 /// Replacement for str.ToIntDef(default). Accepts decimal and "0x"-prefixed hex.
 inline int32_t ToIntDefCompat(const std::string & orc_Str, const int32_t os32_Default)
 {
-   const char_t * opcn_Str = orc_Str.c_str();
-   char_t * opcn_End = nullptr;
+   const char * opcn_Str = orc_Str.c_str();
+   char * opcn_End = nullptr;
    const int32_t s32_Val = static_cast<int32_t>(std::strtol(opcn_Str, &opcn_End, ScanBaseCompat(orc_Str)));
    if (opcn_End == opcn_Str)
    {
@@ -325,8 +325,8 @@ inline int32_t ToIntDefCompat(const std::string & orc_Str, const int32_t os32_De
 /// \throws std::out_of_range      value does not fit in int64_t
 inline int64_t ToInt64Compat(const std::string & orc_Str)
 {
-   const char_t * const opcn_Str = orc_Str.c_str();
-   char_t * pcn_End = nullptr;
+   const char * const opcn_Str = orc_Str.c_str();
+   char * pcn_End = nullptr;
 
    errno = 0;
    const long long x_Value = std::strtoll(opcn_Str, &pcn_End, ScanBaseCompat(orc_Str));
@@ -395,7 +395,7 @@ inline double ToDoubleCompat(const std::string & orc_Str)
 }
 
 /// Replacement for str.Printf(format, ...) — uses vsnprintf internally.
-inline std::string PrintFormattedCompat(const char_t * const opcn_Format, ...)
+inline std::string PrintFormattedCompat(const char * const opcn_Format, ...)
 {
    va_list c_Args;
    va_start(c_Args, opcn_Format);
@@ -445,7 +445,7 @@ inline void ListLoadFromFile(std::vector<std::string> & orc_List, const std::str
 {
    std::FILE * pc_File;
    long x_FileSize;
-   char_t * pcn_Buffer;
+   char * pcn_Buffer;
    size_t x_SizeRead;
    long x_Index;
    uint32_t u32_NumStrings;
@@ -464,7 +464,7 @@ inline void ListLoadFromFile(std::vector<std::string> & orc_List, const std::str
 
    try
    {
-      pcn_Buffer = new char_t[x_FileSize + 1U]; //+ 1: put a terminating \0
+      pcn_Buffer = new char[x_FileSize + 1U]; //+ 1: put a terminating \0
    }
    catch (...)
    {
@@ -510,7 +510,7 @@ inline void ListLoadFromFile(std::vector<std::string> & orc_List, const std::str
    x_Index = 0;
    for (uint32_t u32_Line = 0U; u32_Line < u32_NumStrings; u32_Line++)
    {
-      const char_t * const pcn_String = &pcn_Buffer[x_Index];
+      const char * const pcn_String = &pcn_Buffer[x_Index];
 
       s32_Len = static_cast<int32_t>(std::strlen(pcn_String));
       x_Index += (s32_Len + 1); //skip to next string

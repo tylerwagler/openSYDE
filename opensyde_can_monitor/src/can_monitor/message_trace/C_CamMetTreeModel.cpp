@@ -1053,7 +1053,7 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
                        pc_CurMessage->c_GreyOutInformation.c_GrayOutValueDataBytes.begin();
                     c_ItVal != pc_CurMessage->c_GreyOutInformation.c_GrayOutValueDataBytes.end(); ++c_ItVal)
                {
-                  c_Array.push_back(static_cast<char_t>(*c_ItVal));
+                  c_Array.push_back(static_cast<char>(*c_ItVal));
                }
                c_Retval = c_Array;
             }
