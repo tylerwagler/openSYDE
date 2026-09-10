@@ -295,13 +295,35 @@ TEST(HexStringParsing, ToDoubleCompatThrowsOnNonNumericInput)
    EXPECT_DOUBLE_EQ(0.0, ToDoubleCompat("0.0"));
 }
 
-/// Deliberately laxer than ToIntCompat: the original extracted through a stream
-/// and stopped at the first unusable character. Kept so project files that have
+/// Deliberately laxer than ToIntCompat: parsing stops at the first unusable
+/// character and what was read is returned. Kept so project files that have
 /// always loaded keep loading.
+///
+/// These inputs are the ones that exposed the old istringstream implementation as
+/// non-portable. libstdc++ parsed all of them as the longest valid prefix; libc++
+/// set failbit on "1.5abc", "1e5x" and "3.x" and returned nothing. The parser now
+/// uses std::from_chars, which gives the same answer everywhere -- and this test
+/// runs on macOS CI as well as Linux, so a regression to stream semantics on
+/// either library fails here rather than in a project file.
 TEST(HexStringParsing, ToDoubleCompatToleratesTrailingCharacters)
 {
    EXPECT_DOUBLE_EQ(1.5, ToDoubleCompat("1.5abc"));
    EXPECT_DOUBLE_EQ(42.0, ToDoubleCompat("42 units"));
+   EXPECT_DOUBLE_EQ(100000.0, ToDoubleCompat("1e5x"));
+   EXPECT_DOUBLE_EQ(3.0, ToDoubleCompat("3.x"));
+   EXPECT_DOUBLE_EQ(1.5, ToDoubleCompat("1.5e")) << "a dangling exponent marker is trailing garbage, not an error";
+}
+
+/// The stream skipped leading whitespace and accepted a leading '+'. std::from_chars
+/// does neither, so both are handled explicitly -- and pinned, so switching the
+/// implementation cannot quietly change what a project file's "+1.5" means.
+TEST(HexStringParsing, ToDoubleCompatKeepsStreamLeniencies)
+{
+   EXPECT_DOUBLE_EQ(1.5, ToDoubleCompat(" 1.5"));
+   EXPECT_DOUBLE_EQ(1.5, ToDoubleCompat("\t1.5"));
+   EXPECT_DOUBLE_EQ(1.5, ToDoubleCompat("+1.5"));
+   EXPECT_DOUBLE_EQ(-1.5, ToDoubleCompat("-1.5"));
+   EXPECT_DOUBLE_EQ(1.5, ToDoubleCompat(" +1,5"));
 }
 
 /// The pair has to round-trip: a value written into a project file must read

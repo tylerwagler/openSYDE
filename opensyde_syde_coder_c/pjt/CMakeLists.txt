@@ -82,18 +82,32 @@ endif(COMMAND add_pc_lint)
 # warn a lot — C++17 to match the rest of openSYDE
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_C_FLAGS "-Wall -Wextra -Wc99-c11-compat -Wunused -Wuninitialized -Wmaybe-uninitialized \
+# -Wmaybe-uninitialized and -Wlogical-op are GCC-only. clang has no such options,
+# and under -Werror an unknown warning flag is itself an error, so they must not
+# reach a clang command line. -Wuninitialized (kept unconditionally) is the
+# portable subset of the first.
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+   set(OSY_GCC_ONLY_WARNINGS "-Wmaybe-uninitialized -Wlogical-op")
+else()
+   set(OSY_GCC_ONLY_WARNINGS "")
+endif()
+set(CMAKE_C_FLAGS "${OSY_GCC_ONLY_WARNINGS} -Wall -Wextra -Wc99-c11-compat -Wunused -Wuninitialized \
    -Wdeclaration-after-statement -Wsign-compare -Wstrict-prototypes -Wmissing-prototypes \
    -Wdouble-promotion -Wfloat-equal -Wmissing-include-dirs -Wshadow -Wundef \
-   -Wunused-macros -Wcast-align -Wlogical-op -Wno-multichar -Wredundant-decls -Wnested-externs")
+   -Wunused-macros -Wcast-align -Wno-multichar -Wredundant-decls -Wnested-externs")
 # For C++ do not add "-Wdouble-promotion" as it causes a warning in tinyxml.cpp which we do not want to modify
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized -Wsign-compare  \
-   -Wmissing-include-dirs -Wshadow -Wlogical-op -Wno-multichar -Wredundant-decls")
+set(CMAKE_CXX_FLAGS "${OSY_GCC_ONLY_WARNINGS} -Wall -Wextra -Wunused -Wuninitialized -Wsign-compare  \
+   -Wmissing-include-dirs -Wshadow -Wno-multichar -Wredundant-decls")
 
 # link standard libraries statically (fully static only on Windows)
+#
+# -static-libgcc / -static-libstdc++ are GCC options. clang on macOS has neither a
+# libgcc nor a libstdc++ -- the runtime is compiler-rt inside libSystem and the C++
+# library is libc++ -- and it rejects the flags outright. A dynamically linked
+# libSystem is the only supported configuration on macOS anyway.
 if(WIN32)
    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
-else()
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 endif()
 

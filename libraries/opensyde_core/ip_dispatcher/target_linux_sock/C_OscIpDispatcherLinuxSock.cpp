@@ -44,6 +44,14 @@
 //lint -emacro(641, SOCK_STREAM)
 //lint -emacro(9001, O_NONBLOCK)
 
+// MSG_NOSIGNAL is Linux-only. On macOS SIGPIPE is suppressed via SO_NOSIGPIPE on the
+// socket (see m_ConnectTcp), so no per-call flag is needed there.
+#ifdef MSG_NOSIGNAL
+#define OSY_SEND_FLAGS MSG_NOSIGNAL
+#else
+#define OSY_SEND_FLAGS 0
+#endif
+
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
@@ -268,6 +276,15 @@ std::error_code C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_C
 
    //create TCP socket:
    orc_Connection.s32_Socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+#ifdef __APPLE__
+   // Linux suppresses SIGPIPE per send() with MSG_NOSIGNAL. macOS has no such flag and
+   // instead takes it as a socket option, set once here so every later send() is covered.
+   if (orc_Connection.s32_Socket >= 0)
+   {
+      const int x_ENABLED = 1;
+      (void)setsockopt(orc_Connection.s32_Socket, SOL_SOCKET, SO_NOSIGPIPE, &x_ENABLED, sizeof(x_ENABLED));
+   }
+#endif
    if (orc_Connection.s32_Socket < 0)
    {
       const std::string c_ErrnoStr = strerror(errno);
@@ -798,7 +815,7 @@ std::error_code C_OscIpDispatcherLinuxSock::SendTcp(const uint32_t ou32_Handle, 
       {
          const ssize_t x_BytesSent = //lint !e970 !e8080 //using type to match library interface
                                      send(this->mc_SocketsTcp[ou32_Handle].s32_Socket,
-                                          &orc_Data[0], orc_Data.size(), MSG_NOSIGNAL);
+                                          &orc_Data[0], orc_Data.size(), OSY_SEND_FLAGS);
          if (x_BytesSent != static_cast<ssize_t>(orc_Data.size()))
          {
             if (x_BytesSent == -1)

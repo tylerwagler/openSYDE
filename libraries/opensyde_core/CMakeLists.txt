@@ -831,8 +831,10 @@ else()
    )
 endif()
 
-# linux IP dispatcher (CAN backend moved to libcan; this only ships the Linux sockets IP support now)
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND NOT OPENSYDE_CORE_SKIP_LINUX_DRIVERS)
+# POSIX IP dispatcher (CAN backend moved to libcan; this only ships the sockets IP support now).
+# "Linux" in these names is historical -- it is plain BSD sockets and serves macOS too. The
+# predicate is NOT WIN32 rather than STREQUAL "Linux" for exactly that reason.
+if(NOT WIN32 AND NOT OPENSYDE_CORE_SKIP_LINUX_DRIVERS)
    message("Linux detected ... dragging in Linux drivers")
 
    set(OPENSYDE_CORE_LINUX_DRIVERS_SOURCES
@@ -849,9 +851,9 @@ elseif(OPENSYDE_CORE_SKIP_LINUX_DRIVERS)
    message("OPENSYDE_CORE_SKIP_LINUX_DRIVERS detected ... skipping package")
 endif()
 
-# linux target glue layer
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   message("Linux detected ... dragging in Linux target layer")
+# POSIX target glue layer -- again "linux" is historical; this is the non-Windows layer.
+if(NOT WIN32)
+   message("POSIX host detected ... dragging in Linux target layer")
 
    set(OPENSYDE_CORE_LINUX_TARGET_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglFile.cpp
@@ -998,6 +1000,17 @@ target_precompile_headers(opensyde_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/preco
 # Skip precompiled headers for C source files (the PCH only has C++ content)
 file(GLOB_RECURSE OPENSYDE_CORE_C_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.c")
 set_source_files_properties(${OPENSYDE_CORE_C_SOURCES} PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+
+# miniz is vendored third-party C and is not held to our warning bar. Five tools
+# used to set -Wno-unused-parameter on it, but set_source_files_properties is
+# directory-scoped, so with the root build compiling miniz once *here* none of
+# those applied. This is the one place it takes effect.
+#
+# -Wno-strict-prototypes is for clang: it warns on miniz's K&R-style `void f()`
+# declarations in C, which GCC does not, and -Werror would otherwise stop the
+# macOS build in code we cannot change.
+set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/miniz/miniz.c PROPERTIES
+   COMPILE_OPTIONS "-Wno-unused-parameter;-Wno-strict-prototypes")
 
 # Link libcan PUBLIC so consumers of opensyde_core can also use the can:: API directly if they
 # want (CAN Monitor's future bus-load/error-counter display, for instance).

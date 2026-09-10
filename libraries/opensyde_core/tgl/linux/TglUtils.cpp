@@ -20,6 +20,12 @@
 #include <cstdint>
 #include "TglUtils.hpp"
 
+// HOST_NAME_MAX is a Linux extension. POSIX only guarantees _POSIX_HOST_NAME_MAX (255), which
+// is what macOS provides, and 255 is also what Linux resolves HOST_NAME_MAX to on glibc.
+#ifndef HOST_NAME_MAX
+#define HOST_NAME_MAX _POSIX_HOST_NAME_MAX
+#endif
+
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;

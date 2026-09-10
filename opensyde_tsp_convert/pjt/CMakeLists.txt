@@ -14,7 +14,7 @@ include_directories(
    ${PROJECT_ROOT}/src
    ${PROJECT_ROOT}/src/v2_filer
 )
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if(NOT WIN32)
    find_package(OpenSSL REQUIRED)
    include_directories(${OPENSSL_INCLUDE_DIR})
 else()
@@ -40,7 +40,7 @@ set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING     1)
 set(OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION   1)
 set(OPENSYDE_CORE_SKIP_X_CONFIG_GENERATION         1)
 set(OPENSYDE_CORE_SKIP_SECURITY                    1)
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if(NOT WIN32)
    set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          1)
    set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           1)
    # No CAN/IP dispatchers: this is a pure file-format converter.
@@ -61,18 +61,32 @@ endif()
 # warn a lot — C++17 to match the rest of openSYDE
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_C_FLAGS "-Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized \
+# -Wmaybe-uninitialized and -Wlogical-op are GCC-only. clang has no such options,
+# and under -Werror an unknown warning flag is itself an error, so they must not
+# reach a clang command line. -Wuninitialized (kept unconditionally) is the
+# portable subset of the first.
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+   set(OSY_GCC_ONLY_WARNINGS "-Wmaybe-uninitialized -Wlogical-op")
+else()
+   set(OSY_GCC_ONLY_WARNINGS "")
+endif()
+set(CMAKE_C_FLAGS "${OSY_GCC_ONLY_WARNINGS} -Wall -Wextra -Wunused -Wuninitialized \
    -Wdeclaration-after-statement -Wsign-compare -Wstrict-prototypes -Wmissing-prototypes \
    -Wdouble-promotion -Wfloat-equal -Wmissing-include-dirs -Wshadow -Wundef \
-   -Wunused-macros -Wcast-align -Wlogical-op -Wno-multichar -Wredundant-decls -Wnested-externs \
+   -Wunused-macros -Wcast-align -Wno-multichar -Wredundant-decls -Wnested-externs \
    -Wno-deprecated-declarations")
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized -Wsign-compare  \
-   -Wmissing-include-dirs -Wshadow -Wlogical-op -Wno-multichar -Wredundant-decls -Wno-deprecated-declarations")
+set(CMAKE_CXX_FLAGS "${OSY_GCC_ONLY_WARNINGS} -Wall -Wextra -Wunused -Wuninitialized -Wsign-compare  \
+   -Wmissing-include-dirs -Wshadow -Wno-multichar -Wredundant-decls -Wno-deprecated-declarations")
 
 # link standard libraries statically (fully static only on Windows)
+#
+# -static-libgcc / -static-libstdc++ are GCC options. clang on macOS has neither a
+# libgcc nor a libstdc++ -- the runtime is compiler-rt inside libSystem and the C++
+# library is libc++ -- and it rejects the flags outright. A dynamically linked
+# libSystem is the only supported configuration on macOS anyway.
 if(WIN32)
    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
-else()
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 endif()
 
@@ -87,7 +101,7 @@ set(OSY_TSP_CONVERT_SOURCES
    ${PROJECT_ROOT}/src/v2_filer/C_OscTargetSupportPackageV2Filer.hpp
 )
 
-if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if(WIN32)
    link_directories(
        ../libs/openssl/openssl
    )
@@ -102,7 +116,7 @@ add_executable(osy_tsp_convert ${OSY_TSP_CONVERT_SOURCES})
 target_link_libraries(osy_tsp_convert
    opensyde_core
 )
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if(NOT WIN32)
    target_link_libraries(osy_tsp_convert OpenSSL::SSL OpenSSL::Crypto)
 else()
    target_link_libraries(osy_tsp_convert version)

@@ -38,7 +38,8 @@ REPO_ROOT="$SCRIPT_DIR"
 
 BUILD_TYPE="Release"
 CLEAN=false
-JOBS="$(nproc)"
+# nproc is GNU coreutils; macOS has sysctl instead. getconf is POSIX and works on both.
+JOBS="$(getconf _NPROCESSORS_ONLN 2>/dev/null || nproc 2>/dev/null || echo 4)"
 DEPLOY=false
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/opt/openSYDE}"
 TOOLS=()
@@ -194,6 +195,14 @@ check_prerequisites() {
 # machine without Qt6 keeps working.
 ROOT_BUILD_DIR="$REPO_ROOT/build/$BUILD_TYPE"
 
+# One toolchain per host OS. The Linux one sets CMAKE_SYSTEM_NAME, which on macOS
+# would put CMake into cross-compiling mode and break find_package; the macOS one
+# also has to point at Homebrew keg-only packages (bison, OpenSSL, Qt).
+case "$(uname -s)" in
+    Darwin) TOOLCHAIN_FILE="toolchain_macos.cmake" ;;
+    *)      TOOLCHAIN_FILE="toolchain_linux.cmake" ;;
+esac
+
 configure_root() {
     local want_qt="$1"
 
@@ -211,7 +220,7 @@ configure_root() {
         -S "$REPO_ROOT" -B "$ROOT_BUILD_DIR" -G Ninja
         "-DCMAKE_BUILD_TYPE=$BUILD_TYPE"
         "-DOPENSYDE_BUILD_GUI_TOOLS=$gui_flag"
-        "-DCMAKE_TOOLCHAIN_FILE=$REPO_ROOT/opensyde_tool/pjt/toolchain_linux.cmake"
+        "-DCMAKE_TOOLCHAIN_FILE=$REPO_ROOT/cmake/$TOOLCHAIN_FILE"
     )
     if [[ "$want_qt" == "yes" ]] && [[ -n "${Qt6_DIR:-}" ]]; then
         cmake_args+=("-DQt6_DIR=$Qt6_DIR")

@@ -116,10 +116,15 @@ set(SYDESUP_LINK_LIBRARIES_WINDOWS
 
 set(SYDESUP_LINK_LIBRARIES_LINUX
    pthread
-   rt
    opensyde_core
    OpenSSL::Crypto
 )
+# librt (clock_gettime and friends) is a separate library on Linux only; macOS has
+# no librt and its symbols live in libSystem. This "LINUX" set is also what macOS
+# takes, via the if(WIN32) / else() split below.
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   list(APPEND SYDESUP_LINK_LIBRARIES_LINUX rt)
+endif()
 
 # COMPILER SWITCHES
 # use same compiler switches that gcc uses when compiling openSYDE core from osc_moduletest.pro file

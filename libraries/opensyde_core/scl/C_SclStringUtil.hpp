@@ -17,6 +17,7 @@
 #define CSCLSTRINGUTILH
 
 #include <string>
+#include <charconv>
 #include <sstream>
 #include <algorithm>
 #include <cctype>
@@ -394,7 +395,7 @@ inline int64_t ToInt64Compat(const std::string & orc_Str)
 /// Replacement for str.ToDouble().
 ///
 /// C_SclString::ToDouble() did three things that std::strtod() and std::stod()
-/// do not, and the migration lost all three:
+/// do not, and the migration originally lost all three:
 ///
 ///  1. It parsed in the "C" locale explicitly. strtod() and stod() use the
 ///     *current* C locale, and Qt sets that from the environment during
@@ -409,15 +410,24 @@ inline int64_t ToInt64Compat(const std::string & orc_Str)
 ///     strtod(), which returns 0.0 instead - a malformed value read as a
 ///     legitimate zero.
 ///
-/// An imbued stringstream is used rather than strtod() precisely because it
-/// takes its decimal separator from the imbued std::locale rather than from the
-/// global C locale, so it is immune to whatever Qt did to the process.
+/// Built on std::from_chars, which is locale-independent by specification. The
+/// previous fix used an istringstream imbued with the classic locale, and that
+/// turned out not to be portable: libstdc++ parses "1.5abc" as 1.5 while libc++
+/// sets failbit and produces nothing, and the same divergence applies to "1e5x"
+/// and "3.x". That is the standard library choosing how far to read before
+/// deciding the input is bad, and the two disagree. from_chars returns exactly
+/// where it stopped and gives the same answer on GCC/libstdc++ and Apple
+/// clang/libc++ for every input tried.
 ///
-/// Trailing characters are tolerated, matching the original: it also extracted
+/// Trailing characters are tolerated, matching the original, which extracted
 /// through a stream and stopped at the first character it could not use. This
-/// is deliberately laxer than ToIntCompat, which rejects them - the goal here is
-/// to restore the documented behaviour, not to start rejecting project files
-/// that have always loaded.
+/// is deliberately laxer than ToIntCompat, which rejects them - the goal is to
+/// restore documented behaviour, not to start rejecting project files that
+/// have always loaded.
+///
+/// The two leniencies the stream had that from_chars lacks - skipping leading
+/// whitespace and accepting a leading '+' - are handled explicitly so nothing
+/// that parsed on Linux before stops parsing now.
 ///
 /// \throws std::invalid_argument  string does not begin with a number
 inline double ToDoubleCompat(const std::string & orc_Str)
@@ -431,12 +441,22 @@ inline double ToDoubleCompat(const std::string & orc_Str)
       c_Work[un_Comma] = '.';
    }
 
-   std::istringstream c_Stream(c_Work);
-   c_Stream.imbue(std::locale::classic()); //"." is the decimal separator, whatever the process locale says
+   const char * pcn_Begin = c_Work.c_str();
+   const char * const pcn_End = pcn_Begin + c_Work.size();
+
+   //the stream skipped leading whitespace and accepted a leading '+'; from_chars does neither
+   while ((pcn_Begin < pcn_End) && (std::isspace(static_cast<unsigned char>(*pcn_Begin)) != 0))
+   {
+      ++pcn_Begin;
+   }
+   if ((pcn_Begin < pcn_End) && (*pcn_Begin == '+'))
+   {
+      ++pcn_Begin;
+   }
 
    double f64_Value = 0.0;
-   c_Stream >> f64_Value;
-   if (c_Stream.fail())
+   const std::from_chars_result c_Result = std::from_chars(pcn_Begin, pcn_End, f64_Value);
+   if (c_Result.ec != std::errc())
    {
       throw std::invalid_argument("ToDoubleCompat: string does not contain a double value");
    }
