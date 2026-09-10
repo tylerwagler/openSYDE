@@ -31,7 +31,11 @@ function(add_osc_test TEST_NAME TEST_SOURCE)
    target_precompile_headers(${TEST_NAME} REUSE_FROM opensyde_core)
    # Let GTest list tests at runtime so add_test works without enumerating
    # every TEST() macro.
-   gtest_discover_tests(${TEST_NAME})
+   # DISCOVERY_TIMEOUT defaults to 5 seconds. On macOS the first launch of a freshly
+   # linked binary goes through Gatekeeper, and with a dozen test executables being
+   # discovered in parallel that was enough to time out several -- transiently, and
+   # only on the first build. The binaries themselves list their tests in ~40 ms.
+   gtest_discover_tests(${TEST_NAME} DISCOVERY_TIMEOUT 60)
    # Label for filtering (e.g. ctest -L quick)
    set_property(TARGET ${TEST_NAME} PROPERTY LABELS "opensyde_core")
 endfunction()
@@ -56,3 +60,4 @@ add_osc_test(test_opensyde_core_dp_content     test_node_datapool_content.cpp)
 add_osc_test(test_opensyde_core_dp_util        test_datapool_content_util.cpp)
 add_osc_test(test_opensyde_core_project_meta   test_project_metadata.cpp)
 add_osc_test(test_opensyde_core_view_security test_view_security_options.cpp)
+add_osc_test(test_opensyde_core_tgl_file      test_tgl_file.cpp)

@@ -21,6 +21,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <cstdint>
+#ifdef __APPLE__
+#include <mach-o/dyld.h> // _NSGetExecutablePath: macOS has no /proc
+#endif
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
 #include <string>
@@ -297,17 +300,23 @@ std::string stw::tgl::TglExtractFileExtension(const std::string & orc_Path)
 //----------------------------------------------------------------------------------------------------------------------
 std::string stw::tgl::TglChangeFileExtension(const std::string & orc_Path, const std::string & orc_Extension)
 {
-    uint32_t u32_Pos;
-    std::string c_NewPath = orc_Path;
+   // Only a "." inside the final path component is an extension. Searching the whole
+   // string finds dots in directory names: "/home/j.doe/tool" became "/home/j.log".
+   const std::string::size_type un_LastSep = orc_Path.find_last_of("/\\");
+   const std::string::size_type un_NameStart = (un_LastSep == std::string::npos) ? 0U : (un_LastSep + 1U);
+   const std::string::size_type un_Dot = orc_Path.find_last_of('.');
 
-    u32_Pos = LastPosCompat(c_NewPath, ".");
-    if (u32_Pos != 0U)
-    {
-       //there is a file extension !
-       DeleteCompat(c_NewPath, u32_Pos, INT_MAX); //remove everything from and including the "."
-       c_NewPath += orc_Extension;
-    }
-    return c_NewPath;
+   if ((un_Dot != std::string::npos) && (un_Dot >= un_NameStart))
+   {
+      return orc_Path.substr(0U, un_Dot) + orc_Extension;
+   }
+
+   // No extension: append one rather than return the input unchanged. Returning it
+   // unchanged is what made TglChangeFileExtension(<exe>, ".log") resolve to the
+   // executable itself on Linux and macOS, where binaries carry no ".exe" -- and
+   // osy_syde_coder_c and syde_x_gen overwrote their own binaries with their log
+   // on first run. Windows never saw it because ".exe" is always there to replace.
+   return orc_Path + orc_Extension;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -318,6 +327,24 @@ std::string stw::tgl::TglChangeFileExtension(const std::string & orc_Path, const
 //----------------------------------------------------------------------------------------------------------------------
 std::string stw::tgl::TglGetExePath(void)
 {
+#ifdef __APPLE__
+    // macOS has no /proc. _NSGetExecutablePath reports the needed size in u32_Size when the
+    // buffer is too small, so two calls always suffice. The result may contain "..", hence
+    // realpath() to normalise it the way readlink on /proc/self/exe would.
+    uint32_t u32_Size = 0U;
+    (void)_NSGetExecutablePath(nullptr, &u32_Size);
+    std::vector<char> c_Raw(static_cast<size_t>(u32_Size) + 1U, 0);
+    if (_NSGetExecutablePath(&c_Raw[0], &u32_Size) != 0)
+    {
+       return "";
+    }
+    char acn_Resolved[PATH_MAX];
+    if (realpath(&c_Raw[0], acn_Resolved) == nullptr)
+    {
+       return std::string(&c_Raw[0]);
+    }
+    return std::string(acn_Resolved);
+#else
     std::vector<char> c_VecPath;
     std::string c_Arg;
     std::string c_Path;
@@ -364,6 +391,7 @@ std::string stw::tgl::TglGetExePath(void)
     }
 
     return c_Path;
+#endif
 }
 
 //----------------------------------------------------------------------------------------------------------------------
