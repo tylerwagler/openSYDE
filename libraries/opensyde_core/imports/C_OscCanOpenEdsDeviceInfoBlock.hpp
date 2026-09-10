@@ -81,6 +81,12 @@ public:
                                                      const std::string & orc_KeyName, bool & orq_OutputValue,
                                                      std::string & orc_ErrorMessage,
                                                      const bool oq_DefaultValue = false);
+   template <typename T, typename F_Get>
+   static std::error_code mh_LoadValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
+                                                  const std::string & orc_SectionName,
+                                                  const std::string & orc_KeyName, T & orc_OutputValue,
+                                                  std::string & orc_ErrorMessage, const T & orc_DefaultValue,
+                                                  F_Get && orc_Get);
    static void h_ReportMissingSectionError(const std::string & orc_SectionName,
                                            std::string & orc_ErrorMessage);
    static void h_ReportMissingKeyError(const std::string & orc_SectionName,

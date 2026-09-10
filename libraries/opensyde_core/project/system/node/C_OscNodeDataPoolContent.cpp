@@ -672,7 +672,7 @@ void C_OscNodeDataPoolContent::SetValueArrU8Element(const uint8_t ou8_Value, con
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint8_t> C_OscNodeDataPoolContent::GetValueArrU8(void) const
+std::vector<uint8_t> C_OscNodeDataPoolContent::GetValueArrU8(void) const
 {
    std::vector<uint8_t> c_RetVal;
 
@@ -729,7 +729,7 @@ void C_OscNodeDataPoolContent::SetValueArrU16Element(const uint16_t ou16_Value, 
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint16_t> C_OscNodeDataPoolContent::GetValueArrU16(void) const
+std::vector<uint16_t> C_OscNodeDataPoolContent::GetValueArrU16(void) const
 {
    std::vector<uint16_t> c_RetVal;
 
@@ -944,7 +944,7 @@ void C_OscNodeDataPoolContent::SetValueArrU32Element(const uint32_t ou32_Value, 
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint32_t> C_OscNodeDataPoolContent::GetValueArrU32(void) const
+std::vector<uint32_t> C_OscNodeDataPoolContent::GetValueArrU32(void) const
 {
    std::vector<uint32_t> c_RetVal;
 
@@ -1001,7 +1001,7 @@ void C_OscNodeDataPoolContent::SetValueArrU64Element(const uint64_t ou64_Value, 
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint64_t> C_OscNodeDataPoolContent::GetValueArrU64(void) const
+std::vector<uint64_t> C_OscNodeDataPoolContent::GetValueArrU64(void) const
 {
    std::vector<uint64_t> c_RetVal;
 
@@ -1058,7 +1058,7 @@ void C_OscNodeDataPoolContent::SetValueArrS8Element(const int8_t os8_Value, cons
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int8_t> C_OscNodeDataPoolContent::GetValueArrS8(void) const
+std::vector<int8_t> C_OscNodeDataPoolContent::GetValueArrS8(void) const
 {
    std::vector<int8_t> c_RetVal;
 
@@ -1115,7 +1115,7 @@ void C_OscNodeDataPoolContent::SetValueArrS16Element(const int16_t os16_Value, c
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int16_t> C_OscNodeDataPoolContent::GetValueArrS16(void) const
+std::vector<int16_t> C_OscNodeDataPoolContent::GetValueArrS16(void) const
 {
    std::vector<int16_t> c_RetVal;
 
@@ -1172,7 +1172,7 @@ void C_OscNodeDataPoolContent::SetValueArrS32Element(const int32_t os32_Value, c
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> C_OscNodeDataPoolContent::GetValueArrS32(void) const
+std::vector<int32_t> C_OscNodeDataPoolContent::GetValueArrS32(void) const
 {
    std::vector<int32_t> c_RetVal;
 
@@ -1229,7 +1229,7 @@ void C_OscNodeDataPoolContent::SetValueArrS64Element(const int64_t os64_Value, c
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int64_t> C_OscNodeDataPoolContent::GetValueArrS64(void) const
+std::vector<int64_t> C_OscNodeDataPoolContent::GetValueArrS64(void) const
 {
    std::vector<int64_t> c_RetVal;
 
@@ -1286,7 +1286,7 @@ void C_OscNodeDataPoolContent::SetValueArrF32Element(const float of32_Value, con
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<float> C_OscNodeDataPoolContent::GetValueArrF32(void) const
+std::vector<float> C_OscNodeDataPoolContent::GetValueArrF32(void) const
 {
    std::vector<float> c_RetVal;
 
@@ -1343,7 +1343,7 @@ void C_OscNodeDataPoolContent::SetValueArrF64Element(const double of64_Value, co
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<double> C_OscNodeDataPoolContent::GetValueArrF64(void) const
+std::vector<double> C_OscNodeDataPoolContent::GetValueArrF64(void) const
 {
    std::vector<double> c_RetVal;
 

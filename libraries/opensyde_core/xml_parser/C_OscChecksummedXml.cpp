@@ -20,6 +20,7 @@
 #include <iomanip>
 #include <string>
 #include "C_SclChecksums.hpp"
+#include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -35,19 +36,6 @@ static const std::string mc_NAME_CRC_ATTRIBUTE = "file_crc";
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
-
-namespace {
-/// Helper: integer to hexadecimal string (zero-padded, uppercase, no "0x" prefix)
-template <typename T>
-std::string mh_IntToHex(const T orc_Value, const uint32_t ou32_Digits)
-{
-   std::stringstream c_Stream;
-   c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Value;
-   return c_Stream.str();
-}
-}
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
@@ -139,7 +127,7 @@ std::error_code C_OscChecksummedXml::SaveToFile(const std::string & orc_FileName
    }
    else
    {
-      this->SetAttributeString(mc_NAME_CRC_ATTRIBUTE, "0x" + mh_IntToHex(u16_CrcCalc, 4));
+      this->SetAttributeString(mc_NAME_CRC_ATTRIBUTE, "0x" + stw::scl::IntToHexCompat(u16_CrcCalc, 4));
 
       c_Return = C_OscXmlParser::SaveToFile(orc_FileName);
    }

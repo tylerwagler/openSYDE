@@ -552,7 +552,7 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
                         {
                            const C_OscNodeDataPoolListElement & rc_ListElement =
                               opc_List->c_Elements[rc_SignalData.u32_ComDataElementIndex];
-                           if (LowerCaseCompat(rc_CurrentElement.c_Name) == LowerCaseCompat(rc_ListElement.c_Name))
+                           if (EqualsCaseInsensitive(rc_CurrentElement.c_Name, rc_ListElement.c_Name))
                            {
                               *opq_NameConflict = true;
                               break;

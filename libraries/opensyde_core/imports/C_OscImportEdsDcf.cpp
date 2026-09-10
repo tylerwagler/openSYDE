@@ -33,16 +33,6 @@ using namespace stw::tgl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
-/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
-namespace {
-   template <typename T>
-   std::string mh_IntToHex(T val, uint32_t digits) {
-      std::stringstream ss;
-      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
-      return ss.str();
-   }
-}
-
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
@@ -1805,7 +1795,7 @@ void C_OscImportEdsDcf::mh_AddUserMessage(const uint32_t ou32_CoObjectId, const 
 //----------------------------------------------------------------------------------------------------------------------
 std::string C_OscImportEdsDcf::mh_GetNumberAsHex(const uint32_t ou32_Number)
 {
-   const std::string c_HexObjectIdUpperCase = mh_IntToHex(ou32_Number, 1);
+   const std::string c_HexObjectIdUpperCase = stw::scl::IntToHexCompat(ou32_Number, 1);
 
    return c_HexObjectIdUpperCase;
 }

@@ -107,11 +107,12 @@ C_OscComDriverBase::C_OscComDriverBase(void) :
    mq_Started(false),
    mq_Paused(false),
    mu32_CanMessageBits(0U),
+   mu32_BusLoadTimeRefresh(0U),
    ms32_CanBitrate(1000U),
    mu32_CanTxCounter(0U),
    mu32_CanTxErrors(0U)
 {
-   mpc_AutoSupportProtocol = new C_OscComAutoSupport();
+   mpc_AutoSupportProtocol = std::make_unique<C_OscComAutoSupport>();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -123,7 +124,6 @@ C_OscComDriverBase::C_OscComDriverBase(void) :
 C_OscComDriverBase::~C_OscComDriverBase(void)
 {
    this->mpc_CanDispatcher = nullptr; //do not delete ! not owned by us
-   delete this->mpc_AutoSupportProtocol;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -313,7 +313,6 @@ void C_OscComDriverBase::DistributeMessages(void)
    {
       std::error_code c_Return = Errc::success;
       T_STWCAN_Msg_RX c_Msg;
-      static uint32_t hu32_BusLoadTimeRefresh = 0U;
       uint32_t u32_BusLoadTimeDiff;
       uint32_t u32_LoggerCounter;
 
@@ -347,7 +346,7 @@ void C_OscComDriverBase::DistributeMessages(void)
       while (c_Return == Errc::success);
 
       // Check and update bus load
-      u32_BusLoadTimeDiff = stw::tgl::TglGetTickCount() - hu32_BusLoadTimeRefresh;
+      u32_BusLoadTimeDiff = stw::tgl::TglGetTickCount() - this->mu32_BusLoadTimeRefresh;
       if (u32_BusLoadTimeDiff >= 1000U)
       {
          const uint32_t u32_MaxBitsSec = static_cast<uint32_t>(this->ms32_CanBitrate) * 1024U;
@@ -359,7 +358,7 @@ void C_OscComDriverBase::DistributeMessages(void)
          {
             uint32_t u32_Load = (this->mu32_CanMessageBits * 100U) / u32_MaxBits;
 
-            hu32_BusLoadTimeRefresh = stw::tgl::TglGetTickCount();
+            this->mu32_BusLoadTimeRefresh = stw::tgl::TglGetTickCount();
 
             if (u32_Load > 100U)
             {

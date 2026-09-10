@@ -177,18 +177,20 @@ uint8_t C_OscCanOpenEdsDeviceInfoBlock::GetGranularity() const
    \retval   Errc::config    Value not found, for details see error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::error_code C_OscCanOpenEdsDeviceInfoBlock::h_LoadStringValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                                                             const std::string & orc_SectionName,
-                                                                             const std::string & orc_KeyName,
-                                                                             std::string & orc_OutputValue,
-                                                                             std::string & orc_ErrorMessage,
-                                                                             const std::string & orc_DefaultValue)
+template <typename T, typename F_Get>
+std::error_code C_OscCanOpenEdsDeviceInfoBlock::mh_LoadValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
+                                                                        const std::string & orc_SectionName,
+                                                                        const std::string & orc_KeyName,
+                                                                        T & orc_OutputValue,
+                                                                        std::string & orc_ErrorMessage,
+                                                                        const T & orc_DefaultValue,
+                                                                        F_Get && orc_Get)
 {
    std::error_code c_Retval = Errc::success;
 
    if (orc_File.ValueExists(orc_SectionName, orc_KeyName))
    {
-      orc_OutputValue = orc_File.ReadString(orc_SectionName, orc_KeyName, orc_DefaultValue);
+      orc_OutputValue = orc_Get();
    }
    else
    {
@@ -197,6 +199,18 @@ std::error_code C_OscCanOpenEdsDeviceInfoBlock::h_LoadStringValueFromIniFile(stw
       C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(orc_SectionName, orc_KeyName, orc_ErrorMessage);
    }
    return c_Retval;
+}
+
+std::error_code C_OscCanOpenEdsDeviceInfoBlock::h_LoadStringValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
+                                                                             const std::string & orc_SectionName,
+                                                                             const std::string & orc_KeyName,
+                                                                             std::string & orc_OutputValue,
+                                                                             std::string & orc_ErrorMessage,
+                                                                             const std::string & orc_DefaultValue)
+{
+   return mh_LoadValueFromIniFile(orc_File, orc_SectionName, orc_KeyName, orc_OutputValue, orc_ErrorMessage,
+                                  orc_DefaultValue,
+                                  [&]() { return orc_File.ReadString(orc_SectionName, orc_KeyName, orc_DefaultValue); });
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -223,19 +237,9 @@ std::error_code C_OscCanOpenEdsDeviceInfoBlock::h_LoadU8ValueFromIniFile(stw::sc
                                                                          std::string & orc_ErrorMessage,
                                                                          const uint8_t ou8_DefaultValue)
 {
-   std::error_code c_Retval = Errc::success;
-
-   if (orc_File.ValueExists(orc_SectionName, orc_KeyName))
-   {
-      oru8_OutputValue = orc_File.ReadUint8(orc_SectionName, orc_KeyName, ou8_DefaultValue);
-   }
-   else
-   {
-      oru8_OutputValue = ou8_DefaultValue;
-      c_Retval = Errc::config;
-      C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(orc_SectionName, orc_KeyName, orc_ErrorMessage);
-   }
-   return c_Retval;
+   return mh_LoadValueFromIniFile(orc_File, orc_SectionName, orc_KeyName, oru8_OutputValue, orc_ErrorMessage,
+                                  ou8_DefaultValue,
+                                  [&]() { return orc_File.ReadUint8(orc_SectionName, orc_KeyName, ou8_DefaultValue); });
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -262,19 +266,9 @@ std::error_code C_OscCanOpenEdsDeviceInfoBlock::h_LoadU16ValueFromIniFile(stw::s
                                                                           std::string & orc_ErrorMessage,
                                                                           const uint16_t ou16_DefaultValue)
 {
-   std::error_code c_Retval = Errc::success;
-
-   if (orc_File.ValueExists(orc_SectionName, orc_KeyName))
-   {
-      oru16_OutputValue = orc_File.ReadUint16(orc_SectionName, orc_KeyName, ou16_DefaultValue);
-   }
-   else
-   {
-      oru16_OutputValue = ou16_DefaultValue;
-      c_Retval = Errc::config;
-      C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(orc_SectionName, orc_KeyName, orc_ErrorMessage);
-   }
-   return c_Retval;
+   return mh_LoadValueFromIniFile(orc_File, orc_SectionName, orc_KeyName, oru16_OutputValue, orc_ErrorMessage,
+                                  ou16_DefaultValue,
+                                  [&]() { return orc_File.ReadUint16(orc_SectionName, orc_KeyName, ou16_DefaultValue); });
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -301,19 +295,9 @@ std::error_code C_OscCanOpenEdsDeviceInfoBlock::h_LoadBoolValueFromIniFile(stw::
                                                                            std::string & orc_ErrorMessage,
                                                                            const bool oq_DefaultValue)
 {
-   std::error_code c_Retval = Errc::success;
-
-   if (orc_File.ValueExists(orc_SectionName, orc_KeyName))
-   {
-      orq_OutputValue = orc_File.ReadBool(orc_SectionName, orc_KeyName, oq_DefaultValue);
-   }
-   else
-   {
-      orq_OutputValue = oq_DefaultValue;
-      c_Retval = Errc::config;
-      C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(orc_SectionName, orc_KeyName, orc_ErrorMessage);
-   }
-   return c_Retval;
+   return mh_LoadValueFromIniFile(orc_File, orc_SectionName, orc_KeyName, orq_OutputValue, orc_ErrorMessage,
+                                  oq_DefaultValue,
+                                  [&]() { return orc_File.ReadBool(orc_SectionName, orc_KeyName, oq_DefaultValue); });
 }
 
 //----------------------------------------------------------------------------------------------------------------------

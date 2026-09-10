@@ -65,8 +65,6 @@ using namespace stw::opensyde_core;
 C_OscComDriverProtocol::C_OscComDriverProtocol(void) :
    C_OscComDriverBase(),
    mq_Initialized(false),
-   mpc_CanTransportProtocolBroadcast(nullptr),
-   mpc_IpTransportProtocolBroadcast(nullptr),
    mpc_SysDef(nullptr),
    mu32_ActiveBusIndex(0U),
    mu32_ActiveNodeCount(0),
@@ -85,31 +83,11 @@ C_OscComDriverProtocol::C_OscComDriverProtocol(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscComDriverProtocol::~C_OscComDriverProtocol(void)
 {
-   uint32_t u32_Counter;
-
-   for (u32_Counter = 0; u32_Counter < this->mc_TransportProtocols.size(); ++u32_Counter)
-   {
-      delete (this->mc_TransportProtocols[u32_Counter]);
-      this->mc_TransportProtocols[u32_Counter] = nullptr;
-   }
-
-   for (u32_Counter = 0; u32_Counter < this->mc_LegacyRouterDispatchers.size(); ++u32_Counter)
-   {
-      // If stop routing was not called correctly
-      delete (this->mc_LegacyRouterDispatchers[u32_Counter]);
-      this->mc_LegacyRouterDispatchers[u32_Counter] = nullptr;
-   }
-
-   delete this->mpc_CanTransportProtocolBroadcast;
-   delete this->mpc_IpTransportProtocolBroadcast;
-
-   this->mpc_CanTransportProtocolBroadcast = nullptr;
-   this->mpc_IpTransportProtocolBroadcast = nullptr;
+   // Owned transport protocols, routing dispatchers and broadcast transport protocols are released by the
+   // owning std::unique_ptr / std::vector members.
    this->mpc_IpDispatcher = nullptr;  //do not delete ! not owned by us
    this->mpc_SecurityPemDb = nullptr; //do not delete ! not owned by us
    this->mpc_SysDef = nullptr;        //do not delete ! not owned by us
-
-   C_OscProtocolSecuritySubLayer::h_ClearAll(); //no longer needed
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -168,9 +146,6 @@ std::error_code C_OscComDriverProtocol::Init(const C_OscSystemDefinition & orc_S
 
    if (c_Retval == Errc::success)
    {
-      //clear map with all nodes' traffic encryption configuration
-      C_OscProtocolSecuritySubLayer::h_ClearAll();
-
       this->mu32_ActiveBusIndex = ou32_ActiveBusIndex;
       this->mc_ActiveNodesSystem.clear();
       this->mc_ActiveNodesSystem = orc_ActiveNodes;
@@ -248,7 +223,7 @@ std::error_code C_OscComDriverProtocol::SendTesterPresent(const std::set<uint32_
          if ((opc_SkipNodes == nullptr) ||
              (opc_SkipNodes->find(u32_Counter) == opc_SkipNodes->end()))
          {
-            C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_Counter];
+            C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_Counter].get();
             if (pc_ProtocolOsy != nullptr)
             {
                // Send tester present message without expecting a response
@@ -330,7 +305,7 @@ const
          const uint32_t u32_ActiveNode = orc_ActiveNodes[u32_Counter];
          if (u32_ActiveNode < this->mc_OsyProtocols.size())
          {
-            C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNode];
+            C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNode].get();
             if (pc_ProtocolOsy != nullptr)
             {
                // Send tester present message without expecting a response
@@ -801,7 +776,7 @@ void C_OscComDriverProtocol::ClearDispatcherQueue(void)
       for (u32_Counter = 0U; u32_Counter < this->mc_TransportProtocols.size(); ++u32_Counter)
       {
          C_OscProtocolDriverOsyTpCan * const pc_CanTp =
-            dynamic_cast<C_OscProtocolDriverOsyTpCan *>(this->mc_TransportProtocols[u32_Counter]);
+            dynamic_cast<C_OscProtocolDriverOsyTpCan *>(this->mc_TransportProtocols[u32_Counter].get());
 
          if (pc_CanTp != nullptr)
          {
@@ -826,6 +801,22 @@ void C_OscComDriverProtocol::ClearDispatcherQueue(void)
 bool C_OscComDriverProtocol::IsInitialized(void) const
 {
    return this->mq_Initialized;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Check whether traffic encryption is active for the protocol connected to a node
+
+   \param[in]  orc_ServerId   node to check
+
+   \return
+   true    Traffic encryption is active
+   false   No openSYDE protocol installed for the node or encryption is not active
+*/
+//----------------------------------------------------------------------------------------------------------------------
+bool C_OscComDriverProtocol::IsTrafficEncryptionActive(const C_OscProtocolDriverOsyNode & orc_ServerId) const
+{
+   const C_OscProtocolDriverOsy * const pc_Protocol = this->m_GetOsyProtocol(orc_ServerId);
+   return ((pc_Protocol != nullptr) && (pc_Protocol->GetTrafficEncryptionActive() == true));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -854,7 +845,7 @@ std::error_code C_OscComDriverProtocol::ReConnectNode(
 
    if (q_Found == true)
    {
-      C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNodeIndex];
+      C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNodeIndex].get();
       if (pc_ProtocolOsy != nullptr)
       {
          // ReConnect is C_OscProtocolDriverOsy, still on the STW integer convention
@@ -883,7 +874,7 @@ std::error_code C_OscComDriverProtocol::DisconnectNode(const C_OscProtocolDriver
 
    if (q_Found == true)
    {
-      C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNodeIndex];
+      C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNodeIndex].get();
       if (pc_ProtocolOsy != nullptr)
       {
          // Disconnect is C_OscProtocolDriverOsy, still on the STW integer convention
@@ -903,7 +894,7 @@ void C_OscComDriverProtocol::DisconnectNodes(void) const
 
    for (u32_Counter = 0U; u32_Counter < this->mc_OsyProtocols.size(); ++u32_Counter)
    {
-      C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_Counter];
+      C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_Counter].get();
       if (pc_ProtocolOsy != nullptr)
       {
          pc_ProtocolOsy->Disconnect();
@@ -923,7 +914,7 @@ void C_OscComDriverProtocol::PrepareForDestruction(void)
    for (uint32_t u32_ItTp = 0; u32_ItTp < this->mc_TransportProtocols.size(); ++u32_ItTp)
    {
       C_OscProtocolDriverOsyTpCan * const pc_Tp =
-         dynamic_cast<C_OscProtocolDriverOsyTpCan *>(this->mc_TransportProtocols[u32_ItTp]);
+         dynamic_cast<C_OscProtocolDriverOsyTpCan *>(this->mc_TransportProtocols[u32_ItTp].get());
       //do we have a CAN TP ?
       if (pc_Tp != nullptr)
       {
@@ -932,7 +923,7 @@ void C_OscComDriverProtocol::PrepareForDestruction(void)
       else
       {
          C_OscProtocolDriverOsyTpIp * const pc_TpIp =
-            dynamic_cast<C_OscProtocolDriverOsyTpIp *>(this->mc_TransportProtocols[u32_ItTp]);
+            dynamic_cast<C_OscProtocolDriverOsyTpIp *>(this->mc_TransportProtocols[u32_ItTp].get());
          if (pc_TpIp != nullptr)
          {
             pc_TpIp->SetDispatcher(nullptr, 0U);
@@ -973,7 +964,7 @@ C_OscProtocolDriverOsyTpBase * C_OscComDriverProtocol::GetOsyTransportProtocol(c
    {
       if (mc_ActiveNodesIndexes[u16_Index] == ou32_NodeIndex)
       {
-         pc_Tp = mc_TransportProtocols[u16_Index];
+         pc_Tp = mc_TransportProtocols[u16_Index].get();
       }
    }
 
@@ -1107,7 +1098,7 @@ C_OscProtocolDriverOsy * C_OscComDriverProtocol::m_GetOsyProtocol(const C_OscPro
          if ((u32_Counter < this->mc_OsyProtocols.size()) &&
              (this->mc_OsyProtocols[u32_Counter] != nullptr))
          {
-            pc_Return = this->mc_OsyProtocols[u32_Counter];
+            pc_Return = this->mc_OsyProtocols[u32_Counter].get();
             break;
          }
       }
@@ -1169,7 +1160,7 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSessionId(const uint32_t ou32_A
 
    if (ou32_ActiveNode < this->mc_OsyProtocols.size())
    {
-      pc_ProtocolOsy = this->mc_OsyProtocols[ou32_ActiveNode];
+      pc_ProtocolOsy = this->mc_OsyProtocols[ou32_ActiveNode].get();
       c_Return = this->m_SetNodeSessionId(pc_ProtocolOsy, ou8_SessionId, oq_CheckForSession, opu8_NrCode);
    }
    else
@@ -1459,7 +1450,7 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(const uint32_t o
                                                                 bool * const opq_SecureAuthenticationActive,
                                                                 bool * const opq_TrafficEncryptionActive) const
 {
-   C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[ou32_ActiveNode];
+   C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[ou32_ActiveNode].get();
    const std::error_code c_Return = this->m_SetNodeSecurityAccess(pc_ProtocolOsy, ou8_SecurityLevel, opu8_NrCode,
                                                                   opq_SecureAuthenticationActive,
                                                                   opq_TrafficEncryptionActive);
@@ -1515,8 +1506,7 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDri
          uint8_t u8_NrErrorCode = 0U;
 
          //new SecurityAccess requested: Preset "needs encryption" to false:
-         tgl_assert(opc_ExistingProtocol->pc_SecuritySubLayer != nullptr);
-         opc_ExistingProtocol->pc_SecuritySubLayer->SetEncryptionIsActive(false);
+         opc_ExistingProtocol->mc_SecuritySubLayer.SetEncryptionIsActive(false);
 
          // OsySecurityAccessRequestSeed is C_OscProtocolDriverOsy, still on the STW integer convention
          c_Return = opc_ExistingProtocol->OsySecurityAccessRequestSeed(ou8_SecurityLevel, q_SecureMode, u64_Seed,
@@ -1672,7 +1662,7 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDri
                if ((c_Return == Errc::success) && (q_TrafficEncryptionActive == true))
                {
                   //get own public key; we need to sent it to the server
-                  c_Return = opc_ExistingProtocol->pc_SecuritySubLayer->GetEcdhPublicKey(
+                  c_Return = opc_ExistingProtocol->mc_SecuritySubLayer.GetEcdhPublicKey(
                      c_TrafficEncryptionPublicClientKey);
                   if (c_Return != Errc::success)
                   {
@@ -1706,7 +1696,7 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDri
                //if encryption is on: feed server's public key and init vector to encryption engine
                if ((c_Return == Errc::success) && (q_TrafficEncryptionActive == true))
                {
-                  C_OscProtocolSecuritySubLayer & rc_Ssl = (*opc_ExistingProtocol->pc_SecuritySubLayer);
+                  C_OscProtocolSecuritySubLayer & rc_Ssl = opc_ExistingProtocol->mc_SecuritySubLayer;
 
                   c_Return = rc_Ssl.SetAesInitVector(c_TrafficEncryptionInitVector);
                   if (c_Return != Errc::success)
@@ -1916,7 +1906,7 @@ std::error_code C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_
          {
             // Using the same connection for configuring the router and the final openSYDE target
             pc_ProtocolOsy =
-               dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[u32_OsyRoutingTarget]);
+               dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[u32_OsyRoutingTarget].get());
          }
 
          if (pc_ProtocolOsy != nullptr)
@@ -2210,7 +2200,7 @@ std::error_code C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_Activ
                c_ActRoute.c_VecRoutePoints[c_ActRoute.c_VecRoutePoints.size() - 1];
             const uint32_t u32_ActiveLastNode = this->m_GetActiveIndex(c_LastNodeOfRouting.u32_NodeIndex);
             C_OscProtocolDriverOsy * pc_ProtocolOsyOfLastNodeOfRouting =
-               dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[u32_ActiveLastNode]);
+               dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[u32_ActiveLastNode].get());
             bool q_EthernetRouter = false;
             uint32_t u32_ActiveOsyTargetNode = ou32_ActiveNode;
 
@@ -2264,7 +2254,7 @@ std::error_code C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_Activ
                      const uint32_t u32_ActiveRouterNode = this->m_GetActiveIndex(rc_Point.u32_NodeIndex);
 
                      C_OscProtocolDriverOsy * const pc_ProtocolOsyTarget =
-                        dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[u32_ActiveOsyTargetNode]);
+                        dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[u32_ActiveOsyTargetNode].get());
 
                      if (pc_ProtocolOsyTarget != nullptr)
                      {
@@ -2378,7 +2368,7 @@ std::error_code C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_Activ
                    (c_ActRoute.c_VecRoutePoints.size() == 1))
                {
                   C_OscProtocolDriverOsy * const pc_ProtocolOsyRouter =
-                     dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[u32_ActiveLastNode]);
+                     dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[u32_ActiveLastNode].get());
 
                   if ((pc_ProtocolOsyRouter != nullptr) &&
                       (q_EthernetRouter == false))
@@ -2682,7 +2672,7 @@ std::error_code C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32
 
    // Using the same connection for configuring the router and the final openSYDE target
    C_OscProtocolDriverOsy * const pc_ProtocolOsyTarget =
-      dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[ou32_ActiveOsyTargetNode]);
+      dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[ou32_ActiveOsyTargetNode].get());
 
    if (pc_ProtocolOsyTarget != nullptr)
    {
@@ -2832,8 +2822,7 @@ void C_OscComDriverProtocol::m_StopRoutingSpecific(const uint32_t ou32_ActiveNod
       }
 
       (void)this->mc_LegacyRouterDispatchers[ou32_ActiveNode]->CAN_Exit();
-      delete (this->mc_LegacyRouterDispatchers[ou32_ActiveNode]);
-      this->mc_LegacyRouterDispatchers[ou32_ActiveNode] = nullptr;
+      this->mc_LegacyRouterDispatchers[ou32_ActiveNode].reset();
    }
 }
 
@@ -3081,8 +3070,8 @@ std::error_code C_OscComDriverProtocol::m_InitForCan(void)
       if (this->mpc_CanDispatcher != nullptr)
       {
          //Transport protocols
-         this->mc_TransportProtocols.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
-         this->mc_LegacyRouterDispatchers.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
+         this->mc_TransportProtocols.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount));
+         this->mc_LegacyRouterDispatchers.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount));
          for (uint32_t u32_ItActiveNode = 0;
               (u32_ItActiveNode < this->mu32_ActiveNodeCount) && (c_Retval == Errc::success);
               ++u32_ItActiveNode)
@@ -3116,12 +3105,13 @@ std::error_code C_OscComDriverProtocol::m_InitForCan(void)
                osc_write_log_warning("Asynchronous communication", c_Text.c_str());
                c_Retval = Errc::overflow;
             }
-            this->mc_TransportProtocols[u32_ItActiveNode] = pc_TransportProtocol;
+            this->mc_TransportProtocols[u32_ItActiveNode] =
+               std::unique_ptr<C_OscProtocolDriverOsyTpBase>(pc_TransportProtocol);
          }
          if (c_Retval == Errc::success)
          {
             //Broadcast
-            mpc_CanTransportProtocolBroadcast = new C_OscProtocolDriverOsyTpCan();
+            mpc_CanTransportProtocolBroadcast = std::make_unique<C_OscProtocolDriverOsyTpCan>();
             c_Retval =
                this->mpc_CanTransportProtocolBroadcast->SetNodeIdentifiersForBroadcasts(this->mc_ClientId);
             if (c_Retval == Errc::success)
@@ -3324,8 +3314,8 @@ std::error_code C_OscComDriverProtocol::m_InitForEthernet(void)
             if (c_Retval == Errc::success)
             {
                //Transport protocols
-               this->mc_TransportProtocols.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
-               this->mc_LegacyRouterDispatchers.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
+               this->mc_TransportProtocols.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount));
+               this->mc_LegacyRouterDispatchers.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount));
 
                for (u32_ItActiveNode = 0;
                     (u32_ItActiveNode < this->mu32_ActiveNodeCount) && (c_Retval == Errc::success);
@@ -3355,12 +3345,13 @@ std::error_code C_OscComDriverProtocol::m_InitForEthernet(void)
                      //Invalid configuration = programming error
                      c_Retval = Errc::overflow;
                   }
-                  this->mc_TransportProtocols[u32_ItActiveNode] = pc_TransportProtocol;
+                  this->mc_TransportProtocols[u32_ItActiveNode] =
+                     std::unique_ptr<C_OscProtocolDriverOsyTpBase>(pc_TransportProtocol);
                }
                if (c_Retval == Errc::success)
                {
                   //Broadcast
-                  mpc_IpTransportProtocolBroadcast = new C_OscProtocolDriverOsyTpIp();
+                  mpc_IpTransportProtocolBroadcast = std::make_unique<C_OscProtocolDriverOsyTpIp>();
                   c_Retval = this->mpc_IpTransportProtocolBroadcast->SetDispatcher(this->mpc_IpDispatcher, 0U);
                   if (c_Retval != Errc::success)
                   {

@@ -406,17 +406,16 @@ std::error_code C_SyvComMessageMonitor::AddLogFileAsc(const std::string & orc_Fi
 int32_t C_SyvComMessageMonitor::AddLogFileBlf(const std::string & orc_FilePath)
 {
    int32_t s32_Return;
-   C_SyvComMessageLoggerFileBlf * const pc_File = new C_SyvComMessageLoggerFileBlf(orc_FilePath);
+   std::unique_ptr<C_SyvComMessageLoggerFileBlf> pc_File =
+      std::make_unique<C_SyvComMessageLoggerFileBlf>(orc_FilePath);
 
    //boundary: the callee now reports std::error_code
    s32_Return = pc_File->OpenFile().value();
 
    this->mc_CriticalSectionConfig.lock();
-   this->mc_LoggingFiles.emplace(std::pair<std::string,
-                                           C_OscComMessageLoggerFileBase * const>(orc_FilePath, pc_File));
+   this->mc_LoggingFiles.emplace(orc_FilePath, std::move(pc_File));
    this->mc_CriticalSectionConfig.unlock();
 
-   //lint -e{429}  no memory leak of pc_File because of handling of instance in map mc_LoggingFiles
    return s32_Return;
 }
 

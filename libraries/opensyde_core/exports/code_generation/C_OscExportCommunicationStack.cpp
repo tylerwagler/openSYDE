@@ -36,16 +36,6 @@ using namespace stw::errors;
 using namespace stw::scl;
 using namespace stw::opensyde_core;
 
-/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
-namespace {
-   template <typename T>
-   std::string mh_IntToHex(T val, uint32_t digits) {
-      std::stringstream ss;
-      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
-      return ss.str();
-   }
-}
-
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
@@ -677,7 +667,7 @@ void C_OscExportCommunicationStack::mh_AddDefines(std::vector<std::string> & orc
          orc_Data.push_back("///check for correct version of structure definitions");
          orc_Data.push_back(
             "#if OSY_COM_CONFIG_DEFINITION_VERSION != 0x" +
-            mh_IntToHex(static_cast<int64_t>(C_OscExportCommunicationStack::h_ConvertOverallCodeVersion(
+            stw::scl::IntToHexCompat(static_cast<int64_t>(C_OscExportCommunicationStack::h_ConvertOverallCodeVersion(
                                                           ou16_GenCodeVersion)), 4U) + "U");
          orc_Data.push_back("///if compilation fails here the openSYDE library version does not match the version of the "
                          "generated code");
@@ -1177,7 +1167,7 @@ void C_OscExportCommunicationStack::mh_AddMessageDefinitions(std::vector<std::st
       }
 
       c_Text =
-         "   { 0x" + mh_IntToHex(static_cast<int64_t>(rc_Message.u32_CanId), 3U) + "U, " + // CAN ID
+         "   { 0x" + stw::scl::IntToHexCompat(static_cast<int64_t>(rc_Message.u32_CanId), 3U) + "U, " + // CAN ID
          std::to_string(rc_Message.q_IsExtended) + "U, " +                                    // extended flag
          std::to_string(u16_Dlc) + "U, " + c_Trigger + ", ";                                  // DLC
 

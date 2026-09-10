@@ -252,7 +252,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
                if (q_Skip == false)
                {
                   const C_OscCanMessage & rc_CurrentMessage = this->c_TxMessages[u32_ItMessage];
-                  if (LowerCaseCompat(rc_Message.c_Name) == LowerCaseCompat(rc_CurrentMessage.c_Name))
+                  if (EqualsCaseInsensitive(rc_Message.c_Name, rc_CurrentMessage.c_Name))
                   {
                      *opq_NameConflict = true;
                   }
@@ -276,7 +276,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
                if (q_Skip == false)
                {
                   const C_OscCanMessage & rc_CurrentMessage = this->c_RxMessages[u32_ItMessage];
-                  if (LowerCaseCompat(rc_Message.c_Name) == LowerCaseCompat(rc_CurrentMessage.c_Name))
+                  if (EqualsCaseInsensitive(rc_Message.c_Name, rc_CurrentMessage.c_Name))
                   {
                      *opq_NameConflict = true;
                   }

@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <sstream>
+#include "C_SclStringUtil.hpp"
 #include <iomanip>
 #include <cstdint>
 #include "C_CanMonProtocolUds.hpp"
@@ -21,15 +22,6 @@
 using namespace stw::cmon_protocol;
 using namespace stw::can;
 
-/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
-namespace {
-   template <typename T>
-   std::string mh_IntToHex(T val, uint32_t digits) {
-      std::stringstream ss;
-      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
-      return ss.str();
-   }
-}
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -215,7 +207,7 @@ std::string C_CanMonProtocolUds::mh_ServiceIdToText(const uint8_t ou8_Sid, const
       c_Text += "LinkControl";
       break;
    default:
-      c_Text += "UnknownService(0x" + mh_IntToHex(ou8_Sid, 2) + ")";
+      c_Text += "UnknownService(0x" + stw::scl::IntToHexCompat(ou8_Sid, 2) + ")";
       break;
    }
 
@@ -272,7 +264,7 @@ std::string C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "systemSupplierSpecific3";
          break;
       default:
-         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + stw::scl::IntToHexCompat(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
@@ -296,7 +288,7 @@ std::string C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "disableRapidPowerShutdown";
          break;
       default:
-         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + stw::scl::IntToHexCompat(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
@@ -334,12 +326,12 @@ std::string C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "enableRxAndTxWithEnhancedAddress";
          break;
       default:
-         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + stw::scl::IntToHexCompat(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
    case SID_TESTER_PRESENT:
-      c_Text += " SUBFUNC:0x" + mh_IntToHex(u8_SubFuncVal, 2);
+      c_Text += " SUBFUNC:0x" + stw::scl::IntToHexCompat(u8_SubFuncVal, 2);
       break;
    case SID_ACCESS_TIMING_PARAMETER:
       c_Text += " TIMING:";
@@ -358,7 +350,7 @@ std::string C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "setTimingParamsToGivenValues";
          break;
       default:
-         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + stw::scl::IntToHexCompat(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
@@ -373,7 +365,7 @@ std::string C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "off";
          break;
       default:
-         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + stw::scl::IntToHexCompat(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
@@ -388,12 +380,12 @@ std::string C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "transitionBaudrate";
          break;
       default:
-         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + stw::scl::IntToHexCompat(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
    default:
-      c_Text += " SUBFUNC:0x" + mh_IntToHex(u8_SubFuncVal, 2);
+      c_Text += " SUBFUNC:0x" + stw::scl::IntToHexCompat(u8_SubFuncVal, 2);
       break;
    }
 
@@ -488,7 +480,7 @@ std::string C_CanMonProtocolUds::mh_NegativeResponseCodeToText(const uint8_t ou8
       c_Text = "voltageTooLow";
       break;
    default:
-      c_Text = "unknownNRC(0x" + mh_IntToHex(ou8_Nrc, 2) + ")";
+      c_Text = "unknownNRC(0x" + stw::scl::IntToHexCompat(ou8_Nrc, 2) + ")";
       break;
    }
 
@@ -517,7 +509,7 @@ std::string C_CanMonProtocolUds::mh_SessionToText(const uint8_t ou8_Session)
    case 0x60U:
       return "safe";
    default:
-      return "unknown(0x" + mh_IntToHex(ou8_Session, 2) + ")";
+      return "unknown(0x" + stw::scl::IntToHexCompat(ou8_Session, 2) + ")";
    }
 }
 
@@ -545,7 +537,7 @@ std::string C_CanMonProtocolUds::mh_ResetTypeToText(const uint8_t ou8_ResetType)
    case 0x05U:
       return "disableRapidPowerShutdown";
    default:
-      return "unknown(0x" + mh_IntToHex(ou8_ResetType, 2) + ")";
+      return "unknown(0x" + stw::scl::IntToHexCompat(ou8_ResetType, 2) + ")";
    }
 }
 
@@ -596,7 +588,7 @@ std::string C_CanMonProtocolUds::mh_DataIdentifierToText(const uint16_t ou16_Did
    case 0xFF00U:
       return "udsVersion";
    default:
-      return "DID(0x" + mh_IntToHex(ou16_Did, 4) + ")";
+      return "DID(0x" + stw::scl::IntToHexCompat(ou16_Did, 4) + ")";
    }
 }
 
@@ -616,7 +608,7 @@ std::string C_CanMonProtocolUds::mh_RoutineIdentifierToText(const uint16_t ou16_
    case 0xFF00U:
       return "RoutineCtrlUdsVersion";
    default:
-      return "RID(0x" + mh_IntToHex(ou16_Rid, 4) + ")";
+      return "RID(0x" + stw::scl::IntToHexCompat(ou16_Rid, 4) + ")";
    }
 }
 
@@ -773,7 +765,7 @@ std::string C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
          const uint8_t u8_AddrFormat = pu8_ServiceData[1];
          const uint8_t u8_NumAddrBytes = (u8_AddrFormat & 0x0FU);
          const uint8_t u8_NumSizeBytes = (u8_AddrFormat >> 4U);
-         c_Text += " ADDR_FORMAT:0x" + mh_IntToHex(u8_AddrFormat, 2);
+         c_Text += " ADDR_FORMAT:0x" + stw::scl::IntToHexCompat(u8_AddrFormat, 2);
          u8_Consumed = 2U + u8_NumAddrBytes + u8_NumSizeBytes;
          if (u8_Consumed > u8_ServiceLen)
          {
@@ -798,7 +790,7 @@ std::string C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
       if (u8_ServiceLen >= 2U)
       {
          const uint8_t u8_DataFormat = pu8_ServiceData[1];
-         c_Text += " DFMT:0x" + mh_IntToHex(u8_DataFormat, 2);
+         c_Text += " DFMT:0x" + stw::scl::IntToHexCompat(u8_DataFormat, 2);
          u8_Consumed = 2U;
          // Remaining bytes are address + size (format-dependent)
       }

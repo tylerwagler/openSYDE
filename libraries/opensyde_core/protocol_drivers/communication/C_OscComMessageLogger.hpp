@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <map>
+#include <memory>
 
 #include <cstdint>
 #include <string>
@@ -136,7 +137,7 @@ protected:
    bool mq_Paused;
 
    // Logging
-   std::map<std::string, C_OscComMessageLoggerFileBase * const> mc_LoggingFiles;
+   std::map<std::string, std::unique_ptr<C_OscComMessageLoggerFileBase>> mc_LoggingFiles;
 
 private:
    //Avoid call
@@ -177,7 +178,7 @@ private:
    std::vector<uint32_t> mc_MsgCounterStandardId;
    std::map<uint32_t, uint32_t> mc_MsgCounterExtendedId;
    std::map<uint32_t, std::string> mc_EcesMessages;
-   C_OscComAutoSupport * mpc_AutoSupportProtocol;
+   std::unique_ptr<C_OscComAutoSupport> mpc_AutoSupportProtocol;
 
    class C_EcosMessage
    {

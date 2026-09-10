@@ -14,16 +14,6 @@ using namespace stw::cmon_protocol;
 using namespace stw::scl;
 using namespace stw::can;
 
-//---------------------------------------------------------------------------
-namespace {
-   template <typename T>
-   std::string mh_IntToHex(T val, uint32_t digits) {
-      std::stringstream ss;
-      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
-      return ss.str();
-   }
-}
-//---------------------------------------------------------------------------
 //have the protocol constants here as copies, so we can put this class into a library of its own
 // without having to add all the protocol header files
 
@@ -32,9 +22,6 @@ static const uint32_t NMT_ZERO_ID      =    0U;
 static const uint32_t SYNC_ID          =  128U;
 static const uint32_t EMCY_AREA_LOW    =  129U;
 static const uint32_t EMCY_AREA_HIGH   =  256U;
-//static const uint32 SDO_TX_AREA_LOW  = 1409U;
-//static const uint32 SDO_TX_AREA_HIGH = 1536U;
-//static const uint32 SDO_RX_AREA_LOW  = 1537U;
 static const uint32_t SDO_RX_AREA_HIGH = 1664U;
 static const uint32_t GUARD_AREA_LOW   = 1793U;
 static const uint32_t GUARD_AREA_HIGH  = 1920U;

@@ -2359,7 +2359,7 @@ std::error_code C_OscComDriverFlash::m_InitFlashProtocol(void)
 
       //Init protocol driver
       // The last protocol is for broadcasts
-      this->mc_OsyProtocols.resize(u32_ActiveNodeCount, nullptr);
+      this->mc_OsyProtocols.resize(u32_ActiveNodeCount);
 
       for (u32_ActiveNodeCounter = 0U; u32_ActiveNodeCounter < this->mc_ActiveNodesIndexes.size();
            ++u32_ActiveNodeCounter)
@@ -2376,7 +2376,8 @@ std::error_code C_OscComDriverFlash::m_InitFlashProtocol(void)
                pc_ProtocolOsy = new C_OscProtocolDriverOsy();
                pc_ProtocolOsy->InitializeHandleWaitTime(&C_OscComDriverFlash::mh_HandleWaitTime, this);
                // C_OscProtocolDriverOsy is still on the STW integer convention
-               c_Return = pc_ProtocolOsy->SetTransportProtocol(this->mc_TransportProtocols[u32_ActiveNodeCounter]);
+               c_Return = pc_ProtocolOsy->SetTransportProtocol(
+                  this->mc_TransportProtocols[u32_ActiveNodeCounter].get());
                if (c_Return == Errc::success)
                {
                   // C_OscProtocolDriverOsy is still on the STW integer convention
@@ -2393,7 +2394,8 @@ std::error_code C_OscComDriverFlash::m_InitFlashProtocol(void)
                   //Invalid configuration = programming error
                   c_Return = Errc::overflow;
                }
-               this->mc_OsyProtocols[u32_ActiveNodeCounter] = pc_ProtocolOsy;
+               this->mc_OsyProtocols[u32_ActiveNodeCounter] =
+                  std::unique_ptr<C_OscProtocolDriverOsy>(pc_ProtocolOsy);
                break;
             case C_OscNodeProperties::eFL_NONE:
             default:
@@ -2562,7 +2564,7 @@ void C_OscComDriverFlash::m_HandleWaitTime(void)
          tgl_assert(u32_ActiveNodeRouter < this->mc_OsyProtocols.size());
          if (u32_ActiveNodeRouter < this->mc_OsyProtocols.size())
          {
-            C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNodeRouter];
+            C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNodeRouter].get();
             if (pc_ProtocolOsy != nullptr)
             {
                // Send tester present message without expecting a response

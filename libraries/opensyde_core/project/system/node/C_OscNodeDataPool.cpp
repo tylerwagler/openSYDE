@@ -376,7 +376,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
             if (u32_ItElement != oru32_ListIndex)
             {
                const C_OscNodeDataPoolList & rc_List = this->c_Lists[u32_ItElement];
-               if (LowerCaseCompat(rc_CheckedList.c_Name) == LowerCaseCompat(rc_List.c_Name))
+               if (EqualsCaseInsensitive(rc_CheckedList.c_Name, rc_List.c_Name))
                {
                   *opq_NameConflict = true;
                }

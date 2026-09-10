@@ -523,7 +523,7 @@ const
                   const C_OscNode & rc_CurrentNode = this->c_Nodes[u32_ItNode];
                   c_CurName = rc_CurrentNode.c_Properties.c_Name;
                }
-               if (LowerCaseCompat(rc_CheckedNode.c_Properties.c_Name) == LowerCaseCompat(c_CurName))
+               if (EqualsCaseInsensitive(rc_CheckedNode.c_Properties.c_Name, c_CurName))
                {
                   *opq_NameConflict = true;
                   break;
@@ -982,7 +982,7 @@ std::error_code C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusInde
             if (u32_ItBus != ou32_BusIndex)
             {
                const C_OscSystemBus & rc_CurrentBus = this->c_Buses[u32_ItBus];
-               if (LowerCaseCompat(rc_CheckedBus.c_Name) == LowerCaseCompat(rc_CurrentBus.c_Name))
+               if (EqualsCaseInsensitive(rc_CheckedBus.c_Name, rc_CurrentBus.c_Name))
                {
                   *opq_NameConflict = true;
                }

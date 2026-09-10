@@ -54,7 +54,7 @@ public:
 
    void Save(void);
 
-   void RegisterWidgets(stw::opensyde_gui_logic::C_SyvComDriverDiag & orc_ComDriver) const;
+   void RegisterWidgets(stw::opensyde_gui_logic::C_SyvComDriverDiag & orc_ComDriver);
    void ConnectionActiveChanged(const bool oq_Active);
    void UpdateShowValues(void) const;
    void UpdateTransmissionConfiguration(void);
@@ -140,6 +140,7 @@ private:
    stw::opensyde_gui_logic::C_PuiSvDashboard::E_TabType me_DashboardTabType;
 
    C_SyvDaDashboardScreenshot * mpc_ScreenshotDashboardTab;
+   stw::opensyde_core::C_OscComDriverProtocol * mpc_ComDriver; ///< Holds the diag com driver for encryption status queries
    void m_PerformScreenshot(const bool oq_IsControlButtonPressed);
    void m_SetCurrentTabNameForScreenshotFile(void);
    void m_GetCurrentDashboardTabName(void) const;

@@ -66,7 +66,8 @@ C_SyvDaDashboardSelectorTabWidget::C_SyvDaDashboardSelectorTabWidget(QWidget * c
    mpc_TabBar(nullptr),
    mq_EditMode(false),
    mq_Connected(false),
-   me_DashboardTabType(C_PuiSvDashboard::eSCENE)
+   me_DashboardTabType(C_PuiSvDashboard::eSCENE),
+   mpc_ComDriver(nullptr)
 {
    stw::opensyde_gui_elements::C_OgePubIconEvents * const pc_ScreenshotPushButton = new C_OgePubIconEvents(this);
 
@@ -351,9 +352,11 @@ void C_SyvDaDashboardSelectorTabWidget::Save(void)
    \param[in,out]  orc_ComDriver    Communication driver
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardSelectorTabWidget::RegisterWidgets(C_SyvComDriverDiag & orc_ComDriver) const
+void C_SyvDaDashboardSelectorTabWidget::RegisterWidgets(C_SyvComDriverDiag & orc_ComDriver)
 {
    int32_t s32_Counter;
+
+   this->mpc_ComDriver = &orc_ComDriver;
 
    for (s32_Counter = 0; s32_Counter < this->count(); ++s32_Counter)
    {
@@ -384,7 +387,8 @@ void C_SyvDaDashboardSelectorTabWidget::ConnectionActiveChanged(const bool oq_Ac
    int32_t s32_Counter;
    const QMap<uint32_t,
               bool> c_MappingNodeToTrafficEncryptionStatus =
-      C_SyvDaTrafficEncryptionStatusHelper::h_GetMappingNodeToTrafficEncryptionStatus(this->mu32_ViewIndex, oq_Active);
+      C_SyvDaTrafficEncryptionStatusHelper::h_GetMappingNodeToTrafficEncryptionStatus(this->mu32_ViewIndex, oq_Active,
+                                                                                      *this->mpc_ComDriver);
 
    this->mq_Connected = oq_Active;
 
@@ -1229,7 +1233,8 @@ void C_SyvDaDashboardSelectorTabWidget::m_TearOffWidget(const uint32_t ou32_Data
          const QMap<uint32_t,
                     bool> c_MappingNodeToTrafficEncryptionStatus =
             C_SyvDaTrafficEncryptionStatusHelper::h_GetMappingNodeToTrafficEncryptionStatus(this->mu32_ViewIndex,
-                                                                                            this->mq_Connected);
+                                                                                            this->mq_Connected,
+                                                                                            *this->mpc_ComDriver);
          //Pop up
          C_SyvDaTearOffWidget * const pc_Widget = new C_SyvDaTearOffWidget(this->mu32_ViewIndex, ou32_DataIndex,
                                                                            pc_DashBoard->GetName(), opc_Widget);

@@ -385,11 +385,9 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
          //If encryption is active and connected to the node via CAN then do not set up and request cyclic
          // transmissions.
          //In a routing scenario the connection via CAN applies to the "last hop", not the client side interface.
-         const C_OscProtocolSecuritySubLayer * const pc_SslConfig = C_OscProtocolSecuritySubLayer::h_GetConfigByNodeId(
-            this->mc_ServerIds[u32_ActiveNode]);
-         tgl_assert(pc_SslConfig != nullptr);
+         const bool q_EncryptionActive = this->IsTrafficEncryptionActive(this->mc_ServerIds[u32_ActiveNode]);
 
-         if ((pc_SslConfig != nullptr) && (pc_SslConfig->GetEncryptionIsActive() == true))
+         if (q_EncryptionActive == true)
          {
             C_OscSystemBus::E_Type e_InterfaceType;
             //encryption is active; is the last routing hop via CAN?
@@ -1795,7 +1793,7 @@ int32_t C_SyvComDriverDiag::m_InitDiagProtocol(void)
    {
       //Initialize protocol driver
       this->mc_DiagProtocols.resize(this->m_GetActiveNodeCount(), nullptr);
-      this->mc_OsyProtocols.resize(this->m_GetActiveNodeCount(), nullptr);
+      this->mc_OsyProtocols.resize(this->m_GetActiveNodeCount());
       //preset: assume cyclic transmission supported; otherwise this will be set when setting up cyclic transmissions
       this->mc_CyclicTransmissionsSupported.resize(this->m_GetActiveNodeCount(), 1U);
 
@@ -1817,7 +1815,7 @@ int32_t C_SyvComDriverDiag::m_InitDiagProtocol(void)
                pc_DiagProtocolOsy = new C_OscDiagProtocolOsy();
                //boundary: the callee now reports std::error_code
                s32_Retval =
-                  pc_DiagProtocolOsy->SetTransportProtocol(this->mc_TransportProtocols[u32_ItActiveNode]).value();
+                  pc_DiagProtocolOsy->SetTransportProtocol(this->mc_TransportProtocols[u32_ItActiveNode].get()).value();
                if (s32_Retval == C_NO_ERR)
                {
                   //boundary: the callee now reports std::error_code
@@ -1837,7 +1835,8 @@ int32_t C_SyvComDriverDiag::m_InitDiagProtocol(void)
                   s32_Retval = C_OVERFLOW;
                }
                pc_DiagProtocol = pc_DiagProtocolOsy;
-               this->mc_OsyProtocols[u32_ItActiveNode] = pc_DiagProtocolOsy;
+               this->mc_OsyProtocols[u32_ItActiveNode] =
+                  std::unique_ptr<C_OscProtocolDriverOsy>(pc_DiagProtocolOsy);
                break;
             case C_OscNodeProperties::eDS_NONE:
             default:

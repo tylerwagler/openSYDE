@@ -30,15 +30,6 @@ using namespace stw::cmon_protocol;
 using namespace stw::scl;
 using namespace stw::can;
 
-/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
-namespace {
-   template <typename T>
-   std::string mh_IntToHex(T val, uint32_t digits) {
-      std::stringstream ss;
-      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
-      return ss.str();
-   }
-}
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 //have the protocol constants here as copies, so we can put this class into a library of its own
@@ -785,7 +776,7 @@ std::string C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
 
             c_Text += "  Ext SNR BlockNumber: " + std::to_string(u8_BlockNumber);
             c_Text += "  SubNodeId: " + std::to_string(u8_SubNodeId);
-            c_Text += "  UniqueId: " + mh_IntToHex(u32_UniqueId, 6);
+            c_Text += "  UniqueId: " + stw::scl::IntToHexCompat(u32_UniqueId, 6);
 
             if (u8_BlockNumber == 0)
             {

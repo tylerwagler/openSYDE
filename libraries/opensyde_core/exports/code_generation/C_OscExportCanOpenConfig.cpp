@@ -33,16 +33,6 @@ using namespace stw::errors;
 using namespace stw::scl;
 using namespace stw::opensyde_core;
 
-/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
-namespace {
-   template <typename T>
-   std::string mh_IntToHex(T val, uint32_t digits) {
-      std::stringstream ss;
-      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
-      return ss.str();
-   }
-}
-
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
@@ -181,20 +171,20 @@ void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, 
 std::string C_OscExportCanOpenConciseEntry::GetConciseString(void) const
 {
    const uint32_t u32_PayloadSize = static_cast<uint32_t>(this->c_Payload.size());
-   std::string c_Retval = "0x" + mh_IntToHex(static_cast<uint8_t>(this->u16_Index), 2U) + "U, " +
+   std::string c_Retval = "0x" + stw::scl::IntToHexCompat(static_cast<uint8_t>(this->u16_Index), 2U) + "U, " +
                            "0x" +
-                           mh_IntToHex(static_cast<uint8_t>(this->u16_Index >> 8U), 2U) + "U, " +
-                           "0x" + mh_IntToHex(this->u8_SubIndex, 2U) + "U, " +
-                           "0x" + mh_IntToHex(u32_PayloadSize, 2U) + "U, " +
-                           "0x" + mh_IntToHex(u32_PayloadSize >> 8U, 2U) + "U, " +
-                           "0x" + mh_IntToHex(u32_PayloadSize >> 16U, 2U) + "U, " +
-                           "0x" + mh_IntToHex(u32_PayloadSize >> 24U, 2U) + "U, ";
+                           stw::scl::IntToHexCompat(static_cast<uint8_t>(this->u16_Index >> 8U), 2U) + "U, " +
+                           "0x" + stw::scl::IntToHexCompat(this->u8_SubIndex, 2U) + "U, " +
+                           "0x" + stw::scl::IntToHexCompat(u32_PayloadSize, 2U) + "U, " +
+                           "0x" + stw::scl::IntToHexCompat(u32_PayloadSize >> 8U, 2U) + "U, " +
+                           "0x" + stw::scl::IntToHexCompat(u32_PayloadSize >> 16U, 2U) + "U, " +
+                           "0x" + stw::scl::IntToHexCompat(u32_PayloadSize >> 24U, 2U) + "U, ";
 
    std::string c_PayloadString;
 
    for (uint8_t u8_It = 0; u8_It < c_Payload.size(); ++u8_It)
    {
-      c_PayloadString += "0x" + mh_IntToHex(c_Payload[u8_It], 2) + "U, ";
+      c_PayloadString += "0x" + stw::scl::IntToHexCompat(c_Payload[u8_It], 2) + "U, ";
    }
    //remove last comma + whitespace
    DeleteCompat(c_PayloadString, LastPosCompat(c_PayloadString, ","), 2U);
@@ -213,10 +203,10 @@ std::string C_OscExportCanOpenConciseEntry::GetConciseString(void) const
 //----------------------------------------------------------------------------------------------------------------------
 std::string C_OscExportCanOpenConciseEntry::h_GetNumOfEntriesString(const uint32_t ou32_NumOfEntries)
 {
-   return "0x" + mh_IntToHex(static_cast<uint8_t>(ou32_NumOfEntries), 2U) + "U, " +
-           "0x" + mh_IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 8U), 2U) + "U, " +
-           "0x" + mh_IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 16U), 2U) + "U, " +
-           "0x" + mh_IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 24U), 2U) + "U, " +
+   return "0x" + stw::scl::IntToHexCompat(static_cast<uint8_t>(ou32_NumOfEntries), 2U) + "U, " +
+           "0x" + stw::scl::IntToHexCompat(static_cast<uint8_t>(ou32_NumOfEntries >> 8U), 2U) + "U, " +
+           "0x" + stw::scl::IntToHexCompat(static_cast<uint8_t>(ou32_NumOfEntries >> 16U), 2U) + "U, " +
+           "0x" + stw::scl::IntToHexCompat(static_cast<uint8_t>(ou32_NumOfEntries >> 24U), 2U) + "U, " +
           "                                                 ///< Number of entries";
 }
 
@@ -752,7 +742,7 @@ void C_OscExportCanOpenConfig::mh_AddDefines(std::vector<std::string> & orc_Data
       {
          orc_Data.push_back("///check for correct version of structure definitions");
          orc_Data.push_back("#if OSCO_MAN_CONFIG_DEFINITION_VERSION != 0x" +
-                         mh_IntToHex(static_cast<int64_t>(C_OscExportCanOpenConfig::
+                         stw::scl::IntToHexCompat(static_cast<int64_t>(C_OscExportCanOpenConfig::
                                                                     h_ConvertOverallCodeVersion(
                                                                        ou16_GenCodeVersion)), 4U) + "U");
          orc_Data.push_back("///if compilation fails here the openSYDE library version does not match the version of the "
@@ -985,7 +975,7 @@ void C_OscExportCanOpenConfig::mh_AddPdoDefinitions(std::vector<std::string> & o
          //array contains: COB-ID, COB-ID Extension, COMM-Method, InhibitTime, EventTimer, NumSignals, pointer to
          //first element of array "signal definitions".
          //See code example in /doc/file_specifications/Generated_C_Code/CANopenManager_Definition
-         c_Text = "   { 0x" + mh_IntToHex(rc_CurrentMessage.u32_CanId, 3U) + "U, " + c_IdExt +
+         c_Text = "   { 0x" + stw::scl::IntToHexCompat(rc_CurrentMessage.u32_CanId, 3U) + "U, " + c_IdExt +
                   ", " + c_TransmissionType + ", " +
                   std::to_string(static_cast<uint32_t>(u16_InhibitTime)) + "U, " +
                   c_EventTime + "U, " + std::to_string(rc_CurrentMessage.c_Signals.size()) + "U, " +

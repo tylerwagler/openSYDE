@@ -21,6 +21,7 @@
 #include <string>
 #include "C_SclChecksums.hpp"
 #include "TglUtils.hpp"
+#include <vector>
 
 using namespace stw::errors;
 using namespace stw::hex_file;
@@ -91,7 +92,8 @@ std::error_code C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscA
    uint32_t u32_Address = ou32_SearchStartAddress;
    C_OscApplicationInfoBlock c_Block;
    uint16_t u16_Size = static_cast<uint16_t>(c_Block.GetMaxSizeOnECU());
-   uint8_t * const pu8_Buffer = new uint8_t[u16_Size];
+   std::vector<uint8_t> c_Buffer(u16_Size);
+   uint8_t * const pu8_Buffer = c_Buffer.data();
    uint16_t u16_Help;
 
    char acn_Magic[APPLICATION_INFO_MAGIC_LENGTH_V2];
@@ -145,7 +147,6 @@ std::error_code C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscA
          if ((u32_Address != ou32_SearchStartAddress) || c_Return)
          {
             //we searched the start address and did not find anything !
-            delete[] pu8_Buffer;
             return make_error_code(Errc::noact);
          }
       }
@@ -193,7 +194,6 @@ std::error_code C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscA
       }
       u32_Address += APPLICATION_INFO_MAGIC_LENGTH_V1; //done with this block ...
    }
-   delete[] pu8_Buffer;
    return make_error_code(Errc::success);
 }
 

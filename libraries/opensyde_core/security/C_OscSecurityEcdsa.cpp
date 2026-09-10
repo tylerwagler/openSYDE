@@ -31,23 +31,13 @@
 #include "C_OscSecurityEcdsa.hpp"
 #include "TglUtils.hpp"
 #include "C_SclStringUtil.hpp"
+#include <vector>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
 using namespace stw::scl;
 using namespace stw::errors;
 
-/* -- Anonymous namespace ------------------------------------------------------------------------------------------- */
-namespace
-{
-template <typename T>
-std::string mh_IntToHex(const T orc_Value, const uint32_t ou32_Digits)
-{
-   std::stringstream c_Stream;
-   c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Value;
-   return c_Stream.str();
-}
-} // unnamed namespace
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -122,7 +112,8 @@ std::error_code C_OscSecurityEcdsa::C_Ecdsa256Signature::GetAsDerString(std::str
                                                                            // match library interface
                if (x_BufferSize > 0)
                {
-                  uint8_t * pu8_Buffer = new uint8_t[x_BufferSize];
+                  std::vector<uint8_t> c_Buffer(static_cast<size_t>(x_BufferSize));
+                  uint8_t * pu8_Buffer = c_Buffer.data();
                   uint8_t * const pu8_OriginalBuffer = pu8_Buffer;
 
                   //now fill in the data:
@@ -133,10 +124,8 @@ std::error_code C_OscSecurityEcdsa::C_Ecdsa256Signature::GetAsDerString(std::str
                   for (uint32_t u32_Character = 0U; u32_Character < static_cast<uint32_t>(x_BufferSize);
                        u32_Character++)
                   {
-                     orc_Signature += mh_IntToHex(pu8_OriginalBuffer[u32_Character], 2U);
+                     orc_Signature += stw::scl::IntToHexCompat(pu8_OriginalBuffer[u32_Character], 2U);
                   }
-
-                  delete[] pu8_OriginalBuffer;
 
                   c_Return = Errc::success;
                }

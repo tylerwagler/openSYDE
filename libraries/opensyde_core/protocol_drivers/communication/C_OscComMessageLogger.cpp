@@ -59,18 +59,6 @@ const uint32_t C_OscComMessageLogger::mhu32_ECES_MAX_MESSAGE_COUNTER = 255;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
-/* -- Helper -------------------------------------------------------------------------------------------------------- */
-namespace
-{
-   template <typename T>
-   std::string mh_IntToHex(const T orc_Val, const uint32_t ou32_Digits)
-   {
-      std::stringstream c_Stream;
-      c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Val;
-      return c_Stream.str();
-   }
-}
-
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -123,7 +111,7 @@ C_OscComMessageLogger::C_OscComMessageLogger(void) :
    mu64_FirstTimeStampDayOfTime(0U),
    mu64_LastTimeStamp(0U),
    mu32_FilteredMessages(0U),
-   mpc_AutoSupportProtocol(new C_OscComAutoSupport())
+   mpc_AutoSupportProtocol(std::make_unique<C_OscComAutoSupport>())
 {
    // Resize the vector for all potential CAN standard ids
    this->mc_MsgCounterStandardId.resize(0x800U, 0U);
@@ -147,9 +135,6 @@ C_OscComMessageLogger::~C_OscComMessageLogger(void)
    }
    mpc_OsySysDefMessage = nullptr;
    mpc_OsySysDefDataPoolList = nullptr;
-
-   delete this->mpc_AutoSupportProtocol;
-   this->mpc_AutoSupportProtocol = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -233,7 +218,7 @@ void C_OscComMessageLogger::SetProtocol(const e_CanMonL7Protocols oe_Protocol)
 {
    std::string c_ProtocolName;
 
-   std::map<std::string, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
+   std::map<std::string, std::unique_ptr<C_OscComMessageLoggerFileBase>>::iterator c_ItFile;
 
    this->me_Protocol = oe_Protocol;
    this->mc_ProtocolHex.SetProtocolMode(oe_Protocol);
@@ -535,17 +520,17 @@ std::error_code C_OscComMessageLogger::AddLogFileAsc(const std::string & orc_Fil
                                                      const bool oq_RelativeTimeStampActive)
 {
    std::error_code c_Return = Errc::success;
-   C_OscComMessageLoggerFileAsc * pc_File;
    std::string c_ProtocolName;
 
    this->mc_ProtocolDec.GetProtocolName(this->me_Protocol, c_ProtocolName);
-   pc_File = new C_OscComMessageLoggerFileAsc(orc_FilePath, c_ProtocolName, oq_HexActive, oq_RelativeTimeStampActive);
+   std::unique_ptr<C_OscComMessageLoggerFileAsc> pc_File =
+      std::make_unique<C_OscComMessageLoggerFileAsc>(orc_FilePath, c_ProtocolName, oq_HexActive,
+                                                     oq_RelativeTimeStampActive);
    c_Return = pc_File->OpenFile();
 
-   this->mc_LoggingFiles.insert(std::pair<std::string,
-                                          C_OscComMessageLoggerFileBase * const>(orc_FilePath, pc_File));
+   this->mc_LoggingFiles.emplace(orc_FilePath, std::move(pc_File));
 
-   return c_Return; //lint !e429  //no memory leak of pc_File because of handling of instance in map mc_LoggingFiles
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -564,7 +549,7 @@ std::error_code C_OscComMessageLogger::RemoveLogFile(const std::string & orc_Fil
 {
    std::error_code c_Return = Errc::noact;
 
-   std::map<std::string, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
+   std::map<std::string, std::unique_ptr<C_OscComMessageLoggerFileBase>>::iterator c_ItFile;
 
    c_ItFile = this->mc_LoggingFiles.find(orc_FilePath);
 
@@ -572,7 +557,6 @@ std::error_code C_OscComMessageLogger::RemoveLogFile(const std::string & orc_Fil
    {
       c_Return = Errc::success;
 
-      delete c_ItFile->second;
       this->mc_LoggingFiles.erase(c_ItFile);
    }
 
@@ -587,12 +571,6 @@ std::error_code C_OscComMessageLogger::RemoveLogFile(const std::string & orc_Fil
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComMessageLogger::RemoveAllLogFiles(void)
 {
-   std::map<std::string, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
-
-   for (c_ItFile = this->mc_LoggingFiles.begin(); c_ItFile != this->mc_LoggingFiles.end(); ++c_ItFile)
-   {
-      delete c_ItFile->second;
-   }
    this->mc_LoggingFiles.clear();
 }
 
@@ -677,7 +655,7 @@ std::error_code C_OscComMessageLogger::HandleCanMessage(const T_STWCAN_Msg_RX & 
    {
       if (this->m_CheckFilter(orc_Msg) == true)
       {
-         std::map<std::string, C_OscComMessageLoggerFileBase * const>::const_iterator c_ItFileLogger;
+         std::map<std::string, std::unique_ptr<C_OscComMessageLoggerFileBase>>::const_iterator c_ItFileLogger;
          bool q_OpenSydeInterpretationFound = false;
 
          // Parse message and fill C_OscComMessageLoggerData for all further steps.
@@ -1341,7 +1319,7 @@ void C_OscComMessageLogger::mh_InterpretCanSignalValue(C_OscComMessageLoggerData
       else
       {
          orc_Signal.c_RawValueDec = std::to_string(u64_Value);
-         orc_Signal.c_RawValueHex = mh_IntToHex(static_cast<int64_t>(u64_Value), 1);
+         orc_Signal.c_RawValueHex = stw::scl::IntToHexCompat(static_cast<int64_t>(u64_Value), 1);
       }
 
       // Interpreted value
@@ -1415,7 +1393,7 @@ void C_OscComMessageLogger::m_ConvertCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
 
    // Prepare the data for the ui
    this->mc_HandledCanMessage.c_CanIdDec = std::to_string(orc_Msg.u32_ID);
-   this->mc_HandledCanMessage.c_CanIdHex = mh_IntToHex(orc_Msg.u32_ID, 1);
+   this->mc_HandledCanMessage.c_CanIdHex = stw::scl::IntToHexCompat(orc_Msg.u32_ID, 1);
    if (orc_Msg.u8_XTD > 0U)
    {
       // Extended Id
@@ -1438,7 +1416,7 @@ void C_OscComMessageLogger::m_ConvertCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
          }
       }
       this->mc_HandledCanMessage.c_CanDataDec += std::to_string(orc_Msg.au8_Data[u8_DbCounter]);
-      this->mc_HandledCanMessage.c_CanDataHex += mh_IntToHex(orc_Msg.au8_Data[u8_DbCounter], 2);
+      this->mc_HandledCanMessage.c_CanDataHex += stw::scl::IntToHexCompat(orc_Msg.au8_Data[u8_DbCounter], 2);
 
       if (u8_DbCounter < (orc_Msg.u8_DLC - 1U))
       {
@@ -1687,7 +1665,7 @@ void C_OscComMessageLogger::m_CheckAndHandleEcesMessage()
       C_OscComMessageLoggerDataSignal & rc_Signal = this->mc_HandledCanMessage.c_Signals[u32_Counter];
 
       // Look for special signal "ECeS_Message_Counter" in the message received
-      if (LowerCaseCompat(rc_Signal.c_Name).compare(LowerCaseCompat(mhc_ECES_MESSAGE_COUNTER)) == 0)
+      if (EqualsCaseInsensitive(rc_Signal.c_Name, mhc_ECES_MESSAGE_COUNTER))
       {
          // Search for the unique ECeS message (based on CAN Id) in the saved ECeS messages
          const std::map<uint32_t,  std::string>::iterator c_Iterator = this->mc_EcesMessages.find(
@@ -1735,7 +1713,7 @@ void C_OscComMessageLogger::m_CheckAndHandleEcesMessage()
       }
 
       // Look for special signal "ECeS_Checksum" in the message received
-      else if (LowerCaseCompat(rc_Signal.c_Name).compare(LowerCaseCompat(mhc_ECES_CHECKSUM)) == 0)
+      else if (EqualsCaseInsensitive(rc_Signal.c_Name, mhc_ECES_CHECKSUM))
       {
          const uint8_t u8_OrigCrcValue = static_cast<uint8_t>(this->mc_HandledCanMessage.c_CanMsg.au8_Data[7]);
          const uint8_t u8_CalculatedCrcValue = C_OscComAutoSupport::h_GetCyclicRedundancyCheckCalculation(6,

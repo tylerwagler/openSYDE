@@ -16,6 +16,7 @@
 #include "C_CanMonProtocolUds.hpp"
 
 #include <string>
+#include <cstdio>
 #include "C_SclStringUtil.hpp"
 #include "C_SclIniFile.hpp"
 #include "TglFile.hpp"
@@ -85,7 +86,6 @@ std::string C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Ms
    const uint16_t u16_MAX_CHARS_RAW_DATA = 73U;
 
    std::string c_Text;
-   std::string c_Help;
    int32_t s32_Index;
    uint8_t u8_Len;
    bool q_Decimal = GetDecimalMode();
@@ -95,20 +95,25 @@ std::string C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Ms
    {
       c_Text = PrintFormattedCompat("%8d; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
                                   (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC);
+      //reserve the full line once so the per-byte appends below never reallocate
+      c_Text.reserve(u16_MAX_CHARS_RAW_DATA + 16U);
       for (s32_Index = 0; s32_Index < u8_Len; s32_Index++)
       {
-         c_Help = PrintFormattedCompat("%3d; ", orc_Msg.au8_Data[s32_Index]);
-         c_Text += c_Help;
+         char acn_Byte[8];
+         (void)std::snprintf(acn_Byte, sizeof(acn_Byte), "%3d; ", orc_Msg.au8_Data[s32_Index]);
+         c_Text += acn_Byte;
       }
    }
    else
    {
       c_Text = PrintFormattedCompat("0x%08X; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
                                   (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC);
+      c_Text.reserve(u16_MAX_CHARS_RAW_DATA + 16U);
       for (s32_Index = 0; s32_Index < u8_Len; s32_Index++)
       {
-         c_Help = PrintFormattedCompat("0x%02X; ", orc_Msg.au8_Data[s32_Index]);
-         c_Text += c_Help;
+         char acn_Byte[8];
+         (void)std::snprintf(acn_Byte, sizeof(acn_Byte), "0x%02X; ", orc_Msg.au8_Data[s32_Index]);
+         c_Text += acn_Byte;
       }
    }
    for (; s32_Index < 8; s32_Index++)
@@ -120,7 +125,7 @@ std::string C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Ms
    {
       if (c_Text.length() < u16_MAX_CHARS_RAW_DATA)
       {
-         c_Text = c_Text + std::string(static_cast<size_t>(u16_MAX_CHARS_RAW_DATA - c_Text.length()), ' ');
+         c_Text.append(static_cast<size_t>(u16_MAX_CHARS_RAW_DATA - c_Text.length()), ' ');
       }
       c_Text += (MessageToString(orc_Msg) + ";");
    }

@@ -45,18 +45,6 @@ using namespace stw::tgl;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
-/* -- Helper -------------------------------------------------------------------------------------------------------- */
-namespace
-{
-   template <typename T>
-   std::string mh_IntToHex(const T orc_Val, const uint32_t ou32_Digits)
-   {
-      std::stringstream c_Stream;
-      c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Val;
-      return c_Stream.str();
-   }
-}
-
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1190,7 +1178,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::Cycle(void)
                   {
                      //nothing we can handle ...
                      m_LogWarningWithHeader("Unexpected payload type received: 0x" +
-                                            mh_IntToHex(mc_RxState.c_ServiceHeader.u16_PayloadType, 4) +
+                                            stw::scl::IntToHexCompat(mc_RxState.c_ServiceHeader.u16_PayloadType, 4) +
                                             "Incoming TCP response dumped.", TGL_UTIL_FUNC_ID);
                   }
                }

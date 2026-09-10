@@ -33,16 +33,6 @@ using namespace stw::scl;
 using namespace stw::tgl;
 using namespace stw::opensyde_core;
 
-/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
-namespace {
-   template <typename T>
-   std::string mh_IntToHex(T val, uint32_t digits) {
-      std::stringstream ss;
-      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
-      return ss.str();
-   }
-}
-
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
@@ -377,7 +367,7 @@ std::error_code C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const st
             if (c_Object == c_OdObjects.end())
             {
                mc_LastError = orc_Blockname + ": References object 0x" +
-                              mh_IntToHex(u16_Index, 4) + "which is not described in the file.";
+                              stw::scl::IntToHexCompat(u16_Index, 4) + "which is not described in the file.";
                c_Return = Errc::config;
             }
          }

@@ -284,7 +284,7 @@ std::error_code C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> &
                       InsertCompat(c_ExpectedFolder, c_Substitute, u32_Pos);
                   }
 
-                  if (LowerCaseCompat(c_LastFolderName) != LowerCaseCompat(c_ExpectedFolder))
+                  if (!EqualsCaseInsensitive(c_LastFolderName, c_ExpectedFolder))
                   {
                      q_SkipNode = true;
                   }

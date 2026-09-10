@@ -202,11 +202,11 @@ std::error_code C_OscHalcDefStructFiler::h_ParseSimplestTypeValue(const std::str
          case C_OscNodeDataPoolContent::eUINT8:
             if (orc_TypeStr == "bool")
             {
-                if (LowerCaseCompat(c_ItemStr) == LowerCaseCompat(mhc_FALSE))
+                if (EqualsCaseInsensitive(c_ItemStr, mhc_FALSE))
                 {
                    orc_Content.SetValueU8(static_cast<uint8_t>(false));
                 }
-                else if (LowerCaseCompat(c_ItemStr) == LowerCaseCompat(mhc_TRUE))
+                else if (EqualsCaseInsensitive(c_ItemStr, mhc_TRUE))
                {
                   orc_Content.SetValueU8(static_cast<uint8_t>(true));
                }
@@ -754,11 +754,11 @@ std::error_code C_OscHalcDefStructFiler::h_SetType(C_OscXmlParserBase & orc_XmlP
                   c_Retval = orc_XmlParser.GetAttributeStringError("initial-apply-value-setting", c_Content);
                   if (!c_Retval)
                   {
-                      if (LowerCaseCompat(c_Content) == LowerCaseCompat(mhc_FALSE))
+                      if (EqualsCaseInsensitive(c_Content, mhc_FALSE))
                       {
                          c_BitmaskItem.q_ApplyValueSetting = false;
                       }
-                      else if (LowerCaseCompat(c_Content) == LowerCaseCompat(mhc_TRUE))
+                      else if (EqualsCaseInsensitive(c_Content, mhc_TRUE))
                      {
                         c_BitmaskItem.q_ApplyValueSetting = true;
                      }
@@ -882,11 +882,11 @@ std::error_code C_OscHalcDefStructFiler::h_ParseAttributeIntoContent(C_OscHalcDe
       else if (orc_Type == "bool")
       {
          const std::string c_ItemStr = orc_XmlParser.GetAttributeString(orc_AttributeName);
-          if (LowerCaseCompat(c_ItemStr) == LowerCaseCompat(mhc_FALSE))
+          if (EqualsCaseInsensitive(c_ItemStr, mhc_FALSE))
           {
              orc_Content.SetValueU8(static_cast<uint8_t>(false));
           }
-          else if (LowerCaseCompat(c_ItemStr) == LowerCaseCompat(mhc_TRUE))
+          else if (EqualsCaseInsensitive(c_ItemStr, mhc_TRUE))
          {
             orc_Content.SetValueU8(static_cast<uint8_t>(true));
          }
@@ -1439,7 +1439,7 @@ std::error_code C_OscHalcDefStructFiler::mh_ParseAttributeAvailability(
 {
    std::error_code c_Retval = Errc::success;
 
-   if (LowerCaseCompat(orc_AttributeContent) == "all")
+   if (EqualsCaseInsensitive(orc_AttributeContent, "all"))
    {
       for (uint32_t u32_ItUseCase = 0UL; u32_ItUseCase < orc_UseCases.size(); ++u32_ItUseCase)
       {

@@ -15,6 +15,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <memory>
 #include <system_error>
 #include <cstdint>
 #include "C_OscRoutingRoute.hpp"
@@ -70,6 +71,7 @@ public:
    bool GetNodeIndex(const C_OscProtocolDriverOsyNode & orc_ServerId, uint32_t & oru32_NodeIndex) const;
    void ClearDispatcherQueue(void);
    bool IsInitialized(void) const;
+   bool IsTrafficEncryptionActive(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
 
    std::error_code ReConnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
    std::error_code DisconnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
@@ -85,9 +87,9 @@ protected:
    ///Holds all indices of all relevant nodes for the current use case. This active nodes represent the initialized
    /// active node (for example mc_OsyProtocols) indexes which are part of mc_ActiveNodesSystem.
    std::vector<uint32_t> mc_ActiveNodesIndexes;
-   ///Has pointer to created instances of generic openSYDE protocol if available. Lifetime is handled by child classes.
+   ///Has pointer to created instances of generic openSYDE protocol if available.
    ///Length matches number of active nodes.
-   std::vector<C_OscProtocolDriverOsy *> mc_OsyProtocols;
+   std::vector<std::unique_ptr<C_OscProtocolDriverOsy>> mc_OsyProtocols;
    ///Holds routes to use for each active node
    std::vector<C_OscRoutingRoute> mc_Routes;
    ///Holds server Ids for each active node
@@ -95,16 +97,16 @@ protected:
    ///Holds server IP addresses for each active node
    std::vector<C_OscNodeComInterfaceSettings::C_IpAddress> mc_ServerIpAddresses;
    ///Holds created instances of either CAN or IP TP. Length matches number of active nodes.
-   std::vector<C_OscProtocolDriverOsyTpBase *> mc_TransportProtocols;
+   std::vector<std::unique_ptr<C_OscProtocolDriverOsyTpBase>> mc_TransportProtocols;
    ///Holds created instances of routing dispatcher for legacy-protocol routing.
    ///Length matches number of active nodes.
-   std::vector<C_OscCanDispatcherOsyRouter *> mc_LegacyRouterDispatchers;
+   std::vector<std::unique_ptr<C_OscCanDispatcherOsyRouter>> mc_LegacyRouterDispatchers;
 
    ///Active nodes which are the last CAN node on a route before the concrete target
    std::vector<uint32_t> mc_ActiveNodesLastCanRouters;
 
-   C_OscProtocolDriverOsyTpCan * mpc_CanTransportProtocolBroadcast;
-   C_OscProtocolDriverOsyTpIp * mpc_IpTransportProtocolBroadcast;
+   std::unique_ptr<C_OscProtocolDriverOsyTpCan> mpc_CanTransportProtocolBroadcast;
+   std::unique_ptr<C_OscProtocolDriverOsyTpIp> mpc_IpTransportProtocolBroadcast;
 
    const C_OscSystemDefinition * mpc_SysDef;
    uint32_t mu32_ActiveBusIndex; //index of bus within mpc_SysDef that we are connecting from

@@ -1716,7 +1716,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
             if (u32_ItElement != ou32_DataPoolIndex)
             {
                const C_OscNodeDataPool & rc_CurrentDataPool = this->c_DataPools[u32_ItElement];
-               if (LowerCaseCompat(rc_CheckedDataPool.c_Name) == LowerCaseCompat(rc_CurrentDataPool.c_Name))
+               if (EqualsCaseInsensitive(rc_CheckedDataPool.c_Name, rc_CurrentDataPool.c_Name))
                {
                   *opq_NameConflict = true;
                   break;

@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <list>
+#include <memory>
 #include <system_error>
 
 #include <cstdint>
@@ -107,12 +108,13 @@ private:
 
    // Bus load information
    uint32_t mu32_CanMessageBits;
+   uint32_t mu32_BusLoadTimeRefresh; ///< Timestamp of the last bus-load window refresh
    int32_t ms32_CanBitrate;
 
    uint32_t mu32_CanTxCounter;
    uint32_t mu32_CanTxErrors;
 
-   C_OscComAutoSupport * mpc_AutoSupportProtocol;
+   std::unique_ptr<C_OscComAutoSupport> mpc_AutoSupportProtocol;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -81,52 +81,52 @@ public:
 
    void SetValueArrU8(const std::vector<uint8_t> & orc_Value);
    void SetValueArrU8Element(const uint8_t ou8_Value, const uint32_t ou32_Index);
-   const std::vector<uint8_t> GetValueArrU8(void) const;
+   std::vector<uint8_t> GetValueArrU8(void) const;
    uint8_t GetValueArrU8Element(const uint32_t ou32_Index) const;
 
    void SetValueArrU16(const std::vector<uint16_t> & orc_Value);
    void SetValueArrU16Element(const uint16_t ou16_Value, const uint32_t ou32_Index);
-   const std::vector<uint16_t> GetValueArrU16(void) const;
+   std::vector<uint16_t> GetValueArrU16(void) const;
    uint16_t GetValueArrU16Element(const uint32_t ou32_Index) const;
 
    void SetValueArrU32(const std::vector<uint32_t> & orc_Value);
    void SetValueArrU32Element(const uint32_t ou32_Value, const uint32_t ou32_Index);
-   const std::vector<uint32_t> GetValueArrU32(void) const;
+   std::vector<uint32_t> GetValueArrU32(void) const;
    uint32_t GetValueArrU32Element(const uint32_t ou32_Index) const;
 
    void SetValueArrU64(const std::vector<uint64_t> & orc_Value);
    void SetValueArrU64Element(const uint64_t ou64_Value, const uint32_t ou32_Index);
-   const std::vector<uint64_t> GetValueArrU64(void) const;
+   std::vector<uint64_t> GetValueArrU64(void) const;
    uint64_t GetValueArrU64Element(const uint32_t ou32_Index) const;
 
    void SetValueArrS8(const std::vector<int8_t> & orc_Value);
    void SetValueArrS8Element(const int8_t os8_Value, const uint32_t ou32_Index);
-   const std::vector<int8_t> GetValueArrS8(void) const;
+   std::vector<int8_t> GetValueArrS8(void) const;
    int8_t GetValueArrS8Element(const uint32_t ou32_Index) const;
 
    void SetValueArrS16(const std::vector<int16_t> & orc_Value);
    void SetValueArrS16Element(const int16_t os16_Value, const uint32_t ou32_Index);
-   const std::vector<int16_t> GetValueArrS16(void) const;
+   std::vector<int16_t> GetValueArrS16(void) const;
    int16_t GetValueArrS16Element(const uint32_t ou32_Index) const;
 
    void SetValueArrS32(const std::vector<int32_t> & orc_Value);
    void SetValueArrS32Element(const int32_t os32_Value, const uint32_t ou32_Index);
-   const std::vector<int32_t> GetValueArrS32(void) const;
+   std::vector<int32_t> GetValueArrS32(void) const;
    int32_t GetValueArrS32Element(const uint32_t ou32_Index) const;
 
    void SetValueArrS64(const std::vector<int64_t> & orc_Value);
    void SetValueArrS64Element(const int64_t os64_Value, const uint32_t ou32_Index);
-   const std::vector<int64_t> GetValueArrS64(void) const;
+   std::vector<int64_t> GetValueArrS64(void) const;
    int64_t GetValueArrS64Element(const uint32_t ou32_Index) const;
 
    void SetValueArrF32(const std::vector<float> & orc_Value);
    void SetValueArrF32Element(const float of32_Value, const uint32_t ou32_Index);
-   const std::vector<float> GetValueArrF32(void) const;
+   std::vector<float> GetValueArrF32(void) const;
    float GetValueArrF32Element(const uint32_t ou32_Index) const;
 
    void SetValueArrF64(const std::vector<double> & orc_Value);
    void SetValueArrF64Element(const double of64_Value, const uint32_t ou32_Index);
-   const std::vector<double> GetValueArrF64(void) const;
+   std::vector<double> GetValueArrF64(void) const;
    double GetValueArrF64Element(const uint32_t ou32_Index) const;
 
    std::error_code SetValueFromBigEndianBlob(const std::vector<uint8_t> & orc_Data);

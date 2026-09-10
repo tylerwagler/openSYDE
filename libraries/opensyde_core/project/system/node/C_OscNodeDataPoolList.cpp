@@ -206,7 +206,7 @@ void C_OscNodeDataPoolList::CheckErrorDataSet(const uint32_t & oru32_DataSetInde
             if (u32_ItDataSet != oru32_DataSetIndex)
             {
                const C_OscNodeDataPoolDataSet & rc_DataSet = this->c_DataSets[u32_ItDataSet];
-               if (LowerCaseCompat(rc_CurrentElement.c_Name) == LowerCaseCompat(rc_DataSet.c_Name))
+               if (EqualsCaseInsensitive(rc_CurrentElement.c_Name, rc_DataSet.c_Name))
                {
                   *opq_NameConflict = true;
                }
@@ -269,7 +269,7 @@ void C_OscNodeDataPoolList::CheckErrorElement(const uint32_t & oru32_ElementInde
             if (u32_ItElement != oru32_ElementIndex)
             {
                const C_OscNodeDataPoolListElement & rc_ListElement = this->c_Elements[u32_ItElement];
-               if (LowerCaseCompat(rc_CurrentElement.c_Name) == LowerCaseCompat(rc_ListElement.c_Name))
+               if (EqualsCaseInsensitive(rc_CurrentElement.c_Name, rc_ListElement.c_Name))
                {
                   *opq_NameConflict = true;
                }

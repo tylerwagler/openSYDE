@@ -19,6 +19,7 @@
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolL2.hpp"
 #include <string>
+#include <cstdio>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -51,7 +52,6 @@ using namespace stw::can;
 std::string C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
    std::string c_Text;
-   std::string c_Help;
    char cn_XTD;
    char cn_RTR;
    int32_t j;
@@ -65,10 +65,12 @@ std::string C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
    if (mq_Decimal == false)
    {
       c_Text = PrintFormattedCompat("%08X%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
+      c_Text.reserve(64U);
       for (j = 0; j < u8_Len; j++)
       {
-         c_Help = PrintFormattedCompat(" %02X ", orc_Msg.au8_Data[j]);
-         c_Text += c_Help;
+         char acn_Byte[8];
+         (void)std::snprintf(acn_Byte, sizeof(acn_Byte), " %02X ", orc_Msg.au8_Data[j]);
+         c_Text += acn_Byte;
       }
       for (; j < 8; j++)
       {
@@ -78,10 +80,12 @@ std::string C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
    else
    {
       c_Text = PrintFormattedCompat("%8d%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
+      c_Text.reserve(64U);
       for (j = 0; j < u8_Len; j++)
       {
-         c_Help = PrintFormattedCompat("%3d ", orc_Msg.au8_Data[j]);
-         c_Text += c_Help;
+         char acn_Byte[8];
+         (void)std::snprintf(acn_Byte, sizeof(acn_Byte), "%3d ", orc_Msg.au8_Data[j]);
+         c_Text += acn_Byte;
       }
    }
    return c_Text;

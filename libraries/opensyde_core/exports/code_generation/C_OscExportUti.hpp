@@ -50,6 +50,8 @@ public:
 
    static std::string h_FloatToStrGe(const float of32_Value,  bool * const opq_InfOrNan = nullptr);
    static std::string h_FloatToStrGe(const double of64_Value, bool * const opq_InfOrNan = nullptr);
+   static std::string mh_FloatToStrGeFormat(const double of64_Value, const int os32_Precision,
+                                            bool * const opq_InfOrNan);
    static bool h_CheckInfOrNan(const std::string & orc_String);
    static void h_AddDecimalPointIfNone(std::string & orc_FloatString);
 };

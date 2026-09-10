@@ -463,7 +463,9 @@ public:
       const uint8_t ou8_ResetType = C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON);
 
    //SSL utility:
-   C_OscProtocolSecuritySubLayer * pc_SecuritySubLayer;
+   C_OscProtocolSecuritySubLayer mc_SecuritySubLayer; ///< Own traffic encryption configuration for this connection
+
+   bool GetTrafficEncryptionActive(void) const;
 
    // Default Timeout
    static const uint32_t hu32_DEFAULT_TIMEOUT = 1000U; // In ms

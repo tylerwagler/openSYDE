@@ -36,16 +36,6 @@ using namespace stw::errors;
 using namespace stw::scl;
 using namespace stw::opensyde_core;
 
-/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
-namespace {
-   template <typename T>
-   std::string mh_IntToHex(T val, uint32_t digits) {
-      std::stringstream ss;
-      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
-      return ss.str();
-   }
-}
-
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
@@ -655,7 +645,7 @@ void C_OscExportDataPool::mh_AddDefinesImpl(std::vector<std::string> & orc_Data,
    {
       orc_Data.push_back("///check for correct version of structure definitions");
       orc_Data.push_back("#if OSY_DPA_DATA_POOL_DEFINITION_VERSION != 0x" +
-                      mh_IntToHex(static_cast<int64_t>(C_OscExportDataPool::h_ConvertOverallCodeVersion(
+                      stw::scl::IntToHexCompat(static_cast<int64_t>(C_OscExportDataPool::h_ConvertOverallCodeVersion(
                                                                     ou16_GenCodeVersion)), 4U) + "U");
       orc_Data.push_back("///if compilation fails here the openSYDE library version does not match the version of the "
                       "generated code");
@@ -1057,7 +1047,7 @@ void C_OscExportDataPool::mh_AddModuleGlobal(std::vector<std::string> & orc_Data
                 (orc_DataPool.e_Type == C_OscNodeDataPool::eHALC_NVM))
             {
                c_String += std::to_string(rc_List.q_NvmCrcActive) + "U, ";
-               c_String += "0x" + mh_IntToHex(static_cast<int64_t>(rc_List.u32_NvmStartAddress), 8U) + "U, ";
+               c_String += "0x" + stw::scl::IntToHexCompat(static_cast<int64_t>(rc_List.u32_NvmStartAddress), 8U) + "U, ";
             }
             else
             {
@@ -1105,21 +1095,21 @@ void C_OscExportDataPool::mh_AddModuleGlobal(std::vector<std::string> & orc_Data
          //we have either a HALC or DIAG DP: technically this results in a DIAGNOSIS DP
          orc_Data.push_back("   OSY_DPA_DATA_POOL_TYPE_DIAGNOSIS,");
       }
-      orc_Data.push_back("   { 0x" + mh_IntToHex(orc_DataPool.au8_Version[0], 2U) + "U, 0x" +
-                      mh_IntToHex(orc_DataPool.au8_Version[1], 2U) + "U, 0x" +
-                      mh_IntToHex(orc_DataPool.au8_Version[2], 2U) + "U }," +
+      orc_Data.push_back("   { 0x" + stw::scl::IntToHexCompat(orc_DataPool.au8_Version[0], 2U) + "U, 0x" +
+                      stw::scl::IntToHexCompat(orc_DataPool.au8_Version[1], 2U) + "U, 0x" +
+                      stw::scl::IntToHexCompat(orc_DataPool.au8_Version[2], 2U) + "U }," +
                       " ///< Datapool definition version V" +
                       std::to_string(orc_DataPool.au8_Version[0]) + "." +
                       std::to_string(orc_DataPool.au8_Version[1]) + "r" +
                       std::to_string(orc_DataPool.au8_Version[2]));
       orc_Data.push_back("   \"" + orc_DataPool.c_Name + "\",  ///< name of Datapool");
       orc_Data.push_back("   " + UpperCaseCompat(c_DataPoolName) + "_NUMBER_OF_LISTS,");
-      orc_Data.push_back("   0x" + mh_IntToHex(static_cast<int64_t>(u32_HashValue), 4U) +
+      orc_Data.push_back("   0x" + stw::scl::IntToHexCompat(static_cast<int64_t>(u32_HashValue), 4U) +
                       "U, ///< CRC of Datapool definition");
       if ((orc_DataPool.e_Type == C_OscNodeDataPool::eNVM) ||
           (orc_DataPool.e_Type == C_OscNodeDataPool::eHALC_NVM))
       {
-         orc_Data.push_back("   0x" + mh_IntToHex(static_cast<int64_t>(orc_DataPool.u32_NvmStartAddress), 8U) +
+         orc_Data.push_back("   0x" + stw::scl::IntToHexCompat(static_cast<int64_t>(orc_DataPool.u32_NvmStartAddress), 8U) +
                          "U,  ///< NVM start address");
          orc_Data.push_back("   " + std::to_string(orc_DataPool.u32_NvmSize) +
                          "U,  ///< number of bytes occupied in NVM");
@@ -1190,7 +1180,7 @@ void C_OscExportDataPool::mh_AddModuleGlobal(std::vector<std::string> & orc_Data
             tgl_assert(false);
             break;
          }
-         orc_Data.push_back("   0x" + mh_IntToHex(static_cast<int64_t>(u32_HashValue), 4U) +
+         orc_Data.push_back("   0x" + stw::scl::IntToHexCompat(static_cast<int64_t>(u32_HashValue), 4U) +
                          "U, ///< CRC of Datapool definition");
          orc_Data.push_back("   \"" + orc_DataPool.c_Name + "\"  ///< name of Datapool");
          orc_Data.push_back("};");

@@ -119,11 +119,11 @@ std::error_code C_OscHalcDefContentBitmaskItem::mh_ParseUintFromString(const std
 {
    std::error_code c_Retval = Errc::success;
 
-   if (LowerCaseCompat(orc_Item) == "true")
+   if (EqualsCaseInsensitive(orc_Item, "true"))
    {
       oru64_Value = 1ULL;
    }
-   else if (LowerCaseCompat(orc_Item) == "false")
+   else if (EqualsCaseInsensitive(orc_Item, "false"))
    {
       oru64_Value = 0ULL;
    }

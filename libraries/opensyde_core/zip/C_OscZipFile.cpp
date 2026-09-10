@@ -26,6 +26,7 @@
 #include "C_OscUtils.hpp"
 #include <string>
 #include "C_SclStringUtil.hpp"
+#include <vector>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -121,20 +122,17 @@ std::error_code C_OscZipFile::h_CreateZipFile(const std::string & orc_SourcePath
             c_FileStream.seekg(0LL, ifstream::beg);
 
             // allocate memory
-            char * const pcn_FileData = new char[static_cast<size_t>(c_FileLength)];
+            std::vector<char> c_FileData(static_cast<size_t>(c_FileLength));
 
             // read file content
-            c_FileStream.read(pcn_FileData, static_cast<streamsize>(c_FileLength));
+            c_FileStream.read(c_FileData.data(), static_cast<streamsize>(c_FileLength));
 
             // close file
             c_FileStream.close();
 
             c_Return = C_OscZipFile::mh_AddContentToZipFile(orc_ZipArchivePath, c_FileName,
-                                                              pcn_FileData, static_cast<uint32_t>(c_FileLength),
+                                                              c_FileData.data(), static_cast<uint32_t>(c_FileLength),
                                                               "file", opc_ErrorText);
-
-            // free memory
-            delete[] pcn_FileData;
          }
          else
          {

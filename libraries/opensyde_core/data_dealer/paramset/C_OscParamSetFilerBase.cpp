@@ -32,17 +32,7 @@ using namespace stw::tgl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
-/* -- Anonymous namespace ------------------------------------------------------------------------------------------- */
-namespace
-{
-template <typename T>
-std::string mh_IntToHex(const T orc_Value, const uint32_t ou32_Digits)
-{
-   std::stringstream c_Stream;
-   c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Value;
-   return c_Stream.str();
-}
-} // unnamed namespace
+// unnamed namespace
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 uint16_t C_OscParamSetFilerBase::mhu16_FileVersion = 1;
@@ -175,7 +165,7 @@ void C_OscParamSetFilerBase::h_SaveFileVersion(C_OscXmlParserBase & orc_XmlParse
    {
       tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
    }
-   orc_XmlParser.SetNodeContent("0x" + mh_IntToHex(C_OscParamSetFilerBase::mhu16_FileVersion, 4));
+   orc_XmlParser.SetNodeContent("0x" + stw::scl::IntToHexCompat(C_OscParamSetFilerBase::mhu16_FileVersion, 4));
    //Return
    tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-parameter-sets");
 }

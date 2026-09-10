@@ -44,17 +44,6 @@ using namespace stw::scl;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
-/* -- Helper -------------------------------------------------------------------------------------------------------- */
-namespace
-{
-   template <typename T>
-   std::string mh_IntToHex(const T orc_Val, const uint32_t ou32_Digits)
-   {
-      std::stringstream c_Stream;
-      c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Val;
-      return c_Stream.str();
-   }
-}
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
@@ -90,8 +79,7 @@ C_OscProtocolDriverOsy::C_OscProtocolDriverOsy(void) :
    mpv_OnOsyWaitTimeInstance(nullptr),
    mpc_TransportProtocol(nullptr),
    mu32_TimeoutPollingMs(hu32_DEFAULT_TIMEOUT),
-   mu16_MaxServiceSize(C_OscProtocolDriverOsyTpBase::hu16_OSY_MAXIMUM_SERVICE_SIZE),
-   pc_SecuritySubLayer(nullptr)
+   mu16_MaxServiceSize(C_OscProtocolDriverOsyTpBase::hu16_OSY_MAXIMUM_SERVICE_SIZE)
 {
 }
 
@@ -106,7 +94,19 @@ C_OscProtocolDriverOsy::~C_OscProtocolDriverOsy(void)
    mpv_OnAsyncTunnelCanMessageInstance = nullptr;
    mpr_OnOsyWaitTime = nullptr;
    mpv_OnOsyWaitTimeInstance = nullptr;
-   pc_SecuritySubLayer = nullptr;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Check whether traffic encryption is active for this connection
+
+   \return
+   true    Traffic encryption is active
+   false   Traffic encryption is not active
+*/
+//----------------------------------------------------------------------------------------------------------------------
+bool C_OscProtocolDriverOsy::GetTrafficEncryptionActive(void) const
+{
+   return this->mc_SecuritySubLayer.GetEncryptionIsActive();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1087,8 +1087,7 @@ std::error_code C_OscProtocolDriverOsy::OsyReadMaxNumberOfBlockLength(uint16_t &
    {
       //extract information:
       oru16_MaxNumberOfBlockLength = (static_cast<uint16_t>((static_cast<uint16_t>(c_Data[0])) << 8U)) + (c_Data[1]);
-      tgl_assert(this->pc_SecuritySubLayer != nullptr);
-      if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
+      if (this->mc_SecuritySubLayer.GetEncryptionIsActive() == true)
       {
          //if traffic encryption is active we need to consider that the service size that can effectively
          // be transferred is reduced by the protocol overhead needed for encryption
@@ -3638,13 +3637,6 @@ std::error_code C_OscProtocolDriverOsy::SetNodeIdentifiers(const C_OscProtocolDr
    mc_ClientId = orc_ClientId;
    mc_ServerId = orc_ServerId;
 
-   //set up instance of SSL helper
-   this->pc_SecuritySubLayer = C_OscProtocolSecuritySubLayer::h_GetConfigByNodeId(orc_ServerId);
-   if (this->pc_SecuritySubLayer == nullptr)
-   {
-      c_Return = Errc::config;
-   }
-
    //propagate to installed transport protocol:
    if (mpc_TransportProtocol != nullptr)
    {
@@ -3803,7 +3795,7 @@ void C_OscProtocolDriverOsy::m_OsyReadDataPoolDataEventErrorReceived(const uint8
                         " (Client indexes: Datapool index: " + std::to_string(ou8_DataPoolIndex) +
                         " List index: " + std::to_string(ou16_ListIndex) +
                         " Element index: " + std::to_string(ou16_ElementIndex) + " NRC: " +
-                        mh_IntToHex(ou8_NrCode, 2) + "). Ignoring.", TGL_UTIL_FUNC_ID);
+                        stw::scl::IntToHexCompat(ou8_NrCode, 2) + "). Ignoring.", TGL_UTIL_FUNC_ID);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4478,7 +4470,7 @@ std::error_code C_OscProtocolDriverOsy::m_HandleAsyncResponse(const C_OscProtoco
          default:
             //this is nothing we can handle; report in log
             m_LogErrorWithHeader("Asynchronous communication", "Unexpectedly received service response to service ID 0x" +
-                                 mh_IntToHex(u8_ServiceId,
+                                 stw::scl::IntToHexCompat(u8_ServiceId,
                                                        2) + ". Ignoring.", TGL_UTIL_FUNC_ID);
 
             break;
@@ -4499,7 +4491,7 @@ std::error_code C_OscProtocolDriverOsy::m_HandleAsyncResponse(const C_OscProtoco
          default:
             //this is nothing we can handle; report in log
             m_LogErrorWithHeader("Asynchronous communication", "Unexpectedly received negative response to service ID 0x" +
-                                 mh_IntToHex(orc_ReceivedService.c_Data[1],
+                                 stw::scl::IntToHexCompat(orc_ReceivedService.c_Data[1],
                                                        2) + ". Ignoring.", TGL_UTIL_FUNC_ID);
 
             break;
@@ -4800,8 +4792,7 @@ std::error_code C_OscProtocolDriverOsy::m_SendRequest(const C_OscProtocolDriverO
    const C_OscProtocolDriverOsyService * pc_Request = &orc_Service;
    C_OscProtocolDriverOsyService c_EncryptedRequest;
 
-   tgl_assert(this->pc_SecuritySubLayer != nullptr);
-   if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
+   if (this->mc_SecuritySubLayer.GetEncryptionIsActive() == true)
    {
       bool q_NeedsEncryption = true; //preset: most services need encryption
       //explicitly check for services that do not need encryption:
@@ -4839,7 +4830,7 @@ std::error_code C_OscProtocolDriverOsy::m_SendRequest(const C_OscProtocolDriverO
       }
       if (q_NeedsEncryption == true)
       {
-         c_Return = this->pc_SecuritySubLayer->WrapRequest(orc_Service, c_EncryptedRequest);
+         c_Return = this->mc_SecuritySubLayer.WrapRequest(orc_Service, c_EncryptedRequest);
          if (c_Return != Errc::success)
          {
             osc_write_log_error("Traffic encryption", "Could not create SecuredDataTransmission request. Detail: " +
@@ -4883,9 +4874,8 @@ std::error_code C_OscProtocolDriverOsy::m_ReadResponse(C_OscProtocolDriverOsySer
 {
    std::error_code c_Return = mpc_TransportProtocol->ReadResponse(orc_Service);
 
-   tgl_assert(this->pc_SecuritySubLayer != nullptr);
 
-   if ((c_Return == Errc::success) && (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true))
+   if ((c_Return == Errc::success) && (this->mc_SecuritySubLayer.GetEncryptionIsActive() == true))
    {
       //try to decrypt only if we *do* have a SecuredDataTransmission service
       //otherwise we have an unencrypted response which we just pass through
@@ -4894,7 +4884,7 @@ std::error_code C_OscProtocolDriverOsy::m_ReadResponse(C_OscProtocolDriverOsySer
           ((orc_Service.c_Data[0]) == (mhu8_OSY_SI_SECURED_DATA_TRANSMISSION | 0x40U)))
       {
          C_OscProtocolDriverOsyService c_DecryptedResponse;
-         c_Return = this->pc_SecuritySubLayer->UnwrapResponse(orc_Service, c_DecryptedResponse);
+         c_Return = this->mc_SecuritySubLayer.UnwrapResponse(orc_Service, c_DecryptedResponse);
          if (c_Return == Errc::success)
          {
             orc_Service = c_DecryptedResponse;
@@ -5009,8 +4999,7 @@ std::error_code C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_S
                      (static_cast<uint32_t>(c_Response.c_Data[2U + static_cast<size_t>(u8_Index)]) <<
                       (((u8_LengthFormat - 1U) - u8_Index) * 8U));
                }
-               tgl_assert(pc_SecuritySubLayer != nullptr);
-               if (pc_SecuritySubLayer->GetEncryptionIsActive() == true)
+               if (mc_SecuritySubLayer.GetEncryptionIsActive() == true)
                {
                   //if traffic encryption is active we need to consider that the service size that can effectively
                   // be transferred is reduced by the protocol overhead needed for encryption
@@ -5150,8 +5139,7 @@ std::error_code C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string
                      (static_cast<uint32_t>(c_Response.c_Data[3U + static_cast<size_t>(u8_Index)]) <<
                       (((u8_LengthFormat - 1U) - u8_Index) * 8U));
                }
-               tgl_assert(pc_SecuritySubLayer != nullptr);
-               if (pc_SecuritySubLayer->GetEncryptionIsActive() == true)
+               if (mc_SecuritySubLayer.GetEncryptionIsActive() == true)
                {
                   //if traffic encryption is active we need to consider that the service size that can effectively
                   // be transferred is reduced by the protocol overhead needed for encryption
@@ -5499,8 +5487,7 @@ std::error_code C_OscProtocolDriverOsy::OsyReadMemoryByAddress(const uint32_t ou
       //if traffic encryption is active we need to consider that the service size that can effectively
       // be transferred is reduced by the protocol overhead needed for encryption
       //4bytes header + padding to multiples of 16 bytes
-      tgl_assert(this->pc_SecuritySubLayer != nullptr);
-      if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
+      if (this->mc_SecuritySubLayer.GetEncryptionIsActive() == true)
       {
          const uint16_t u16_EncryptionOverhead = static_cast<uint16_t>(4U + ((u32_BlockSize) % 16U));
          u32_BlockSize -= u16_EncryptionOverhead;
@@ -5633,8 +5620,7 @@ std::error_code C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t o
       //if traffic encryption is active we need to consider that the service size that can effectively
       // be transferred is reduced by the protocol overhead needed for encryption
       //4bytes header + padding to multiples of 16 bytes
-      tgl_assert(this->pc_SecuritySubLayer != nullptr);
-      if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
+      if (this->mc_SecuritySubLayer.GetEncryptionIsActive() == true)
       {
          const uint16_t u16_EncryptionOverhead = static_cast<uint16_t>(4U + ((u32_BlockSize) % 16U));
          mu16_MaxServiceSize -= u16_EncryptionOverhead;

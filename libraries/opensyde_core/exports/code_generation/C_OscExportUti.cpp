@@ -395,14 +395,15 @@ std::string C_OscExportUti::h_GetElementCeName(const std::string & orc_Name, con
    Value converted to string
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::string C_OscExportUti::h_FloatToStrGe(const float of32_Value, bool * const opq_InfOrNan)
+std::string C_OscExportUti::mh_FloatToStrGeFormat(const double of64_Value, const int os32_Precision,
+                                                  bool * const opq_InfOrNan)
 {
    std::string c_Return;
    bool q_InfOrNan;
 
    {
       std::ostringstream ss;
-      ss << std::setprecision(9) << std::defaultfloat << static_cast<double>(of32_Value);
+      ss << std::setprecision(os32_Precision) << std::defaultfloat << of64_Value;
       c_Return = ss.str();
    }
    // do not use '#' option of print formatted, as it also adds trailing zeroes
@@ -434,6 +435,23 @@ std::string C_OscExportUti::h_FloatToStrGe(const float of32_Value, bool * const 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Convert 32-bit float to string with %g formatter and maximum representable precision
+
+   Always adds a decimal point.
+
+   \param[in]  of32_Value     Float value
+   \param[in]  opq_InfOrNan   Flag if conversion returned "inf" or "nan"
+
+   \return
+   Value converted to string
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::string C_OscExportUti::h_FloatToStrGe(const float of32_Value, bool * const opq_InfOrNan)
+{
+   return mh_FloatToStrGeFormat(static_cast<double>(of32_Value), 9, opq_InfOrNan);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Convert 64-bit float to string with %g formatter and maximum representable precision
 
    Always adds a decimal point.
@@ -447,40 +465,7 @@ std::string C_OscExportUti::h_FloatToStrGe(const float of32_Value, bool * const 
 //----------------------------------------------------------------------------------------------------------------------
 std::string C_OscExportUti::h_FloatToStrGe(const double of64_Value, bool * const opq_InfOrNan)
 {
-   std::string c_Return;
-   bool q_InfOrNan;
-
-   {
-      std::ostringstream ss;
-      ss << std::setprecision(17) << std::defaultfloat << of64_Value;
-      c_Return = ss.str();
-   }
-   // do not use '#' option of print formatted, as it also adds trailing zeroes
-
-   q_InfOrNan = h_CheckInfOrNan(c_Return);
-
-   if (opq_InfOrNan != nullptr)
-   {
-      *opq_InfOrNan = q_InfOrNan;
-   }
-
-   if (q_InfOrNan == false)
-   {
-      h_AddDecimalPointIfNone(c_Return);
-   }
-   else
-   {
-      //"A double argument representing a NaN is converted in one of the styles [-]nan or [-]nan(n-char-sequence) —
-      // which style, and the meaning of any n-char-sequence, is implementation-defined."
-      //The actual parsing might even be done by a DLL. So even with the same compiler behavior might
-      // differ on different systems. So be defensive and make sure to only return plain "nan".
-      if (PosCompat(LowerCaseCompat(c_Return), "nan") > 0)
-      {
-         c_Return = "nan";
-      }
-   }
-
-   return c_Return;
+   return mh_FloatToStrGeFormat(of64_Value, 17, opq_InfOrNan);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

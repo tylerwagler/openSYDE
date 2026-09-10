@@ -14,6 +14,7 @@
 #include "C_SclStringUtil.hpp"
 
 #include <set>
+#include <memory>
 #include <system_error>
 
 #include <cstdint>
@@ -277,13 +278,9 @@ std::error_code C_OscSuSequences::m_FlashNodeOpenSydeHex(
 
    std::vector<uint32_t> c_SignatureAddresses(orc_FilesToFlash.size()); ///< addresses of signatures within hex files
 
-   //C_OscHexFile cannot be copied; so we cannot put it into a resizable vector
-   //-> create instances manually
-   std::vector<C_OscHexFile *> c_Files(orc_FilesToFlash.size());
-   for (uint32_t u32_File = 0U; u32_File < c_Files.size(); u32_File++)
-   {
-      c_Files[u32_File] = new C_OscHexFile();
-   }
+   //C_OscHexFile is not copyable; store it in a vector of unique_ptr so ownership is explicit and
+   //the instances are released automatically.
+   std::vector<std::unique_ptr<C_OscHexFile>> c_Files(orc_FilesToFlash.size());
 
    //try to open files to check whether we have valid hex files before we start messing with the target's flash memory:
    for (uint32_t u32_File = 0U; (u32_File < orc_FilesToFlash.size()) && (c_Return == Errc::success); u32_File++)
@@ -373,7 +370,7 @@ std::error_code C_OscSuSequences::m_FlashNodeOpenSydeHex(
             {
                bool q_IsSame = false;
                //Check actual device name
-               if (UpperCaseCompat(TrimCompat(c_DeviceName)) == UpperCaseCompat(TrimCompat(c_DeviceNameHexFile)))
+               if (EqualsCaseInsensitive(TrimCompat(c_DeviceName), TrimCompat(c_DeviceNameHexFile)))
                {
                   orc_StateHexFiles[u32_File].e_NodeNameCompared = eSUSEQ_STATE_NO_ERR;
                   q_IsSame = true;
@@ -384,8 +381,8 @@ std::error_code C_OscSuSequences::m_FlashNodeOpenSydeHex(
                   for (uint32_t u32_ItName = 0UL;
                        (u32_ItName < orc_OtherAcceptedDeviceNames.size()) && (q_IsSame == false); ++u32_ItName)
                   {
-                     if (UpperCaseCompat(TrimCompat(orc_OtherAcceptedDeviceNames[u32_ItName])) ==
-                         UpperCaseCompat(TrimCompat(c_DeviceNameHexFile)))
+                     if (EqualsCaseInsensitive(TrimCompat(orc_OtherAcceptedDeviceNames[u32_ItName]),
+                                               TrimCompat(c_DeviceNameHexFile)))
                      {
                         orc_StateHexFiles[u32_File].e_NodeNameCompared = eSUSEQ_STATE_NO_ERR;
                         q_IsSame = true;
@@ -519,12 +516,6 @@ std::error_code C_OscSuSequences::m_FlashNodeOpenSydeHex(
             }
          }
       }
-   }
-
-   //clean up hex file instances:
-   for (uint32_t u32_File = 0U; u32_File < c_Files.size(); u32_File++)
-   {
-      delete c_Files[u32_File];
    }
 
    return c_Return;

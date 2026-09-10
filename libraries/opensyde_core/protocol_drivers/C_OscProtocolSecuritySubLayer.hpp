@@ -13,7 +13,6 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
-#include <map>
 #include <system_error>
 #include <cstdint>
 
@@ -76,12 +75,7 @@ public:
    virtual std::error_code DeriveAesKey(const std::vector<uint8_t> & orc_OthersPublicKey);
    virtual std::error_code SetAesInitVector(const std::vector<uint8_t> & orc_InitVector);
 
-   static C_OscProtocolSecuritySubLayer * h_GetConfigByNodeId(const C_OscProtocolDriverOsyNode & orc_NodeId);
-   static void h_ClearAll();
-
 protected:
-   static std::map<C_OscProtocolDriverOsyNode, C_OscProtocolSecuritySubLayer> mhc_TheConfig;
-
    C_OscSecurityEcdhAes mc_Ecdh;
 
    uint8_t mau8_EcdhPublicKey[C_OscSecurityEcdhAes::hu32_PUBLIC_KEY_LENGTH];

@@ -128,7 +128,7 @@ void C_OscHalcConfigDomain::CheckChannelNameUnique(const uint32_t ou32_ChannelIn
          if (u32_ItCompChannels != ou32_ChannelIndex) // skip current channel to avoid comparison "with itself"
          {
             const C_OscHalcConfigChannel & rc_ComparedChannel = this->c_ChannelConfigs[u32_ItCompChannels];
-            if (LowerCaseCompat(rc_CheckedChannel.c_Name) == LowerCaseCompat(rc_ComparedChannel.c_Name))
+            if (EqualsCaseInsensitive(rc_CheckedChannel.c_Name, rc_ComparedChannel.c_Name))
             {
                *opq_NameConflict = true;
                break; // if we have one conflict we can stop searching

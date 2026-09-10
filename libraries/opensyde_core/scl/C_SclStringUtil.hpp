@@ -177,6 +177,55 @@ inline std::string LowerCaseCompat(const std::string & orc_Str)
    return c_Result;
 }
 
+/// Case-insensitive string equality comparison (allocation-free).
+inline bool EqualsCaseInsensitive(const std::string & orc_A, const std::string & orc_B)
+{
+   if (orc_A.size() != orc_B.size())
+   {
+      return false;
+   }
+   for (std::string::size_type u32_Pos = 0U; u32_Pos < orc_A.size(); ++u32_Pos)
+   {
+      if (std::toupper(static_cast<unsigned char>(orc_A[u32_Pos])) !=
+          std::toupper(static_cast<unsigned char>(orc_B[u32_Pos])))
+      {
+         return false;
+      }
+   }
+   return true;
+}
+
+/// Case-insensitive find; returns 1-based position (0 = not found), like PosCompat.
+inline uint32_t FindCaseInsensitive(const std::string & orc_Str, const std::string & orc_Sub)
+{
+   if (orc_Sub.empty())
+   {
+      return 1U;
+   }
+   if (orc_Sub.size() > orc_Str.size())
+   {
+      return 0U;
+   }
+   for (std::string::size_type u32_Start = 0U; u32_Start + orc_Sub.size() <= orc_Str.size(); ++u32_Start)
+   {
+      bool q_Match = true;
+      for (std::string::size_type u32_Offset = 0U; u32_Offset < orc_Sub.size(); ++u32_Offset)
+      {
+         if (std::toupper(static_cast<unsigned char>(orc_Str[u32_Start + u32_Offset])) !=
+             std::toupper(static_cast<unsigned char>(orc_Sub[u32_Offset])))
+         {
+            q_Match = false;
+            break;
+         }
+      }
+      if (q_Match == true)
+      {
+         return static_cast<uint32_t>(u32_Start) + 1U;
+      }
+   }
+   return 0U;
+}
+
 /// Replacement for str.Delete(index, count) — 1-based to 0-based conversion.
 inline std::string & DeleteCompat(std::string & orc_Str, const uint32_t ou32_Index, const uint32_t ou32_Count)
 {
@@ -419,7 +468,7 @@ inline int32_t VectorIndexOf(const std::vector<std::string> & orc_List, const st
 {
    for (uint32_t u32_Index = 0U; u32_Index < static_cast<uint32_t>(orc_List.size()); ++u32_Index)
    {
-      if (LowerCaseCompat(orc_List[u32_Index]).compare(LowerCaseCompat(orc_String)) == 0)
+      if (EqualsCaseInsensitive(orc_List[u32_Index], orc_String))
       {
          return static_cast<int32_t>(u32_Index);
       }
@@ -563,13 +612,12 @@ inline int32_t ListIndexOfName(const std::vector<std::string> & orc_List, const 
 {
    bool q_Found = false;
    int32_t s32_Index;
-   const std::string c_Search = UpperCaseCompat(orc_Name);
    std::string c_Remainder;
    uint32_t u32_Pos;
 
    for (s32_Index = 0; s32_Index < static_cast<int32_t>(orc_List.size()); s32_Index++)
    {
-      u32_Pos = PosCompat(UpperCaseCompat(orc_List[s32_Index]), c_Search);
+      u32_Pos = FindCaseInsensitive(orc_List[s32_Index], orc_Name);
       if (u32_Pos == 1U)
       {
          //there must be a subsequent "=" (may be preceeded by blanks)

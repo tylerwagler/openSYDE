@@ -32,6 +32,7 @@
 #include "C_HexFile.hpp"
 #include "C_HexFileErrorCategory.hpp"
 #include <cstdint>
+#include <vector>
 
 //------------------------------------------------------------------------
 
@@ -56,7 +57,6 @@ static const uint8_t mu8_MAX_RECSIZE          =   255U;
 static const uint8_t mu8_CMD_DATA     =   0x00U;
 static const uint8_t mu8_CMD_EOF      =   0x01U;
 static const uint8_t mu8_CMD_XADR16   =   0x02U;
-//static const uint8 mu8_CMD_START16  =   0x03U;
 static const uint8_t mu8_CMD_XADR32   =   0x04U;
 static const uint8_t mu8_CMD_START32  =   0x05U;
 
@@ -68,14 +68,10 @@ static const uint8_t mu8_INTEL_CMD   =    0x03U;
 static const uint8_t mu8_INTEL_DAT   =    0x04U;
 
 // Motorola S-Record types
-//static const uint8 mu8_SREC_HEADER  =   0U;
 static const uint8_t mu8_SREC_DATA16  =   1U;
 static const uint8_t mu8_SREC_END16   =   9U;
 static const uint8_t mu8_SREC_DATA24  =   2U;
-//static const uint8 mu8_SREC_END24   =   8U;
 static const uint8_t mu8_SREC_DATA32  =   3U;
-//static const uint8 mu8_SREC_END32   =   7U;
-//static const uint8 mu8_SREC_COUNT   =   5U;
 
 // Motorola S-Record data offset
 static const uint8_t mu8_SREC_LEN     =   0x00U;
@@ -506,11 +502,11 @@ std::error_code C_HexFile::OptimizeLinear(const uint32_t ou32_RecSize, const int
    {
       uint32_t u32_Offset = mu32_MinAdr;
       uint32_t u32_Size = (mu32_MaxAdr - mu32_MinAdr) + 1U;
-      uint16_t * pu16_BinImage;
+      std::vector<uint16_t> c_BinImage;
 
       try // try to allocate memory
       {
-         pu16_BinImage = new uint16_t[u32_Size]; // allocate space for memory image
+         c_BinImage.resize(u32_Size); // allocate space for memory image (zero-initialised)
       }
       catch (...) // not enough memory?
       {
@@ -519,26 +515,23 @@ std::error_code C_HexFile::OptimizeLinear(const uint32_t ou32_RecSize, const int
 
       if (u32_Error == NO_ERR) // memory OK?
       {
-         (void)std::memset(pu16_BinImage, 0, u32_Size * sizeof(uint16_t)); // clear memory
          // store memory image
-         uint32_t u32_Warning = m_CopyHex2Mem(pu16_BinImage, u32_Offset);
+         uint32_t u32_Warning = m_CopyHex2Mem(c_BinImage.data(), u32_Offset);
 
          if (os32_FillFlag != 0) // fill gaps?
          {
             for (uint32_t u32_ByteIndex = 0U; u32_ByteIndex < u32_Size; u32_ByteIndex++) // yes, fill unused data
             {
-               if ((pu16_BinImage[u32_ByteIndex] & 0xFF00U) == 0U)
+               if ((c_BinImage[u32_ByteIndex] & 0xFF00U) == 0U)
                {
-                  pu16_BinImage[u32_ByteIndex] =
+                  c_BinImage[u32_ByteIndex] =
                      static_cast<uint16_t>(static_cast<uint16_t>(0x0100U) + ou8_FillPattern);
                }
             }
          }
 
          // create new HEX file from image
-         const std::error_code c_CreateError = CreateHexFile(pu16_BinImage, u32_Offset, u32_Size, ou32_RecSize);
-
-         delete[] pu16_BinImage; // delete memory image
+         const std::error_code c_CreateError = CreateHexFile(c_BinImage.data(), u32_Offset, u32_Size, ou32_RecSize);
 
          if (c_CreateError)
          {

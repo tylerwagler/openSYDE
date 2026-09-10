@@ -12,6 +12,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <cstring>
+#include <cstdlib>
 #include <unistd.h>
 #include <err.h>
 #include <pwd.h>
@@ -168,14 +169,10 @@ void stw::tgl::TglHandleSystemMessages(void)
 /*! \brief   Set environment variable for calling process
 
    Sets an environment variable to a fixed value.
-   This function was modified to fail in any case after reviewing the code.
-   The implementation uses "putenv" which will usually not do what the author expected.
-   "putenv" will store a pointer to the passed memory, which is on the stack in this implementation.
-   So after the function is left the environment will point to undefined memory.
-   See e.g.: https://wiki.sei.cmu.edu/confluence/display/c/POS34-C.+Do+not+call+putenv%28%29+with+a+pointer+to+an+automatic+variable+as+the+argument
-
-   Fixing this is not straightforward. Better for the function to fail than to do random things.
-   Maybe Team Linux has a ready-made implementation at hand.
+   Implemented with setenv() on Linux, which copies both strings. The historical
+   putenv()-based body was unsafe: putenv retains a pointer to the passed storage
+   (POS34-C), and the previous implementation passed a stack buffer, leaving the
+   environment pointing at dead memory once the function returned.
 
    \param[in]    orc_Name    name of environment variable
    \param[in]    orc_Value   value of environment variable
@@ -187,21 +184,6 @@ void stw::tgl::TglHandleSystemMessages(void)
 //----------------------------------------------------------------------------------------------------------------------
 int32_t stw::tgl::TglSetEnvironmentVariable(const std::string & orc_Name, const std::string & orc_Value)
 {
-   (void)orc_Name;
-   (void)orc_Value;
-   tgl_assert(false);
-
-#if 0
-   int32_t s32_Return = -1;
-   char acn_String[1024];
-   const std::string c_String = orc_Name + "=" + orc_Value;
-
-   if (c_String.length() < sizeof(acn_String))
-   {
-      std::strcpy(acn_String, c_String.c_str());
-      s32_Return = putenv(acn_String);
-   }
+   const int32_t s32_Return = setenv(orc_Name.c_str(), orc_Value.c_str(), 1);
    return (s32_Return == 0) ? 0 : -1;
-#endif
-   return -1;
 }

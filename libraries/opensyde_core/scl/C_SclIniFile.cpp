@@ -579,11 +579,11 @@ int32_t C_SclIniFile::ReadInteger(const std::string & orc_Section, const std::st
       }
       catch (...)
       {
-         if (UpperCaseCompat(c_String) == "TRUE")
+         if (EqualsCaseInsensitive(c_String, "TRUE"))
          {
             s32_Return = 1;
          }
-         else if (UpperCaseCompat(c_String) == "FALSE")
+         else if (EqualsCaseInsensitive(c_String, "FALSE"))
          {
             s32_Return = 0;
          }
@@ -673,7 +673,7 @@ void C_SclIniFile::EraseSection(const std::string & orc_Section)
 
    for (s32_Index = 0; s32_Index < static_cast<int32_t>(mc_Sections.size()); s32_Index++)
    {
-      if (LowerCaseCompat(mc_Sections[s32_Index].c_Name).compare(LowerCaseCompat(orc_Section)) == 0)
+      if (EqualsCaseInsensitive(mc_Sections[s32_Index].c_Name, orc_Section))
       {
          mc_Sections.erase(mc_Sections.begin() + s32_Index);
          mq_Dirty = true;
@@ -707,7 +707,7 @@ void C_SclIniFile::DeleteKey(const std::string & orc_Section, const std::string 
 
    for (s32_Index = 0; s32_Index < static_cast<int32_t>(pc_Section->c_Keys.size()); s32_Index++)
    {
-      if (LowerCaseCompat(pc_Section->c_Keys[s32_Index].c_Key).compare(LowerCaseCompat(orc_Key)) == 0)
+      if (EqualsCaseInsensitive(pc_Section->c_Keys[s32_Index].c_Key, orc_Key))
       {
          pc_Section->c_Keys.erase(pc_Section->c_Keys.begin() + s32_Index);
          mq_Dirty = true;
@@ -805,7 +805,7 @@ C_SclIniKey * C_SclIniSection::GetKey(const std::string & orc_Key)
    //Search from last successful point to the end
    for (s32_Index = s32_LastIndex; s32_Index < static_cast<int32_t>(this->c_Keys.size()); s32_Index++)
    {
-      if (LowerCaseCompat(this->c_Keys[s32_Index].c_Key).compare(LowerCaseCompat(orc_Key)) == 0)
+      if (EqualsCaseInsensitive(this->c_Keys[s32_Index].c_Key, orc_Key))
       {
          ms32_PreviousKeyIndex = s32_Index;
          return &this->c_Keys[s32_Index];
@@ -815,7 +815,7 @@ C_SclIniKey * C_SclIniSection::GetKey(const std::string & orc_Key)
    //Not found yet -> Search from beginning to last successful point
    for (s32_Index = 0; s32_Index < s32_LastIndex; s32_Index++)
    {
-      if (LowerCaseCompat(this->c_Keys[s32_Index].c_Key).compare(LowerCaseCompat(orc_Key)) == 0)
+      if (EqualsCaseInsensitive(this->c_Keys[s32_Index].c_Key, orc_Key))
       {
          ms32_PreviousKeyIndex = s32_Index;
          return &this->c_Keys[s32_Index];
@@ -868,7 +868,7 @@ C_SclIniSection * C_SclIniFile::m_GetSection(const std::string & orc_Section)
    //Search from last successful point to the end
    for (s32_Index = s32_LastIndex; s32_Index < static_cast<int32_t>(mc_Sections.size()); s32_Index++)
    {
-      if (LowerCaseCompat(mc_Sections[s32_Index].c_Name).compare(LowerCaseCompat(orc_Section)) == 0)
+      if (EqualsCaseInsensitive(mc_Sections[s32_Index].c_Name, orc_Section))
       {
          ms32_PreviousSectionIndex = s32_Index;
          return &mc_Sections[s32_Index];
@@ -878,7 +878,7 @@ C_SclIniSection * C_SclIniFile::m_GetSection(const std::string & orc_Section)
    //Not found yet -> Search from beginning to last successful point
    for (s32_Index = 0; s32_Index < s32_LastIndex; s32_Index++)
    {
-      if (LowerCaseCompat(mc_Sections[s32_Index].c_Name).compare(LowerCaseCompat(orc_Section)) == 0)
+      if (EqualsCaseInsensitive(mc_Sections[s32_Index].c_Name, orc_Section))
       {
          ms32_PreviousSectionIndex = s32_Index;
          return &mc_Sections[s32_Index];

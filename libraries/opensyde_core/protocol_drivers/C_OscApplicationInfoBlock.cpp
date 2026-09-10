@@ -385,14 +385,15 @@ std::error_code C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const o
 std::string C_OscApplicationInfoBlock::m_GetNonTerminatedString(const char * const opcn_Chars,
                                                                 const uint8_t ou8_MaxLength) const
 {
-   std::string c_Help;
-   char * pcn_Text;
+   std::string c_Help(opcn_Chars, ou8_MaxLength);
 
-   pcn_Text = new char[ou8_MaxLength + 1];
-   pcn_Text[ou8_MaxLength] = '\0';
-   (void)memcpy(pcn_Text, opcn_Chars, ou8_MaxLength);
-   c_Help = pcn_Text;
-   delete[] pcn_Text;
+   //The field may be null-terminated inside the fixed-length buffer; keep only up to the first null
+   //(the historical C-string assignment stopped at a null terminator).
+   const std::string::size_type u32_NullPos = c_Help.find('\0');
+   if (u32_NullPos != std::string::npos)
+   {
+      c_Help.resize(u32_NullPos);
+   }
    c_Help = TrimRightCompat(c_Help);
    return c_Help;
 }

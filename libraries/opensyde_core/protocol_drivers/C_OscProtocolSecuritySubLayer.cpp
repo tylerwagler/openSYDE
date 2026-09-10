@@ -31,9 +31,6 @@ using namespace stw::opensyde_core;
 
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
-std::map<C_OscProtocolDriverOsyNode, C_OscProtocolSecuritySubLayer> C_OscProtocolSecuritySubLayer::mhc_TheConfig;
-
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
@@ -83,43 +80,7 @@ C_OscProtocolSecuritySubLayer::~C_OscProtocolSecuritySubLayer()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   get config with specified NodeId
-
-   If no entry exists add one to our map.
-   So we keep a static map with multiple known busIds + nodeIds and their current traffic encryption configuration.
-   The combination of busId + nodeId is guaranteed to be unique on a valid system.
-   Known nodes and their states can be cleaned up with h_ClearAll.
-
-   \param[in]    orc_NodeId   node id to get config for
-
-   \return  pointer to config
-*/
-//----------------------------------------------------------------------------------------------------------------------
-C_OscProtocolSecuritySubLayer * C_OscProtocolSecuritySubLayer::h_GetConfigByNodeId(
-   const C_OscProtocolDriverOsyNode & orc_NodeId)
-{
-   //either get existing entry define for that node id or create new (empty) one
-   return &mhc_TheConfig[orc_NodeId];
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Clear all known nodes
-
-   Clear list of all known nodes from map.
-   Beware that this will render previous pointer returned by h_GetConfigByNodeId invalid.
-   So only call this at central spots where there is no risk of the pointers still being in use.
-
-   Effectively this will result in all new nodes being (re-)added when calling h_GetConfigByNodeId.
-   So they will start with uninitialized keys and encryption off.
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscProtocolSecuritySubLayer::h_ClearAll()
-{
-   mhc_TheConfig.clear();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Initialize ECDH keys
+/*! \brief   Initialize ECDH keys
 
    If not done so already create set of private and public ECDH keys and store in class fields.
 

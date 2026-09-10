@@ -50,7 +50,8 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 QMap<uint32_t, bool> C_SyvDaTrafficEncryptionStatusHelper::h_GetMappingNodeToTrafficEncryptionStatus(
-   const uint32_t ou32_ViewIndex, const bool oq_ConnectionActiveStatus)
+   const uint32_t ou32_ViewIndex, const bool oq_ConnectionActiveStatus,
+   const stw::opensyde_core::C_OscComDriverProtocol & orc_ComDriver)
 {
    QMap<uint32_t, bool> c_Retval;
    if (oq_ConnectionActiveStatus)
@@ -86,12 +87,12 @@ QMap<uint32_t, bool> C_SyvDaTrafficEncryptionStatusHelper::h_GetMappingNodeToTra
                            const C_OscRoutingRoutePoint & rc_LastPoint =
                               pc_Route->c_VecRoutePoints[pc_Route->c_VecRoutePoints.size() - 1UL];
                            mh_GetTrafficEncryptionStatusForNodeUsingBus(c_Retval, u32_ItNode,
-                                                                        rc_LastPoint.u32_OutBusIndex);
+                                                                        rc_LastPoint.u32_OutBusIndex, orc_ComDriver);
                         }
                         else
                         {
                            mh_GetTrafficEncryptionStatusForNodeUsingBus(c_Retval, u32_ItNode,
-                                                                        pc_View->GetOscPcData().GetBusIndex());
+                                                                        pc_View->GetOscPcData().GetBusIndex(), orc_ComDriver);
                         }
                      }
                   }
@@ -171,7 +172,8 @@ C_SyvDaTrafficEncryptionStatusHelper::C_SyvDaTrafficEncryptionStatusHelper()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTrafficEncryptionStatusHelper::mh_GetTrafficEncryptionStatusForNodeUsingBus(QMap<uint32_t,
                                                                                              bool> & orc_MappingNodeToTrafficEncryptionStatus, const uint32_t ou32_NodeIndex,
-                                                                                        const uint32_t ou32_BusIndex)
+                                                                                        const uint32_t ou32_BusIndex,
+                                                                                        const stw::opensyde_core::C_OscComDriverProtocol & orc_ComDriver)
 {
    const C_OscNode * const pc_Node =
       C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
@@ -189,7 +191,8 @@ void C_SyvDaTrafficEncryptionStatusHelper::mh_GetTrafficEncryptionStatusForNodeU
             mh_GetTrafficEncryptionStatusForNodeUsingBusAndNodeId(orc_MappingNodeToTrafficEncryptionStatus,
                                                                   ou32_NodeIndex,
                                                                   ou32_BusIndex,
-                                                                  rc_Interface.u8_NodeId);
+                                                                  rc_Interface.u8_NodeId,
+                                                                  orc_ComDriver);
          }
       }
    }
@@ -206,7 +209,8 @@ void C_SyvDaTrafficEncryptionStatusHelper::mh_GetTrafficEncryptionStatusForNodeU
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTrafficEncryptionStatusHelper::mh_GetTrafficEncryptionStatusForNodeUsingBusAndNodeId(QMap<uint32_t,
                                                                                                       bool> & orc_MappingNodeToTrafficEncryptionStatus, const uint32_t ou32_NodeIndex, const uint32_t ou32_BusIndex,
-                                                                                                 const uint8_t ou8_NodeId)
+                                                                                                 const uint8_t ou8_NodeId,
+                                                                                                 const stw::opensyde_core::C_OscComDriverProtocol & orc_ComDriver)
 {
    const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(ou32_BusIndex);
 
@@ -214,15 +218,10 @@ void C_SyvDaTrafficEncryptionStatusHelper::mh_GetTrafficEncryptionStatusForNodeU
    if ((pc_Bus != nullptr) && (pc_Bus->e_Type != C_OscSystemBus::eETHERNET))
    {
       const C_OscProtocolDriverOsyNode c_NodeId(pc_Bus->u8_BusId, ou8_NodeId);
-      const C_OscProtocolSecuritySubLayer * const pc_NodeStatus =
-         C_OscProtocolSecuritySubLayer::h_GetConfigByNodeId(c_NodeId);
 
-      if (pc_NodeStatus != nullptr)
+      if (orc_ComDriver.IsTrafficEncryptionActive(c_NodeId))
       {
-         if (pc_NodeStatus->GetEncryptionIsActive())
-         {
-            orc_MappingNodeToTrafficEncryptionStatus[ou32_NodeIndex] = true;
-         }
+         orc_MappingNodeToTrafficEncryptionStatus[ou32_NodeIndex] = true;
       }
    }
 }
