@@ -134,7 +134,7 @@ Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 13 suites, 175 tests: `test_application_info_block`, `test_checksums`,
 `test_dynamic_array`, `test_hex_file`, `test_hex_string_parsing`, `test_logging`,
 `test_osc_error_category`, `test_protocol_serial_number`, `test_scl_string`,
-`test_security_aes_file`, `test_stwerrors`, `test_stwtypes`, `test_xml_parser`.
+`test_security_aes_file`, `test_stwerrors`, `test_cstdint`, `test_xml_parser`.
 
 Several of these are regression pins for defects the phase 2/3 migrations
 introduced and CI did not catch, so prefer extending them over replacing them.
@@ -180,7 +180,7 @@ and roughly 1,124 of its lines are never built. See `docs/TODO.md`.
 
 Core library internals: `project/system/` (nodes, buses, definitions), `halc/`,
 `protocol_drivers/`, `data_dealer/`, `exports/`, `xml_parser/`, `scl/`, `security/`,
-`stwtypes/`, `stwerrors/`.
+`stwtypes/` (C header only, for generated controller code), `stwerrors/`.
 
 ## Coding Conventions
 

@@ -39,7 +39,7 @@ endfunction()
 # --- Test suites --------------------------------------------------------------
 
 add_osc_test(test_opensyde_core_checksums      test_checksums.cpp)
-add_osc_test(test_opensyde_core_stwtypes       test_stwtypes.cpp)
+add_osc_test(test_opensyde_core_cstdint        test_cstdint.cpp)
 add_osc_test(test_opensyde_core_stwerrors      test_stwerrors.cpp)
 add_osc_test(test_opensyde_core_error_category test_osc_error_category.cpp)
 add_osc_test(test_opensyde_core_xml_parser     test_xml_parser.cpp)
