@@ -46,7 +46,6 @@ public:
    void TriggerHoverLeaveEvent(QGraphicsSceneHoverEvent * const opc_Event);
 
 private:
-   bool mq_GrabbedByWidget;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

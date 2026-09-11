@@ -50,7 +50,6 @@ private:
    QColor mc_InnerCircleTop;
    QColor mc_InnerCircleBottom;
    QColor mc_StringColor;
-   bool mq_ValueCircle;
    int32_t ms32_Value;
    const int32_t ms32_Min;
    const int32_t ms32_Max;

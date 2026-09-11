@@ -53,8 +53,6 @@ protected:
                             const int32_t & ors32_Interface,
                             const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties) = 0;
 
-private:
-   bool mq_Merged;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

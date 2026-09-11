@@ -31,8 +31,7 @@ public:
    C_SyvDaUnoAddCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
                         const C_PuiSvDbDataElement::E_Type & ore_Type, const QPointF & orc_NewPos,
                         const double of64_ZetValue, const QString & orc_AdditionalInformation = "",
-                        QUndoCommand * const opc_Parent = nullptr,
-                        const bool & orq_ForceUseAdditionalInformation = false);
+                        QUndoCommand * const opc_Parent = nullptr);
    ~C_SyvDaUnoAddCommand(void) override;
 
 protected:
@@ -43,7 +42,6 @@ private:
    const QPointF mc_NewPos;
    const double mf64_ZetValue;
    const QString mc_AdditionalInformation;
-   const bool mq_ForceUseAdditionalInformation;
 
    static void mh_DecodeTheme(C_PuiSvDbWidgetBase & orc_Base, const QString & orc_Theme);
 };

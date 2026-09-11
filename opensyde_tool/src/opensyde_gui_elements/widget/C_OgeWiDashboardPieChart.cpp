@@ -45,7 +45,6 @@ const QColor C_OgeWiDashboardPieChart::mhc_TRANSPARENT = static_cast<QColor>(Qt:
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeWiDashboardPieChart::C_OgeWiDashboardPieChart(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
-   mq_ValueCircle(false),
    ms32_Value(100),
    ms32_Min(0),
    ms32_Max(2000000),

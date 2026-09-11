@@ -62,8 +62,7 @@ C_SdManUnoTopologyReconnectBaseCommand::C_SdManUnoTopologyReconnectBaseCommand(Q
    ms32_Interface(ors32_Interface),
    mu8_InitialInterface(255U),
    mc_Properties(orc_Properties),
-   mc_InitialProperties(),
-   mq_Merged(false)
+   mc_InitialProperties()
 {
 }
 

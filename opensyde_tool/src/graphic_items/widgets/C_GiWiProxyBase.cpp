@@ -40,8 +40,7 @@ using namespace stw::opensyde_gui;
 C_GiWiProxyBase::C_GiWiProxyBase(const double of64_InitWidth, const double of64_InitHeight,
                                  QGraphicsItem * const opc_Parent) :
    QGraphicsProxyWidget(opc_Parent),
-   C_GiBiSizeableItem(of64_InitWidth, of64_InitHeight),
-   mq_GrabbedByWidget(false)
+   C_GiBiSizeableItem(of64_InitWidth, of64_InitHeight)
 {
    this->setFlag(QGraphicsItem::ItemIsMovable);
    this->setFlag(QGraphicsItem::ItemIsSelectable);
