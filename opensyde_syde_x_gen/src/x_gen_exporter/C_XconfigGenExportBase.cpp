@@ -174,20 +174,10 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::Init(const int32_t 
                                                                   char * const * const oppcn_Argv)
 {
    E_ResultCode e_Return = eRESULT_OK;
-#ifdef _WIN32
-   char acn_ApplicationName[MAX_PATH + 1];
-   uint32_t u32_Return = GetModuleFileNameA(nullptr, &acn_ApplicationName[0], MAX_PATH + 1);
-   tgl_assert(u32_Return != 0);
-#else
-   char acn_ApplicationName[PATH_MAX + 1];
-   const ssize_t x_Count = readlink("/proc/self/exe", &acn_ApplicationName[0], PATH_MAX);
-   tgl_assert(x_Count > 0);
-   acn_ApplicationName[(x_Count < PATH_MAX) ? x_Count : PATH_MAX] = '\0';
-#endif
 
    mq_EraseTargetFolder = false;
 
-   mc_ExeName = acn_ApplicationName;
+   mc_ExeName = stw::tgl::TglGetExePath();
    mc_ExeVersion = h_GetApplicationVersion(mc_ExeName);
    mc_BinaryHash = stw::opensyde_core::C_OscUtilBinaryHash::h_CreateBinaryHash();
 
