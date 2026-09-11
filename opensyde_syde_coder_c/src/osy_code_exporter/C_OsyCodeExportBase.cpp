@@ -16,6 +16,7 @@
 #include <getopt.h> //note: as we use getopt.h this application is not portable to all compilers
 
 #include <cstdint>
+#include "version_config.hpp"
 #include "stwerrors.hpp"
 #include "C_OscProjectFiler.hpp"
 #include "C_OscProject.hpp"
@@ -135,6 +136,8 @@ std::string C_OsyCodeExportBase::h_GetApplicationVersion(const std::string & orc
    }
 #else
    (void)orc_FileName;
+   c_Version = PrintFormattedCompat("V%d.%02dr%d", PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR,
+                                    PROJECT_VERSION_RELEASE);
 #endif
    return c_Version;
 }

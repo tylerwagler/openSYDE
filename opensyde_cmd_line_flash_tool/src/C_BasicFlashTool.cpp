@@ -35,6 +35,7 @@ static int kbhit(void)
 #endif
 
 #include <cstdint>
+#include "version_config.hpp"
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
 #include "TglTime.hpp"
@@ -501,6 +502,8 @@ std::string C_BasicFlashTool::mh_GetApplicationVersion(const std::string & orc_F
    }
 #else
    (void)orc_FileName;
+   c_Version = PrintFormattedCompat("V%d.%02dr%d", PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR,
+                                    PROJECT_VERSION_RELEASE);
 #endif
    return c_Version;
 }
