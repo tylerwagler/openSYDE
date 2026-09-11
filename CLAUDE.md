@@ -19,7 +19,8 @@ i18n infrastructure has been stripped.
 
 ## Build System
 
-CMake + Ninja + GCC. Driven by `build.sh` at the repo root.
+CMake + Ninja, driven by `build.sh` at the repo root. GCC on Linux, Apple clang on
+macOS, MinGW on Windows — the project targets all three (we ship binaries for each).
 
 ```bash
 ./build.sh                      # Build all tools (Release)
@@ -34,8 +35,11 @@ CMake + Ninja + GCC. Driven by `build.sh` at the repo root.
 Tool names: `opensyde`, `canmonitor`, `sydeflash`, `sydesup`, `syde_x_gen`,
 `syde_coder_c`, `flash_tool`, `tsp_convert`, `all`.
 
-`build.sh` requires plain `cmake`, `ninja`, and `g++` on `PATH` — it never pins a
-compiler version.
+`build.sh` requires plain `cmake` and `ninja` on `PATH` plus a C++ compiler (`g++`
+on Linux, Apple clang on macOS) — it never pins a compiler version. It picks the
+toolchain file by `uname`: `cmake/toolchain_macos.cmake` on Darwin, otherwise
+`cmake/toolchain_linux.cmake`. It also uses `getconf _NPROCESSORS_ONLN` rather than
+`nproc` so job detection works on macOS, which has no `nproc`.
 
 The root `CMakeLists.txt` builds everything as one project: `opensyde_core` once,
 then each tool linking that single archive. `build.sh` drives it — one configure,
@@ -88,21 +92,34 @@ On Ubuntu 24.04 / 26.04:
 
 ```
 cmake ninja-build g++ qt6-base-dev qt6-svg-dev qt6-tools-dev
-libgl1-mesa-dev libssl-dev flex bison libfl-dev libqcustomplot-dev
+libgl1-mesa-dev libssl-dev flex bison libfl-dev
 ```
 
-Notes that have bitten CI before:
+QCustomPlot is **not** a system package — it is vendored and built from source on
+every platform (see the QCustomPlot gotcha below), so `libqcustomplot-dev` is no
+longer required.
 
-- **`flex` alone is not enough.** `FlexLexer.h` ships in `libfl-dev`. Without it CMake
-  leaves `FLEX_INCLUDE_DIR` unset and `Vector_DBC` fails to generate its scanner.
-  `opensyde_core` links `CanLibraries::dbc`, so this is not optional.
+On macOS (Homebrew), the keg-only deps are pointed at by `cmake/toolchain_macos.cmake`:
+
+```
+brew install cmake ninja bison flex openssl@3 qtbase qtsvg
+```
+
+Notes that have bitten builds before:
+
+- **`flex` alone is not enough.** `FlexLexer.h` ships in `libfl-dev` on Ubuntu and in
+  the `flex` keg on macOS. Without it CMake leaves `FLEX_INCLUDE_DIR` unset and
+  `Vector_DBC` fails to generate its scanner. `opensyde_core` links
+  `CanLibraries::dbc`, so this is not optional. `toolchain_macos.cmake` sets
+  `FLEX_INCLUDE_DIR` at the brew keg for this reason.
+- **macOS `bison` is too old.** Apple ships bison 2.3; `Vector_DBC` needs ≥ 3.3.
+  `toolchain_macos.cmake` points `BISON_EXECUTABLE` at brew's bison 3.8.
+- **The `qt` meta-formula can fail on Intel Macs**, but the component kegs (`qtbase`,
+  `qtsvg`) install fine and provide everything openSYDE needs; the toolchain adds all
+  three to `CMAKE_PREFIX_PATH`.
 - **Package names differ across Ubuntu releases.** Qt6 SVG dev is `qt6-svg-dev` from
   noble (24.04) onward, but `libqt6svg6-dev` on jammy (22.04). Jammy also has no
   `g++-13`. CI does not target jammy for these reasons.
-- **QCustomPlot is unresolved.** `libqcustomplot-dev` ships the Qt5-linked library;
-  the Qt6 runtime is a separate package (`libqcustomplot2.1-qt6`), and the tree also
-  carries a vendored copy at `libraries/qcustomplot/`. Confirm which one the build
-  should use before relying on the system package — see "Known Broken" below.
 
 ### Verifying tool-tree changes
 
@@ -131,10 +148,12 @@ Per-tool build directories under `build/`; deploy target defaults to
 Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `-DOPENSYDE_CORE_BUILD_TESTS=ON`, run with `ctest`.
 
-13 suites, 175 tests: `test_application_info_block`, `test_checksums`,
-`test_dynamic_array`, `test_hex_file`, `test_hex_string_parsing`, `test_logging`,
-`test_osc_error_category`, `test_protocol_serial_number`, `test_scl_string`,
-`test_security_aes_file`, `test_stwerrors`, `test_cstdint`, `test_xml_parser`.
+19 suites, 231 tests: `test_application_info_block`, `test_checksums`,
+`test_cstdint`, `test_datapool_content_util`, `test_dynamic_array`, `test_hex_file`,
+`test_hex_string_parsing`, `test_logging`, `test_node_datapool_content`,
+`test_osc_error_category`, `test_project_metadata`, `test_protocol_driver_base`,
+`test_protocol_serial_number`, `test_scl_string`, `test_security_aes_file`,
+`test_stwerrors`, `test_tgl_file`, `test_view_security_options`, `test_xml_parser`.
 
 Several of these are regression pins for defects the phase 2/3 migrations
 introduced and CI did not catch, so prefer extending them over replacing them.
@@ -308,24 +327,44 @@ Cross-cutting follow-ups (dark mode, Linux version string, About dialog) live in
 
 ## Gotchas
 
-**QCustomPlot is a system dependency on Linux, not vendored.** `libraries/qcustomplot/`
-holds only `qcustomplot.h`, a compatibility wrapper that re-defines the Qt keywords
-(`signals`, `slots`, `foreach`) around the *system* header, because the project builds
-with `QT_NO_KEYWORDS` for DBC library compatibility. There is no vendored
-`libqcustomplot.a` on Linux. The tool's CMake tries pkg-config `qcustomplot-qt6` first
-(openSUSE) and falls back to `find_library(NAMES QCustomPlotQt6 QCustomPlot)` (Debian
-/ Ubuntu, where `libqcustomplot-dev` ships the capitalized `libQCustomPlotQt6.so`).
+**QCustomPlot is vendored and built from source on every platform.** This replaced
+three inconsistent resolution paths (Linux system package, a committed Windows `.a`
+whose path did not even exist, nothing on macOS) with one source build. The layout:
 
-**Each GUI tool needs its own `pjt/toolchain_linux.cmake` and `pjt/lint_config.cmake`.**
-`build.sh` passes `-DCMAKE_TOOLCHAIN_FILE` per tool, and each tool's `CMakeLists.txt`
-does `include(lint_config.cmake)` from its own `pjt/` directory. When CAN Monitor and
-SYDEflash were split out of `opensyde_tool/` into their own top-level trees, the
-`CMakeLists.txt` files came across but these two siblings did not, so neither tool
-could build on Linux at all. Restored 2026-09-06. If a new tool is split out the same
-way, check for both files.
+- `libraries/qcustomplot/qcustomplot.h` — a compatibility wrapper that redefines the
+  Qt keywords (`signals`, `slots`, `foreach`) around `#include_next <qcustomplot.h>`,
+  because the project builds with `QT_NO_KEYWORDS` for DBC library compatibility.
+- `libraries/qcustomplot/upstream/` — the vendored v2.1.1 source (`qcustomplot.{cpp,h}`,
+  GPLv3) plus a `CMakeLists.txt` that builds a `qcustomplot` static library.
 
-Both problems were invisible until the GUI CI job was repaired on 2026-09-06 — before
-that it died at dependency installation and never reached a build.
+The tool's CMake does `add_subdirectory(.../upstream)` guarded by
+`if(NOT TARGET qcustomplot)` and links `qcustomplot`. Two non-obvious things make it
+compile: the subdir's CMakeLists calls `remove_definitions(-DQT_NO_KEYWORDS)` —
+per-target `-UQT_NO_KEYWORDS` is not enough because **AUTOMOC reads the directory's
+COMPILE_DEFINITIONS**, and moc must see the keywords — and it sets
+`AUTOMOC ON AUTOUIC OFF AUTORCC OFF` so the plain library doesn't inherit the tool's
+`.ui`/`.qrc` rules and collide on generated headers.
+
+**Platform-specific CMake predicates must test `WIN32`, not `else()`.** A recurring
+bug in this tree was `if(CMAKE_SYSTEM_NAME STREQUAL "Linux") … else() …` where the
+`else()` branch silently meant *Windows* — which breaks macOS, since macOS is neither.
+For anything that is vendored on Windows but resolved from the system elsewhere
+(OpenSSL, zlib, QCustomPlot), the correct shape is `if(WIN32) vendored / else()
+system` — macOS then takes the same path as Linux. Clang-only and GCC-only warning
+flags (`-Wunused-private-field` is clang-only; `-Wmaybe-uninitialized`, `-Wlogical-op`,
+`-static-libgcc/-static-libstdc++` are GCC-only) must likewise be gated on
+`CMAKE_CXX_COMPILER_ID` or they are fatal under `-Werror` on the other compiler.
+
+**The build uses one shared toolchain file, plus per-tool `pjt/lint_config.cmake`.**
+`build.sh` passes a single `-DCMAKE_TOOLCHAIN_FILE=cmake/toolchain_{linux,macos}.cmake`
+(selected by `uname`) for the whole root build; the older per-tool
+`pjt/toolchain_linux.cmake` files are vestigial standalone-config leftovers, not what
+the unified build uses. Each tool's `CMakeLists.txt` still does
+`include(lint_config.cmake)` from its own `pjt/` directory, so that file is per-tool.
+When CAN Monitor and SYDEflash were split out of `opensyde_tool/` into their own
+top-level trees, their `lint_config.cmake` did not come across and neither tool could
+build on Linux at all (restored 2026-09-06, invisible until the GUI CI job was
+repaired the same day). If a new tool is split out the same way, check for that file.
 
 ## Agent Workspace Rules
 
