@@ -55,7 +55,14 @@ endif()
 
 # OpenSSL and Qt are keg-only too; put their CMake configs where find_package looks.
 #   brew install openssl@3 qt
-foreach(_pkg openssl@3 qt)
+#
+# qtbase and qtsvg are listed alongside qt because Homebrew's monolithic `qt`
+# formula can fail to finish on Intel Macs (a late module wants a newer Xcode than
+# is installed), yet the split component kegs it built first -- qtbase (Core, Gui,
+# Widgets, PrintSupport) and qtsvg (Svg, SvgWidgets) -- are exactly what openSYDE
+# needs. The EXISTS guard picks up whichever are present, so this works whether the
+# meta-formula completed or only its components did.
+foreach(_pkg openssl@3 qt qtbase qtsvg)
    if(EXISTS "${OSY_BREW_PREFIX}/opt/${_pkg}")
       list(APPEND CMAKE_PREFIX_PATH "${OSY_BREW_PREFIX}/opt/${_pkg}")
    endif()

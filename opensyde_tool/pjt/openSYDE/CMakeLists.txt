@@ -174,16 +174,20 @@ set (OPENSYDE_GUI_INCLUDES
 # Include path with library modules
 set (OPENSYDE_GUI_LIB_INCLUDES
    ${PROJECT_ROOT}/../libraries/qcustomplot
+   # the wrapper above manages Qt keywords, then #include_next pulls the real
+   # vendored header from here -- must come after the wrapper dir
+   ${PROJECT_ROOT}/../libraries/qcustomplot/upstream
    # Vector DBC headers come transitively from CanLibraries::dbc
    ${PROJECT_ROOT}/../libraries/osy_git_data_model_monitor/includes
 )
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   find_package(OpenSSL REQUIRED)
-   list(APPEND OPENSYDE_GUI_LIB_INCLUDES ${OPENSSL_INCLUDE_DIR})
-else()
+# macOS uses the system OpenSSL (Homebrew) like Linux; only Windows vendors it.
+if(WIN32)
    list(APPEND OPENSYDE_GUI_LIB_INCLUDES
    ${PROJECT_ROOT}/../libraries/openssl/openssl64/include
    )
+else()
+   find_package(OpenSSL REQUIRED)
+   list(APPEND OPENSYDE_GUI_LIB_INCLUDES ${OPENSSL_INCLUDE_DIR})
 endif()
 
 # --- PROJECT SOURCE FILE PATHS ----------------------------------------------------------------------------------------
@@ -1915,12 +1919,13 @@ set(OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING            0)
 set(OPENSYDE_CORE_SKIP_X_CONFIG_GENERATION         1)
 set(OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION   0)
 set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING     0)
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          1)
-   set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           1)
-else()
+# Windows-only core subsystems compile only on Windows; macOS and Linux both skip them.
+if(WIN32)
    set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          0)
    set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           0)
+else()
+   set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          1)
+   set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           1)
 endif()
 set(OPENSYDE_CORE_SKIP_SECURITY                    0)
 
@@ -1945,42 +1950,21 @@ set(OPENSYDE_LINK_LIBRARIES
    # Vector DBC, built from source via the can-libraries submodule
    CanLibraries::dbc
 )
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   find_package(PkgConfig REQUIRED)
-   # Try pkg-config first (openSUSE), fall back to direct find (Ubuntu)
-   pkg_check_modules(QCUSTOMPLOT QUIET qcustomplot-qt6)
-   if(QCUSTOMPLOT_FOUND)
-      # pkg-config found it (openSUSE)
-      list(APPEND OPENSYDE_LINK_LIBRARIES
-         ${QCUSTOMPLOT_LIBRARIES}
-         OpenSSL::SSL
-         OpenSSL::Crypto
-      )
-   else()
-      # Ubuntu: find library and headers directly
-      find_library(QCUSTOMPLOT_LIBRARY
-         NAMES QCustomPlotQt6 QCustomPlot
-         PATHS /usr/lib/x86_64-linux-gnu /usr/lib /usr/local/lib
-      )
-      find_path(QCUSTOMPLOT_INCLUDE_DIR
-         NAMES qcustomplot.h
-         PATHS /usr/include /usr/local/include
-      )
-      if(QCUSTOMPLOT_LIBRARY AND QCUSTOMPLOT_INCLUDE_DIR)
-         list(APPEND OPENSYDE_LINK_LIBRARIES
-            ${QCUSTOMPLOT_LIBRARY}
-            OpenSSL::SSL
-            OpenSSL::Crypto
-         )
-         include_directories(${QCUSTOMPLOT_INCLUDE_DIR})
-      else()
-         message(FATAL_ERROR "QCustomPlot not found. Install libqcustomplot-dev or libqcustomplot2.1-qt6")
-      endif()
-   endif()
-else()
-   list(PREPEND OPENSYDE_LINK_LIBRARIES
-      ${PROJECT_ROOT}/../libraries/qcustomplot/libqcustomplot.a
-   )
+# QCustomPlot: vendored GPL source (libraries/qcustomplot/upstream), built as a
+# static library on every platform. This replaced three inconsistent mechanisms --
+# a Linux system package, a Windows committed .a (whose path did not even exist in
+# the tree), and nothing at all on macOS -- with one source of truth. Qt Charts,
+# the obvious Qt-native alternative, is deprecated since Qt 6.10, and its successor
+# Qt Graphs is a QML/RHI module with no QWidget line chart or item layer, so neither
+# can host this widget's draggable-cursor plot without a rewrite.
+# Built in its own subdirectory so it can drop QT_NO_KEYWORDS for moc as well as the
+# compiler (see that CMakeLists). Guarded in case a sibling tool ever shares it.
+if(NOT TARGET qcustomplot)
+   add_subdirectory(${PROJECT_ROOT}/../libraries/qcustomplot/upstream ${CMAKE_BINARY_DIR}/qcustomplot)
+endif()
+list(APPEND OPENSYDE_LINK_LIBRARIES qcustomplot)
+
+if(WIN32)
    list(APPEND OPENSYDE_LINK_LIBRARIES
       version
       ws2_32   #WinSock
@@ -1989,6 +1973,9 @@ else()
       ${PROJECT_ROOT}/../libraries/openssl/openssl64/libcrypto.a
       ${PROJECT_ROOT}/../libraries/osy_git_data_model_monitor/libosy_git_data_model_monitor.a
    )
+else()
+   # macOS and Linux: system OpenSSL via find_package (done above).
+   list(APPEND OPENSYDE_LINK_LIBRARIES OpenSSL::SSL OpenSSL::Crypto)
 endif()
 
 # COMPILER SWITCHES
@@ -2020,10 +2007,10 @@ qt_add_executable(openSYDE
 target_include_directories(openSYDE PRIVATE ${OPENSYDE_GUI_INCLUDES})
 target_include_directories(openSYDE SYSTEM PRIVATE ${OPENSYDE_GUI_LIB_INCLUDES})
 # core also needs path to openSSL:
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   target_include_directories(opensyde_core PRIVATE ${OPENSSL_INCLUDE_DIR})
-else()
+if(WIN32)
    target_include_directories(opensyde_core PRIVATE ${PROJECT_ROOT}/../libraries/openssl/openssl64/include)
+else()
+   target_include_directories(opensyde_core PRIVATE ${OPENSSL_INCLUDE_DIR})
 endif()
 
 target_link_libraries(openSYDE PRIVATE ${OPENSYDE_LINK_LIBRARIES})

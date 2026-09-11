@@ -420,12 +420,13 @@ set(OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING            1)
 set(OPENSYDE_CORE_SKIP_X_CONFIG_GENERATION         1)
 set(OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION   1)
 set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING     1)
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          1)
-   set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           1)
-else()
+# Windows-only core subsystems compile only on Windows; macOS and Linux both skip them.
+if(WIN32)
    set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          0)
    set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           0)
+else()
+   set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          1)
+   set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           1)
 endif()
 set(OPENSYDE_CORE_SKIP_SECURITY                    1)
 
@@ -447,19 +448,20 @@ set(OPENSYDE_LINK_LIBRARIES
    Qt6::SvgWidgets
    opensyde_core
 )
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   find_package(OpenSSL REQUIRED)
-   list(APPEND OPENSYDE_LINK_LIBRARIES
-      OpenSSL::SSL
-      OpenSSL::Crypto
-   )
-else()
+# macOS links system OpenSSL (Homebrew) like Linux; only Windows vendors the .a files.
+if(WIN32)
    list(APPEND OPENSYDE_LINK_LIBRARIES
       version
       ws2_32   #WinSock
       Iphlpapi #IP helper API
       ${PROJECT_ROOT}/../libraries/openssl/openssl64/libssl.a
       ${PROJECT_ROOT}/../libraries/openssl/openssl64/libcrypto.a
+   )
+else()
+   find_package(OpenSSL REQUIRED)
+   list(APPEND OPENSYDE_LINK_LIBRARIES
+      OpenSSL::SSL
+      OpenSSL::Crypto
    )
 endif()
 
