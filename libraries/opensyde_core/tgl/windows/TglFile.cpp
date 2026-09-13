@@ -21,7 +21,6 @@
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
 #include <string>
-#include "C_SclDateTime.hpp"
 #include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -39,8 +38,6 @@ using namespace stw::scl;
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
-static bool m_FileAgeDosTime(const std::string & orc_FileName, uint16_t * const opu16_Date,
-                             uint16_t * const opu16_Time);
 static int32_t m_FileFind(const std::string & orc_SearchPattern,
                           std::vector<C_TglFileSearchRecord> & orc_FoundFiles,
                           const bool oq_IncludeDirectories = false,
@@ -48,28 +45,6 @@ static int32_t m_FileFind(const std::string & orc_SearchPattern,
 static bool m_CheckUncShare(const std::string & orc_Path);
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
-//utility: get operating system file age
-static bool m_FileAgeDosTime(const std::string & orc_FileName, uint16_t * const opu16_Date, uint16_t * const opu16_Time)
-{
-   HANDLE pv_Handle;
-   WIN32_FIND_DATAA t_FindData;
-   FILETIME t_LocalFileTime;
-   bool q_Return = false;
-
-   pv_Handle = FindFirstFileA(orc_FileName.c_str(), &t_FindData);
-   if (pv_Handle != INVALID_HANDLE_VALUE) //lint !e923 //provided by system headers; no problems expected
-   {
-      (void)FindClose(pv_Handle);
-      if ((t_FindData.dwFileAttributes & static_cast<uint32_t>(FILE_ATTRIBUTE_DIRECTORY)) == 0U)
-      {
-         (void)FileTimeToLocalFileTime(&t_FindData.ftLastWriteTime, &t_LocalFileTime);
-         //please Visual C 2005 compiler ...
-         q_Return = (FileTimeToDosDateTime(&t_LocalFileTime, opu16_Date, opu16_Time) == 0) ? false : true;
-      }
-   }
-   return q_Return;
-}
-
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   check if string is UNC server path
 

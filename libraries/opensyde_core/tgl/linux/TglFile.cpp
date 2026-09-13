@@ -27,7 +27,6 @@
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
 #include <string>
-#include "C_SclDateTime.hpp"
 #include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
