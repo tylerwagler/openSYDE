@@ -143,6 +143,7 @@ set (OPENSYDE_GUI_INCLUDES
    ${PROJECT_ROOT}/src/system_views/device_configuration
    ${OPENSYDE_GUI_ROOT}/src/table_base
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base
+   ${PROJECT_ROOT}/src/table_base
    ${PROJECT_ROOT}/src/table_base/tree_base
    ${OPENSYDE_GUI_ROOT}/src/project_operations
    ${PROJECT_ROOT}/src/project_operations
@@ -242,8 +243,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeModel.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeView.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceUpdateEdsDialog.cpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewDelegate.cpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableDelegate.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerDialog.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableDelegate.cpp
@@ -251,7 +250,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableView.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionWidget.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobGeneralSettingsWidget.cpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobOvDelegate.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobPropertiesWidget.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListModel.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListView.cpp
@@ -553,7 +551,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableView.cpp
    ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableModel.cpp
    ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableView.cpp
-   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableDelegate.cpp
    ${PROJECT_ROOT}/src/system_definition/C_SdTopologyDataSnapshot.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebBaseCopyPasteManager.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiTextElementBus.cpp
@@ -904,6 +901,7 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerHalc.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblDelegate.cpp
+   ${PROJECT_ROOT}/src/table_base/C_TblHoveredRowDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblEditLineEditBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFixPosition.cpp
@@ -916,7 +914,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcDefUpdateDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelect.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvWidget.cpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvDelegate.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableView.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableModel.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeDelegate.cpp
@@ -1006,8 +1003,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeModel.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeView.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceUpdateEdsDialog.hpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewDelegate.hpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableDelegate.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerDialog.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableDelegate.hpp
@@ -1015,7 +1010,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableView.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionWidget.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobGeneralSettingsWidget.hpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobOvDelegate.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobPropertiesWidget.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListModel.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListView.hpp
@@ -1318,7 +1312,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableView.hpp
    ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableModel.hpp
    ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableView.hpp
-   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableDelegate.hpp
    ${PROJECT_ROOT}/src/system_definition/C_SdTopologyDataSnapshot.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebBaseCopyPasteManager.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiTextElementBus.hpp
@@ -1671,6 +1664,7 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerHalc.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblDelegate.hpp
+   ${PROJECT_ROOT}/src/table_base/C_TblHoveredRowDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblEditLineEditBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFixPosition.hpp
@@ -1683,7 +1677,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcDefUpdateDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelect.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvWidget.hpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvDelegate.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableView.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableModel.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeDelegate.hpp
