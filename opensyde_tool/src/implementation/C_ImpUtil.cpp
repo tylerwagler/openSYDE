@@ -1075,7 +1075,7 @@ WINBOOL CALLBACK C_ImpUtil::mh_EnumWindowsCallback(HWND opc_Handle, const LPARAM
    GetWindowThreadProcessId(opc_Handle, &x_ProcessId);
 
    //lint -e{9010} //interface defined by Windows API
-   if (GetWindow(opc_Handle, GW_OWNER) == reinterpret_cast<HWND>(nullptr))
+   if (GetWindow(opc_Handle, GW_OWNER) == nullptr)
    {
       if (IsWindowVisible(opc_Handle) == true)
       {

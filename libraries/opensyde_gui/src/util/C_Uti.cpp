@@ -663,12 +663,12 @@ QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat)
    uint32_t u32_ValSize;
    int32_t s32_InfoSize;
 
-   s32_InfoSize = GetFileVersionInfoSizeA(c_FileName.toStdString(), nullptr);
+   s32_InfoSize = GetFileVersionInfoSizeA(c_FileName.toStdString().c_str(), nullptr);
    if (s32_InfoSize != 0)
    {
       uint8_t * pu8_Buffer;
       pu8_Buffer = new uint8_t[static_cast<uint32_t>(s32_InfoSize)];
-      if (GetFileVersionInfoA(c_FileName.toStdString(), 0, s32_InfoSize, pu8_Buffer) != FALSE)
+      if (GetFileVersionInfoA(c_FileName.toStdString().c_str(), 0, s32_InfoSize, pu8_Buffer) != FALSE)
       {
          //reinterpret_cast required due to function interface
          if (VerQueryValueA(pu8_Buffer, "\\",
