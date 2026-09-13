@@ -688,10 +688,70 @@ mutex wrappers. Singletons use local-static.
 
 ## Phase 7 — Performance (Analysis #13, #14, #16)
 
-### 7.1 — Logging Hot Path Optimization
-- Replace `std::stringstream` in `mh_WriteLog` with `std::format` (or fmtlib)
-- Cache date-time string, update only when millisecond changes
-- Batch writes with larger buffer
+### 7.1 — Logging Hot Path Optimization — **Done 2026-09-13**
+- ~~Replace `std::stringstream` in `mh_WriteLog` with `std::format` (or fmtlib)~~ done
+- ~~Cache date-time string, update only when millisecond changes~~ superseded — see below
+- ~~Batch writes with larger buffer~~ not done; not where the time was
+
+`BM_WriteLogInfo` (Release, macOS/libc++, both binaries run alternately):
+**2540/2592/2604 ns → 1090/966/1005 ns = 2.53x.** Exit criterion met.
+
+The prescribed change was not sufficient on its own and the diagnosis in the
+plan was wrong about where the time went. `std::format` instead of
+`std::stringstream` is 2.8x (macOS/libc++) to 12.2x (Windows/llvm-mingw) faster
+*at formatting*, but it moved the end-to-end call only 1.4x, because formatting
+was never the bulk of it. Probe benchmarks (`BM_GetDateTimeNow`,
+`BM_ConvertDateTimeToString`) split the ~1900 ns:
+
+| Part | Before | After |
+|------|--------|-------|
+| `h_UtilConvertDateTimeToString` | 964 ns | 104 ns |
+| `TglGetDateTimeNow` (`localtime_r`) | ~400 ns | ~400 ns |
+| line assembly + allocations | ~600 ns | ~500 ns |
+
+So the win came from allocation and from not using a general formatter for a
+fixed numeric layout, not from the formatter swap:
+
+- The timestamp fields are fixed-width decimals at known offsets; the digits are
+  now written directly instead of re-parsing a format spec for seven arguments.
+- `mh_WriteLog` renders the timestamp into the line buffer rather than calling
+  `h_UtilConvertDateTimeToString`, whose 23 character return does not fit
+  libc++'s 22 character small-string buffer and so allocated on every line.
+- The class name comes from `__FILE__` as a `string_view`, and the line is built
+  in per-thread buffers that keep their capacity — about five allocations per
+  call to none.
+
+"Cache date-time string, update only when the millisecond changes" would not
+have helped: at ~1 µs per call the millisecond almost always *has* changed, so
+the cache would miss nearly every time. The version that pays is caching the
+`localtime_r` result per *second*, and that was done in a second pass:
+
+**`TglGetDateTimeNow` 366 ns → 60 ns, taking `BM_WriteLogInfo` to 620 ns —
+4.2x against the pre-7.1 baseline.**
+
+Measured first: `localtime_r` was 289 ns of the 366, `clock_gettime` only 44. The
+breakdown is by definition identical for every call within one second, so it is
+computed once per second per thread. The cache is `thread_local` rather than
+shared, because a shared one needs the lock this is avoiding.
+
+The cost is that a change in the local time rules — a DST transition, or a
+process calling `tzset()` after changing `TZ` — is picked up at the next second
+boundary rather than immediately. The staleness is bounded at one second because
+the cache key is the absolute second the rules are applied to, not a duration
+since the last lookup.
+
+POSIX only. The Windows `TglGetDateTimeNow` is a different implementation
+(`GetLocalTime`) and was left alone.
+
+`TglGetDateTimeNow` also had no test. `tests/test_tgl_time.cpp` now compares it
+against an independent conversion on every call across a second boundary, and
+that test was mutation-checked: with the invalidation broken it fails, which is
+the only evidence that it tests anything.
+
+The log line format and the `__FILE__`/`__func__` handling had **no test**
+before this. They are now pinned byte for byte, and those tests were run against
+the pre-7.1 `stringstream` implementation as well to prove the output is
+unchanged — five-digit years included.
 
 ### 7.2 — Hardware CRC32
 - Add `#ifdef __SSE4_2__` path using `_mm_crc32_u32` / `_mm_crc32_u8`

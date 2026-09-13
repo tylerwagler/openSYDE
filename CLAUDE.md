@@ -19,8 +19,8 @@ i18n infrastructure has been stripped.
 
 ## Build System
 
-CMake + Ninja, driven by `build.sh` at the repo root. GCC on Linux, Apple clang on
-macOS, MinGW on Windows — the project targets all three (we ship binaries for each).
+CMake + Ninja, driven by `build.sh` at the repo root. **Clang on all three platforms**
+— the project targets Linux, macOS and Windows and we ship binaries for each.
 
 ```bash
 ./build.sh                      # Build all tools (Release)
@@ -35,11 +35,34 @@ macOS, MinGW on Windows — the project targets all three (we ship binaries for 
 Tool names: `opensyde`, `canmonitor`, `sydeflash`, `sydesup`, `syde_x_gen`,
 `syde_coder_c`, `flash_tool`, `tsp_convert`, `all`.
 
-`build.sh` requires plain `cmake` and `ninja` on `PATH` plus a C++ compiler (`g++`
-on Linux, Apple clang on macOS) — it never pins a compiler version. It picks the
-toolchain file by `uname`: `cmake/toolchain_macos.cmake` on Darwin, otherwise
+`build.sh` requires plain `cmake`, `ninja` and `clang++` on `PATH` — it never pins a
+compiler version. It picks the toolchain file by `uname`: `cmake/toolchain_macos.cmake`
+on Darwin, `cmake/toolchain_windows.cmake` under MinGW/MSYS/Cygwin, otherwise
 `cmake/toolchain_linux.cmake`. It also uses `getconf _NPROCESSORS_ONLN` rather than
 `nproc` so job detection works on macOS, which has no `nproc`.
+
+### One compiler, three platforms
+
+All three toolchain files select `clang`/`clang++`. The standard library does **not**
+match across them, and that is deliberate rather than an oversight:
+
+| Platform | Compiler | Standard library |
+|----------|----------|------------------|
+| Linux | clang 19 | **libstdc++** |
+| macOS | Apple clang 21 | libc++ |
+| Windows | LLVM-MinGW clang 17 | libc++ |
+
+Linux stays on libstdc++ because the system Qt6 is built against it. `opensyde_core`
+is one static archive shared by all eight tools, so it has to match whatever Qt the
+GUI tools link — mixing libc++ core with libstdc++ Qt is an ABI mismatch at every
+`std::string` that crosses the boundary. "libc++ for the CLI tools, libstdc++ for the
+GUI" is not available for the same reason: there is only one core.
+
+The consequence to remember: **libc++ and libstdc++ diverge, and CI is where you find
+out.** The one that has already bitten this tree is floating-point `std::from_chars`,
+which libc++ 17 and 19 declare but delete. Code that needs it must guard on
+`__cpp_lib_to_chars` and fall back to `strtod_l` / `_strtod_l` against an explicit
+`"C"` locale — plain `strtod` is locale-dependent and fails the round-trip tests.
 
 The root `CMakeLists.txt` builds everything as one project: `opensyde_core` once,
 then each tool linking that single archive. `build.sh` drives it — one configure,
@@ -91,7 +114,7 @@ git submodule update --init --recursive
 On Ubuntu 24.04 / 26.04:
 
 ```
-cmake ninja-build g++ qt6-base-dev qt6-svg-dev qt6-tools-dev
+cmake ninja-build clang qt6-base-dev qt6-svg-dev qt6-tools-dev
 libgl1-mesa-dev libssl-dev flex bison libfl-dev
 ```
 
@@ -104,6 +127,12 @@ On macOS (Homebrew), the keg-only deps are pointed at by `cmake/toolchain_macos.
 ```
 brew install cmake ninja bison flex openssl@3 qtbase qtsvg
 ```
+
+On Windows, run from Git Bash / MSYS so `uname` reports `MINGW*`, with LLVM-MinGW
+(clang + libc++), Ninja, Qt6 for `win64_llvm_mingw`, OpenSSL v3, and winflexbison
+on `PATH`. Nothing is vendored: zlib is fetched from source at configure time
+(`FetchContent` with `OVERRIDE_FIND_PACKAGE`) because there is no system copy.
+See `.github/workflows/build.yml` for the exact versions CI installs.
 
 Notes that have bitten builds before:
 
@@ -129,14 +158,24 @@ in core must be checked with a full eight-tool build. Grep is not a substitute:
 callers reach migrated classes through base-class pointers, share method names
 with unmigrated classes, and compare rather than assign.
 
-A 48-core build host makes this cheap — ~3 minutes for all eight tools against
-~18 on a laptop. See `docs/remote-build.md`.
+Two ways to get that, and they answer different questions:
+
+**CI** covers all three platforms and is the only thing that proves a change builds
+on Windows and macOS, so anything touching platform-conditional code or a core
+signature goes through a PR rather than a local build. Push and read the result.
+
+**The 48-core build host** is for a fast single-platform answer while iterating —
+~3 minutes for all eight tools against ~18 on a laptop. See `docs/remote-build.md`.
 
 ```bash
 ssh claude@claude 'cd ~/Projects/openSYDE && git fetch origin && git checkout develop \
   && git pull --ff-only origin develop && git submodule update --init --recursive \
   && ./build.sh -b Debug -j 48 all'
 ```
+
+The Mac has no push credentials; pushes route through that host. See
+`docs/remote-build.md` for the bundle workflow that preserves interdependent
+submodule SHAs.
 
 ### Build outputs
 
@@ -148,38 +187,71 @@ Per-tool build directories under `build/`; deploy target defaults to
 Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `-DOPENSYDE_CORE_BUILD_TESTS=ON`, run with `ctest`.
 
-19 suites, 231 tests: `test_application_info_block`, `test_checksums`,
-`test_cstdint`, `test_datapool_content_util`, `test_dynamic_array`, `test_hex_file`,
-`test_hex_string_parsing`, `test_logging`, `test_node_datapool_content`,
-`test_osc_error_category`, `test_project_metadata`, `test_protocol_driver_base`,
-`test_protocol_serial_number`, `test_scl_string`, `test_security_aes_file`,
-`test_stwerrors`, `test_tgl_file`, `test_view_security_options`, `test_xml_parser`.
+21 suites, 258 tests: `test_application_info_block`, `test_checksums`,
+`test_cstdint`, `test_data_logger_trigger_parser`, `test_datapool_content_util`,
+`test_dynamic_array`, `test_hex_file`, `test_hex_string_parsing`, `test_logging`,
+`test_node_datapool_content`, `test_osc_error_category`, `test_project_metadata`,
+`test_protocol_driver_base`, `test_protocol_serial_number`, `test_scl_string`,
+`test_security_aes_file`, `test_stwerrors`, `test_tgl_file`, `test_tgl_time`,
+`test_view_security_options`, `test_xml_parser`.
+
+The suite runs on all three platforms, so anything it touches must avoid
+platform-specific assumptions — `XmlParser.SaveAndLoadFile` hardcoded `/tmp/` and
+had to move to `std::filesystem::temp_directory_path()` when Windows joined CI.
+
+### Benchmarks
+
+Google Benchmark, in `libraries/opensyde_core/bench/`. Enable with
+`-DOPENSYDE_CORE_BUILD_BENCHMARKS=ON`, which builds a `bench_opensyde` target.
+
+**Always measure in Release.** Phase 7.1 recorded "`std::format` is slower than
+`std::stringstream`" as a finding and nearly abandoned the change on it. That was a
+Debug artifact: unoptimized, `std::format`'s template machinery looks terrible and
+the conclusion inverts. In Release it is 2.8x–12.2x faster. A Debug benchmark number
+is not a slow measurement of the right thing, it is a measurement of a different
+program.
+
+Measure attribution before optimizing, and A/B by keeping both binaries and running
+them alternately — these machines drift enough between runs (~15%) that a before
+number taken an hour earlier is not comparable to an after number taken now.
 
 Several of these are regression pins for defects the phase 2/3 migrations
 introduced and CI did not catch, so prefer extending them over replacing them.
 
 ## CI
 
-`.github/workflows/build.yml`, on push/PR to `main`, `develop`, `master`.
+`.github/workflows/build.yml`, on push/PR to `main`, `develop`, `master`. **All
+three target platforms build on every push:**
 
-- **Core Library** — `ubuntu-26.04`. Configures with full subsystem coverage,
-  builds, runs `ctest`. ~1.5 min.
-- **GUI Tools** — `ubuntu-26.04`, smoke-builds all eight tools via
-  `./build.sh -b Debug all`. ~13-18 min.
+| Job | Runners | What it does | Wall clock |
+|-----|---------|--------------|------------|
+| **Core Library** | `ubuntu-26.04`, `macos-14` | Full subsystem coverage, builds, `ctest` | ~1.5 min |
+| **GUI Tools** | `ubuntu-26.04`, `macos-14` | Smoke-builds all eight tools (`./build.sh -b Debug all`), then checks one tool still configures standalone | 12–20 min |
+| **Tools + Core Tests** | `windows-2022` | All eight tools under LLVM-MinGW clang, plus the core unit tests | ~35 min |
 
-One runner, one compiler — the distro default `g++`, unpinned, which is what
-resolute users actually get. Neither job is `continue-on-error`: as the only
-targets they have to gate, or CI stops meaning anything.
+No job is `continue-on-error`: they are the only targets that have to gate, or CI
+stops meaning anything.
+
+macOS Qt comes from `install-qt-action`, not Homebrew. `brew install qt` drags
+`qtwebengine` into a source build, and the split `qtbase`/`qtsvg` kegs hid Svg from
+`find_package`. Windows likewise installs Qt (`win64_llvm_mingw`), the toolchain
+(`tools_llvm_mingw1706`), Ninja and OpenSSL through the same action.
+
+`.github/workflows/bench.yml` is separate and `workflow_dispatch`-only: the Google
+Benchmark harness across the same three OSes, in **Release**. GitHub only offers
+`workflow_dispatch` for workflows present on the **default branch**, so a new
+benchmark workflow has to reach `master` before it can be dispatched.
 
 Keep CI green. The core job was red from the moment it was introduced until
 2026-09-06, and that gap is precisely how phase-2 and phase-3 migration residue
 (`GetLength()` on `std::vector`, mangled `std::stoi` artifacts) survived unnoticed.
 A job that does not run is not a quality gate.
 
-**CI does not compile anything behind `#ifdef _WIN32`.** Both runners are Linux
-and so is the remote build host. 23 files carry `_WIN32` conditionals; most guard
-a few lines, but `C_SdNdeDalTriggerCheckHelper.cpp` is stubbed wholesale on Linux
-and roughly 1,124 of its lines are never built. See `docs/TODO.md`.
+The Windows job exists because `#ifdef _WIN32` code used to be compiled by nothing
+we ran — 28 files carry `_WIN32` conditionals. Bringing them under a compiler
+immediately turned up a lost `.` in `TglFile`, a dead `TglTasks.hpp` include, a wide
+`WCHAR*` used as a `std::string`, an ill-formed `reinterpret_cast<HWND>(nullptr)`
+and a committed merge-conflict marker in a `.rc` file. See `docs/TODO.md`.
 
 ## Repository Layout
 
@@ -197,9 +269,17 @@ and roughly 1,124 of its lines are never built. See `docs/TODO.md`.
 | `opensyde_cmd_line_flash_tool/`, `opensyde_tsp_convert/` | CLI utilities |
 | `docs/` | TODOs and agent plans |
 
-Core library internals: `project/system/` (nodes, buses, definitions), `halc/`,
+Core library internals: `project/system/` (nodes, buses, definitions, and
+`node/data_logger/` with the trigger-expression parser), `halc/`,
 `protocol_drivers/`, `data_dealer/`, `exports/`, `xml_parser/`, `scl/`, `security/`,
-`stwtypes/` (C header only, for generated controller code), `stwerrors/`.
+`logging/`, `stwtypes/` (C header only, for generated controller code),
+`stwerrors/`, plus `tests/` and `bench/`.
+
+**Nothing prebuilt is vendored.** `libraries/osy_git_data_model_monitor/` — a `.a`
+plus headers with no source — was the last one and is deleted; the functionality
+openSYDE used from it was reimplemented as `C_OscDataLoggerTriggerParser`. Vendored
+*source* (QCustomPlot, the CAN libraries submodule) is fine; a binary that cannot be
+rebuilt for three platforms is not.
 
 ## Coding Conventions
 
@@ -318,7 +398,7 @@ detail.
 | 4 — Replace homegrown AES | Done for files; wire protocol deliberately out of scope. `C_OscSecurityAesFile` is AES-256-GCM + PBKDF2 (600k) with a versioned 56-byte header and key wiping. `C_OscSecurityAesCbc` remains AES-128-CBC and is still used by `C_OscProtocolSecuritySubLayer` — changing that is an ECU-side protocol change, not a PC-side one |
 | 5 — Error handling modernization | Done — every STW `int32_t` error return in `opensyde_core` is `std::error_code` (9 waves: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc, protocol_drivers, dispatchers/xml_parser/project plus a final six). Bridging scaffolding fell 238 → 8; 19 functions stay `int32_t` on purpose (foreign conventions). No `static_cast<Errc>` misuse remains |
 | 6 — Concurrency & singletons | 6.1 done (`std::call_once`; Meyer's singleton rejected). 6.2 done (`C_TglCriticalSection` and `TglTasks` deleted, 52 sites on `std::mutex`). 6.3 closed — no defect found |
-| 7 — Performance | Not started |
+| 7 — Performance | 7.1 done — logging hot path **4.2x** (`BM_WriteLogInfo` ~2.6µs → ~0.62µs, Release). The win was allocation, a hand-written fixed-width timestamp, and a per-second `localtime_r` cache in `TglGetDateTimeNow` (366 → 60 ns) — **not** the `std::format` swap the plan prescribed, which alone was only 1.4x. 7.2 and 7.3 open — both need a decision before code, see `PLAN.md` |
 | 8 — Build system modernization | Done — CMake minimum 3.25, CI reworked, ccache added, unified root build (one opensyde_core, all eight tools). C++23 adopted tree-wide (root + core + tool toolchains) on 2026-09-08 |
 
 Cross-cutting follow-ups (dark mode, Linux version string, About dialog) live in
@@ -355,8 +435,17 @@ flags (`-Wunused-private-field` is clang-only; `-Wmaybe-uninitialized`, `-Wlogic
 `-static-libgcc/-static-libstdc++` are GCC-only) must likewise be gated on
 `CMAKE_CXX_COMPILER_ID` or they are fatal under `-Werror` on the other compiler.
 
+**Do not set `CMAKE_SYSTEM_NAME` in a toolchain file for a native host.** Setting it
+at all makes CMake declare `CMAKE_CROSSCOMPILING`, which changes how `find_package`
+searches — on Windows this produced a `ZLIB NOTFOUND` that looked for all the world
+like a missing dependency and was not. Only `toolchain_linux.cmake` sets it (and only
+because it is the historical cross-compile lane); `toolchain_macos.cmake` and
+`toolchain_windows.cmake` deliberately do not, and both carry a comment saying so.
+If a native build starts failing to find a package it should obviously have, check
+this before hunting the package.
+
 **The build uses one shared toolchain file, plus per-tool `pjt/lint_config.cmake`.**
-`build.sh` passes a single `-DCMAKE_TOOLCHAIN_FILE=cmake/toolchain_{linux,macos}.cmake`
+`build.sh` passes a single `-DCMAKE_TOOLCHAIN_FILE=cmake/toolchain_{linux,macos,windows}.cmake`
 (selected by `uname`) for the whole root build; the older per-tool
 `pjt/toolchain_linux.cmake` files are vestigial standalone-config leftovers, not what
 the unified build uses. Each tool's `CMakeLists.txt` still does

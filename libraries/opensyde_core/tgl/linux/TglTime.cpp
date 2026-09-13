@@ -5,7 +5,7 @@
 
    cf. header for details
 
-   Here: Implementation for Windows.
+   Here: Implementation for Linux.
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
@@ -42,11 +42,20 @@ using namespace stw::tgl;
 //----------------------------------------------------------------------------------------------------------------------
 void stw::tgl::TglGetDateTimeNow(C_TglDateTime & orc_DateTime)
 {
-   struct timespec c_TimeSpec;
-   struct std::tm * pc_LocalTime;
-   struct std::tm c_Time;
+   //localtime_r is ~290ns of this function's ~366ns, and its answer is by definition the
+   //same for every call within one second, so it is evaluated once per second per thread.
+   //The cache is thread_local rather than shared: it is two words of state, and a shared
+   //one would need the lock this is trying to avoid.
+   //
+   //The cost is that a change in the local time rules -- a DST transition, or a process
+   //calling tzset() after changing TZ -- is picked up on the next second boundary rather
+   //than immediately. The staleness is bounded by one second because the cache key is the
+   //absolute second the rules are being applied to, not a duration since the last lookup.
+   static thread_local time_t hx_CachedSecond = 0;   //lint !e8080 //using type to match library API
+   static thread_local bool hq_CacheValid = false;
+   static thread_local C_TglDateTime hc_CachedFields;
 
-   time_t x_UnixTime; //lint !e8080 //using type to match library API
+   struct timespec c_TimeSpec;
 
    clock_gettime(CLOCK_REALTIME, &c_TimeSpec);
 
@@ -54,26 +63,45 @@ void stw::tgl::TglGetDateTimeNow(C_TglDateTime & orc_DateTime)
    c_TimeSpec.tv_sec += (c_TimeSpec.tv_nsec / 1000000000);
    c_TimeSpec.tv_nsec = (c_TimeSpec.tv_nsec % 1000000000);
 
-   x_UnixTime = c_TimeSpec.tv_sec;
-   pc_LocalTime = localtime_r(&x_UnixTime, &c_Time);
+   const time_t x_UnixTime = c_TimeSpec.tv_sec; //lint !e8080 //using type to match library API
 
-   tgl_assert(pc_LocalTime != nullptr);
-   if (pc_LocalTime != nullptr)
+   if ((hq_CacheValid == false) || (hx_CachedSecond != x_UnixTime))
    {
-      //Convert from tm format to TGL format
-      orc_DateTime.mu16_Year  = static_cast<uint16_t>(pc_LocalTime->tm_year + 1900);
-      orc_DateTime.mu8_Month  = static_cast<uint8_t>(pc_LocalTime->tm_mon + 1);
-      orc_DateTime.mu8_Day    = static_cast<uint8_t>(pc_LocalTime->tm_mday);
-      orc_DateTime.mu8_Hour   = static_cast<uint8_t>(pc_LocalTime->tm_hour);
-      orc_DateTime.mu8_Minute = static_cast<uint8_t>(pc_LocalTime->tm_min);
-      orc_DateTime.mu8_Second = static_cast<uint8_t>(pc_LocalTime->tm_sec);
+      struct std::tm c_Time;
+      const struct std::tm * const pc_LocalTime = localtime_r(&x_UnixTime, &c_Time);
+
+      tgl_assert(pc_LocalTime != nullptr);
+      if (pc_LocalTime != nullptr)
+      {
+         //Convert from tm format to TGL format
+         hc_CachedFields.mu16_Year  = static_cast<uint16_t>(pc_LocalTime->tm_year + 1900);
+         hc_CachedFields.mu8_Month  = static_cast<uint8_t>(pc_LocalTime->tm_mon + 1);
+         hc_CachedFields.mu8_Day    = static_cast<uint8_t>(pc_LocalTime->tm_mday);
+         hc_CachedFields.mu8_Hour   = static_cast<uint8_t>(pc_LocalTime->tm_hour);
+         hc_CachedFields.mu8_Minute = static_cast<uint8_t>(pc_LocalTime->tm_min);
+         hc_CachedFields.mu8_Second = static_cast<uint8_t>(pc_LocalTime->tm_sec);
+
+         //Technically tm_sec could be > 59 in some rare cases due to leap seconds
+         if (hc_CachedFields.mu8_Second > 59U)
+         {
+            hc_CachedFields.mu8_Second = 59U;
+         }
+
+         hx_CachedSecond = x_UnixTime;
+         hq_CacheValid = true;
+      }
    }
 
-   //Technically tm_sec could be > 59 in some rare cases due to leap seconds
-   if (orc_DateTime.mu8_Second > 59U)
+   if (hq_CacheValid == true)
    {
-      orc_DateTime.mu8_Second = 59U;
+      orc_DateTime.mu16_Year  = hc_CachedFields.mu16_Year;
+      orc_DateTime.mu8_Month  = hc_CachedFields.mu8_Month;
+      orc_DateTime.mu8_Day    = hc_CachedFields.mu8_Day;
+      orc_DateTime.mu8_Hour   = hc_CachedFields.mu8_Hour;
+      orc_DateTime.mu8_Minute = hc_CachedFields.mu8_Minute;
+      orc_DateTime.mu8_Second = hc_CachedFields.mu8_Second;
    }
+
    orc_DateTime.mu16_MilliSeconds = static_cast<uint16_t>(c_TimeSpec.tv_nsec / 1000000);
 }
 

@@ -164,7 +164,7 @@ check_prerequisites() {
     write_step "Checking prerequisites..."
     local missing=false
 
-    for cmd in cmake ninja g++; do
+    for cmd in cmake ninja clang++; do
         if ! command -v "$cmd" &>/dev/null; then
             write_error "$cmd not found"
             missing=true
@@ -177,7 +177,7 @@ check_prerequisites() {
 
     echo "  CMake: $(cmake --version | head -1)"
     echo "  Ninja: $(ninja --version)"
-    echo "  GCC:   $(g++ --version | head -1)"
+    echo "  Clang: $(clang++ --version | head -1)"
 }
 
 # --- Configure the root project (once) -------------------------------------------
