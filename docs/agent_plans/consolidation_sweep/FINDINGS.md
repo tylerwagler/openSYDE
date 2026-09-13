@@ -141,3 +141,49 @@ Forward-declaration / include-hygiene work: headers average 3.6 includes, only
 build time. `NULL` → `nullptr` (616 sites) and `(void)` parameter lists (8,823)
 are cosmetic; fold the former into whatever files other passes touch. First-party
 C-style casts: **zero** — the 34 found are all in vendored `miniz.c`.
+
+---
+
+## Silently discarded `std::error_code` returns (2026-09-13)
+
+Phase 5 converted every STW `int32_t` error return in `opensyde_core` to
+`std::error_code`, but nothing checks that callers actually look at them. There
+are **804** distinct `std::error_code`-returning function names in core headers
+and **zero** `[[nodiscard]]` anywhere in the tree.
+
+Scanning statement-position calls that neither assign the result nor cast it
+away, then resolving each call to its declaring class (name collisions across
+filers make an unqualified name lookup useless — `h_SaveData` and
+`mh_SaveDataPools` each have both `void` and `std::error_code` overloads in
+different classes) and discarding continuation lines of a multi-line assignment,
+leaves **19 genuinely dropped error returns**: 7 in `libraries/`, 12 in
+`opensyde_tool`.
+
+### Fixed here, because the surrounding code proves the intent
+
+- `C_OscNodeFiler::mh_SaveCanOpenManagers` — the `orc_BasePath.empty()` branch
+  dropped `C_OscCanOpenManagerFiler::h_SaveData`'s result while **the sibling
+  branch assigns `h_SaveFile`'s**, and the function documents
+  `\retval Errc::config file could not be created`. A failed save reported
+  success.
+- `C_OscHalcMagicianGenerator::m_FillHalcDatapools`, three call sites — the
+  enclosing loops are written `for (...; (u32_ItDomain < ...) && (!c_Retval); ...)`,
+  so they test `c_Retval` to stop early while the body never assigns it. The
+  guard could not fire. `mh_FillHalcDatapoolsDomain` returns `Errc::config` only
+  on structural problems, not in normal operation, so propagating is safe.
+
+### Left for triage — they need domain judgement, not a sweep
+
+The remaining 16 may be deliberate. `h_SetValueInMinMaxRange` (6 sites) reports
+whether it clamped, which a caller may legitimately not care about;
+`h_EthDisconnectNode` is called during teardown. But four sites in
+`C_SdClipBoardHelper` drop load and save results, and those look like the same
+defect class as the two fixed above.
+
+### The durable fix
+
+`[[nodiscard]]` on the error-returning core API would make this a compile error
+rather than a scan. The codebase is already shaped for it: it marks intentional
+discards with `(void)expr` in 4,439 places as a MISRA convention, so the idiom
+for "I meant to ignore this" already exists and is already used everywhere else.
+That is a large sweep and a separate decision.
