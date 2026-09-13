@@ -48,9 +48,7 @@ void TglReportAssertionDetail(const char * const opcn_DetailInfo, const char * c
                               const char * const opcn_Func, const int32_t os32_Line);
 bool TglGetSystemUserName(std::string & orc_UserName);
 bool TglGetSystemMachineName(std::string & orc_MachineName);
-void TglHandleSystemMessages(void);
 
-int32_t TglSetEnvironmentVariable(const std::string & orc_Name, const std::string & orc_Value);
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
 }

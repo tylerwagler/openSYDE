@@ -127,7 +127,6 @@ endif()
 set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers/precomp_headers.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilBinaryHash.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilChecksummedIniFile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtils.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stw_compid/stwcompid.c
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.cpp
@@ -141,7 +140,6 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/tinyxml2/tinyxml2.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilBinaryHash.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilChecksummedIniFile.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtils.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stw_compid/stwcompid.h
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.hpp
@@ -158,13 +156,10 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscXmlParserLog.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscChecksummedXml.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/tinyxml2/tinyxml2.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/conf_file_handler/C_OscConfFileHandler.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/conf_file_handler/C_OscConfFileHandler.hpp
 )
 
 set(OPENSYDE_CORE_COMMON_INCLUDE_DIRECTORIES
    ${CMAKE_CURRENT_SOURCE_DIR}
-   ${CMAKE_CURRENT_SOURCE_DIR}/conf_file_handler
    ${CMAKE_CURRENT_SOURCE_DIR}/stw_compid
    ${CMAKE_CURRENT_SOURCE_DIR}/logging
    ${CMAKE_CURRENT_SOURCE_DIR}/md5
@@ -185,11 +180,9 @@ else()
 
    set(OPENSYDE_CORE_ZIPPING_SOURCES
 
-      ${CMAKE_CURRENT_SOURCE_DIR}/zip/C_OscZipData.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/zip/C_OscZipFile.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/miniz/miniz.c
 
-      ${CMAKE_CURRENT_SOURCE_DIR}/zip/C_OscZipData.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/zip/C_OscZipFile.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/miniz/miniz.h
    )

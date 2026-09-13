@@ -27,7 +27,6 @@
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
 #include <string>
-#include "C_SclDateTime.hpp"
 #include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -49,51 +48,6 @@ static int m_RemoveFile(const char * const opcn_Pathname, const struct stat * co
                         struct FTW * const opc_Ftwb);
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get file age time as string
-
-   Report the specified file's timestamp as a string.
-   Format of returned string: "dd.mm.yyyy hh:mm:ss"
-
-   \param[in]     orc_FileName     path to file
-   \param[out]    orc_String       timestamp as string
-
-   \return
-   true      timestamp placed in orc_String  \n
-   false     error -> orc_String not valid
-*/
-//----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglFileAgeString(const std::string & orc_FileName, std::string & orc_String)
-{
-   C_SclDateTime c_DateTime;
-   struct stat c_Stat;
-   bool q_Return = false;
-
-   if (stat(orc_FileName.c_str(), &c_Stat) == 0)
-   {
-      struct std::tm c_Time;
-      struct std::tm * const pc_Time = localtime_r(&c_Stat.st_mtime, &c_Time);
-      if (pc_Time != nullptr)
-      {
-         q_Return = true;
-         c_DateTime.mu16_Day    = static_cast<uint16_t>(c_Time.tm_mday);
-         c_DateTime.mu16_Month  = static_cast<uint16_t>(c_Time.tm_mon + 1);
-         c_DateTime.mu16_Year   = static_cast<uint16_t>(c_Time.tm_year + 1900);
-         c_DateTime.mu16_Hour   = static_cast<uint16_t>(c_Time.tm_hour);
-         c_DateTime.mu16_Minute = static_cast<uint16_t>(c_Time.tm_min);
-         c_DateTime.mu16_Second = static_cast<uint16_t>(c_Time.tm_sec);
-         //just to make sure we don't get a leap second reported:
-         if (c_DateTime.mu16_Second >= 60)
-         {
-            c_DateTime.mu16_Second = 59;
-         }
-      }
-   }
-
-   orc_String = c_DateTime.DateTimeToString();
-   return q_Return;
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Get file size in bytes
