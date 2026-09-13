@@ -89,6 +89,30 @@ rsync -az --delete --exclude .git --exclude build --exclude result \
 ssh claude@claude 'cd ~/Projects/openSYDE && ./build.sh -b Debug -j 48 all'
 ```
 
+## Pushing: the Mac has no credentials
+
+Git pushes route through the build host. Do not re-commit on the far side — that
+rewrites SHAs, and the superproject records submodule commits by SHA, so a fork with
+its own submodule fork (`can-libraries`) breaks the moment the recorded SHA does not
+exist upstream. Move the objects with a bundle, which preserves them exactly:
+
+```bash
+# on the Mac: bundle the commits the remote does not have
+git bundle create /tmp/work.bundle origin/develop..HEAD
+scp /tmp/work.bundle claude@claude:/tmp/
+
+# on the build host: unbundle and push to a real branch name
+ssh claude@claude 'cd ~/Projects/openSYDE \
+  && git fetch /tmp/work.bundle HEAD:refs/bundle/work \
+  && git push origin refs/bundle/work:refs/heads/my-branch'
+```
+
+The refspec target must be a full `refs/heads/<name>`. A bare `my-branch` on the
+right-hand side is rejected, because the left side is not already a branch ref.
+
+Submodules go first: push the `can-libraries` fork before the superproject that
+points at it, or CI checks out a SHA that is not there yet.
+
 ## Do not pipe build.sh and then read `$?`
 
 `build.sh` is correct: it accumulates failures in a `FAILED` array and `exit 1`s
