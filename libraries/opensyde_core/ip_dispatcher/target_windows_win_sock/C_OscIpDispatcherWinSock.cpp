@@ -56,6 +56,35 @@ static int32_t m_WsFionRead(void)
    return FIONREAD; //lint !e970 !e1924 !e9112 !e9128 !e9130 !e9136
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Convert a wide (UTF-16) Win32 string to a UTF-8 std::string
+
+   Several Win32 fields the dispatcher reads -- IP_ADAPTER_ADDRESSES::FriendlyName in
+   particular -- are always WCHAR*, but openSYDE core works in std::string. Convert
+   through WideCharToMultiByte using UTF-8.
+
+   \param[in]  opcn_Wide   null-terminated wide string (may be NULL)
+
+   \return  UTF-8 encoded copy (empty string on NULL input or conversion failure)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+static std::string m_WideToNarrow(const wchar_t * const opcn_Wide)
+{
+   std::string c_Result;
+
+   if (opcn_Wide != nullptr)
+   {
+      const int x_Needed = WideCharToMultiByte(CP_UTF8, 0, opcn_Wide, -1, nullptr, 0, nullptr, nullptr);
+      if (x_Needed > 0)
+      {
+         std::vector<char> c_Buffer(static_cast<size_t>(x_Needed));
+         (void)WideCharToMultiByte(CP_UTF8, 0, opcn_Wide, -1, &c_Buffer[0], x_Needed, nullptr, nullptr);
+         c_Result = &c_Buffer[0]; // stops at the embedded terminating '\0'
+      }
+   }
+   return c_Result;
+}
+
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
@@ -254,8 +283,9 @@ std::error_code C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
 
             while (pc_Address != nullptr)
             {
+               const std::string c_FriendlyName = m_WideToNarrow(pc_Adapter->FriendlyName);
                if ((this->mc_PreferredInterfaceNames.size() == 0) ||
-                   (VectorIndexOf(this->mc_PreferredInterfaceNames, pc_Adapter->FriendlyName) != -1))
+                   (VectorIndexOf(this->mc_PreferredInterfaceNames, c_FriendlyName) != -1))
                {
                   // sockaddr is the generic descriptor and sockaddr_in is IPV4 specific
                   // https://stackoverflow.com/questions/21099041/why-do-we-cast-sockaddr-in-to-sockaddr-when-calling-bind/21099196
@@ -271,7 +301,7 @@ std::error_code C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
                      mc_LocalInterfaceIps.push_back(ntohl(c_IpAddr.S_un.S_addr)); //add to list of known interfaces
 
                      c_Info =  "Local IP interface used with IP: " + static_cast<std::string>(inet_ntoa(c_IpAddr)) +
-                              ", name of adapter: \"" + pc_Adapter->FriendlyName +
+                              ", name of adapter: \"" + c_FriendlyName +
                               "\"";
 
                      osc_write_log_info("openSYDE IP-TP", c_Info);

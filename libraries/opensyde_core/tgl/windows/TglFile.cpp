@@ -94,7 +94,7 @@ static bool m_CheckUncShare(const std::string & orc_Path)
       // check beginning of path for "//" or "\\"
        if ((SubStringCompat(orc_Path, 1, 2) == "//") || (SubStringCompat(orc_Path, 1, 2) == "\\\\"))
       {
-         const size_t un_CharIndex = orc_Pathfind_first_of("\\/", 2);
+         const size_t un_CharIndex = orc_Path.find_first_of("\\/", 2);
          // check if no deeper UNC path like "\\mypc\shared"
          if ((un_CharIndex == orc_Path.length()) || // case path ends on slash
              (un_CharIndex == std::string::npos))   // case path does not contain another slash
