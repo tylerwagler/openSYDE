@@ -14,6 +14,7 @@
 #include "benchmark/benchmark.h"
 
 #include "C_OscLoggingHandler.hpp"
+#include "TglTime.hpp"
 
 static void BM_WriteLogInfo(benchmark::State & orc_State)
 {
@@ -32,3 +33,28 @@ static void BM_WriteLogInfo(benchmark::State & orc_State)
 }
 
 BENCHMARK(BM_WriteLogInfo);
+
+/* Attribution probe: how much of BM_WriteLogInfo is the clock/timezone call
+   rather than the formatting 7.1 targets. */
+static void BM_GetDateTimeNow(benchmark::State & orc_State)
+{
+   for (auto _ : orc_State)
+   {
+      stw::tgl::C_TglDateTime c_DateTime;
+      stw::tgl::TglGetDateTimeNow(c_DateTime);
+      benchmark::DoNotOptimize(c_DateTime);
+   }
+}
+BENCHMARK(BM_GetDateTimeNow);
+
+static void BM_ConvertDateTimeToString(benchmark::State & orc_State)
+{
+   stw::tgl::C_TglDateTime c_DateTime;
+   stw::tgl::TglGetDateTimeNow(c_DateTime);
+   for (auto _ : orc_State)
+   {
+      benchmark::DoNotOptimize(
+         stw::opensyde_core::C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime));
+   }
+}
+BENCHMARK(BM_ConvertDateTimeToString);
