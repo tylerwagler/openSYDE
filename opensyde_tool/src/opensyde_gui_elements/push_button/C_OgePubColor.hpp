@@ -43,6 +43,7 @@ Q_SIGNALS:
    void SigHideOtherToolTips(void);
 
 protected:
+   void m_EmitHideOtherToolTips(void) override;
    bool event(QEvent * const opc_Event) override;
 };
 
