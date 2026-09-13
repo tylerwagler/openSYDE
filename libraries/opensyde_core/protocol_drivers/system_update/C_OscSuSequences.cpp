@@ -113,9 +113,8 @@ bool C_OscSuSequences::m_IsNodeActive(const uint32_t ou32_NodeIndex, const uint3
    //is the node intends to be addressed at all (defined by parameter set in Init() function)
    if (this->mc_ActiveNodes[ou32_NodeIndex] == 1U)
    {
-      for (uint16_t u16_Interface = 0U; u16_Interface < rc_Node.c_Properties.c_ComInterfaces.size(); u16_Interface++)
+      for (const C_OscNodeComInterfaceSettings & rc_Settings : rc_Node.c_Properties.c_ComInterfaces)
       {
-         const C_OscNodeComInterfaceSettings & rc_Settings = rc_Node.c_Properties.c_ComInterfaces[u16_Interface];
 
          if ((rc_Settings.GetBusConnected() == true) && (rc_Settings.u32_BusIndex == ou32_BusIndex) &&
              (rc_Settings.q_IsUpdateEnabled == true))

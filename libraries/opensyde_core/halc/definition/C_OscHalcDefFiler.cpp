@@ -720,9 +720,8 @@ std::error_code C_OscHalcDefFiler::mh_SaveIoDomain(const C_OscHalcDefDomain & or
    //Channels
    tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("channels") == "channels");
    orc_XmlParser.SetAttributeUint32("count", static_cast<uint32_t>(orc_IoDataDomain.c_Channels.size()));
-   for (uint32_t u32_ItChannel = 0UL; u32_ItChannel < orc_IoDataDomain.c_Channels.size(); ++u32_ItChannel)
+   for (const C_OscHalcDefChannelDef & rc_Channel : orc_IoDataDomain.c_Channels)
    {
-      const C_OscHalcDefChannelDef & rc_Channel = orc_IoDataDomain.c_Channels[u32_ItChannel];
       tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("channel") == "channel");
       orc_XmlParser.SetAttributeString("name", rc_Channel.c_Name);
       //Return
@@ -1747,9 +1746,8 @@ std::string C_OscHalcDefFiler::mh_GetAvailabilityString(
 {
    std::string c_Retval;
 
-   for (uint32_t u32_ItAva = 0UL; u32_ItAva < orc_Availability.size(); ++u32_ItAva)
+   for (const C_OscHalcDefChannelAvailability & rc_Avail : orc_Availability)
    {
-      const C_OscHalcDefChannelAvailability & rc_Avail = orc_Availability[u32_ItAva];
       if (rc_Avail.c_DependentValues.size() == 0UL)
       {
          if (c_Retval.empty() == false)
@@ -1915,16 +1913,14 @@ std::error_code C_OscHalcDefFiler::mh_DomainCategoryStringToEnum(const std::stri
 void C_OscHalcDefFiler::mh_GetAllNames(const std::vector<C_OscHalcDefStruct> & orc_Values,
                                        std::vector<std::string> & orc_Names)
 {
-   for (uint32_t u32_ItVal = 0UL; u32_ItVal < orc_Values.size(); ++u32_ItVal)
+   for (const C_OscHalcDefStruct & rc_Struct : orc_Values)
    {
-      const C_OscHalcDefStruct & rc_Struct = orc_Values[u32_ItVal];
       if (rc_Struct.c_StructElements.size() == 0UL)
       {
          orc_Names.push_back(rc_Struct.c_Display);
       }
-      for (uint32_t u32_ItValElem = 0UL; u32_ItValElem < rc_Struct.c_StructElements.size(); ++u32_ItValElem)
+      for (const C_OscHalcDefElement & rc_Elem : rc_Struct.c_StructElements)
       {
-         const C_OscHalcDefElement & rc_Elem = rc_Struct.c_StructElements[u32_ItValElem];
          orc_Names.push_back(rc_Elem.c_Display);
       }
    }

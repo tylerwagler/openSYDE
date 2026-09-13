@@ -125,9 +125,8 @@ std::error_code C_OscSystemDefinition::InsertBus(const uint32_t ou32_BusIndex, c
    {
       this->c_Buses.insert(this->c_Buses.begin() + ou32_BusIndex, orc_Bus);
       //Sync interface indices
-      for (uint32_t u32_ItNode = 0; u32_ItNode < this->c_Nodes.size(); ++u32_ItNode)
+      for (C_OscNode & rc_Node : this->c_Nodes)
       {
-         C_OscNode & rc_Node = this->c_Nodes[u32_ItNode];
          for (uint32_t u32_ItInterface = 0; u32_ItInterface < rc_Node.c_Properties.c_ComInterfaces.size();
               ++u32_ItInterface)
          {
@@ -172,9 +171,8 @@ std::error_code C_OscSystemDefinition::DeleteBus(const uint32_t ou32_BusIndex)
    {
       this->c_Buses.erase(this->c_Buses.begin() + ou32_BusIndex);
       //Sync interface indices
-      for (uint32_t u32_ItNode = 0; u32_ItNode < this->c_Nodes.size(); ++u32_ItNode)
+      for (C_OscNode & rc_Node : this->c_Nodes)
       {
-         C_OscNode & rc_Node = this->c_Nodes[u32_ItNode];
          for (uint32_t u32_ItInterface = 0; u32_ItInterface < rc_Node.c_Properties.c_ComInterfaces.size();
               ++u32_ItInterface)
          {
@@ -1998,9 +1996,8 @@ void C_OscSystemDefinition::m_HandleNameMaxCharLimit(const uint32_t ou32_NameMax
       m_HandleNameMaxCharLimitNodeName(u32_ItNode, ou32_NameMaxCharLimit, opc_ChangedItems);
       rc_Node.HandleNameMaxCharLimit(ou32_NameMaxCharLimit, opc_ChangedItems);
    }
-   for (uint32_t u32_ItBus = 0UL; u32_ItBus < this->c_Buses.size(); ++u32_ItBus)
+   for (C_OscSystemBus & rc_Bus : this->c_Buses)
    {
-      C_OscSystemBus & rc_Bus = this->c_Buses[u32_ItBus];
       C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit, "bus-name",
                                                                                 rc_Bus.c_Name,
                                                                                 opc_ChangedItems);

@@ -749,9 +749,8 @@ void C_OscSupServiceUpdatePackageCreate::mh_GetSydeSecureFileNames(const C_OscSy
                                                                    std::vector<std::string> & orc_AbsPath,
                                                                    std::vector<std::string> & orc_RelPath)
 {
-   for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
+   for (const C_OscNode & rc_Node : orc_SystemDefinition.c_Nodes)
    {
-      const C_OscNode & rc_Node = orc_SystemDefinition.c_Nodes[u32_ItNode];
       const std::string c_RelFile = C_OscUtils::h_NiceifyStringForFileName(
          rc_Node.c_Properties.c_Name) + ".syde_suc";
       const std::string c_AbsFile = orc_TargetPath + c_RelFile;

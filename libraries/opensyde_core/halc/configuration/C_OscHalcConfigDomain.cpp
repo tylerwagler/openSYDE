@@ -175,9 +175,8 @@ std::error_code C_OscHalcConfigDomain::CheckChannelLinked(const uint32_t ou32_Ch
             {
                bool q_Found = false;
                const C_OscHalcDefChannelUseCase & rc_UseCase = this->c_ChannelUseCases[u32_UseCaseIndex];
-               for (uint32_t u32_ItAv = 0UL; u32_ItAv < rc_UseCase.c_Availability.size(); ++u32_ItAv)
+               for (const C_OscHalcDefChannelAvailability & rc_Avail : rc_UseCase.c_Availability)
                {
-                  const C_OscHalcDefChannelAvailability & rc_Avail = rc_UseCase.c_Availability[u32_ItAv];
                   if (rc_Avail.u32_ValueIndex == ou32_ChannelIndex)
                   {
                      q_Found = true;
@@ -478,15 +477,13 @@ void C_OscHalcConfigDomain::HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCh
 void C_OscHalcConfigDomain::mh_AddParameters(const std::vector<C_OscHalcDefStruct> & orc_Parameters,
                                              std::vector<C_OscHalcConfigParameterStruct> & orc_ParamConfig)
 {
-   for (uint32_t u32_ItParam = 0UL; u32_ItParam < orc_Parameters.size(); ++u32_ItParam)
+   for (const C_OscHalcDefStruct & rc_Struct : orc_Parameters)
    {
-      const C_OscHalcDefStruct & rc_Struct = orc_Parameters[u32_ItParam];
       C_OscHalcConfigParameterStruct c_NewStruct;
       c_NewStruct.c_Comment = rc_Struct.c_Comment;
       c_NewStruct.c_Value = rc_Struct.c_InitialValue;
-      for (uint32_t u32_ItElem = 0UL; u32_ItElem < rc_Struct.c_StructElements.size(); ++u32_ItElem)
+      for (const C_OscHalcDefElement & rc_Elem : rc_Struct.c_StructElements)
       {
-         const C_OscHalcDefElement & rc_Elem = rc_Struct.c_StructElements[u32_ItElem];
          C_OscHalcConfigParameter c_NewElem;
          c_NewElem.c_Comment = rc_Elem.c_Comment;
          c_NewElem.c_Value = rc_Elem.c_InitialValue;

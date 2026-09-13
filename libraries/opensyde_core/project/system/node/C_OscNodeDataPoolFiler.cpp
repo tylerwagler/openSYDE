@@ -973,9 +973,8 @@ std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(
 void C_OscNodeDataPoolFiler::h_SaveDataPoolListDataSets(
    const std::vector<C_OscNodeDataPoolDataSet> & orc_NodeDataPoolListDataSets, C_OscXmlParserBase & orc_XmlParser)
 {
-   for (uint32_t u32_ItDataSet = 0; u32_ItDataSet < orc_NodeDataPoolListDataSets.size(); ++u32_ItDataSet)
+   for (const C_OscNodeDataPoolDataSet & rc_DataSet : orc_NodeDataPoolListDataSets)
    {
-      const C_OscNodeDataPoolDataSet & rc_DataSet = orc_NodeDataPoolListDataSets[u32_ItDataSet];
 
       orc_XmlParser.CreateAndSelectNodeChild("data-set");
       orc_XmlParser.CreateNodeChild("name", rc_DataSet.c_Name);

@@ -1182,9 +1182,8 @@ void C_OscViewFiler::mh_SaveNodeUpdateInformationPaths(const std::vector<std::st
    const std::string c_ChildName = orc_XmlTagBaseName;
 
    orc_XmlParser.CreateAndSelectNodeChild(c_ParentName);
-   for (uint32_t u32_ItPath = 0; u32_ItPath < orc_Paths.size(); ++u32_ItPath)
+   for (const std::string & rc_Path : orc_Paths)
    {
-      const std::string & rc_Path = orc_Paths[u32_ItPath];
       orc_XmlParser.CreateNodeChild(c_ChildName, rc_Path);
    }
    //Return
@@ -1203,9 +1202,8 @@ void C_OscViewFiler::mh_SaveNodeUpdateInformationParamInfo(const std::vector<C_O
                                                            C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("param-sets");
-   for (uint32_t u32_ItParamSet = 0UL; u32_ItParamSet < orc_Info.size(); ++u32_ItParamSet)
+   for (const C_OscViewNodeUpdateParamInfo & rc_ParamSetInfo : orc_Info)
    {
-      const C_OscViewNodeUpdateParamInfo & rc_ParamSetInfo = orc_Info[u32_ItParamSet];
       orc_XmlParser.CreateAndSelectNodeChild("param-set");
       orc_XmlParser.SetAttributeUint32("last-known-crc", rc_ParamSetInfo.GetLastKnownCrc());
       orc_XmlParser.CreateNodeChild("path", rc_ParamSetInfo.GetPath());

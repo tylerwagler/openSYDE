@@ -103,9 +103,8 @@ std::error_code C_OscCanProtocol::GetAllSignalsForMessage(const C_OscNodeDataPoo
          if (ou32_MessageIndex < rc_ComMessages.size())
          {
             const C_OscCanMessage & rc_Message = rc_ComMessages[ou32_MessageIndex];
-            for (uint32_t u32_ItSignal = 0; u32_ItSignal < rc_Message.c_Signals.size(); ++u32_ItSignal)
+            for (const C_OscCanSignal & rc_Signal : rc_Message.c_Signals)
             {
-               const C_OscCanSignal & rc_Signal = rc_Message.c_Signals[u32_ItSignal];
                const uint32_t u32_ListSignalIndex = rc_Signal.u32_ComDataElementIndex;
                if (u32_ListSignalIndex < pc_List->c_Elements.size())
                {

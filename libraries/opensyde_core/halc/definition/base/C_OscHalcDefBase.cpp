@@ -80,9 +80,8 @@ bool C_OscHalcDefBase::CheckIdsUnique(std::vector<std::string> & orc_DuplicateId
       if (pc_Domain != nullptr)
       {
          c_AllIds.push_back(pc_Domain->c_Id);
-         for (uint32_t u32_ItChannel = 0UL; u32_ItChannel < pc_Domain->c_ChannelUseCases.size(); ++u32_ItChannel)
+         for (const C_OscHalcDefChannelUseCase & rc_Channel : pc_Domain->c_ChannelUseCases)
          {
-            const C_OscHalcDefChannelUseCase & rc_Channel = pc_Domain->c_ChannelUseCases[u32_ItChannel];
             c_AllIds.push_back(rc_Channel.c_Id);
          }
          C_OscHalcDefBase::mh_AggregateIds(pc_Domain->c_ChannelValues.c_Parameters, c_AllIds);
@@ -220,13 +219,11 @@ void C_OscHalcDefBase::CalcHash(uint32_t & oru32_HashValue) const
 void C_OscHalcDefBase::mh_AggregateIds(const std::vector<C_OscHalcDefStruct> & orc_Items,
                                        std::vector<std::string> & orc_DuplicateIds)
 {
-   for (uint32_t u32_ItItem = 0UL; u32_ItItem < orc_Items.size(); ++u32_ItItem)
+   for (const C_OscHalcDefStruct & rc_Item : orc_Items)
    {
-      const C_OscHalcDefStruct & rc_Item = orc_Items[u32_ItItem];
       orc_DuplicateIds.push_back(rc_Item.c_Id);
-      for (uint32_t u32_ItItemElem = 0UL; u32_ItItemElem < rc_Item.c_StructElements.size(); ++u32_ItItemElem)
+      for (const C_OscHalcDefElement & rc_ItemElem : rc_Item.c_StructElements)
       {
-         const C_OscHalcDefElement & rc_ItemElem = rc_Item.c_StructElements[u32_ItItemElem];
          orc_DuplicateIds.push_back(rc_ItemElem.c_Id);
       }
    }

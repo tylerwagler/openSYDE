@@ -102,9 +102,8 @@ void C_OscNodeDataPoolList::RecalculateAddress(void)
       u32_Offset += 2;
    }
 
-   for (uint32_t u32_ItDataElement = 0; u32_ItDataElement < this->c_Elements.size(); ++u32_ItDataElement)
+   for (C_OscNodeDataPoolListElement & rc_CurElem : this->c_Elements)
    {
-      C_OscNodeDataPoolListElement & rc_CurElem = this->c_Elements[u32_ItDataElement];
       rc_CurElem.u32_NvmStartAddress = u32_Offset;
       u32_Offset += rc_CurElem.GetSizeByte();
    }
@@ -149,9 +148,8 @@ uint32_t C_OscNodeDataPoolList::GetNumBytesUsed(void) const
    {
       u32_Retval += 2;
    }
-   for (uint32_t u32_ItListElement = 0; u32_ItListElement < this->c_Elements.size(); ++u32_ItListElement)
+   for (const C_OscNodeDataPoolListElement & rc_NodeDataPoolListElement : this->c_Elements)
    {
-      const C_OscNodeDataPoolListElement & rc_NodeDataPoolListElement = this->c_Elements[u32_ItListElement];
       u32_Retval += rc_NodeDataPoolListElement.GetSizeByte();
    }
    return u32_Retval;
@@ -408,17 +406,15 @@ void C_OscNodeDataPoolList::HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCh
                                                                              "node-datapool-list-name",
                                                                              this->c_Name,
                                                                              opc_ChangedItems);
-   for (uint32_t u32_ItEl = 0UL; u32_ItEl < this->c_Elements.size(); ++u32_ItEl)
+   for (C_OscNodeDataPoolListElement & rc_El : this->c_Elements)
    {
-      C_OscNodeDataPoolListElement & rc_El = this->c_Elements[u32_ItEl];
       C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit,
                                                                                 "node-datapool-list-element-name",
                                                                                 rc_El.c_Name,
                                                                                 opc_ChangedItems);
    }
-   for (uint32_t u32_ItDataset = 0UL; u32_ItDataset < this->c_DataSets.size(); ++u32_ItDataset)
+   for (C_OscNodeDataPoolDataSet & rc_Dataset : this->c_DataSets)
    {
-      C_OscNodeDataPoolDataSet & rc_Dataset = this->c_DataSets[u32_ItDataset];
       C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit,
                                                                                 "node-datapool-list-datset-name",
                                                                                 rc_Dataset.c_Name,

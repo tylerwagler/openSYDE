@@ -193,9 +193,8 @@ void C_OscNodeSquadFiler::h_SaveNodeGroups(const std::vector<C_OscNodeSquad> & o
 {
    orc_XmlParser.CreateAndSelectNodeChild("node-groups");
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_NodeGroups.size()));
-   for (uint32_t u32_ItGroup = 0UL; u32_ItGroup < orc_NodeGroups.size(); ++u32_ItGroup)
+   for (const C_OscNodeSquad & rc_NodeGroup : orc_NodeGroups)
    {
-      const C_OscNodeSquad & rc_NodeGroup = orc_NodeGroups[u32_ItGroup];
       C_OscNodeSquadFiler::h_SaveNodeGroup(rc_NodeGroup, orc_XmlParser);
    }
    orc_XmlParser.SelectNodeParent();

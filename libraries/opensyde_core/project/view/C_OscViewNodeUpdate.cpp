@@ -71,21 +71,18 @@ void C_OscViewNodeUpdate::CalcHash(uint32_t & oru32_HashValue) const
    stw::scl::C_SclChecksums::CalcCRC32(&this->me_StateTrafficEncryption, sizeof(this->me_StateTrafficEncryption),
                                        oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&u32_Size, sizeof(u32_Size), oru32_HashValue);
-   for (uint32_t u32_It = 0; u32_It < this->mc_DataBlockPaths.size(); ++u32_It)
+   for (const std::string & rc_QtData : this->mc_DataBlockPaths)
    {
-      const std::string & rc_QtData = this->mc_DataBlockPaths[u32_It];
       const std::string c_Data = rc_QtData;
       stw::scl::C_SclChecksums::CalcCRC32(c_Data.c_str(), c_Data.length(), oru32_HashValue);
    }
-   for (uint32_t u32_It = 0; u32_It < this->mc_FileBasedPaths.size(); ++u32_It)
+   for (const std::string & rc_QtData : this->mc_FileBasedPaths)
    {
-      const std::string & rc_QtData = this->mc_FileBasedPaths[u32_It];
       const std::string c_Data = rc_QtData;
       stw::scl::C_SclChecksums::CalcCRC32(c_Data.c_str(), c_Data.length(), oru32_HashValue);
    }
-   for (uint32_t u32_It = 0; u32_It < this->mc_ParamSetPaths.size(); ++u32_It)
+   for (const C_OscViewNodeUpdateParamInfo & rc_Test : this->mc_ParamSetPaths)
    {
-      const C_OscViewNodeUpdateParamInfo & rc_Test = this->mc_ParamSetPaths[u32_It];
       rc_Test.CalcHash(oru32_HashValue);
    }
    for (uint32_t u32_It = 0; u32_It < this->mc_SkipUpdateOfFiles.size(); ++u32_It)

@@ -107,9 +107,8 @@ std::error_code C_OscNode::InsertDataPool(const uint32_t ou32_DataPoolIndex, con
    {
       this->c_DataPools.insert(this->c_DataPools.begin() + ou32_DataPoolIndex, orc_DataPool);
       //Sync data pool index with com protocol
-      for (uint32_t u32_ItComProtocol = 0; u32_ItComProtocol < this->c_ComProtocols.size(); ++u32_ItComProtocol)
+      for (C_OscCanProtocol & rc_Protocol : this->c_ComProtocols)
       {
-         C_OscCanProtocol & rc_Protocol = this->c_ComProtocols[u32_ItComProtocol];
          if (rc_Protocol.u32_DataPoolIndex >= ou32_DataPoolIndex)
          {
             ++rc_Protocol.u32_DataPoolIndex;
@@ -141,9 +140,8 @@ std::error_code C_OscNode::DeleteDataPool(const uint32_t ou32_DataPoolIndex)
    {
       this->c_DataPools.erase(this->c_DataPools.begin() + ou32_DataPoolIndex);
       //Sync data pool index with com protocol
-      for (uint32_t u32_ItComProtocol = 0; u32_ItComProtocol < this->c_ComProtocols.size(); ++u32_ItComProtocol)
+      for (C_OscCanProtocol & rc_Protocol : this->c_ComProtocols)
       {
-         C_OscCanProtocol & rc_Protocol = this->c_ComProtocols[u32_ItComProtocol];
          if (rc_Protocol.u32_DataPoolIndex >= ou32_DataPoolIndex)
          {
             --rc_Protocol.u32_DataPoolIndex;
@@ -1033,9 +1031,8 @@ uint32_t C_OscNode::GetListsSize(void) const
 {
    uint32_t u32_Retval = 0;
 
-   for (uint32_t u32_ItDataPool = 0; u32_ItDataPool < this->c_DataPools.size(); ++u32_ItDataPool)
+   for (const C_OscNodeDataPool & rc_NodeDataPool : this->c_DataPools)
    {
-      const C_OscNodeDataPool & rc_NodeDataPool = this->c_DataPools[u32_ItDataPool];
       if ((rc_NodeDataPool.e_Type == C_OscNodeDataPool::eNVM) ||
           (rc_NodeDataPool.e_Type == C_OscNodeDataPool::eHALC_NVM))
       {
@@ -1056,9 +1053,8 @@ uint32_t C_OscNode::GetDataPoolsSize(void) const
 {
    uint32_t u32_Retval = 0;
 
-   for (uint32_t u32_ItDataPool = 0; u32_ItDataPool < this->c_DataPools.size(); ++u32_ItDataPool)
+   for (const C_OscNodeDataPool & rc_NodeDataPool : this->c_DataPools)
    {
-      const C_OscNodeDataPool & rc_NodeDataPool = this->c_DataPools[u32_ItDataPool];
       if ((rc_NodeDataPool.e_Type == C_OscNodeDataPool::eNVM) ||
           (rc_NodeDataPool.e_Type == C_OscNodeDataPool::eHALC_NVM))
       {
@@ -1275,9 +1271,8 @@ const
 {
    std::vector<const C_OscNodeDataPool *> c_Return;
 
-   for (uint32_t u32_ItCanProtocol = 0; u32_ItCanProtocol < this->c_ComProtocols.size(); ++u32_ItCanProtocol)
+   for (const C_OscCanProtocol & rc_CanProtocol : this->c_ComProtocols)
    {
-      const C_OscCanProtocol & rc_CanProtocol = this->c_ComProtocols[u32_ItCanProtocol];
       if (rc_CanProtocol.e_Type == oe_ComProtocol)
       {
          if (rc_CanProtocol.u32_DataPoolIndex < this->c_DataPools.size())
@@ -1304,9 +1299,8 @@ std::vector<C_OscNodeDataPool *> C_OscNode::GetComDataPools(const C_OscCanProtoc
 {
    std::vector<C_OscNodeDataPool *> c_Return;
 
-   for (uint32_t u32_ItCanProtocol = 0; u32_ItCanProtocol < this->c_ComProtocols.size(); ++u32_ItCanProtocol)
+   for (const C_OscCanProtocol & rc_CanProtocol : this->c_ComProtocols)
    {
-      const C_OscCanProtocol & rc_CanProtocol = this->c_ComProtocols[u32_ItCanProtocol];
       if (rc_CanProtocol.e_Type == oe_ComProtocol)
       {
          if (rc_CanProtocol.u32_DataPoolIndex < this->c_DataPools.size())
@@ -2253,9 +2247,8 @@ void C_OscNode::RecalculateAddress(void)
 {
    uint32_t u32_Offset = 0UL;
 
-   for (uint32_t u32_ItDataPool = 0UL; u32_ItDataPool < this->c_DataPools.size(); ++u32_ItDataPool)
+   for (C_OscNodeDataPool & rc_DataPool : this->c_DataPools)
    {
-      C_OscNodeDataPool & rc_DataPool = this->c_DataPools[u32_ItDataPool];
       if ((rc_DataPool.e_Type == C_OscNodeDataPool::eNVM) ||
           (rc_DataPool.e_Type == C_OscNodeDataPool::eHALC_NVM))
       {
@@ -2283,12 +2276,10 @@ uint32_t C_OscNode::CountAllLocalMessages(void) const
 {
    uint32_t u32_MessageCount = 0UL;
 
-   for (uint32_t u32_ItProt = 0UL; u32_ItProt < this->c_ComProtocols.size(); ++u32_ItProt)
+   for (const C_OscCanProtocol & rc_Prot : this->c_ComProtocols)
    {
-      const C_OscCanProtocol & rc_Prot = this->c_ComProtocols[u32_ItProt];
-      for (uint32_t u32_ItCont = 0UL; u32_ItCont < rc_Prot.c_ComMessages.size(); ++u32_ItCont)
+      for (const C_OscCanMessageContainer & rc_Cont : rc_Prot.c_ComMessages)
       {
-         const C_OscCanMessageContainer & rc_Cont = rc_Prot.c_ComMessages[u32_ItCont];
          u32_MessageCount += static_cast<uint32_t>(rc_Cont.c_RxMessages.size());
          u32_MessageCount += static_cast<uint32_t>(rc_Cont.c_TxMessages.size());
       }
@@ -2306,20 +2297,17 @@ uint32_t C_OscNode::CountAllLocalMessages(void) const
 void C_OscNode::HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
                                        std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
 {
-   for (uint32_t u32_ItDp = 0UL; u32_ItDp < this->c_DataPools.size(); ++u32_ItDp)
+   for (C_OscNodeDataPool & rc_Dp : this->c_DataPools)
    {
-      C_OscNodeDataPool & rc_Dp = this->c_DataPools[u32_ItDp];
       rc_Dp.HandleNameMaxCharLimit(ou32_NameMaxCharLimit, opc_ChangedItems);
    }
-   for (uint32_t u32_ItProt = 0UL; u32_ItProt < this->c_ComProtocols.size(); ++u32_ItProt)
+   for (C_OscCanProtocol & rc_Prot : this->c_ComProtocols)
    {
-      C_OscCanProtocol & rc_Prot = this->c_ComProtocols[u32_ItProt];
       rc_Prot.HandleNameMaxCharLimit(ou32_NameMaxCharLimit, opc_ChangedItems);
    }
    this->c_HalcConfig.HandleNameMaxCharLimit(ou32_NameMaxCharLimit, opc_ChangedItems);
-   for (uint32_t u32_ItDatablock = 0UL; u32_ItDatablock < this->c_Applications.size(); ++u32_ItDatablock)
+   for (C_OscNodeApplication & rc_Datablock : this->c_Applications)
    {
-      C_OscNodeApplication & rc_Datablock = this->c_Applications[u32_ItDatablock];
       C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit,
                                                                                 "node-datablock-name",
                                                                                 rc_Datablock.c_Name,
@@ -2437,9 +2425,8 @@ void C_OscNode::m_AppendAllProtocolMessages(const uint32_t ou32_InterfaceIndex,
                                             const bool * const opq_SkipMessageIsTxFlag,
                                             const uint32_t * const opu32_SkipMessageIndex) const
 {
-   for (uint32_t u32_ItCanProtocol = 0; u32_ItCanProtocol < this->c_ComProtocols.size(); ++u32_ItCanProtocol)
+   for (const C_OscCanProtocol & rc_CanProtocol : this->c_ComProtocols)
    {
-      const C_OscCanProtocol & rc_CanProtocol = this->c_ComProtocols[u32_ItCanProtocol];
       if (rc_CanProtocol.e_Type == oe_ComProtocol)
       {
          if (ou32_InterfaceIndex < rc_CanProtocol.c_ComMessages.size())
@@ -2617,9 +2604,8 @@ bool C_OscNode::m_CheckErrorTooFewElements(const uint32_t ou32_DataPoolIndex) co
          }
          else
          {
-            for (uint32_t u32_ItContainer = 0UL; u32_ItContainer < pc_Protocol->c_ComMessages.size(); ++u32_ItContainer)
+            for (const C_OscCanMessageContainer & rc_Container : pc_Protocol->c_ComMessages)
             {
-               const C_OscCanMessageContainer & rc_Container = pc_Protocol->c_ComMessages[u32_ItContainer];
                if (rc_Container.CheckMinSignalError())
                {
                   orq_TooFewListsOrElements = true;
