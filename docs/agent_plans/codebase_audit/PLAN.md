@@ -330,11 +330,7 @@ CRC-32C ~17-20x the software table CRC; std::format slower than std::stringstrea
 libstdc++-14 -- recheck the 7.1 std::format premise against this harness.)
 
 Phase 7 fieldwork 2026-09-08:
-- 7.1 std::format premise: local libstdc++-14 measures std::format SLOWER than
-  stringstream (1.17us vs 0.46us); GCC-15 confirmation is the deciding data but the
-  runner lane is indirect. bench.yml (dispatch-only) exists on develop; GitHub only
-  dispatches workflows present on the DEFAULT branch (master), so either merge
-  bench.yml to master via PR or accept the documented libstdc++-15 improvement.
+- 7.1 std::format premise: SUPERSEDED -- see the 2026-09-13 correction below.
 - 7.2: SSE4.2 reference is 17-20x the software table CRC (5-6 GiB/s vs 0.35 GiB/s).
   Caveat: _mm_crc32_* is CRC-32C (poly 0x1EDC6F41) != STW software CRC (poly
   0xEDB88320) -- landing it changes checksum semantics and invalidates stored CRCs.
@@ -343,6 +339,35 @@ Phase 7 fieldwork 2026-09-08:
   critical-section member (std::mutex is non-movable -> defaulted moves are deleted)
   and the large protocol classes are polymorphic (move is a slicing risk). Needs
   hand-written moves per-class that skip the lock.
+
+
+Phase 7.1 settled 2026-09-13 -- the premise holds, the earlier reading was a Debug artifact:
+
+The 2026-09-08 measurement was taken on a **Debug** build (bench.yml pinned
+CMAKE_BUILD_TYPE=Debug). That inverts this particular comparison: std::format is
+header-only template code that needs the optimiser, while stringstream's work sits in
+an already-optimised standard library binary. Measured both ways, on every platform we
+ship:
+
+| Release (ships)            | stdlib     | stringstream | std::format | speedup |
+|---|---|---|---|---|
+| macOS, Apple clang         | libc++     | 756 ns  | 271 ns | 2.8x  |
+| Linux, clang               | libstdc++  | 756 ns  | 240 ns | 3.2x  |
+| Linux, gcc                 | libstdc++  | 749 ns  | 229 ns | 3.3x  |
+| Windows, llvm-mingw clang  | libc++     | 2723 ns | 223 ns | 12.2x |
+
+In Debug the same benchmark reports format 1.9-2.5x *slower* (macOS 1340/2495,
+Linux clang 921/2069, Linux gcc 964/2451) -- i.e. the sign of the result flips with
+the build type, which is what produced the wrong conclusion.
+
+std::format also beats snprintf in Release (223-271 ns vs 368-487 ns). 7.1 therefore
+clears its own "2x+" exit criterion on all three platforms and is worth doing.
+
+bench.yml has been fixed accordingly: Release, the project's own toolchain files
+(clang, not the runner default), all three OSes, and a push trigger on 'bench/**' so
+it can actually be run from a topic branch -- workflow_dispatch alone is only offered
+for workflows present on the default branch (master), which is why it was unrunnable.
+
 
 question. Neither is performance work as such.
 
