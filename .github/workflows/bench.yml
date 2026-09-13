@@ -2,54 +2,113 @@
 # Phase 7 benchmark run on the production toolchain.
 #
 # The opensyde_core bench harness (OPENSYDE_CORE_BUILD_BENCHMARKS, Google Benchmark)
-# measures the Phase 7.1/7.2 exit criteria. Local measurements use the dev box's
-# libstdc++-14; the code ships built with whatever the runner has (GCC 15 on
-# ubuntu-26.04). This job reports the numbers that actually count.
+# measures the Phase 7.1/7.2 exit criteria.
 #
-# Run manually: gh workflow run bench.yml --ref develop
+# Three things this workflow gets deliberately right, because getting them wrong
+# produced a wrong Phase 7.1 conclusion once already:
+#
+#   1. CMAKE_BUILD_TYPE=Release. Benchmarking a Debug build inverts the 7.1 result:
+#      std::format is header-only template code that needs optimisation, while
+#      stringstream's work sits in an already-optimised standard library binary. At
+#      -O0 format measures ~2x SLOWER; at -O2 it is 2.8-12x FASTER. Never benchmark Debug.
+#   2. The toolchain files, so it measures clang -- what the project actually ships --
+#      rather than whatever compiler the runner happens to default to.
+#   3. All three platforms. libc++ and libstdc++ differ enough to matter (MinGW's
+#      iostreams in particular are slow, which changes the 7.1 margin by 4x).
+#
+# It builds through the ROOT CMakeLists with the GUI off: core alone cannot configure
+# on Windows, which needs the root's from-source zlib.
+#
+# Run manually:  gh workflow run bench.yml --ref <branch>
+# (workflow_dispatch is only offered for workflows present on the DEFAULT branch, so
+# the push trigger below is the way to run this from a topic branch.)
 # -------------------------------------------------------------------------------------------------------------------
 
 name: Benchmarks
 
 on:
   workflow_dispatch:
+  push:
+    branches: ['bench/**']
 
 env:
-  BUILD_TYPE: Debug
+  BUILD_TYPE: Release
 
 jobs:
   core-bench:
-    name: Core Bench (ubuntu-26.04)
-    runs-on: ubuntu-26.04
+    name: Core Bench (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-26.04, macos-14, windows-2022]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
           submodules: recursive
 
-      - name: Install system dependencies
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq \
-            cmake ninja-build g++ \
-            libssl-dev \
-            flex bison libfl-dev
+          sudo apt-get install -y -qq clang cmake ninja-build libssl-dev flex bison libfl-dev
 
-      - name: Configure (benchmarks on)
-        run: >
-          cmake
-          -S libraries/opensyde_core
-          -B build/bench
-          -G Ninja
-          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
-          -DOPENSYDE_CORE_BUILD_BENCHMARKS=ON
-          -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON
-          -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update -q
+          brew install -q ninja bison flex openssl@3
+
+      # Windows needs the LLVM-MinGW clang toolchain, Ninja and OpenSSL. install-qt-action
+      # is the delivery mechanism for those tools; Qt itself is unused here (GUI off).
+      - name: Install LLVM-MinGW + Ninja + OpenSSL (Windows)
+        if: runner.os == 'Windows'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          host: windows
+          target: desktop
+          arch: win64_llvm_mingw
+          tools: 'tools_llvm_mingw1706 tools_ninja tools_opensslv3_x64'
+          add-tools-to-path: true
+
+      - name: Install winflexbison (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          choco install --no-progress winflexbison3
+          $tools = Split-Path (Get-ChildItem C:\ProgramData\chocolatey\lib\winflexbison3 -Recurse -Filter win_flex.exe | Select-Object -First 1).FullName
+          Add-Content -Path $env:GITHUB_PATH -Value $tools
+
+      - name: Configure (Release, benchmarks on)
+        shell: bash
+        env:
+          OPENSSL_ROOT_DIR: ${{ runner.os == 'Windows' && format('{0}/OpenSSLv3/Win_x64', env.IQTA_TOOLS) || '' }}
+        run: |
+          case "${{ runner.os }}" in
+            Linux)   TC=cmake/toolchain_linux.cmake ;;
+            macOS)   TC=cmake/toolchain_macos.cmake ;;
+            Windows) TC=cmake/toolchain_windows.cmake ;;
+          esac
+          cmake -S . -B build/bench -G Ninja \
+            -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+            -DOPENSYDE_BUILD_GUI_TOOLS=OFF \
+            -DOPENSYDE_CORE_BUILD_BENCHMARKS=ON \
+            -DCMAKE_TOOLCHAIN_FILE="$PWD/$TC"
 
       - name: Build benchmark binary
-        run: cmake --build build/bench -j $(nproc) --target bench_opensyde
+        shell: bash
+        run: cmake --build build/bench --target bench_opensyde -j "$(getconf _NPROCESSORS_ONLN)"
 
       - name: Run benchmarks
+        shell: bash
         run: |
-          g++ --version | head -1
-          ./build/bench/bench_opensyde --benchmark_min_time=1.0s
+          (clang++ --version | head -1) || true
+          # Invoke the binary directly: piping into `xargs -I{} {}` makes xargs look for a
+          # command literally named "{}" and exits 127.
+          BIN=$(find build/bench -type f \( -name 'bench_opensyde' -o -name 'bench_opensyde.exe' \) | head -1)
+          if [ -z "$BIN" ]; then echo "benchmark binary not found under build/bench"; exit 1; fi
+          echo "benchmark binary: $BIN"
+          "$BIN" --benchmark_min_time=1.0s
