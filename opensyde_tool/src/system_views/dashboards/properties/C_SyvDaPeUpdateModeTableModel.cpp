@@ -616,7 +616,7 @@ bool C_SyvDaPeUpdateModeTableModel::setData(const QModelIndex & orc_Index, const
             if (os32_Role == static_cast<int32_t>(Qt::EditRole))
             {
                int32_t s32_Count = 0;
-               QVector<int32_t> c_Roles;
+               QList<int32_t> c_Roles;
                C_PuiSvReadDataConfiguration & rc_CurConfig = this->mc_DataElementConfigurations[u32_Index];
                switch (e_Col) //lint !e788 //not all columns need handling here
                {

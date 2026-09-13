@@ -373,7 +373,7 @@ void C_SdBueMlvGraphicsScene::SetSignal(const uint32_t ou32_SignalIndex)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvGraphicsScene::Clear(void)
 {
-   QVector<C_SdBueMlvSignalManager *>::iterator pc_ItOldItem;
+   QList<C_SdBueMlvSignalManager *>::iterator pc_ItOldItem;
 
    // remove all signals
    while (this->mc_VecSignals.size() > 0)
@@ -456,7 +456,7 @@ void C_SdBueMlvGraphicsScene::DisplayToolTip(const QPointF & orc_ScenePos)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvGraphicsScene::RefreshColors(void)
 {
-   QVector<C_SdBueMlvSignalManager *>::iterator pc_ItItem;
+   QList<C_SdBueMlvSignalManager *>::iterator pc_ItItem;
 
    // Remove all colors of all items
    for (pc_ItItem = this->mc_VecSignals.begin(); pc_ItItem != this->mc_VecSignals.end(); ++pc_ItItem)
@@ -906,7 +906,7 @@ void C_SdBueMlvGraphicsScene::m_AddSignal(const uint32_t ou32_SignalIndex)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvGraphicsScene::m_RemoveSignal(const uint32_t ou32_SignalIndex)
 {
-   QVector<C_SdBueMlvSignalManager *>::iterator pc_ItItem;
+   QList<C_SdBueMlvSignalManager *>::iterator pc_ItItem;
    C_SdBueMlvSignalManager * pc_Item;
 
    // search the signal
@@ -956,7 +956,7 @@ void C_SdBueMlvGraphicsScene::m_UpdateAll(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvGraphicsScene::m_UpdateBorderItems(void)
 {
-   QVector<C_SdBueMlvBorderItem *>::const_iterator pc_ItItem;
+   QList<C_SdBueMlvBorderItem *>::const_iterator pc_ItItem;
    int32_t s32_Pos = 8;
 
    this->mpc_BorderItemUpperLeft->SetSize(QSizeF(this->mf64_SingleItemWidth, this->mf64_SingleItemHeight));
@@ -1022,7 +1022,7 @@ void C_SdBueMlvGraphicsScene::m_UpdateEmptyItems(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvGraphicsScene::m_UpdateSignalManager(void)
 {
-   QVector<C_SdBueMlvSignalManager *>::const_iterator pc_ItItem;
+   QList<C_SdBueMlvSignalManager *>::const_iterator pc_ItItem;
 
    for (pc_ItItem = this->mc_VecSignals.begin();
         pc_ItItem != this->mc_VecSignals.end();

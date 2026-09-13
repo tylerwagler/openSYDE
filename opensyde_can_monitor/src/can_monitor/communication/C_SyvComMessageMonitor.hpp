@@ -16,7 +16,6 @@
 
 #include <QString>
 #include <QList>
-#include <QVector>
 #include <QMutex>
 
 #include <cstdint>

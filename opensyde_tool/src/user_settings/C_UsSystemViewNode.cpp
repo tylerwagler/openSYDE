@@ -47,7 +47,7 @@ C_UsSystemViewNode::C_UsSystemViewNode(void)
    vector of expanded flags (true: expanded, false: collapsed)
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QVector<bool> & C_UsSystemViewNode::GetSectionsExpanded(void) const
+const QList<bool> & C_UsSystemViewNode::GetSectionsExpanded(void) const
 {
    return this->mc_SectionsExpanded;
 }
@@ -58,7 +58,7 @@ const QVector<bool> & C_UsSystemViewNode::GetSectionsExpanded(void) const
    \param[in]  orc_SectionsExpanded    Last known expanded flags of sections
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsSystemViewNode::SetSectionsExpanded(const QVector<bool> & orc_SectionsExpanded)
+void C_UsSystemViewNode::SetSectionsExpanded(const QList<bool> & orc_SectionsExpanded)
 {
    this->mc_SectionsExpanded = orc_SectionsExpanded;
 }

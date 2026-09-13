@@ -9,7 +9,7 @@
 #define C_GISYCOLORSELECTWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QVector>
+#include <QList>
 #include <QWidget>
 #include <QTimer>
 #include <QWindow>
@@ -78,7 +78,7 @@ private:
    QColor mc_LightGreen;
    QColor mc_DarkBlueGreen;
    QColor mc_Lavendel;
-   QVector<stw::opensyde_gui_elements::C_OgePubColor *> mc_StandardColorButtons;
+   QList<stw::opensyde_gui_elements::C_OgePubColor *> mc_StandardColorButtons;
 
    QLabel * mpc_LabelTransparentColorShower;
    QLabel * mpc_LabelTransparentRecentColorNr1;

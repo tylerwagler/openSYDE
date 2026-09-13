@@ -109,7 +109,7 @@ bool C_SyvDaItPaTreeModel::IsEmpty(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeModel::ReloadSetValues(void)
 {
-   QVector<int32_t> c_Roles;
+   QList<int32_t> c_Roles;
    const int32_t s32_ColSet = C_SyvDaItPaTreeModel::h_EnumToColumn(C_SyvDaItPaTreeModel::eSET);
    const int32_t s32_ColTree = C_SyvDaItPaTreeModel::h_EnumToColumn(C_SyvDaItPaTreeModel::eTREE);
    c_Roles.append(static_cast<int32_t>(Qt::DisplayRole));
@@ -192,8 +192,8 @@ void C_SyvDaItPaTreeModel::DeleteSpecified(const std::vector<C_OscNodeDataPoolLi
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeModel::ClearEcuValues(void)
 {
-   QVector<int32_t> c_RolesDisplay;
-   QVector<int32_t> c_RolesStyle;
+   QList<int32_t> c_RolesDisplay;
+   QList<int32_t> c_RolesStyle;
    const int32_t s32_ColSet = C_SyvDaItPaTreeModel::h_EnumToColumn(C_SyvDaItPaTreeModel::eSET);
    const int32_t s32_ColEcu = C_SyvDaItPaTreeModel::h_EnumToColumn(C_SyvDaItPaTreeModel::eDEVICE_VALUE);
    const int32_t s32_ColTree = C_SyvDaItPaTreeModel::h_EnumToColumn(C_SyvDaItPaTreeModel::eTREE);
@@ -290,7 +290,7 @@ void C_SyvDaItPaTreeModel::ApplyEcuValues(const std::vector<C_OscNodeDataPoolLis
          //Do not apply if not all are read
          if (q_AllRead == true)
          {
-            QVector<int32_t> c_Roles;
+            QList<int32_t> c_Roles;
             const int32_t s32_Col = C_SyvDaItPaTreeModel::h_EnumToColumn(C_SyvDaItPaTreeModel::eSET);
             c_Roles.push_back(static_cast<int32_t>(Qt::DisplayRole));
             c_Roles.push_back(static_cast<int32_t>(Qt::FontRole));

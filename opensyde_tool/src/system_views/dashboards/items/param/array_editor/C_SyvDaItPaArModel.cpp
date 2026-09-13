@@ -293,7 +293,7 @@ bool C_SyvDaItPaArModel::setData(const QModelIndex & orc_Index, const QVariant &
                }
             }
 
-            Q_EMIT this->dataChanged(orc_Index, orc_Index, QVector<int32_t>() << os32_Role);
+            Q_EMIT this->dataChanged(orc_Index, orc_Index, QList<int32_t>() << os32_Role);
          }
       }
    }

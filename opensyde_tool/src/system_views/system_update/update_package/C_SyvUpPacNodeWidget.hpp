@@ -126,7 +126,7 @@ private:
    stw::opensyde_core::C_OscViewNodeUpdate::E_StateDebugger me_StateDebugger;
    stw::opensyde_core::C_OscViewNodeUpdate::E_StateTrafficEncryption me_StateTrafficEncryption;
 
-   QVector<C_SyvUpPacSectionNodeDatablockWidget *> mc_DatablockWidgets;
+   QList<C_SyvUpPacSectionNodeDatablockWidget *> mc_DatablockWidgets;
    C_SyvUpPacSectionNodeFilesWidget * mpc_FilesWidget;
    QFrame * mpc_FilesWidgetSeparator;
    stw::opensyde_gui_elements::C_OgeMuSections * mpc_SecurityMenu;

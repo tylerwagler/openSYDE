@@ -128,8 +128,8 @@ void C_NagToolBarWidget::InitText(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void stw::opensyde_gui::C_NagToolBarWidget::ConfigureButtons(C_NagUseCaseWidget * const opc_UseCaseWidget)
 {
-   QVector<C_NagToolBarButtonProperties> c_VecFuncs;
-   QVector<C_NagToolBarButtonProperties>::const_iterator pc_ItFuncName;
+   QList<C_NagToolBarButtonProperties> c_VecFuncs;
+   QList<C_NagToolBarButtonProperties>::const_iterator pc_ItFuncName;
    int32_t s32_LayoutIndex  = 0;
 
    this->ResetButtons();
@@ -195,8 +195,8 @@ void stw::opensyde_gui::C_NagToolBarWidget::ConfigureButtons(C_NagUseCaseWidget 
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagToolBarWidget::ResetButtons(void)
 {
-   QVector<C_OgePubToolBar *>::iterator pc_ItButton;
-   QVector<QWidget *>::iterator pc_ItGroupBox;
+   QList<C_OgePubToolBar *>::iterator pc_ItButton;
+   QList<QWidget *>::iterator pc_ItGroupBox;
 
    // remove all buttons and its groupboxes
    for (pc_ItButton = this->mc_VecButtons.begin(); pc_ItButton != this->mc_VecButtons.end(); ++pc_ItButton)
@@ -240,7 +240,7 @@ void C_NagToolBarWidget::SetTopWidget(QWidget * const opc_Widget)
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagToolBarWidget::HideAllButtonsAndStoreState(void)
 {
-   QVector<QWidget *>::iterator pc_VecGroupBox;
+   QList<QWidget *>::iterator pc_VecGroupBox;
 
    // hide all buttons and save their current visible state
    this->mc_VecGroupBoxVisible.clear();

@@ -51,7 +51,7 @@ private:
    C_SyvDaDashboardToolbox & operator =(const C_SyvDaDashboardToolbox &) &;
 
    Ui::C_SyvDaDashboardToolbox * mpc_Ui;
-   QVector<C_SdTopologyListWidget *> mc_ListWidgets;
+   QList<C_SdTopologyListWidget *> mc_ListWidgets;
    QFrame * mpc_FrameSeparatorReadingWidgets;
    QFrame * mpc_FrameSeparatorWritingWidgets;
 

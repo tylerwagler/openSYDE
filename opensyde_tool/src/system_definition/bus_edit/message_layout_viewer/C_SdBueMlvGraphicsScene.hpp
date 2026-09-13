@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QGraphicsScene>
-#include <QVector>
+#include <QList>
 #include <set>
 #include <vector>
 #include <array>
@@ -164,15 +164,15 @@ private:
    // Border items
    C_SdBueMlvBorderItem * mpc_BorderItemUpperLeft;
    // all vertical items without item in the upper left corner
-   QVector<C_SdBueMlvBorderItem *> mc_VecBorderItemsVertical;
+   QList<C_SdBueMlvBorderItem *> mc_VecBorderItemsVertical;
    // all horizontal items without item in the upper left corner
-   QVector<C_SdBueMlvBorderItem *> mc_VecBorderItemsHorizontal;
+   QList<C_SdBueMlvBorderItem *> mc_VecBorderItemsHorizontal;
 
    // All empty items
-   QVector<C_SdBueMlvEmptyItem *> mc_VecEmptyItems;
+   QList<C_SdBueMlvEmptyItem *> mc_VecEmptyItems;
 
    // All signals
-   QVector<C_SdBueMlvSignalManager *> mc_VecSignals;
+   QList<C_SdBueMlvSignalManager *> mc_VecSignals;
 
    // Tooltip information
    C_SdBueMlvSignalManager * mpc_HoveredSignal;

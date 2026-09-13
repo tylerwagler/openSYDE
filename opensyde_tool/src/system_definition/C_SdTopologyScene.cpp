@@ -749,8 +749,8 @@ void C_SdTopologyScene::CopyFromSnapshotToScene(const stw::opensyde_gui_logic::C
    uint32_t u32_ItElem;
 
    QMap<uint32_t, uint32_t> c_MapOldBusIndexToNewBusIndex;
-   QVector<uint32_t> c_NodeIndices;
-   QVector<uint32_t> c_BusIndices;
+   QList<uint32_t> c_NodeIndices;
+   QList<uint32_t> c_BusIndices;
    /*
    0: Boundary
    1: Text element
@@ -758,7 +758,7 @@ void C_SdTopologyScene::CopyFromSnapshotToScene(const stw::opensyde_gui_logic::C
    3: Image
    4: Bus text element
    */
-   QVector<uint32_t> c_OtherIndices;
+   QList<uint32_t> c_OtherIndices;
    //Copy buses
    for (u32_ItElem = 0; u32_ItElem < orc_Snapshot.c_OscBuses.size(); ++u32_ItElem)
    {
@@ -1921,12 +1921,12 @@ bool C_SdTopologyScene::m_CallSetupStyle(QGraphicsItem * const opc_Item) const
    Node Indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-QVector<uint32_t> C_SdTopologyScene::m_CopyFromSnapshotToSceneHandleNodes(const C_SdTopologyDataSnapshot & orc_Snapshot,
+QList<uint32_t> C_SdTopologyScene::m_CopyFromSnapshotToSceneHandleNodes(const C_SdTopologyDataSnapshot & orc_Snapshot,
                                                                           const QMap<uint32_t,
                                                                                      uint32_t> & orc_MapOldBusIndexToNewBusIndex)
 const
 {
-   QVector<uint32_t> c_NodeIndices;
+   QList<uint32_t> c_NodeIndices;
    for (uint32_t u32_ItElem = 0; u32_ItElem < orc_Snapshot.c_OscNodes.size(); ++u32_ItElem)
    {
       const bool q_IsFirst = C_PuiSdUtil::h_CheckIsFirstInAnyGroupOrNotInAny(u32_ItElem, orc_Snapshot.c_OscNodeGroups);
@@ -3542,13 +3542,13 @@ void C_SdTopologyScene::m_ShowInterfaceChangePopUp(QGraphicsItem * const opc_Ite
    \param[in]  opc_IdMap                     Optional map for IDs to use
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdTopologyScene::m_LoadSnapshot(const QVector<uint32_t> & orc_NodeIndices,
-                                       const QVector<uint32_t> & orc_BusIndices,
-                                       const QVector<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection,
+void C_SdTopologyScene::m_LoadSnapshot(const QList<uint32_t> & orc_NodeIndices,
+                                       const QList<uint32_t> & orc_BusIndices,
+                                       const QList<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection,
                                        const std::vector<C_PuiSdCompleteBusConnectionData> * const opc_AdditionalConnectionData,
                                        const QMap<C_PuiBsTemporaryDataId, uint64_t> * const opc_IdMap)
 {
-   QVector<uint32_t> c_SaveIndices;
+   QList<uint32_t> c_SaveIndices;
 
    //Fix index if necessary
 
@@ -3576,7 +3576,7 @@ void C_SdTopologyScene::m_LoadSnapshot(const QVector<uint32_t> & orc_NodeIndices
    \param[in]      oru32_New  New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdTopologyScene::mh_AddAndUpdateHigher(QVector<uint32_t> & orc_Vec, const uint32_t & oru32_New)
+void C_SdTopologyScene::mh_AddAndUpdateHigher(QList<uint32_t> & orc_Vec, const uint32_t & oru32_New)
 {
    for (int32_t s32_ItVec = 0; s32_ItVec < orc_Vec.size(); ++s32_ItVec)
    {

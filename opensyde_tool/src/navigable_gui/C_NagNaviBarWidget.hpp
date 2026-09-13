@@ -14,7 +14,7 @@
 
 #include <QWidget>
 #include <QTimer>
-#include <QVector>
+#include <QList>
 #include <set>
 #include <QLabel>
 #include <QLineEdit>

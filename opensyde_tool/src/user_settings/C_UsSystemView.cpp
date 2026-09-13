@@ -294,7 +294,7 @@ C_UsSystemViewNode C_UsSystemView::GetSvNode(const QString & orc_NodeName) const
    \param[in]  orc_ExpandedFlags    Expanded flags
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsSystemView::SetNodeSectionsExpanded(const QString & orc_NodeName, const QVector<bool> & orc_ExpandedFlags)
+void C_UsSystemView::SetNodeSectionsExpanded(const QString & orc_NodeName, const QList<bool> & orc_ExpandedFlags)
 {
    if (this->mc_Nodes.contains(orc_NodeName) == true)
    {

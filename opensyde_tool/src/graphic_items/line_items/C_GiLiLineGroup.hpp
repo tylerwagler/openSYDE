@@ -63,7 +63,7 @@ public:
    int32_t GetWidth(void) const;
    QColor GetColor(void) const;
    QColor GetMiddleLineColor(void) const;
-   QVector<C_GiLiLineConnection *> GetLines(void) const;
+   QList<C_GiLiLineConnection *> GetLines(void) const;
    bool GetMiddleLine(void) const;
    int32_t GetNumberPoints(void) const;
    virtual QPointF GetPos(void) const;
@@ -99,7 +99,7 @@ Q_SIGNALS:
    void SigSubItemWasMoved(const int32_t & ors32_LineIndex, const QPointF & orc_PositionDifference);
 
 protected:
-   QVector<C_GiLiInteractionPoint *> mc_Points; ///< Interaction points of segmented line
+   QList<C_GiLiInteractionPoint *> mc_Points; ///< Interaction points of segmented line
    C_GiLiLine * mpc_LinePath;
 
    virtual void m_InitPoint(const int32_t & ors32_Index, const QPointF & orc_Pos);

@@ -17,7 +17,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QByteArray>
-#include <QVector>
+#include <QList>
 #include <QGroupBox>
 #include <QStackedWidget>
 

@@ -64,7 +64,6 @@
 #include <QUndoCommand>
 #include <QUndoStack>
 #include <QVariant>
-#include <QVector>
 #include <QWidget>
 
 #endif

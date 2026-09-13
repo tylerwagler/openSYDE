@@ -33,7 +33,7 @@ class C_SebToolboxUtil
 public:
    static stw::opensyde_gui::C_SdTopologyListWidget * h_AddNewList(const QString & orc_Name,
                                                                    QVBoxLayout * const opc_Layout,
-                                                                   QVector<stw::opensyde_gui::C_SdTopologyListWidget *> & orc_ListWidgets, QWidget * const opc_Parent);
+                                                                   QList<stw::opensyde_gui::C_SdTopologyListWidget *> & orc_ListWidgets, QWidget * const opc_Parent);
    static QFrame * h_AddNewHeading(const QString & orc_Name, QVBoxLayout * const opc_Layout,
                                    QWidget * const opc_Parent, const bool oq_AddSpacerBefore);
    static std::vector<stw::opensyde_gui_elements::C_OgePubIconOnly *> h_AddNewUserHeading(const QString & orc_Name,

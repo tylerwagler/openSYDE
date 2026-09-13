@@ -236,7 +236,7 @@ void C_SdNdeHalcChannelTreeModel::UpdateChannelText(const uint32_t ou32_DomainIn
             // update domain and channel visualization
             Q_EMIT (dataChanged(GetModelIndexFromIndexes(ou32_DomainIndex, ou32_ChannelIndex, oq_UseChannelIndex),
                                 GetModelIndexFromIndexes(ou32_DomainIndex, ou32_ChannelIndex, oq_UseChannelIndex),
-                                QVector<int32_t>() << static_cast<int32_t>(Qt::DisplayRole) <<
+                                QList<int32_t>() << static_cast<int32_t>(Qt::DisplayRole) <<
                                 ms32_USER_ROLE_TOOL_TIP_HEADING << ms32_USER_ROLE_TOOL_TIP_CONTENT));
          }
       }
@@ -410,10 +410,10 @@ void C_SdNdeHalcChannelTreeModel::CheckError(const uint32_t ou32_DomainIndex)
             Q_EMIT (dataChanged(GetModelIndexFromIndexes(ou32_DomainIndex, 0, true),
                                 GetModelIndexFromIndexes(
                                    ou32_DomainIndex, static_cast<uint32_t>(pc_Domain->c_ChannelConfigs.size()), true),
-                                QVector<int32_t>() << static_cast<int32_t>(Qt::DecorationRole)));
+                                QList<int32_t>() << static_cast<int32_t>(Qt::DecorationRole)));
             Q_EMIT (dataChanged(GetModelIndexFromIndexes(ou32_DomainIndex, 0 /*irrelevant*/, false),
                                 GetModelIndexFromIndexes(ou32_DomainIndex, 0 /*irrelevant*/, false),
-                                QVector<int32_t>() << static_cast<int32_t>(Qt::DecorationRole)));
+                                QList<int32_t>() << static_cast<int32_t>(Qt::DecorationRole)));
          }
       }
    }

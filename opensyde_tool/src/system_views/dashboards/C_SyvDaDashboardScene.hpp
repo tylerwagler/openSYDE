@@ -145,7 +145,7 @@ private:
                     const stw::opensyde_gui_logic::C_PuiSvDbDataElement::E_Action & ore_Action) const;
 
    //Add
-   void m_LoadSubset(const QVector<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection,
+   void m_LoadSubset(const QList<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection,
                      const QMap<stw::opensyde_gui_logic::C_PuiBsTemporaryDataId,
                                 uint64_t> * const opc_IdMap);
 

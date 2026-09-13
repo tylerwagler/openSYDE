@@ -1305,7 +1305,7 @@ void C_SdNdeCoConfigTreeModel::m_TriggerUpdateDeviceCount(const uint8_t ou8_Inte
          const QModelIndex c_Index = this->GetDevicesModelIndex(ou8_InterfaceNumber);
          m_InitDevicesNodeContent(*pc_ManagerInfo, *pc_AllDevices);
          Q_EMIT (this->dataChanged(c_Index, c_Index,
-                                   QVector<int32_t>() << static_cast<int32_t>(Qt::DisplayRole)));
+                                   QList<int32_t>() << static_cast<int32_t>(Qt::DisplayRole)));
       }
    }
 }
@@ -1474,7 +1474,7 @@ void C_SdNdeCoConfigTreeModel::m_CheckError(const QModelIndex & orc_InterfaceInd
       }
 
       Q_EMIT (dataChanged(orc_InterfaceIndex, c_LastElementIndex,
-                          QVector<int32_t>() << static_cast<int32_t>(Qt::DecorationRole)));
+                          QList<int32_t>() << static_cast<int32_t>(Qt::DecorationRole)));
    }
 }
 

@@ -786,13 +786,13 @@ void C_GiNode::ReevaluatePortState(void)
    const C_GiPort * pc_CurRefPort;
    C_GiLiBusConnector * pc_CurConn;
 
-   for (QVector<C_GiPort *>::iterator pc_ItPort = mc_Ports.begin(); pc_ItPort != mc_Ports.end(); ++pc_ItPort)
+   for (QList<C_GiPort *>::iterator pc_ItPort = mc_Ports.begin(); pc_ItPort != mc_Ports.end(); ++pc_ItPort)
    {
       pc_CurPort = *pc_ItPort;
       pc_CurPort->AbortTemporaryUnregister();
       pc_CurPort->ResetConnectorCount();
    }
-   for (QVector<C_GiLiBusConnector *>::iterator pc_ItConn =
+   for (QList<C_GiLiBusConnector *>::iterator pc_ItConn =
            mc_Connections.begin(); pc_ItConn != mc_Connections.end();
         ++pc_ItConn)
    {
@@ -802,7 +802,7 @@ void C_GiNode::ReevaluatePortState(void)
          pc_CurRefPort = pc_CurConn->GetPortItem();
          if (pc_CurRefPort != nullptr)
          {
-            for (QVector<C_GiPort *>::iterator pc_ItPort = mc_Ports.begin(); pc_ItPort != mc_Ports.end();
+            for (QList<C_GiPort *>::iterator pc_ItPort = mc_Ports.begin(); pc_ItPort != mc_Ports.end();
                  ++pc_ItPort)
             {
                pc_CurPort = *pc_ItPort;

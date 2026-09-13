@@ -13,7 +13,7 @@
 #include <cstdint>
 
 #include <QModelIndex>
-#include <QVector>
+#include <QList>
 
 #include "C_OgeTreeViewToolTipBase.hpp"
 #include "C_TblTreeModelCheckable.hpp"

@@ -50,7 +50,7 @@ const int32_t C_SebToolboxUtil::hs32_HEADING_SPACER_SIZE_TOP = 47;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdTopologyListWidget * C_SebToolboxUtil::h_AddNewList(const QString & orc_Name, QVBoxLayout * const opc_Layout,
-                                                        QVector<C_SdTopologyListWidget *> & orc_ListWidgets,
+                                                        QList<C_SdTopologyListWidget *> & orc_ListWidgets,
                                                         QWidget * const opc_Parent)
 {
    C_SdTopologyListWidget * pc_Retval = nullptr;

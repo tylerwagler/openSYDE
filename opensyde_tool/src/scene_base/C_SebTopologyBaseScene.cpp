@@ -129,9 +129,9 @@ void C_SebTopologyBaseScene::CheckAllItemsForChanges(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebTopologyBaseScene::m_LoadProject(void)
 {
-   QVector<uint32_t> c_SaveNodeIndices;
-   QVector<uint32_t> c_SaveBusIndices;
-   QVector<uint32_t> c_SaveIndices;
+   QList<uint32_t> c_SaveNodeIndices;
+   QList<uint32_t> c_SaveBusIndices;
+   QList<uint32_t> c_SaveIndices;
 
    for (uint32_t u32_It = 0; u32_It < C_PuiSdHandler::h_GetInstance()->GetOscNodesSize(); ++u32_It)
    {
@@ -173,9 +173,9 @@ void C_SebTopologyBaseScene::m_LoadProject(void)
    \param[in]  opc_IdMap                     Optional map for IDs to use
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndices,
-                                          const QVector<uint32_t> & orc_BusIndices,
-                                          const QVector<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection,
+void C_SebTopologyBaseScene::m_LoadSubset(const QList<uint32_t> & orc_NodeIndices,
+                                          const QList<uint32_t> & orc_BusIndices,
+                                          const QList<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection,
                                           const std::vector<C_PuiSdCompleteBusConnectionData> * const opc_AdditionalConnectionData,
                                           const QMap<C_PuiBsTemporaryDataId, uint64_t> * const opc_IdMap)
 {

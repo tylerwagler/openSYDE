@@ -2168,7 +2168,7 @@ void C_CamMetTreeModel::m_GrayOutTimer(void)
             if (s32_TransparencyStepDataByte !=
                 rc_Data.c_GreyOutInformation.c_MapMultiplexerValueToGrayOutValue[c_ItValue->first])
             {
-               QVector<int32_t> c_Roles;
+               QList<int32_t> c_Roles;
                const int32_t s32_Row = C_CamMetUtil::h_GetRowForMultiplexerValue(rc_Data.c_Signals, c_ItValue->first);
                // Save the new value
                rc_Data.c_GreyOutInformation.c_MapMultiplexerValueToGrayOutValue[c_ItValue->first] =
@@ -2208,7 +2208,7 @@ void C_CamMetTreeModel::m_GrayOutTimer(void)
             // Update the gray out value. The gray out value for data will be adapted too
             const int32_t s32_ColIdTime = C_CamMetTreeModel::h_EnumToColumn(eTIME_STAMP);
             const int32_t s32_ColIdCounter = C_CamMetTreeModel::h_EnumToColumn(eCAN_COUNTER);
-            QVector<int32_t> c_Roles;
+            QList<int32_t> c_Roles;
 
             rc_Data.c_GreyOutInformation.s32_GrayOutValueMsg = s32_TransparencyStepMsg;
 
@@ -2221,7 +2221,7 @@ void C_CamMetTreeModel::m_GrayOutTimer(void)
          {
             // Update the gray out value of CAN message data only.
             const int32_t s32_ColData = C_CamMetTreeModel::h_EnumToColumn(eCAN_DATA);
-            QVector<int32_t> c_Roles;
+            QList<int32_t> c_Roles;
 
             // Send the change only if the value changed really and let update the foreground only
             c_Roles.push_back(static_cast<int32_t>(Qt::ForegroundRole));

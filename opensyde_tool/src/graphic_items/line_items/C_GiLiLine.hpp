@@ -60,7 +60,7 @@ public:
    int32_t GetWidth(void) const;
    QColor GetColor(void) const;
    QColor GetMiddleLineColor(void) const;
-   QVector<C_GiLiLineConnection *> GetLines(void) const;
+   QList<C_GiLiLineConnection *> GetLines(void) const;
    bool GetMiddleLine(void) const;
 
    void SetAnimated(const bool oq_Active, const bool oq_Inverse = false, const bool oq_SpeedUp = false,
@@ -76,8 +76,8 @@ public:
    void SetInteractionWidth(const double & orf64_Value);
 
 protected:
-   QVector<QPointF> mc_Points;               ///< Interaction points of segmented line
-   QVector<C_GiLiLineConnection *> mc_Lines; ///< Interactable line segments of segmented line
+   QList<QPointF> mc_Points;               ///< Interaction points of segmented line
+   QList<C_GiLiLineConnection *> mc_Lines; ///< Interactable line segments of segmented line
 
 private:
    //Avoid call

@@ -498,7 +498,7 @@ bool C_SdNdeDalLogJobDataSelectionTableModel::setData(const QModelIndex & orc_In
                break;
             }
 
-            Q_EMIT this->dataChanged(orc_Index, orc_Index, QVector<int32_t>() << os32_Role);
+            Q_EMIT this->dataChanged(orc_Index, orc_Index, QList<int32_t>() << os32_Role);
 
             // Signal data changes to the data selection widget for data management
             Q_EMIT this->SigDataChanged(orc_Index, orc_Value.toString());

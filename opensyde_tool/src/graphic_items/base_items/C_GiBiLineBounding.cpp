@@ -44,7 +44,7 @@ using namespace stw::opensyde_core;
    \param[in]  orf64_InteractionPointWidth   Interaction point width
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiBiLineBounding::C_GiBiLineBounding(const QVector<QPointF> & orc_Points, const double & orf64_Width,
+C_GiBiLineBounding::C_GiBiLineBounding(const QList<QPointF> & orc_Points, const double & orf64_Width,
                                        const double & orf64_InteractionPointWidth) :
    mc_Points(orc_Points),
    mf64_Width(orf64_Width),

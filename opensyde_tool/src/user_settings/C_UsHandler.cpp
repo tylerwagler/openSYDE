@@ -422,7 +422,7 @@ QString C_UsHandler::GetCurrentSaveAsPath(void) const
    Recent colors as vector to color picker
 */
 //----------------------------------------------------------------------------------------------------------------------
-QVector<QColor> C_UsHandler::GetRecentColors(void) const
+QList<QColor> C_UsHandler::GetRecentColors(void) const
 {
    return this->mc_RecentColors;
 }
@@ -1290,7 +1290,7 @@ void C_UsHandler::SetCurrentSaveAsPath(const QString & orc_Value)
    \param[in]  orc_RecentColorsVector  Recent colors as vector from color picker
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsHandler::SetRecentColors(const QVector<QColor> & orc_RecentColorsVector)
+void C_UsHandler::SetRecentColors(const QList<QColor> & orc_RecentColorsVector)
 {
    this->mc_RecentColors = orc_RecentColorsVector;
 }
@@ -2663,7 +2663,7 @@ void C_UsHandler::SetProjSvUpdateEmptyOptionalSectionsVisible(const QString & or
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSvUpdateSectionsExpandedFlags(const QString & orc_ViewName, const QString & orc_NodeName,
-                                                       const QVector<bool> & orc_SectionsExpanded)
+                                                       const QList<bool> & orc_SectionsExpanded)
 {
    if (this->mc_ProjSvSetupView.contains(orc_ViewName) == true)
    {

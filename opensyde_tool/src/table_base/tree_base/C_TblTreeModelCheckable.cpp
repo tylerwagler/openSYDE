@@ -157,7 +157,7 @@ bool C_TblTreeModelCheckable::setData(const QModelIndex & orc_Index, const QVari
             // or has a parent
             this->m_CheckParent(pc_TreeItem, orc_Index, c_StartIndex);
 
-            Q_EMIT (this->dataChanged(c_StartIndex, c_EndIndex, QVector<int32_t>() << os32_Role));
+            Q_EMIT (this->dataChanged(c_StartIndex, c_EndIndex, QList<int32_t>() << os32_Role));
             q_Return = true;
          }
       }

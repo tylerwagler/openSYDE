@@ -166,7 +166,7 @@ C_SyvUpPacNodeWidget::C_SyvUpPacNodeWidget(const uint32_t ou32_ViewIndex, const 
    if (pc_View != nullptr)
    {
       int32_t s32_ExpectedSections;
-      QVector<bool> c_Flags = C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName().c_str()).
+      QList<bool> c_Flags = C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName().c_str()).
                               GetSvNode(orc_NodeName).GetSectionsExpanded();
 
       s32_ExpectedSections = static_cast<int32_t>(this->mc_DatablockWidgets.size());
@@ -211,7 +211,7 @@ C_SyvUpPacNodeWidget::~C_SyvUpPacNodeWidget()
 
    if (pc_View != nullptr)
    {
-      QVector<bool> c_Flags;
+      QList<bool> c_Flags;
       int32_t s32_DatablockCounter;
 
       c_Flags.resize(this->mc_DatablockWidgets.size());

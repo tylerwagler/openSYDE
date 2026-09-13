@@ -112,7 +112,7 @@ QPainterPath C_GiBiArrow::shape() const
    double f64_InteractioWidth = 0.0;
 
    //Copy points for interface
-   QVector<QPointF> c_Points;
+   QList<QPointF> c_Points;
    c_Points.reserve(this->mc_Points.size());
    for (int32_t s32_ItPoint = 0; s32_ItPoint < this->mc_Points.size(); ++s32_ItPoint)
    {
@@ -360,7 +360,7 @@ void C_GiBiArrow::mousePressEvent(QGraphicsSceneMouseEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiBiArrow::m_GenerateArrows()
 {
-   const QVector<C_GiLiLineConnection *> c_Lines = this->GetLines();
+   const QList<C_GiLiLineConnection *> c_Lines = this->GetLines();
 
    if (c_Lines.size() > 0)
    {

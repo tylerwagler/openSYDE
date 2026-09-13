@@ -12,7 +12,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
-#include <QVector>
+#include <QList>
 
 #include <cstdint>
 
@@ -45,7 +45,7 @@ public:
 
    virtual void SetParentHook(QWidget * const opc_Parent);
 
-   QVector<C_NagToolBarButtonProperties> GetVecToolBarFuncNames(void) const;
+   QList<C_NagToolBarButtonProperties> GetVecToolBarFuncNames(void) const;
 
    virtual void UserInputFunc(const uint32_t ou32_FuncNumber);
    virtual void Save(void);
@@ -94,7 +94,7 @@ Q_SIGNALS:
    void SigBlockDragAndDrop(const bool oq_Block);
 
 protected:
-   QVector<C_NagToolBarButtonProperties> mc_VecUserInputFuncNames;
+   QList<C_NagToolBarButtonProperties> mc_VecUserInputFuncNames;
 
 private:
    //Avoid call
