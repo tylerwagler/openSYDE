@@ -806,6 +806,7 @@ else()
    )
 
    set(OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock
    )
@@ -990,6 +991,18 @@ endif()
 # needs the flags that shaped it to be PUBLIC too.
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    target_compile_definitions(opensyde_core PUBLIC _LARGEFILE64_SOURCE)
+endif()
+
+# Core's security subsystem includes <openssl/*.h> directly. Linking OpenSSL is
+# deliberately left to the application -- so a tool that needs no crypto (e.g. CAN
+# Monitor) links no libcrypto -- but the headers still have to be on core's include
+# path to compile. On Linux they sit in the implicit /usr/include, so this was never
+# needed there; on macOS (keg-only openssl@3) and Windows/MinGW (Qt's OpenSSL) they
+# do not, so a standalone core build could not find them. Resolve the include
+# directory here: headers only, no target_link_libraries, so the link invariant holds.
+if(NOT OPENSYDE_CORE_SKIP_SECURITY)
+   find_package(OpenSSL REQUIRED)
+   list(APPEND OPENSYDE_CORE_INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
 endif()
 
 # add all include directories to library target and make public

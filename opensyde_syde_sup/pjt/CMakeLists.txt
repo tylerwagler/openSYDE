@@ -12,9 +12,7 @@ if (${LNX_LINK_OPENSSL_STATIC})
    set(OPENSSL_USE_STATIC_LIBS TRUE) 
 endif()
 
-if (NOT WIN32)
-   find_package(OpenSSL REQUIRED)
-endif()
+find_package(OpenSSL REQUIRED)
 
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 
@@ -23,16 +21,7 @@ set(SYDESUP_COMMON_INCLUDE_DIRECTORIES
    ${PROJECT_ROOT}/src
    )
 
-if (WIN32)
-   set(SYDESUP_COMMON_INCLUDE_DIRECTORIES
-      ${SYDESUP_COMMON_INCLUDE_DIRECTORIES}
-      #/libs/openssl/include needed only on Windows
-     ${PROJECT_ROOT}/../libraries/openssl/openssl32/include
-      )
-endif()
-
-
-include_directories(${SYDESUP_COMMON_INCLUDE_DIRECTORIES})
+include_directories(${SYDESUP_COMMON_INCLUDE_DIRECTORIES} ${OPENSSL_INCLUDE_DIR})
 
 set(SYDESUP_LINUX_INCLUDE_DIRECTORIES
    ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux
@@ -111,7 +100,7 @@ set(SYDESUP_LINK_LIBRARIES_WINDOWS
    opensyde_core
    ws2_32   #WinSock
    Iphlpapi #IP helper API
-   crypto
+   OpenSSL::Crypto
 )
 
 set(SYDESUP_LINK_LIBRARIES_LINUX
@@ -150,9 +139,6 @@ endif()
 
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
 if(WIN32)
-   link_directories(
-       ${PROJECT_ROOT}/../libraries/openssl/openssl32
-   )
    add_executable(SYDEsup ${SYDESUP_COMMON_SOURCES} ${SYDESUP_WINDOWS_SOURCES} ${PROJECT_ROOT}/src/WindowsMain.cpp)
    target_link_libraries(SYDEsup ${SYDESUP_LINK_LIBRARIES_WINDOWS})
 else()    

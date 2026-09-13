@@ -8,13 +8,16 @@ set(CMAKE_SYSTEM_NAME Linux)
 cmake_host_system_information(RESULT _host_arch QUERY OS_PLATFORM)
 set(CMAKE_SYSTEM_PROCESSOR "${_host_arch}")
 
-# Use default compiler (GCC)
-set(CMAKE_C_COMPILER gcc)
+# clang is the project's unifying compiler across Linux, macOS and Windows.
+# On Linux it uses libstdc++ (clang's default here): the system Qt6 is built with
+# libstdc++, and opensyde_core is a single shared static library linked by both the
+# Qt GUI tools and the CLI tools, so its standard library must be the one Qt uses.
+# (macOS and Windows use libc++ because their Qt does.)
+set(CMAKE_C_COMPILER clang)
 set(CMAKE_C_FLAGS "-Wall -Wextra -Wpedantic")
-set(CMAKE_CXX_COMPILER g++)
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -std=c++23")
+set(CMAKE_CXX_COMPILER clang++)
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
 
-# Enable C++17 standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

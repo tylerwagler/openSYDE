@@ -14,12 +14,8 @@ include_directories(
    ${PROJECT_ROOT}/src
    ${PROJECT_ROOT}/src/v2_filer
 )
-if(NOT WIN32)
-   find_package(OpenSSL REQUIRED)
-   include_directories(${OPENSSL_INCLUDE_DIR})
-else()
-   include_directories(${PROJECT_ROOT}/libs/openssl/openssl/include)
-endif()
+find_package(OpenSSL REQUIRED)
+include_directories(${OPENSSL_INCLUDE_DIR})
 
 # --- COMPILER FLAGS AND LIBRARIES -------------------------------------------------------------------------------------
 
@@ -101,12 +97,6 @@ set(OSY_TSP_CONVERT_SOURCES
    ${PROJECT_ROOT}/src/v2_filer/C_OscTargetSupportPackageV2Filer.hpp
 )
 
-if(WIN32)
-   link_directories(
-       ../libs/openssl/openssl
-   )
-endif()
-
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
 
 # define binary name and sources
@@ -116,9 +106,9 @@ add_executable(osy_tsp_convert ${OSY_TSP_CONVERT_SOURCES})
 target_link_libraries(osy_tsp_convert
    opensyde_core
 )
-if(NOT WIN32)
-   target_link_libraries(osy_tsp_convert OpenSSL::SSL OpenSSL::Crypto)
-else()
+target_link_libraries(osy_tsp_convert OpenSSL::SSL OpenSSL::Crypto)
+if(WIN32)
+   # Windows version-info API (GetFileVersionInfo*) used by h_GetApplicationVersion
    target_link_libraries(osy_tsp_convert version)
 endif()
 

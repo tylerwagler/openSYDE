@@ -26,9 +26,6 @@
 #include "C_OscErrorCategory.hpp"
 #include "C_OscIpDispatcher.hpp"
 #include <string>
-#include <string>
-#include <vector>
-#include "TglTasks.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

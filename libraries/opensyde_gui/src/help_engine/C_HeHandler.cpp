@@ -79,7 +79,7 @@ void C_HeHandler::CallSpecificHelpPage(const QString & orc_ClassName)
    {
       if (c_PageSearchName.compare("") == 0)
       {
-         this->mpr_HtmlHelp(GetDesktopWindow(), this->m_GetHelpLocation().toStdString(), HH_DISPLAY_TOPIC, 0);
+         this->mpr_HtmlHelp(GetDesktopWindow(), this->m_GetHelpLocation().toStdString().c_str(), HH_DISPLAY_TOPIC, 0);
       }
       else
       {
@@ -103,7 +103,7 @@ void C_HeHandler::CallSpecificHelpPage(const QString & orc_ClassName)
          //this->mpr_HtmlHelp(GetDesktopWindow(), mh_GetHelpLocation().toStdString(), HH_DISPLAY_TOPIC, 0);
          //lint -e{923,1924,9091} Required by API interface
          this->mpr_HtmlHelp(GetDesktopWindow(),
-                            this->m_GetHelpLocation().toStdString(), HH_KEYWORD_LOOKUP, (DWORD_PTR) &c_Link);
+                            this->m_GetHelpLocation().toStdString().c_str(), HH_KEYWORD_LOOKUP, (DWORD_PTR) &c_Link);
          delete[] (pcn_Text);
       }
    }

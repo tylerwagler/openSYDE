@@ -19,7 +19,6 @@
 #else
 #include <sys/select.h>
 #include <unistd.h>
-#include "C_SclStringUtil.hpp"
 
 // Linux equivalent of the Windows kbhit(): returns >0 if a byte is available on stdin.
 static int kbhit(void)
@@ -36,6 +35,7 @@ static int kbhit(void)
 
 #include <cstdint>
 #include "version_config.hpp"
+#include "C_SclStringUtil.hpp"
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
 #include "TglTime.hpp"

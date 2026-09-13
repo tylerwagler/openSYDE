@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <cerrno>
+#include <locale.h> // strtod_l / _strtod_l for a locale-independent double fallback
 #include <climits>
 #include <format>
 #include <stdexcept>
@@ -455,11 +456,35 @@ inline double ToDoubleCompat(const std::string & orc_Str)
    }
 
    double f64_Value = 0.0;
+#if defined(__cpp_lib_to_chars)
+   //Preferred path: std::from_chars is locale-independent and gives identical results
+   //across libstdc++ and Apple libc++ (see the note above).
    const std::from_chars_result c_Result = std::from_chars(pcn_Begin, pcn_End, f64_Value);
    if (c_Result.ec != std::errc())
    {
       throw std::invalid_argument("ToDoubleCompat: string does not contain a double value");
    }
+#else
+   //Fallback for standard libraries without floating-point std::from_chars (e.g.
+   //LLVM-MinGW's libc++ 17, where the overload is =deleted). strtod tolerates
+   //trailing characters like from_chars; parse against an explicit "C" locale so
+   //the decimal point is always '.' (matching the ',' -> '.' step above) and the
+   //result stays locale-independent regardless of the process locale -- plain
+   //strtod would honour LC_NUMERIC and mis-parse under a comma-decimal locale.
+   char * pcn_ParseEnd = nullptr;
+#ifdef _WIN32
+   static const _locale_t hx_CLocale = _create_locale(LC_ALL, "C");
+   f64_Value = _strtod_l(pcn_Begin, &pcn_ParseEnd, hx_CLocale);
+#else
+   static const locale_t hx_CLocale = newlocale(LC_ALL_MASK, "C", static_cast<locale_t>(0));
+   f64_Value = strtod_l(pcn_Begin, &pcn_ParseEnd, hx_CLocale);
+#endif
+   if (pcn_ParseEnd == pcn_Begin)
+   {
+      throw std::invalid_argument("ToDoubleCompat: string does not contain a double value");
+   }
+   static_cast<void>(pcn_End);
+#endif
    return f64_Value;
 }
 

@@ -18,16 +18,6 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-# For supporting windows .rc files - only enable on Windows
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-   enable_language("RC")
-   # Special configuration of RC file compiling with windres necessary. Without change, the command line call is to long
-   # for windres with all include paths forwarded by CMake
-   set(CMAKE_RC_INCLUDE_PATH
-      ${PROJECT_ROOT}/src
-   )
-   set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
-endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)
@@ -41,6 +31,18 @@ endif()
 
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/../..)
 set(OPENSYDE_GUI_ROOT ${PROJECT_ROOT}/../libraries/opensyde_gui)
+
+# Windows resource compilation. Must come after PROJECT_ROOT is set: an empty
+# PROJECT_ROOT here yields a bogus windres -I and the .rc's icon cannot be found.
+# A dedicated CMAKE_RC_INCLUDE_PATH also keeps the windres command line short
+# (the full CMake include list overflows it).
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+   enable_language("RC")
+   set(CMAKE_RC_INCLUDE_PATH
+      ${PROJECT_ROOT}/src
+   )
+   set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
+endif()
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -178,17 +180,10 @@ set (OPENSYDE_GUI_LIB_INCLUDES
    # vendored header from here -- must come after the wrapper dir
    ${PROJECT_ROOT}/../libraries/qcustomplot/upstream
    # Vector DBC headers come transitively from CanLibraries::dbc
-   ${PROJECT_ROOT}/../libraries/osy_git_data_model_monitor/includes
 )
-# macOS uses the system OpenSSL (Homebrew) like Linux; only Windows vendors it.
-if(WIN32)
-   list(APPEND OPENSYDE_GUI_LIB_INCLUDES
-   ${PROJECT_ROOT}/../libraries/openssl/openssl64/include
-   )
-else()
-   find_package(OpenSSL REQUIRED)
-   list(APPEND OPENSYDE_GUI_LIB_INCLUDES ${OPENSSL_INCLUDE_DIR})
-endif()
+# OpenSSL is resolved via find_package on every platform -- nothing is vendored.
+find_package(OpenSSL REQUIRED)
+list(APPEND OPENSYDE_GUI_LIB_INCLUDES ${OPENSSL_INCLUDE_DIR})
 
 # --- PROJECT SOURCE FILE PATHS ----------------------------------------------------------------------------------------
 
@@ -1964,18 +1959,14 @@ if(NOT TARGET qcustomplot)
 endif()
 list(APPEND OPENSYDE_LINK_LIBRARIES qcustomplot)
 
+# OpenSSL is resolved via find_package on every platform (done above) -- nothing vendored.
+list(APPEND OPENSYDE_LINK_LIBRARIES OpenSSL::SSL OpenSSL::Crypto)
 if(WIN32)
    list(APPEND OPENSYDE_LINK_LIBRARIES
       version
       ws2_32   #WinSock
       Iphlpapi #IP helper API
-      ${PROJECT_ROOT}/../libraries/openssl/openssl64/libssl.a
-      ${PROJECT_ROOT}/../libraries/openssl/openssl64/libcrypto.a
-      ${PROJECT_ROOT}/../libraries/osy_git_data_model_monitor/libosy_git_data_model_monitor.a
    )
-else()
-   # macOS and Linux: system OpenSSL via find_package (done above).
-   list(APPEND OPENSYDE_LINK_LIBRARIES OpenSSL::SSL OpenSSL::Crypto)
 endif()
 
 # COMPILER SWITCHES
@@ -2006,12 +1997,8 @@ qt_add_executable(openSYDE
 # marking library modules with the keyword "SYSTEM" to suppress its warnings
 target_include_directories(openSYDE PRIVATE ${OPENSYDE_GUI_INCLUDES})
 target_include_directories(openSYDE SYSTEM PRIVATE ${OPENSYDE_GUI_LIB_INCLUDES})
-# core also needs path to openSSL:
-if(WIN32)
-   target_include_directories(opensyde_core PRIVATE ${PROJECT_ROOT}/../libraries/openssl/openssl64/include)
-else()
-   target_include_directories(opensyde_core PRIVATE ${OPENSSL_INCLUDE_DIR})
-endif()
+# core also needs the OpenSSL headers (resolved via find_package on every platform)
+target_include_directories(opensyde_core PRIVATE ${OPENSSL_INCLUDE_DIR})
 
 target_link_libraries(openSYDE PRIVATE ${OPENSYDE_LINK_LIBRARIES})
 

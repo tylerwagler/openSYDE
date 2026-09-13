@@ -1,27 +1,19 @@
 # openSYDE CI — Build & Test
 #
-# Builds the opensyde_core library, runs its unit tests, and smoke-builds all
-# eight tools on Ubuntu with Qt6.
+# Builds opensyde_core + its unit tests and smoke-builds all eight tools on the
+# three platforms the project ships: Linux, macOS and Windows. The toolchain is
+# clang everywhere (build.sh selects the per-OS toolchain file):
+#   - Linux   (ubuntu-26.04):  clang + libstdc++  (matches the system Qt)
+#   - macOS   (macos-14):      Apple clang + libc++
+#   - Windows (windows-2022):  LLVM-MinGW clang + libc++ (Qt llvm-mingw_64 kit)
 #
-# Runner target: resolute (26.04 LTS), the distro this fork develops against.
+# Nothing is vendored: OpenSSL and zlib are resolved via find_package (zlib is
+# built from source on Windows, where LLVM-MinGW ships none), and QCustomPlot is
+# built from the in-tree copy.
 #
-# Older releases are deliberately NOT targeted. Package names diverge across
-# them — jammy (22.04) calls the Qt6 SVG development package libqt6svg6-dev,
-# whereas noble (24.04) onward call it qt6-svg-dev — so supporting a range
-# would mean per-release package selection for no benefit to a fork that only
-# ships against one distro.
-#
-# Both jobs build with resolute's default g++ (GCC 15). Nothing is pinned: the
-# core job previously pinned g++-12 and g++-13, inherited from a Phase 0 matrix
-# that targeted jammy and noble, so it was compiling core with two versions
-# nobody ships while build.sh built the tools with the default. Core and the
-# GUI tools now agree on one compiler, and it is the one resolute users get.
-#
-# ubuntu-26.04 is still a preview runner image. It is NOT marked
-# continue-on-error: as the only target it has to gate, or CI stops meaning
-# anything. The tradeoff is that preview-image flakiness will show up as a red
-# build; if that becomes noisy, add a second GA runner back rather than
-# reinstating continue-on-error.
+# Windows deps come from the Qt online-installer tooling via install-qt-action
+# (Qt for the llvm-mingw kit, plus the llvm-mingw toolchain, Ninja and OpenSSL)
+# and winflexbison for flex/bison. Git Bash runs build.sh, exactly as on a dev box.
 
 name: Build & Test
 
@@ -30,19 +22,22 @@ on:
     branches: [main, develop, master]
   pull_request:
     branches: [main, develop, master]
-  workflow_dispatch: # allow manual trigger
+  workflow_dispatch:
 
 env:
   BUILD_TYPE: Debug
 
 jobs:
+  # --- opensyde_core + unit tests -------------------------------------------------------------------------------------
+  # Linux/macOS build core standalone (system/Homebrew zlib). Windows core needs the
+  # root build for its from-source zlib, so its tests run in the tools job instead.
   core-library:
     name: Core Library (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-26.04]
+        os: [ubuntu-26.04, macos-14]
 
     steps:
       - name: Checkout repository
@@ -50,49 +45,48 @@ jobs:
         with:
           submodules: recursive
 
-      # flex and bison generate the Vector_DBC scanner/parser, and opensyde_core
-      # links CanLibraries::dbc, so they are required for configure to succeed.
-      # FlexLexer.h ships in libfl-dev, NOT in flex itself — without libfl-dev
-      # CMake leaves FLEX_INCLUDE_DIR unset and Vector_DBC fails to generate.
-      - name: Install system dependencies
+      # flex/bison generate the Vector_DBC scanner; FlexLexer.h ships in libfl-dev.
+      # clang is the compiler the Linux toolchain selects.
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq \
-            cmake ninja-build g++ \
-            qt6-base-dev \
-            libgl1-mesa-dev \
-            libssl-dev \
+            clang cmake ninja-build \
+            libgl1-mesa-dev libssl-dev \
             flex bison libfl-dev
 
-      # Compile every subsystem (security, protocol drivers, zipping,
-      # imports, code generation, project handling, param set, system package
-      # handling, x-config/-certificates generation, logging) so untested
-      # code cannot rot unnoticed. Only the Windows-only subsystems are
-      # skipped (they cannot build on the Ubuntu runner).
-      - name: Configure CMake (core library tests, full coverage)
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update -q
+          brew install -q ninja bison flex openssl@3
+
+      # Both OSes drive core through their toolchain file so the compiler/flags match
+      # build.sh (clang). Only the Windows-only subsystems are skipped here.
+      - name: Configure (core + tests)
         run: >
-          cmake
-          -S libraries/opensyde_core
-          -B build/core
-          -G Ninja
+          cmake -S libraries/opensyde_core -B build/core -G Ninja
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
           -DOPENSYDE_CORE_BUILD_TESTS=ON
           -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON
           -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
+          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/cmake/toolchain_${{ runner.os == 'macOS' && 'macos' || 'linux' }}.cmake
 
       - name: Build
-        run: cmake --build build/core -j $(nproc)
+        run: cmake --build build/core -j "$(getconf _NPROCESSORS_ONLN)"
 
       - name: Run unit tests
-        run: ctest --test-dir build/core --output-on-failure -j $(nproc)
+        run: ctest --test-dir build/core --output-on-failure -j "$(getconf _NPROCESSORS_ONLN)"
 
+  # --- all eight tools (Linux/macOS) ----------------------------------------------------------------------------------
   gui-tools:
     name: GUI Tools (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-26.04]
+        os: [ubuntu-26.04, macos-14]
 
     steps:
       - name: Checkout repository
@@ -100,69 +94,118 @@ jobs:
         with:
           submodules: recursive
 
-      # build.sh requires plain `g++` (it never pins a version), so install the
-      # default metapackage rather than a numbered compiler. libssl-dev, flex,
-      # bison and libfl-dev are needed for the same reasons as the core job.
-      #
-      # libqcustomplot-dev is required by the openSYDE tool: on Linux it links
-      # the system QCustomPlot (libraries/qcustomplot/ holds only a
-      # QT_NO_KEYWORDS compatibility wrapper around the system header, not a
-      # vendored library). The package ships libQCustomPlotQt6.so, which is the
-      # Qt6 variant the project's find_library() call looks for.
-      - name: Install system dependencies
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq \
-            cmake ninja-build g++ ccache \
+            clang cmake ninja-build ccache \
             qt6-base-dev qt6-svg-dev qt6-tools-dev \
-            libgl1-mesa-dev \
-            libssl-dev \
-            flex bison libfl-dev \
-            libqcustomplot-dev
+            libgl1-mesa-dev libssl-dev \
+            flex bison libfl-dev
 
-      # build.sh now drives the root CMakeLists: opensyde_core is compiled once
-      # and every tool links that archive. The old reason for ccache here --
-      # collapsing eight duplicate core builds within a single run -- is gone,
-      # and a clean `all` dropped from 1,139 core objects across eight archives
-      # to 220 in one.
-      #
-      # ccache is kept because it still collapses work *across* runs via the
-      # restore-key below, which is the larger win on CI.
-      #
-      # CCACHE_SLOPPINESS is still required: every target uses
-      # target_precompile_headers and ccache refuses PCH builds without it. The
-      # first run measured 2240 of 2445 calls (91.6%) UNCACHEABLE with a 0.49%
-      # hit rate for exactly that reason. CCACHE_BASEDIR rewrites absolute paths
-      # relative to the workspace so a cached object still matches when the
-      # workspace path differs between runs.
+      # brew for the non-Qt deps only. Qt comes from install-qt-action below: the
+      # `qt` meta-formula drags in qtwebengine (source build -> fails), and the
+      # split qtbase/qtsvg kegs put Svg in a separate prefix that Qt's component
+      # search doesn't discover. install-qt-action gives one unified Qt prefix
+      # (Svg included) and sets Qt6_DIR, which build.sh forwards.
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update -q
+          brew install -q ninja bison flex openssl@3 ccache
+
+      - name: Install Qt (macOS)
+        if: runner.os == 'macOS'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          host: mac
+          target: desktop
+          arch: clang_64
+
       - name: Restore ccache
         uses: actions/cache@v5
         with:
-          path: ~/.cache/ccache
+          path: ${{ github.workspace }}/.ccache
           key: ccache-gui-${{ matrix.os }}-${{ github.sha }}
           restore-keys: |
             ccache-gui-${{ matrix.os }}-
 
       - name: Build all tools (smoke test)
         env:
+          CCACHE_DIR: ${{ github.workspace }}/.ccache
           CCACHE_SLOPPINESS: pch_defines,time_macros,include_file_mtime,include_file_ctime
           CCACHE_BASEDIR: ${{ github.workspace }}
         run: ./build.sh -b Debug all
 
       - name: ccache statistics
         if: always()
+        env:
+          CCACHE_DIR: ${{ github.workspace }}/.ccache
         run: ccache --show-stats
 
-      # build.sh no longer exercises the per-tool path, but each tool's own
-      # pjt/CMakeLists.txt is still expected to configure standalone -- it guards
-      # its core add_subdirectory with if(NOT TARGET opensyde_core) and falls back
-      # to building its own core with its own SKIP_* set. Nothing else tests that
-      # now, so it would rot silently. Configure only: this catches a broken guard
-      # or a missing variable in seconds, without paying for a second core build.
       - name: Verify a tool still configures standalone
+        if: runner.os == 'Linux'
         run: >
-          cmake
-          -S opensyde_tsp_convert/pjt
-          -B build/standalone-check
-          -G Ninja
+          cmake -S opensyde_tsp_convert/pjt -B build/standalone-check -G Ninja
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+
+  # --- all eight tools + core tests (Windows, LLVM-MinGW clang) --------------------------------------------------------
+  windows:
+    name: Tools + Core Tests (windows-2022)
+    runs-on: windows-2022
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      # Qt for the llvm-mingw kit, plus the llvm-mingw clang toolchain, Ninja and
+      # OpenSSL — the same components the Qt online installer provides on a dev box.
+      - name: Install Qt + LLVM-MinGW + Ninja + OpenSSL
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          host: windows
+          target: desktop
+          arch: win64_llvm_mingw
+          modules: qtimageformats
+          tools: 'tools_llvm_mingw1706 tools_ninja tools_opensslv3_x64'
+          add-tools-to-path: true
+
+      # flex/bison for Vector_DBC (CMake's FindFLEX/FindBISON recognise win_flex/
+      # win_bison). Put winflexbison's real tools dir on PATH -- it holds win_flex.exe
+      # next to FlexLexer.h, so FindFLEX can derive FLEX_INCLUDE_DIR. The choco shim
+      # in chocolatey\bin is not co-located with the header, which leaves it NOTFOUND.
+      - name: Install winflexbison
+        shell: pwsh
+        run: |
+          choco install --no-progress winflexbison3
+          $tools = Split-Path (Get-ChildItem C:\ProgramData\chocolatey\lib\winflexbison3 -Recurse -Filter win_flex.exe | Select-Object -First 1).FullName
+          Write-Host "winflexbison tools: $tools"
+          Add-Content -Path $env:GITHUB_PATH -Value $tools
+
+      # build.sh (Git Bash) selects cmake/toolchain_windows.cmake (clang) by uname.
+      # Qt6_DIR is set by install-qt-action; point OpenSSL and Qt on CMAKE_PREFIX_PATH.
+      # zlib is built from source by the CMake config.
+      - name: Build all tools
+        shell: bash
+        env:
+          OPENSSL_ROOT_DIR: ${{ env.IQTA_TOOLS }}/OpenSSLv3/Win_x64
+          CMAKE_PREFIX_PATH: ${{ env.QT_ROOT_DIR }};${{ env.IQTA_TOOLS }}/OpenSSLv3/Win_x64
+        run: ./build.sh -b Debug all
+
+      - name: Build + run core unit tests
+        shell: bash
+        env:
+          OPENSSL_ROOT_DIR: ${{ env.IQTA_TOOLS }}/OpenSSLv3/Win_x64
+          CMAKE_PREFIX_PATH: ${{ env.QT_ROOT_DIR }};${{ env.IQTA_TOOLS }}/OpenSSLv3/Win_x64
+        run: |
+          cmake -S . -B build/coretests -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DOPENSYDE_BUILD_GUI_TOOLS=OFF \
+            -DOPENSYDE_CORE_BUILD_TESTS=ON \
+            -DCMAKE_TOOLCHAIN_FILE="$PWD/cmake/toolchain_windows.cmake"
+          cmake --build build/coretests -j "$(nproc)"
+          ctest --test-dir build/coretests/opensyde_core --output-on-failure -j "$(nproc)"

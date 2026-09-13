@@ -197,10 +197,12 @@ ROOT_BUILD_DIR="$REPO_ROOT/build/$BUILD_TYPE"
 
 # One toolchain per host OS. The Linux one sets CMAKE_SYSTEM_NAME, which on macOS
 # would put CMake into cross-compiling mode and break find_package; the macOS one
-# also has to point at Homebrew keg-only packages (bison, OpenSSL, Qt).
+# points at Homebrew keg-only packages (bison, OpenSSL, Qt); the Windows one is a
+# native MinGW build (run from Git Bash / MSYS, where uname reports MINGW*/MSYS*).
 case "$(uname -s)" in
-    Darwin) TOOLCHAIN_FILE="toolchain_macos.cmake" ;;
-    *)      TOOLCHAIN_FILE="toolchain_linux.cmake" ;;
+    Darwin)                   TOOLCHAIN_FILE="toolchain_macos.cmake" ;;
+    MINGW*|MSYS*|CYGWIN*)     TOOLCHAIN_FILE="toolchain_windows.cmake" ;;
+    *)                        TOOLCHAIN_FILE="toolchain_linux.cmake" ;;
 esac
 
 configure_root() {

@@ -1,4 +1,5 @@
 #include <cstring>
+#include <filesystem>
 #include "gtest/gtest.h"
 #include "C_OscXmlParser.hpp"
 #include "C_OscErrorCategory.hpp"
@@ -293,7 +294,8 @@ TEST(XmlParser, DeleteNode)
 
 TEST(XmlParser, SaveAndLoadFile)
 {
-   const std::string c_TmpFile = "/tmp/opensyde_test_xml.xml";
+   // Use the platform temp dir, not a hardcoded /tmp (which does not exist on Windows).
+   const std::string c_TmpFile = (std::filesystem::temp_directory_path() / "opensyde_test_xml.xml").string();
 
    stw::opensyde_core::C_OscXmlParser c_Writer;
    c_Writer.CreateAndSelectNodeChild("testdata");
