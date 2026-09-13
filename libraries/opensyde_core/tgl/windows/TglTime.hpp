@@ -38,7 +38,6 @@ public:
 };
 
 void TglGetDateTimeNow(C_TglDateTime & orc_DateTime);
-void TglDelayUs(const uint32_t ou32_NumberUs);
 void TglSleep(const uint32_t ou32_NumberMs);
 void TglSleepPolling();
 uint32_t TglGetTickCount(void);

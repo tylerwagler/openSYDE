@@ -59,26 +59,6 @@ void stw::tgl::TglGetDateTimeNow(C_TglDateTime & orc_DateTime)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Actively wait for a period of time
-
-   Actively blocks for the given number of microseconds.
-   Depending on the underlying system very short delays might not be possible
-     and are rounded up to the smallest possible delay.
-   Thus for example 10 calls of TGL_DelayUs(1) can cause a longer delay than 1 call of TGL_DelayUs(10).
-
-   \param[in]   ou32_NumberUs             number of microseconds to block
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void stw::tgl::TglDelayUs(const uint32_t ou32_NumberUs)
-{
-   const uint64_t u64_StopTime = TglGetTickCountUs() + ou32_NumberUs;
-
-   while (TglGetTickCountUs() < u64_StopTime)
-   {
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Sleep for a number of milliseconds
 
    Delay for a number of milliseconds. Thread control shall meanwhile be passed on.

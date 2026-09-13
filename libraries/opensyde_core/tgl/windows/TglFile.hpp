@@ -36,7 +36,6 @@ public:
    //for now we only need the name ...
 };
 
-bool TglFileAgeString(const std::string & orc_FileName, std::string & orc_String);
 int32_t TglFileSize(const std::string & orc_FileName);
 bool TglDirectoryExists(const std::string & orc_Path);
 bool TglFileExists(const std::string & orc_FileName);

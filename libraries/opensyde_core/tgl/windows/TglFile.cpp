@@ -120,50 +120,6 @@ static bool m_CheckUncShare(const std::string & orc_Path)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   get file age time as string
-
-   Report the specified file's timestamp as a string.
-   Format of returned string: "dd.mm.yyyy hh:mm:ss"
-
-   \param[in]     orc_FileName     path to file
-   \param[out]    orc_String       timestamp as string
-
-   \return
-   true      timestamp placed in oc_String  \n
-   false     error -> oc_String not valid
-*/
-//----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglFileAgeString(const std::string & orc_FileName, std::string & orc_String)
-{
-   bool q_Return;
-   uint16_t u16_Time;
-   uint16_t u16_Date;
-   C_SclDateTime c_DateTime;
-
-   q_Return = m_FileAgeDosTime(orc_FileName, &u16_Date, &u16_Time);
-   if (q_Return == true)
-   {
-      c_DateTime.mu16_Day    = static_cast<uint16_t>(u16_Date & 0x1FU);
-      c_DateTime.mu16_Month  = static_cast<uint16_t>((u16_Date >> 5U) & 0x0FU);
-      c_DateTime.mu16_Year   = static_cast<uint16_t>((u16_Date >> 9U) + 1980U);
-      c_DateTime.mu16_Hour   = static_cast<uint16_t>(u16_Time >> 11U);
-      c_DateTime.mu16_Minute = static_cast<uint16_t>((u16_Time >> 5U) & 0x3FU);
-      c_DateTime.mu16_Second = static_cast<uint16_t>((u16_Time & 0x1FU) * 2U);
-   }
-   else
-   {
-      c_DateTime.mu16_Day    = 1U;
-      c_DateTime.mu16_Month  = 1U;
-      c_DateTime.mu16_Year   = 1970U;
-      c_DateTime.mu16_Hour   = 0U;
-      c_DateTime.mu16_Minute = 0U;
-      c_DateTime.mu16_Second = 0U;
-   }
-   orc_String = c_DateTime.DateTimeToString();
-   return q_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   get file size in bytes
 
    Return the specified file's file size in bytes.
