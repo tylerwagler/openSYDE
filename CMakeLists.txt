@@ -50,6 +50,33 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # On x86-64 the cost for a static library linked into executables is negligible.
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+# zlib on Windows. Vector_BLF and CAN Monitor need zlib, but the LLVM-MinGW clang
+# toolchain ships none (MinGW-GCC did; borrowing it would drag libstdc++ headers
+# into a libc++ build). Build it from source -- source, not a vendored binary --
+# and expose it under the names consumers expect: the classic FindZLIB result
+# variables (Vector_BLF uses ${ZLIB_INCLUDE_DIRS}/${ZLIB_LIBRARIES}) and the
+# ZLIB::ZLIB imported target (CAN Monitor). OVERRIDE_FIND_PACKAGE makes the
+# find_package(ZLIB) calls in those subprojects resolve here. Windows-only:
+# Linux and macOS resolve zlib from the system as before.
+if(WIN32)
+   include(FetchContent)
+   FetchContent_Declare(ZLIB
+      GIT_REPOSITORY https://github.com/madler/zlib.git
+      GIT_TAG        v1.3.1
+      OVERRIDE_FIND_PACKAGE
+   )
+   set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+   FetchContent_MakeAvailable(ZLIB)
+   if(TARGET zlibstatic)
+      if(NOT TARGET ZLIB::ZLIB)
+         add_library(ZLIB::ZLIB ALIAS zlibstatic)
+      endif()
+      set(ZLIB_INCLUDE_DIRS "${zlib_SOURCE_DIR}" "${zlib_BINARY_DIR}" CACHE INTERNAL "source-built zlib includes")
+      set(ZLIB_LIBRARIES    zlibstatic                                CACHE INTERNAL "source-built zlib library")
+      set(ZLIB_FOUND        TRUE                                      CACHE INTERNAL "source-built zlib present")
+   endif()
+endif()
+
 # Everything on: this core serves every tool, so it must be the union of what they need.
 set(OPENSYDE_CORE_SKIP_ZIPPING                     0)
 set(OPENSYDE_CORE_SKIP_IMPORTS                     0)
