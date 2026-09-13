@@ -5,37 +5,29 @@ For phase-specific work, see `docs/agent_plans/`.
 For in-code `TODO` / `FIXME` / `HACK` comments tracked individually,
 see `docs/code-comment-todos.md`.
 
-## Reimplement the data-logger trigger-expression validator
+## Data-logger trigger-expression validator — done
 
 `C_SdNdeDalTriggerCheckHelper` (data logger trigger conditions in the System
-Definition editor) is **stubbed on every platform**: `h_Check` always reports
-the expression as valid and `h_ParseDataElements` returns nothing. The target
-device still validates trigger conditions at runtime — this only removes the
-editor-time syntax/variable feedback.
+Definition editor) validates expressions again, on **all three platforms**, with
+nothing vendored.
 
-It was stubbed because its real implementation depended on
-`libraries/osy_git_data_model_monitor/`, which is **a prebuilt `.a` plus headers
-with no `.cpp` source in the tree** (the archive contains a compiled
-`lexer.cpp.obj`; the rest is header-only templates). A committed prebuilt binary
-can't be part of a cross-platform build and can't be rebuilt for a new
-compiler/ABI, so it was wired Windows-only and is now dropped from the build.
-The directory is kept **only as reference material** for the rework.
+It had been stubbed because the real implementation depended on
+`libraries/osy_git_data_model_monitor/` — a prebuilt `.a` plus headers with no
+source in the tree, which could not be part of a cross-platform build. That
+directory is now **deleted**.
 
-To restore the feature properly (all three platforms, nothing vendored), either:
+The lexer and grammar were reimplemented from scratch as
+`C_OscDataLoggerTriggerParser` in `opensyde_core` (`project/system/node/data_logger/`),
+covering the pieces openSYDE actually used — the library's event/dispatcher
+framework was never used here and is gone. The grammar was recovered from the old
+archive (cast pattern `^\[[A-Za-z0-9]+\]$`, dot-separated channel paths, the
+comparison/logical operator set) and from the original consumer code, and is
+pinned by unit tests in `tests/test_data_logger_trigger_parser.cpp`. The original
+error messages ("Missing left operand for comparison operator", "Missing/Unexpected
+closing parenthesis", …) are preserved.
 
-- **Reimplement from scratch** against the existing headers in
-  `libraries/osy_git_data_model_monitor/includes/` — the missing piece is
-  essentially the regex-based lexer (`data::monitor::Lexer`, token set in
-  `data/monitor/lexer.hpp`); the expression AST (`expression.hpp/.tpp`,
-  `operand.*`) is already header-only. Build it as a normal CMake library.
-- **Or recover the original source** (`lexer.cpp` et al.) from wherever the
-  `.a` was built and add it as a source-built library.
-- **Or decompile** `libosy_git_data_model_monitor.a` to recover the lexer logic.
-
-The pre-stub implementation is in git history (the `#else // _WIN32` arm of
-`C_SdNdeDalTriggerCheckHelper.cpp` before the Windows port) and shows the exact
-API surface the validator consumed (`Lexer::lex`, `ChannelDataContainer`,
-`BooleanExpression::evaluate`).
+Because the parser lives in core, it is compiled and tested on every platform —
+the old implementation sat behind `#ifdef _WIN32` and was never built at all.
 
 ## Dark Mode
 
@@ -203,40 +195,20 @@ Option 1 is preferred, done a directory at a time.
 - `opensyde_tool`, `opensyde_can_monitor`, `opensyde_syde_flash` — outstanding,
   445 sites as of the phase 5 completion.
 
-## Windows-only code paths are never compiled
+## Windows-only code paths are never compiled — done
 
-CI runs `ubuntu-26.04` only, and the remote build host is Debian, so anything
-behind `#ifdef _WIN32` is not compiled by anything we run. 23 files in our own
-trees carry `_WIN32` conditionals. Most guard a few lines (a Win32 API call with
-a POSIX sibling), which is low risk.
+CI now builds and tests on Linux, macOS **and** Windows (LLVM-MinGW clang), so
+`#ifdef _WIN32` code is compiled by something we run. The worst offender —
+`C_SdNdeDalTriggerCheckHelper.cpp`, of which ~1,124 of 1,167 lines were
+Windows-only and had never been compiled — no longer has a platform split at
+all: its expression handling moved into `C_OscDataLoggerTriggerParser` in core
+and the file builds everywhere.
 
-One is not:
-
-- `opensyde_tool/src/system_definition/node_edit/data_logger/C_SdNdeDalTriggerCheckHelper.cpp`
-  is `#ifndef _WIN32` → a stub returning `true`, `#else` → the real
-  implementation. About **1,124 of its 1,167 lines are Windows-only** and have
-  never been compiled here. The Linux stub comment says the
-  `osy_git_data_model_monitor` library is unavailable, so data logger trigger
-  validation does not run on Linux at all — the expression is only checked on
-  the device.
-
-This bit during the `ToDouble` locale fix: the `std::stod` call and its exception
-handler both live in that branch, so the edit went in unverified by any compiler.
-
-Options, cheapest first:
-
-1. **Accept and flag it.** Note in review that edits to that file are unbuilt.
-   Free, and unreliable.
-2. **Add a Windows CI job.** `windows-latest` with the MinGW toolchain the tool
-   targets. Real coverage, but the Qt install is the slow part and the job would
-   dominate CI time.
-3. **Make the Linux stub compile the parseable parts.** Split the file so the
-   pure logic (token parsing, constant conversion, syntax checks) builds
-   everywhere and only the `osy_git_data_model_monitor` calls stay guarded.
-   Best coverage per minute of CI, but it is a real refactor of a 1,167-line
-   file.
-
-Option 3 is the one worth doing if that file gets touched again.
+Bringing those paths under a compiler immediately turned up real latent bugs
+(a lost `.` in `TglFile`, a dead `TglTasks.hpp` include, a wide `WCHAR*` used as
+`std::string`, `std::string` passed where `LPCSTR` was expected, an ill-formed
+`reinterpret_cast<HWND>(nullptr)`, and a committed merge-conflict marker in a
+`.rc` file) — which is the argument for keeping the Windows job green.
 
 ## Core build warnings — done
 
