@@ -723,11 +723,30 @@ fixed numeric layout, not from the formatter swap:
 
 "Cache date-time string, update only when the millisecond changes" would not
 have helped: at ~1 µs per call the millisecond almost always *has* changed, so
-the cache would miss nearly every time. The equivalent idea that would pay is
-caching the `localtime_r` result per *second*, which is now the largest single
-term (~400 ns, 40% of the remaining call). Not done here — it is a change to
-`TglGetDateTimeNow`, shared by every caller, and belongs with a decision about
-the 1-second staleness window across a DST change.
+the cache would miss nearly every time. The version that pays is caching the
+`localtime_r` result per *second*, and that was done in a second pass:
+
+**`TglGetDateTimeNow` 366 ns → 60 ns, taking `BM_WriteLogInfo` to 620 ns —
+4.2x against the pre-7.1 baseline.**
+
+Measured first: `localtime_r` was 289 ns of the 366, `clock_gettime` only 44. The
+breakdown is by definition identical for every call within one second, so it is
+computed once per second per thread. The cache is `thread_local` rather than
+shared, because a shared one needs the lock this is avoiding.
+
+The cost is that a change in the local time rules — a DST transition, or a
+process calling `tzset()` after changing `TZ` — is picked up at the next second
+boundary rather than immediately. The staleness is bounded at one second because
+the cache key is the absolute second the rules are applied to, not a duration
+since the last lookup.
+
+POSIX only. The Windows `TglGetDateTimeNow` is a different implementation
+(`GetLocalTime`) and was left alone.
+
+`TglGetDateTimeNow` also had no test. `tests/test_tgl_time.cpp` now compares it
+against an independent conversion on every call across a second boundary, and
+that test was mutation-checked: with the invalidation broken it fails, which is
+the only evidence that it tests anything.
 
 The log line format and the `__FILE__`/`__func__` handling had **no test**
 before this. They are now pinned byte for byte, and those tests were run against

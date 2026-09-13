@@ -187,12 +187,12 @@ Per-tool build directories under `build/`; deploy target defaults to
 Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `-DOPENSYDE_CORE_BUILD_TESTS=ON`, run with `ctest`.
 
-20 suites, 253 tests: `test_application_info_block`, `test_checksums`,
+21 suites, 258 tests: `test_application_info_block`, `test_checksums`,
 `test_cstdint`, `test_data_logger_trigger_parser`, `test_datapool_content_util`,
 `test_dynamic_array`, `test_hex_file`, `test_hex_string_parsing`, `test_logging`,
 `test_node_datapool_content`, `test_osc_error_category`, `test_project_metadata`,
 `test_protocol_driver_base`, `test_protocol_serial_number`, `test_scl_string`,
-`test_security_aes_file`, `test_stwerrors`, `test_tgl_file`,
+`test_security_aes_file`, `test_stwerrors`, `test_tgl_file`, `test_tgl_time`,
 `test_view_security_options`, `test_xml_parser`.
 
 The suite runs on all three platforms, so anything it touches must avoid
@@ -398,7 +398,7 @@ detail.
 | 4 — Replace homegrown AES | Done for files; wire protocol deliberately out of scope. `C_OscSecurityAesFile` is AES-256-GCM + PBKDF2 (600k) with a versioned 56-byte header and key wiping. `C_OscSecurityAesCbc` remains AES-128-CBC and is still used by `C_OscProtocolSecuritySubLayer` — changing that is an ECU-side protocol change, not a PC-side one |
 | 5 — Error handling modernization | Done — every STW `int32_t` error return in `opensyde_core` is `std::error_code` (9 waves: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc, protocol_drivers, dispatchers/xml_parser/project plus a final six). Bridging scaffolding fell 238 → 8; 19 functions stay `int32_t` on purpose (foreign conventions). No `static_cast<Errc>` misuse remains |
 | 6 — Concurrency & singletons | 6.1 done (`std::call_once`; Meyer's singleton rejected). 6.2 done (`C_TglCriticalSection` and `TglTasks` deleted, 52 sites on `std::mutex`). 6.3 closed — no defect found |
-| 7 — Performance | 7.1 done — logging hot path 2.53x (`BM_WriteLogInfo` 2.5µs → 1.0µs, Release). The win was allocation and a hand-written fixed-width timestamp, **not** the `std::format` swap the plan prescribed, which alone was only 1.4x. `localtime_r` (~400 ns) is now the largest remaining term. 7.2 and 7.3 open — both need a decision before code, see `PLAN.md` |
+| 7 — Performance | 7.1 done — logging hot path **4.2x** (`BM_WriteLogInfo` ~2.6µs → ~0.62µs, Release). The win was allocation, a hand-written fixed-width timestamp, and a per-second `localtime_r` cache in `TglGetDateTimeNow` (366 → 60 ns) — **not** the `std::format` swap the plan prescribed, which alone was only 1.4x. 7.2 and 7.3 open — both need a decision before code, see `PLAN.md` |
 | 8 — Build system modernization | Done — CMake minimum 3.25, CI reworked, ccache added, unified root build (one opensyde_core, all eight tools). C++23 adopted tree-wide (root + core + tool toolchains) on 2026-09-08 |
 
 Cross-cutting follow-ups (dark mode, Linux version string, About dialog) live in
