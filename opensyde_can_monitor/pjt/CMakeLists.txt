@@ -18,14 +18,6 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-# For supporting windows .rc files - only enable on Windows
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-   enable_language("RC")
-   set(CMAKE_RC_INCLUDE_PATH
-      ${PROJECT_ROOT}/src/can_monitor
-   )
-   set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
-endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)
@@ -39,6 +31,16 @@ endif()
 
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 set(OPENSYDE_GUI_ROOT ${PROJECT_ROOT}/../libraries/opensyde_gui)
+
+# Windows resource compilation. Must come after PROJECT_ROOT is set: an empty
+# PROJECT_ROOT here yields a bogus windres -I and the .rc's icon cannot be found.
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+   enable_language("RC")
+   set(CMAKE_RC_INCLUDE_PATH
+      ${PROJECT_ROOT}/src/can_monitor
+   )
+   set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
+endif()
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -540,19 +542,17 @@ set(OPENSYDE_LINK_LIBRARIES
    CanLibraries::dbc
    CanLibraries::blf
 )
-# macOS links system zlib (ships with the SDK) like Linux; only Windows vendors it.
+# zlib is resolved via find_package on every platform (system zlib on Linux/macOS,
+# the MinGW-bundled zlib on Windows) -- nothing is vendored into the tree.
+find_package(ZLIB REQUIRED)
+list(APPEND OPENSYDE_LINK_LIBRARIES
+   ZLIB::ZLIB
+)
 if(WIN32)
    list(APPEND OPENSYDE_LINK_LIBRARIES
       version
       ws2_32   #WinSock
       Iphlpapi #IP helper API
-      ${PROJECT_ROOT}/../libraries/zlib/libzlibstatic.a
-   )
-else()
-   find_package(PkgConfig REQUIRED)
-   find_package(ZLIB REQUIRED)
-   list(APPEND OPENSYDE_LINK_LIBRARIES
-      ZLIB::ZLIB
    )
 endif()
 

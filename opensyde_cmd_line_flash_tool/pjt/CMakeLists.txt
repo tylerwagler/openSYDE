@@ -13,12 +13,8 @@ set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 include_directories(
    ${PROJECT_ROOT}/src
 )
-if(NOT WIN32)
-   find_package(OpenSSL REQUIRED)
-   include_directories(${OPENSSL_INCLUDE_DIR})
-else()
-   include_directories(${PROJECT_ROOT}/libs/openssl/openssl/include)
-endif()
+find_package(OpenSSL REQUIRED)
+include_directories(${OPENSSL_INCLUDE_DIR})
 
 # --- COMPILER FLAGS AND LIBRARIES -------------------------------------------------------------------------------------
 
@@ -103,12 +99,6 @@ set(OSY_CMD_LINE_FLASH_TOOL_SOURCES
    ../src/resources.rc
 )
 
-if(WIN32)
-   link_directories(
-       ../libs/openssl/openssl
-   )
-endif()
-
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
 
 # define binary name and sources
@@ -118,9 +108,9 @@ add_executable(osy_cmd_line_flash_tool ${OSY_CMD_LINE_FLASH_TOOL_SOURCES})
 target_link_libraries(osy_cmd_line_flash_tool
    opensyde_core
 )
-if(NOT WIN32)
-   target_link_libraries(osy_cmd_line_flash_tool OpenSSL::SSL OpenSSL::Crypto)
-else()
+target_link_libraries(osy_cmd_line_flash_tool OpenSSL::SSL OpenSSL::Crypto)
+if(WIN32)
+   # Windows version-info API (GetFileVersionInfo*) used by mh_GetApplicationVersion
    target_link_libraries(osy_cmd_line_flash_tool version)
 endif()
 

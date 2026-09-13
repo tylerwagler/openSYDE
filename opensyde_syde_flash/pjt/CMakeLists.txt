@@ -18,14 +18,6 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-   enable_language("RC")
-   set(CMAKE_RC_INCLUDE_PATH
-      ${PROJECT_ROOT}/src/syde_flash
-   )
-   set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
-endif()
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)
 
@@ -38,6 +30,18 @@ endif()
 
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 set(OPENSYDE_GUI_ROOT ${PROJECT_ROOT}/../libraries/opensyde_gui)
+
+# Windows resource compilation. Must come after PROJECT_ROOT is set: the include
+# path feeds windres both version_config.hpp and the icon referenced by the .rc,
+# and an empty PROJECT_ROOT here silently yields a bogus -I and a "can't open
+# icon file" failure (never seen until Windows was actually built).
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+   enable_language("RC")
+   set(CMAKE_RC_INCLUDE_PATH
+      ${PROJECT_ROOT}/src/syde_flash
+   )
+   set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
+endif()
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -448,20 +452,18 @@ set(OPENSYDE_LINK_LIBRARIES
    Qt6::SvgWidgets
    opensyde_core
 )
-# macOS links system OpenSSL (Homebrew) like Linux; only Windows vendors the .a files.
+# OpenSSL is resolved via find_package on every platform (system/Homebrew on
+# Linux/macOS, Qt's installed OpenSSL on Windows) -- nothing is vendored.
+find_package(OpenSSL REQUIRED)
+list(APPEND OPENSYDE_LINK_LIBRARIES
+   OpenSSL::SSL
+   OpenSSL::Crypto
+)
 if(WIN32)
    list(APPEND OPENSYDE_LINK_LIBRARIES
       version
       ws2_32   #WinSock
       Iphlpapi #IP helper API
-      ${PROJECT_ROOT}/../libraries/openssl/openssl64/libssl.a
-      ${PROJECT_ROOT}/../libraries/openssl/openssl64/libcrypto.a
-   )
-else()
-   find_package(OpenSSL REQUIRED)
-   list(APPEND OPENSYDE_LINK_LIBRARIES
-      OpenSSL::SSL
-      OpenSSL::Crypto
    )
 endif()
 
