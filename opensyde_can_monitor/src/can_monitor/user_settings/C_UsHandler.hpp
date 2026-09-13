@@ -121,8 +121,6 @@ public:
 
    void Save(void) const;
 
-   static int32_t h_GetParentFolder(const QString & orc_CompletePath, QString & orc_Parent,
-                                    const bool & orq_CompletePathContainsFile);
 
 private:
    static C_UsHandler * mhpc_Singleton;

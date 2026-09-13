@@ -560,63 +560,6 @@ void C_UsHandler::Save(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get parent folder of path with or without file
-
-   \param[in]   orc_CompletePath                Complete path
-   \param[out]  orc_Parent                      Parent folder
-   \param[in]   orq_CompletePathContainsFile    Indicator if complete path contains a file (filenames can't be handled automatically
-                                                as there is no difference to a folder name,
-                                                e.g. in Windows you can name a folder "MyFolder.MyExtension")
-
-   \return
-   C_NO_ERR: Parent valid
-   C_RANGE:  Parent invalid = No parent found
-             Sources: Input empty
-                Path does not exist
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_UsHandler::h_GetParentFolder(const QString & orc_CompletePath, QString & orc_Parent,
-                                       const bool & orq_CompletePathContainsFile)
-{
-   int32_t s32_Retval;
-
-   if (orc_CompletePath.compare("") == 0)
-   {
-      s32_Retval = C_RANGE;
-   }
-   else
-   {
-      QString c_Path;
-
-      //RemoveFile
-      if (orq_CompletePathContainsFile == true)
-      {
-         const QFileInfo c_File(orc_CompletePath);
-         c_Path = c_File.absoluteDir().absolutePath();
-      }
-      else
-      {
-         c_Path = orc_CompletePath;
-      }
-      //GetParent
-      {
-         QDir c_Dir(c_Path);
-
-         if (c_Dir.cdUp() == true)
-         {
-            s32_Retval = C_NO_ERR;
-            orc_Parent = c_Dir.path();
-         }
-         else
-         {
-            s32_Retval = C_RANGE;
-         }
-      }
-   }
-   return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Constructor
 
    Load currently set values
