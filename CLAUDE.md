@@ -187,7 +187,7 @@ Per-tool build directories under `build/`; deploy target defaults to
 Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `-DOPENSYDE_CORE_BUILD_TESTS=ON`, run with `ctest`.
 
-21 suites, 258 tests: `test_application_info_block`, `test_checksums`,
+21 suites, 265 tests: `test_application_info_block`, `test_checksums`,
 `test_cstdint`, `test_data_logger_trigger_parser`, `test_datapool_content_util`,
 `test_dynamic_array`, `test_hex_file`, `test_hex_string_parsing`, `test_logging`,
 `test_node_datapool_content`, `test_osc_error_category`, `test_project_metadata`,
@@ -400,6 +400,11 @@ detail.
 | 6 — Concurrency & singletons | 6.1 done (`std::call_once`; Meyer's singleton rejected). 6.2 done (`C_TglCriticalSection` and `TglTasks` deleted, 52 sites on `std::mutex`). 6.3 closed — no defect found |
 | 7 — Performance | 7.1 done — logging hot path **4.2x** (`BM_WriteLogInfo` ~2.6µs → ~0.62µs, Release). The win was allocation, a hand-written fixed-width timestamp, and a per-second `localtime_r` cache in `TglGetDateTimeNow` (366 → 60 ns) — **not** the `std::format` swap the plan prescribed, which alone was only 1.4x. 7.2 and 7.3 open — both need a decision before code, see `PLAN.md` |
 | 8 — Build system modernization | Done — CMake minimum 3.25, CI reworked, ccache added, unified root build (one opensyde_core, all eight tools). C++23 adopted tree-wide (root + core + tool toolchains) on 2026-09-08 |
+
+A whole-tree consolidation sweep ran 2026-09-13; findings, what was rejected and
+why, and the ranked remainder are in `docs/agent_plans/consolidation_sweep/FINDINGS.md`.
+Read that before starting any dedup work — several of the largest apparent wins
+are deliberately declined there.
 
 Cross-cutting follow-ups (dark mode, Linux version string, About dialog) live in
 `docs/TODO.md`; in-code `TODO`/`FIXME` markers are catalogued in
