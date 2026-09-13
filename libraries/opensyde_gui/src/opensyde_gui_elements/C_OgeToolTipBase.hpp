@@ -13,6 +13,8 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
+#include <QEvent>
+#include <QWidget>
 
 #include "C_NagToolTip.hpp"
 
@@ -36,6 +38,14 @@ public:
    void ShowToolTipWhenDisabled(const bool oq_ShowToolTip);
 
 protected:
+   bool m_HandleToolTipEvent(QEvent * const opc_Event, QWidget & orc_Widget, bool & orq_Handled);
+
+   //Hooks for the two signals. They cannot live here because this class is deliberately not a
+   //QObject -- it is mixed into widgets that already derive from one. Defaults do nothing, which
+   //is what the widgets that declare no such signal did before.
+   virtual void m_EmitLastChanceToUpdateToolTip(void);
+   virtual void m_EmitHideOtherToolTips(void);
+
    virtual void m_HideToolTip(void);
    stw::opensyde_gui::C_NagToolTip * m_GetToolTip(void);
 

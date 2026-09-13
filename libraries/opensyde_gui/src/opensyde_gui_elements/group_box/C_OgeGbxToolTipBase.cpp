@@ -59,52 +59,8 @@ C_OgeGbxToolTipBase::C_OgeGbxToolTipBase(QWidget * const opc_Parent) :
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OgeGbxToolTipBase::event(QEvent * const opc_Event)
 {
-   bool q_Return;
+   bool q_Handled;
+   const bool q_Return = this->m_HandleToolTipEvent(opc_Event, *this, q_Handled);
 
-   if (this->mq_ToolTipActive == true)
-   {
-      if (opc_Event->type() == QEvent::ToolTip)
-      {
-         //show tooltip
-         if (this->m_GetToolTip()->isVisible() == false)
-         {
-            QHelpEvent * const pc_HelpEvent = dynamic_cast<QHelpEvent * const>(opc_Event);
-
-            if (pc_HelpEvent != nullptr)
-            {
-               this->setMouseTracking(true);
-
-               this->m_GetToolTip()->SetHeading(this->mc_ToolTipHeading);
-               this->m_GetToolTip()->SetContent(this->mc_ToolTipContent);
-               this->m_GetToolTip()->SetType(this->me_ToolTipType);
-               this->m_GetToolTip()->show();
-               this->m_GetToolTip()->DoMove(pc_HelpEvent->globalPos());
-            }
-         }
-         //Accept event because of Qt dynamic tooltip time based on the fact if there was a tooltip in this widget
-         // already
-         opc_Event->accept();
-         q_Return = true;
-      }
-      else if (opc_Event->type() == QEvent::Leave)
-      {
-         //hide on leave
-         this->m_HideToolTip();
-
-         this->setMouseTracking(false);
-
-         opc_Event->accept();
-         q_Return = true;
-      }
-      else
-      {
-         q_Return = QGroupBox::event(opc_Event);
-      }
-   }
-   else
-   {
-      q_Return = QGroupBox::event(opc_Event);
-   }
-
-   return q_Return;
+   return (q_Handled == true) ? q_Return : QGroupBox::event(opc_Event);
 }
