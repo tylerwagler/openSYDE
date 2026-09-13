@@ -1344,3 +1344,59 @@ void C_Uti::h_SortIndicesAscendingAndSync<uint32_t>(std::vector<uint32_t> & orc_
 C_Uti::C_Uti(void)
 {
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get parent folder of a path
+
+   Shared by the three C_UsHandler implementations (openSYDE, CAN Monitor, SYDEflash), which
+   each carried a byte-identical copy of this.
+
+   \param[in]   orc_CompletePath                   Complete path
+   \param[out]  orc_Parent                         Parent folder
+   \param[in]   orq_CompletePathContainsFile       Indicator if complete path contains a file
+
+   \return
+   C_NO_ERR  Parent valid
+   C_RANGE   Parent invalid, e.g. path empty or already at the root
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_Uti::h_GetParentFolder(const QString & orc_CompletePath, QString & orc_Parent,
+                                 const bool & orq_CompletePathContainsFile)
+{
+   int32_t s32_Retval;
+
+   if (orc_CompletePath.compare("") == 0)
+   {
+      s32_Retval = C_RANGE;
+   }
+   else
+   {
+      QString c_Path;
+
+      //RemoveFile
+      if (orq_CompletePathContainsFile == true)
+      {
+         const QFileInfo c_File(orc_CompletePath);
+         c_Path = c_File.absoluteDir().absolutePath();
+      }
+      else
+      {
+         c_Path = orc_CompletePath;
+      }
+      //GetParent
+      {
+         QDir c_Dir(c_Path);
+
+         if (c_Dir.cdUp() == true)
+         {
+            s32_Retval = C_NO_ERR;
+            orc_Parent = c_Dir.path();
+         }
+         else
+         {
+            s32_Retval = C_RANGE;
+         }
+      }
+   }
+   return s32_Retval;
+}

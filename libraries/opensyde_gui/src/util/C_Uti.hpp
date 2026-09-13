@@ -79,6 +79,8 @@ public:
    template <typename T>
    static void h_SortIndicesAscendingAndSync(std::vector<uint32_t> & orc_IndicesTmp, std::vector<T> & orc_SyncContent);
    static QString h_GetAbsolutePathFromExe(const QString & orc_Path);
+   static int32_t h_GetParentFolder(const QString & orc_CompletePath, QString & orc_Parent,
+                                    const bool & orq_CompletePathContainsFile);
    static bool h_IsPathRelativeToDir(const QString & orc_PathIn, const QString & orc_AbsoluteReferenceDir,
                                      QString & orc_PathAbsolute, QString & orc_PathRelative);
    static QString h_GetHashValueAsQtString(void);
