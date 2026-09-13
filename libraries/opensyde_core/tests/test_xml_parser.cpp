@@ -2,6 +2,7 @@
 #include <filesystem>
 #include "gtest/gtest.h"
 #include "C_OscXmlParser.hpp"
+#include "C_OscXmlParserLog.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "C_SclStringUtil.hpp"
 
@@ -315,4 +316,140 @@ TEST(XmlParser, LoadNonexistentFile_ReturnsError)
 {
    stw::opensyde_core::C_OscXmlParser c_Parser;
    EXPECT_EQ(stw::errors::Errc::noact, c_Parser.LoadFromFile("/nonexistent/path/file.xml"));
+}
+
+/* -- Error-returning API ------------------------------------------------------------------------------------------- */
+/* The *Error() helpers are the migration target for the filer layer, which still hand-rolls
+   "if (SelectNodeChild(x) == x) {...} else {log; C_CONFIG;}" at roughly 130 sites. Before any
+   of that is converted the helpers' contract needs pinning, because two parts of it are easy
+   to get wrong: the base class reports NOTHING (only C_OscXmlParserLog does), and a failed
+   select leaves the cursor where it was rather than unwinding. */
+
+namespace
+{
+//Builds <root><child attr="7" flag="true"/></root> with root selected
+void mh_MakeDoc(stw::opensyde_core::C_OscXmlParser & orc_Parser)
+{
+   orc_Parser.CreateAndSelectNodeChild("root");
+   orc_Parser.CreateAndSelectNodeChild("child");
+   orc_Parser.SetAttributeUint32("attr", 7UL);
+   orc_Parser.SetAttributeBool("flag", true);
+   orc_Parser.SelectNodeParent();
+}
+
+//Observes whether the logging subclass reported, without depending on the log file
+class C_SpyParser :
+   public stw::opensyde_core::C_OscXmlParserLog
+{
+public:
+   mutable uint32_t mu32_NodeMissingReports = 0U;
+   mutable std::string mc_LastMissingNode;
+
+   void ReportErrorForNodeMissing(const std::string & orc_MissingNodeName) const override
+   {
+      this->mu32_NodeMissingReports++;
+      this->mc_LastMissingNode = orc_MissingNodeName;
+      stw::opensyde_core::C_OscXmlParserLog::ReportErrorForNodeMissing(orc_MissingNodeName);
+   }
+};
+}
+
+TEST(XmlParserErrorApi, SelectNodeChildError_SucceedsAndMovesCursor)
+{
+   stw::opensyde_core::C_OscXmlParser c_Parser;
+
+   mh_MakeDoc(c_Parser);
+
+   EXPECT_FALSE(static_cast<bool>(c_Parser.SelectNodeChildError("child")));
+   EXPECT_EQ("child", c_Parser.GetCurrentNodeName());
+}
+
+TEST(XmlParserErrorApi, SelectNodeChildError_MissingReturnsConfigAndLeavesCursorPut)
+{
+   stw::opensyde_core::C_OscXmlParser c_Parser;
+
+   mh_MakeDoc(c_Parser);
+
+   const std::error_code c_Error = c_Parser.SelectNodeChildError("nope");
+   EXPECT_TRUE(static_cast<bool>(c_Error));
+   EXPECT_EQ(stw::errors::Errc::config, c_Error);
+   //The filers rely on this: a failed select needs no SelectNodeParent() to recover
+   EXPECT_EQ("root", c_Parser.GetCurrentNodeName());
+}
+
+TEST(XmlParserErrorApi, GetAttributeErrors_ReadValuesWhenPresent)
+{
+   stw::opensyde_core::C_OscXmlParser c_Parser;
+
+   mh_MakeDoc(c_Parser);
+   c_Parser.SelectNodeChild("child");
+
+   uint32_t u32_Value = 0U;
+   bool q_Value = false;
+   EXPECT_FALSE(static_cast<bool>(c_Parser.GetAttributeUint32Error("attr", u32_Value)));
+   EXPECT_EQ(7U, u32_Value);
+   EXPECT_FALSE(static_cast<bool>(c_Parser.GetAttributeBoolError("flag", q_Value)));
+   EXPECT_TRUE(q_Value);
+}
+
+TEST(XmlParserErrorApi, GetAttributeErrors_MissingZeroTheOutParameter)
+{
+   stw::opensyde_core::C_OscXmlParser c_Parser;
+
+   mh_MakeDoc(c_Parser);
+   c_Parser.SelectNodeChild("child");
+
+   //Pre-set to a non-default so the overwrite is observable: callers must not keep their own value
+   uint32_t u32_Value = 99U;
+   bool q_Value = true;
+   int32_t s32_Value = -5;
+
+   EXPECT_EQ(stw::errors::Errc::config, c_Parser.GetAttributeUint32Error("absent", u32_Value));
+   EXPECT_EQ(0U, u32_Value);
+   EXPECT_EQ(stw::errors::Errc::config, c_Parser.GetAttributeBoolError("absent", q_Value));
+   EXPECT_FALSE(q_Value);
+   EXPECT_EQ(stw::errors::Errc::config, c_Parser.GetAttributeSint32Error("absent", s32_Value));
+   EXPECT_EQ(0, s32_Value);
+}
+
+TEST(XmlParserErrorApi, BaseParserReportsNothingOnFailure)
+{
+   //The whole point of the Log subclass: the base class is silent. A filer that drops its
+   //hand-written osc_write_log_error in favour of the helper loses the message unless the
+   //caller passed a C_OscXmlParserLog.
+   C_SpyParser c_Spy;
+   stw::opensyde_core::C_OscXmlParser & rc_AsBase = c_Spy;
+
+   mh_MakeDoc(c_Spy);
+   //Called through the base type, the virtual still dispatches to the override...
+   EXPECT_TRUE(static_cast<bool>(rc_AsBase.SelectNodeChildError("nope")));
+   EXPECT_EQ(1U, c_Spy.mu32_NodeMissingReports);
+
+   //...but a plain C_OscXmlParser has no reporting path at all
+   stw::opensyde_core::C_OscXmlParser c_Plain;
+   mh_MakeDoc(c_Plain);
+   EXPECT_TRUE(static_cast<bool>(c_Plain.SelectNodeChildError("nope")));
+}
+
+TEST(XmlParserErrorApi, LogParserReportsTheMissingNodeName)
+{
+   C_SpyParser c_Spy;
+
+   c_Spy.SetLogHeading("UnitTest");
+   mh_MakeDoc(c_Spy);
+
+   EXPECT_EQ(stw::errors::Errc::config, c_Spy.SelectNodeChildError("nope"));
+   EXPECT_EQ(1U, c_Spy.mu32_NodeMissingReports);
+   EXPECT_EQ("nope", c_Spy.mc_LastMissingNode);
+}
+
+TEST(XmlParserErrorApi, LogParserSucceedsSilently)
+{
+   C_SpyParser c_Spy;
+
+   c_Spy.SetLogHeading("UnitTest");
+   mh_MakeDoc(c_Spy);
+
+   EXPECT_FALSE(static_cast<bool>(c_Spy.SelectNodeChildError("child")));
+   EXPECT_EQ(0U, c_Spy.mu32_NodeMissingReports);
 }

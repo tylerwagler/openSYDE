@@ -156,8 +156,9 @@ std::error_code C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcCo
 {
    std::error_code c_Retval = Errc::success;
 
-   // Device Type
-   if (orc_XmlParser.SelectNodeChild("definition-content-version") == "definition-content-version")
+   // Definition content version
+   c_Retval = orc_XmlParser.SelectNodeChildError("definition-content-version");
+   if (!c_Retval)
    {
       orc_IoData.u32_DefinitionContentVersion = 0UL;
       try
@@ -171,30 +172,24 @@ std::error_code C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcCo
          c_Retval = Errc::config;
       }
    }
-   else
-   {
-      c_Retval = Errc::config;
-   }
 
-   // Definition content version
+   // Device Type
    if (!c_Retval)
    {
-      if (orc_XmlParser.SelectNodeChild("device-type") == "device-type")
+      c_Retval = orc_XmlParser.SelectNodeChildError("device-type");
+      if (!c_Retval)
       {
          orc_IoData.c_DeviceType = orc_XmlParser.GetNodeContent();
          //Return
          orc_XmlParser.SelectNodeParent();
-      }
-      else
-      {
-         c_Retval = Errc::config;
       }
    }
 
    if (!c_Retval)
    {
       // Domains
-      if (orc_XmlParser.SelectNodeChild("domains") == "domains")
+      c_Retval = orc_XmlParser.SelectNodeChildError("domains");
+      if (!c_Retval)
       {
          std::string c_NodeDomain = orc_XmlParser.SelectNodeChild("domain");
 
@@ -206,15 +201,17 @@ std::error_code C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcCo
             c_Retval = C_OscHalcConfigFiler::h_LoadIoDomain(c_Domain, orc_XmlParser);
 
             // Domain Id
-            if (orc_XmlParser.SelectNodeChild("domain-id") == "domain-id")
+            //Guarded because h_LoadIoDomain above already assigned c_Retval: assigning the
+            //select result unconditionally would report success and lose that failure.
+            if (!c_Retval)
             {
-               c_Domain.c_Id = orc_XmlParser.GetNodeContent();
-               //Return
-               orc_XmlParser.SelectNodeParent();
-            }
-            else
-            {
-               c_Retval = Errc::config;
+               c_Retval = orc_XmlParser.SelectNodeChildError("domain-id");
+               if (!c_Retval)
+               {
+                  c_Domain.c_Id = orc_XmlParser.GetNodeContent();
+                  //Return
+                  orc_XmlParser.SelectNodeParent();
+               }
             }
 
             if (!c_Retval)
@@ -233,7 +230,8 @@ std::error_code C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcCo
 
                      q_AtLeastOneChannelId = true;
 
-                     if (orc_XmlParser.SelectNodeChild("name") == "name")
+                     c_Retval = orc_XmlParser.SelectNodeChildError("name");
+                     if (!c_Retval)
                      {
                         C_OscHalcDefChannelDef c_ChannelDef;
 
@@ -243,10 +241,6 @@ std::error_code C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcCo
 
                         //Return
                         orc_XmlParser.SelectNodeParent();
-                     }
-                     else
-                     {
-                        c_Retval = Errc::config;
                      }
 
                      // Parameter Ids
@@ -317,10 +311,6 @@ std::error_code C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcCo
             //Return "domains"
             orc_XmlParser.SelectNodeParent();
          }
-      }
-      else
-      {
-         c_Retval = Errc::config;
       }
    }
 
