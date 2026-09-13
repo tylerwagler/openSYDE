@@ -204,7 +204,7 @@ void C_GiLiBusConnector::UpdateData(C_PuiSdNodeConnection * const opc_UiConnecti
       }
       opc_UiConnection->c_UiNodeConnectionInteractionPoints.clear();
       opc_UiConnection->c_UiNodeConnectionInteractionPoints.reserve(this->mc_Points.size());
-      for (QVector<C_GiLiInteractionPoint *>::const_iterator pc_ItPoint = this->mc_Points.begin();
+      for (QList<C_GiLiInteractionPoint *>::const_iterator pc_ItPoint = this->mc_Points.begin();
            pc_ItPoint != this->mc_Points.end(); ++pc_ItPoint)
       {
          opc_UiConnection->c_UiNodeConnectionInteractionPoints.push_back((*pc_ItPoint)->scenePos());

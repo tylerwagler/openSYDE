@@ -154,7 +154,7 @@ private:
    C_SdTopologyScene(const C_SdTopologyScene &);
    C_SdTopologyScene & operator =(const C_SdTopologyScene &) &; //lint !e1511 //we want to hide the base func.
 
-   QVector<uint32_t> m_CopyFromSnapshotToSceneHandleNodes(
+   QList<uint32_t> m_CopyFromSnapshotToSceneHandleNodes(
       const stw::opensyde_gui_logic::C_SdTopologyDataSnapshot & orc_Snapshot, const QMap<uint32_t,
                                                                                          uint32_t> & orc_MapOldBusIndexToNewBusIndex)
    const;
@@ -211,13 +211,13 @@ private:
    std::vector<uint8_t> m_BuildCompleteIpAddress(const uint8_t & oru8_IpLastByte);
 
    void m_ShowInterfaceChangePopUp(QGraphicsItem * const opc_Item);
-   void m_LoadSnapshot(const QVector<uint32_t> & orc_NodeIndices, const QVector<uint32_t> & orc_BusIndices,
-                       const QVector<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection, const std::vector<
+   void m_LoadSnapshot(const QList<uint32_t> & orc_NodeIndices, const QList<uint32_t> & orc_BusIndices,
+                       const QList<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection, const std::vector<
                           stw::opensyde_gui_logic::C_PuiSdCompleteBusConnectionData
                           > * const opc_AdditionalConnectionData,
                        const QMap<stw::opensyde_gui_logic::C_PuiBsTemporaryDataId,
                                   uint64_t> * const opc_IdMap);
-   static void mh_AddAndUpdateHigher(QVector<uint32_t> & orc_Vec, const uint32_t & oru32_New);
+   static void mh_AddAndUpdateHigher(QList<uint32_t> & orc_Vec, const uint32_t & oru32_New);
    void m_BusConnectorReconnectionStart(const C_GiLiBusConnector::E_ConnectState & ore_ConnectState,
                                         const QGraphicsItem * const opc_Item = nullptr,
                                         const stw::opensyde_core::C_OscSystemBus::E_Type * const ope_Type = nullptr,

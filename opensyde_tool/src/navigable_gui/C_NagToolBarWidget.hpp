@@ -14,7 +14,7 @@
 
 #include <QWidget>
 #include <QPixmap>
-#include <QVector>
+#include <QList>
 
 #include "C_NagUseCaseWidget.hpp"
 
@@ -84,9 +84,9 @@ private:
    Ui::C_NagToolBarWidget * mpc_Ui;
 
    C_NagUseCaseWidget * mpc_ActUseCaseWidget;
-   QVector<stw::opensyde_gui_elements::C_OgePubToolBar *> mc_VecButtons;
-   QVector<QWidget *> mc_VecGroupBox;
-   QVector<bool> mc_VecGroupBoxVisible;
+   QList<stw::opensyde_gui_elements::C_OgePubToolBar *> mc_VecButtons;
+   QList<QWidget *> mc_VecGroupBox;
+   QList<bool> mc_VecGroupBoxVisible;
 
    static const int32_t mhs32_SPACER_SIZE;
 

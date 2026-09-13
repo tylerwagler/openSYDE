@@ -12,7 +12,7 @@
 #define C_USSYSTEMVIEWNODE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QVector>
+#include <QList>
 #include <QMap>
 #include <cstdint>
 
@@ -30,14 +30,14 @@ class C_UsSystemViewNode
 public:
    C_UsSystemViewNode(void);
 
-   const QVector<bool> & GetSectionsExpanded(void) const;
-   void SetSectionsExpanded(const QVector<bool> & orc_SectionsExpanded);
+   const QList<bool> & GetSectionsExpanded(void) const;
+   void SetSectionsExpanded(const QList<bool> & orc_SectionsExpanded);
 
    const QMap<uint32_t, double> & GetUpdateDataRateHistory() const;
    void AddUpdateDataRate(const uint32_t ou32_Checksum, const double of64_Value);
 
 private:
-   QVector<bool> mc_SectionsExpanded;
+   QList<bool> mc_SectionsExpanded;
    QMap<uint32_t, double > mc_UpdateDataRateHistory;
 };
 

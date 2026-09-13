@@ -998,7 +998,7 @@ bool C_SdNdeDpListTableModel::setData(const QModelIndex & orc_Index, const QVari
          {
             //Unknown data change
          }
-         Q_EMIT this->dataChanged(orc_Index, orc_Index, QVector<int32_t>() << os32_Role);
+         Q_EMIT this->dataChanged(orc_Index, orc_Index, QList<int32_t>() << os32_Role);
       }
    }
    return q_Retval;

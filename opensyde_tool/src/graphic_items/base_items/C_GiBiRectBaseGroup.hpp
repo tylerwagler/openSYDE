@@ -107,7 +107,7 @@ private:
    QRectF m_GetBiggestSubItemBoundingRect(void) const;
    void m_SetAdaptedPos(const QPointF & orc_Pos);
 
-   QVector<C_GiPointInteraction *> mc_ActionPoints;
+   QList<C_GiPointInteraction *> mc_ActionPoints;
    bool mq_ResizingActive;
    int32_t ms32_ActiveResizeMode;
    QRectF mc_ShowBoundingRect;

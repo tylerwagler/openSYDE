@@ -147,7 +147,7 @@ C_GiLiBusConnectorBase::~C_GiLiBusConnectorBase(void)
 QPointF C_GiLiBusConnectorBase::GetPos(void) const
 {
    QPointF c_Pos;
-   const QVector<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
+   const QList<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
 
    if (rc_Lines.size() > 0)
    {
@@ -172,9 +172,9 @@ QPointF C_GiLiBusConnectorBase::GetPos(void) const
 std::vector<QPointF> C_GiLiBusConnectorBase::GetPointsScenePos(void) const
 {
    std::vector<QPointF> c_Retval;
-   const QVector<C_GiLiLineConnection *> c_Lines = this->GetLines();
+   const QList<C_GiLiLineConnection *> c_Lines = this->GetLines();
    const C_GiLiLineConnection * pc_CurConn = nullptr;
-   for (QVector<C_GiLiLineConnection *>::const_iterator pc_ItLine = c_Lines.begin(); pc_ItLine != c_Lines.end();
+   for (QList<C_GiLiLineConnection *>::const_iterator pc_ItLine = c_Lines.begin(); pc_ItLine != c_Lines.end();
         ++pc_ItLine)
    {
       pc_CurConn = *pc_ItLine;
@@ -443,7 +443,7 @@ void C_GiLiBusConnectorBase::m_UpdateBus(const QPointF & orc_Pos, const C_GiLiBu
    this->m_SetBus(opc_BusItem);
    if (this->GetBusItem() != nullptr)
    {
-      QVector<C_GiLiLineConnection *> c_Lines;
+      QList<C_GiLiLineConnection *> c_Lines;
       m_AdaptStyleToBus(this->GetBusItem());
 
       c_Lines = this->GetBusItem()->GetLines();
@@ -492,7 +492,7 @@ C_GiLiLineConnection * C_GiLiBusConnectorBase::m_GetCurrentConn(void) const
 
    if (this->GetBusItem() != nullptr)
    {
-      QVector<C_GiLiLineConnection *> c_Lines = this->GetBusItem()->GetLines();
+      QList<C_GiLiLineConnection *> c_Lines = this->GetBusItem()->GetLines();
       if ((this->ms32_ConnIndex >= 0) && (this->ms32_ConnIndex < c_Lines.size()))
       {
          pc_Retval = c_Lines[this->ms32_ConnIndex];
@@ -530,7 +530,7 @@ void C_GiLiBusConnectorBase::m_UpdateExternal(void)
 
       {
          //Replace line count
-         const QVector<C_GiLiLineConnection *> c_Lines = this->GetBusItem()->GetLines();
+         const QList<C_GiLiLineConnection *> c_Lines = this->GetBusItem()->GetLines();
          const int32_t s32_LineCount = c_Lines.size();
          if (s32_LineCount < ms32_KnownLineCount)
          {

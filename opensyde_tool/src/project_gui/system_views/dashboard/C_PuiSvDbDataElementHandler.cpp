@@ -871,8 +871,8 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDbDataElementHandler::m_GetAllValues(const uint32_t ou32_WidgetDataPoolElementIndex,
                                                     QString & orc_ScaledFormattedLastValue,
-                                                    QVector<double> & orc_ScaledValues,
-                                                    QVector<uint32_t> & orc_Timestamps)
+                                                    QList<double> & orc_ScaledValues,
+                                                    QList<uint32_t> & orc_Timestamps)
 {
    int32_t s32_Return = C_RANGE;
    C_PuiSvDbNodeDataPoolListElementId c_Id;

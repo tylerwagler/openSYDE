@@ -66,7 +66,7 @@ C_GiSyColorSelectWidget::C_GiSyColorSelectWidget(stw::opensyde_gui_elements::C_O
    mpc_ScreenColorPickingEventFilter(nullptr),
    ms32_NextRecentButton(C_UsHandler::h_GetInstance()->GetNextRecentColorButtonNumber())
 {
-   const QVector<QColor> c_RecentColors = C_UsHandler::h_GetInstance()->GetRecentColors();
+   const QList<QColor> c_RecentColors = C_UsHandler::h_GetInstance()->GetRecentColors();
 
    this->mc_RecentColorNr1 = c_RecentColors.at(0);
    this->mc_RecentColorNr2 = c_RecentColors.at(1);
@@ -422,7 +422,7 @@ void C_GiSyColorSelectWidget::m_InitElements(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyColorSelectWidget::m_InitStandardColorButtons(void)
 {
-   QVector<stw::opensyde_gui_elements::C_OgePubColor *>::iterator pc_ItButton;
+   QList<stw::opensyde_gui_elements::C_OgePubColor *>::iterator pc_ItButton;
 
    this->mc_StandardColorButtons.push_back(this->mpc_Ui->pc_PushButtonLightBlue);
    this->mc_StandardColorButtons.push_back(this->mpc_Ui->pc_PushButtonGreen);
@@ -629,7 +629,7 @@ void C_GiSyColorSelectWidget::m_CancelClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyColorSelectWidget::m_StandardColorClicked(const C_OgePubColor * const opc_Button)
 {
-   QVector<stw::opensyde_gui_elements::C_OgePubColor *>::iterator pc_ItButton;
+   QList<stw::opensyde_gui_elements::C_OgePubColor *>::iterator pc_ItButton;
    for (pc_ItButton = this->mc_StandardColorButtons.begin();
         pc_ItButton != this->mc_StandardColorButtons.end();
         ++pc_ItButton)
@@ -1106,7 +1106,7 @@ void C_GiSyColorSelectWidget::m_SetRecentColorToRecentButton(C_OgePubColor * con
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyColorSelectWidget::m_AddRecentColors(void)
 {
-   QVector<QColor> c_RecentColorsVector;
+   QList<QColor> c_RecentColorsVector;
 
    if ((this->mpc_Ui->pc_PushButtonColorShower->CurrentColor() == this->mc_RecentColorNr1) ||
        (this->mpc_Ui->pc_PushButtonColorShower->CurrentColor() == this->mc_RecentColorNr2) ||

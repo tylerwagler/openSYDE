@@ -335,7 +335,7 @@ void C_GiLiLine::SetInteractionWidth(const double & orf64_Value)
 {
    this->prepareGeometryChange();
    this->mf64_InteractionWidth = orf64_Value;
-   for (QVector<C_GiLiLineConnection *>::iterator pc_ItLine = this->mc_Lines.begin(); pc_ItLine != this->mc_Lines.end();
+   for (QList<C_GiLiLineConnection *>::iterator pc_ItLine = this->mc_Lines.begin(); pc_ItLine != this->mc_Lines.end();
         ++pc_ItLine)
    {
       C_GiLiLineConnection * const pc_Line = *pc_ItLine;
@@ -587,7 +587,7 @@ QColor C_GiLiLine::GetMiddleLineColor() const
    \return  Interactable segments of line
 */
 //----------------------------------------------------------------------------------------------------------------------
-QVector<C_GiLiLineConnection *> C_GiLiLine::GetLines(void) const
+QList<C_GiLiLineConnection *> C_GiLiLine::GetLines(void) const
 {
    return mc_Lines;
 }
@@ -694,7 +694,7 @@ void C_GiLiLine::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsI
       {
          //Alternative pattern
          //const double f64_Length = 200;
-         //QVector<qreal> c_Pattern;
+         //QList<qreal> c_Pattern;
          //Point 1
          //c_Pattern.push_back(static_cast<double>(this->mu8_AnimationStep) /
          //                    static_cast<double>(C_GiLiLine::mhu8_AnimationStepCount) * f64_Length);
@@ -707,7 +707,7 @@ void C_GiLiLine::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsI
          //                    (f64_Length / static_cast<double>(C_GiLiLine::mhu8_AnimationStepCount)));
          //c_Pen.setDashPattern(c_Pattern);
 
-         QVector<qreal> c_Pattern;
+         QList<qreal> c_Pattern;
          double f64_Offset;
          QColor c_AnimatedColor;
          const uint8_t u8_ANIMATION_STEP_COUNT_OVERRIDE = C_GiLiLine::mhu8_ANIMATION_STEP_COUNT;

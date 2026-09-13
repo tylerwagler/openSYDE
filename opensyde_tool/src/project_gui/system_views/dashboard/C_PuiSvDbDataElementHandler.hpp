@@ -12,7 +12,6 @@
 #define C_PUISVDBDATAELEMENTHANDLER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QVector>
 #include <QList>
 #include <QMap>
 #include <QMutex>
@@ -89,7 +88,7 @@ protected:
    virtual int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<double> & orc_Values,
                                   const bool oq_UseScaling);
    int32_t m_GetAllValues(const uint32_t ou32_WidgetDataPoolElementIndex, QString & orc_ScaledFormattedLastValue,
-                          QVector<double> & orc_ScaledValues, QVector<uint32_t> & orc_Timestamps);
+                          QList<double> & orc_ScaledValues, QList<uint32_t> & orc_Timestamps);
    int32_t m_GetLastNvmValue(const uint32_t ou32_WidgetDataPoolElementIndex,
                              stw::opensyde_core::C_OscNodeDataPoolContent & orc_Value);
    int32_t m_GetTimoutPercentage100(const uint32_t ou32_DataElementIndex, uint8_t & oru8_TimoutPercentage100) const;
@@ -142,9 +141,9 @@ private:
    const uint32_t mu32_WidgetDataPoolElementCountMaximum;
    uint32_t mu32_WidgetDataPoolElementCount;
    // For each datapool element an own list
-   QVector<QList<C_PuiSvDbDataElementContent> > mc_VecDataValues;
-   QVector<C_PuiSvDbDataElementContent> mc_VecNvmValue;
-   QVector<bool> mc_VecNvmValueReceived;
+   QList<QList<C_PuiSvDbDataElementContent> > mc_VecDataValues;
+   QList<C_PuiSvDbDataElementContent> mc_VecNvmValue;
+   QList<bool> mc_VecNvmValueReceived;
    // Mapping of datapool element id to index of datapool element list in mc_VecDataValues
    QMap<C_PuiSvDbNodeDataPoolListElementId, uint32_t> mc_MappingDpElementToDataSerie;
    QMap<C_PuiSvDbNodeDataPoolListElementId,

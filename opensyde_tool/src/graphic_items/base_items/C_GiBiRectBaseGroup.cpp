@@ -178,7 +178,7 @@ void C_GiBiRectBaseGroup::SetDefaultCursor(const QCursor & orc_Value)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiBiRectBaseGroup::m_InitActionPoints()
 {
-   QVector<C_GiPointInteraction *>::iterator pc_ItPoint;
+   QList<C_GiPointInteraction *>::iterator pc_ItPoint;
 
    // set initial coordinates for the action points and the shown bounding rect
    this->m_UpdateActionPoints();
@@ -442,7 +442,7 @@ void C_GiBiRectBaseGroup::SetZetValueCustom(const double of64_ZetValue)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiBiRectBaseGroup::SetResizing(const bool oq_Active)
 {
-   QVector<C_GiPointInteraction *>::iterator pc_ItPoint;
+   QList<C_GiPointInteraction *>::iterator pc_ItPoint;
 
    this->mq_ResizingActive = oq_Active;
 
@@ -614,7 +614,7 @@ void C_GiBiRectBaseGroup::CopyStyle(const QGraphicsItem * const opc_GuidelineIte
 void C_GiBiRectBaseGroup::UpdateTransform(const QTransform & orc_Transform)
 {
    this->prepareGeometryChange();
-   for (QVector<C_GiPointInteraction *>::iterator pc_ItActionPoint = this->mc_ActionPoints.begin();
+   for (QList<C_GiPointInteraction *>::iterator pc_ItActionPoint = this->mc_ActionPoints.begin();
         pc_ItActionPoint != this->mc_ActionPoints.end(); ++pc_ItActionPoint)
    {
       C_GiPointInteraction * const pc_ActionPoint = *pc_ItActionPoint;
@@ -739,7 +739,7 @@ QVariant C_GiBiRectBaseGroup::itemChange(const GraphicsItemChange oe_Change, con
       if (this->scene() != nullptr)
       {
          // item was added to scene
-         QVector<C_GiPointInteraction *>::iterator pc_ItPoint;
+         QList<C_GiPointInteraction *>::iterator pc_ItPoint;
 
          // configure the points
          for (pc_ItPoint = this->mc_ActionPoints.begin(); pc_ItPoint != this->mc_ActionPoints.end(); ++pc_ItPoint)
@@ -752,7 +752,7 @@ QVariant C_GiBiRectBaseGroup::itemChange(const GraphicsItemChange oe_Change, con
       if (orc_Value.isNull() == true)
       {
          // item was removed from scene
-         QVector<C_GiPointInteraction *>::iterator pc_ItPoint;
+         QList<C_GiPointInteraction *>::iterator pc_ItPoint;
 
          // configure the points
          for (pc_ItPoint = this->mc_ActionPoints.begin(); pc_ItPoint != this->mc_ActionPoints.end(); ++pc_ItPoint)

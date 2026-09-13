@@ -81,8 +81,8 @@ public:
    bool GetCurrentGraph(uint32_t & oru32_DataPoolElementConfigIndex) const;
    bool IsAnyDataSerieOnPosition(const QPoint & orc_Pos) const;
    void AddGraphContent(const stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId & orc_DataPoolElementId,
-                        const QString & orc_FormattedLastValue, const QVector<double> & orc_Values,
-                        const QVector<uint32_t> & orc_Timestamps);
+                        const QString & orc_FormattedLastValue, const QList<double> & orc_Values,
+                        const QList<uint32_t> & orc_Timestamps);
    void SetScaling(const uint32_t ou32_DataPoolElementConfigIndex, const QString & orc_DisplayName,
                    const stw::opensyde_gui_logic::C_PuiSvDbDataElementScaling & orc_ElementScaling);
    uint32_t GetCountGraphs(void) const;

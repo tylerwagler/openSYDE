@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QObject>
-#include <QVector>
+#include <QList>
 #include <QColor>
 #include <set>
 
@@ -130,7 +130,7 @@ private:
    uint32_t mu32_SignalIndex;
 
    // the shown parts of the signal
-   QVector<C_SdBueMlvSignalItem *> mc_VecSignalItems;
+   QList<C_SdBueMlvSignalItem *> mc_VecSignalItems;
 
    QString mc_Name;
    bool mq_MultiplexerSignal;

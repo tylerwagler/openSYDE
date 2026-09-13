@@ -53,7 +53,7 @@ private:
    C_SdTopologyToolbox & operator =(const C_SdTopologyToolbox &) &;
 
    Ui::C_SdTopologyToolbox * mpc_Ui;
-   QVector<C_SdTopologyListWidget *> mc_ListWidgets;
+   QList<C_SdTopologyListWidget *> mc_ListWidgets;
 
    QIcon mc_Icon;
    C_SdTopologyListWidget * mpc_List;

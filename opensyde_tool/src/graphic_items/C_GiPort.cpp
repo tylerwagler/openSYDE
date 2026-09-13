@@ -105,8 +105,8 @@ void C_GiPort::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsIte
 
    QFont c_Font;
    QLinearGradient c_Gradient;
-   QVector<QPointF> c_PointsSurrounding;
-   QVector<QPointF> c_PointsInside;
+   QList<QPointF> c_PointsSurrounding;
+   QList<QPointF> c_PointsInside;
 
    c_Font = mc_STYLE_GUIDE_FONT_REGULAR_14;
    c_Font.setPixelSize(c_Font.pointSize());

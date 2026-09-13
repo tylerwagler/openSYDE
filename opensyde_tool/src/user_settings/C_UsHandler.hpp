@@ -19,7 +19,7 @@
 #include <QPoint>
 #include <QSize>
 #include <QMap>
-#include <QVector>
+#include <QList>
 #include <QColor>
 #include <cstdint>
 #include "C_UsCommunication.hpp"
@@ -70,7 +70,7 @@ public:
    int32_t GetSdBusEditLayoutSplitterHorizontal(void) const;
    static uint8_t h_GetMaxRecentProjects(void);
    QString GetCurrentSaveAsPath(void) const;
-   QVector<QColor> GetRecentColors(void) const;
+   QList<QColor> GetRecentColors(void) const;
    int32_t GetNextRecentColorButtonNumber(void) const;
    int32_t GetScreenshotGifSucessTimeout(void) const;
    QString GetPathHandlingSelection(void) const;
@@ -142,7 +142,7 @@ public:
    void SetSdBusEditLayoutSplitterHorizontal(const int32_t os32_Value);
    void SetSdTopologyToolboxMaximized(const bool & orq_New);
    void SetCurrentSaveAsPath(const QString & orc_Value);
-   void SetRecentColors(const QVector<QColor> & orc_RecentColorsVector);
+   void SetRecentColors(const QList<QColor> & orc_RecentColorsVector);
    void SetNextRecentColorButtonNumber(const int32_t os32_NextRecentColorButtonNumber);
    void SetSkipTspSelection(const QString & orc_Selection);
    void SetPathHandlingSelection(const QString & orc_Selection);
@@ -249,7 +249,7 @@ public:
    void SetProjSvUpdateSummaryBig(const QString & orc_ViewName, const bool oq_BigVisible);
    void SetProjSvUpdateEmptyOptionalSectionsVisible(const QString & orc_ViewName, const bool oq_Visible);
    void SetProjSvUpdateSectionsExpandedFlags(const QString & orc_ViewName, const QString & orc_NodeName,
-                                             const QVector<bool> & orc_SectionsExpanded);
+                                             const QList<bool> & orc_SectionsExpanded);
    void SetProjSvDashboardToolbox(const QString & orc_ViewName, const QPoint & orc_Position, const QSize & orc_Size,
                                   const bool & orq_Maximized);
    void SetProjSvDashboardSelectedTabIndex(const QString & orc_ViewName, const int32_t os32_Index);
@@ -302,7 +302,7 @@ private:
    QString mc_SkipTspImportSelection; ///< Flag if TSP Import on Node Adding shall always be skipped
 
    QString mc_CurrentSaveAsPath;              ///< Current save as base path
-   QVector<QColor> mc_RecentColors;           ///< Recent colors from color picker
+   QList<QColor> mc_RecentColors;           ///< Recent colors from color picker
    int32_t ms32_NextRecentColorButtonNumber;  ///< Next recent color button for color from color picker
    QStringList mc_RecentProjects;             ///< Unique history of recent projects
    QStringList mc_DeviceRootPaths;            ///< Configured device-bundle search roots (absolute paths)

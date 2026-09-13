@@ -12,7 +12,7 @@
 #define C_SEBTOPOLOGYBASESCENE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QVector>
+#include <QList>
 
 #include "C_SebScene.hpp"
 #include "C_GiLiCanBus.hpp"
@@ -53,8 +53,8 @@ Q_SIGNALS:
 
 protected:
    void m_LoadProject(void);
-   void m_LoadSubset(const QVector<uint32_t> & orc_NodeIndices, const QVector<uint32_t> & orc_BusIndices,
-                     const QVector<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection, const std::vector<
+   void m_LoadSubset(const QList<uint32_t> & orc_NodeIndices, const QList<uint32_t> & orc_BusIndices,
+                     const QList<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection, const std::vector<
                         stw::opensyde_gui_logic::C_PuiSdCompleteBusConnectionData
                         > * const opc_AdditionalConnectionData,
                      const QMap<stw::opensyde_gui_logic::C_PuiBsTemporaryDataId,

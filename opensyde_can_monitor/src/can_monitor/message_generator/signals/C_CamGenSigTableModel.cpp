@@ -763,14 +763,14 @@ bool C_CamGenSigTableModel::setData(const QModelIndex & orc_Index, const QVarian
                      const QModelIndex c_Index =
                         this->index(orc_Index.row(),
                                     C_CamGenSigTableModel::h_EnumToColumn(C_CamGenSigTableModel::eRAW));
-                     Q_EMIT (this->dataChanged(c_Index, c_Index, QVector<int32_t>() << os32_Role));
+                     Q_EMIT (this->dataChanged(c_Index, c_Index, QList<int32_t>() << os32_Role));
                   }
                   else
                   {
                      const QModelIndex c_Index =
                         this->index(orc_Index.row(),
                                     C_CamGenSigTableModel::h_EnumToColumn(C_CamGenSigTableModel::ePHYSICAL));
-                     Q_EMIT (this->dataChanged(c_Index, c_Index, QVector<int32_t>() << os32_Role));
+                     Q_EMIT (this->dataChanged(c_Index, c_Index, QList<int32_t>() << os32_Role));
                   }
                }
             }
@@ -805,7 +805,7 @@ bool C_CamGenSigTableModel::setData(const QModelIndex & orc_Index, const QVarian
          if (q_Retval == true)
          {
             //lint -e{1793} Qt example
-            Q_EMIT (this->dataChanged(orc_Index, orc_Index, QVector<int32_t>() << os32_Role));
+            Q_EMIT (this->dataChanged(orc_Index, orc_Index, QList<int32_t>() << os32_Role));
             Q_EMIT (this->SigUpdateMessageData(this->mu32_MessageIndex));
          }
          //Trigger sending of updated message
@@ -817,7 +817,7 @@ bool C_CamGenSigTableModel::setData(const QModelIndex & orc_Index, const QVarian
       //Even though the data is the same the display format might have to change
       //so its better to indicate a data change anyways
       //lint -e{1793} Qt example
-      Q_EMIT (this->dataChanged(orc_Index, orc_Index, QVector<int32_t>() << os32_Role));
+      Q_EMIT (this->dataChanged(orc_Index, orc_Index, QList<int32_t>() << os32_Role));
    }
    return q_Retval;
 }

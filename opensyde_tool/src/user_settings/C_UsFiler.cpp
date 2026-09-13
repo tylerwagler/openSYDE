@@ -425,7 +425,7 @@ void C_UsFiler::mh_SaveDataRatesPerNode(QSettings & orc_Ini, const C_UsSystemVie
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsFiler::mh_SaveViewNode(QSettings & orc_Ini, const C_UsSystemViewNode & orc_ViewNode)
 {
-   const QVector<bool> & rc_ExpandedFlags = orc_ViewNode.GetSectionsExpanded();
+   const QList<bool> & rc_ExpandedFlags = orc_ViewNode.GetSectionsExpanded();
 
    h_SaveArray(orc_Ini, "SectionsExpanded", rc_ExpandedFlags, [&orc_Ini] (auto c_It)
    {
@@ -495,7 +495,7 @@ void C_UsFiler::mh_SaveEnvironment(QSettings & orc_Ini, const C_UsHandler & orc_
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsFiler::mh_SaveColors(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings)
 {
-   const QVector<QColor> c_RecentColors = orc_UserSettings.GetRecentColors();
+   const QList<QColor> c_RecentColors = orc_UserSettings.GetRecentColors();
 
    // Clear the section to drop any legacy ColorNr<N>_Red etc. keys before rewriting.
    // mh_SaveNextRecentColorButtonNumber runs after this and adds the remaining key.
@@ -1193,7 +1193,7 @@ void C_UsFiler::mh_LoadDataRatesPerNode(QSettings & orc_Ini, const QString & orc
 void C_UsFiler::mh_LoadViewNode(QSettings & orc_Ini, const QString & orc_NodeName, const QString & orc_ViewName,
                                 C_UsHandler & orc_UserSettings)
 {
-   QVector<bool> c_ExpandedFlags;
+   QList<bool> c_ExpandedFlags;
    const int32_t s32_SectionCount = orc_Ini.beginReadArray("SectionsExpanded");
 
    if (s32_SectionCount > 0)
@@ -1299,7 +1299,7 @@ void C_UsFiler::mh_LoadEnvironment(C_UsHandler & orc_UserSettings, QSettings & o
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsFiler::mh_LoadColors(C_UsHandler & orc_UserSettings, QSettings & orc_Ini)
 {
-   QVector<QColor> c_RecentColors;
+   QList<QColor> c_RecentColors;
 
    orc_Ini.beginGroup("RecentColors");
    const int32_t s32_Size = orc_Ini.beginReadArray("Colors");

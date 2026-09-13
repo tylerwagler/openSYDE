@@ -57,7 +57,7 @@ private:
    C_GiPort & operator =(const C_GiPort &) &; //lint !e1511 //we want to hide the base func.
 
    QGraphicsDropShadowEffect * mpc_Shadow;
-   QVector<QPointF> mc_Points;
+   QList<QPointF> mc_Points;
    QRectF mc_BoundingRect;
    int32_t ms32_RegisteredConnectors;
    bool mq_DrawBoder;

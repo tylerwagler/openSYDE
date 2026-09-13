@@ -82,7 +82,7 @@ C_SyvDaItTaModel::C_SyvDaItTaModel(C_PuiSvDbDataElementHandler * const opc_Data,
    mc_IconHalOtherError(":/images/system_definition/NodeEdit/halc/OtherSmallError.svg")
 {
    //Register to allow data changed signal
-   qRegisterMetaType<QVector<int32_t> >();
+   qRegisterMetaType<QList<int32_t> >();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ void C_SyvDaItTaModel::UpdateError(void)
 {
    if (this->rowCount() > 0)
    {
-      QVector<int32_t> c_Roles;
+      QList<int32_t> c_Roles;
       c_Roles.push_back(ms32_USER_ROLE_ICON);
       Q_EMIT (this->dataChanged(this->index(0, 0), this->index(this->rowCount() - 1, 0), c_Roles));
    }
@@ -277,7 +277,7 @@ void C_SyvDaItTaModel::UpdateTransparency(const uint32_t ou32_DataElementIndex, 
                      this->index(static_cast<int32_t>(u32_ItConfig), h_EnumToColumn(C_SyvDaItTaModel::eVALUE));
                   this->mc_Transparency[u32_ItConfig] = os32_Value;
                   Q_EMIT this->dataChanged(c_Index, c_Index,
-                                           QVector<int32_t>() << static_cast<int32_t>(Qt::ForegroundRole));
+                                           QList<int32_t>() << static_cast<int32_t>(Qt::ForegroundRole));
                }
             }
          }

@@ -373,7 +373,7 @@ bool C_SdNdeDpListArrayEditModel::setData(const QModelIndex & orc_Index, const Q
                                        this->mu32_DataSetIndex,
                                        u32_Index, orc_Value);
 
-            Q_EMIT this->dataChanged(orc_Index, orc_Index, QVector<int32_t>() << os32_Role);
+            Q_EMIT this->dataChanged(orc_Index, orc_Index, QList<int32_t>() << os32_Role);
             Q_EMIT this->SigErrorChangePossible(this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex,
                                                 this->mu32_ElementIndex, this->me_ArrayEditType,
                                                 this->mu32_DataSetIndex);

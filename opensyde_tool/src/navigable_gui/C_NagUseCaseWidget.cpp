@@ -78,7 +78,7 @@ void C_NagUseCaseWidget::SetParentHook(QWidget * const opc_Parent)
    Vector with function names
 */
 //----------------------------------------------------------------------------------------------------------------------
-QVector<C_NagToolBarButtonProperties> C_NagUseCaseWidget::GetVecToolBarFuncNames(void) const
+QList<C_NagToolBarButtonProperties> C_NagUseCaseWidget::GetVecToolBarFuncNames(void) const
 {
    return this->mc_VecUserInputFuncNames;
 }

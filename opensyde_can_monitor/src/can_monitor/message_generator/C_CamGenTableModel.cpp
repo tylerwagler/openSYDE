@@ -69,7 +69,7 @@ C_CamGenTableModel::C_CamGenTableModel(QObject * const opc_Parent) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamGenTableModel::UpdateMessageKey(const uint32_t ou32_MessageIndex)
 {
-   QVector<int32_t> c_Roles;
+   QList<int32_t> c_Roles;
    const int32_t s32_Col = C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eKEY);
 
    c_Roles.push_back(static_cast<int32_t>(Qt::DisplayRole));
@@ -86,7 +86,7 @@ void C_CamGenTableModel::UpdateMessageKey(const uint32_t ou32_MessageIndex)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamGenTableModel::UpdateMessageData(const uint32_t ou32_MessageIndex)
 {
-   QVector<int32_t> c_Roles;
+   QList<int32_t> c_Roles;
    const int32_t s32_Col = C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eDATA);
 
    c_Roles.push_back(static_cast<int32_t>(Qt::DisplayRole));
@@ -103,7 +103,7 @@ void C_CamGenTableModel::UpdateMessageData(const uint32_t ou32_MessageIndex)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamGenTableModel::UpdateAutoProtocolCellData(const uint32_t ou32_MessageIndex)
 {
-   QVector<int32_t> c_Roles;
+   QList<int32_t> c_Roles;
    const int32_t s32_Col = C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eAUTO_SUPPORT);
 
    c_Roles.push_back(static_cast<int32_t>(Qt::DisplayRole));
@@ -123,7 +123,7 @@ void C_CamGenTableModel::TriggerMessageReload()
    const QModelIndex c_TopLeft = this->index(0, s32_Col);
    const QModelIndex c_BottomRight = this->index(s32_RowCount - 1, s32_Col);
 
-   QVector<int32_t> c_Roles;
+   QList<int32_t> c_Roles;
    c_Roles.push_back(static_cast<int32_t>(Qt::DisplayRole));
 
    Q_EMIT this->dataChanged(c_TopLeft, c_BottomRight, c_Roles);
@@ -1103,7 +1103,7 @@ bool C_CamGenTableModel::setData(const QModelIndex & orc_Index, const QVariant &
 
                   Q_EMIT (this->SigUpdateMessageDlc(u32_Index));
                   //lint -e{1793} Qt example
-                  Q_EMIT (this->dataChanged(c_Temp, c_Temp, QVector<int32_t>() << os32_Role));
+                  Q_EMIT (this->dataChanged(c_Temp, c_Temp, QList<int32_t>() << os32_Role));
                }
             }
          }
@@ -1195,7 +1195,7 @@ bool C_CamGenTableModel::setData(const QModelIndex & orc_Index, const QVariant &
          if (q_Retval == true)
          {
             //lint -e{1793} Qt example
-            Q_EMIT (this->dataChanged(orc_Index, orc_Index, QVector<int32_t>() << os32_Role));
+            Q_EMIT (this->dataChanged(orc_Index, orc_Index, QList<int32_t>() << os32_Role));
          }
       }
    }
@@ -1695,7 +1695,7 @@ void C_CamGenTableModel::m_SpecialXtdFlagSetHandling(const int32_t os32_Row, con
       //lint -e{1793} Qt example
       Q_EMIT (this->dataChanged(this->index(os32_Row, s32_Col),
                                 this->index(os32_Row, s32_Col),
-                                QVector<int32_t>() << os32_Role));
+                                QList<int32_t>() << os32_Role));
    }
 }
 

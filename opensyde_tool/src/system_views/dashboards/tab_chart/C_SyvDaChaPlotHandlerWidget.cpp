@@ -989,8 +989,8 @@ bool C_SyvDaChaPlotHandlerWidget::IsAnyDataSerieOnPosition(const QPoint & orc_Po
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::AddGraphContent(const C_PuiSvDbNodeDataPoolListElementId & orc_DataPoolElementId,
                                                   const QString & orc_FormattedLastValue,
-                                                  const QVector<double> & orc_Values,
-                                                  const QVector<uint32_t> & orc_Timestamps)
+                                                  const QList<double> & orc_Values,
+                                                  const QList<uint32_t> & orc_Timestamps)
 {
    // Find the correct data series
    if (orc_Values.size() > 0)
@@ -1426,8 +1426,8 @@ void C_SyvDaChaPlotHandlerWidget::m_ResetChart(void)
 {
    int32_t s32_CounterItem;
 
-   const QVector<double> c_EmptyKeys;
-   const QVector<double> c_EmptyValues;
+   const QList<double> c_EmptyKeys;
+   const QList<double> c_EmptyValues;
 
    for (s32_CounterItem = 0;
         s32_CounterItem < this->mpc_Ui->pc_Plot->graphCount();

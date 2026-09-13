@@ -385,7 +385,7 @@ bool C_CamMosFilterTableModel::setData(const QModelIndex & orc_Index, const QVar
                   //lint -e{1793} Qt example
                   Q_EMIT (this->dataChanged(this->index(u32_RowIndex, s32_ColumnDetails),
                                             this->index(u32_RowIndex, s32_ColumnDetails),
-                                            QVector<int32_t>() << os32_Role));
+                                            QList<int32_t>() << os32_Role));
                   q_Retval = true; // for updating data in column "Type"
                   break;
                case eMODE:
@@ -411,7 +411,7 @@ bool C_CamMosFilterTableModel::setData(const QModelIndex & orc_Index, const QVar
             if (q_Retval == true)
             {
                //lint -e{1793} Qt example
-               Q_EMIT (this->dataChanged(orc_Index, orc_Index, QVector<int32_t>() << os32_Role));
+               Q_EMIT (this->dataChanged(orc_Index, orc_Index, QList<int32_t>() << os32_Role));
             }
          }
       }
@@ -591,7 +591,7 @@ void C_CamMosFilterTableModel::SetFilterItemsData(const QList<C_CamProFilterItem
 void C_CamMosFilterTableModel::SetFilterItemIds(const uint32_t ou32_Index, const uint32_t ou32_NewStartId,
                                                 const uint32_t ou32_NewEndId, const bool oq_IsExtended)
 {
-   QVector<int32_t> c_Roles;
+   QList<int32_t> c_Roles;
    const int32_t s32_Column = C_CamMosFilterTableModel::h_EnumToColumn(C_CamMosFilterTableModel::eDETAILS);
 
    if (ou32_Index < static_cast<uint32_t>(this->mc_FilterItemsData.size()))

@@ -205,8 +205,8 @@ void C_SyvDaChaWidget::UpdateShowValues(void)
    {
       int32_t s32_Return;
       QString c_LastValue;
-      QVector<double> oc_ScaledValues;
-      QVector<uint32_t> oc_Timestamps;
+      QList<double> oc_ScaledValues;
+      QList<uint32_t> oc_Timestamps;
 
       // Get all values
       s32_Return = this->m_GetAllValues(u32_Counter, c_LastValue, oc_ScaledValues, oc_Timestamps);

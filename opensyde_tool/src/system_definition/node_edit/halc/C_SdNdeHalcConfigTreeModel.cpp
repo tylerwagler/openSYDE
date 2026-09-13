@@ -548,7 +548,7 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
                tgl_assert(false);
                break;
             }
-            Q_EMIT (this->dataChanged(orc_Index, orc_Index, QVector<int32_t>() << os32_Role));
+            Q_EMIT (this->dataChanged(orc_Index, orc_Index, QList<int32_t>() << os32_Role));
          }
       }
    }

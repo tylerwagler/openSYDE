@@ -546,7 +546,7 @@ void C_SdBueMlvSignalManager::GenerateHint(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvSignalManager::Update(const double of64_SingleItemWidth, const double of64_SingleItemHeight)
 {
-   QVector<C_SdBueMlvSignalItem *>::const_iterator pc_ItItem;
+   QList<C_SdBueMlvSignalItem *>::const_iterator pc_ItItem;
 
    // updating the position and size of the items
    for (pc_ItItem = this->mc_VecSignalItems.begin(); pc_ItItem != this->mc_VecSignalItems.end(); ++pc_ItItem)
@@ -564,7 +564,7 @@ void C_SdBueMlvSignalManager::Update(const double of64_SingleItemWidth, const do
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvSignalManager::ClearItems(void)
 {
-   QVector<C_SdBueMlvSignalItem *>::iterator pc_ItItem;
+   QList<C_SdBueMlvSignalItem *>::iterator pc_ItItem;
 
    // remove all signal items from the scene and delete the items
    for (pc_ItItem = this->mc_VecSignalItems.begin(); pc_ItItem != this->mc_VecSignalItems.end(); ++pc_ItItem)

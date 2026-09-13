@@ -55,7 +55,7 @@ public:
    bool GetUpdatePackEmptyOptionalSectionsVisible(void) const;
    void SetUpdateEmptyOptionalSectionsVisible(const bool oq_Visible);
    C_UsSystemViewNode GetSvNode(const QString & orc_NodeName) const;
-   void SetNodeSectionsExpanded(const QString & orc_NodeName, const QVector<bool> & orc_ExpandedFlags);
+   void SetNodeSectionsExpanded(const QString & orc_NodeName, const QList<bool> & orc_ExpandedFlags);
    const QList<QString> GetViewNodesKeysInternal(void) const;
 
    // Navigation

@@ -246,7 +246,7 @@ void C_NagTopTreeModel::SetError(const std::vector<bool> & orc_Error)
 
    // reload tree
    Q_EMIT (this->dataChanged(this->index(0, 0), this->index(this->rowCount() - 1, 0), // flat tree so column is always 0
-                             QVector<int32_t>() << static_cast<int32_t>(Qt::DecorationRole)));
+                             QList<int32_t>() << static_cast<int32_t>(Qt::DecorationRole)));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

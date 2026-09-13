@@ -225,7 +225,7 @@ bool C_GiLiLineGroup::mh_Near(const double of64_Exact, const double of64_Eval)
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_GiLiLineGroup::BendLine(const QPointF & orc_ScenePos, const int32_t * const ops32_Index)
 {
-   const QVector<C_GiLiLineConnection *> & rc_VecLines = this->mpc_LinePath->GetLines();
+   const QList<C_GiLiLineConnection *> & rc_VecLines = this->mpc_LinePath->GetLines();
 
    int32_t s32_Retval = -1;
 
@@ -236,7 +236,7 @@ int32_t C_GiLiLineGroup::BendLine(const QPointF & orc_ScenePos, const int32_t * 
 
    if (ops32_Index == nullptr)
    {
-      QVector<C_GiLiLineConnection *>::const_iterator pc_ItLine;
+      QList<C_GiLiLineConnection *>::const_iterator pc_ItLine;
       double f64_ResultDist;
       double f64_MinDist = 1000000.0;
 
@@ -297,7 +297,7 @@ int32_t C_GiLiLineGroup::BendLine(const QPointF & orc_ScenePos, const int32_t * 
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_GiLiLineGroup::RemoveBend(const QPointF & orc_ScenePos, const int32_t * const ops32_Index)
 {
-   const QVector<C_GiLiInteractionPoint *> & rc_VecPoints = this->mc_Points;
+   const QList<C_GiLiInteractionPoint *> & rc_VecPoints = this->mc_Points;
 
    int32_t s32_Retval = -1;
 
@@ -305,7 +305,7 @@ int32_t C_GiLiLineGroup::RemoveBend(const QPointF & orc_ScenePos, const int32_t 
 
    if (ops32_Index == nullptr)
    {
-      QVector<C_GiLiInteractionPoint *>::const_iterator pc_ItPoint;
+      QList<C_GiLiInteractionPoint *>::const_iterator pc_ItPoint;
       double f64_ResultDist;
       double f64_MinDist = 1000000.0;
 
@@ -375,7 +375,7 @@ QRectF C_GiLiLineGroup::boundingRect() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiLineGroup::RestoreDefaultCursor(void)
 {
-   const QVector<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
+   const QList<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
 
    for (int32_t s32_ItPoint = 0; s32_ItPoint < this->mc_Points.size(); ++s32_ItPoint)
    {
@@ -396,7 +396,7 @@ void C_GiLiLineGroup::RestoreDefaultCursor(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiLineGroup::SetTemporaryCursor(const QCursor & orc_TemporaryCursor)
 {
-   const QVector<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
+   const QList<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
 
    for (int32_t s32_ItPoint = 0; s32_ItPoint < this->mc_Points.size(); ++s32_ItPoint)
    {
@@ -417,7 +417,7 @@ void C_GiLiLineGroup::SetTemporaryCursor(const QCursor & orc_TemporaryCursor)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiLineGroup::SetDefaultCursor(const QCursor & orc_Value)
 {
-   const QVector<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
+   const QList<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
 
    for (int32_t s32_ItLine = 0; s32_ItLine < rc_Lines.size(); ++s32_ItLine)
    {
@@ -555,7 +555,7 @@ void C_GiLiLineGroup::m_UpdateBasicData(stw::opensyde_gui_logic::C_PuiBsLineBase
    orc_Data.f64_ZetOrder = this->zValue();
    orc_Data.c_UiInteractionPoints.clear();
    orc_Data.c_UiInteractionPoints.reserve(this->mc_Points.size());
-   for (QVector<C_GiLiInteractionPoint *>::const_iterator pc_ItPoint = this->mc_Points.begin();
+   for (QList<C_GiLiInteractionPoint *>::const_iterator pc_ItPoint = this->mc_Points.begin();
         pc_ItPoint != this->mc_Points.end();
         ++pc_ItPoint)
    {
@@ -734,7 +734,7 @@ void C_GiLiLineGroup::mousePressEvent(QGraphicsSceneMouseEvent * const opc_Event
          // check lines
          if (q_FoundPoint == false)
          {
-            const QVector<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
+            const QList<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
 
             for (s32_Counter = 0; s32_Counter < rc_Lines.size(); ++s32_Counter)
             {
@@ -898,7 +898,7 @@ QColor C_GiLiLineGroup::GetMiddleLineColor() const
    \return  vector with pointer to all used lines
 */
 //----------------------------------------------------------------------------------------------------------------------
-QVector<C_GiLiLineConnection *> C_GiLiLineGroup::GetLines() const
+QList<C_GiLiLineConnection *> C_GiLiLineGroup::GetLines() const
 {
    return this->mpc_LinePath->GetLines();
 }
@@ -936,7 +936,7 @@ int32_t C_GiLiLineGroup::GetNumberPoints(void) const
 QPointF C_GiLiLineGroup::GetPos(void) const
 {
    QPointF c_Pos;
-   const QVector<C_GiLiLineConnection *> & rc_VecLines = this->mpc_LinePath->GetLines();
+   const QList<C_GiLiLineConnection *> & rc_VecLines = this->mpc_LinePath->GetLines();
 
    // check if there is a line
    if (rc_VecLines.size() > 0)
@@ -1054,7 +1054,7 @@ void C_GiLiLineGroup::FindClosestConnection(const QPointF & orc_ScenePoint, int3
    if (this->mpc_LinePath != nullptr)
    {
       double f64_Best = std::numeric_limits<double>::max();
-      const QVector<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
+      const QList<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
 
       ors32_Index = -1;
       if (mc_Points.size() > 0)
@@ -1247,7 +1247,7 @@ void C_GiLiLineGroup::UpdateTransform(const QTransform & orc_Transform)
       C_GiPointInteraction * pc_ActionPoint;
 
       this->prepareGeometryChange();
-      for (QVector<C_GiLiInteractionPoint *>::iterator pc_ItActionPoint = this->mc_Points.begin();
+      for (QList<C_GiLiInteractionPoint *>::iterator pc_ItActionPoint = this->mc_Points.begin();
            pc_ItActionPoint != this->mc_Points.end(); ++pc_ItActionPoint)
       {
          pc_ActionPoint = *pc_ItActionPoint;

@@ -12,7 +12,7 @@
 #define C_GIBILINEBOUNDING_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QVector>
+#include <QList>
 #include <QPointF>
 #include <QLineF>
 #include <QPolygonF>
@@ -33,7 +33,7 @@ namespace opensyde_gui_logic
 class C_GiBiLineBounding
 {
 public:
-   C_GiBiLineBounding(const QVector<QPointF> & orc_Points, const double & orf64_Width, const double & orf64_InteractionPointWidth =
+   C_GiBiLineBounding(const QList<QPointF> & orc_Points, const double & orf64_Width, const double & orf64_InteractionPointWidth =
                          stw::opensyde_gui::mf64_INTERACTION_POINT_WIDTH);
    C_GiBiLineBounding(const QLineF & orc_Line, const double & orf64_Width, const double & orf64_InteractionPointWidth =
                          stw::opensyde_gui::mf64_INTERACTION_POINT_WIDTH);
@@ -53,7 +53,7 @@ private:
                                    const QPointF & orc_End2, QPointF & orc_Intersection);
    static bool mh_Within(const double & orf64_Eval, const double & orf64_Start, const double & orf64_End);
 
-   const QVector<QPointF> mc_Points;
+   const QList<QPointF> mc_Points;
    const double mf64_Width;
    const double mf64_InteractionPointWidth;
    QPolygonF mc_Bounding;

@@ -325,7 +325,7 @@ void C_SyvDaDashboardScene::SetDashboardIndex(const uint32_t ou32_DashboardIndex
 void C_SyvDaDashboardScene::Load(void)
 {
    //Fill up with zeros
-   const QVector<uint32_t> c_SaveIndices(13, 0);
+   const QList<uint32_t> c_SaveIndices(13, 0);
 
    //Sync system definition scaling information
    tgl_assert(C_PuiSvHandler::h_GetInstance()->SyncDashboardScalingInformation(this->mu32_ViewIndex,
@@ -396,7 +396,7 @@ void C_SyvDaDashboardScene::CopyFromSnapshotToScene(const C_PuiSvDashboard & orc
          10: Table
          11: Param
          */
-         QVector<uint32_t> c_OtherIndices;
+         QList<uint32_t> c_OtherIndices;
          //Indices
          c_OtherIndices.push_back(static_cast<uint>(pc_Dashboard->c_Boundaries.size()));
          c_OtherIndices.push_back(static_cast<uint>(pc_Dashboard->c_TextElements.size()));
@@ -1808,7 +1808,7 @@ void C_SyvDaDashboardScene::m_SyncIndex(const C_PuiSvDbDataElement::E_Type & ore
    \param[in]  opc_IdMap               Optional map for IDs to use
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardScene::m_LoadSubset(const QVector<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection,
+void C_SyvDaDashboardScene::m_LoadSubset(const QList<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection,
                                          const QMap<C_PuiBsTemporaryDataId, uint64_t> * const opc_IdMap)
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);

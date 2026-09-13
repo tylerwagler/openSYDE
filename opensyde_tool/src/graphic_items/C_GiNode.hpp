@@ -135,9 +135,9 @@ private:
    C_GiNode & operator =(const C_GiNode &) &; //lint !e1511 //we want to hide the base func.
 
    C_GiNodeBoundary * mpc_Boundary;
-   QVector<C_GiPort *> mc_Ports;
+   QList<C_GiPort *> mc_Ports;
 
-   QVector<C_GiLiBusConnector *> mc_Connections;
+   QList<C_GiLiBusConnector *> mc_Connections;
    C_GiRectPixmap * mpc_ConflictIcon;
    bool mq_Valid;
    bool mq_DrawWhiteFilter;
