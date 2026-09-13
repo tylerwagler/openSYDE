@@ -1,6 +1,7 @@
 #include <set>
 #include "gtest/gtest.h"
 #include "C_OscLoggingHandler.hpp"
+#include "TglTime.hpp"
 
 TEST(Logging, StartPerformanceTimer_ReturnsNonZeroId)
 {
@@ -53,4 +54,56 @@ TEST(Logging, StwError_Consistency)
    EXPECT_EQ("C_CONFIG",   stw::opensyde_core::C_OscLoggingHandler::h_StwError(-10));
    EXPECT_EQ("C_CHECKSUM", stw::opensyde_core::C_OscLoggingHandler::h_StwError(-11));
    EXPECT_EQ("C_TIMEOUT",  stw::opensyde_core::C_OscLoggingHandler::h_StwError(-12));
+}
+
+/* -- Date/time formatting ------------------------------------------------------------------------------------------ */
+/* Pins the exact log timestamp format. It is the prefix of every log line, is parsed
+   back out of log file names, and was reimplemented with std::format in phase 7.1 --
+   previously nothing covered its output at all. */
+
+namespace
+{
+stw::tgl::C_TglDateTime mh_MakeDateTime(const uint16_t ou16_Year, const uint8_t ou8_Month, const uint8_t ou8_Day,
+                                        const uint8_t ou8_Hour, const uint8_t ou8_Minute, const uint8_t ou8_Second,
+                                        const uint16_t ou16_MilliSeconds)
+{
+   stw::tgl::C_TglDateTime c_Retval;
+
+   c_Retval.mu16_Year = ou16_Year;
+   c_Retval.mu8_Month = ou8_Month;
+   c_Retval.mu8_Day = ou8_Day;
+   c_Retval.mu8_Hour = ou8_Hour;
+   c_Retval.mu8_Minute = ou8_Minute;
+   c_Retval.mu8_Second = ou8_Second;
+   c_Retval.mu16_MilliSeconds = ou16_MilliSeconds;
+   return c_Retval;
+}
+}
+
+TEST(Logging, ConvertDateTimeToString_DocumentedExample)
+{
+   //The format documented on the function itself
+   const stw::tgl::C_TglDateTime c_DateTime = mh_MakeDateTime(2017U, 8U, 29U, 7U, 32U, 19U, 123U);
+
+   EXPECT_EQ("2017-08-29 07:32:19.123",
+             stw::opensyde_core::C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime));
+}
+
+TEST(Logging, ConvertDateTimeToString_ZeroPadsEveryField)
+{
+   //Single digit fields must pad, and milliseconds pad to three digits
+   const stw::tgl::C_TglDateTime c_DateTime = mh_MakeDateTime(2026U, 1U, 2U, 3U, 4U, 5U, 6U);
+
+   EXPECT_EQ("2026-01-02 03:04:05.006",
+             stw::opensyde_core::C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime));
+}
+
+TEST(Logging, ConvertDateTimeToString_PadsYearAndKeepsFixedWidth)
+{
+   const stw::tgl::C_TglDateTime c_Early = mh_MakeDateTime(7U, 12U, 31U, 23U, 59U, 59U, 999U);
+
+   EXPECT_EQ("0007-12-31 23:59:59.999",
+             stw::opensyde_core::C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_Early));
+   //Every rendering is the same width, which the fixed-width log columns rely on
+   EXPECT_EQ(23U, stw::opensyde_core::C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_Early).size());
 }
