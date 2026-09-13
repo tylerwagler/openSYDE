@@ -5,6 +5,38 @@ For phase-specific work, see `docs/agent_plans/`.
 For in-code `TODO` / `FIXME` / `HACK` comments tracked individually,
 see `docs/code-comment-todos.md`.
 
+## Reimplement the data-logger trigger-expression validator
+
+`C_SdNdeDalTriggerCheckHelper` (data logger trigger conditions in the System
+Definition editor) is **stubbed on every platform**: `h_Check` always reports
+the expression as valid and `h_ParseDataElements` returns nothing. The target
+device still validates trigger conditions at runtime — this only removes the
+editor-time syntax/variable feedback.
+
+It was stubbed because its real implementation depended on
+`libraries/osy_git_data_model_monitor/`, which is **a prebuilt `.a` plus headers
+with no `.cpp` source in the tree** (the archive contains a compiled
+`lexer.cpp.obj`; the rest is header-only templates). A committed prebuilt binary
+can't be part of a cross-platform build and can't be rebuilt for a new
+compiler/ABI, so it was wired Windows-only and is now dropped from the build.
+The directory is kept **only as reference material** for the rework.
+
+To restore the feature properly (all three platforms, nothing vendored), either:
+
+- **Reimplement from scratch** against the existing headers in
+  `libraries/osy_git_data_model_monitor/includes/` — the missing piece is
+  essentially the regex-based lexer (`data::monitor::Lexer`, token set in
+  `data/monitor/lexer.hpp`); the expression AST (`expression.hpp/.tpp`,
+  `operand.*`) is already header-only. Build it as a normal CMake library.
+- **Or recover the original source** (`lexer.cpp` et al.) from wherever the
+  `.a` was built and add it as a source-built library.
+- **Or decompile** `libosy_git_data_model_monitor.a` to recover the lexer logic.
+
+The pre-stub implementation is in git history (the `#else // _WIN32` arm of
+`C_SdNdeDalTriggerCheckHelper.cpp` before the Windows port) and shows the exact
+API surface the validator consumed (`Lexer::lex`, `ChannelDataContainer`,
+`BooleanExpression::evaluate`).
+
 ## Dark Mode
 
 openSYDE, CAN Monitor, and SYDEflash all render with their built-in light
