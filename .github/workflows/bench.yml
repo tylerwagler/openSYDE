@@ -105,5 +105,10 @@ jobs:
       - name: Run benchmarks
         shell: bash
         run: |
-          clang++ --version | head -1 || true
-          find build/bench -name 'bench_opensyde*' -type f -perm -u+x | head -1 | xargs -I{} {} --benchmark_min_time=1.0s
+          (clang++ --version | head -1) || true
+          # Invoke the binary directly: piping into `xargs -I{} {}` makes xargs look for a
+          # command literally named "{}" and exits 127.
+          BIN=$(find build/bench -type f \( -name 'bench_opensyde' -o -name 'bench_opensyde.exe' \) | head -1)
+          if [ -z "$BIN" ]; then echo "benchmark binary not found under build/bench"; exit 1; fi
+          echo "benchmark binary: $BIN"
+          "$BIN" --benchmark_min_time=1.0s
