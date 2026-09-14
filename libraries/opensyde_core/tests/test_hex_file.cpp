@@ -373,3 +373,178 @@ TEST(HexFileError, MessagesAreDescriptive)
    EXPECT_EQ("Wrong checksum in hex line", make_error_code(HexFileErrc::hexline_checksum).message());
    EXPECT_EQ("Out of memory", make_error_code(HexFileErrc::not_enough_memory).message());
 }
+
+/* -- Address lookup and pattern search ------------------------------------------------------------------------------ */
+/* GetDataByAddress and FindPattern are two of the three functions PLAN.md records as
+   deliberately staying on int32_t because they use a FOREIGN convention -- plain 0 / -1 / -2,
+   not STW error codes. Nothing pinned that convention, which is exactly the thing a future
+   error-code migration could silently get wrong by bridging them with
+   make_error_code_from_stw. These tests are that pin. */
+
+TEST(HexFile, GetDataByAddress_ReadsAllRequestedBytes)
+{
+   const std::string c_Path = mh_WriteHex("hf_gdba_full.hex", mpcn_SIMPLE);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+
+   uint8_t au8_Data[4] = {0U, 0U, 0U, 0U};
+   uint16_t u16_NumBytes = 4U;
+
+   //0 means every requested byte was available
+   EXPECT_EQ(0, c_File.GetDataByAddress(0x0000U, u16_NumBytes, au8_Data));
+   EXPECT_EQ(4U, u16_NumBytes);
+   EXPECT_EQ(1U, au8_Data[0]);
+   EXPECT_EQ(2U, au8_Data[1]);
+   EXPECT_EQ(3U, au8_Data[2]);
+   EXPECT_EQ(4U, au8_Data[3]);
+}
+
+TEST(HexFile, GetDataByAddress_ReadsFromAnOffsetWithinTheBlock)
+{
+   const std::string c_Path = mh_WriteHex("hf_gdba_off.hex", mpcn_SIMPLE);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+
+   uint8_t au8_Data[2] = {0U, 0U};
+   uint16_t u16_NumBytes = 2U;
+
+   EXPECT_EQ(0, c_File.GetDataByAddress(0x0001U, u16_NumBytes, au8_Data));
+   EXPECT_EQ(2U, au8_Data[0]);
+   EXPECT_EQ(3U, au8_Data[1]);
+}
+
+TEST(HexFile, GetDataByAddress_PartialReadReturnsMinusTwoAndShortensTheCount)
+{
+   //Asking for more than the block holds is -2, not -1, and oru16_NumBytes is rewritten to
+   //what was actually copied. A caller that ignores the return value silently gets fewer bytes.
+   const std::string c_Path = mh_WriteHex("hf_gdba_part.hex", mpcn_SIMPLE);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+
+   uint8_t au8_Data[8] = {0U};
+   uint16_t u16_NumBytes = 8U;
+
+   EXPECT_EQ(-2, c_File.GetDataByAddress(0x0002U, u16_NumBytes, au8_Data));
+   EXPECT_EQ(2U, u16_NumBytes); //only 2 of the 4 bytes sit at or after 0x0002
+   EXPECT_EQ(3U, au8_Data[0]);
+   EXPECT_EQ(4U, au8_Data[1]);
+}
+
+TEST(HexFile, GetDataByAddress_UnknownAddressReturnsMinusOne)
+{
+   const std::string c_Path = mh_WriteHex("hf_gdba_miss.hex", mpcn_SIMPLE);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+
+   uint8_t au8_Data[4] = {0U};
+   uint16_t u16_NumBytes = 4U;
+
+   //Far outside any block. -1 is "not found", and is NOT an STW error code.
+   EXPECT_EQ(-1, c_File.GetDataByAddress(0xF000U, u16_NumBytes, au8_Data));
+}
+
+TEST(HexFile, FindPattern_FindsAPatternAndReportsItsAddress)
+{
+   const std::string c_Path = mh_WriteHex("hf_find_hit.hex", mpcn_TWO_RECORDS);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+
+   const uint8_t au8_Pattern[2] = {0x06U, 0x07U};
+   uint32_t u32_Address = 0x0000U;
+
+   EXPECT_EQ(0, c_File.FindPattern(u32_Address, 2U, au8_Pattern));
+   EXPECT_EQ(0x0011U, u32_Address); //second record starts at 0x0010, 06 is its second byte
+}
+
+TEST(HexFile, FindPattern_MissingPatternReturnsMinusOne)
+{
+   const std::string c_Path = mh_WriteHex("hf_find_miss.hex", mpcn_TWO_RECORDS);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+
+   const uint8_t au8_Pattern[3] = {0xDEU, 0xADU, 0xBEU};
+   uint32_t u32_Address = 0x0000U;
+
+   EXPECT_EQ(-1, c_File.FindPattern(u32_Address, 3U, au8_Pattern));
+}
+
+/* -- Record reformatting -------------------------------------------------------------------------------------------- */
+/* Optimize and OptimizeLinear rewrite the record layout. OptimizeLinear is the one that
+   allocates a raw uint16_t[] image and fills gaps; PLAN.md flags its allocation as the
+   reason the hex parser was left alone. Neither had any coverage. */
+
+TEST(HexFile, Optimize_RewritesRecordsAndPreservesContent)
+{
+   const std::string c_Path = mh_WriteHex("hf_opt.hex", mpcn_TWO_RECORDS);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+   const uint32_t u32_BytesBefore = c_File.ByteCount();
+   const uint32_t u32_MinBefore = c_File.MinAdr();
+   const uint32_t u32_MaxBefore = c_File.MaxAdr();
+
+   //Re-emit with a larger record size; the data must survive unchanged
+   ASSERT_FALSE(static_cast<bool>(c_File.Optimize(32U)));
+
+   EXPECT_EQ(u32_BytesBefore, c_File.ByteCount());
+   EXPECT_EQ(u32_MinBefore, c_File.MinAdr());
+   EXPECT_EQ(u32_MaxBefore, c_File.MaxAdr());
+
+   uint8_t au8_Data[4] = {0U};
+   uint16_t u16_NumBytes = 4U;
+   EXPECT_EQ(0, c_File.GetDataByAddress(0x0010U, u16_NumBytes, au8_Data));
+   EXPECT_EQ(5U, au8_Data[0]);
+   EXPECT_EQ(8U, au8_Data[3]);
+}
+
+TEST(HexFile, OptimizeLinear_FillsTheGapBetweenRecords)
+{
+   //The two records sit at 0x0000 and 0x0010 with a 12 byte hole between them.
+   //OptimizeLinear with fill enabled closes that hole with the fill pattern, so the
+   //byte count grows and the previously undefined addresses become readable.
+   const std::string c_Path = mh_WriteHex("hf_optlin.hex", mpcn_TWO_RECORDS);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+   const uint32_t u32_BytesBefore = c_File.ByteCount();
+
+   ASSERT_FALSE(static_cast<bool>(c_File.OptimizeLinear(16U, 1, 0xEEU)));
+
+   EXPECT_GT(c_File.ByteCount(), u32_BytesBefore);
+   EXPECT_EQ(0x0000U, c_File.MinAdr());
+
+   //An address inside the former gap now reads back as the fill pattern
+   uint8_t au8_Data[1] = {0U};
+   uint16_t u16_NumBytes = 1U;
+   EXPECT_EQ(0, c_File.GetDataByAddress(0x0008U, u16_NumBytes, au8_Data));
+   EXPECT_EQ(0xEEU, au8_Data[0]);
+}
+
+/* -- Line string access --------------------------------------------------------------------------------------------- */
+
+TEST(HexFile, NextLineString_WalksTheRecordsAsText)
+{
+   const std::string c_Path = mh_WriteHex("hf_linestr.hex", mpcn_TWO_RECORDS);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+   ASSERT_TRUE(c_File.LineInit() != NULL);
+
+   uint32_t u32_Seen = 0U;
+   const char * pcn_Line = c_File.NextLineString();
+   while (pcn_Line != NULL)
+   {
+      const std::string c_Line(pcn_Line);
+      //Every emitted record is an Intel HEX line
+      EXPECT_EQ(':', c_Line.at(0));
+      u32_Seen++;
+      pcn_Line = c_File.NextLineString();
+   }
+   EXPECT_EQ(c_File.LineCount(), u32_Seen);
+}
