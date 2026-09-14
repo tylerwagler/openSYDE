@@ -345,3 +345,51 @@ no scan in this sweep would have found it.
 Use `ninja -C <build> -k 0`. A plain `cmake --build` stops at the first failing
 translation unit and reports **4** sites, not 60 — the truncated number looks
 like a decisive answer and is not.
+
+---
+
+## `-Wconditional-uninitialized` is not worth enabling here (2026-09-14)
+
+Having found two uninitialised-out-parameter bugs by hand, the obvious next move
+was to let the compiler do it. Clang has a warning aimed squarely at that class
+and it is **not** part of `-Wall -Wextra`.
+
+**Result: 9 sites in `opensyde_core`, all of them false positives — and neither
+of the two real bugs is among them.**
+
+The nine split into two shapes the warning cannot see through:
+
+- **Pointer out-parameters.** `C_OscSystemDefinition::CheckErrorNode` takes
+  `bool *` parameters, passes them to `CheckErrorManager`, and reads the locals
+  afterwards. `CheckErrorManager` writes through every non-null pointer
+  unconditionally, so the locals are always written — but that is in another
+  translation unit's function body, which the warning does not analyse. 4 sites.
+- **A boolean flag correlated with initialisation.** `C_CanMonProtocolOpenSyde`
+  sets `u32_SnrSignStartIndex` in the branches where it also leaves
+  `q_DlcCorrect` true, and reads it only under `if (q_DlcCorrect == true)`.
+  `C_OscCanMessage` does the same with `q_NoCheckNecessary`. Clang does not
+  correlate the two. 3 sites. The remaining 2 are the `h_GetComListIndex`
+  short-circuit already described above.
+
+**Why the real bugs are invisible to it.** Both `CheckChannelLinked` and
+`CalcFileChecksum` are *cross-function*: the callee returns before writing its
+out parameter and the caller reads it anyway. Nothing in the caller's own body
+looks wrong, so an intraprocedural warning has nothing to flag. That is exactly
+why `[[nodiscard]]` found them — it does not analyse flow, it just makes the
+ignored status a compile error and lets a human look at the call site.
+
+So: do not enable this warning. It would cost 9 pointless `= 0` initialisations,
+each of which makes the code marginally less honest about what it knows, and
+would catch none of the real instances.
+
+### Measuring warnings in this tree
+
+`-DCMAKE_CXX_FLAGS=...` on the configure line **does not work** — the toolchain
+files set `CMAKE_CXX_FLAGS` outright and win. Append the flag to
+`cmake/toolchain_*.cmake` temporarily instead, and verify it arrived:
+
+    python3 -c "import json;print('conditional-uninitialized' in json.load(open('build/warn/compile_commands.json'))[0]['command'])"
+
+Without that check the first run of this experiment reported **0 findings**, from
+a build that never had the flag, and also silently tried to compile the Windows
+TGL sources because `OPENSYDE_CORE_SKIP_WINDOWS_*` had been left off.
