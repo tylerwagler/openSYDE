@@ -258,3 +258,58 @@ lists.
 `C_CamOgeLeFilePath` vs `C_FlaOgeLeFilePath` **are** functionally identical —
 13 vs 14 code lines differing only by an extra `#include <cstdint>` — so that
 pair alone could still be merged, for about 60 lines.
+
+---
+
+## `[[nodiscard]]` blast radius, measured (2026-09-14)
+
+The dropped-error scan above raised `[[nodiscard]]` as the durable fix but left
+it as an open decision. This measures it so the decision is cheap.
+
+**Experiment:** annotate every `std::error_code`-returning declaration in
+`opensyde_core` headers — **981 declarations across 122 headers** — then build.
+
+**Result: 60 call sites**, across 22 files.
+
+| Subsystem | Sites |
+|---|---|
+| `protocol_drivers/communication` | 25 |
+| `protocol_drivers/*` (update, config, base) | 14 |
+| `md5` | 4 |
+| `ip_dispatcher/target_linux_sock` | 3 |
+| `project/system*` | 5 |
+| `halc/*` | 6 |
+| `data_dealer` | 2 |
+
+### Why this is worth doing
+
+**The compiler finds roughly three times what a hand-written scan does.** The
+scan earlier in this document resolved qualified static calls and `this->`
+member calls and found 19 sites repo-wide; `[[nodiscard]]` finds 60 in core
+alone, because it also catches calls in expression and argument position that no
+line-oriented heuristic will match.
+
+The codebase is already shaped for the annotation: intentional discards are
+written `(void)expr` in **4,439** places as a MISRA convention, so the "I meant
+to ignore this" idiom exists, is already used everywhere else, and reads as
+deliberate rather than as noise.
+
+### Why it was not landed here
+
+60 sites each need a judgement — propagate, or mark `(void)` — and 39 of them
+are in `protocol_drivers`, where best-effort on a CAN send or a teardown
+disconnect may well be correct. Making those calls in bulk would be exactly the
+"behaviour change made on a guess" that the rest of this sweep avoided. The
+annotation is cheap; the triage is the work, and it wants someone who knows the
+protocol layer.
+
+A sensible staging if this is taken up: annotate one subsystem at a time,
+starting with `project/`, `halc/` and `data_dealer` (15 sites, all filer and
+configuration paths where propagating is almost always right), and leave
+`protocol_drivers` for a pass with domain review.
+
+### Measuring it again
+
+Use `ninja -C <build> -k 0`. A plain `cmake --build` stops at the first failing
+translation unit and reports **4** sites, not 60 — the truncated number looks
+like a decisive answer and is not.
