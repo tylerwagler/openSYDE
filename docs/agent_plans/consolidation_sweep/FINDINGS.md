@@ -393,3 +393,56 @@ files set `CMAKE_CXX_FLAGS` outright and win. Append the flag to
 Without that check the first run of this experiment reported **0 findings**, from
 a build that never had the flag, and also silently tried to compile the Windows
 TGL sources because `OPENSYDE_CORE_SKIP_WINDOWS_*` had been left off.
+
+---
+
+## The uninitialised-out-parameter class cannot be closed by scanning (2026-09-14)
+
+Two real bugs of this shape were found and fixed (`CheckChannelLinked`,
+`CalcFileChecksum`). The obvious follow-up was to prove there are no more. Three
+methods were tried. **None of them can establish absence, and the reasons are
+worth recording so the next attempt does not repeat them.**
+
+### 1. Textual scanning — 50% false negatives, and its one hit was a false positive
+
+A scanner was written that finds callees which "can return an error before
+writing a scalar out parameter", then callers that declare the variable
+uninitialised, discard the status and read it anyway.
+
+Validated by temporarily undoing both known fixes and re-running: **it found 1 of
+the 2.** A rewrite using line-based brace counting instead of regex (the
+multi-line function signature had defeated the first version) still found 1 of 2,
+plus one new candidate that turned out to be a false positive —
+`C_OscComDriverFlash::SendOsyBroadcastRequestProgramming` writes
+`orq_NotAccepted = false` unconditionally on its first line.
+
+The flaw is structural, not a bug in the script. The heuristic asks *"is there a
+write before the first error, textually?"* In `CheckChannelLinked` the first
+write sits at relative line 30 and the outermost range return at line 87 — later
+in the text, but on a different path. **Textual ordering is not path analysis**,
+and no amount of regex fixes that.
+
+### 2. `-Wconditional-uninitialized` — 9 findings, all false, both real bugs invisible
+
+Covered in the section above. It is intraprocedural, so a callee that fails to
+write its out parameter is simply not something it can see.
+
+### 3. What actually worked
+
+`[[nodiscard]]`. It performs no analysis at all — it makes the ignored status a
+compile error and puts a human in front of the call site. Both bugs were found
+that way, and the second was found by looking for the shape of the first.
+
+### Recommendation
+
+For this class specifically, the right tool is the **clang static analyzer**
+(`scan-build`, or `clang-tidy` with the `clang-analyzer-*` checks), which is
+path-sensitive and does cross-function reasoning. Neither `clang-tidy` nor
+`scan-build` is installed on the dev machine or the build host, so this could not
+be tried here. Adding it — even as a non-gating CI job — is likely worth more
+than any further scanning, and would also cover the other analyser checks this
+tree has never been run through.
+
+Until then: **do not treat a zero result from a textual scan as evidence that
+this class is clear.** The scan in this document demonstrably misses half of the
+known instances.
