@@ -824,11 +824,13 @@ int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_M
                      do
                      {
                         c_Tmp.clear();
-                        C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(c_Tmp, c_StringXml);
+                        //the project filers report std::error_code now; this class keeps the STW int32_t convention
+                        s32_Retval =
+                           C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(c_Tmp, c_StringXml).value();
                         orc_OscSignalCommons.push_back(c_Tmp);
                         c_CurrentNode = c_StringXml.SelectNodeNext("data-elements");
                      }
-                     while (c_CurrentNode == "data-elements");
+                     while ((c_CurrentNode == "data-elements") && (s32_Retval == C_NO_ERR));
                      //Return
                      tgl_assert(c_StringXml.SelectNodeParent() == "message-common");
                   }
@@ -1180,8 +1182,9 @@ int32_t C_SdClipBoardHelper::h_LoadDataSnapShotFromClipboard(C_SdTopologyDataSna
 
    if (c_StringXml.SelectRoot() == "opensyde-system-definition")
    {
-      C_OscNodeSquadFiler::h_LoadNodeGroups(orc_Data.c_OscNodeGroups, c_StringXml);
-      if (c_StringXml.SelectNodeChild("nodes-core") == "nodes-core")
+      //the project filers report std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = C_OscNodeSquadFiler::h_LoadNodeGroups(orc_Data.c_OscNodeGroups, c_StringXml).value();
+      if ((s32_Retval == C_NO_ERR) && (c_StringXml.SelectNodeChild("nodes-core") == "nodes-core"))
       {
          //the project filers report std::error_code now; this class keeps the STW int32_t convention
          s32_Retval = C_OscSystemDefinitionFiler::h_LoadNodes(orc_Data.c_OscNodes, c_StringXml,
@@ -1402,7 +1405,9 @@ int32_t C_SdClipBoardHelper::mh_LoadSignalsFromString(const QString & orc_Input,
                tgl_assert(c_StringXml.SelectNodeParent() == "core");
                if (c_StringXml.SelectNodeChild("data-elements") == "data-elements")
                {
-                  C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(orc_OscSignalCommons, c_StringXml);
+                  //the project filers report std::error_code now; this class keeps the STW int32_t convention
+                  s32_Retval =
+                     C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(orc_OscSignalCommons, c_StringXml).value();
                   //Return
                   tgl_assert(c_StringXml.SelectNodeParent() == "core");
                   //Return
