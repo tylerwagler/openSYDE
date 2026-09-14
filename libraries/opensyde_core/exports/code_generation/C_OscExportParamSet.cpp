@@ -283,9 +283,8 @@ void C_OscExportParamSet::mh_FillInterpretedDatapool(const C_OscNodeDataPool & o
    (void)memcpy(&orc_IntDataPool.c_DataPoolInfo.au8_Version[0], &orc_SdDataPool.au8_Version[0], 3);
 
    // Add all lists
-   for (uint16_t u16_ListIndex = 0U; u16_ListIndex < orc_SdDataPool.c_Lists.size(); u16_ListIndex++)
+   for (const C_OscNodeDataPoolList & rc_SdList : orc_SdDataPool.c_Lists)
    {
-      const C_OscNodeDataPoolList & rc_SdList = orc_SdDataPool.c_Lists[u16_ListIndex];
 
       C_OscParamSetInterpretedList c_IntList;
       c_IntList.c_Name = rc_SdList.c_Name;

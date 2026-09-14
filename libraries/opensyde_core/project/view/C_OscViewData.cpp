@@ -67,9 +67,8 @@ void C_OscViewData::CalcHash(uint32_t & oru32_HashValue) const
 {
    stw::scl::C_SclChecksums::CalcCRC32(this->mc_Name.c_str(), this->mc_Name.length(), oru32_HashValue);
    this->mc_PcData.CalcHash(oru32_HashValue);
-   for (uint32_t u32_ItUpdate = 0; u32_ItUpdate < this->mc_NodeUpdateInformation.size(); ++u32_ItUpdate)
+   for (const C_OscViewNodeUpdate & rc_Update : this->mc_NodeUpdateInformation)
    {
-      const C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[u32_ItUpdate];
       rc_Update.CalcHash(oru32_HashValue);
    }
    for (uint32_t u32_ItNode = 0; u32_ItNode < this->mc_NodeActiveFlags.size(); ++u32_ItNode)

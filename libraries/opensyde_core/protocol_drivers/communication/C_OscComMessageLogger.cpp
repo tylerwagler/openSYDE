@@ -1660,9 +1660,8 @@ void C_OscComMessageLogger::mh_AddSpecialEcesSignals(C_OscNode & orc_Node,
 void C_OscComMessageLogger::m_CheckAndHandleEcesMessage()
 {
    // Look for special signals that indicate an ECeS message
-   for (uint32_t u32_Counter = 0U; u32_Counter < this->mc_HandledCanMessage.c_Signals.size(); ++u32_Counter)
+   for (C_OscComMessageLoggerDataSignal & rc_Signal : this->mc_HandledCanMessage.c_Signals)
    {
-      C_OscComMessageLoggerDataSignal & rc_Signal = this->mc_HandledCanMessage.c_Signals[u32_Counter];
 
       // Look for special signal "ECeS_Message_Counter" in the message received
       if (EqualsCaseInsensitive(rc_Signal.c_Name, mhc_ECES_MESSAGE_COUNTER))

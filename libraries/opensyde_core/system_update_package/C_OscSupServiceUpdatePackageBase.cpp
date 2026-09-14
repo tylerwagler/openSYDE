@@ -154,9 +154,8 @@ void C_OscSupServiceUpdatePackageBase::mh_GetSydeSecureDefFileNames(const C_OscS
                                                                     std::vector<std::string> & orc_AbsPath,
                                                                     std::vector<std::string> & orc_RelPath)
 {
-   for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
+   for (const C_OscNode & rc_Node : orc_SystemDefinition.c_Nodes)
    {
-      const C_OscNode & rc_Node = orc_SystemDefinition.c_Nodes[u32_ItNode];
       const std::string c_Folder = TglFileIncludeTrailingDelimiter(C_OscUtils::h_NiceifyStringForFileName(
                                                                       rc_Node.c_Properties.c_Name));
       const std::string c_File = "secure_update_collection.syde_sucdef";
@@ -181,9 +180,8 @@ void C_OscSupServiceUpdatePackageBase::mh_GetNodeFolderNames(const C_OscSystemDe
                                                              std::vector<std::string> & orc_AbsPath,
                                                              std::vector<std::string> & orc_RelPath)
 {
-   for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
+   for (const C_OscNode & rc_Node : orc_SystemDefinition.c_Nodes)
    {
-      const C_OscNode & rc_Node = orc_SystemDefinition.c_Nodes[u32_ItNode];
       const std::string c_RelFile = C_OscUtils::h_NiceifyStringForFileName(rc_Node.c_Properties.c_Name);
       const std::string c_AbsFile = TglFileIncludeTrailingDelimiter(orc_TargetPath + c_RelFile);
       orc_AbsPath.push_back(c_AbsFile);

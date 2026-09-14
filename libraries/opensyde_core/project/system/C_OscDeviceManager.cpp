@@ -149,9 +149,8 @@ std::error_code C_OscDeviceManager::LoadFromPaths(const std::vector<std::string>
    // std::map gives a deterministic alphabetical group ordering at flatten time.
    std::map<std::string, C_OscDeviceGroup> c_GroupsByName;
 
-   for (uint32_t u32_ItRoot = 0U; u32_ItRoot < orc_RootPaths.size(); ++u32_ItRoot)
+   for (const std::string & rc_RootStr : orc_RootPaths)
    {
-      const std::string & rc_RootStr = orc_RootPaths[u32_ItRoot];
       const fs::path c_RootPath(rc_RootStr.c_str());
 
       std::error_code c_Ec;

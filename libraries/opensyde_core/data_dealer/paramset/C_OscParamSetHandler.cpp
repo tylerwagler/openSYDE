@@ -239,9 +239,8 @@ std::error_code C_OscParamSetHandler::AddRawDataForNode(const C_OscParamSetRawNo
 {
    std::error_code c_Retval = Errc::success;
 
-   for (uint32_t u32_ItRawNode = 0; u32_ItRawNode < this->mc_RawNodes.size(); ++u32_ItRawNode)
+   for (const C_OscParamSetRawNode & rc_CurRawNode : this->mc_RawNodes)
    {
-      const C_OscParamSetRawNode & rc_CurRawNode = this->mc_RawNodes[u32_ItRawNode];
       if (rc_CurRawNode.c_Name == orc_Content.c_Name)
       {
          c_Retval = Errc::range;

@@ -101,9 +101,8 @@ void C_OscCanMessageContainer::ReCalcDataElementIndices(void)
       for (uint32_t u32_ItMessage = 0; u32_ItMessage < pc_ComMessages->size(); ++u32_ItMessage)
       {
          C_OscCanMessage & rc_Message = (*pc_ComMessages)[u32_ItMessage];
-         for (uint32_t u32_ItSignal = 0; u32_ItSignal < rc_Message.c_Signals.size(); ++u32_ItSignal)
+         for (C_OscCanSignal & rc_Signal : rc_Message.c_Signals)
          {
-            C_OscCanSignal & rc_Signal = rc_Message.c_Signals[u32_ItSignal];
             rc_Signal.u32_ComDataElementIndex = u32_ListSignalIndex;
             ++u32_ListSignalIndex;
          }
@@ -616,17 +615,15 @@ bool C_OscCanMessageContainer::CheckMinSignalError() const
 void C_OscCanMessageContainer::HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
                                                       std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
 {
-   for (uint32_t u32_ItTxMsg = 0UL; u32_ItTxMsg < this->c_TxMessages.size(); ++u32_ItTxMsg)
+   for (C_OscCanMessage & rc_TxMsg : this->c_TxMessages)
    {
-      C_OscCanMessage & rc_TxMsg = this->c_TxMessages[u32_ItTxMsg];
       C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit,
                                                                                 "tx-message-name",
                                                                                 rc_TxMsg.c_Name,
                                                                                 opc_ChangedItems);
    }
-   for (uint32_t u32_ItRxMsg = 0UL; u32_ItRxMsg < this->c_RxMessages.size(); ++u32_ItRxMsg)
+   for (C_OscCanMessage & rc_RxMsg : this->c_RxMessages)
    {
-      C_OscCanMessage & rc_RxMsg = this->c_RxMessages[u32_ItRxMsg];
       C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit,
                                                                                 "rx-message-name",
                                                                                 rc_RxMsg.c_Name,

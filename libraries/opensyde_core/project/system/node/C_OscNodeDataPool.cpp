@@ -270,9 +270,8 @@ void C_OscNodeDataPool::RecalculateAddress(void)
    {
       uint32_t u32_Offset = this->u32_NvmStartAddress;
 
-      for (uint32_t u32_ItList = 0; u32_ItList < this->c_Lists.size(); ++u32_ItList)
+      for (C_OscNodeDataPoolList & rc_List : this->c_Lists)
       {
-         C_OscNodeDataPoolList & rc_List = this->c_Lists[u32_ItList];
          rc_List.u32_NvmStartAddress = u32_Offset;
          rc_List.RecalculateAddress();
          u32_Offset += rc_List.u32_NvmSize;
@@ -291,9 +290,8 @@ uint32_t C_OscNodeDataPool::GetNumBytesUsed(void) const
 {
    uint32_t u32_Retval = 0;
 
-   for (uint32_t u32_ItList = 0; u32_ItList < this->c_Lists.size(); ++u32_ItList)
+   for (const C_OscNodeDataPoolList & rc_NodeDataPoolList : this->c_Lists)
    {
-      const C_OscNodeDataPoolList & rc_NodeDataPoolList = this->c_Lists[u32_ItList];
       u32_Retval += rc_NodeDataPoolList.GetNumBytesUsed();
    }
    return u32_Retval;
@@ -322,9 +320,8 @@ uint32_t C_OscNodeDataPool::GetListsSize(void) const
 {
    uint32_t u32_Retval = 0;
 
-   for (uint32_t u32_ItList = 0; u32_ItList < this->c_Lists.size(); ++u32_ItList)
+   for (const C_OscNodeDataPoolList & rc_NodeDataPoolList : this->c_Lists)
    {
-      const C_OscNodeDataPoolList & rc_NodeDataPoolList = this->c_Lists[u32_ItList];
       u32_Retval += rc_NodeDataPoolList.u32_NvmSize;
    }
    return u32_Retval;
@@ -566,9 +563,8 @@ void C_OscNodeDataPool::HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLi
                                                                                 "node-datapool-name",
                                                                                 this->c_Name,
                                                                                 opc_ChangedItems);
-      for (uint32_t u32_ItList = 0UL; u32_ItList < this->c_Lists.size(); ++u32_ItList)
+      for (C_OscNodeDataPoolList & rc_List : this->c_Lists)
       {
-         C_OscNodeDataPoolList & rc_List = this->c_Lists[u32_ItList];
          rc_List.HandleNameMaxCharLimit(ou32_NameMaxCharLimit, opc_ChangedItems);
       }
    }

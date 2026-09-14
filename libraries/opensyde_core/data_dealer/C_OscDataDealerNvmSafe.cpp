@@ -1132,9 +1132,8 @@ std::error_code C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(
                         bool q_Found = false;
                         const C_OscNodeDataPoolListId & rc_CopyId = c_Copy[u32_ItCopy];
                         //Search if already appended
-                        for (uint32_t u32_ItExisting = 0; u32_ItExisting < orc_DataPoolLists.size(); ++u32_ItExisting)
+                        for (const C_OscNodeDataPoolListId & rc_ExistingId : orc_DataPoolLists)
                         {
-                           const C_OscNodeDataPoolListId & rc_ExistingId = orc_DataPoolLists[u32_ItExisting];
                            if (((rc_ExistingId.u32_NodeIndex == rc_CopyId.u32_NodeIndex) &&
                                 (rc_ExistingId.u32_DataPoolIndex == rc_CopyId.u32_DataPoolIndex)) &&
                                (rc_ExistingId.u32_ListIndex == rc_CopyId.u32_ListIndex))
@@ -1331,9 +1330,8 @@ std::error_code C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const std::
                if (pc_Node != nullptr)
                {
                   //write the actual values:
-                  for (uint32_t u32_ItEntry = 0; u32_ItEntry < pc_Node->c_Entries.size(); u32_ItEntry++)
+                  for (const C_OscParamSetRawEntry & rc_Entry : pc_Node->c_Entries)
                   {
-                     const C_OscParamSetRawEntry & rc_Entry = pc_Node->c_Entries[u32_ItEntry];
                      const std::error_code c_ProtReturn =
                         this->mpc_DiagProtocol->NvmWrite(rc_Entry.u32_StartAddress, rc_Entry.c_Bytes, nullptr);
                      //Map error codes

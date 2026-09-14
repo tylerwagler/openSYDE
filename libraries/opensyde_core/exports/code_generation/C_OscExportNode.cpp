@@ -284,9 +284,8 @@ std::error_code C_OscExportNode::mh_CreateDatapoolCode(const C_OscNode & orc_Nod
       if (q_Create == true)
       {
          bool q_AtLeastOneElement = false;
-         for (uint16_t u16_ListIndex = 0U; u16_ListIndex < rc_DataPool.c_Lists.size(); u16_ListIndex++)
+         for (const C_OscNodeDataPoolList & rc_List : rc_DataPool.c_Lists)
          {
-            const C_OscNodeDataPoolList & rc_List = rc_DataPool.c_Lists[u16_ListIndex];
             if (rc_List.c_Elements.size() != 0)
             {
                q_AtLeastOneElement = true;
@@ -397,9 +396,8 @@ std::error_code C_OscExportNode::mh_CreateCommStackCode(const C_OscNode & orc_No
 {
    std::error_code c_Retval = Errc::success;
 
-   for (uint32_t u32_ItProtocol = 0U; u32_ItProtocol < orc_Node.c_ComProtocols.size(); ++u32_ItProtocol)
+   for (const C_OscCanProtocol & rc_Protocol : orc_Node.c_ComProtocols)
    {
-      const C_OscCanProtocol & rc_Protocol = orc_Node.c_ComProtocols[u32_ItProtocol];
 
       //logic: C_OscCanProtocol refers to a Datapool; if that Datapool is owned by the application than create code
       if (orc_Node.c_DataPools[rc_Protocol.u32_DataPoolIndex].s32_RelatedDataBlockIndex == ou16_ApplicationIndex)
@@ -624,9 +622,8 @@ std::error_code C_OscExportNode::mh_CheckPrerequisites(const C_OscNode & orc_Nod
    if (!c_Retval)
    {
       //Valid related application index ?
-      for (uint8_t u8_DataPool = 0U; u8_DataPool < orc_Node.c_DataPools.size(); u8_DataPool++)
+      for (const C_OscNodeDataPool & rc_CurDataPool : orc_Node.c_DataPools)
       {
-         const C_OscNodeDataPool & rc_CurDataPool = orc_Node.c_DataPools[u8_DataPool];
          if ((rc_CurDataPool.s32_RelatedDataBlockIndex == -1) ||
              (rc_CurDataPool.s32_RelatedDataBlockIndex >= static_cast<int32_t>(orc_Node.c_Applications.size())))
          {
@@ -702,9 +699,8 @@ std::error_code C_OscExportNode::mh_AdaptComDataPool(const C_OscNode & orc_Node,
    {
       bool q_Found = false;
       //Search protocol
-      for (uint32_t u32_ItProtocol = 0; u32_ItProtocol < orc_Node.c_ComProtocols.size(); ++u32_ItProtocol)
+      for (const C_OscCanProtocol & rc_Protocol : orc_Node.c_ComProtocols)
       {
-         const C_OscCanProtocol & rc_Protocol = orc_Node.c_ComProtocols[u32_ItProtocol];
          if (rc_Protocol.u32_DataPoolIndex == ou32_DataPoolIndex)
          {
             q_Found = true;
@@ -723,13 +719,11 @@ std::error_code C_OscExportNode::mh_AdaptComDataPool(const C_OscNode & orc_Node,
                      C_OscCanProtocol::h_GetComList(orc_DataPool, u32_ItMessageContainer, q_IsTx);
                   const std::vector<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessagesConst(q_IsTx);
                   //For each message
-                  for (uint32_t u32_ItMessage = 0; u32_ItMessage < rc_Messages.size(); ++u32_ItMessage)
+                  for (const C_OscCanMessage & rc_Message : rc_Messages)
                   {
-                     const C_OscCanMessage & rc_Message = rc_Messages[u32_ItMessage];
                      //For each signal
-                     for (uint32_t u32_ItSignal = 0; u32_ItSignal < rc_Message.c_Signals.size(); ++u32_ItSignal)
+                     for (const C_OscCanSignal & rc_Signal : rc_Message.c_Signals)
                      {
-                        const C_OscCanSignal & rc_Signal = rc_Message.c_Signals[u32_ItSignal];
                         if (rc_Signal.u32_ComDataElementIndex < pc_List->c_Elements.size())
                         {
                            //Combine message and signal name

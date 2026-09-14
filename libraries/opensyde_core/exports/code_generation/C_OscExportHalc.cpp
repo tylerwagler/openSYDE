@@ -368,9 +368,8 @@ void C_OscExportHalc::mh_AddDefines(std::vector<std::string> & orc_Data, const C
                uint32_t u32_NumberOfAssignedChannels = 0U;
                // add define for each assigned channel
 
-               for (uint32_t u32_ChannelIt = 0U; u32_ChannelIt < pc_Domain->c_ChannelConfigs.size(); u32_ChannelIt++)
+               for (const C_OscHalcConfigChannel & rc_ChannelConfig : pc_Domain->c_ChannelConfigs)
                {
-                  const C_OscHalcConfigChannel & rc_ChannelConfig = pc_Domain->c_ChannelConfigs[u32_ChannelIt];
                   if (mh_DropChannel(rc_ChannelConfig.q_SafetyRelevant, orc_HalcConfig.e_SafetyMode,
                                      oq_IsSafe) == false)
                   {

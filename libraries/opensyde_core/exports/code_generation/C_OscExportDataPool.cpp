@@ -561,9 +561,8 @@ std::error_code C_OscExportDataPool::mh_AddDefinesHeader(std::vector<std::string
          {
             const C_OscNodeDataPoolList & rc_List = orc_DataPool.c_Lists[u16_ListIndex];
             const std::string c_ListName = UpperCaseCompat(rc_List.c_Name);
-            for (uint16_t u16_ElementIndex = 0U; u16_ElementIndex < rc_List.c_Elements.size(); u16_ElementIndex++)
+            for (const C_OscNodeDataPoolListElement & rc_Element : rc_List.c_Elements)
             {
-               const C_OscNodeDataPoolListElement & rc_Element = rc_List.c_Elements[u16_ElementIndex];
                 const std::string c_ElementName = UpperCaseCompat(rc_Element.c_Name);
                std::string c_ElementStruct;
                std::string c_Makro;
@@ -676,9 +675,8 @@ void C_OscExportDataPool::mh_AddTypes(std::vector<std::string> & orc_Data, const
    {
       bool q_AtLeastOneElement = false; // defensive (actually no file generation for empty datapools)
 
-      for (uint16_t u16_ListIndex = 0U; u16_ListIndex < orc_DataPool.c_Lists.size(); u16_ListIndex++)
+      for (const C_OscNodeDataPoolList & rc_List : orc_DataPool.c_Lists)
       {
-         const C_OscNodeDataPoolList & rc_List = orc_DataPool.c_Lists[u16_ListIndex];
          if (rc_List.c_Elements.size() != 0)
          {
             q_AtLeastOneElement = true;
@@ -686,9 +684,8 @@ void C_OscExportDataPool::mh_AddTypes(std::vector<std::string> & orc_Data, const
             orc_Data.push_back("typedef struct");
             orc_Data.push_back("{");
 
-            for (uint16_t u16_ElementIndex = 0U; u16_ElementIndex < rc_List.c_Elements.size(); u16_ElementIndex++)
+            for (const C_OscNodeDataPoolListElement & rc_Element : rc_List.c_Elements)
             {
-               const C_OscNodeDataPoolListElement & rc_Element = rc_List.c_Elements[u16_ElementIndex];
                const std::string c_TypePrefix =
                   C_OscExportUti::h_GetTypePrefix(rc_Element.GetType(), rc_Element.GetArray());
                const std::string c_ElementType =  mh_GetType(rc_Element.GetType());

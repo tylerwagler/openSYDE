@@ -818,9 +818,8 @@ std::error_code C_OscDeviceDefinitionFiler::mh_HandleConnectedInterfaces(C_OscDe
    if (orc_DeviceDefinition.c_SubDevices.size() <= 1L)
    {
       //Auto fill
-      for (uint32_t u32_ItSubDev = 0UL; u32_ItSubDev < orc_DeviceDefinition.c_SubDevices.size(); ++u32_ItSubDev)
+      for (C_OscSubDeviceDefinition & rc_SubDevice : orc_DeviceDefinition.c_SubDevices)
       {
-         C_OscSubDeviceDefinition & rc_SubDevice = orc_DeviceDefinition.c_SubDevices[u32_ItSubDev];
          for (uint32_t u32_ItCan = 0UL; u32_ItCan < static_cast<uint32_t>(orc_DeviceDefinition.u8_NumCanBusses);
               ++u32_ItCan)
          {
@@ -982,9 +981,8 @@ std::error_code C_OscDeviceDefinitionFiler::mh_CheckNotConnectedDevice(
 {
    std::error_code c_Retval = Errc::success;
 
-   for (uint32_t u32_ItSubDevice = 0UL; u32_ItSubDevice < orc_DeviceDefinition.c_SubDevices.size(); ++u32_ItSubDevice)
+   for (const C_OscSubDeviceDefinition & rc_SubDevice : orc_DeviceDefinition.c_SubDevices)
    {
-      const C_OscSubDeviceDefinition & rc_SubDevice = orc_DeviceDefinition.c_SubDevices[u32_ItSubDevice];
       if (!C_OscDeviceDefinitionFiler::mh_CheckNotConnectedDeviceByType(rc_SubDevice, C_OscSystemBus::eCAN,
                                                                         orc_DeviceDefinition.u8_NumCanBusses))
       {
@@ -1044,9 +1042,8 @@ std::error_code C_OscDeviceDefinitionFiler::mh_CheckDeviceName(const C_OscDevice
 {
    std::error_code c_Retval = Errc::success;
 
-   for (uint32_t u32_ItSubDevice = 0UL; u32_ItSubDevice < orc_DeviceDefinition.c_SubDevices.size(); ++u32_ItSubDevice)
+   for (const C_OscSubDeviceDefinition & rc_SubDevice : orc_DeviceDefinition.c_SubDevices)
    {
-      const C_OscSubDeviceDefinition & rc_SubDevice = orc_DeviceDefinition.c_SubDevices[u32_ItSubDevice];
       if (!C_OscUtils::h_CheckValidCeName(rc_SubDevice.c_SubDeviceName))
       {
          c_Retval = Errc::config;

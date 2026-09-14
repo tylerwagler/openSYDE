@@ -1149,9 +1149,8 @@ void C_OscNodeFiler::mh_SaveApplications(const std::vector<C_OscNodeApplication>
 {
    orc_XmlParser.CreateAndSelectNodeChild("applications");
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_NodeApplications.size()));
-   for (uint32_t u32_ItApplication = 0; u32_ItApplication < orc_NodeApplications.size(); ++u32_ItApplication)
+   for (const C_OscNodeApplication & rc_CurApplication : orc_NodeApplications)
    {
-      const C_OscNodeApplication & rc_CurApplication = orc_NodeApplications[u32_ItApplication];
       orc_XmlParser.CreateAndSelectNodeChild("application");
       orc_XmlParser.SetAttributeBool("active", rc_CurApplication.q_Active);
       orc_XmlParser.SetAttributeUint32("process-id", static_cast<uint32_t>(rc_CurApplication.u8_ProcessId));

@@ -582,9 +582,8 @@ void C_OscExportCommunicationStack::mh_AddDefines(std::vector<std::string> & orc
       {
          bool q_CommentAdded = false;
          // Tx MUX messages
-         for (uint16_t u16_MessageIndex = 0U; u16_MessageIndex < orc_ComMessage.c_TxMessages.size(); u16_MessageIndex++)
+         for (const C_OscCanMessage & rc_Message : orc_ComMessage.c_TxMessages)
          {
-            const C_OscCanMessage & rc_Message = orc_ComMessage.c_TxMessages[u16_MessageIndex];
 
             if (rc_Message.IsMultiplexed() == true)
             {
@@ -621,9 +620,8 @@ void C_OscExportCommunicationStack::mh_AddDefines(std::vector<std::string> & orc
          }
          // Rx MUX messages
          q_CommentAdded = false;
-         for (uint16_t u16_MessageIndex = 0U; u16_MessageIndex < orc_ComMessage.c_RxMessages.size(); u16_MessageIndex++)
+         for (const C_OscCanMessage & rc_Message : orc_ComMessage.c_RxMessages)
          {
-            const C_OscCanMessage & rc_Message = orc_ComMessage.c_RxMessages[u16_MessageIndex];
 
             if (rc_Message.IsMultiplexed() == true)
             {
@@ -910,9 +908,8 @@ void C_OscExportCommunicationStack::mh_AddSignalDefinitions(std::vector<std::str
                                                             const std::vector<C_OscCanMessage> & orc_Messages,
                                                             const uint16_t ou16_GenCodeVersion)
 {
-   for (uint16_t u16_MessageIndex = 0U; u16_MessageIndex < orc_Messages.size(); u16_MessageIndex++)
+   for (const C_OscCanMessage & rc_Message : orc_Messages)
    {
-      const C_OscCanMessage & rc_Message = orc_Messages[u16_MessageIndex];
 
       //Only create of signal table(s) for messages with signals.
       //For multiplexed messages we have at least one signal by definition; otherwise it could not be multiplexed.
@@ -1268,9 +1265,8 @@ uint32_t C_OscExportCommunicationStack::mh_CountMuxMessages(const std::vector<C_
 {
    uint32_t u32_MessageNum = 0;
 
-   for (uint16_t u16_MessageIndex = 0U; u16_MessageIndex < orc_Messages.size(); u16_MessageIndex++)
+   for (const C_OscCanMessage & rc_Message : orc_Messages)
    {
-      const C_OscCanMessage & rc_Message = orc_Messages[u16_MessageIndex];
 
       if (rc_Message.IsMultiplexed() == true)
       {

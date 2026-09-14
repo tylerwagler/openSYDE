@@ -141,9 +141,8 @@ std::error_code C_OscExportOsyInit::h_CreateSourceCode(const std::string & orc_F
    {
       c_Lines.push_back("//Header files exporting comm stack configuration and status:");
 
-      for (uint32_t u32_ItProtocol = 0U; u32_ItProtocol < orc_Node.c_ComProtocols.size(); u32_ItProtocol++)
+      for (const C_OscCanProtocol & rc_Protocol : orc_Node.c_ComProtocols)
       {
-         const C_OscCanProtocol & rc_Protocol = orc_Node.c_ComProtocols[u32_ItProtocol];
 
          //skip CANopen protocol
          if (rc_Protocol.e_Type != C_OscCanProtocol::eCAN_OPEN)
@@ -180,9 +179,8 @@ std::error_code C_OscExportOsyInit::h_CreateSourceCode(const std::string & orc_F
 
       //count number of active CAN and ETH channels:
       //CAN and Ethernet bus number
-      for (uint8_t u8_Channel = 0U; u8_Channel < orc_Node.c_Properties.c_ComInterfaces.size(); u8_Channel++)
+      for (const C_OscNodeComInterfaceSettings & rc_ComIf : orc_Node.c_Properties.c_ComInterfaces)
       {
-         const C_OscNodeComInterfaceSettings & rc_ComIf = orc_Node.c_Properties.c_ComInterfaces[u8_Channel];
 
          if (C_OscExportOsyInit::mh_IsDpdInitRequired(rc_ComIf) == true)
          {
@@ -325,9 +323,8 @@ std::error_code C_OscExportOsyInit::h_CreateSourceCode(const std::string & orc_F
          //channel instances
          u8_NumCanChannels = 0U;
          u8_NumEthChannels = 0U;
-         for (uint8_t u8_Channel = 0U; u8_Channel < orc_Node.c_Properties.c_ComInterfaces.size(); u8_Channel++)
+         for (const C_OscNodeComInterfaceSettings & rc_ComIf : orc_Node.c_Properties.c_ComInterfaces)
          {
-            const C_OscNodeComInterfaceSettings & rc_ComIf = orc_Node.c_Properties.c_ComInterfaces[u8_Channel];
             //create initialization if
             //* the bus is connected and
             //** routing is enabled (in this case we need to be able to route on application level as well)
@@ -639,9 +636,8 @@ bool C_OscExportOsyInit::mh_IsDpKnownToApp(const uint8_t ou8_DataPoolIndex, cons
       bool q_AtLeastOneElement = false;
 
       // check if datapool is non-empty (files only get generated in this case)
-      for (uint16_t u16_ListIndex = 0U; u16_ListIndex < rc_DataPool.c_Lists.size(); u16_ListIndex++)
+      for (const C_OscNodeDataPoolList & rc_List : rc_DataPool.c_Lists)
       {
-         const C_OscNodeDataPoolList & rc_List = rc_DataPool.c_Lists[u16_ListIndex];
          if (rc_List.c_Elements.size() != 0)
          {
             q_AtLeastOneElement = true;

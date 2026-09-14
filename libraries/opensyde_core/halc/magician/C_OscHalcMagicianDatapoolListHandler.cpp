@@ -354,9 +354,8 @@ uint32_t C_OscHalcMagicianDatapoolListHandler::CountRelevantItems(
          break;
       case C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING:
       default:
-         for (uint32_t u32_ItChannel = 0UL; u32_ItChannel < orc_Channels.size(); ++u32_ItChannel)
+         for (const C_OscHalcConfigChannel & rc_Channel : orc_Channels)
          {
-            const C_OscHalcConfigChannel & rc_Channel = orc_Channels[u32_ItChannel];
             if (rc_Channel.q_SafetyRelevant == this->mq_IsSafe)
             {
                ++u32_Retval;

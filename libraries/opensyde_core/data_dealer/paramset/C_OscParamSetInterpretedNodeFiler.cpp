@@ -97,9 +97,8 @@ void C_OscParamSetInterpretedNodeFiler::h_SaveInterpretedNode(const C_OscParamSe
    C_OscParamSetFilerBase::mh_SaveNodeName(orc_Node.c_Name, orc_XmlParser);
    //Extract data pool info
    c_Infos.reserve(orc_Node.c_DataPools.size());
-   for (uint32_t u32_ItDataPool = 0; u32_ItDataPool < orc_Node.c_DataPools.size(); ++u32_ItDataPool)
+   for (const C_OscParamSetInterpretedDataPool & rc_DataPool : orc_Node.c_DataPools)
    {
-      const C_OscParamSetInterpretedDataPool & rc_DataPool = orc_Node.c_DataPools[u32_ItDataPool];
       c_Infos.push_back(rc_DataPool.c_DataPoolInfo);
    }
    C_OscParamSetFilerBase::mh_SaveDataPoolInfos(c_Infos, orc_XmlParser);
