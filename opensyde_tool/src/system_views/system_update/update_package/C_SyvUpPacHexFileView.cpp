@@ -211,9 +211,13 @@ QString C_SyvUpPacHexFileView::mh_GetMd5Hex(const QString & orc_Path)
 void C_SyvUpPacHexFileView::mh_AddDataInformation(C_OscHexFile & orc_HexFile, QString & orc_Content)
 {
    const uint32_t u32_Bytes = orc_HexFile.ByteCount();
-   uint32_t u32_Crc;
+   uint32_t u32_Crc = 0U;
 
-   orc_HexFile.CalcFileChecksum(u32_Crc);
+   //SYDEflash's equivalent (C_FlaUpHexFileInfo) guards this call; this one did not, and read
+   //u32_Crc uninitialised into the dialog whenever the dump failed. The status is still not
+   //actionable here -- the row is part of a fixed table -- so the discard is marked deliberate
+   //and the displayed value is now the defined default rather than stack contents.
+   (void)orc_HexFile.CalcFileChecksum(u32_Crc);
 
    orc_Content += "<h3>" + static_cast<QString>("Data Information") + "</h3>";
    orc_Content += "<table>";
