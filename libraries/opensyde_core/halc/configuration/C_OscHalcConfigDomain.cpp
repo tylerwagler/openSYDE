@@ -161,6 +161,13 @@ std::error_code C_OscHalcConfigDomain::CheckChannelLinked(const uint32_t ou32_Ch
 {
    std::error_code c_Retval = Errc::success;
 
+   //Every failure path below returns without touching orq_IsLinked, so it is given a value up
+   //front. C_SdNdeHalcConfigImportModel declares its flag uninitialised, discards this result and
+   //reads the flag regardless -- which was undefined behaviour whenever the index was out of
+   //range. This matches what the XML parser's GetAttribute*Error helpers already do: write the
+   //out parameter a default before reporting the error.
+   orq_IsLinked = false;
+
    if (oq_UseChannelIndex == true)
    {
       if (ou32_ChannelIndex < this->c_ChannelConfigs.size())
