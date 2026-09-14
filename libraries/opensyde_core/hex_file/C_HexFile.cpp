@@ -372,10 +372,17 @@ uint32_t C_HexFile::m_LoadSRecord(std::FILE * const opt_File)
             // get record address
             u32_Error = m_GetSRecordAddress(acn_HexBuffer, u8_RecordType, u32_AdrNew);
 
-            if (mu32_AdrOffs != (u32_AdrNew & mu32_XADR32_MASK)) // 32bit address offset changed?
+            //m_GetSRecordAddress only writes u32_AdrNew on its success paths, so the address must
+            //not be read until the status has been checked. The Intel branch above already does
+            //this; this one used to read u32_AdrNew first and check afterwards, which meant a
+            //malformed S-record set mu32_AdrOffs from an uninitialised value.
+            if (u32_Error == NO_ERR)
             {
-               mu32_AdrOffs = (u32_AdrNew & mu32_XADR32_MASK); // yes -> set new address offset
-               u32_Error = m_SetOffset(mu32_AdrOffs);          // set new offset record
+               if (mu32_AdrOffs != (u32_AdrNew & mu32_XADR32_MASK)) // 32bit address offset changed?
+               {
+                  mu32_AdrOffs = (u32_AdrNew & mu32_XADR32_MASK); // yes -> set new address offset
+                  u32_Error = m_SetOffset(mu32_AdrOffs);          // set new offset record
+               }
             }
 
             if (u32_Error == NO_ERR) // no error?
@@ -683,7 +690,11 @@ const uint8_t * C_HexFile::NextBinData(uint32_t & oru32_Address, uint8_t & oru8_
    {
       if (pu8_Line[mu8_INTEL_CMD] == mu8_CMD_DATA)
       {
-         pt_Line = mpt_HexData->pt_Prev;
+         //NextLine() returns the current entry and then advances, setting mpt_HexData to nullptr
+         //once it has handed out the last one. So the line just returned is mpt_HexData->pt_Prev
+         //in the normal case, but the list tail when the walk has finished -- dereferencing
+         //mpt_HexData unconditionally crashed on a file whose final record is a data record.
+         pt_Line = (mpt_HexData != nullptr) ? mpt_HexData->pt_Prev : mpt_DataEntry->pt_Prev;
          oru32_Address = pt_Line->u32_XAdr;   // get 32bit line address
          oru8_Size = pu8_Line[mu8_INTEL_LEN]; // get data len
          pu8_Line = &pu8_Line[mu8_INTEL_DAT]; // get data pointer
