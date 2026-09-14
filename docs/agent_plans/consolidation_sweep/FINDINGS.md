@@ -258,3 +258,138 @@ lists.
 `C_CamOgeLeFilePath` vs `C_FlaOgeLeFilePath` **are** functionally identical —
 13 vs 14 code lines differing only by an extra `#include <cstdint>` — so that
 pair alone could still be merged, for about 60 lines.
+
+---
+
+## `[[nodiscard]]` blast radius, measured (2026-09-14)
+
+The dropped-error scan above raised `[[nodiscard]]` as the durable fix but left
+it as an open decision. This measures it so the decision is cheap.
+
+**Experiment:** annotate every `std::error_code`-returning declaration in
+`opensyde_core` headers — **981 declarations across 122 headers** — then build.
+
+**Result: 60 call sites**, across 22 files.
+
+| Subsystem | Sites |
+|---|---|
+| `protocol_drivers/communication` | 25 |
+| `protocol_drivers/*` (update, config, base) | 14 |
+| `md5` | 4 |
+| `ip_dispatcher/target_linux_sock` | 3 |
+| `project/system*` | 5 |
+| `halc/*` | 6 |
+| `data_dealer` | 2 |
+
+### Why this is worth doing
+
+**The compiler finds roughly three times what a hand-written scan does.** The
+scan earlier in this document resolved qualified static calls and `this->`
+member calls and found 19 sites repo-wide; `[[nodiscard]]` finds 60 in core
+alone, because it also catches calls in expression and argument position that no
+line-oriented heuristic will match.
+
+The codebase is already shaped for the annotation: intentional discards are
+written `(void)expr` in **4,439** places as a MISRA convention, so the "I meant
+to ignore this" idiom exists, is already used everywhere else, and reads as
+deliberate rather than as noise.
+
+### Why it was not landed here
+
+60 sites each need a judgement — propagate, or mark `(void)` — and 39 of them
+are in `protocol_drivers`, where best-effort on a CAN send or a teardown
+disconnect may well be correct. Making those calls in bulk would be exactly the
+"behaviour change made on a guess" that the rest of this sweep avoided. The
+annotation is cheap; the triage is the work, and it wants someone who knows the
+protocol layer.
+
+### Correction: 60 was also a core-only number
+
+The 60 above counts callers inside `opensyde_core`. The same headers are consumed
+by the GUI trees, and those add more. Annotating only `halc/` and `data_dealer/`
+gives **14 sites in core plus 6 in `opensyde_tool`**; adding `project/` brings a
+further **17 GUI sites** (`C_PuiSdHandler*`, `C_PuiSvHandler`, `C_SdClipBoardHelper`
+and others dropping results from `DeleteBus`, `SetNodeName`, `InsertDataPool`,
+`SetNodeUpdateInformation`).
+
+So the "easy three subsystems" are roughly **37 sites**, not 15. Measure with a
+full `./build.sh all`, not a core build.
+
+A sensible staging if this is taken up: `halc/` + `data_dealer/` first (20 sites),
+then `project/` (a further ~17, all GUI handler paths), then `protocol_drivers`
+behind domain review.
+
+### A defect the annotation surfaced
+
+`C_OscHalcConfigDomain::CheckChannelLinked` assigns its `orq_IsLinked` out
+parameter **only on its success paths**. When the channel index is out of range it
+returns `Errc::range` without touching it.
+
+`C_SdNdeHalcConfigImportModel.cpp` (around line 370) declares
+
+    bool q_IsLinkedOld;
+    bool q_IsLinkedNew;
+
+uninitialised, calls `CheckChannelLinked` twice **discarding both results**, and
+then reads both bools. If that call ever fails, this reads uninitialised memory.
+
+Whether it can fail in practice depends on `u32_ChannelCounter` always being in
+range, which was not traced. The shape is unsafe regardless: an out parameter
+consumed without checking the status that says whether it was written. Either the
+callee should initialise `orq_IsLinked` before its range check, or the caller
+should check. This is the clearest argument in this document for the annotation —
+no scan in this sweep would have found it.
+
+### Measuring it again
+
+Use `ninja -C <build> -k 0`. A plain `cmake --build` stops at the first failing
+translation unit and reports **4** sites, not 60 — the truncated number looks
+like a decisive answer and is not.
+
+---
+
+## `-Wconditional-uninitialized` is not worth enabling here (2026-09-14)
+
+Having found two uninitialised-out-parameter bugs by hand, the obvious next move
+was to let the compiler do it. Clang has a warning aimed squarely at that class
+and it is **not** part of `-Wall -Wextra`.
+
+**Result: 9 sites in `opensyde_core`, all of them false positives — and neither
+of the two real bugs is among them.**
+
+The nine split into two shapes the warning cannot see through:
+
+- **Pointer out-parameters.** `C_OscSystemDefinition::CheckErrorNode` takes
+  `bool *` parameters, passes them to `CheckErrorManager`, and reads the locals
+  afterwards. `CheckErrorManager` writes through every non-null pointer
+  unconditionally, so the locals are always written — but that is in another
+  translation unit's function body, which the warning does not analyse. 4 sites.
+- **A boolean flag correlated with initialisation.** `C_CanMonProtocolOpenSyde`
+  sets `u32_SnrSignStartIndex` in the branches where it also leaves
+  `q_DlcCorrect` true, and reads it only under `if (q_DlcCorrect == true)`.
+  `C_OscCanMessage` does the same with `q_NoCheckNecessary`. Clang does not
+  correlate the two. 3 sites. The remaining 2 are the `h_GetComListIndex`
+  short-circuit already described above.
+
+**Why the real bugs are invisible to it.** Both `CheckChannelLinked` and
+`CalcFileChecksum` are *cross-function*: the callee returns before writing its
+out parameter and the caller reads it anyway. Nothing in the caller's own body
+looks wrong, so an intraprocedural warning has nothing to flag. That is exactly
+why `[[nodiscard]]` found them — it does not analyse flow, it just makes the
+ignored status a compile error and lets a human look at the call site.
+
+So: do not enable this warning. It would cost 9 pointless `= 0` initialisations,
+each of which makes the code marginally less honest about what it knows, and
+would catch none of the real instances.
+
+### Measuring warnings in this tree
+
+`-DCMAKE_CXX_FLAGS=...` on the configure line **does not work** — the toolchain
+files set `CMAKE_CXX_FLAGS` outright and win. Append the flag to
+`cmake/toolchain_*.cmake` temporarily instead, and verify it arrived:
+
+    python3 -c "import json;print('conditional-uninitialized' in json.load(open('build/warn/compile_commands.json'))[0]['command'])"
+
+Without that check the first run of this experiment reported **0 findings**, from
+a build that never had the flag, and also silently tried to compile the Windows
+TGL sources because `OPENSYDE_CORE_SKIP_WINDOWS_*` had been left off.
