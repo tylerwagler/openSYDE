@@ -304,9 +304,17 @@ The genuine ownership cases were then checked individually and none is defective
   entry) is unreachable — it is initialised to `NO_ERR` immediately above.
 - **`C_HexFile` `T_HexLine` ring buffer.** A hand-rolled doubly-linked list, and
   the one item with real substance left in this sub-phase. Converting it means
-  restructuring 2,561 lines of firmware-image parsing that has **zero test
-  coverage**, to fix no observed defect. That is a bad trade in that order. If
-  this is ever revisited, characterisation tests for the hex parser come first.
+  restructuring 2,561 lines of firmware-image parsing, to fix no observed defect.
+  That was a bad trade while the file had **zero test coverage**, which was the
+  original reason for declining it.
+
+  **That precondition is now met (2026-09-13).** `tests/test_hex_file.cpp` holds
+  28 characterisation tests covering the whole public API, including the pieces
+  this conversion would disturb: `Optimize` / `OptimizeLinear` (the raw
+  `uint16_t[]` image and gap filling), the `LineInit` / `NextLine` walk over the
+  ring buffer itself, and `GetDataByAddress` / `FindPattern` with their foreign
+  0 / -1 / -2 convention. The trade is now a judgement about value rather than
+  about safety.
 
 ### Phase 7 — blocked on its own terms
 
