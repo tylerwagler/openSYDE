@@ -282,10 +282,13 @@ std::error_code C_OscHalcMagicianGenerator::m_FillHalcDatapools(std::vector<C_Os
                   tgl_assert(pc_Config != nullptr);
                   if (pc_Config != nullptr)
                   {
-                     C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsDomain(rc_ListNonSafe, *pc_Config, c_Handler,
-                                                                            u32_ItDomain);
-                     C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsDomain(rc_ListSafe, *pc_Config, c_HandlerSafe,
-                                                                            u32_ItDomain);
+                     c_Retval = C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsDomain(rc_ListNonSafe, *pc_Config,
+                                                                                       c_Handler, u32_ItDomain);
+                     if (!c_Retval)
+                     {
+                        c_Retval = C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsDomain(rc_ListSafe, *pc_Config,
+                                                                                          c_HandlerSafe, u32_ItDomain);
+                     }
                   }
                }
             }
@@ -321,8 +324,8 @@ std::error_code C_OscHalcMagicianGenerator::m_FillHalcDatapools(std::vector<C_Os
                   tgl_assert(pc_Config != nullptr);
                   if (pc_Config != nullptr)
                   {
-                     C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsDomain(rc_List, *pc_Config, c_Handler,
-                                                                            u32_ItDomain);
+                     c_Retval = C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsDomain(rc_List, *pc_Config, c_Handler,
+                                                                                       u32_ItDomain);
                   }
                }
             }

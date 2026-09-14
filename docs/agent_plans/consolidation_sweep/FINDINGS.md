@@ -141,3 +141,120 @@ Forward-declaration / include-hygiene work: headers average 3.6 includes, only
 build time. `NULL` → `nullptr` (616 sites) and `(void)` parameter lists (8,823)
 are cosmetic; fold the former into whatever files other passes touch. First-party
 C-style casts: **zero** — the 34 found are all in vendored `miniz.c`.
+
+---
+
+## Silently discarded `std::error_code` returns (2026-09-13)
+
+Phase 5 converted every STW `int32_t` error return in `opensyde_core` to
+`std::error_code`, but nothing checks that callers actually look at them. There
+are **804** distinct `std::error_code`-returning function names in core headers
+and **zero** `[[nodiscard]]` anywhere in the tree.
+
+Scanning statement-position calls that neither assign the result nor cast it
+away, then resolving each call to its declaring class (name collisions across
+filers make an unqualified name lookup useless — `h_SaveData` and
+`mh_SaveDataPools` each have both `void` and `std::error_code` overloads in
+different classes) and discarding continuation lines of a multi-line assignment,
+leaves **19 genuinely dropped error returns**: 7 in `libraries/`, 12 in
+`opensyde_tool`.
+
+### Fixed here, because the surrounding code proves the intent
+
+- `C_OscNodeFiler::mh_SaveCanOpenManagers` — the `orc_BasePath.empty()` branch
+  dropped `C_OscCanOpenManagerFiler::h_SaveData`'s result while **the sibling
+  branch assigns `h_SaveFile`'s**, and the function documents
+  `\retval Errc::config file could not be created`. A failed save reported
+  success.
+- `C_OscHalcMagicianGenerator::m_FillHalcDatapools`, three call sites — the
+  enclosing loops are written `for (...; (u32_ItDomain < ...) && (!c_Retval); ...)`,
+  so they test `c_Retval` to stop early while the body never assigns it. The
+  guard could not fire. `mh_FillHalcDatapoolsDomain` returns `Errc::config` only
+  on structural problems, not in normal operation, so propagating is safe.
+
+### Left for triage — they need domain judgement, not a sweep
+
+The remaining 16 may be deliberate. `h_SetValueInMinMaxRange` (6 sites) reports
+whether it clamped, which a caller may legitimately not care about;
+`h_EthDisconnectNode` is called during teardown. But four sites in
+`C_SdClipBoardHelper` drop load and save results, and those look like the same
+defect class as the two fixed above.
+
+### Second pass: member calls through `this->`
+
+The first scan only covered qualified static calls (`C_Class::fn(...)`). Extending
+it to `this->fn(...)`, which resolves unambiguously to the enclosing class, found
+**9 more discarded returns and no new confirmed defects.** Checked individually:
+
+- `C_OscNode::MoveDataPool` discards `DeleteDataPool` and `InsertDataPool`, but
+  the enclosing `if` validates both indices and those two only fail with
+  `Errc::range` on a bad index. **Provably safe** -- do not "fix" it.
+- `C_OscComDriverBase::SendCanMessageDirect` (2 sites) is the cyclic-message
+  pump. A silent send failure matters for a flashing tool, but stopping the pump
+  on one failure may be worse. No sibling evidence either way; needs domain
+  judgement.
+- `C_OscIpDispatcher*::CloseUdp` (both platforms) and
+  `C_OscProtocolDriverOsy::m_HandleAsyncResponse` are teardown and async paths
+  where best-effort is defensible.
+
+That the extension turned up no further confirmed defects raises confidence that
+the five fixed are the real ones, rather than the first five of many.
+
+### The durable fix
+
+`[[nodiscard]]` on the error-returning core API would make this a compile error
+rather than a scan. The codebase is already shaped for it: it marks intentional
+discards with `(void)expr` in 4,439 places as a MISRA convention, so the idiom
+for "I meant to ignore this" already exists and is already used everywhere else.
+That is a large sweep and a separate decision.
+
+---
+
+## Two more survey items that do not survive inspection (2026-09-13)
+
+### Popup-dialog scaffolding — already done
+
+The `opensyde_tool` survey ranked this ~700 lines across 92 sites. There is a
+detailed, user-approved brief for it at
+`docs/agent_plans/gui_consolidation/phase3-brief.md` describing a
+`C_OgePopUpContentBase` that hoists both the `mrc_ParentDialog` member and a
+22-line Ctrl+Enter `keyPressEvent`.
+
+**That base class exists and the migration landed.** Only 5 classes still declare
+their own `mrc_ParentDialog`, and searching for the actual Ctrl+Enter → accept
+pattern (Key_Enter/Return **and** Alt **and** Shift checks **and** an
+`accept()`/`m_OkClicked()` call) finds **4 overrides left, all with distinct
+bodies**:
+
+- `C_GiSyBaseWidget` and `C_GiSyColorSelectWidget` interleave colour-picking
+  cancel handling with the enter handling.
+- `C_ImpCodeGenerationReportWidget` is a straggler but small.
+- `C_PopPasswordDialogWidget` is on the brief's own exclusion list (inherits
+  `QDialog`, not `QWidget`).
+
+A first count of "30 remaining" was wrong: the filter matched any
+`ControlModifier` handler, so it swept up things like `C_CamMetTreeView`'s
+Ctrl+C copy. Worth repeating only with the narrow predicate.
+
+Note the base as built is narrower than the brief — it hoists the member but not
+`keyPressEvent`/`m_OnEnterAccept`. Given only 4 sites remain and each has extra
+logic, finishing that design now would cost more than it saves.
+
+### Cam/Fla `PubPathVariables` — already consolidated, and the rest is domain logic
+
+`C_CamOgePubPathVariables` and `C_FlaOgePubPathVariables` already share
+`C_CamOgePubPathVariablesBase` in `libraries/opensyde_gui/`. Stripping comments,
+the only differences left are the three menu entries ("CAN Monitor Binary" vs
+"SYDExsh Binary" and so on) — per-tool by design. The prior GUI-consolidation
+effort reached the same conclusion independently and recorded it in
+`phase5-progress.md`: *"ctor calls m_AddHeading / m_AddEntry (real domain logic,
+not styling)"*.
+
+The one real wart: that shared base is named `C_Cam*` and lives under a
+`can_monitor/` subtree of the shared library, while SYDEflash compiles and
+depends on it. Renaming is cosmetic and touches both apps' CMakeLists and lint
+lists.
+
+`C_CamOgeLeFilePath` vs `C_FlaOgeLeFilePath` **are** functionally identical —
+13 vs 14 code lines differing only by an extra `#include <cstdint>` — so that
+pair alone could still be merged, for about 60 lines.

@@ -1498,8 +1498,8 @@ std::error_code C_OscNodeFiler::mh_SaveCanOpenManagers(const std::map<uint8_t, C
       if (orc_BasePath.empty())
       {
          //To string
-         C_OscCanOpenManagerFiler::h_SaveData(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
-                                              orc_NodeIndicesToNameMap);
+         c_Retval = C_OscCanOpenManagerFiler::h_SaveData(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
+                                                         orc_NodeIndicesToNameMap);
       }
       else
       {
