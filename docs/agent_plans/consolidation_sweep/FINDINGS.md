@@ -207,3 +207,54 @@ rather than a scan. The codebase is already shaped for it: it marks intentional
 discards with `(void)expr` in 4,439 places as a MISRA convention, so the idiom
 for "I meant to ignore this" already exists and is already used everywhere else.
 That is a large sweep and a separate decision.
+
+---
+
+## Two more survey items that do not survive inspection (2026-09-13)
+
+### Popup-dialog scaffolding — already done
+
+The `opensyde_tool` survey ranked this ~700 lines across 92 sites. There is a
+detailed, user-approved brief for it at
+`docs/agent_plans/gui_consolidation/phase3-brief.md` describing a
+`C_OgePopUpContentBase` that hoists both the `mrc_ParentDialog` member and a
+22-line Ctrl+Enter `keyPressEvent`.
+
+**That base class exists and the migration landed.** Only 5 classes still declare
+their own `mrc_ParentDialog`, and searching for the actual Ctrl+Enter → accept
+pattern (Key_Enter/Return **and** Alt **and** Shift checks **and** an
+`accept()`/`m_OkClicked()` call) finds **4 overrides left, all with distinct
+bodies**:
+
+- `C_GiSyBaseWidget` and `C_GiSyColorSelectWidget` interleave colour-picking
+  cancel handling with the enter handling.
+- `C_ImpCodeGenerationReportWidget` is a straggler but small.
+- `C_PopPasswordDialogWidget` is on the brief's own exclusion list (inherits
+  `QDialog`, not `QWidget`).
+
+A first count of "30 remaining" was wrong: the filter matched any
+`ControlModifier` handler, so it swept up things like `C_CamMetTreeView`'s
+Ctrl+C copy. Worth repeating only with the narrow predicate.
+
+Note the base as built is narrower than the brief — it hoists the member but not
+`keyPressEvent`/`m_OnEnterAccept`. Given only 4 sites remain and each has extra
+logic, finishing that design now would cost more than it saves.
+
+### Cam/Fla `PubPathVariables` — already consolidated, and the rest is domain logic
+
+`C_CamOgePubPathVariables` and `C_FlaOgePubPathVariables` already share
+`C_CamOgePubPathVariablesBase` in `libraries/opensyde_gui/`. Stripping comments,
+the only differences left are the three menu entries ("CAN Monitor Binary" vs
+"SYDExsh Binary" and so on) — per-tool by design. The prior GUI-consolidation
+effort reached the same conclusion independently and recorded it in
+`phase5-progress.md`: *"ctor calls m_AddHeading / m_AddEntry (real domain logic,
+not styling)"*.
+
+The one real wart: that shared base is named `C_Cam*` and lives under a
+`can_monitor/` subtree of the shared library, while SYDEflash compiles and
+depends on it. Renaming is cosmetic and touches both apps' CMakeLists and lint
+lists.
+
+`C_CamOgeLeFilePath` vs `C_FlaOgeLeFilePath` **are** functionally identical —
+13 vs 14 code lines differing only by an extra `#include <cstdint>` — so that
+pair alone could still be merged, for about 60 lines.
