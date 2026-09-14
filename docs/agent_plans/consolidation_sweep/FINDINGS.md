@@ -446,3 +446,59 @@ tree has never been run through.
 Until then: **do not treat a zero result from a textual scan as evidence that
 this class is clear.** The scan in this document demonstrably misses half of the
 known instances.
+
+---
+
+## clang static analyser: installed, run, and wired into CI (2026-09-14)
+
+`clang-tidy-19` and `clang-tools-19` are installed on the build host, version
+matched to its clang 19.1.7 — a mismatched clang-tidy parses C++23
+inconsistently. A non-gating `Static Analysis (advisory)` job in
+`.github/workflows/build.yml` now runs it over `opensyde_core` on every push and
+writes the findings to the job summary.
+
+It is **advisory and must stay that way**: it has a real false-positive rate on
+this codebase, documented below.
+
+### Baseline over all 220 core sources: 9 findings
+
+| Finding | Verdict |
+|---|---|
+| `C_HexFile.cpp:375` garbage value in `&` | **Real.** Fixed — the S-record address was read before checking `m_GetSRecordAddress` |
+| `C_HexFile.cpp:686` null deref of `mpt_HexData` | Real hazard, **no reproducer**. Hardened; see below |
+| `C_HexFile.cpp:183` `errno` may be overwritten by `fclose` | Minor, unreviewed |
+| `C_Md5Checksum.cpp:358` stream read at EOF / indeterminate position | Unreviewed |
+| `C_OscSuSequences.cpp:1035` same stream pattern | Unreviewed |
+| `C_OscSuSequences.cpp:1088` "opened stream never closed" | **Not reproduced.** The file is closed on both the failure path (line 975, guarded by `c_Return != success`) and the success path (line 1082), and nothing changes `c_Return` between them. Left alone rather than restructured on an unproven path |
+| `C_SclStringUtil.hpp:567` "memory allocated with size zero" | Looks false: `new char[x_FileSize + 1U]` is at least 1, and `buffer[x_FileSize]` is in range |
+
+### What it does and does not catch
+
+It found the S-record defect, which no scan in this sweep did. It does **not**
+catch either of the out-parameter bugs (`CheckChannelLinked`,
+`CalcFileChecksum`), because those are cross translation unit: the callee is in
+core, the caller in a GUI tree, and the analyser is intra-TU by default. It will
+not inline a callee it cannot see and conservatively assumes the out parameter
+was written.
+
+Cross-TU analysis exists (`clang-extdef-mapping`, `experimental-enable-naive-ctu-analysis`)
+and was attempted. It needs pre-built `.ast` files per callee translation unit
+and an external definition map; the AST emit step failed on the first attempt
+and chasing it further was worth less than simply running the analyser in its
+normal mode, which is what found the new defect. If someone wants those two bug
+shapes caught automatically, CTU is the route, and it is a project in itself.
+
+### Running it by hand
+
+    cmake -S libraries/opensyde_core -B build/tidy -G Ninja \
+      -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain_linux.cmake \
+      -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    ninja -C build/tidy            # required: the compile database references a PCH
+    clang-tidy-19 -p build/tidy --checks='-*,clang-analyzer-*' \
+      --header-filter='libraries/opensyde_core/.*' --quiet <file.cpp>
+
+Two things that will otherwise waste time: without the build step it fails with
+"PCH file not found", and without `--header-filter` it silently suppresses
+everything in project headers (it reported "Suppressed 25593 warnings" and
+printed nothing).
