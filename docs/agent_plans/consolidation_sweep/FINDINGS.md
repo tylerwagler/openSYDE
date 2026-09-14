@@ -180,6 +180,26 @@ whether it clamped, which a caller may legitimately not care about;
 `C_SdClipBoardHelper` drop load and save results, and those look like the same
 defect class as the two fixed above.
 
+### Second pass: member calls through `this->`
+
+The first scan only covered qualified static calls (`C_Class::fn(...)`). Extending
+it to `this->fn(...)`, which resolves unambiguously to the enclosing class, found
+**9 more discarded returns and no new confirmed defects.** Checked individually:
+
+- `C_OscNode::MoveDataPool` discards `DeleteDataPool` and `InsertDataPool`, but
+  the enclosing `if` validates both indices and those two only fail with
+  `Errc::range` on a bad index. **Provably safe** -- do not "fix" it.
+- `C_OscComDriverBase::SendCanMessageDirect` (2 sites) is the cyclic-message
+  pump. A silent send failure matters for a flashing tool, but stopping the pump
+  on one failure may be worse. No sibling evidence either way; needs domain
+  judgement.
+- `C_OscIpDispatcher*::CloseUdp` (both platforms) and
+  `C_OscProtocolDriverOsy::m_HandleAsyncResponse` are teardown and async paths
+  where best-effort is defensible.
+
+That the extension turned up no further confirmed defects raises confidence that
+the five fixed are the real ones, rather than the first five of many.
+
 ### The durable fix
 
 `[[nodiscard]]` on the error-returning core API would make this a compile error
