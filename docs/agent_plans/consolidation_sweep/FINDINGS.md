@@ -303,10 +303,42 @@ disconnect may well be correct. Making those calls in bulk would be exactly the
 annotation is cheap; the triage is the work, and it wants someone who knows the
 protocol layer.
 
-A sensible staging if this is taken up: annotate one subsystem at a time,
-starting with `project/`, `halc/` and `data_dealer` (15 sites, all filer and
-configuration paths where propagating is almost always right), and leave
-`protocol_drivers` for a pass with domain review.
+### Correction: 60 was also a core-only number
+
+The 60 above counts callers inside `opensyde_core`. The same headers are consumed
+by the GUI trees, and those add more. Annotating only `halc/` and `data_dealer/`
+gives **14 sites in core plus 6 in `opensyde_tool`**; adding `project/` brings a
+further **17 GUI sites** (`C_PuiSdHandler*`, `C_PuiSvHandler`, `C_SdClipBoardHelper`
+and others dropping results from `DeleteBus`, `SetNodeName`, `InsertDataPool`,
+`SetNodeUpdateInformation`).
+
+So the "easy three subsystems" are roughly **37 sites**, not 15. Measure with a
+full `./build.sh all`, not a core build.
+
+A sensible staging if this is taken up: `halc/` + `data_dealer/` first (20 sites),
+then `project/` (a further ~17, all GUI handler paths), then `protocol_drivers`
+behind domain review.
+
+### A defect the annotation surfaced
+
+`C_OscHalcConfigDomain::CheckChannelLinked` assigns its `orq_IsLinked` out
+parameter **only on its success paths**. When the channel index is out of range it
+returns `Errc::range` without touching it.
+
+`C_SdNdeHalcConfigImportModel.cpp` (around line 370) declares
+
+    bool q_IsLinkedOld;
+    bool q_IsLinkedNew;
+
+uninitialised, calls `CheckChannelLinked` twice **discarding both results**, and
+then reads both bools. If that call ever fails, this reads uninitialised memory.
+
+Whether it can fail in practice depends on `u32_ChannelCounter` always being in
+range, which was not traced. The shape is unsafe regardless: an out parameter
+consumed without checking the status that says whether it was written. Either the
+callee should initialise `orq_IsLinked` before its range check, or the caller
+should check. This is the clearest argument in this document for the annotation —
+no scan in this sweep would have found it.
 
 ### Measuring it again
 
