@@ -227,6 +227,11 @@ std::error_code C_OscHexFile::CalcFileChecksum(uint32_t & oru32_Checksum)
    std::error_code c_DumpError = Errc::success;
    const C_HexDataDump * pc_Dump;
 
+   //Written before the early return below, so a caller that ignores the status reads a defined
+   //value rather than whatever was on the stack. Matches the XML parser's GetAttribute*Error
+   //helpers, which also default their out parameter before reporting an error.
+   oru32_Checksum = 0U;
+
    pc_Dump = this->GetDataDump(c_DumpError);
    if (c_DumpError)
    {
