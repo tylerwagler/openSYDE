@@ -11,6 +11,7 @@
 #define C_NAGMAINWINDOW_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 
 #include "precomp_headers.hpp"
 #include <QMainWindow>
@@ -116,6 +117,8 @@ private:
    stw::opensyde_gui_logic::C_SyvManager mc_SystemViewManager;
 
    bool mq_InitialProjectLoaded;
+   //Result of the device definition scan done in the constructor, reported once the window is up
+   std::error_code mc_DeviceLoadResult;
    bool mq_BlockDragAndDrop;
    bool mq_StartView;
    int32_t ms32_Mode;
