@@ -1183,7 +1183,9 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformation(const uint32_t ou32_ViewIndex, 
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      rc_View.SetNodeUpdateInformation(ou32_NodeIndex, orc_NodeUpdateInformation);
+      //This function already reports C_RANGE for a bad view index, so a bad node index belongs
+      //in the same channel.
+      s32_Retval = rc_View.SetNodeUpdateInformation(ou32_NodeIndex, orc_NodeUpdateInformation).value();
    }
    else
    {

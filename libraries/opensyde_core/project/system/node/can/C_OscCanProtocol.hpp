@@ -43,7 +43,7 @@ public:
    C_OscCanProtocol(void);
 
    void CalcHash(uint32_t & oru32_HashValue) const;
-   std::error_code GetAllSignalsForMessage(const C_OscNodeDataPool & orc_DataPool, const uint32_t ou32_InterfaceIndex,
+   [[nodiscard]] std::error_code GetAllSignalsForMessage(const C_OscNodeDataPool & orc_DataPool, const uint32_t ou32_InterfaceIndex,
                                    const uint32_t ou32_MessageIndex, const bool oq_IsTx,
                                    std::vector<const C_OscNodeDataPoolListElement *> & orc_Signals) const;
    static const C_OscNodeDataPoolList * h_GetComListConst(const C_OscNodeDataPool & orc_DataPool,
@@ -54,7 +54,7 @@ public:
                                  const bool oq_IsTx);
    static C_OscNodeDataPoolList * h_GetComList(C_OscNodeDataPool & orc_DataPool, const uint32_t ou32_InterfaceIndex,
                                                const bool oq_IsTx);
-   static std::error_code h_GetComListIndex(const C_OscNodeDataPool & orc_DataPool, const uint32_t ou32_InterfaceIndex,
+   [[nodiscard]] static std::error_code h_GetComListIndex(const C_OscNodeDataPool & orc_DataPool, const uint32_t ou32_InterfaceIndex,
                                     const bool oq_IsTx, uint32_t & oru32_ListIndex);
    const C_OscNodeDataPoolListElement * GetComListElementConst(const C_OscNodeDataPool & orc_DataPool,
                                                                const uint32_t ou32_InterfaceIndex, const bool oq_IsTx,

@@ -27,15 +27,15 @@ class C_OscCanOpenManagerFiler
 public:
    C_OscCanOpenManagerFiler();
 
-   static std::error_code h_LoadFile(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+   [[nodiscard]] static std::error_code h_LoadFile(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
                                      const std::string & orc_Path, const std::string & orc_BasePath);
-   static std::error_code h_SaveFile(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+   [[nodiscard]] static std::error_code h_SaveFile(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
                                      const std::string & orc_Path, const std::string & orc_BasePath,
                                      std::vector<std::string> * const opc_CreatedFiles, const std::map<uint32_t,
                                      std::string> & orc_NodeIndicesToNameMap);
-   static std::error_code h_LoadData(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+   [[nodiscard]] static std::error_code h_LoadData(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
                                      C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath);
-   static std::error_code h_SaveData(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+   [[nodiscard]] static std::error_code h_SaveData(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
                                      C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
                                      std::vector<std::string> * const opc_CreatedFiles, const std::map<uint32_t,
                                      std::string> & orc_NodeIndicesToNameMap);
@@ -43,54 +43,54 @@ public:
 private:
    static const uint16_t mhu16_FILE_VERSION_1;
 
-   static std::error_code mh_LoadManagerData(C_OscCanOpenManagerInfo & orc_Config, C_OscXmlParserBase & orc_XmlParser,
+   [[nodiscard]] static std::error_code mh_LoadManagerData(C_OscCanOpenManagerInfo & orc_Config, C_OscXmlParserBase & orc_XmlParser,
                                              const std::string & orc_BasePath);
-   static std::error_code mh_SaveManagerData(const C_OscCanOpenManagerInfo & orc_Config,
+   [[nodiscard]] static std::error_code mh_SaveManagerData(const C_OscCanOpenManagerInfo & orc_Config,
                                              C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
                                              std::vector<std::string> * const opc_CreatedFiles, const std::map<uint32_t,
                                              std::string> & orc_NodeIndicesToNameMap);
-   static std::error_code mh_LoadManagerProperties(C_OscCanOpenManagerInfo & orc_Config,
+   [[nodiscard]] static std::error_code mh_LoadManagerProperties(C_OscCanOpenManagerInfo & orc_Config,
                                                    C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveManagerProperties(const C_OscCanOpenManagerInfo & orc_Config, C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code mh_LoadManagerSyncProperties(C_OscCanOpenManagerInfo & orc_Config,
+   [[nodiscard]] static std::error_code mh_LoadManagerSyncProperties(C_OscCanOpenManagerInfo & orc_Config,
                                                        C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveManagerSyncProperties(const C_OscCanOpenManagerInfo & orc_Config,
                                             C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code mh_LoadManagerSubDevices(std::map<C_OscCanInterfaceId,
+   [[nodiscard]] static std::error_code mh_LoadManagerSubDevices(std::map<C_OscCanInterfaceId,
                                                    C_OscCanOpenManagerDeviceInfo> & orc_Config,
                                                    C_OscXmlParserBase & orc_XmlParser,
                                                    const std::string & orc_BasePath);
-   static std::error_code mh_SaveManagerSubDevices(const std::map<C_OscCanInterfaceId,
+   [[nodiscard]] static std::error_code mh_SaveManagerSubDevices(const std::map<C_OscCanInterfaceId,
                                                    C_OscCanOpenManagerDeviceInfo> & orc_Config,
                                                    C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
                                                    std::vector<std::string> * const opc_CreatedFiles,
                                                    const std::map<uint32_t, std::string> & orc_NodeIndicesToNameMap);
-   static std::error_code mh_LoadManagerSubDevice(C_OscCanOpenManagerDeviceInfo & orc_Config,
+   [[nodiscard]] static std::error_code mh_LoadManagerSubDevice(C_OscCanOpenManagerDeviceInfo & orc_Config,
                                                   C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath);
-   static std::error_code mh_SaveManagerSubDevice(const C_OscCanOpenManagerDeviceInfo & orc_Config,
+   [[nodiscard]] static std::error_code mh_SaveManagerSubDevice(const C_OscCanOpenManagerDeviceInfo & orc_Config,
                                                   C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
                                                   std::vector<std::string> * const opc_CreatedFiles,
                                                   const std::string & orc_NodeName, const uint8_t ou8_InterfaceNumber);
-   static std::error_code mh_LoadManagerSubDeviceEdsPart(C_OscCanOpenManagerDeviceInfo & orc_Config,
+   [[nodiscard]] static std::error_code mh_LoadManagerSubDeviceEdsPart(C_OscCanOpenManagerDeviceInfo & orc_Config,
                                                          C_OscXmlParserBase & orc_XmlParser,
                                                          const std::string & orc_BasePath);
-   static std::error_code mh_SaveManagerSubDeviceEdsPart(const C_OscCanOpenManagerDeviceInfo & orc_Config,
+   [[nodiscard]] static std::error_code mh_SaveManagerSubDeviceEdsPart(const C_OscCanOpenManagerDeviceInfo & orc_Config,
                                                          C_OscXmlParserBase & orc_XmlParser,
                                                          const std::string & orc_BasePath,
                                                          std::vector<std::string> * const opc_CreatedFiles,
                                                          const std::string & orc_NodeName,
                                                          const uint8_t ou8_InterfaceNumber);
-   static std::error_code mh_LoadManagerMappedSignals(std::vector< C_OscCanOpenManagerMappableSignal > & orc_Config,
+   [[nodiscard]] static std::error_code mh_LoadManagerMappedSignals(std::vector< C_OscCanOpenManagerMappableSignal > & orc_Config,
                                                       C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveManagerMappedSignals(const std::vector<C_OscCanOpenManagerMappableSignal> & orc_Config,
                                            C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code mh_LoadManagerMappedSignal(C_OscCanOpenManagerMappableSignal & orc_Config,
+   [[nodiscard]] static std::error_code mh_LoadManagerMappedSignal(C_OscCanOpenManagerMappableSignal & orc_Config,
                                                      C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveManagerMappedSignal(const C_OscCanOpenManagerMappableSignal & orc_Config,
                                           C_OscXmlParserBase & orc_XmlParser);
    static std::string mh_CanOpenManagerInfoTypeToString(
       const C_OscCanOpenManagerInfo::E_NmtErrorBehaviourType & ore_Type);
-   static std::error_code mh_StringToCanOpenManagerInfoType(
+   [[nodiscard]] static std::error_code mh_StringToCanOpenManagerInfoType(
       const std::string & orc_String, C_OscCanOpenManagerInfo::E_NmtErrorBehaviourType & ore_Type);
 };
 

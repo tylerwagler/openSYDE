@@ -48,30 +48,30 @@ public:
    const std::vector<C_OscViewNodeUpdate> & GetAllNodeUpdateInformation(void) const;
    void SetNodeUpdateInformation(const std::vector<C_OscViewNodeUpdate> & orc_NodeUpdateInformation);
    const C_OscViewNodeUpdate * GetNodeUpdateInformation(const uint32_t ou32_NodeIndex) const;
-   std::error_code SetNodeUpdateInformation(const uint32_t ou32_NodeIndex,
+   [[nodiscard]] std::error_code SetNodeUpdateInformation(const uint32_t ou32_NodeIndex,
                                             const C_OscViewNodeUpdate & orc_NodeUpdateInformation);
-   std::error_code SetNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+   [[nodiscard]] std::error_code SetNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
                                                 const std::string & orc_Value,
                                                 const C_OscViewNodeUpdate::E_GenericFileType oe_Type);
-   std::error_code SetNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+   [[nodiscard]] std::error_code SetNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
                                                      const C_OscViewNodeUpdateParamInfo & orc_Value);
-   std::error_code SetNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex, const std::string & orc_Value);
-   std::error_code SetNodeUpdateInformationSkipUpdateOfPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+   [[nodiscard]] std::error_code SetNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex, const std::string & orc_Value);
+   [[nodiscard]] std::error_code SetNodeUpdateInformationSkipUpdateOfPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
                                                             const bool oq_SkipFile,
                                                             const C_OscViewNodeUpdate::E_GenericFileType oe_Type);
-   std::error_code SetNodeUpdateInformationSkipUpdateOfParamInfo(const uint32_t ou32_NodeIndex,
+   [[nodiscard]] std::error_code SetNodeUpdateInformationSkipUpdateOfParamInfo(const uint32_t ou32_NodeIndex,
                                                                  const uint32_t ou32_Index, const bool oq_SkipFile);
-   std::error_code SetNodeUpdateInformationSkipUpdateOfPemFile(const uint32_t ou32_NodeIndex, const bool oq_SkipFile);
-   std::error_code SetNodeUpdateInformationStates(const uint32_t ou32_NodeIndex,
+   [[nodiscard]] std::error_code SetNodeUpdateInformationSkipUpdateOfPemFile(const uint32_t ou32_NodeIndex, const bool oq_SkipFile);
+   [[nodiscard]] std::error_code SetNodeUpdateInformationStates(const uint32_t ou32_NodeIndex,
                                                   const C_OscViewNodeUpdate::E_StateSecureAuthentication oe_StateAuthentication,
                                                   const C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger,
                                                   const C_OscViewNodeUpdate::E_StateTrafficEncryption oe_StateTrafficEncryption);
-   std::error_code SetNodeUpdateInformationParamInfoContent(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+   [[nodiscard]] std::error_code SetNodeUpdateInformationParamInfoContent(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
                                                             const std::string & orc_FilePath,
                                                             const uint32_t ou32_LastKnownCrc);
-   std::error_code AddNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const std::string & orc_Value,
+   [[nodiscard]] std::error_code AddNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const std::string & orc_Value,
                                                 const C_OscViewNodeUpdate::E_GenericFileType oe_Type);
-   std::error_code AddNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex,
+   [[nodiscard]] std::error_code AddNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex,
                                                      const C_OscViewNodeUpdateParamInfo & orc_Value);
    const std::string & GetName(void) const;
    void SetName(const std::string & orc_Value);
@@ -82,13 +82,13 @@ public:
    void OnSyncBusDeleted(const uint32_t ou32_Index);
 
    //Delete
-   std::error_code RemoveNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+   [[nodiscard]] std::error_code RemoveNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
                                                    const C_OscViewNodeUpdate::E_GenericFileType oe_Type);
-   std::error_code RemoveNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index);
-   std::error_code RemoveNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex);
-   std::error_code ClearNodeUpdateInformationAsAppropriate(const uint32_t ou32_NodeIndex,
+   [[nodiscard]] std::error_code RemoveNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index);
+   [[nodiscard]] std::error_code RemoveNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex);
+   [[nodiscard]] std::error_code ClearNodeUpdateInformationAsAppropriate(const uint32_t ou32_NodeIndex,
                                                            const C_OscViewNodeUpdate::E_GenericFileType oe_Type);
-   std::error_code ClearNodeUpdateInformationParamPaths(const uint32_t ou32_NodeIndex);
+   [[nodiscard]] std::error_code ClearNodeUpdateInformationParamPaths(const uint32_t ou32_NodeIndex);
 
 protected:
    //Protected access for tests and inheritance

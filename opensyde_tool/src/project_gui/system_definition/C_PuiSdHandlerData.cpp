@@ -895,7 +895,8 @@ void C_PuiSdHandlerData::m_FixNameIssues(void)
    {
       C_OscNodeSquad & rc_OscNodeGroup = this->mc_CoreDefinition.c_NodeSquads[u32_ItNodeGroup];
       const QString c_Name = C_PuiSdHandlerData::h_AutomaticCeStringAdaptation(rc_OscNodeGroup.c_BaseName.c_str());
-      rc_OscNodeGroup.SetBaseName(this->mc_CoreDefinition.c_Nodes, c_Name.toStdString().c_str());
+      //Enclosing function returns void; a rejected rename leaves the previous name in place
+      (void)rc_OscNodeGroup.SetBaseName(this->mc_CoreDefinition.c_Nodes, c_Name.toStdString().c_str());
    }
 }
 

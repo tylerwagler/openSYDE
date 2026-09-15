@@ -1297,7 +1297,8 @@ void C_OscComMessageLogger::mh_InterpretCanSignalValue(C_OscComMessageLoggerData
       c_SignalRawData.resize(c_OscValue.GetSizeByte());
       C_OscCanUtil::h_GetSignalValue(orau8_CanDb, orc_OscSignal, c_SignalRawData, orc_OscValue.GetType());
       // And the interpreted value
-      c_OscValue.SetValueFromLittleEndianBlob(c_SignalRawData);
+      //Enclosing function returns void; the buffer was sized from the value directly above
+      (void)c_OscValue.SetValueFromLittleEndianBlob(c_SignalRawData);
 
       // Raw values
       // Signal data is converted to little endian by h_GetSignalValue

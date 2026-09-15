@@ -25,14 +25,14 @@ namespace opensyde_core
 class C_OscXappPropertiesFiler
 {
 public:
-   static std::error_code h_LoadXappPropertiesFile(C_OscXappProperties & orc_XappProperties,
+   [[nodiscard]] static std::error_code h_LoadXappPropertiesFile(C_OscXappProperties & orc_XappProperties,
                                                    const std::string & orc_FilePath);
-   static std::error_code h_LoadXappProperties(C_OscXappProperties & orc_XappProperties,
+   [[nodiscard]] static std::error_code h_LoadXappProperties(C_OscXappProperties & orc_XappProperties,
                                                C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_SaveXappPropertiesFile(const C_OscXappProperties & orc_XappProperties,
+   [[nodiscard]] static std::error_code h_SaveXappPropertiesFile(const C_OscXappProperties & orc_XappProperties,
                                                    const std::string & orc_FilePath);
    static void h_SaveXappProperties(const C_OscXappProperties & orc_XappProperties, C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_LoadCommInterfaceId(C_OscSystemBus::E_Type & ore_Type, uint8_t & oru8_InterfaceNumber,
+   [[nodiscard]] static std::error_code h_LoadCommInterfaceId(C_OscSystemBus::E_Type & ore_Type, uint8_t & oru8_InterfaceNumber,
                                                 C_OscXmlParserBase & orc_XmlParser,
                                                 const std::string & orc_ParentNodeName,
                                                 const std::string & orc_UseCase);

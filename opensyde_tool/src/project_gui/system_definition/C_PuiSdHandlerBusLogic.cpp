@@ -72,7 +72,8 @@ uint32_t C_PuiSdHandlerBusLogic::AddBusAndSort(C_OscSystemBus & orc_OscBus, cons
    }
    if (oq_AllowBusIdAdaption == true)
    {
-      mc_CoreDefinition.GetNextFreeBusId(orc_OscBus.u8_BusId);
+      //Enclosing function returns the new bus index, not a status
+      (void)mc_CoreDefinition.GetNextFreeBusId(orc_OscBus.u8_BusId);
    }
 
    mc_CoreDefinition.AddBus(orc_OscBus);
@@ -251,7 +252,8 @@ void C_PuiSdHandlerBusLogic::RemoveBus(const uint32_t ou32_BusIndex)
 {
    uint32_t u32_Counter;
 
-   this->mc_CoreDefinition.DeleteBus(ou32_BusIndex);
+   //Enclosing function returns void; the index was checked by the caller path above
+   (void)this->mc_CoreDefinition.DeleteBus(ou32_BusIndex);
    this->mc_UiBuses.erase(this->mc_UiBuses.begin() + ou32_BusIndex);
 
    // Sync bus text elements indices

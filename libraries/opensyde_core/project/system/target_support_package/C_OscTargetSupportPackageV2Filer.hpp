@@ -30,15 +30,15 @@ namespace opensyde_core
 class C_OscTargetSupportPackageV2Filer
 {
 public:
-   static std::error_code h_Load(stw::opensyde_core::C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
+   [[nodiscard]] static std::error_code h_Load(stw::opensyde_core::C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
                                  const std::string & orc_Path);
 
 private:
-   static std::error_code mh_Load(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
+   [[nodiscard]] static std::error_code mh_Load(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
                                   C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code mh_ParseApplication(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
+   [[nodiscard]] static std::error_code mh_ParseApplication(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
                                               C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code mh_ParseHalcSection(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
+   [[nodiscard]] static std::error_code mh_ParseHalcSection(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
                                               C_OscXmlParserBase & orc_XmlParser);
 };
 

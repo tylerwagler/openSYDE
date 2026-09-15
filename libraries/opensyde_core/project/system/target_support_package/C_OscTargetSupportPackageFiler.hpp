@@ -27,11 +27,11 @@ namespace opensyde_core
 class C_OscTargetSupportPackageFiler
 {
 public:
-   static std::error_code h_Load(stw::opensyde_core::C_OscTargetSupportPackage & orc_TargetSupportPackage,
+   [[nodiscard]] static std::error_code h_Load(stw::opensyde_core::C_OscTargetSupportPackage & orc_TargetSupportPackage,
                                  std::string & orc_NodePath, const std::string & orc_Path);
 
 private:
-   static std::error_code mh_Load(C_OscTargetSupportPackage & orc_TargetSupportPackage, std::string & orc_NodePath,
+   [[nodiscard]] static std::error_code mh_Load(C_OscTargetSupportPackage & orc_TargetSupportPackage, std::string & orc_NodePath,
                                   C_OscXmlParserBase & orc_XmlParser);
 };
 

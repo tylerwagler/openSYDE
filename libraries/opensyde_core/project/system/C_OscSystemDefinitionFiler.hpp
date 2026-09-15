@@ -34,16 +34,16 @@ namespace opensyde_core
 class C_OscSystemDefinitionFiler
 {
 public:
-   static std::error_code h_LoadSystemDefinitionFile(
+   [[nodiscard]] static std::error_code h_LoadSystemDefinitionFile(
       C_OscSystemDefinition & orc_SystemDefinition, const std::string & orc_PathSystemDefinition,
       const std::string & orc_PathDeviceDefinitions, const bool oq_UseDeviceDefinitions = true,
       uint16_t * const opu16_ReadFileVersion = nullptr, const std::vector<uint8_t> * const opc_NodesToLoad = nullptr,
       const bool oq_SkipContent = false, const std::string * const opc_ExpectedNodeName = nullptr,
       std::vector<std::string> * const opc_ErrorDetailsMissingDevices = nullptr);
-   static std::error_code h_SaveSystemDefinitionFile(const C_OscSystemDefinition & orc_SystemDefinition,
+   [[nodiscard]] static std::error_code h_SaveSystemDefinitionFile(const C_OscSystemDefinition & orc_SystemDefinition,
                                                      const std::string & orc_Path,
                                                      std::vector<std::string> * const opc_CreatedFiles = nullptr);
-   static std::error_code h_LoadNodes(std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
+   [[nodiscard]] static std::error_code h_LoadNodes(std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
                                       const C_OscDeviceManager & orc_DeviceDefinitions,
                                       const std::string & orc_BasePath, const bool oq_UseDeviceDefinitions = true,
                                       const bool oq_UseFileInterface = true,
@@ -51,19 +51,19 @@ public:
                                       const bool oq_SkipContent = false,
                                       const std::string * const opc_ExpectedNodeName = nullptr,
                                       std::vector<std::string> * const opc_ErrorDetailsMissingDevices = nullptr);
-   static std::error_code h_LoadBuses(std::vector<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_SaveNodes(const std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
+   [[nodiscard]] static std::error_code h_LoadBuses(std::vector<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
+   [[nodiscard]] static std::error_code h_SaveNodes(const std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
                                       const std::string & orc_BasePath,
                                       std::vector<std::string> * const opc_CreatedFiles);
    static void h_SaveBuses(const std::vector<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_LoadSystemDefinition(
+   [[nodiscard]] static std::error_code h_LoadSystemDefinition(
       C_OscSystemDefinition & orc_SystemDefinition, C_OscXmlParserBase & orc_XmlParser,
       const std::string & orc_PathDeviceDefinitions, const std::string & orc_BasePath,
       const bool oq_UseDeviceDefinitions = true, uint16_t * const opu16_ReadFileVersion = nullptr,
       const std::vector<uint8_t> * const opc_NodesToLoad = nullptr, const bool oq_SkipContent = false,
       const std::string * const opc_ExpectedNodeName = nullptr,
       std::vector<std::string> * const opc_ErrorDetailsMissingDevices = nullptr);
-   static std::error_code h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
+   [[nodiscard]] static std::error_code h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
                                                  C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
                                                  std::vector<std::string> * const opc_CreatedFiles);
 
@@ -78,7 +78,7 @@ public:
 
 private:
    static std::map<uint32_t, std::string> mh_MapNodeIndicesToName(const std::vector<C_OscNode> & orc_Nodes);
-   static std::error_code mh_LoadSystemDefinitionProperties(C_OscSystemDefinition & orc_SystemDefinition,
+   [[nodiscard]] static std::error_code mh_LoadSystemDefinitionProperties(C_OscSystemDefinition & orc_SystemDefinition,
                                                             C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveSystemDefinitionProperties(const C_OscSystemDefinition & orc_SystemDefinition,
                                                  C_OscXmlParserBase & orc_XmlParser);

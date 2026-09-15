@@ -1704,7 +1704,7 @@ std::error_code C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(C_OscNodeDataPoo
    if (orc_NodeDataPoolContent.GetArray() == false)
    {
       //same format as in newer file version:
-      h_LoadDataPoolElementValue(orc_NodeDataPoolContent, orc_XmlParser, false);
+      c_Retval = h_LoadDataPoolElementValue(orc_NodeDataPoolContent, orc_XmlParser, false);
    }
    else
    {

@@ -55,8 +55,8 @@ public:
    void HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
                                std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
 
-   std::error_code SetCrcFromBigEndianBlob(const std::vector<uint8_t> & orc_Data);
-   std::error_code SetCrcFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data);
+   [[nodiscard]] std::error_code SetCrcFromBigEndianBlob(const std::vector<uint8_t> & orc_Data);
+   [[nodiscard]] std::error_code SetCrcFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data);
    void GetCrcAsBigEndianBlob(std::vector<uint8_t> & orc_Data) const;
    void GetCrcAsLittleEndianBlob(std::vector<uint8_t> & orc_Data) const;
 

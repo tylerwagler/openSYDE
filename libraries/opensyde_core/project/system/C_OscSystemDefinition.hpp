@@ -43,17 +43,17 @@ public:
    void CalcHash(uint32_t & oru32_HashValue) const;
 
    void AddBus(const C_OscSystemBus & orc_Bus);
-   std::error_code InsertBus(const uint32_t ou32_BusIndex, const C_OscSystemBus & orc_Bus);
-   std::error_code DeleteBus(const uint32_t ou32_BusIndex);
-   std::error_code AddConnection(const uint32_t ou32_NodeIndex, const uint32_t ou32_BusIndex,
+   [[nodiscard]] std::error_code InsertBus(const uint32_t ou32_BusIndex, const C_OscSystemBus & orc_Bus);
+   [[nodiscard]] std::error_code DeleteBus(const uint32_t ou32_BusIndex);
+   [[nodiscard]] std::error_code AddConnection(const uint32_t ou32_NodeIndex, const uint32_t ou32_BusIndex,
                                  const uint8_t ou8_Interface);
    bool CheckInterfaceIsAvailable(const uint32_t ou32_NodeIndex, const uint32_t ou32_ComIndex,
                                   const uint8_t ou8_ComNodeId) const;
    bool CheckIpAddressIsValid(const uint32_t ou32_NodeIndex, const uint32_t ou32_ComIndex,
                               const std::vector<int32_t> & orc_Ip) const;
    bool CheckBusIdAvailable(const uint8_t ou8_BusId, const uint32_t * const opu32_BusIndexToSkip = nullptr) const;
-   std::error_code GetNextFreeBusId(uint8_t & oru8_BusId) const;
-   std::error_code CheckErrorNode(const uint32_t ou32_NodeIndex, bool * const opq_NameConflict,
+   [[nodiscard]] std::error_code GetNextFreeBusId(uint8_t & oru8_BusId) const;
+   [[nodiscard]] std::error_code CheckErrorNode(const uint32_t ou32_NodeIndex, bool * const opq_NameConflict,
                                   bool * const opq_NameInvalid, bool * const opq_NodeIdInvalid,
                                   bool * const opq_IpInvalid, bool * const opq_DataPoolsInvalid,
                                   bool * const opq_ApplicationsInvalid, bool * const opq_DomainsInvalid,
@@ -66,16 +66,16 @@ public:
                                   std::vector<uint32_t> * const opc_InvalidApplicationIndices,
                                   std::vector<uint32_t> * const opc_InvalidDomainIndices,
                                   std::vector<C_OscCanProtocol::E_Type> * const opc_InvalidProtocolTypes) const;
-   std::error_code CheckErrorBus(const uint32_t ou32_BusIndex, bool * const opq_NameConflict,
+   [[nodiscard]] std::error_code CheckErrorBus(const uint32_t ou32_BusIndex, bool * const opq_NameConflict,
                                  bool * const opq_NameInvalid, bool * const opq_IdInvalid,
                                  bool * const opq_DataPoolsInvalid) const;
-   std::error_code CheckMessageIdBus(const uint32_t ou32_BusIndex, const C_OscCanMessageUniqueId & orc_MessageId,
+   [[nodiscard]] std::error_code CheckMessageIdBus(const uint32_t ou32_BusIndex, const C_OscCanMessageUniqueId & orc_MessageId,
                                      bool & orq_Valid,
                                      const C_OscCanMessageIdentificationIndices * const opc_SkipMessage = nullptr) const;
-   std::error_code CheckMessageNameBus(const uint32_t ou32_BusIndex, const std::string & orc_MessageName,
+   [[nodiscard]] std::error_code CheckMessageNameBus(const uint32_t ou32_BusIndex, const std::string & orc_MessageName,
                                        bool & orq_Valid,
                                        const C_OscCanMessageIdentificationIndices * const opc_SkipMessage = nullptr) const;
-   std::error_code CheckMessageMatch(const C_OscCanMessageIdentificationIndices & orc_MessageId1,
+   [[nodiscard]] std::error_code CheckMessageMatch(const C_OscCanMessageIdentificationIndices & orc_MessageId1,
                                      const C_OscCanMessageIdentificationIndices & orc_MessageId2, bool & orq_IsMatch,
                                      const bool oq_IgnoreMessageDirection = false) const;
    void GetNameMaxCharLimitAffectedItems(const uint32_t ou32_NameMaxCharLimit,
@@ -96,10 +96,10 @@ public:
    void AddNodeSquad(std::vector<C_OscNode> & orc_Nodes, const std::vector<std::string> & orc_SubDeviceNames,
                      const std::string & orc_MainDeviceName);
 
-   std::error_code DeleteNode(const uint32_t ou32_NodeIndex);
+   [[nodiscard]] std::error_code DeleteNode(const uint32_t ou32_NodeIndex);
 
-   std::error_code SetNodeName(const uint32_t ou32_NodeIndex, const std::string & orc_NodeName);
-   std::error_code GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex, uint32_t & oru32_NodeSquadIndex) const;
+   [[nodiscard]] std::error_code SetNodeName(const uint32_t ou32_NodeIndex, const std::string & orc_NodeName);
+   [[nodiscard]] std::error_code GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex, uint32_t & oru32_NodeSquadIndex) const;
 
    static C_OscDeviceManager hc_Devices;     ///< container of device types known in the system
    std::vector<C_OscNode> c_Nodes;           ///< all nodes that are part of this system definition
