@@ -229,8 +229,13 @@ three target platforms build on every push:**
 | **GUI Tools** | `ubuntu-26.04`, `macos-14` | Smoke-builds all eight tools (`./build.sh -b Debug all`), then checks one tool still configures standalone | 12–20 min |
 | **Tools + Core Tests** | `windows-2022` | All eight tools under LLVM-MinGW clang, plus the core unit tests | ~35 min |
 
-No job is `continue-on-error`: they are the only targets that have to gate, or CI
-stops meaning anything.
+| **Static Analysis** | `ubuntu-26.04` | clang analyser over `opensyde_core`, findings in the job summary | ~5 min |
+
+The first three are not `continue-on-error`: they are the targets that have to
+gate, or CI stops meaning anything. **Static Analysis is deliberately advisory**
+— the clang analyser has a real false-positive rate here, and the known findings
+are triaged in `docs/agent_plans/consolidation_sweep/FINDINGS.md`. Read it before
+acting on a finding; several are not bugs.
 
 macOS Qt comes from `install-qt-action`, not Homebrew. `brew install qt` drags
 `qtwebengine` into a source build, and the split `qtbase`/`qtsvg` kegs hid Svg from

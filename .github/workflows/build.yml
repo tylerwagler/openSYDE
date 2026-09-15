@@ -209,3 +209,59 @@ jobs:
             -DCMAKE_TOOLCHAIN_FILE="$PWD/cmake/toolchain_windows.cmake"
           cmake --build build/coretests -j "$(nproc)"
           ctest --test-dir build/coretests/opensyde_core --output-on-failure -j "$(nproc)"
+
+  # --- clang static analyser (non-gating) -----------------------------------------------------------------------------
+  # The clang analyser is path sensitive and reasons about paths the compiler warnings do not,
+  # which is how the S-record uninitialised-address defect was found. It is advisory: it has a
+  # real false-positive rate on this codebase, so it reports and never blocks a merge. Read the
+  # summary, do not assume a finding is a bug -- docs/agent_plans/consolidation_sweep/FINDINGS.md
+  # records which of the known findings are real and which are not.
+  static-analysis:
+    name: Static Analysis (advisory)
+    runs-on: ubuntu-26.04
+    continue-on-error: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake ninja-build clang clang-tidy \
+            libssl-dev flex bison libfl-dev
+
+      - name: Configure (compile database only)
+        run: >
+          cmake
+          -S libraries/opensyde_core
+          -B build/analysis
+          -G Ninja
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/cmake/toolchain_linux.cmake
+          -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON
+          -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      # clang-tidy needs the precompiled header the compile database references.
+      - name: Build (generates the PCH clang-tidy needs)
+        run: cmake --build build/analysis -j $(nproc)
+
+      - name: Run clang analyser over opensyde_core
+        run: |
+          find libraries/opensyde_core -name "*.cpp" \
+            | grep -vE "tinyxml2|miniz|/tests/|/bench/" | sort > /tmp/sources.txt
+          echo "Analysing $(wc -l < /tmp/sources.txt) files"
+          xargs -a /tmp/sources.txt -P $(nproc) -n 1 -I{} \
+            clang-tidy -p build/analysis --checks="-*,clang-analyzer-*" \
+              --header-filter="libraries/opensyde_core/.*" --quiet {} \
+            2>/dev/null > /tmp/analysis.log || true
+          echo "### Static analysis findings" >> "$GITHUB_STEP_SUMMARY"
+          if grep -q "warning:" /tmp/analysis.log; then
+            grep -E "warning:" /tmp/analysis.log | sed "s|$PWD/||" | sort -u \
+              | sed "s|^|- |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "None." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          grep -cE "warning:" /tmp/analysis.log || true
