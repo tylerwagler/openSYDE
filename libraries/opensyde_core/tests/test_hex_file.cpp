@@ -548,3 +548,28 @@ TEST(HexFile, NextLineString_WalksTheRecordsAsText)
    }
    EXPECT_EQ(c_File.LineCount(), u32_Seen);
 }
+
+TEST(HexFile, NextBinData_WalksEveryDataRecordAfterOptimize)
+{
+   //Optimize rebuilds the line list. This walks every data record afterwards, which is the
+   //path where NextBinData's cursor can already have been reset by NextLine handing out the
+   //final entry.
+   const std::string c_Path = mh_WriteHex("hf_nbd_opt.hex", mpcn_TWO_RECORDS);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+   ASSERT_FALSE(static_cast<bool>(c_File.Optimize(32U)));
+   ASSERT_TRUE(c_File.LineInit() != NULL);
+
+   uint32_t u32_Address = 0U;
+   uint8_t u8_Size = 0U;
+   uint32_t u32_Seen = 0U;
+   const uint8_t * pu8_Data = c_File.NextBinData(u32_Address, u8_Size);
+   while (pu8_Data != NULL)
+   {
+      u32_Seen++;
+      EXPECT_GT(u8_Size, 0U);
+      pu8_Data = c_File.NextBinData(u32_Address, u8_Size);
+   }
+   EXPECT_GT(u32_Seen, 0U);
+}
