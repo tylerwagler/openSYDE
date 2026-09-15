@@ -28,7 +28,7 @@ public:
    C_OscHalcDefContentBitmaskItem(void);
    virtual ~C_OscHalcDefContentBitmaskItem();
 
-   std::error_code SetValueByString(const std::string & orc_Item);
+   [[nodiscard]] std::error_code SetValueByString(const std::string & orc_Item);
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
    virtual void CalcHashStructure(uint32_t & oru32_HashValue) const;
@@ -39,7 +39,7 @@ public:
    uint64_t u64_Value;              ///< Bitmask value
 
 private:
-   static std::error_code mh_ParseUintFromString(const std::string & orc_Item, uint64_t & oru64_Value);
+   [[nodiscard]] static std::error_code mh_ParseUintFromString(const std::string & orc_Item, uint64_t & oru64_Value);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

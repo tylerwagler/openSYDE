@@ -375,9 +375,11 @@ bool C_SdNdeHalcConfigImportModel::IsSelectionOfLinkedChannelsValid(std::vector<
 
                      // use copy for linked check (standalone config has no use case information!)
                      // together with imported use case index
-                     pc_CopyDomainConfig->CheckChannelLinked(u32_ChannelCounter, true, q_IsLinkedNew, nullptr,
+                     //Enclosing function returns bool; the linked flags are defaulted by the callee on failure
+                     (void)pc_CopyDomainConfig->CheckChannelLinked(u32_ChannelCounter, true, q_IsLinkedNew, nullptr,
                                                              &c_LinkedChannelIndicesNew, &rc_Channel.u32_UseCaseIndex);
-                     pc_CopyDomainConfig->CheckChannelLinked(u32_ChannelCounter, true, q_IsLinkedOld, nullptr,
+                     //Enclosing function returns bool; the linked flags are defaulted by the callee on failure
+                     (void)pc_CopyDomainConfig->CheckChannelLinked(u32_ChannelCounter, true, q_IsLinkedOld, nullptr,
                                                              &c_LinkedChannelIndicesOld, nullptr);
 
                      // check of linked channels: are all link-buddies also checked?
@@ -791,7 +793,8 @@ QString C_SdNdeHalcConfigImportModel::m_CreateTooltipContent(const uint32_t ou32
          }
 
          // linked channel information
-         pc_CurDomain->CheckChannelLinked(ou32_ChannelIndex, true, q_IsLinked, nullptr,
+         //Tooltip text only: the enclosing function returns a QString and has nowhere to report this
+         (void)pc_CurDomain->CheckChannelLinked(ou32_ChannelIndex, true, q_IsLinked, nullptr,
                                           &c_LinkedChannelIndices, &rc_ImpChannelConfig.u32_UseCaseIndex);
          // import configuration does not know about linked channels so we need to ask current domain;
          // and we want the names of the import channel to be displayed so we cannot use opc_LinkedChannelNames

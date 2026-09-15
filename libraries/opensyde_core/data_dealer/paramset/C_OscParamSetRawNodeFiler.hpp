@@ -32,18 +32,18 @@ class C_OscParamSetRawNodeFiler :
    public C_OscParamSetFilerBase
 {
 public:
-   static std::error_code h_LoadRawNode(C_OscParamSetRawNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
+   [[nodiscard]] static std::error_code h_LoadRawNode(C_OscParamSetRawNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
                                         bool & orq_MissingOptionalContent);
    static void h_SaveRawNode(const C_OscParamSetRawNode & orc_Node, C_OscXmlParserBase & orc_XmlParser);
 
 private:
    C_OscParamSetRawNodeFiler(void);
 
-   static std::error_code mh_LoadEntries(std::vector<C_OscParamSetRawEntry> & orc_Entries,
+   [[nodiscard]] static std::error_code mh_LoadEntries(std::vector<C_OscParamSetRawEntry> & orc_Entries,
                                          C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveEntries(const std::vector<C_OscParamSetRawEntry> & orc_Entries,
                               C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code mh_LoadEntry(C_OscParamSetRawEntry & orc_Entry, C_OscXmlParserBase & orc_XmlParser);
+   [[nodiscard]] static std::error_code mh_LoadEntry(C_OscParamSetRawEntry & orc_Entry, C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveEntry(const C_OscParamSetRawEntry & orc_Entry, C_OscXmlParserBase & orc_XmlParser);
 };
 

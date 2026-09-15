@@ -44,36 +44,36 @@ public:
                           C_OscDiagProtocolBase * const opc_DiagProtocol);
    virtual ~C_OscDataDealerNvmSafe(void);
 
-   std::error_code NvmSafeCheckCrcs(const C_OscNode & orc_Node) const;
-   std::error_code NvmSafeWriteChangedValues(
+   [[nodiscard]] std::error_code NvmSafeCheckCrcs(const C_OscNode & orc_Node) const;
+   [[nodiscard]] std::error_code NvmSafeWriteChangedValues(
       std::vector<C_OscNodeDataPoolListElementId> & orc_ChangedElements,
       const std::vector<C_OscNodeDataPoolListId> * const opc_AdditionalListsToUpdate = nullptr,
       uint8_t * const opu8_NrCode = nullptr);
-   std::error_code NvmSafeReadValues(const C_OscNode * (&orpc_NodeCopy), uint8_t * const opu8_NrCode);
-   std::error_code NvmSafeWriteCrcs(uint8_t * const opu8_NrCode);
+   [[nodiscard]] std::error_code NvmSafeReadValues(const C_OscNode * (&orpc_NodeCopy), uint8_t * const opu8_NrCode);
+   [[nodiscard]] std::error_code NvmSafeWriteCrcs(uint8_t * const opu8_NrCode);
 
    //Create file process
    void NvmSafeClearInternalContent(void);
-   std::error_code NvmSafeReadParameterValues(const std::vector<C_OscNodeDataPoolListId> & orc_ListIds,
+   [[nodiscard]] std::error_code NvmSafeReadParameterValues(const std::vector<C_OscNodeDataPoolListId> & orc_ListIds,
                                               uint8_t * const opu8_NrCode);
-   std::error_code NvmSafeCreateCleanFileWithoutCrc(
+   [[nodiscard]] std::error_code NvmSafeCreateCleanFileWithoutCrc(
       const std::string & orc_Path,
       const stw::opensyde_core::C_OscParamSetInterpretedFileInfoData & orc_FileInfo =
          stw::opensyde_core::C_OscParamSetInterpretedFileInfoData());
-   std::error_code NvmSafeReadFileWithoutCrc(const std::string & orc_Path);
-   std::error_code NvmSafeCheckParameterFileContents(const std::string & orc_Path,
+   [[nodiscard]] std::error_code NvmSafeReadFileWithoutCrc(const std::string & orc_Path);
+   [[nodiscard]] std::error_code NvmSafeCheckParameterFileContents(const std::string & orc_Path,
                                                      std::vector<C_OscNodeDataPoolListId> & orc_DataPoolLists);
-   std::error_code NvmSafeUpdateCrcForFile(const std::string & orc_Path);
+   [[nodiscard]] std::error_code NvmSafeUpdateCrcForFile(const std::string & orc_Path);
 
    //Write file process
-   std::error_code NvmSafeReadFileWithCrc(const std::string & orc_Path);
-   std::error_code NvmSafeWriteParameterSetFile(const std::string & orc_Path, int32_t & ors32_ResultDetail);
+   [[nodiscard]] std::error_code NvmSafeReadFileWithCrc(const std::string & orc_Path);
+   [[nodiscard]] std::error_code NvmSafeWriteParameterSetFile(const std::string & orc_Path, int32_t & ors32_ResultDetail);
 
 private:
    static void mh_CreateInterpretedList(const C_OscNodeDataPoolList & orc_List,
                                         C_OscParamSetInterpretedList & orc_InterpretedList);
-   std::error_code m_CheckParameterFileContent(const C_OscParamSetRawNode & orc_Node) const;
-   std::error_code m_CreateRawEntryAndPrepareInterpretedData(C_OscNodeDataPoolList & orc_List,
+   [[nodiscard]] std::error_code m_CheckParameterFileContent(const C_OscParamSetRawNode & orc_Node) const;
+   [[nodiscard]] std::error_code m_CreateRawEntryAndPrepareInterpretedData(C_OscNodeDataPoolList & orc_List,
                                                              C_OscParamSetRawEntry & orc_Entry,
                                                              uint8_t * const opu8_NrCode);
 

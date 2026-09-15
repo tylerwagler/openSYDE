@@ -1066,8 +1066,9 @@ std::error_code C_OscHalcConfig::GetRelevantIndicesForSelectedUseCase(
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
       const C_OscHalcConfigDomain & rc_Domain = this->mc_Domains[ou32_DomainIndex];
-      rc_Domain.GetRelevantIndicesForSelectedUseCase(ou32_ChannelIndex, oq_UseChannelIndex, opc_ParameterIndices,
-                                                     opc_InputIndices, opc_OutputIndices, opc_StatusIndices);
+      c_Retval = rc_Domain.GetRelevantIndicesForSelectedUseCase(ou32_ChannelIndex, oq_UseChannelIndex,
+                                                                opc_ParameterIndices, opc_InputIndices,
+                                                                opc_OutputIndices, opc_StatusIndices);
    }
    else
    {

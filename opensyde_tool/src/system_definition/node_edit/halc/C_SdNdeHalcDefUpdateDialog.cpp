@@ -301,7 +301,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateHalcConfiguration(void)
 
                   // Same Id -> Compare and if necessary update
                   C_SdNdeHalcDefUpdateDialog::m_UpdateDomainConfiguration(*pc_CurrentDomain, c_AdatedUpdatedDomain);
-                  this->mc_UpdatedHalcConfig.SetDomainConfig(u32_UpdatedDomainCounter, c_AdatedUpdatedDomain);
+                  //Index comes from the loop over this same config's domains, so the range check cannot fail
+                  (void)this->mc_UpdatedHalcConfig.SetDomainConfig(u32_UpdatedDomainCounter, c_AdatedUpdatedDomain);
 
                   q_DomainFound = true;
                   break;

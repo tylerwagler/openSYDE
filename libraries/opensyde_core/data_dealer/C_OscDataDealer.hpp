@@ -43,13 +43,13 @@ public:
                    C_OscDiagProtocolBase * const opc_DiagProtocol);
 
    uint32_t GetNodeIndex(void) const;
-   virtual std::error_code DataPoolRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] virtual std::error_code DataPoolRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                         const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode);
-   std::error_code DataPoolWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] std::error_code DataPoolWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                  const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode);
-   virtual std::error_code NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] virtual std::error_code NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                    const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode);
-   std::error_code NvmWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] std::error_code NvmWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                             const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode);
 
 protected:

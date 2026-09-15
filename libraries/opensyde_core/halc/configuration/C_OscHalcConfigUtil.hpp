@@ -33,7 +33,7 @@ public:
 
    static void h_GetConfigStandalone(const C_OscHalcConfig & orc_Config,
                                      C_OscHalcConfigStandalone & orc_ConfigStandalone);
-   static std::error_code h_GetConfigStandaloneChannel(const C_OscHalcConfig & orc_Config,
+   [[nodiscard]] static std::error_code h_GetConfigStandaloneChannel(const C_OscHalcConfig & orc_Config,
                                                        const uint32_t ou32_DomainIndex,
                                                        const uint32_t ou32_ChannelIndex, const bool oq_DomainOnly,
                                                        C_OscHalcConfigStandalone & orc_ConfigStandalone);
