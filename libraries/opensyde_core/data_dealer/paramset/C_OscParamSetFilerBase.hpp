@@ -34,8 +34,8 @@ namespace opensyde_core
 class C_OscParamSetFilerBase
 {
 public:
-   static std::error_code h_AddCrc(const std::string & orc_Path);
-   static std::error_code h_CheckFileVersion(C_OscXmlParserBase & orc_XmlParser);
+   [[nodiscard]] static std::error_code h_AddCrc(const std::string & orc_Path);
+   [[nodiscard]] static std::error_code h_CheckFileVersion(C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveFileVersion(C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveFileInfo(C_OscXmlParserBase & orc_XmlParser,
                               const C_OscParamSetInterpretedFileInfoData & orc_FileInfo);
@@ -45,14 +45,14 @@ public:
 protected:
    C_OscParamSetFilerBase(void);
 
-   static std::error_code mh_LoadNodeName(std::string & orc_Name, C_OscXmlParserBase & orc_XmlParser);
+   [[nodiscard]] static std::error_code mh_LoadNodeName(std::string & orc_Name, C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveNodeName(const std::string & orc_Name, C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code mh_LoadDataPoolInfos(std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
+   [[nodiscard]] static std::error_code mh_LoadDataPoolInfos(std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
                                                C_OscXmlParserBase & orc_XmlParser,
                                                bool & orq_MissingOptionalContent);
    static void mh_SaveDataPoolInfos(const std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
                                     C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & orc_DataPoolInfo,
+   [[nodiscard]] static std::error_code mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & orc_DataPoolInfo,
                                               C_OscXmlParserBase & orc_XmlParser,
                                               bool & orq_MissingOptionalContent);
    static void mh_SaveDataPoolInfo(const C_OscParamSetDataPoolInfo & orc_DataPoolInfo,

@@ -38,18 +38,18 @@ public:
    C_OscParamSetHandler(void);
 
    //File
-   std::error_code CreateCleanFileWithoutCrc(const std::string & orc_FilePath,
+   [[nodiscard]] std::error_code CreateCleanFileWithoutCrc(const std::string & orc_FilePath,
                                              const bool oq_InterpretedDataOnly = false) const;
-   std::error_code ReadFile(const std::string & orc_FilePath, const bool oq_IgnoreCrc,
+   [[nodiscard]] std::error_code ReadFile(const std::string & orc_FilePath, const bool oq_IgnoreCrc,
                             const bool oq_InterpretedDataOnly = false, uint16_t * const opu16_FileCrc = nullptr,
                             bool * const opq_MissingOptionalContent = nullptr);
-   static std::error_code h_UpdateCrcForFile(const std::string & orc_FilePath);
+   [[nodiscard]] static std::error_code h_UpdateCrcForFile(const std::string & orc_FilePath);
 
    //Data
    void ClearContent(void);
-   std::error_code AddRawDataForNode(const C_OscParamSetRawNode & orc_Content);
+   [[nodiscard]] std::error_code AddRawDataForNode(const C_OscParamSetRawNode & orc_Content);
    void AddInterpretedFileData(const C_OscParamSetInterpretedFileInfoData & orc_FileInfo);
-   std::error_code AddInterpretedDataForNode(const C_OscParamSetInterpretedNode & orc_Content);
+   [[nodiscard]] std::error_code AddInterpretedDataForNode(const C_OscParamSetInterpretedNode & orc_Content);
    const C_OscParamSetRawNode * GetRawDataForNode(const std::string & orc_NodeName) const;
    const C_OscParamSetInterpretedData & GetInterpretedData(void) const;
 
@@ -60,7 +60,7 @@ private:
    C_OscParamSetInterpretedData mc_Data;
    std::vector<C_OscParamSetRawNode> mc_RawNodes;
 
-   std::error_code m_LoadNodes(C_OscXmlParser & orc_XmlParser, const bool oq_InterpretedDataOnly,
+   [[nodiscard]] std::error_code m_LoadNodes(C_OscXmlParser & orc_XmlParser, const bool oq_InterpretedDataOnly,
                                bool & orq_MissingOptionalContent);
 };
 

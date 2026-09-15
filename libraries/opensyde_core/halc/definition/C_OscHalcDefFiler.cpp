@@ -1246,7 +1246,7 @@ std::error_code C_OscHalcDefFiler::mh_LoadChannelUseCases(std::vector<C_OscHalcD
                                                   orc_XmlParser);
                   if (!c_Retval)
                   {
-                     C_OscHalcDefFiler::mh_CheckAvailability(c_UseCase.c_Availability, orc_XmlParser);
+                     c_Retval = C_OscHalcDefFiler::mh_CheckAvailability(c_UseCase.c_Availability, orc_XmlParser);
                   }
                }
                if (!c_Retval)

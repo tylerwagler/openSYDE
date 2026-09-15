@@ -480,7 +480,8 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddElementSection(const C_OscHalcDefEl
    {
       for (uint32_t u32_ItCh = 0UL; u32_ItCh < orc_RelevantChannels.size(); ++u32_ItCh)
       {
-         C_OscHalcMagicianUtil::h_GetVariableName(orc_Definition, ou32_Index, ou32_ElementIndex,
+         //Enclosing function returns void; on failure the name stays empty and the entry is skipped
+         (void)C_OscHalcMagicianUtil::h_GetVariableName(orc_Definition, ou32_Index, ou32_ElementIndex,
                                                   orc_DomainSingularName, c_Name,
                                                   orc_RelevantChannels[u32_ItCh]);
          C_SdNdeHalcChannelDpPreviewPopUp::mh_AddListEntry(orc_ListName, orq_AddedList, c_Name,
@@ -490,7 +491,8 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddElementSection(const C_OscHalcDefEl
    }
    else
    {
-      C_OscHalcMagicianUtil::h_GetVariableName(orc_Definition, ou32_Index, ou32_ElementIndex,
+      //Enclosing function returns void; on failure the name stays empty and the entry is skipped
+      (void)C_OscHalcMagicianUtil::h_GetVariableName(orc_Definition, ou32_Index, ou32_ElementIndex,
                                                orc_DomainSingularName, c_Name);
       C_SdNdeHalcChannelDpPreviewPopUp::mh_AddListEntry(orc_ListName, orq_AddedList, c_Name,
                                                         orc_HalDefElement.c_Comment,

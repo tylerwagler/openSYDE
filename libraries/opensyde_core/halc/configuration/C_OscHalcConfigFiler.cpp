@@ -774,7 +774,7 @@ std::error_code C_OscHalcConfigFiler::mh_SaveIoParameter(const C_OscHalcConfigPa
       {
          std::string c_Tmp;
          orc_XmlParser.SetAttributeString("type", "string");
-         orc_Parameter.c_Value.GetStringValue(c_Tmp);
+         c_Retval = orc_Parameter.c_Value.GetStringValue(c_Tmp);
          orc_XmlParser.SetAttributeString("value", c_Tmp);
          orc_XmlParser.SetAttributeUint32("strlen", orc_Parameter.c_Value.GetArraySize() - 1UL);
          q_ValueHandled = true;

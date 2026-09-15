@@ -36,14 +36,14 @@ public:
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
    void CheckChannelNameUnique(const uint32_t ou32_ChannelIndex, bool * const opq_NameConflict) const;
-   std::error_code CheckChannelLinked(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
+   [[nodiscard]] std::error_code CheckChannelLinked(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
                                       bool & orq_IsLinked, std::vector<std::string> * const opc_LinkedChannelNames,
                                       std::vector<uint32_t> * const opc_LinkedChannelIndices,
                                       const uint32_t * const opu32_UseCaseIndex) const;
-   std::error_code ResetChannelToDefault(const uint32_t ou32_ChannelIndex);
-   std::error_code ResetChannelUseCase(const uint32_t ou32_ChannelIndex);
+   [[nodiscard]] std::error_code ResetChannelToDefault(const uint32_t ou32_ChannelIndex);
+   [[nodiscard]] std::error_code ResetChannelUseCase(const uint32_t ou32_ChannelIndex);
    void ResetDomainToDefault(void);
-   std::error_code GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
+   [[nodiscard]] std::error_code GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
                                                         std::vector<uint32_t> * const opc_ParameterIndices,
                                                         std::vector<uint32_t> * const opc_InputIndices,
                                                         std::vector<uint32_t> * const opc_OutputIndices,

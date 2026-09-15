@@ -1677,7 +1677,8 @@ bool C_OscHalcDefStructFiler::mh_CheckInitialBitmaskContentValid(const C_OscHalc
       for (std::vector<C_OscHalcDefContentBitmaskItem>::const_iterator c_ItBitmask = rc_Bitmasks.begin();
            c_ItBitmask != rc_Bitmasks.end(); ++c_ItBitmask)
       {
-         c_Copy.SetBitmask(c_ItBitmask->c_Display, c_ItBitmask->q_ApplyValueSetting);
+         //Every display name here came from this same object, so the lookup cannot miss
+         (void)c_Copy.SetBitmask(c_ItBitmask->c_Display, c_ItBitmask->q_ApplyValueSetting);
       }
       switch (orc_Content.GetType()) //lint !e788 not all enum constants used; this is unsigned only
       {

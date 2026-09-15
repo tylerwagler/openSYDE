@@ -80,19 +80,19 @@ private:
    const C_OscHalcDefDomain::E_VariableSelector me_Selector;
    const bool mq_IsSafe;
 
-   std::error_code m_GetListIndex(const uint32_t ou32_DomainIndex, const uint32_t ou32_ParameterStructIndex,
+   [[nodiscard]] std::error_code m_GetListIndex(const uint32_t ou32_DomainIndex, const uint32_t ou32_ParameterStructIndex,
                                   const uint32_t ou32_ParameterStructElementIndex, uint32_t & oru32_ListIndex,
                                   const bool oq_GetUseCaseIndex, const bool oq_GetChanNumIndex,
                                   const bool oq_GetSafetyFlagIndex, const uint32_t ou32_CurChannel) const;
 
-   static std::error_code mh_GetSubElementIndex(const uint32_t ou32_Index, const uint32_t ou32_ElementIndex,
+   [[nodiscard]] static std::error_code mh_GetSubElementIndex(const uint32_t ou32_Index, const uint32_t ou32_ElementIndex,
                                                 const uint32_t ou32_CurChannel,
                                                 const std::vector<C_OscHalcDefStruct> & orc_Values,
                                                 const std::vector<uint32_t> & orc_RelevantChannels,
                                                 uint32_t & oru32_ListIndex);
    static void mh_GetSubDefElementIndex(const C_OscHalcDefElement & orc_DefElement, const uint32_t ou32_CurChannel,
                                         const std::vector<uint32_t> & orc_RelevantChannels, uint32_t & oru32_ListIndex);
-   std::error_code m_GetArrayIndexOfChannel(const uint32_t ou32_DomainIndex,
+   [[nodiscard]] std::error_code m_GetArrayIndexOfChannel(const uint32_t ou32_DomainIndex,
                                             const C_OscNodeDataPoolListElement & orc_ListElement,
                                             const uint32_t ou32_CurChannel, bool & orq_IsArray,
                                             uint32_t & oru32_ArrayIndex) const;

@@ -91,7 +91,8 @@ const
        (pc_Retval != nullptr) &&
        (opq_IsArray != nullptr) && (opu32_ArrayIndex != nullptr))
    {
-      m_GetArrayIndexOfChannel(ou32_DomainIndex, *pc_Retval, ou32_CurChannel, *opq_IsArray, *opu32_ArrayIndex);
+      //Enclosing function returns the element pointer, so there is nowhere to report this
+      (void)m_GetArrayIndexOfChannel(ou32_DomainIndex, *pc_Retval, ou32_CurChannel, *opq_IsArray, *opu32_ArrayIndex);
    }
 
    return pc_Retval;
@@ -134,7 +135,8 @@ const C_OscNodeDataPoolListElement * C_OscHalcMagicianDatapoolListHandler::GetLi
        (pc_Retval != nullptr) &&
        (opq_IsArray != nullptr) && (opu32_ArrayIndex != nullptr))
    {
-      m_GetArrayIndexOfChannel(ou32_DomainIndex, *pc_Retval, ou32_CurChannel, *opq_IsArray, *opu32_ArrayIndex);
+      //Enclosing function returns the element pointer, so there is nowhere to report this
+      (void)m_GetArrayIndexOfChannel(ou32_DomainIndex, *pc_Retval, ou32_CurChannel, *opq_IsArray, *opu32_ArrayIndex);
    }
 
    return pc_Retval;
