@@ -130,12 +130,16 @@ bool C_OscDeviceManager::WasLoaded(void) const
    or earlier folder), the first-seen device wins and a warning is logged.
 
    Per-device parse failures and per-root access failures are logged but do not stop the
-   overall scan.
+   overall scan. They are however reported through the return value, so a caller can tell
+   the user something is wrong instead of silently coming up with no devices -- the log is
+   the detail, the return value is the signal.
 
    \param[in]  orc_RootPaths   Root directories to scan, in priority order
 
    \return
-   Errc::success  Scan completed (with or without devices found)
+   Errc::success  every manifest found was parsed, and at least one device was registered
+   Errc::config   at least one manifest failed to parse, but others loaded (partial result)
+   Errc::noact    no device definitions were registered at all
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscDeviceManager::LoadFromPaths(const std::vector<std::string> & orc_RootPaths)
@@ -145,6 +149,7 @@ std::error_code C_OscDeviceManager::LoadFromPaths(const std::vector<std::string>
    this->mc_DeviceGroups.clear();
    this->mq_WasLoaded = false;
 
+   uint32_t u32_ParseFailures = 0U;
    std::set<std::string> c_KnownDeviceNames;
    // std::map gives a deterministic alphabetical group ordering at flatten time.
    std::map<std::string, C_OscDeviceGroup> c_GroupsByName;
@@ -214,6 +219,7 @@ std::error_code C_OscDeviceManager::LoadFromPaths(const std::vector<std::string>
          {
             osc_write_log_error("Loading device definitions",
                                 "Failed to parse manifest \"" + c_ManifestStr + "\".");
+            u32_ParseFailures++;
             continue;
          }
 
@@ -244,5 +250,22 @@ std::error_code C_OscDeviceManager::LoadFromPaths(const std::vector<std::string>
    }
 
    this->mq_WasLoaded = true;
-   return Errc::success;
+
+   //The scan itself always completes; what the caller needs to know is whether it produced a
+   //usable result. Nothing registered means the application has no devices at all, which used to
+   //be reported as success and left the user staring at an empty device list.
+   std::error_code c_Retval = Errc::success;
+   if (c_KnownDeviceNames.empty())
+   {
+      c_Retval = Errc::noact;
+   }
+   else if (u32_ParseFailures > 0U)
+   {
+      c_Retval = Errc::config;
+   }
+   else
+   {
+      //everything found was parsed
+   }
+   return c_Retval;
 }

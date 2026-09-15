@@ -12,6 +12,7 @@
 #define C_POPERRORHANDLING_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 
 #include <QWidget>
 #include <QString>
@@ -36,6 +37,7 @@ public:
    static void h_ProjectSaveErr(const int32_t & ors32_Err, QWidget * const opc_Parent);
    static void h_ServiceProjectSaveErr(const int32_t & ors32_Err, QWidget * const opc_Parent);
    static void h_GetTextInitializeErr(const int32_t & ors32_Err);
+   static void h_DeviceDefinitionLoadErr(const std::error_code & orc_Err, QWidget * const opc_Parent);
 
 private:
    C_PopErrorHandling();

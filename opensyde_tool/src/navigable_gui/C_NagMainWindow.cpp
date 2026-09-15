@@ -115,9 +115,10 @@ C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
          c_StwPaths.emplace_back(rc_Path.toStdString().c_str());
       }
       //lint -e{1938}  static const is guaranteed preinitialized before main
-      //Marked rather than handled: this is a constructor, so there is nowhere to return to, and a
-      //failure means the app starts with no device definitions. Worth surfacing to the user.
-      (void)stw::opensyde_core::C_OscSystemDefinition::hc_Devices.LoadFromPaths(c_StwPaths);
+      //Kept rather than reported here: a constructor has nowhere to return to, and a modal dialog
+      //before the main window is shown looks like a crash. m_LoadInitialProject reports it once
+      //the window is up.
+      this->mc_DeviceLoadResult = stw::opensyde_core::C_OscSystemDefinition::hc_Devices.LoadFromPaths(c_StwPaths);
    }
 
    this->mpc_MainWidget = new C_NagMainWidget(this->mpc_Ui->pc_workAreaWidget);
@@ -644,6 +645,11 @@ void C_NagMainWindow::dropEvent(QDropEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagMainWindow::m_LoadInitialProject(void)
 {
+   //Report a device definition problem before the project loads, not after. A project referring
+   //to a device that failed to load reports it as unknown, and that message is far less useful
+   //than being told the definitions themselves did not come up.
+   C_PopErrorHandling::h_DeviceDefinitionLoadErr(this->mc_DeviceLoadResult, this);
+
    this->mpc_MainWidget->LoadInitialProject();
 
    // Handle use case switch

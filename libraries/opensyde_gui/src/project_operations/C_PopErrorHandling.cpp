@@ -14,6 +14,7 @@
 
 #include <QEventLoop>
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "constants.hpp"
 #include "C_OgeWiError.hpp"
 #include "C_Uti.hpp"
@@ -284,4 +285,47 @@ void C_PopErrorHandling::h_GetTextInitializeErr(const int32_t & ors32_Err)
 //----------------------------------------------------------------------------------------------------------------------
 C_PopErrorHandling::C_PopErrorHandling()
 {
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Handle a device definition load problem
+
+   The scan itself logs every skipped root and every unparseable manifest. This reports the
+   outcome, because the failure is otherwise invisible: openSYDE comes up with an empty or
+   incomplete device list and says nothing, and the first symptom is a project that will not
+   open or a toolbox missing the device you need.
+
+   \param[in]      orc_Err       Result of C_OscDeviceManager::LoadFromPaths
+   \param[in,out]  opc_Parent    Parent widget
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_PopErrorHandling::h_DeviceDefinitionLoadErr(const std::error_code & orc_Err, QWidget * const opc_Parent)
+{
+   if (orc_Err)
+   {
+      const QString c_LogLink = "For details see " +
+                                C_Uti::h_GetLink("log file.", mc_STYLE_GUIDE_COLOR_LINK,
+                                                 C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
+      C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::E_Type::eERROR);
+
+      c_Message.SetHeading("Device definitions");
+
+      if (orc_Err == Errc::noact)
+      {
+         c_Message.SetDescription("No device definitions could be loaded.");
+         c_Message.SetDetails("openSYDE cannot open projects or build a system definition without them.<br/>"
+                              "Check the device paths in User Settings, then restart.<br/>" + c_LogLink);
+         c_Message.SetCustomMinHeight(180, 300);
+      }
+      else
+      {
+         c_Message.SetType(C_OgeWiCustomMessage::E_Type::eWARNING);
+         c_Message.SetDescription("Some device definitions could not be read.");
+         c_Message.SetDetails("The devices that did load are usable. Any project referring to one of the "
+                              "others will report it as an unknown device.<br/>" + c_LogLink);
+         c_Message.SetCustomMinHeight(180, 270);
+      }
+
+      c_Message.Execute();
+   }
 }
