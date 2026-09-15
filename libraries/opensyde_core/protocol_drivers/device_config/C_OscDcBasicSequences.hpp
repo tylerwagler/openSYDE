@@ -32,11 +32,11 @@ public:
    C_OscDcBasicSequences(void);
    virtual ~C_OscDcBasicSequences(void);
 
-   std::error_code Init(stw::can::C_CanDispatcher * const opc_CanDispatcher);
-   std::error_code ScanEnterFlashloader(const uint32_t ou32_FlashloaderResetWaitTime);
-   std::error_code ScanGetInfo(void);
-   std::error_code ResetSystem(void);
-   std::error_code ConfigureDevice(const uint8_t ou8_CurrentNodeId, const uint8_t ou8_NewNodeId,
+   [[nodiscard]] std::error_code Init(stw::can::C_CanDispatcher * const opc_CanDispatcher);
+   [[nodiscard]] std::error_code ScanEnterFlashloader(const uint32_t ou32_FlashloaderResetWaitTime);
+   [[nodiscard]] std::error_code ScanGetInfo(void);
+   [[nodiscard]] std::error_code ResetSystem(void);
+   [[nodiscard]] std::error_code ConfigureDevice(const uint8_t ou8_CurrentNodeId, const uint8_t ou8_NewNodeId,
                                    const uint32_t ou32_Bitrate, const uint8_t ou8_InterfaceIndex);
 
    static std::string h_DevicesInfoToString(

@@ -35,9 +35,9 @@ public:
    bool operator <(const C_OscProtocolSerialNumber & orc_Cmp) const;
 
    void SetPosSerialNumber(const uint8_t (&orau8_SerialNumber)[6]);
-   std::error_code SetExtSerialNumber(const std::vector<uint8_t> & orc_SerialNumber,
+   [[nodiscard]] std::error_code SetExtSerialNumber(const std::vector<uint8_t> & orc_SerialNumber,
                                       const uint8_t ou8_SerialNumberManufacturerFormat);
-   std::error_code SetExtSerialNumber(const std::string & orc_SerialNumber,
+   [[nodiscard]] std::error_code SetExtSerialNumber(const std::string & orc_SerialNumber,
                                       const uint8_t ou8_SerialNumberManufacturerFormat);
    std::vector<uint8_t> GetSerialNumberAsRawData(void) const;
    std::string GetSerialNumberAsFormattedString(void) const;

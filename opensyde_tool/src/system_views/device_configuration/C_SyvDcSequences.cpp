@@ -1324,7 +1324,9 @@ int32_t C_SyvDcSequences::m_RunScanCanGetInfoFromOpenSydeDevices(void)
                c_CurSenderId = c_ReadSnResultExt[u32_ReadSnrResultExtIndex].c_SenderId;
             }
 
-            this->mpc_ComDriver->SendOsyReadDeviceName(c_CurSenderId, c_Result);
+            //c_Result is constructed fresh each iteration, so a failed read leaves the device name
+            //empty rather than carrying the previous device's name over.
+            (void)this->mpc_ComDriver->SendOsyReadDeviceName(c_CurSenderId, c_Result);
 
             this->mc_DeviceInfoResult[u32_DeviceInfoIndex].SetDeviceName(c_Result);
          }
@@ -1944,7 +1946,8 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                         }
 
                         // Configuration of primary interface of node finished. Concrete disconnect necessary
-                        C_OscComDriverFlash::h_EthDisconnectNode(c_TemporaryProtocol);
+                        //Concrete disconnect on the way out of the configuration step; nothing to act on
+                        (void)C_OscComDriverFlash::h_EthDisconnectNode(c_TemporaryProtocol);
                      }
                   }
                }

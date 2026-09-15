@@ -37,7 +37,7 @@ public:
                                 const bool oq_RelativeTimeStampActive);
    virtual ~C_OscComMessageLoggerFileAsc(void);
 
-   virtual std::error_code OpenFile(void);
+   [[nodiscard]] virtual std::error_code OpenFile(void);
    virtual void AddMessageToFile(const C_OscComMessageLoggerData & orc_MessageData);
 
 private:

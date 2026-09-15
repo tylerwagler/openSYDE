@@ -2549,7 +2549,9 @@ std::error_code C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstE
                   // Set the request programming flag to bring the server into flashloader
                   c_Return = this->mpc_ComDriver->SendOsyRequestProgramming(mc_CurrentNode);
 
-                  this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
+                  //Cleanup on the way out: c_Return already holds the outcome that matters and is checked
+                  //below, so assigning this would replace a real result with a teardown one.
+                  (void)this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
 
                   if (c_Return != Errc::success)
                   {
@@ -2609,7 +2611,9 @@ std::error_code C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstE
                         mc_CurrentNode,
                         C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
 
-                     this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
+                     //Cleanup on the way out: c_Return already holds the outcome that matters and is checked
+                     //below, so assigning this would replace a real result with a teardown one.
+                     (void)this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
 
                      if (c_Return != Errc::success)
                      {
@@ -2757,7 +2761,9 @@ std::error_code C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstE
                      }
                   }
 
-                  this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
+                  //Cleanup on the way out: c_Return already holds the outcome that matters and is checked
+                  //below, so assigning this would replace a real result with a teardown one.
+                  (void)this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
                   if (c_Return != Errc::success)
                   {
                      q_AtLeastOneError = true;
@@ -2987,7 +2993,9 @@ std::error_code C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstE
                      }
 
                      // Stop routing always to clean up
-                     this->mpc_ComDriver->StopRouting(u16_Node);
+                     //Cleanup on the way out: c_Return already holds the outcome that matters and is checked
+                     //below, so assigning this would replace a real result with a teardown one.
+                     (void)this->mpc_ComDriver->StopRouting(u16_Node);
                   }
                   else
                   {
@@ -3158,7 +3166,9 @@ std::error_code C_OscSuSequences::ReadDeviceInformation(const bool oq_FailOnFirs
                if (q_RoutingActivated == true)
                {
                   // Stop routing always to clean up
-                  this->mpc_ComDriver->StopRouting(u16_Node);
+                  //Cleanup on the way out: c_Return already holds the outcome that matters and is checked
+                  //below, so assigning this would replace a real result with a teardown one.
+                  (void)this->mpc_ComDriver->StopRouting(u16_Node);
                }
             }
             else
@@ -3672,7 +3682,9 @@ std::error_code C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequence
             if (q_RoutingActivated == true)
             {
                // Stop routing always to clean up
-               this->mpc_ComDriver->StopRouting(u32_NodeIndex);
+               //Cleanup on the way out: c_Return already holds the outcome that matters and is checked
+               //below, so assigning this would replace a real result with a teardown one.
+               (void)this->mpc_ComDriver->StopRouting(u32_NodeIndex);
             }
          }
          if (c_Return != Errc::success)
@@ -3823,7 +3835,9 @@ std::error_code C_OscSuSequences::ResetSystem(void)
                      TglSleep(20);
 
                      // Stop routing always because of cleaning up the tp and legacy routing dispatcher
-                     this->mpc_ComDriver->StopRouting(u32_Node);
+                     //Cleanup on the way out: c_Return already holds the outcome that matters and is checked
+                     //below, so assigning this would replace a real result with a teardown one.
+                     (void)this->mpc_ComDriver->StopRouting(u32_Node);
                   }
                }
             }
@@ -4088,7 +4102,9 @@ std::error_code C_OscSuSequences::m_DisconnectFromTargetServer(const bool oq_Dis
                uint32_t u32_NodeIndex;
 
                this->mpc_ComDriver->GetNodeIndex(this->mc_CurrentNode, u32_NodeIndex);
-               this->mpc_ComDriver->StopRouting(u32_NodeIndex);
+               //Cleanup on the way out: c_Return already holds the outcome that matters and is checked
+               //below, so assigning this would replace a real result with a teardown one.
+               (void)this->mpc_ComDriver->StopRouting(u32_NodeIndex);
             }
             else
             {

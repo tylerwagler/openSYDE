@@ -847,7 +847,9 @@ std::error_code C_OscBuSequences::h_ReadHexFile(const std::string & orc_HexFileP
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscBuSequences::PrepareForDestruction(void)
 {
-   mc_TpCan.SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
+   //Teardown: the enclosing function returns void and SetDispatcher itself documents that it
+   //ignores its own unregister result, so there is nothing to act on here.
+   (void)mc_TpCan.SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
 }
 
 //----------------------------------------------------------------------------------------------------------------------

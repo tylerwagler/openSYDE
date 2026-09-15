@@ -35,22 +35,22 @@ public:
    C_OscProtocolSecuritySubLayerBase();
    virtual ~C_OscProtocolSecuritySubLayerBase();
 
-   virtual std::error_code InitEcdhKeys() = 0;
-   virtual std::error_code GetEcdhPublicKey(std::vector<uint8_t> & orc_TrafficEncryptionPublicClientKey) = 0;
-   virtual std::error_code DeriveAesKey(const std::vector<uint8_t> & orc_OthersPublicKey) = 0;
-   virtual std::error_code SetAesInitVector(const std::vector<uint8_t> & orc_InitVector) = 0;
+   [[nodiscard]] virtual std::error_code InitEcdhKeys() = 0;
+   [[nodiscard]] virtual std::error_code GetEcdhPublicKey(std::vector<uint8_t> & orc_TrafficEncryptionPublicClientKey) = 0;
+   [[nodiscard]] virtual std::error_code DeriveAesKey(const std::vector<uint8_t> & orc_OthersPublicKey) = 0;
+   [[nodiscard]] virtual std::error_code SetAesInitVector(const std::vector<uint8_t> & orc_InitVector) = 0;
 
    void SetEncryptionIsActive(const bool oq_IsActive);
    bool GetEncryptionIsActive() const;
 
-   std::error_code WrapRequest(const C_OscProtocolDriverOsyService & orc_UnwrappedService,
+   [[nodiscard]] std::error_code WrapRequest(const C_OscProtocolDriverOsyService & orc_UnwrappedService,
                                C_OscProtocolDriverOsyService & orc_WrappedService);
-   std::error_code UnwrapResponse(const C_OscProtocolDriverOsyService & orc_WrappedService,
+   [[nodiscard]] std::error_code UnwrapResponse(const C_OscProtocolDriverOsyService & orc_WrappedService,
                                   C_OscProtocolDriverOsyService & orc_UnwrappedService);
 
 protected:
-   virtual std::error_code m_Encrypt(const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output) = 0;
-   virtual std::error_code m_Decrypt(const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output) = 0;
+   [[nodiscard]] virtual std::error_code m_Encrypt(const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output) = 0;
+   [[nodiscard]] virtual std::error_code m_Decrypt(const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output) = 0;
 
    static const uint8_t mhu8_OSY_SI_SECURED_DATA_TRANSMISSION = 0x84U;
 
@@ -70,18 +70,18 @@ public:
    C_OscProtocolSecuritySubLayer();
    virtual ~C_OscProtocolSecuritySubLayer();
 
-   virtual std::error_code InitEcdhKeys();
-   virtual std::error_code GetEcdhPublicKey(std::vector<uint8_t> & orc_TrafficEncryptionPublicClientKey);
-   virtual std::error_code DeriveAesKey(const std::vector<uint8_t> & orc_OthersPublicKey);
-   virtual std::error_code SetAesInitVector(const std::vector<uint8_t> & orc_InitVector);
+   [[nodiscard]] virtual std::error_code InitEcdhKeys();
+   [[nodiscard]] virtual std::error_code GetEcdhPublicKey(std::vector<uint8_t> & orc_TrafficEncryptionPublicClientKey);
+   [[nodiscard]] virtual std::error_code DeriveAesKey(const std::vector<uint8_t> & orc_OthersPublicKey);
+   [[nodiscard]] virtual std::error_code SetAesInitVector(const std::vector<uint8_t> & orc_InitVector);
 
 protected:
    C_OscSecurityEcdhAes mc_Ecdh;
 
    uint8_t mau8_EcdhPublicKey[C_OscSecurityEcdhAes::hu32_PUBLIC_KEY_LENGTH];
 
-   virtual std::error_code m_Encrypt(const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output);
-   virtual std::error_code m_Decrypt(const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output);
+   [[nodiscard]] virtual std::error_code m_Encrypt(const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output);
+   [[nodiscard]] virtual std::error_code m_Decrypt(const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

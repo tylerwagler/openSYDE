@@ -63,23 +63,23 @@ public:
 
    // openSYDE system definition handling
    virtual void SetProtocol(const stw::cmon_protocol::e_CanMonL7Protocols oe_Protocol);
-   std::error_code AddOsySysDef(const std::string & orc_PathSystemDefinition,
+   [[nodiscard]] std::error_code AddOsySysDef(const std::string & orc_PathSystemDefinition,
                                 std::vector<C_OscSystemBus> & orc_Buses);
-   std::error_code AddOsySysDef(const std::string & orc_PathSystemDefinition, const uint32_t ou32_BusIndex,
+   [[nodiscard]] std::error_code AddOsySysDef(const std::string & orc_PathSystemDefinition, const uint32_t ou32_BusIndex,
                                 std::vector<C_OscSystemBus> & orc_Buses);
-   virtual std::error_code SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
+   [[nodiscard]] virtual std::error_code SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
                                            const uint32_t ou32_BusIndex);
-   virtual std::error_code GetOsySysDef(const std::string & orc_PathSystemDefinition,
+   [[nodiscard]] virtual std::error_code GetOsySysDef(const std::string & orc_PathSystemDefinition,
                                         C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition);
 
    // Generic database handling
-   virtual std::error_code RemoveDatabase(const std::string & orc_Path);
-   virtual std::error_code ActivateDatabase(const std::string & orc_Path, const bool oq_Active);
+   [[nodiscard]] virtual std::error_code RemoveDatabase(const std::string & orc_Path);
+   [[nodiscard]] virtual std::error_code ActivateDatabase(const std::string & orc_Path, const bool oq_Active);
 
    // Logging handling
-   virtual std::error_code AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
+   [[nodiscard]] virtual std::error_code AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
                                          const bool oq_RelativeTimeStampActive);
-   virtual std::error_code RemoveLogFile(const std::string & orc_FilePath);
+   [[nodiscard]] virtual std::error_code RemoveLogFile(const std::string & orc_FilePath);
    virtual void RemoveAllLogFiles(void);
 
    // Filter handling
@@ -89,6 +89,8 @@ public:
    virtual uint32_t GetFilteredMessages(void) const;
 
    // CAN bus handling
+   //Deliberately not [[nodiscard]] yet -- receive path, same question as the send pump.
+   //Whether its callers should propagate is a protocol decision, not a call-site one.
    virtual std::error_code HandleCanMessage(const stw::can::T_STWCAN_Msg_RX & orc_Msg, const bool oq_IsTx);
    virtual void ResetCounter(void);
    virtual void UpdateBusLoad(const uint8_t ou8_BusLoad);
