@@ -41,9 +41,9 @@ public:
    void CheckErrorManager(bool * const opq_CoNodeIdConflict, bool * const opq_CoManagerNodeIdInvalid,
                           bool * const opq_CoDevicesNodeIdInvalid, bool * const opq_HearbeatTimeInvalid,
                           const bool oq_CheckDeviceToDeviceErrors) const;
-   std::error_code CheckErrorDeviceCoNodeId(const C_OscCanInterfaceId & orc_DeviceId, bool * const opq_CoNodeIdConflict,
+   [[nodiscard]] std::error_code CheckErrorDeviceCoNodeId(const C_OscCanInterfaceId & orc_DeviceId, bool * const opq_CoNodeIdConflict,
                                     bool * const opq_CoNodeIdInvalid, const bool oq_CheckDeviceToDeviceErrors) const;
-   std::error_code CheckErrorDeviceHeartbeat(const C_OscCanInterfaceId & orc_DeviceId,
+   [[nodiscard]] std::error_code CheckErrorDeviceHeartbeat(const C_OscCanInterfaceId & orc_DeviceId,
                                      bool * const opq_HearbeatTimeInvalid) const;
 
    bool q_UseOpenSydeNodeId;        ///< Use openSYDE node ID instead of CANopen node ID

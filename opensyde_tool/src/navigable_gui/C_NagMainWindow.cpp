@@ -115,7 +115,9 @@ C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
          c_StwPaths.emplace_back(rc_Path.toStdString().c_str());
       }
       //lint -e{1938}  static const is guaranteed preinitialized before main
-      stw::opensyde_core::C_OscSystemDefinition::hc_Devices.LoadFromPaths(c_StwPaths);
+      //Marked rather than handled: this is a constructor, so there is nowhere to return to, and a
+      //failure means the app starts with no device definitions. Worth surfacing to the user.
+      (void)stw::opensyde_core::C_OscSystemDefinition::hc_Devices.LoadFromPaths(c_StwPaths);
    }
 
    this->mpc_MainWidget = new C_NagMainWidget(this->mpc_Ui->pc_workAreaWidget);

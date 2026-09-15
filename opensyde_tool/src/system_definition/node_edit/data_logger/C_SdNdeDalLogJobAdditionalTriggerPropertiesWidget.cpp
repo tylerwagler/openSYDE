@@ -503,7 +503,8 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_DataElementChanged()
          {
             C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_ValueChangedTo;
             // set value in range, leave initial value if in range
-            C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(pc_El->c_MinValue,
+            //Enclosing slot returns void; the clamping outcome the caller wants is e_ValueChangedTo
+            (void)C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(pc_El->c_MinValue,
                                                                   pc_El->c_MaxValue,
                                                                   c_Tmp,
                                                                   e_ValueChangedTo,

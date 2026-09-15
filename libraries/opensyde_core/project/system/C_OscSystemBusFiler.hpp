@@ -29,11 +29,11 @@ namespace opensyde_core
 class C_OscSystemBusFiler
 {
 public:
-   static std::error_code h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
+   [[nodiscard]] static std::error_code h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveBus(const C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
 
 private:
-   static std::error_code mh_LoadCanFdProperties(C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
+   [[nodiscard]] static std::error_code mh_LoadCanFdProperties(C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveCanFdProperties(const C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser);
 };
 

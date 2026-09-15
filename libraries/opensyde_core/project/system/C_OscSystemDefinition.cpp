@@ -2032,7 +2032,8 @@ void C_OscSystemDefinition::m_HandleNameMaxCharLimitNodeName(const uint32_t ou32
       {
          if (c_OldName != rc_Squad.c_BaseName)
          {
-            this->SetNodeName(ou32_NodeIndex, rc_Squad.c_BaseName);
+            //Enclosing function returns void, so there is nowhere to report this
+            (void)this->SetNodeName(ou32_NodeIndex, rc_Squad.c_BaseName);
          }
       }
    }

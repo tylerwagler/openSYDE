@@ -525,7 +525,8 @@ void C_PuiSdHandlerNodeLogic::SetOscNodePropertiesDetailed(const uint32_t ou32_N
       C_OscNode & rc_OscNode = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
 
       //set name (special handling)
-      this->mc_CoreDefinition.SetNodeName(ou32_NodeIndex, orc_Name.toStdString().c_str());
+      //Enclosing function returns void; a rejected rename leaves the previous name in place
+      (void)this->mc_CoreDefinition.SetNodeName(ou32_NodeIndex, orc_Name.toStdString().c_str());
 
       //set other properties
       rc_OscNode.c_Properties.c_Comment = orc_Comment.toStdString().c_str();
@@ -670,7 +671,8 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
    // definition pointer
 
    tgl_assert(u32_NodeSquadIndex < mc_CoreDefinition.c_NodeSquads.size());
-   this->mc_CoreDefinition.c_NodeSquads[u32_NodeSquadIndex].SetBaseName(this->mc_CoreDefinition.c_Nodes,
+   //Enclosing function returns the new squad index, not a status
+   (void)this->mc_CoreDefinition.c_NodeSquads[u32_NodeSquadIndex].SetBaseName(this->mc_CoreDefinition.c_Nodes,
                                                                         c_Name);
 
    //insert UI part at same position as OSC part:
@@ -1592,7 +1594,9 @@ int32_t C_PuiSdHandlerNodeLogic::InsertDataPool(const uint32_t & oru32_NodeIndex
       if (oru32_DataPoolIndex <= rc_UiNode.c_UiDataPools.size())
       {
          rc_UiNode.c_UiDataPools.insert(rc_UiNode.c_UiDataPools.begin() + oru32_DataPoolIndex, orc_UiContent);
-         rc_OscNode.InsertDataPool(oru32_DataPoolIndex, c_NodeDataPool);
+         //This function already reports C_RANGE for index problems, so the insert's own range
+         //check belongs in the same channel.
+         s32_Retval = rc_OscNode.InsertDataPool(oru32_DataPoolIndex, c_NodeDataPool).value();
          //Handle NVM
          rc_OscNode.RecalculateAddress();
          //Handle COMM

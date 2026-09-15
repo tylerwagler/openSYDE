@@ -70,8 +70,8 @@ public:
    C_OscNodeDataPoolContent::E_Type GetType(void) const;
    bool GetArray(void) const;
    uint32_t GetArraySize(void) const;
-   std::error_code CheckValueRange(void) const;
-   std::error_code CheckNvmValueRange(void) const;
+   [[nodiscard]] std::error_code CheckValueRange(void) const;
+   [[nodiscard]] std::error_code CheckNvmValueRange(void) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

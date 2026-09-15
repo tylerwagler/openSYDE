@@ -35,7 +35,7 @@ public:
 
    static std::string h_CombineNames(const std::string & orc_MainDeviceName,
                                                const std::string & orc_SubDeviceName);
-   std::error_code SetBaseName(std::vector<C_OscNode> & orc_Nodes, const std::string & orc_NodeBaseName);
+   [[nodiscard]] std::error_code SetBaseName(std::vector<C_OscNode> & orc_Nodes, const std::string & orc_NodeBaseName);
    static bool h_CheckIsMultiDevice(const uint32_t ou32_NodeIndex,
                                     const std::vector<stw::opensyde_core::C_OscNodeSquad> & orc_AvailableGroups,
                                     uint32_t * const opu32_GroupIndex = nullptr);

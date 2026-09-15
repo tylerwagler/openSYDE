@@ -39,7 +39,7 @@ public:
 
    bool WasLoaded(void) const;
 
-   std::error_code LoadFromPaths(const std::vector<std::string> & orc_RootPaths);
+   [[nodiscard]] std::error_code LoadFromPaths(const std::vector<std::string> & orc_RootPaths);
 
 private:
    bool mq_WasLoaded;

@@ -1757,7 +1757,8 @@ void C_SyvDaItTaModel::m_InitStartValueForOneRow(const C_PuiSvDbNodeDataElementC
          orc_ElementConfig.c_ElementScaling,
          orc_OscElement.q_InterpretAsString));
    //Set unscaled starting value to 0 if possible
-   C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(orc_OscElement.c_MinValue,
+   //Enclosing function returns void; the clamping outcome the caller wants is e_ValueChangedTo
+   (void)C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(orc_OscElement.c_MinValue,
                                                          orc_OscElement.c_MaxValue, c_Val,
                                                          e_FullyUsefulAndTotallyNecessaryVariable,
                                                          C_OscNodeDataPoolContentUtil::eTO_ZERO);

@@ -73,19 +73,19 @@ public:
    void SetPaths(const std::vector<std::string> & orc_Value, const E_GenericFileType oe_Type);
    void SetSkipUpdateOfParamInfosFlags(const std::vector<bool> & orc_Value);
    void SetSkipUpdateOfPathsFlags(const std::vector<bool> & orc_Value, const E_GenericFileType oe_Type);
-   std::error_code SetParamInfoContent(const uint32_t ou32_Index, const std::string & orc_FilePath,
+   [[nodiscard]] std::error_code SetParamInfoContent(const uint32_t ou32_Index, const std::string & orc_FilePath,
                                        const uint32_t ou32_LastKnownCrc);
 
    //Elements
    void AddPath(const std::string & orc_Path, const E_GenericFileType oe_Type);
    void AddParamInfo(const C_OscViewNodeUpdateParamInfo & orc_Value);
-   std::error_code SetPath(const uint32_t ou32_Index, const std::string & orc_Value, const E_GenericFileType oe_Type);
-   std::error_code SetParamInfo(const uint32_t ou32_Index, const C_OscViewNodeUpdateParamInfo & orc_Value);
-   std::error_code SetSkipUpdateOfPath(const uint32_t ou32_Index, const bool oq_SkipFile,
+   [[nodiscard]] std::error_code SetPath(const uint32_t ou32_Index, const std::string & orc_Value, const E_GenericFileType oe_Type);
+   [[nodiscard]] std::error_code SetParamInfo(const uint32_t ou32_Index, const C_OscViewNodeUpdateParamInfo & orc_Value);
+   [[nodiscard]] std::error_code SetSkipUpdateOfPath(const uint32_t ou32_Index, const bool oq_SkipFile,
                                        const E_GenericFileType oe_Type);
-   std::error_code SetSkipUpdateOfParamInfo(const uint32_t ou32_Index, const bool oq_SkipFile);
-   std::error_code RemovePath(const uint32_t ou32_Index, const E_GenericFileType oe_Type);
-   std::error_code RemoveParamInfo(const uint32_t ou32_Index);
+   [[nodiscard]] std::error_code SetSkipUpdateOfParamInfo(const uint32_t ou32_Index, const bool oq_SkipFile);
+   [[nodiscard]] std::error_code RemovePath(const uint32_t ou32_Index, const E_GenericFileType oe_Type);
+   [[nodiscard]] std::error_code RemoveParamInfo(const uint32_t ou32_Index);
 
    // PEM file
    void SetPemFilePath(const std::string & orc_Value);

@@ -1135,7 +1135,8 @@ void C_SdClipBoardHelper::h_StoreDataSnapShotToClipboard(const C_SdTopologyDataS
    c_StringXml.CreateAndSelectNodeChild("opensyde-system-definition");
    C_OscNodeSquadFiler::h_SaveNodeGroups(orc_Data.c_OscNodeGroups, c_StringXml);
    c_StringXml.CreateAndSelectNodeChild("nodes-core");
-   C_OscSystemDefinitionFiler::h_SaveNodes(orc_Data.c_OscNodes, c_StringXml, "", nullptr);
+   //Enclosing function returns void, so a failed save cannot be reported from here
+   (void)C_OscSystemDefinitionFiler::h_SaveNodes(orc_Data.c_OscNodes, c_StringXml, "", nullptr);
    tgl_assert(c_StringXml.SelectNodeParent() == "opensyde-system-definition");
    c_StringXml.CreateAndSelectNodeChild("nodes-ui");
    C_PuiSdHandlerFiler::h_SaveNodes(orc_Data.c_UiNodes, c_StringXml);

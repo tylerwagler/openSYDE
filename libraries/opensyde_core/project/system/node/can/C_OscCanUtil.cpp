@@ -265,7 +265,8 @@ void C_OscCanUtil::h_GetSignalValue(const uint8_t (&orau8_CanDb)[8], const C_Osc
    // The result is in little endian. The function converts in case of Motorola format automatically.
    h_GetSignalValue(orau8_CanDb, orc_Signal, c_Data, orc_Value.GetType());
 
-   orc_Value.SetValueFromLittleEndianBlob(c_Data);
+   //Enclosing function returns void; the buffer was sized from the value directly above
+   (void)orc_Value.SetValueFromLittleEndianBlob(c_Data);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

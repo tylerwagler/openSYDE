@@ -129,8 +129,8 @@ public:
    std::vector<double> GetValueArrF64(void) const;
    double GetValueArrF64Element(const uint32_t ou32_Index) const;
 
-   std::error_code SetValueFromBigEndianBlob(const std::vector<uint8_t> & orc_Data);
-   std::error_code SetValueFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data);
+   [[nodiscard]] std::error_code SetValueFromBigEndianBlob(const std::vector<uint8_t> & orc_Data);
+   [[nodiscard]] std::error_code SetValueFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data);
    void GetValueAsBigEndianBlob(std::vector<uint8_t> & orc_Data) const;
    void GetValueAsLittleEndianBlob(std::vector<uint8_t> & orc_Data) const;
 

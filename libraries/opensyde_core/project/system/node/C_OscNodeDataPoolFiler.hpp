@@ -32,30 +32,30 @@ public:
    C_OscNodeDataPoolFiler();
 
    ///load functions
-   static std::error_code h_LoadDataPoolFile(C_OscNodeDataPool & orc_NodeDataPool, const std::string & orc_FilePath);
-   static std::error_code h_LoadDataPool(C_OscNodeDataPool & orc_NodeDataPool, C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_LoadDataPoolList(C_OscNodeDataPoolList & orc_NodeDataPoolList,
+   [[nodiscard]] static std::error_code h_LoadDataPoolFile(C_OscNodeDataPool & orc_NodeDataPool, const std::string & orc_FilePath);
+   [[nodiscard]] static std::error_code h_LoadDataPool(C_OscNodeDataPool & orc_NodeDataPool, C_OscXmlParserBase & orc_XmlParser);
+   [[nodiscard]] static std::error_code h_LoadDataPoolList(C_OscNodeDataPoolList & orc_NodeDataPoolList,
                                              C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_LoadDataPoolElement(C_OscNodeDataPoolListElement & orc_NodeDataPoolListElement,
+   [[nodiscard]] static std::error_code h_LoadDataPoolElement(C_OscNodeDataPoolListElement & orc_NodeDataPoolListElement,
                                                 C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_LoadDataPoolLists(std::vector<C_OscNodeDataPoolList> & orc_NodeDataPoolLists,
+   [[nodiscard]] static std::error_code h_LoadDataPoolLists(std::vector<C_OscNodeDataPoolList> & orc_NodeDataPoolLists,
                                               C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_LoadDataPoolListElements(
+   [[nodiscard]] static std::error_code h_LoadDataPoolListElements(
       std::vector<C_OscNodeDataPoolListElement> & orc_NodeDataPoolListElements, C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_LoadDataPoolListElementDataSetValues(
+   [[nodiscard]] static std::error_code h_LoadDataPoolListElementDataSetValues(
       const C_OscNodeDataPoolContent & orc_ContentType,
       std::vector<C_OscNodeDataPoolContent> & orc_NodeDataPoolListElementDataSetValues,
       C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_LoadDataPoolElementType(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
+   [[nodiscard]] static std::error_code h_LoadDataPoolElementType(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
                                                     C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_LoadDataPoolElementValue(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
+   [[nodiscard]] static std::error_code h_LoadDataPoolElementValue(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
                                                      C_OscXmlParserBase & orc_XmlParser, const bool oq_CheckDataType,
                                                      std::string * const opc_CheckDataTypeErrorDetails = nullptr);
-   static std::error_code h_LoadDataPoolContentV1(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
+   [[nodiscard]] static std::error_code h_LoadDataPoolContentV1(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
                                                   C_OscXmlParserBase & orc_XmlParser);
 
    ///save functions
-   static std::error_code h_SaveDataPoolFile(const C_OscNodeDataPool & orc_NodeDataPool,
+   [[nodiscard]] static std::error_code h_SaveDataPoolFile(const C_OscNodeDataPool & orc_NodeDataPool,
                                              const std::string & orc_FilePath);
    static void h_SaveDataPool(const C_OscNodeDataPool & orc_NodeDataPool, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveDataPoolList(const C_OscNodeDataPoolList & orc_NodeDataPoolList,
@@ -71,12 +71,12 @@ public:
    static void h_SaveDataPoolListElementDataSetValues(
       const std::vector<C_OscNodeDataPoolContent> & orc_NodeDataPoolListElementDataSetValues,
       C_OscXmlParserBase & orc_XmlParser);
-   static std::error_code h_LoadDataPoolListDataSets(
+   [[nodiscard]] static std::error_code h_LoadDataPoolListDataSets(
       std::vector<C_OscNodeDataPoolDataSet> & orc_NodeDataPoolListDataSets, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveDataPoolListDataSets(const std::vector<C_OscNodeDataPoolDataSet> & orc_NodeDataPoolListDataSets,
                                           C_OscXmlParserBase & orc_XmlParser);
    static std::string h_DataPoolToString(const C_OscNodeDataPool::E_Type & ore_DataPool);
-   static std::error_code h_StringToDataPool(const std::string & orc_String, C_OscNodeDataPool::E_Type & ore_Type);
+   [[nodiscard]] static std::error_code h_StringToDataPool(const std::string & orc_String, C_OscNodeDataPool::E_Type & ore_Type);
 
    static void h_SaveDataPoolElementType(const C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
                                          C_OscXmlParserBase & orc_XmlParser);
@@ -88,18 +88,18 @@ public:
 
    //Misc
    static std::string h_GetFileName(const std::string & orc_DatapoolName);
-   static std::error_code h_CheckDataPoolElementValueType(const C_OscNodeDataPoolContent::E_Type oe_ContentType,
+   [[nodiscard]] static std::error_code h_CheckDataPoolElementValueType(const C_OscNodeDataPoolContent::E_Type oe_ContentType,
                                                           const C_OscXmlParserBase & orc_XmlParser,
                                                           std::string * const opc_CheckDataTypeErrorDetails = nullptr);
 
 private:
    static std::string mh_NodeDataPoolContentToString(
       const C_OscNodeDataPoolContent::E_Type & ore_NodeDataPoolContent);
-   static std::error_code mh_StringToNodeDataPoolContent(const std::string & orc_String,
+   [[nodiscard]] static std::error_code mh_StringToNodeDataPoolContent(const std::string & orc_String,
                                                          C_OscNodeDataPoolContent::E_Type & ore_Type);
    static std::string mh_NodeDataPoolElementAccessToString(
       const C_OscNodeDataPoolListElement::E_Access & ore_NodeDataPoolElementAccess);
-   static std::error_code mh_StringToNodeDataPoolElementAccess(const std::string & orc_String,
+   [[nodiscard]] static std::error_code mh_StringToNodeDataPoolElementAccess(const std::string & orc_String,
                                                                C_OscNodeDataPoolListElement::E_Access & ore_Type);
 };
 

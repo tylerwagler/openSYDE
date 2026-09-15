@@ -286,11 +286,12 @@ std::error_code C_OscDataDealerNvm::m_SaveDumpToList(const std::vector<uint8_t> 
 
          if (this->mpc_DiagProtocol->GetEndianness() == C_OscDiagProtocolBase::mhu8_ENDIANNESS_BIG)
          {
-            orc_List.SetCrcFromBigEndianBlob(c_CrcData);
+            //c_CrcData is resized to 2 directly above, which is the only thing these can reject
+            (void)orc_List.SetCrcFromBigEndianBlob(c_CrcData);
          }
          else
          {
-            orc_List.SetCrcFromLittleEndianBlob(c_CrcData);
+            (void)orc_List.SetCrcFromLittleEndianBlob(c_CrcData);
          }
 
          // Check CRC

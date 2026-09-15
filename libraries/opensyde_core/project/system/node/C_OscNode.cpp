@@ -185,9 +185,10 @@ std::error_code C_OscNode::MoveDataPool(const uint32_t ou32_Start, const uint32_
          pc_Protocol = nullptr;
       }
       //Erase
-      this->DeleteDataPool(ou32_Start);
+      //Both indices were bounds checked above and range is all these can return
+      (void)this->DeleteDataPool(ou32_Start);
       //Insert
-      this->InsertDataPool(ou32_Target, c_Data);
+      (void)this->InsertDataPool(ou32_Target, c_Data);
       //Can protocol handling
       if (pc_Protocol != nullptr)
       {

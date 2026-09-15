@@ -32,12 +32,12 @@ namespace opensyde_core
 class C_OscProjectFiler
 {
 public:
-   static std::error_code h_Save(C_OscProject & orc_Project, const std::string & orc_Path,
+   [[nodiscard]] static std::error_code h_Save(C_OscProject & orc_Project, const std::string & orc_Path,
                                  const std::string & orc_OpenSydeVersion);
-   static std::error_code h_Load(C_OscProject & orc_Project, const std::string & orc_Path);
+   [[nodiscard]] static std::error_code h_Load(C_OscProject & orc_Project, const std::string & orc_Path);
 
 private:
-   static std::error_code mh_SaveInternal(C_OscProject & orc_Project, const std::string & orc_Path,
+   [[nodiscard]] static std::error_code mh_SaveInternal(C_OscProject & orc_Project, const std::string & orc_Path,
                                           const std::string & orc_OpenSydeVersion, const bool oq_New);
 };
 

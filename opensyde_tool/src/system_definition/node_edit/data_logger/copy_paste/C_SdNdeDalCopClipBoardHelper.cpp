@@ -309,7 +309,8 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadElementIdGroup(C_OscNodeDataPoolLis
       s32_Retval = orc_XmlParser.SelectNodeChildError("index").value();
       if (s32_Retval == C_NO_ERR)
       {
-         C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(orc_ElementId, orc_XmlParser);
+         //the project filers report std::error_code now; this class keeps the STW int32_t convention
+         s32_Retval = C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(orc_ElementId, orc_XmlParser).value();
 
          orc_ElementIdGroup.SetElementId(orc_ElementId);
          //Return

@@ -625,7 +625,8 @@ const
          C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_Change;
          C_OscNodeDataPoolContent c_Tmp = pc_Element->c_MinValue;
          C_OscNodeDataPoolContentUtil::h_SetValueInContent(of64_Value, c_Tmp, 0UL);
-         C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(pc_Element->c_MinValue, pc_Element->c_MaxValue, c_Tmp,
+         //Enclosing function returns the formatted string; e_ValueChangedTo carries the clamping
+         (void)C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(pc_Element->c_MinValue, pc_Element->c_MaxValue, c_Tmp,
                                                                e_Change);
          c_Retval = c_FormatterConfig.GetSingleValueContentFormatted(c_Tmp, 0UL, c_Scaling, nullptr);
          if (opf64_Progress != nullptr)
