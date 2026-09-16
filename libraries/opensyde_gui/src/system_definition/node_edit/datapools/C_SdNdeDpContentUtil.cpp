@@ -2910,12 +2910,22 @@ QString C_SdNdeDpContentUtil::h_GetAllContentAsString(const C_OscNodeDataPoolCon
 int32_t C_SdNdeDpContentUtil::h_SetAllContentFromString(const QString & orc_Input,
                                                         C_OscNodeDataPoolContent & orc_Output)
 {
+   int32_t s32_Retval;
    C_OscXmlParser c_Xml;
 
-   c_Xml.LoadFromString(orc_Input.toStdString());
-   c_Xml.SelectRoot();
-   //the filer reports std::error_code now; this class still runs on the STW int32_t convention
-   return C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_Output, c_Xml).value();
+   if (c_Xml.LoadFromString(orc_Input.toStdString()))
+   {
+      //not XML at all; without this the filer runs against an empty parser and only
+      //reports failure as a side effect of every node it wants being absent
+      s32_Retval = C_CONFIG;
+   }
+   else
+   {
+      c_Xml.SelectRoot();
+      //the filer reports std::error_code now; this class still runs on the STW int32_t convention
+      s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_Output, c_Xml).value();
+   }
+   return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
