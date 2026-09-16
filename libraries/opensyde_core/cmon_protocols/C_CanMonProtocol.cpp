@@ -1,6 +1,7 @@
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include <cstring>
+#include <cinttypes> //for PRIu64
 #include "stw_can.hpp"
 #include <system_error>
 
@@ -327,18 +328,20 @@ std::string C_CanMonProtocols::FormatTimeStamp(const uint64_t ou64_TimeStampUs, 
 
    if (oq_LeftFillBlanks == false)
    {
-      c_Time = PrintFormattedCompat("%013llu", ou64_TimeStampUs);
+      //PRIu64 rather than a hardcoded "llu": uint64_t is unsigned long on Linux and
+      //unsigned long long on Windows and macOS, so no fixed length modifier is right everywhere
+      c_Time = PrintFormattedCompat("%013" PRIu64, ou64_TimeStampUs);
    }
    else
    {
       if (ou64_TimeStampUs >= 1000)
       {
-         c_Time = PrintFormattedCompat("%13llu", ou64_TimeStampUs);
+         c_Time = PrintFormattedCompat("%13" PRIu64, ou64_TimeStampUs);
       }
       else
       {
          //we need at least 4 characters so we don't get strings list " . 12" but "0.012"
-         c_Time = PrintFormattedCompat("         %04llu", ou64_TimeStampUs);
+         c_Time = PrintFormattedCompat("         %04" PRIu64, ou64_TimeStampUs);
       }
    }
    (void)InsertCompat(c_Time, ".", 11);
