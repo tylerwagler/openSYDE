@@ -556,10 +556,16 @@ because the failure does not matter:
 ### The build host is a weaker checker than CI
 
 `C_SyvDaDashboardsWidget`'s discard was rejected by all three CI runners and
-accepted by the 48-core build host, which runs clang 19.1.7. The declaration is
-annotated, there is no unannotated override, and clearing the precompiled
-headers changes nothing -- clang 19 simply does not emit `-Wunused-result`
-there.
+accepted by the 48-core build host. The declaration is annotated, there is no
+unannotated override, and clearing the precompiled headers changes nothing.
+
+**Corrected later in the sweep:** the host was not running clang at all. Its
+`build/Debug` directory had been configured before the tree moved to clang, and
+CMake keeps the cached compiler across a toolchain change -- so it was building
+with **GCC 14** while `toolchain_linux.cmake` said clang. So the compiler that
+accepted that discard was GCC 14, not clang 19, and the divergence was between
+two different compilers rather than two versions of one. See the section on
+stale build directories below.
 
 **So "all eight tools build on the host" does not mean CI will agree.** For
 warning-driven work, the host is a fast first pass and CI is the authority.
@@ -957,3 +963,69 @@ handed to the compiler, hand it over. A grep has to be remembered, re-run, and
 re-validated every time; an attribute runs on every build forever, on all three
 platforms, and cannot be forgotten. `[[nodiscard]]` earned its place the same
 way.
+
+## The build host was silently building with the wrong compiler
+
+`cmake/toolchain_linux.cmake` sets `CMAKE_CXX_COMPILER clang++`. The build host's
+`build/Debug` was building with **GCC 14**.
+
+CMake records the compiler in `CMakeCache.txt` on first configure and keeps it.
+Changing the toolchain file does not move an existing build directory onto the
+new compiler -- it silently keeps the old one. That directory predates the switch
+to clang, so every "all eight tools build on the host" check in this sweep was a
+statement about GCC 14, not about the clang that CI and the shipped binaries use.
+
+It is visible in one line and nowhere else:
+
+```bash
+grep CMAKE_CXX_COMPILER_AR build/Debug/CMakeCache.txt   # gcc-ar-14 vs llvm-ar-19
+```
+
+A fresh configure with the same toolchain gives clang 19 (`llvm-ar-19`,
+`clang-scan-deps-19`), confirming the toolchain itself is correct.
+
+**This is not all bad news, and that is worth being precise about.** Two compilers
+is more coverage than one, and GCC earned its keep here: it caught the
+`%llu`/`unsigned long` mismatch. But nobody knew that was what was happening, and
+the earlier note about the host "being a weaker checker than CI" was attributed to
+the wrong cause. After wiping the directory, all eight tools build clean under
+clang 19 as well, so the tree is good on both.
+
+**When measuring compiler behaviour on the host, check the cache or wipe the
+directory first.** A toolchain edit that appears to do nothing is the expected
+outcome, not a sign that the flag was wrong.
+
+## Warning flags: measured, then mostly rejected
+
+Following the format-attribute result, fifteen candidate warnings were measured
+across the tree -- one build with all of them enabled non-fatally, counted by
+category. The counts decide, not taste:
+
+| Flag | Findings | Verdict |
+|------|---------:|---------|
+| `-Wnon-virtual-dtor` | 0 | **adopted** |
+| `-Wimplicit-fallthrough` | 0 in project code (3 in vendored tinyxml2) | **adopted** |
+| `-Wcast-qual` | 0 in project code (2 in vendored miniz) | **adopted** |
+| `-Wswitch-enum` | 7 | rejected -- all are `default:`-covered by design |
+| `-Wdouble-promotion` | 3 | rejected -- lossless `float`→`double` into helpers taking `double` |
+| `-Wfloat-equal` | 2 | rejected -- `operator==` on a stored value; already carries `//lint -e{777}` |
+| `-Wformat-nonliteral` | 4 | rejected -- all vendored; the format attribute already covers ours |
+| `-Wzero-as-null-pointer-constant` | 3047 | rejected -- style, not a defect class |
+| `-Wsuggest-override` | 4661 | rejected -- style, not a defect class |
+| `-Wold-style-cast` | 10273 | rejected -- style, not a defect class |
+| `-Wuseless-cast` | n/a | GCC-only; clang rejects the spelling |
+
+**Zero new defects.** That is the honest headline: unlike the format attribute,
+which found 7, this sweep found none. The three adopted flags are adopted
+*because* they are at zero -- each covers a class that is silent at runtime
+(deleting through a base pointer with no virtual destructor, a missing `break`,
+casting away `const`) and nothing else in the build would report it.
+
+Adopting them exposed a second stale-compiler assumption: the vendored-source
+warning suppression was gated on `CMAKE_CXX_COMPILER_ID STREQUAL "GNU"` and so
+silenced nothing under clang. It now covers `miniz.c` and `tinyxml2.cpp` on any
+non-MSVC compiler.
+
+And the test targets were the one place in the tree building without `-Werror`.
+They sat at exactly one warning -- a discarded `[[nodiscard]]` return, the very
+class the attribute exists to surface. Fixed, and they are held at zero now.
