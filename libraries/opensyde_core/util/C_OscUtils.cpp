@@ -338,7 +338,11 @@ std::string C_OscUtils::h_NiceifyStringForCeComment(const std::string & orc_Stri
 {
    std::string c_Result = orc_String;
 
-   for (uint32_t u32_Index = 1U; u32_Index <= orc_String.length(); u32_Index++)
+   //0-based, like the sibling h_NiceifyStringForFileName above. This loop kept its 1-based
+   //C_SclString bounds, so it never examined character 0 -- a comment starting with "*\/" was
+   //left intact, which is the one thing this function exists to prevent -- and its final pass
+   //wrote through c_Result[size()], which is undefined for the non-const operator[].
+   for (uint32_t u32_Index = 0U; u32_Index < orc_String.length(); u32_Index++)
    {
       const char cn_Character = c_Result[u32_Index];
       const uint32_t u32_NextIndex = u32_Index + 1U;
@@ -350,13 +354,13 @@ std::string C_OscUtils::h_NiceifyStringForCeComment(const std::string & orc_Stri
       {
          c_Result[u32_Index] = '_';
       }
-      else if ((u32_Index < orc_String.length()) && (cn_Character == '*') &&
+      else if ((u32_NextIndex < orc_String.length()) && (cn_Character == '*') &&
                (c_Result[u32_NextIndex] == '/'))
       {
          //prevent adding end of C comment
          c_Result[u32_Index] = '_';
       }
-      else if ((u32_Index == orc_String.length()) && (cn_Character == '\\'))
+      else if ((u32_NextIndex == orc_String.length()) && (cn_Character == '\\'))
       {
          //prevent continuing C++ comment
          c_Result[u32_Index] = '_';

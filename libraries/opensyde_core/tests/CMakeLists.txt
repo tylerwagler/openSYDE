@@ -68,5 +68,6 @@ add_osc_test(test_opensyde_core_dl_trigger     test_data_logger_trigger_parser.c
 add_osc_test(test_opensyde_core_md5           test_md5.cpp)
 add_osc_test(test_opensyde_core_canopen_eds  test_canopen_eds.cpp)
 add_osc_test(test_opensyde_core_crc_xml      test_checksummed_xml.cpp)
+add_osc_test(test_opensyde_core_niceify     test_osc_utils_niceify.cpp)
 add_osc_test(test_opensyde_core_scl_ini_file test_scl_ini_file.cpp)
 add_osc_test(test_opensyde_core_str_prefix   test_string_prefix_parsing.cpp)

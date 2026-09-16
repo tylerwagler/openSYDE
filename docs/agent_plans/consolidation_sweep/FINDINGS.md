@@ -866,3 +866,52 @@ where a "fix" can be a disabled check, so the tests include the inverse:
 `ChecksummedXml.DetectsTamperedContent` and
 `ParamSetFileVersion.UnsupportedVersionIsRejected` pass **both** with and without
 the fix. Only the round-trip tests change state.
+
+### And the third form: 1-based *loop bounds*
+
+Indexing and parsing were two forms of the same migration residue. Loop bounds
+are the third, and the scan for it is one line:
+
+```
+for (...; <var> <= <something>.length(); ...)
+```
+
+An inclusive bound against a *count* is 1-based thinking. Two sites, both real:
+
+**`C_OscUtils::h_NiceifyStringForCeComment`** ran `1 <= index <= length` while
+indexing 0-based. So it **never examined character 0**, and its final iteration
+read and then *wrote* `c_Result[size()]` -- undefined for the non-const
+`operator[]`.
+
+This function exists to stop a Datapool comment from breaking the C file it is
+embedded in. With the old bounds, anything at position 0 passed straight
+through. Verified by reverting the fix against the new tests:
+
+| Input | Old output |
+|-------|-----------|
+| `*/rest` | `*/rest` -- **terminates the generated comment** |
+| `\nbc` | `\nbc` -- a raw newline inside a block comment |
+| `` `ackquote `` | unchanged |
+| `text\` | unchanged -- continues a C++ line comment |
+
+The sibling directly above it, `h_NiceifyStringForFileName`, is correct 0-based.
+Same file, same author, same pattern -- one converted, one not. That is the
+clearest illustration in the tree of why this class is invisible to review: the
+right and wrong versions are adjacent and look alike.
+
+**`opensyde_tsp_convert`'s `mh_Sanitize`** had the same bounds: it dropped the
+first character and appended a `_` for the terminator, so `"ESX-4CS-GW"` became
+`"SX_4CS_GW_"`. Its own doc comment says the answer should be `"ESX_4CS_GW"`.
+
+### The three forms, and what closes them
+
+| Form | Scan | Found |
+|------|------|-------|
+| Indexing | `\w+\[[0-9]\]\s*[=!]=\s*'` | 4 (PR #29) |
+| Parsing | `std::sto*` with no base, checked against its writer | 2 sites, 8 functions (PR #30) |
+| Loop bounds | `<=` against `.size()`/`.length()` | 2 (PR #30) |
+
+All three are silent: wrong value, no error, no log, nothing for `[[nodiscard]]`
+or a sanitiser to catch. All three were invisible because the affected classes
+had no tests. The scans are cheap and worth re-running after any future
+string-handling change.

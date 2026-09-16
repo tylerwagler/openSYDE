@@ -91,7 +91,9 @@ static void mh_PrintUsage(void)
 static std::string mh_Sanitize(const std::string & orc_Input)
 {
    std::string c_Result;
-   for (uint32_t u32_Index = 1U; u32_Index <= orc_Input.length(); ++u32_Index)
+   //0-based: the 1-based bounds dropped the first character and appended a '_' for the
+   //terminator, so "ESX-4CS-GW" came out as "SX_4CS_GW_" rather than the documented "ESX_4CS_GW"
+   for (uint32_t u32_Index = 0U; u32_Index < orc_Input.length(); ++u32_Index)
    {
       const char cn_Char = orc_Input[u32_Index];
       const bool q_Ok = ((cn_Char >= 'A') && (cn_Char <= 'Z')) ||
