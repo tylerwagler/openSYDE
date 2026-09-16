@@ -32,7 +32,7 @@ public:
                                  const std::string & orc_ProtocolName);
    virtual ~C_OscComMessageLoggerFileBase(void);
 
-   virtual std::error_code OpenFile(void);
+   [[nodiscard]] virtual std::error_code OpenFile(void);
    virtual void AddMessageToFile(const C_OscComMessageLoggerData & orc_MessageData) = 0;
 
    void SetProtocolName(const std::string & orc_ProtocolName);

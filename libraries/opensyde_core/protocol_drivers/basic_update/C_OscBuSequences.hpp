@@ -33,15 +33,15 @@ class C_OscBuSequences
 public:
    C_OscBuSequences(void);
    virtual ~C_OscBuSequences(void);
-   std::error_code Init(stw::can::C_CanDispatcher * const opc_CanDispatcher, const int32_t os32_CanBitrate,
+   [[nodiscard]] std::error_code Init(stw::can::C_CanDispatcher * const opc_CanDispatcher, const int32_t os32_CanBitrate,
                         const uint8_t ou8_NodeId);
-   std::error_code ActivateFlashLoader(const uint32_t ou32_FlashloaderResetWaitTime);
-   std::error_code ReadDeviceInformation(void);
-   std::error_code UpdateNode(const std::string & orc_HexFilePath, const uint32_t ou32_RequestDownloadTimeout,
+   [[nodiscard]] std::error_code ActivateFlashLoader(const uint32_t ou32_FlashloaderResetWaitTime);
+   [[nodiscard]] std::error_code ReadDeviceInformation(void);
+   [[nodiscard]] std::error_code UpdateNode(const std::string & orc_HexFilePath, const uint32_t ou32_RequestDownloadTimeout,
                               const uint32_t ou32_TransferDataTimeout);
-   std::error_code ResetSystem(void);
+   [[nodiscard]] std::error_code ResetSystem(void);
 
-   static std::error_code h_ReadHexFile(const std::string & orc_HexFilePath, C_OscHexFile & orc_HexFile,
+   [[nodiscard]] static std::error_code h_ReadHexFile(const std::string & orc_HexFilePath, C_OscHexFile & orc_HexFile,
                                         uint32_t & oru32_SignatureBlockAddress);
 
    void PrepareForDestruction(void);

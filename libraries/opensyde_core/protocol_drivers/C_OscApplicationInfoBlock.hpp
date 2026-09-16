@@ -40,7 +40,7 @@ class C_OscApplicationInfoBlock
 private:
    std::string m_GetNonTerminatedString(const char * opcn_Chars, const uint8_t ou8_MaxLength) const;
 
-   std::error_code m_ParsePayload(const uint8_t * const opu8_Data, const uint16_t ou16_NumBytesAvailable,
+   [[nodiscard]] std::error_code m_ParsePayload(const uint8_t * const opu8_Data, const uint16_t ou16_NumBytesAvailable,
                                   const uint8_t ou8_BlockVersion);
 
 public:
@@ -56,7 +56,7 @@ public:
    void ClearContents(void);
    uint16_t GetMaxSizeOnECU(void) const;
 
-   std::error_code ParseFromBLOB(const uint8_t * const opu8_Data, const uint16_t ou16_NumBytesAvailable);
+   [[nodiscard]] std::error_code ParseFromBLOB(const uint8_t * const opu8_Data, const uint16_t ou16_NumBytesAvailable);
 
    char acn_Magic[APPLICATION_INFO_MAGIC_LENGTH_V2]; //Maximum length ...
    uint8_t u8_StructVersion;                           ///< = 1

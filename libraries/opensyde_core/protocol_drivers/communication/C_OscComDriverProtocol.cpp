@@ -897,7 +897,8 @@ void C_OscComDriverProtocol::DisconnectNodes(void) const
       C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_Counter].get();
       if (pc_ProtocolOsy != nullptr)
       {
-         pc_ProtocolOsy->Disconnect();
+         //Enclosing function returns void, so there is nowhere to report this
+         (void)pc_ProtocolOsy->Disconnect();
       }
    }
 }
@@ -918,7 +919,9 @@ void C_OscComDriverProtocol::PrepareForDestruction(void)
       //do we have a CAN TP ?
       if (pc_Tp != nullptr)
       {
-         pc_Tp->SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
+         //Teardown: the enclosing function returns void and SetDispatcher itself documents that it
+         //ignores its own unregister result, so there is nothing to act on here.
+         (void)pc_Tp->SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
       }
       else
       {
@@ -926,7 +929,9 @@ void C_OscComDriverProtocol::PrepareForDestruction(void)
             dynamic_cast<C_OscProtocolDriverOsyTpIp *>(this->mc_TransportProtocols[u32_ItTp].get());
          if (pc_TpIp != nullptr)
          {
-            pc_TpIp->SetDispatcher(nullptr, 0U);
+            //Teardown: the enclosing function returns void and SetDispatcher itself documents that it
+            //ignores its own unregister result, so there is nothing to act on here.
+            (void)pc_TpIp->SetDispatcher(nullptr, 0U);
          }
       }
    }
@@ -934,11 +939,15 @@ void C_OscComDriverProtocol::PrepareForDestruction(void)
    //also clean up broadcast instances:
    if (this->mpc_CanTransportProtocolBroadcast != nullptr)
    {
-      this->mpc_CanTransportProtocolBroadcast->SetDispatcher(nullptr);
+      //Teardown: the enclosing function returns void and SetDispatcher itself documents that it
+      //ignores its own unregister result, so there is nothing to act on here.
+      (void)this->mpc_CanTransportProtocolBroadcast->SetDispatcher(nullptr);
    }
    if (this->mpc_IpTransportProtocolBroadcast != nullptr)
    {
-      this->mpc_IpTransportProtocolBroadcast->SetDispatcher(nullptr, 0U);
+      //Teardown: the enclosing function returns void and SetDispatcher itself documents that it
+      //ignores its own unregister result, so there is nothing to act on here.
+      (void)this->mpc_IpTransportProtocolBroadcast->SetDispatcher(nullptr, 0U);
    }
 
    C_OscComDriverBase::PrepareForDestruction();
@@ -2741,7 +2750,9 @@ std::error_code C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32
 
             if (q_DoDisconnect == true)
             {
-               pc_ProtocolOsyTarget->Disconnect();
+               //Cleanup on the way out: c_Return already holds the outcome that matters and is checked
+               //below, so assigning this would replace a real result with a teardown one.
+               (void)pc_ProtocolOsyTarget->Disconnect();
             }
          }
 
@@ -2784,7 +2795,9 @@ std::error_code C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32
 
          if (q_DoDisconnect == true)
          {
-            pc_ProtocolOsyTarget->Disconnect();
+            //Cleanup on the way out: c_Return already holds the outcome that matters and is checked
+            //below, so assigning this would replace a real result with a teardown one.
+            (void)pc_ProtocolOsyTarget->Disconnect();
          }
 
          // No further stopping for this node necessary
@@ -2818,7 +2831,8 @@ void C_OscComDriverProtocol::m_StopRoutingSpecific(const uint32_t ou32_ActiveNod
                                                                                        c_VecRoutePoints.size() -
                                                                                        1].u32_NodeIndex);
 
-         this->m_SetNodeSecurityAccess(u32_ActiveRouterNode, 5, nullptr);
+         //Enclosing function returns void, so there is nowhere to report this
+         (void)this->m_SetNodeSecurityAccess(u32_ActiveRouterNode, 5, nullptr);
       }
 
       (void)this->mc_LegacyRouterDispatchers[ou32_ActiveNode]->CAN_Exit();

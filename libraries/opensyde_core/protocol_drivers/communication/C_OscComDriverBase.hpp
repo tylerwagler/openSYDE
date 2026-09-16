@@ -50,11 +50,11 @@ public:
    C_OscComDriverBase(void);
    virtual ~C_OscComDriverBase(void);
 
-   std::error_code InitBase(stw::can::C_CanDispatcher * const opc_CanDispatcher);
+   [[nodiscard]] std::error_code InitBase(stw::can::C_CanDispatcher * const opc_CanDispatcher);
 
    void RegisterLogger(C_OscComMessageLogger * const opc_Logger);
 
-   virtual std::error_code StartLogging(const int32_t os32_Bitrate);
+   [[nodiscard]] virtual std::error_code StartLogging(const int32_t os32_Bitrate);
    virtual void StopLogging(void);
 
    virtual void ContinueLogging(void);
@@ -65,6 +65,8 @@ public:
    virtual void ClearRxMessages(void);
    virtual void DistributeMessages(void);
    virtual void SendCanMessageQueued(const stw::can::T_STWCAN_Msg_TX & orc_Msg);
+   //Deliberately not [[nodiscard]] yet -- cyclic message pump: aborting the pump on one failed send may be worse.
+   //Whether its callers should propagate is a protocol decision, not a call-site one.
    std::error_code SendCanMessageDirect(stw::can::T_STWCAN_Msg_TX & orc_Msg);
 
    virtual void SendCanMessage(C_OscComDriverBaseCanMessage & orc_MsgCfg, const bool oq_SetAutoSupportMode,

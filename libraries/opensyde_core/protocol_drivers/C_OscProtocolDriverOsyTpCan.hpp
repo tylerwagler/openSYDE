@@ -98,24 +98,24 @@ private:
    C_ServiceState mc_TxService; ///< status of Tx service currently ongoing
    C_ServiceState mc_RxService; ///< status of Rx service currently ongoing
 
-   std::error_code m_SetRxFilter(const bool oq_ForBroadcast);
+   [[nodiscard]] std::error_code m_SetRxFilter(const bool oq_ForBroadcast);
    uint32_t m_GetTxIdentifier(void) const;
    uint32_t m_GetTxBroadcastIdentifier(void) const;
 
-   std::error_code m_HandleIncomingSingleFrame(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
-   std::error_code m_HandleIncomingOsySpecificSingleFrame(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
-   std::error_code m_HandleIncomingFirstFrame(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
-   std::error_code m_HandleIncomingFlowControl(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
-   std::error_code m_HandleIncomingConsecutiveFrame(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
-   std::error_code m_HandleIncomingOsySpecificMultiFrame(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
-   std::error_code m_BroadcastSendDiagnosticSessionControl(const uint8_t ou8_Session) const;
+   [[nodiscard]] std::error_code m_HandleIncomingSingleFrame(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
+   [[nodiscard]] std::error_code m_HandleIncomingOsySpecificSingleFrame(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
+   [[nodiscard]] std::error_code m_HandleIncomingFirstFrame(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
+   [[nodiscard]] std::error_code m_HandleIncomingFlowControl(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
+   [[nodiscard]] std::error_code m_HandleIncomingConsecutiveFrame(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
+   [[nodiscard]] std::error_code m_HandleIncomingOsySpecificMultiFrame(const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
+   [[nodiscard]] std::error_code m_BroadcastSendDiagnosticSessionControl(const uint8_t ou8_Session) const;
 
-   std::error_code m_SendNextConsecutiveFrames(void);
+   [[nodiscard]] std::error_code m_SendNextConsecutiveFrames(void);
 
    static void mh_ComposeSingleFrame(const C_OscProtocolDriverOsyService & orc_Service, const uint32_t ou32_Identifier,
                                      stw::can::T_STWCAN_Msg_TX & orc_CanMessage);
 
-   std::error_code m_HandleBroadcastSetNodeIdBySerialNumberResponse(const uint8_t ou8_RoutineIdMsb,
+   [[nodiscard]] std::error_code m_HandleBroadcastSetNodeIdBySerialNumberResponse(const uint8_t ou8_RoutineIdMsb,
                                                                     const uint8_t ou8_RoutineIdLsb,
                                                                     uint8_t * const opu8_NrCode = nullptr) const;
 
@@ -150,28 +150,32 @@ public:
    explicit C_OscProtocolDriverOsyTpCan(const uint16_t ou16_MaxServiceQueueSize = 200U);
    virtual ~C_OscProtocolDriverOsyTpCan(void);
 
+   //Deliberately not [[nodiscard]] yet -- dispatcher poll, called from a read loop.
+   //Whether its callers should propagate is a protocol decision, not a call-site one.
    virtual std::error_code Cycle(void);
+   //Deliberately not [[nodiscard]] yet -- routing setup: a rejected identifier change means the router is misconfigured.
+   //Whether its callers should propagate is a protocol decision, not a call-site one.
    virtual std::error_code SetNodeIdentifiers(const C_OscProtocolDriverOsyNode & orc_ClientIdentifier,
                                               const C_OscProtocolDriverOsyNode & orc_ServerIdentifier);
-   std::error_code SetNodeIdentifiersForBroadcasts(const C_OscProtocolDriverOsyNode & orc_ClientIdentifier);
+   [[nodiscard]] std::error_code SetNodeIdentifiersForBroadcasts(const C_OscProtocolDriverOsyNode & orc_ClientIdentifier);
 
-   std::error_code SetDispatcher(stw::can::C_CanDispatcher * const opc_Dispatcher);
+   [[nodiscard]] std::error_code SetDispatcher(stw::can::C_CanDispatcher * const opc_Dispatcher);
 
    //Tp-specific broadcast services:
-   std::error_code BroadcastReadSerialNumber(
+   [[nodiscard]] std::error_code BroadcastReadSerialNumber(
       std::vector<C_BroadcastReadEcuSerialNumberResults> & orc_Responses,
       std::vector<C_BroadcastReadEcuSerialNumberExtendedResults> & orc_ExtendedResponses) const;
-   std::error_code BroadcastRequestProgramming(std::vector<C_BroadcastRequestProgrammingResults> & orc_Results) const;
-   std::error_code BroadcastSetNodeIdBySerialNumber(const C_OscProtocolSerialNumber & orc_SerialNumber,
+   [[nodiscard]] std::error_code BroadcastRequestProgramming(std::vector<C_BroadcastRequestProgrammingResults> & orc_Results) const;
+   [[nodiscard]] std::error_code BroadcastSetNodeIdBySerialNumber(const C_OscProtocolSerialNumber & orc_SerialNumber,
                                                     const C_OscProtocolDriverOsyNode & orc_NewNodeId,
                                                     uint8_t * const opu8_NrCode = nullptr) const;
-   std::error_code BroadcastSetNodeIdBySerialNumberExtended(const C_OscProtocolSerialNumber & orc_SerialNumber,
+   [[nodiscard]] std::error_code BroadcastSetNodeIdBySerialNumberExtended(const C_OscProtocolSerialNumber & orc_SerialNumber,
                                                             const uint8_t ou8_SubNodeId,
                                                             const C_OscProtocolDriverOsyNode & orc_NewNodeId,
                                                             uint8_t * const opu8_NrCode = nullptr) const;
-   std::error_code BroadcastEcuReset(const uint8_t ou8_ResetType) const;
-   std::error_code BroadcastSendEnterPreProgrammingSession(void) const;
-   std::error_code BroadcastSendEnterDefaultSession(void) const;
+   [[nodiscard]] std::error_code BroadcastEcuReset(const uint8_t ou8_ResetType) const;
+   [[nodiscard]] std::error_code BroadcastSendEnterPreProgrammingSession(void) const;
+   [[nodiscard]] std::error_code BroadcastSendEnterDefaultSession(void) const;
 
    void ClearDispatcherQueue(void);
 };

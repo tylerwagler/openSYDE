@@ -73,48 +73,50 @@ private:
                           const uint8_t ou8_NrCode) const;
 
    //check for exactly one incoming non-async service:
-   std::error_code m_Cycle(const bool oq_CheckForSpecificServiceId = false, const uint8_t ou8_ExpectedServiceId = 0xFFU,
+   [[nodiscard]] std::error_code m_Cycle(const bool oq_CheckForSpecificServiceId = false, const uint8_t ou8_ExpectedServiceId = 0xFFU,
                            C_OscProtocolDriverOsyService * const opc_ReceivedService = nullptr);
    //poll for exactly one incoming service:
-   std::error_code m_PollForSpecificServiceResponse(const uint8_t ou8_ExpectedServiceId,
+   [[nodiscard]] std::error_code m_PollForSpecificServiceResponse(const uint8_t ou8_ExpectedServiceId,
                                                     const uint16_t ou16_ExpectedSize,
                                                     C_OscProtocolDriverOsyService & orc_Service, uint8_t & oru8_NrCode,
                                                     const bool oq_ExactSizeExpected = true,
                                                     const std::vector<uint8_t> * const opc_ExpectedErrData = nullptr);
-   std::error_code m_ReadDataByIdentifier(const uint16_t ou16_Identifier, const uint16_t ou16_ExpectedPayloadSize,
+   [[nodiscard]] std::error_code m_ReadDataByIdentifier(const uint16_t ou16_Identifier, const uint16_t ou16_ExpectedPayloadSize,
                                           const bool oq_ExactSizeExpected, std::vector<uint8_t> & orc_ReadData,
                                           uint8_t & oru8_NrCode);
-   std::error_code m_ReadStringDataIdentifier(const uint16_t ou16_DataIdentifier, std::string & orc_String,
+   [[nodiscard]] std::error_code m_ReadStringDataIdentifier(const uint16_t ou16_DataIdentifier, std::string & orc_String,
                                               uint8_t & oru8_NrCode);
-   std::error_code m_WriteDataByIdentifier(const uint16_t ou16_Identifier, const std::vector<uint8_t> & orc_WriteData,
+   [[nodiscard]] std::error_code m_WriteDataByIdentifier(const uint16_t ou16_Identifier, const std::vector<uint8_t> & orc_WriteData,
                                            uint8_t & oru8_NrCode);
-   std::error_code m_PackDataPoolIdentifier(const uint8_t ou8_DataPoolIndex,
+   [[nodiscard]] std::error_code m_PackDataPoolIdentifier(const uint8_t ou8_DataPoolIndex,
                                             const uint16_t ou16_ListIndex,
                                             const uint16_t ou16_ElementIndex,
                                             uint8_t(&orau8_PackedId)[3]) const;
    void m_UnpackDataPoolIdentifier(const uint8_t(&orau8_PackedId)[3], uint8_t & oru8_DataPoolIndex,
                                    uint16_t & oru16_ListIndex, uint16_t & oru16_ElementIndex) const;
-   std::error_code m_RoutineControl(const uint16_t ou16_RoutineIdentifier, const uint8_t ou8_SubFunction,
+   [[nodiscard]] std::error_code m_RoutineControl(const uint16_t ou16_RoutineIdentifier, const uint8_t ou8_SubFunction,
                                     const std::vector<uint8_t> & orc_SendData, const uint16_t ou16_ExpectedPayloadSize,
                                     const bool oq_ExactSizeExpected, std::vector<uint8_t> & orc_ReadData,
                                     uint8_t & oru8_NrCode, const bool oq_CanTransferWithoutFlowControl = false);
-   std::error_code m_SecurityAccess(const uint8_t ou8_SubFunction, const std::vector<uint8_t> & orc_SendData,
+   [[nodiscard]] std::error_code m_SecurityAccess(const uint8_t ou8_SubFunction, const std::vector<uint8_t> & orc_SendData,
                                     const uint16_t ou16_SendPayloadSize, const uint16_t ou16_ExpectedPayloadSize,
                                     std::vector<uint8_t> & orc_ReadData, uint8_t & oru8_NrCode);
 
+   //Deliberately not [[nodiscard]] yet -- async response handling, fire and forget by design or not.
+   //Whether its callers should propagate is a protocol decision, not a call-site one.
    std::error_code m_HandleAsyncResponse(const C_OscProtocolDriverOsyService & orc_ReceivedService);
-   std::error_code m_HandleAsyncOsyReadDataPoolDataEvent(const C_OscProtocolDriverOsyService & orc_ReceivedService);
-   std::error_code m_HandleAsyncOsyReadDataPoolDataErrorEvent(
+   [[nodiscard]] std::error_code m_HandleAsyncOsyReadDataPoolDataEvent(const C_OscProtocolDriverOsyService & orc_ReceivedService);
+   [[nodiscard]] std::error_code m_HandleAsyncOsyReadDataPoolDataErrorEvent(
       const C_OscProtocolDriverOsyService & orc_ReceivedService);
-   std::error_code m_HandleAsyncOsyTunnelCanMessagesEvent(const C_OscProtocolDriverOsyService & orc_ReceivedService);
+   [[nodiscard]] std::error_code m_HandleAsyncOsyTunnelCanMessagesEvent(const C_OscProtocolDriverOsyService & orc_ReceivedService);
 
    uint8_t m_GetDataPoolIndexClientToServer(const uint8_t ou8_ClientDataPoolIndex) const;
    uint8_t m_GetDataPoolIndexServerToClient(const uint8_t ou8_ServerDataPoolIndex) const;
 
    static void mh_ConvertVariableToNecessaryBytes(const uint32_t ou32_Variable, std::vector<uint8_t> & orc_Bytes);
 
-   std::error_code m_SendRequest(const C_OscProtocolDriverOsyService & orc_Service);
-   std::error_code m_ReadResponse(C_OscProtocolDriverOsyService & orc_Service);
+   [[nodiscard]] std::error_code m_SendRequest(const C_OscProtocolDriverOsyService & orc_Service);
+   [[nodiscard]] std::error_code m_ReadResponse(C_OscProtocolDriverOsyService & orc_Service);
 
    //service IDs:
    static const uint8_t mhu8_OSY_SI_DIAGNOSTIC_SESSION_CONTROL = 0x10U;
@@ -278,12 +280,16 @@ public:
                                    void * const opv_Instance);
    void InitializeHandleWaitTime(const PR_OsyHandleWaitTime opr_OsyHandleWaitTime, void * const opv_Instance);
 
-   std::error_code IsConnected(void);
-   std::error_code ReConnect(void);
-   std::error_code Disconnect(void);
+   [[nodiscard]] std::error_code IsConnected(void);
+   [[nodiscard]] std::error_code ReConnect(void);
+   [[nodiscard]] std::error_code Disconnect(void);
+   //Deliberately not [[nodiscard]] yet -- dispatcher poll, called from a read loop.
+   //Whether its callers should propagate is a protocol decision, not a call-site one.
    std::error_code Cycle(void);
 
-   std::error_code SetTransportProtocol(C_OscProtocolDriverOsyTpBase * const opc_TransportProtocol);
+   [[nodiscard]] std::error_code SetTransportProtocol(C_OscProtocolDriverOsyTpBase * const opc_TransportProtocol);
+   //Deliberately not [[nodiscard]] yet -- routing setup: a rejected identifier change means the router is misconfigured.
+   //Whether its callers should propagate is a protocol decision, not a call-site one.
    std::error_code SetNodeIdentifiers(const C_OscProtocolDriverOsyNode & orc_ClientId,
                                       const C_OscProtocolDriverOsyNode & orc_ServerId);
 
@@ -299,167 +305,167 @@ public:
 
    //openSYDE protocol services:
    //Session management:
-   std::error_code OsyDiagnosticSessionControl(const uint8_t ou8_SessionId, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyDiagnosticSessionControl(const uint8_t ou8_SessionId, uint8_t * const opu8_NrCode = nullptr);
 
    //Device information services:
-   std::error_code OsyReadEcuSerialNumber(C_OscProtocolSerialNumber & orc_SerialNumber,
+   [[nodiscard]] std::error_code OsyReadEcuSerialNumber(C_OscProtocolSerialNumber & orc_SerialNumber,
                                           uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadHardwareNumber(uint32_t & oru32_HardwareNumber, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadHardwareVersionNumber(std::string & orc_HardwareVersionNumber,
+   [[nodiscard]] std::error_code OsyReadHardwareNumber(uint32_t & oru32_HardwareNumber, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyReadHardwareVersionNumber(std::string & orc_HardwareVersionNumber,
                                                 uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadListOfFeatures(C_ListOfFeatures & orc_ListOfFeatures, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadMaxNumberOfBlockLength(uint16_t & oru16_MaxNumberOfBlockLength,
+   [[nodiscard]] std::error_code OsyReadListOfFeatures(C_ListOfFeatures & orc_ListOfFeatures, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyReadMaxNumberOfBlockLength(uint16_t & oru16_MaxNumberOfBlockLength,
                                                  uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadDeviceName(std::string & orc_DeviceName, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadApplicationName(std::string & orc_ApplicationName, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadApplicationVersion(std::string & orc_ApplicationVersion,
+   [[nodiscard]] std::error_code OsyReadDeviceName(std::string & orc_DeviceName, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyReadApplicationName(std::string & orc_ApplicationName, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyReadApplicationVersion(std::string & orc_ApplicationVersion,
                                              uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadActiveDiagnosticSession(uint8_t & oru8_SessionId, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadBootSoftwareIdentification(uint8_t(&orau8_Version)[3],
+   [[nodiscard]] std::error_code OsyReadActiveDiagnosticSession(uint8_t & oru8_SessionId, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyReadBootSoftwareIdentification(uint8_t(&orau8_Version)[3],
                                                      uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadMaxNumOfEventDrivenTransmissions(uint16_t & oru16_MaxNum,
+   [[nodiscard]] std::error_code OsyReadMaxNumOfEventDrivenTransmissions(uint16_t & oru16_MaxNum,
                                                            uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadProtocolDriverImplementationVersion(uint8_t(&orau8_Version)[3],
+   [[nodiscard]] std::error_code OsyReadProtocolDriverImplementationVersion(uint8_t(&orau8_Version)[3],
                                                               uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadProtocolVersion(uint8_t(&orau8_Version)[3],
+   [[nodiscard]] std::error_code OsyReadProtocolVersion(uint8_t(&orau8_Version)[3],
                                           uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadFlashloaderProtocolVersion(uint8_t(&orau8_Version)[3],
+   [[nodiscard]] std::error_code OsyReadFlashloaderProtocolVersion(uint8_t(&orau8_Version)[3],
                                                      uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadFlashCount(uint32_t & oru32_FlashCount, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadApplicationSoftwareFingerprint(uint8_t(&orau8_Date)[3],
+   [[nodiscard]] std::error_code OsyReadFlashCount(uint32_t & oru32_FlashCount, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyReadApplicationSoftwareFingerprint(uint8_t(&orau8_Date)[3],
                                                          uint8_t(&orau8_Time)[3],
                                                          std::string & orc_Username,
                                                          uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadFileBasedTransferExitResult(std::string & orc_TransferExitResult,
+   [[nodiscard]] std::error_code OsyReadFileBasedTransferExitResult(std::string & orc_TransferExitResult,
                                                       uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadEcuSerialNumberExt(C_OscProtocolSerialNumber & orc_SerialNumberExt,
+   [[nodiscard]] std::error_code OsyReadEcuSerialNumberExt(C_OscProtocolSerialNumber & orc_SerialNumberExt,
                                              uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadSubNodeId(uint8_t & oru8_SubNodeId, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyReadSubNodeId(uint8_t & oru8_SubNodeId, uint8_t * const opu8_NrCode = nullptr);
 
    //Device configuration
-   std::error_code OsySetNodeIdForChannel(const uint8_t ou8_ChannelType, const uint8_t ou8_ChannelIndex,
+   [[nodiscard]] std::error_code OsySetNodeIdForChannel(const uint8_t ou8_ChannelType, const uint8_t ou8_ChannelIndex,
                                           const C_OscProtocolDriverOsyNode & orc_NewNodeId,
                                           uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsySetBitrate(const uint8_t ou8_ChannelType, const uint8_t ou8_ChannelIndex,
+   [[nodiscard]] std::error_code OsySetBitrate(const uint8_t ou8_ChannelType, const uint8_t ou8_ChannelIndex,
                                  const uint32_t ou32_Bitrate, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyConfigureFlashloaderCommunicationChannel(const uint8_t ou8_ChannelType,
+   [[nodiscard]] std::error_code OsyConfigureFlashloaderCommunicationChannel(const uint8_t ou8_ChannelType,
                                                                const uint8_t ou8_ChannelIndex, const bool oq_Activated,
                                                                uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsySetIpAddressForChannel(const uint8_t ou8_ChannelType, const uint8_t ou8_ChannelIndex,
+   [[nodiscard]] std::error_code OsySetIpAddressForChannel(const uint8_t ou8_ChannelType, const uint8_t ou8_ChannelIndex,
                                              const uint8_t (&orau8_IpAddress)[4], const uint8_t (&orau8_NetMask)[4],
                                              const uint8_t(&orau8_DefaultGateway)[4],
                                              uint8_t * const opu8_NrCode = nullptr);
 
    //Application layer routing for "legacy" protocols
-   std::error_code OsySetRouteDiagnosisCommunication(const uint8_t ou8_InputChannelType,
+   [[nodiscard]] std::error_code OsySetRouteDiagnosisCommunication(const uint8_t ou8_InputChannelType,
                                                      const uint8_t ou8_InputChannelIndex,
                                                      const uint8_t ou8_OutputChannelType,
                                                      const uint8_t ou8_OutputChannelIndex,
                                                      const uint8_t ou8_SourceBusId, const uint8_t ou8_TargetBusId,
                                                      uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyStopRouteDiagnosisCommunication(uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsySetRouteIp2IpCommunication(const uint8_t ou8_OutputChannelType,
+   [[nodiscard]] std::error_code OsyStopRouteDiagnosisCommunication(uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsySetRouteIp2IpCommunication(const uint8_t ou8_OutputChannelType,
                                                  const uint8_t ou8_OutputChannelIndex, const uint8_t ou8_SourceBusId,
                                                  const uint8_t ou8_TargetBusId, const uint8_t (&orau8_IpAddress)[4],
                                                  uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyCheckRouteIp2IpCommunication(uint8_t & oru8_Status, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsySendCanMessage(const uint8_t ou8_ChannelIndex, const stw::can::T_STWCAN_Msg_TX & orc_CanMessage,
+   [[nodiscard]] std::error_code OsyCheckRouteIp2IpCommunication(uint8_t & oru8_Status, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsySendCanMessage(const uint8_t ou8_ChannelIndex, const stw::can::T_STWCAN_Msg_TX & orc_CanMessage,
                                      uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsySetTunnelCanMessages(const uint8_t ou8_CanChannelIndex, const uint32_t ou32_FilterId,
+   [[nodiscard]] std::error_code OsySetTunnelCanMessages(const uint8_t ou8_CanChannelIndex, const uint32_t ou32_FilterId,
                                            const uint32_t ou32_FilterMask, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyStopTunnelCanMessages(uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyStopTunnelCanMessages(uint8_t * const opu8_NrCode = nullptr);
 
    //Data pool access:
-   std::error_code OsyReadDataPoolData(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] std::error_code OsyReadDataPoolData(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                        const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
                                        uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyWriteDataPoolData(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] std::error_code OsyWriteDataPoolData(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                         const uint16_t ou16_ElementIndex, const std::vector<uint8_t> & orc_DataToWrite,
                                         uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyWriteDataPoolEventDataRate(const uint8_t ou8_TransmissionRail, const uint16_t ou16_DataRate,
+   [[nodiscard]] std::error_code OsyWriteDataPoolEventDataRate(const uint8_t ou8_TransmissionRail, const uint16_t ou16_DataRate,
                                                  uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadDataPoolDataCyclic(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] std::error_code OsyReadDataPoolDataCyclic(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                              const uint16_t ou16_ElementIndex, const uint8_t ou8_TransmissionRail,
                                              uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadDataPoolDataChangeDriven(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] std::error_code OsyReadDataPoolDataChangeDriven(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                    const uint16_t ou16_ElementIndex, const uint8_t ou8_TransmissionRail,
                                                    const uint32_t ou32_Hysteresis,
                                                    uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyStopDataPoolEvents(uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadDataPoolMetaData(const uint8_t ou8_DataPoolIndex, C_DataPoolMetaData & orc_MetaData,
+   [[nodiscard]] std::error_code OsyStopDataPoolEvents(uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyReadDataPoolMetaData(const uint8_t ou8_DataPoolIndex, C_DataPoolMetaData & orc_MetaData,
                                            uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyVerifyDataPool(const uint8_t ou8_DataPoolIndex, const uint32_t ou32_DataPoolChecksum,
+   [[nodiscard]] std::error_code OsyVerifyDataPool(const uint8_t ou8_DataPoolIndex, const uint32_t ou32_DataPoolChecksum,
                                      bool & orq_Match, uint8_t * const opu8_NrCode = nullptr);
    //NVM access:
-   std::error_code OsyReadMemoryByAddress(const uint32_t ou32_MemoryAddress, std::vector<uint8_t> & orc_DataRecord,
+   [[nodiscard]] std::error_code OsyReadMemoryByAddress(const uint32_t ou32_MemoryAddress, std::vector<uint8_t> & orc_DataRecord,
                                           uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyWriteMemoryByAddress(const uint32_t ou32_MemoryAddress,
+   [[nodiscard]] std::error_code OsyWriteMemoryByAddress(const uint32_t ou32_MemoryAddress,
                                            const std::vector<uint8_t> & orc_DataRecord,
                                            uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyNotifyNvmDataChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
+   [[nodiscard]] std::error_code OsyNotifyNvmDataChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
                                            bool & orq_ApplicationAcknowledge, uint8_t * const opu8_NrCode = nullptr);
 
    //Flashloader
-   std::error_code OsyRequestProgramming(uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyCheckFlashMemoryAvailable(const uint32_t ou32_StartAddress, const uint32_t ou32_Size,
+   [[nodiscard]] std::error_code OsyRequestProgramming(uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyCheckFlashMemoryAvailable(const uint32_t ou32_StartAddress, const uint32_t ou32_Size,
                                                 uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadFlashBlockData(const uint8_t ou8_FlashBlock, C_FlashBlockInfo & orc_BlockInfo,
+   [[nodiscard]] std::error_code OsyReadFlashBlockData(const uint8_t ou8_FlashBlock, C_FlashBlockInfo & orc_BlockInfo,
                                          uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsySecurityAccessRequestSeed(const uint8_t ou8_SecurityLevel, bool & orq_SecureMode,
+   [[nodiscard]] std::error_code OsySecurityAccessRequestSeed(const uint8_t ou8_SecurityLevel, bool & orq_SecureMode,
                                                 uint64_t & oru64_Seed, bool & orq_AuthenticationActive,
                                                 bool & orq_TrafficEncryptionActive,
                                                 std::vector<uint8_t> & orc_TrafficEncryptionInitVector,
                                                 uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsySecurityAccessSendKey(const uint8_t ou8_SecurityLevel, const uint32_t ou32_SecurityKey,
+   [[nodiscard]] std::error_code OsySecurityAccessSendKey(const uint8_t ou8_SecurityLevel, const uint32_t ou32_SecurityKey,
                                             uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsySecurityAccessSendKey(const uint8_t ou8_SecurityLevel,
+   [[nodiscard]] std::error_code OsySecurityAccessSendKey(const uint8_t ou8_SecurityLevel,
                                             const std::vector<uint8_t> & orc_AuthenticationKey,
                                             const uint32_t ou32_SecurityKey,
                                             const std::vector<uint8_t> & orc_TrafficEncryptionPublicClientKey,
                                             std::vector<uint8_t> & orc_TrafficEncryptionPublicServerKey,
                                             uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyRequestDownload(const uint32_t ou32_StartAddress, const uint32_t ou32_Size,
+   [[nodiscard]] std::error_code OsyRequestDownload(const uint32_t ou32_StartAddress, const uint32_t ou32_Size,
                                       uint32_t & oru32_MaxBlockLength, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyRequestFileTransfer(const std::string & orc_FilePath, const uint32_t ou32_FileSize,
+   [[nodiscard]] std::error_code OsyRequestFileTransfer(const std::string & orc_FilePath, const uint32_t ou32_FileSize,
                                           uint32_t & oru32_MaxBlockLength, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyTransferData(const uint8_t ou8_BlockSequenceCounter, const std::vector<uint8_t> & orc_Data,
+   [[nodiscard]] std::error_code OsyTransferData(const uint8_t ou8_BlockSequenceCounter, const std::vector<uint8_t> & orc_Data,
                                    uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyRequestTransferExitAddressBased(const bool oq_SendSignatureBlockAddress,
+   [[nodiscard]] std::error_code OsyRequestTransferExitAddressBased(const bool oq_SendSignatureBlockAddress,
                                                       const uint32_t ou32_SignatureBlockAddress,
                                                       uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyRequestTransferExitFileBased(const uint8_t(&orau8_Signature)[8],
+   [[nodiscard]] std::error_code OsyRequestTransferExitFileBased(const uint8_t(&orau8_Signature)[8],
                                                    uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyWriteApplicationSoftwareFingerprint(const uint8_t (&orau8_Date)[3],
+   [[nodiscard]] std::error_code OsyWriteApplicationSoftwareFingerprint(const uint8_t (&orau8_Date)[3],
                                                           const uint8_t (&orau8_Time)[3],
                                                           const std::string & orc_UserName,
                                                           uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyFactoryMode(const uint8_t ou8_Operation, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyFactoryMode(const uint8_t ou8_Operation, uint8_t * const opu8_NrCode = nullptr);
 
    //Security
-   std::error_code OsyReadAuthenticationCertificateSerialNumber(std::vector<uint8_t> & orc_SerialNumber,
+   [[nodiscard]] std::error_code OsyReadAuthenticationCertificateSerialNumber(std::vector<uint8_t> & orc_SerialNumber,
                                                                 uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadAuthenticationCertificateSerialNumberL7(std::vector<uint8_t> & orc_SerialNumber,
+   [[nodiscard]] std::error_code OsyReadAuthenticationCertificateSerialNumberL7(std::vector<uint8_t> & orc_SerialNumber,
                                                                   uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyWriteSecurityAuthenticationKey(const std::vector<uint8_t> & orc_PublicKeyModulus,
+   [[nodiscard]] std::error_code OsyWriteSecurityAuthenticationKey(const std::vector<uint8_t> & orc_PublicKeyModulus,
                                                      const std::vector<uint8_t> & orc_PublicKeyExponent,
                                                      const std::vector<uint8_t> & orc_CertificateSerialNumber,
                                                      uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadSecurityAuthenticationActivation(bool & orq_SecurityOn, uint8_t & oru8_SecurityAlgorithm,
+   [[nodiscard]] std::error_code OsyReadSecurityAuthenticationActivation(bool & orq_SecurityOn, uint8_t & oru8_SecurityAlgorithm,
                                                            uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyWriteSecurityAuthenticationActivation(const bool oq_SecurityOn,
+   [[nodiscard]] std::error_code OsyWriteSecurityAuthenticationActivation(const bool oq_SecurityOn,
                                                             const uint8_t ou8_SecurityAlgorithm,
                                                             uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadSecurityTrafficEncryptionActivation(bool & orq_SecurityOn, uint8_t & oru8_SecurityAlgorithm,
+   [[nodiscard]] std::error_code OsyReadSecurityTrafficEncryptionActivation(bool & orq_SecurityOn, uint8_t & oru8_SecurityAlgorithm,
                                                               uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyWriteSecurityTrafficEncryptionActivation(const bool oq_SecurityOn,
+   [[nodiscard]] std::error_code OsyWriteSecurityTrafficEncryptionActivation(const bool oq_SecurityOn,
                                                                const uint8_t ou8_SecurityAlgorithm,
                                                                uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyReadDebuggerEnabled(bool & orq_DebuggerEnabled, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyWriteDebuggerEnabled(const bool oq_DebuggerEnabled, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyReadDebuggerEnabled(bool & orq_DebuggerEnabled, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyWriteDebuggerEnabled(const bool oq_DebuggerEnabled, uint8_t * const opu8_NrCode = nullptr);
 
    //Common
-   std::error_code OsyTesterPresent(const uint8_t ou8_SuppressResponseMsg, uint8_t * const opu8_NrCode = nullptr);
-   std::error_code OsyEcuReset(
+   [[nodiscard]] std::error_code OsyTesterPresent(const uint8_t ou8_SuppressResponseMsg, uint8_t * const opu8_NrCode = nullptr);
+   [[nodiscard]] std::error_code OsyEcuReset(
       const uint8_t ou8_ResetType = C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON);
 
    //SSL utility:

@@ -88,10 +88,10 @@ protected:
    C_OscProtocolDriverOsyNode mc_ServerId; ///< ID of server node to communicate with
    uint32_t mu32_BroadcastTimeoutMs;       ///< timeout for collecting responses to broadcasts
 
-   std::error_code m_AddToTxQueue(const C_OscProtocolDriverOsyService & orc_Service);
-   std::error_code m_AddToRxQueue(const C_OscProtocolDriverOsyService & orc_Service);
-   std::error_code m_GetFromTxQueue(C_OscProtocolDriverOsyService & orc_Service);
-   std::error_code m_GetFromRxQueue(C_OscProtocolDriverOsyService & orc_Service);
+   [[nodiscard]] std::error_code m_AddToTxQueue(const C_OscProtocolDriverOsyService & orc_Service);
+   [[nodiscard]] std::error_code m_AddToRxQueue(const C_OscProtocolDriverOsyService & orc_Service);
+   [[nodiscard]] std::error_code m_GetFromTxQueue(C_OscProtocolDriverOsyService & orc_Service);
+   [[nodiscard]] std::error_code m_GetFromRxQueue(C_OscProtocolDriverOsyService & orc_Service);
 
 public:
    ///common parameters for the different transport protocols
@@ -102,12 +102,12 @@ public:
    explicit C_OscProtocolDriverOsyTpBase(const uint16_t ou16_MaxServiceQueueSize);
    virtual ~C_OscProtocolDriverOsyTpBase(void);
 
-   virtual std::error_code IsConnected(void);
-   virtual std::error_code ReConnect(void);
-   virtual std::error_code Disconnect(void);
+   [[nodiscard]] virtual std::error_code IsConnected(void);
+   [[nodiscard]] virtual std::error_code ReConnect(void);
+   [[nodiscard]] virtual std::error_code Disconnect(void);
 
-   std::error_code SendRequest(const C_OscProtocolDriverOsyService & orc_Request);
-   std::error_code ReadResponse(C_OscProtocolDriverOsyService & orc_Response);
+   [[nodiscard]] std::error_code SendRequest(const C_OscProtocolDriverOsyService & orc_Request);
+   [[nodiscard]] std::error_code ReadResponse(C_OscProtocolDriverOsyService & orc_Response);
    void ClearServiceQueues(void);
 
    void SetBroadcastTimeout(const uint32_t ou32_TimeoutMs);
@@ -129,7 +129,11 @@ public:
       Errc::com       communication driver reported error
    */
    //-----------------------------------------------------------------------------
+   //Deliberately not [[nodiscard]] yet -- dispatcher poll, called from a read loop.
+   //Whether its callers should propagate is a protocol decision, not a call-site one.
    virtual std::error_code Cycle(void) = 0;
+   //Deliberately not [[nodiscard]] yet -- routing setup: a rejected identifier change means the router is misconfigured.
+   //Whether its callers should propagate is a protocol decision, not a call-site one.
    virtual std::error_code SetNodeIdentifiers(const C_OscProtocolDriverOsyNode & orc_ClientIdentifier,
                                               const C_OscProtocolDriverOsyNode & orc_ServerIdentifier);
    virtual void GetNodeIdentifiers(C_OscProtocolDriverOsyNode & orc_ClientIdentifier,

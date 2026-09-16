@@ -67,7 +67,9 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
    c_HexFileInfo.c_FileName = c_FileInfo.fileName();
 
    const std::error_code c_Result = c_HexFile.LoadFromFile(orc_File.toStdString().c_str());
-   c_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
+   //Only returns noact when an exact address match was requested, which this call does not;
+   //with no match the block list simply comes back empty, which is the meaningful outcome.
+   (void)c_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
 
    if (!c_Result)
    {

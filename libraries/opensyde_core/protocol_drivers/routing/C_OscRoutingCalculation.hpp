@@ -48,7 +48,7 @@ public:
 
    const std::vector<C_OscRoutingRoute> * GetRoutes(void) const;
    const C_OscRoutingRoute * GetBestRoute(void) const;
-   std::error_code GetState(void) const;
+   [[nodiscard]] std::error_code GetState(void) const;
    bool CheckItfNumberForRouting(const uint32_t ou32_TargetNodeIndex,
                                  const C_OscNodeComInterfaceSettings & orc_ComItfSettings) const;
 
@@ -58,7 +58,7 @@ private:
    C_OscRoutingCalculation & operator =(const C_OscRoutingCalculation &);
 
    void m_SearchRoute(void);
-   std::error_code m_CheckTargetNodeConfig(void) const;
+   [[nodiscard]] std::error_code m_CheckTargetNodeConfig(void) const;
    void m_SearchRoutePointsOnBus(const uint32_t ou32_BusIndex);
    std::vector<uint32_t> m_GetAllRoutePointsOfNodeOnOneInput(const C_OscRoutingRoutePoint & orc_InPoint,
                                                              const uint32_t ou32_InItfNumber);
@@ -68,7 +68,7 @@ private:
    void m_AddOneOpenRoute(const C_OscRoutingRoute & orc_Route);
    void m_AddOneRouteToTarget(const C_OscRoutingRoute & orc_Route);
 
-   std::error_code m_CheckRoutesForLimitations(void);
+   [[nodiscard]] std::error_code m_CheckRoutesForLimitations(void);
 
    uint32_t mu32_StartBusIndex;
    uint32_t mu32_TargetNodeIndex;

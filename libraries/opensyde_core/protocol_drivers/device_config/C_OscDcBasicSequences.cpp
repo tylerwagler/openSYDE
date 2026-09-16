@@ -633,7 +633,9 @@ std::string C_OscDcBasicSequences::h_DevicesInfoToString(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDcBasicSequences::PrepareForDestruction(void)
 {
-   mc_TpCan.SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
+   //Teardown: the enclosing function returns void and SetDispatcher itself documents that it
+   //ignores its own unregister result, so there is nothing to act on here.
+   (void)mc_TpCan.SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
 }
 
 //----------------------------------------------------------------------------------------------------------------------

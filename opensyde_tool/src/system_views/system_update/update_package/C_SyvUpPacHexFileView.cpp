@@ -250,7 +250,9 @@ void C_SyvUpPacHexFileView::mh_AddDataInformation(C_OscHexFile & orc_HexFile, QS
 void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexFile, QString & orc_Content)
 {
    std::vector<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
-   orc_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
+   //Only returns noact when an exact address match was requested, which this call does not;
+   //with no match the block list simply comes back empty, which is the meaningful outcome.
+   (void)orc_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
    orc_Content += "<h3>" + static_cast<QString>("File Information Blocks") + "</h3>";
    orc_Content += "<table>";
    orc_Content += "<tr>";

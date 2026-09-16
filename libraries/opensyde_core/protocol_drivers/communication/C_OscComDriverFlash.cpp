@@ -887,7 +887,9 @@ std::error_code C_OscComDriverFlash::SendOsyRequestProgramming(const C_OscProtoc
    {
       // If the device is already in flashloader, the preprogramming session is needed.
       // If the device is in the application, this session request will return with an error. This error can be ignored.
-      pc_ExistingProtocol->OsyDiagnosticSessionControl(C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PREPROGRAMMING,
+      //Documented directly above: a device still running the application answers this with an
+      //error, and that error is expected. The next call carries the real result.
+      (void)pc_ExistingProtocol->OsyDiagnosticSessionControl(C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PREPROGRAMMING,
                                                        nullptr);
       // C_OscProtocolDriverOsy is still on the STW integer convention
       c_Return = pc_ExistingProtocol->OsyRequestProgramming();

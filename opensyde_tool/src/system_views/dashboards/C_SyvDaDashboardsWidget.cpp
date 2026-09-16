@@ -708,7 +708,11 @@ int32_t C_SyvDaDashboardsWidget::m_InitOsyDriver(QString & orc_Message)
       //       If this is necessary, this bitrate must be adapted for the real value and not this dummy
       if (this->mpc_ComDriver != nullptr)
       {
-         this->mpc_ComDriver->StartLogging(0U);
+         //Marked rather than propagated: this sits inside switch (s32_Retval), so reporting it would
+         //mean assigning the variable being switched on. A failure here means CAN signal interpretation
+         //does not start, which is arguably worth telling the user about -- but that is a restructure
+         //and a product call, not a call-site one.
+         (void)this->mpc_ComDriver->StartLogging(0U);
       }
       break;
    case C_CONFIG:

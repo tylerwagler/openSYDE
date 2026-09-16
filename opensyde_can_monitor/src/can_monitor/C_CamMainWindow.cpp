@@ -655,7 +655,8 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
    // Tear down the previous dispatcher (if any) and create a fresh one for this session.
    if (this->mpc_CanDispatcher != nullptr)
    {
-      this->mc_ComDriver.InitBase(nullptr);
+      //Teardown of the previous dispatcher; the enclosing function returns void
+      (void)this->mc_ComDriver.InitBase(nullptr);
       delete this->mpc_CanDispatcher;
       this->mpc_CanDispatcher = nullptr;
    }
@@ -669,7 +670,8 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
    }
    else
    {
-      this->mc_ComDriver.InitBase(this->mpc_CanDispatcher);
+      //Teardown of the previous dispatcher; the enclosing function returns void
+      (void)this->mc_ComDriver.InitBase(this->mpc_CanDispatcher);
       const std::error_code c_CanInitResult = this->mpc_CanDispatcher->CAN_Init();
 
       s32_Return = (c_CanInitResult == Errc::success) ? C_NO_ERR : C_COM;

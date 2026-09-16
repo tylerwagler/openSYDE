@@ -1502,7 +1502,8 @@ void C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults::ParseF
       (void)std::memcpy(&c_CurSerialNumber[0], &orc_Data[static_cast<size_t>(ou8_DataStartIndex) + 35U],
                         u8_SerialNumberLength);
 
-      this->c_SerialNumber.SetExtSerialNumber(c_CurSerialNumber,
+      //Enclosing function returns void, so there is nowhere to report this
+      (void)this->c_SerialNumber.SetExtSerialNumber(c_CurSerialNumber,
                                               orc_Data[static_cast<size_t>(ou8_DataStartIndex) + 33]);
    }
 }

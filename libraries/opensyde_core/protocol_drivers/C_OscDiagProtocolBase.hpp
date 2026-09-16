@@ -109,6 +109,8 @@ public:
       Errc::config    pre-requisites not correct; e.g. driver not initialized
    */
    //-----------------------------------------------------------------------------
+   //Deliberately not [[nodiscard]] yet -- dispatcher poll, called from a read loop.
+   //Whether its callers should propagate is a protocol decision, not a call-site one.
    virtual std::error_code Cycle(void) = 0;
 
    //-----------------------------------------------------------------------------
@@ -136,7 +138,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code DataPoolReadNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] virtual std::error_code DataPoolReadNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
                                                uint8_t * const opu8_NrCode) = 0;
 
@@ -165,7 +167,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code DataPoolReadArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] virtual std::error_code DataPoolReadArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                              const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
                                              uint8_t * const opu8_NrCode) = 0;
 
@@ -193,7 +195,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code DataPoolWriteNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] virtual std::error_code DataPoolWriteNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                 const uint16_t ou16_ElementIndex,
                                                 const std::vector<uint8_t> & orc_DataToWrite,
                                                 uint8_t * const opu8_NrCode) = 0;
@@ -223,7 +225,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code DataPoolWriteArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] virtual std::error_code DataPoolWriteArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                               const uint16_t ou16_ElementIndex,
                                               const std::vector<uint8_t> & orc_DataToWrite,
                                               uint8_t * const opu8_NrCode) = 0;
@@ -256,7 +258,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code DataPoolSetEventDataRate(const uint8_t ou8_Rail, const uint16_t ou16_IntervalMs) = 0;
+   [[nodiscard]] virtual std::error_code DataPoolSetEventDataRate(const uint8_t ou8_Rail, const uint16_t ou16_IntervalMs) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -287,7 +289,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code DataPoolReadCyclic(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] virtual std::error_code DataPoolReadCyclic(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                               const uint16_t ou16_ElementIndex, const uint8_t ou8_Rail,
                                               uint8_t * const opu8_NrCode) = 0;
 
@@ -322,7 +324,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code DataPoolReadChangeDriven(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+   [[nodiscard]] virtual std::error_code DataPoolReadChangeDriven(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                     const uint16_t ou16_ElementIndex, const uint8_t ou8_Rail,
                                                     const uint32_t ou32_Threshold, uint8_t * const opu8_NrCode) = 0;
 
@@ -343,7 +345,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code DataPoolStopEventDriven(void) = 0;
+   [[nodiscard]] virtual std::error_code DataPoolStopEventDriven(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -366,7 +368,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code NvmRead(const uint32_t ou32_MemoryAddress, std::vector<uint8_t> & orc_DataRecord,
+   [[nodiscard]] virtual std::error_code NvmRead(const uint32_t ou32_MemoryAddress, std::vector<uint8_t> & orc_DataRecord,
                                    uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
@@ -391,7 +393,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code NvmWriteStartTransaction(const uint8_t ou8_DataPoolIndex,
+   [[nodiscard]] virtual std::error_code NvmWriteStartTransaction(const uint8_t ou8_DataPoolIndex,
                                                     const uint16_t ou16_NvmAccessCount) = 0;
 
    //-----------------------------------------------------------------------------
@@ -419,7 +421,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code NvmWrite(const uint32_t ou32_MemoryAddress, const std::vector<uint8_t> & orc_DataRecord,
+   [[nodiscard]] virtual std::error_code NvmWrite(const uint32_t ou32_MemoryAddress, const std::vector<uint8_t> & orc_DataRecord,
                                     uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
@@ -435,7 +437,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code NvmWriteFinalizeTransaction(void) = 0;
+   [[nodiscard]] virtual std::error_code NvmWriteFinalizeTransaction(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -457,7 +459,7 @@ public:
       Errc::warn      error response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code DataPoolReadVersion(const uint8_t ou8_DataPoolIndex,
+   [[nodiscard]] virtual std::error_code DataPoolReadVersion(const uint8_t ou8_DataPoolIndex,
                                                uint8_t(&orau8_Version)[3],
                                                uint8_t * const opu8_NrCode) = 0;
 
@@ -483,7 +485,7 @@ public:
       Errc::warn      error response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code DataPoolReadMetaData(const uint8_t ou8_DataPoolIndex,
+   [[nodiscard]] virtual std::error_code DataPoolReadMetaData(const uint8_t ou8_DataPoolIndex,
                                                 uint8_t(&orau8_Version)[3],
                                                 std::string & orc_Name,
                                                 uint8_t * const opu8_NrCode) = 0;
@@ -513,7 +515,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code DataPoolVerify(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_NumberOfDataPoolElements,
+   [[nodiscard]] virtual std::error_code DataPoolVerify(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_NumberOfDataPoolElements,
                                           const uint16_t ou16_DataPoolVersion, const uint32_t ou32_DataPoolChecksum,
                                           bool & orq_Match) = 0;
 
@@ -540,7 +542,7 @@ public:
       Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
+   [[nodiscard]] virtual std::error_code NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
                                               bool & orq_ApplicationAcknowledge, uint8_t * const opu8_NrCode) = 0;
 };
 

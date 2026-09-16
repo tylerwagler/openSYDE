@@ -2643,7 +2643,9 @@ void C_SyvComDriverDiag::m_ThreadFunc(void)
    if (s64_CurrentTime > (hs64_LastSentTesterPresent + 1000))
    {
       hs64_LastSentTesterPresent = s64_CurrentTime;
-      this->SendTesterPresent(this->mc_ActiveCommunicatingNodes);
+      //Periodic keep-alive from the polling thread, which returns void. A failed tester-present
+      //is picked up by the next cycle rather than being worth aborting the thread for.
+      (void)this->SendTesterPresent(this->mc_ActiveCommunicatingNodes);
    }
    else if (s64_CurrentTime > (hs64_LastSentDebugTest + 200))
    {
