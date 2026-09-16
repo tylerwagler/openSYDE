@@ -2850,7 +2850,7 @@ void C_PuiSvData::FixInvalidRailConfig(const bool oq_PrintLog)
                                      c_ItReadItem.key().u32_NodeIndex).arg(c_ItReadItem.key().u32_DataPoolIndex).arg(
                                      c_ItReadItem.key().
                                      u32_ListIndex).arg(
-                                     c_ItReadItem.key().u32_ElementIndex).toStdString().c_str());
+                                     c_ItReadItem.key().u32_ElementIndex).toStdString());
          }
          //New item at current position
          c_ItReadItem = this->mc_ReadRailAssignments.erase(c_ItReadItem);
@@ -2913,7 +2913,7 @@ void C_PuiSvData::InitFromSystemDefinition(void)
                      c_Path = C_Uti::h_ConcatPathIfNecessary(rc_Application.c_GeneratePath.c_str(), c_Path);
                   }
                   c_ApplPaths.emplace_back(C_PuiUtil::h_MakeIndependentOfDbProjectPath(
-                                              rc_Application.c_ProjectPath.c_str(), c_Path).toStdString().c_str());
+                                              rc_Application.c_ProjectPath.c_str(), c_Path).toStdString());
                }
                else
                {
@@ -2925,7 +2925,7 @@ void C_PuiSvData::InitFromSystemDefinition(void)
                      c_ParamInfo.SetContent(
                         C_PuiUtil::h_MakeIndependentOfDbProjectPath(
                            rc_Application.c_ProjectPath.c_str(),
-                           rc_Application.c_ResultPaths[u32_PathCounter].c_str()).toStdString().c_str(), 0U);
+                           rc_Application.c_ResultPaths[u32_PathCounter].c_str()).toStdString(), 0U);
                      c_ParamInfos.push_back(c_ParamInfo);
                   }
                }
@@ -3233,7 +3233,7 @@ std::map<std::string, bool> C_PuiSvData::m_GetExistingDashboardNamesMap(void) co
    for (uint32_t u32_ItDashboard = 0; u32_ItDashboard < this->mc_Dashboards.size(); ++u32_ItDashboard)
    {
       const C_PuiSvDashboard & rc_Data = this->mc_Dashboards[u32_ItDashboard];
-      c_Retval[rc_Data.GetName().toStdString().c_str()] = true;
+      c_Retval[rc_Data.GetName().toStdString()] = true;
    }
    return c_Retval;
 }

@@ -862,7 +862,7 @@ void C_UsFiler::mh_LoadNode(QSettings & orc_Ini, const QString & orc_NodeName, C
          orc_Ini.setArrayIndex(s32_It);
          const std::pair<uint8_t, std::string> c_PairInterfaceId(
             static_cast<uint8_t>(orc_Ini.value("DeviceInterfaceNumber", 0).toInt()),
-            std::string(orc_Ini.value("DeviceNodeName", "").toString().toStdString().c_str()));
+            std::string(orc_Ini.value("DeviceNodeName", "").toString().toStdString()));
          const std::pair<uint8_t, std::pair<uint8_t, std::string> > c_Pair(
             static_cast<uint8_t>(orc_Ini.value("InterfaceNumber", 0).toInt()), c_PairInterfaceId);
          c_LoadDevice[c_Pair] = orc_Ini.value("Expanded", false).toBool();

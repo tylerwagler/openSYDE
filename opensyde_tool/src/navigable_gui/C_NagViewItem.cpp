@@ -547,7 +547,7 @@ void C_NagViewItem::m_OnNameEditFinished(void)
          const C_PuiSvData * const pc_ViewData = C_PuiSvHandler::h_GetInstance()->GetView(u32_ItView);
          if (pc_ViewData != nullptr)
          {
-            if (pc_ViewData->GetName().compare(this->mpc_Ui->pc_LineEditHeading->text().toStdString().c_str()) == 0)
+            if (pc_ViewData->GetName().compare(this->mpc_Ui->pc_LineEditHeading->text().toStdString()) == 0)
             {
                q_Found = true;
             }

@@ -165,7 +165,7 @@ void C_SdTopologyScene::AddNode(const QString & orc_NodeType, const QPointF & or
 {
    uint32_t u32_Tmp;
    const C_OscDeviceDefinition * const pc_MainDevice = C_OscSystemDefinition::hc_Devices.LookForDevice(
-      orc_NodeType.toStdString().c_str(), "", u32_Tmp);
+      orc_NodeType.toStdString(), "", u32_Tmp);
 
    if (pc_MainDevice != nullptr)
    {
@@ -1533,7 +1533,7 @@ bool C_SdTopologyScene::m_AddOfMime(const QMimeData * const opc_MimeData, const 
          c_Text = opc_MimeData->text();
 
          // check if it is a node
-         pc_Node = C_OscSystemDefinition::hc_Devices.LookForDevice(c_Text.toStdString().c_str(), "", u32_SubDevice);
+         pc_Node = C_OscSystemDefinition::hc_Devices.LookForDevice(c_Text.toStdString(), "", u32_SubDevice);
          if (pc_Node != nullptr)
          {
             e_Type = C_SdManUnoTopologyAddCommand::E_ElementType::eNODE;
@@ -3814,7 +3814,7 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode & orc_OscNode, const QString & 
 
    orc_OscNode.pc_DeviceDefinition =
       C_OscSystemDefinition::hc_Devices.LookForDevice(
-         orc_NodeType.toStdString().c_str(), orc_MainDevice.toStdString().c_str(), u32_SubDeviceIndex);
+         orc_NodeType.toStdString(), orc_MainDevice.toStdString(), u32_SubDeviceIndex);
    orc_OscNode.u32_SubDeviceIndex = u32_SubDeviceIndex;
    tgl_assert(orc_OscNode.pc_DeviceDefinition != nullptr);
    if (orc_OscNode.pc_DeviceDefinition != nullptr)
@@ -3824,7 +3824,7 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode & orc_OscNode, const QString & 
       {
          //default name: same as device type
          orc_OscNode.c_Properties.c_Name = C_PuiSdHandler::h_AutomaticCeStringAdaptation(
-            orc_OscNode.pc_DeviceDefinition->GetDisplayName().c_str()).toStdString().c_str();
+            orc_OscNode.pc_DeviceDefinition->GetDisplayName().c_str()).toStdString();
 
          //special handling for "3rd Party" node:
          //Fix leading digit to avoid naming error after node drag&drop
@@ -3842,12 +3842,12 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode & orc_OscNode, const QString & 
 
          if (orc_MainDevice.isEmpty())
          {
-            orc_OscNode.c_DeviceType = orc_NodeType.toStdString().c_str();
+            orc_OscNode.c_DeviceType = orc_NodeType.toStdString();
          }
          else
          {
             orc_OscNode.c_DeviceType = C_OscNodeSquad::h_CombineNames(
-               orc_MainDevice.toStdString().c_str(), orc_NodeType.toStdString().c_str());
+               orc_MainDevice.toStdString(), orc_NodeType.toStdString());
          }
          //---Init COM IF Settings (BEFORE initial datablock)
          this->m_InitNodeComIfSettings(orc_OscNode, orc_NodeType, orc_MainDevice);
@@ -3875,8 +3875,8 @@ void C_SdTopologyScene::m_InitNodeComIfSettings(C_OscNode & orc_OscNode, const Q
    //the node has not been added to the system definition yet, so the "pc_DeviceDefinition" pointer
    // was not set yet: search list of device
    const C_OscDeviceDefinition * const pc_DeviceDefinition =
-      C_OscSystemDefinition::hc_Devices.LookForDevice(orc_NodeType.toStdString().c_str(),
-                                                      orc_MainDevice.toStdString().c_str(),
+      C_OscSystemDefinition::hc_Devices.LookForDevice(orc_NodeType.toStdString(),
+                                                      orc_MainDevice.toStdString(),
                                                       u32_SubDeviceIndex);
 
    tgl_assert(pc_DeviceDefinition != nullptr);
@@ -4002,7 +4002,7 @@ bool C_SdTopologyScene::m_ShowShortcutTspOption(const QString & orc_NodeName,
    if ((C_UsHandler::h_GetInstance()->GetSkipTspSelection() == "") ||
        (C_UsHandler::h_GetInstance()->GetSkipTspSelection() == "Ask User"))
    {
-      const std::string c_TitleString = orc_NodeName.toStdString().c_str();
+      const std::string c_TitleString = orc_NodeName.toStdString();
       const std::string c_MessageBoxTitle = "Import TSP Assistance";
       const std::string c_MessageBoxText =
          "Do you want to import openSYDE Target Support Package file(s) to " +
@@ -4034,7 +4034,7 @@ bool C_SdTopologyScene::m_ShowShortcutTspOption(const QString & orc_NodeName,
       {
          q_UseShortcut = true;
 
-         m_AddTspForAllSubNodes(oru32_SubDevicesSize, oru32_OriginalOscNodeSize, orc_NodeName.toStdString().c_str());
+         m_AddTspForAllSubNodes(oru32_SubDevicesSize, oru32_OriginalOscNodeSize, orc_NodeName.toStdString());
       }
       else if (e_Output == C_OgeWiCustomMessage::eNO)
       {

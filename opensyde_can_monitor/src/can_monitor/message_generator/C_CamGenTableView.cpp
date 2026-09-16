@@ -939,11 +939,11 @@ void C_CamGenTableView::m_AddMessageFromDatabase(const std::vector<std::array<QS
       std::vector<uint8_t> c_Bytes;
 
       //Common attributes
-      c_NewMessage.c_DataBaseFilePath = orc_NewItems[u32_ItNewItem][0UL].toStdString().c_str();
+      c_NewMessage.c_DataBaseFilePath = orc_NewItems[u32_ItNewItem][0UL].toStdString();
       c_NewMessage.q_ContainsValidHash = true;
       c_NewMessage.c_Key = "";
       c_NewMessage.u32_KeyPressOffset = 0UL;
-      c_NewMessage.c_Name = orc_NewItems[u32_ItNewItem][1UL].toStdString().c_str();
+      c_NewMessage.c_Name = orc_NewItems[u32_ItNewItem][1UL].toStdString();
       c_NewMessage.SetMessageBoolValue(C_CamProMessageData::eGBODS_RTR, false);
       c_NewMessage.SetMessageBoolValue(C_CamProMessageData::eGBODS_DO_CYCLIC, false);
       c_NewMessage.SetMessageBoolValue(C_CamProMessageData::eGBODS_AUTO_SUPPORT, false);

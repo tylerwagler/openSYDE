@@ -2021,13 +2021,13 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(const QString & orc_PublicKeyPath, 
       if (oq_OptionAddSecureAuthentication)
       {
          c_UpdatePackageParameters.resize(1);
-         c_UpdatePackageParameters.at(0).c_AuthenticationKeyPath = orc_PublicKeyPath.toStdString().c_str();
-         c_UpdatePackageParameters.at(0).c_Password = orc_Password.toStdString().c_str();
+         c_UpdatePackageParameters.at(0).c_AuthenticationKeyPath = orc_PublicKeyPath.toStdString();
+         c_UpdatePackageParameters.at(0).c_Password = orc_Password.toStdString();
       }
       //h_CreatePackage now reports std::error_code; this local is shared with other
       //unmigrated calls in this function, so convert at the boundary
       s32_Return = C_OscXceCreate::h_CreatePackage(
-         c_FullPackagePath.toStdString().c_str(), c_UsedCertificatesPath, c_UpdatePackageParameters, c_Warnings,
+         c_FullPackagePath.toStdString(), c_UsedCertificatesPath, c_UpdatePackageParameters, c_Warnings,
          c_Error).value();
       C_UsHandler::h_GetInstance()->SetLastKnownSecureCertificatePackagePath(c_FullPackagePath);
       if (s32_Return == C_NO_ERR)

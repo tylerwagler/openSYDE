@@ -896,7 +896,7 @@ bool C_SyvUpSequences::m_ReportProgress(const E_ProgressStep oe_Step, const int3
    std::string c_Text;
 
    {
-      c_Text =  ("Step: " + this->GetStepName(oe_Step)).toStdString().c_str();
+      c_Text =  ("Step: " + this->GetStepName(oe_Step)).toStdString();
       c_Text += " Progress: " + std::to_string(ou8_Progress);
       c_Text += " Result: " + std::to_string(os32_Result);
       c_Text += " Info: " + orc_Information;
@@ -933,7 +933,7 @@ bool C_SyvUpSequences::m_ReportProgress(const E_ProgressStep oe_Step, const int3
    std::string c_Text;
 
    {
-      c_Text =  ("Step: " + this->GetStepName(oe_Step)).toStdString().c_str();
+      c_Text =  ("Step: " + this->GetStepName(oe_Step)).toStdString();
       c_Text += " Progress: " + std::to_string(ou8_Progress);
       c_Text += " Result: " + std::to_string(os32_Result);
       c_Text += " Bus ID: " + std::to_string(orc_Server.u8_BusIdentifier);

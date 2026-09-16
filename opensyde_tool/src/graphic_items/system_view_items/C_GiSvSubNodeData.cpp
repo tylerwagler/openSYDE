@@ -928,7 +928,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
    this->mc_HexAppInfoAmbiguous.reserve(orc_FinalFilePaths.size());
    for (uint32_t u32_ItFile = 0; u32_ItFile < orc_FinalFilePaths.size(); ++u32_ItFile)
    {
-      const std::string c_Path = orc_FinalFilePaths[u32_ItFile].toStdString().c_str();
+      const std::string c_Path = orc_FinalFilePaths[u32_ItFile].toStdString();
       // c_Path is already absolute and placeholder variables got resolved!
       C_OscHexFile c_HexFile;
 

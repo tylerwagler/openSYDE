@@ -2620,7 +2620,7 @@ bool C_CamMetTreeModel::m_CheckMessageDataForSearch(const C_CamMetTreeLoggerData
    bool q_Return = false;
 
    // Compare all in upper case to be case insensitive
-   const std::string c_SearchString = orc_SearchString.toUpper().toStdString().c_str();
+   const std::string c_SearchString = orc_SearchString.toUpper().toStdString();
 
    if (orc_SearchString != "")
    {
@@ -2683,7 +2683,7 @@ bool C_CamMetTreeModel::m_CheckSignalDataForSearch(const C_OscComMessageLoggerDa
    bool q_Return = false;
 
    // Compare all in upper case to be case insensitive
-   const std::string c_SearchString = orc_SearchString.toUpper().toStdString().c_str();
+   const std::string c_SearchString = orc_SearchString.toUpper().toStdString();
 
    if (orc_SearchString != "")
    {

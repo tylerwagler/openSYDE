@@ -444,7 +444,7 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
             std::vector<std::string> c_Warnings;
             std::string c_ParseError;
             const int32_t s32_ParseResult =
-               C_CieImportDbc::h_ImportNetwork(c_DbcPath.toStdString().c_str(),
+               C_CieImportDbc::h_ImportNetwork(c_DbcPath.toStdString(),
                                                c_CommDef, c_Warnings, c_ParseError, true);
 
             if ((s32_ParseResult != C_NO_ERR) && (s32_ParseResult != C_WARN))
@@ -562,9 +562,9 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
                   }
                   else
                   {
-                     rc_Interface.c_LastSyncedDbcSha256 = c_DbcHash.toStdString().c_str();
+                     rc_Interface.c_LastSyncedDbcSha256 = c_DbcHash.toStdString();
                      const QString c_ProjectHash = h_ComputeProjectMessagesHash(ou32_NodeIndex, ou32_InterfaceIndex);
-                     rc_Interface.c_LastSyncedProjectMsgHash = c_ProjectHash.toStdString().c_str();
+                     rc_Interface.c_LastSyncedProjectMsgHash = c_ProjectHash.toStdString();
                   }
                }
             }
@@ -725,7 +725,7 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
                   std::vector<std::string> c_ExportWarnings;
                   std::string c_ExportError;
                   const int32_t s32_Export = C_CieExportDbc::h_ExportNetwork(
-                     c_DbcPath.toStdString().c_str(), c_CommDef, c_ExportWarnings, c_ExportError);
+                     c_DbcPath.toStdString(), c_CommDef, c_ExportWarnings, c_ExportError);
 
                   if ((s32_Export != C_NO_ERR) && (s32_Export != C_WARN))
                   {
@@ -745,10 +745,10 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
                      }
                      else
                      {
-                        rc_Interface.c_LastSyncedDbcSha256 = c_DbcHash.toStdString().c_str();
+                        rc_Interface.c_LastSyncedDbcSha256 = c_DbcHash.toStdString();
                         const QString c_ProjectHash = h_ComputeProjectMessagesHash(ou32_NodeIndex,
                                                                                    ou32_InterfaceIndex);
-                        rc_Interface.c_LastSyncedProjectMsgHash = c_ProjectHash.toStdString().c_str();
+                        rc_Interface.c_LastSyncedProjectMsgHash = c_ProjectHash.toStdString();
                      }
                   }
                }

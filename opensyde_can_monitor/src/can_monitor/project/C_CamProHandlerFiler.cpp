@@ -665,8 +665,8 @@ void C_CamProHandlerFiler::h_SaveFilters(const std::vector<C_CamProFilterData> &
 void C_CamProHandlerFiler::h_SaveFilter(const C_CamProFilterData & orc_Filter, C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeBool("active", orc_Filter.q_Enabled);
-   orc_XmlParser.CreateNodeChild("name", orc_Filter.c_Name.toStdString().c_str());
-   orc_XmlParser.CreateNodeChild("comment", orc_Filter.c_Comment.toStdString().c_str());
+   orc_XmlParser.CreateNodeChild("name", orc_Filter.c_Name.toStdString());
+   orc_XmlParser.CreateNodeChild("comment", orc_Filter.c_Comment.toStdString());
    orc_XmlParser.CreateAndSelectNodeChild("filter-items");
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_Filter.c_FilterItems.size()));
 
@@ -961,7 +961,7 @@ void C_CamProHandlerFiler::h_SaveDatabase(const C_CamProDatabaseData & orc_Datab
 {
    orc_XmlParser.SetAttributeBool("active", orc_Database.q_Enabled);
    orc_XmlParser.SetAttributeSint32("bus-index", orc_Database.s32_BusIndex);
-   orc_XmlParser.CreateNodeChild("name", orc_Database.c_Name.toStdString().c_str());
+   orc_XmlParser.CreateNodeChild("name", orc_Database.c_Name.toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1083,9 +1083,9 @@ void C_CamProHandlerFiler::h_SaveLoggingConfig(const C_CamProLoggingData & orc_L
    orc_XmlParser.SetAttributeBool("active", orc_LoggingData.q_Enabled);
    orc_XmlParser.SetAttributeSint32("overwrite-mode", static_cast<int32_t>(orc_LoggingData.e_OverwriteMode));
    orc_XmlParser.SetAttributeString("format", C_CamProLoggingData::h_FormatEnumToString(
-                                       orc_LoggingData.e_FileFormat).toStdString().c_str());
-   orc_XmlParser.CreateNodeChild("directory", orc_LoggingData.c_Directory.toStdString().c_str());
-   orc_XmlParser.CreateNodeChild("file-name", orc_LoggingData.c_FileName.toStdString().c_str());
+                                       orc_LoggingData.e_FileFormat).toStdString());
+   orc_XmlParser.CreateNodeChild("directory", orc_LoggingData.c_Directory.toStdString());
+   orc_XmlParser.CreateNodeChild("file-name", orc_LoggingData.c_FileName.toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

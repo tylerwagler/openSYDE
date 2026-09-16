@@ -790,7 +790,7 @@ void C_SdClipBoardHelper::h_StoreMessages(const std::vector<C_OscCanMessage> & o
                c_StringXml.SetAttributeUint32("interface-index", rc_OwnerNodeInterfaceIndex[u32_ItOwner]);
                c_StringXml.SetAttributeUint32("datapool-index", rc_OwnerNodeDatapoolIndex[u32_ItOwner]);
                c_StringXml.SetAttributeBool("message-was-tx", rc_OwnerIsTxFlag[u32_ItOwner]);
-               c_StringXml.CreateNodeChild("name", rc_CurName.toStdString().c_str());
+               c_StringXml.CreateNodeChild("name", rc_CurName.toStdString());
                //Return
                tgl_assert(c_StringXml.SelectNodeParent() == "message-parents");
             }

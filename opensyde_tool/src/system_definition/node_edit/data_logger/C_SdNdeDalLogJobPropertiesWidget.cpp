@@ -429,15 +429,15 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnXappSettingsChanged()
    {
       this->mc_Properties = pc_Retval->c_Properties;
 
-      this->mc_Properties.c_Name = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
-      this->mc_Properties.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString().c_str();
+      this->mc_Properties.c_Name = this->mpc_Ui->pc_LineEditName->text().toStdString();
+      this->mc_Properties.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString();
       this->mc_Properties.e_UseCase =
          static_cast<C_OscDataLoggerJobProperties::E_UseCase>(this->mpc_Ui->pc_ComboBoxLogJobUseCase->currentIndex());
       this->mc_Properties.e_LogFileFormat =
          static_cast<C_OscDataLoggerJobProperties::E_LogFileFormat>(this->mpc_Ui->pc_ComboBoxLogFileFormat->
                                                                     currentIndex());
       this->mc_Properties.c_LogDestinationDirectory =
-         this->mpc_Ui->pc_LineEditLogDestination->text().toStdString().c_str();
+         this->mpc_Ui->pc_LineEditLogDestination->text().toStdString();
       this->mc_Properties.e_LocalLogTrigger =
          static_cast<C_OscDataLoggerJobProperties::E_LocalLogTrigger>(this->mpc_Ui->pc_ComboBoxLocalData->
                                                                       currentIndex());
@@ -459,7 +459,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnXappSettingsChanged()
 void C_SdNdeDalLogJobPropertiesWidget::m_CheckDataLoggerName()
 {
    //check
-   const std::string c_LogJobName = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
+   const std::string c_LogJobName = this->mpc_Ui->pc_LineEditName->text().toStdString();
    const bool q_IsLogJobNameUnique = C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(this->mu32_NodeIndex, c_LogJobName,
                                                                                      &this->mu32_DataLoggerJobIndex,
                                                                                      nullptr);
@@ -577,7 +577,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
    if (hq_InProgress == false)
    {
       std::vector<std::string> c_ExistingLogJobNames;
-      const std::string c_LogJobName = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
+      const std::string c_LogJobName = this->mpc_Ui->pc_LineEditName->text().toStdString();
       hq_InProgress = true;
       if (C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(this->mu32_NodeIndex, c_LogJobName,
                                                           &this->mu32_DataLoggerJobIndex,

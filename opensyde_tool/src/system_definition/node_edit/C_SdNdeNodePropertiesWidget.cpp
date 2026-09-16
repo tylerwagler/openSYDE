@@ -1212,7 +1212,7 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
             //name
             //Only accept new name if not in conflict
             if (C_PuiSdHandler::h_GetInstance()->CheckNodeNameAvailable(
-                   this->mpc_Ui->pc_LineEditNodeName->text().toStdString().c_str(), &this->mu32_NodeIndex, nullptr))
+                   this->mpc_Ui->pc_LineEditNodeName->text().toStdString(), &this->mu32_NodeIndex, nullptr))
             {
                c_Name = this->mpc_Ui->pc_LineEditNodeName->text();
             }
@@ -1445,7 +1445,7 @@ void C_SdNdeNodePropertiesWidget::m_SupportedProtocolChange(void)
 void C_SdNdeNodePropertiesWidget::m_CheckNodeName(void)
 {
    //check
-   const std::string c_Text = this->mpc_Ui->pc_LineEditNodeName->text().toStdString().c_str();
+   const std::string c_Text = this->mpc_Ui->pc_LineEditNodeName->text().toStdString();
    const bool q_NameIsUnique = C_PuiSdHandler::h_GetInstance()->CheckNodeNameAvailable(c_Text, &this->mu32_NodeIndex,
                                                                                        nullptr);
    const bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(c_Text);
@@ -1529,7 +1529,7 @@ void C_SdNdeNodePropertiesWidget::m_RegisterNameChange(void)
       hq_InProgress = true;
 
       if (C_PuiSdHandler::h_GetInstance()->CheckNodeNameAvailable(
-             this->mpc_Ui->pc_LineEditNodeName->text().toStdString().c_str(),
+             this->mpc_Ui->pc_LineEditNodeName->text().toStdString(),
              &this->mu32_NodeIndex,
              &c_ExistingNames) == false)
       {

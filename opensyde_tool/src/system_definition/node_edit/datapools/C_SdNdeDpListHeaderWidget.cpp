@@ -746,7 +746,7 @@ void C_SdNdeDpListHeaderWidget::m_OpenDataSetEdit(void)
 void C_SdNdeDpListHeaderWidget::m_CheckName(void) const
 {
    QString c_Content;
-   const std::string c_Name = this->mpc_Ui->pc_LineEditName->GetName().toStdString().c_str();
+   const std::string c_Name = this->mpc_Ui->pc_LineEditName->GetName().toStdString();
 
    //check
    bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(c_Name);

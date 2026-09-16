@@ -165,7 +165,7 @@ int32_t C_RtfExportWidget::GetRtfPath(std::string & orc_RtfPath) const
    int32_t s32_Return = C_CONFIG;
 
    // get full RTF path of widget Ui
-   orc_RtfPath = C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditRtfPath->GetPath()).toStdString().c_str();
+   orc_RtfPath = C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditRtfPath->GetPath()).toStdString();
 
    // check if path fulfills our path requirements
    if (C_OscUtils::h_CheckValidFilePath(orc_RtfPath) == true)
@@ -177,7 +177,7 @@ int32_t C_RtfExportWidget::GetRtfPath(std::string & orc_RtfPath) const
          // check if file name is valid
          if (c_Info.suffix().toLower() == "rtf")
          {
-            if (C_OscUtils::h_CheckValidFileName(c_Info.completeBaseName().toStdString().c_str()))
+            if (C_OscUtils::h_CheckValidFileName(c_Info.completeBaseName().toStdString()))
             {
                if (c_Info.exists() == true)
                {
@@ -218,7 +218,7 @@ int32_t C_RtfExportWidget::GetRtfPath(std::string & orc_RtfPath) const
 int32_t C_RtfExportWidget::GetCompanyName(std::string & orc_CompanyName) const
 {
    // get company name of widget Ui
-   orc_CompanyName = this->mpc_Ui->pc_EditCompany->text().toStdString().c_str();
+   orc_CompanyName = this->mpc_Ui->pc_EditCompany->text().toStdString();
 
    return C_NO_ERR;
 }
@@ -239,7 +239,7 @@ int32_t C_RtfExportWidget::GetCompanyLogoPath(std::string & orc_CompanyLogoPath)
    int32_t s32_Return = C_CONFIG;
 
    // get company logo path
-   orc_CompanyLogoPath = this->mpc_Ui->pc_EditLogoPath->GetPath().toStdString().c_str();
+   orc_CompanyLogoPath = this->mpc_Ui->pc_EditLogoPath->GetPath().toStdString();
 
    if (orc_CompanyLogoPath == "")
    {
@@ -253,7 +253,7 @@ int32_t C_RtfExportWidget::GetCompanyLogoPath(std::string & orc_CompanyLogoPath)
       {
          // make absolute path if necessary
          orc_CompanyLogoPath =
-            C_PuiUtil::h_GetAbsolutePathFromProject(orc_CompanyLogoPath.c_str()).toStdString().c_str();
+            C_PuiUtil::h_GetAbsolutePathFromProject(orc_CompanyLogoPath.c_str()).toStdString();
 
          // check if file exists
          const QFileInfo c_Info(orc_CompanyLogoPath.c_str());
@@ -353,8 +353,8 @@ int32_t C_RtfExportWidget::ExportToRtf(const std::string & orc_RtfPath, const st
    tgl_assert(c_DirDocuCreatorTmp.cdUp() == true);                      // go one directory up
    c_DocuCreatorPath = c_DirDocuCreatorTmp.absolutePath();              // get current path
    c_DocuCreatorPath += "/connectors/DocuCreator/" + C_Uti::h_GetExeBasename("osy_docu_creator");
-   const std::string c_SclStringDocuCreatorPath = c_DocuCreatorPath.toStdString().c_str();
-   std::string c_SclStringDocuCreatorConfigPath = c_DirDocuCreatorTmp.absolutePath().toStdString().c_str();
+   const std::string c_SclStringDocuCreatorPath = c_DocuCreatorPath.toStdString();
+   std::string c_SclStringDocuCreatorConfigPath = c_DirDocuCreatorTmp.absolutePath().toStdString();
    c_SclStringDocuCreatorConfigPath += "/connectors/DocuCreator/config.xml";
 
    QString c_PathNetworkTopologyScreenshot; // to save screenshot of network topology
@@ -409,7 +409,7 @@ int32_t C_RtfExportWidget::ExportToRtf(const std::string & orc_RtfPath, const st
       {
          // could not save 'Network Topology' screenshot to disk
          this->mc_Error = "Could not save Network Topology screenshot to \"" +
-                          static_cast<std::string>(c_PathNetworkTopologyScreenshot.toStdString().c_str()) + "\".";
+                          static_cast<std::string>(c_PathNetworkTopologyScreenshot.toStdString()) + "\".";
          osc_write_log_error("RTF File Export", this->mc_Error);
          s32_Return = C_BUSY;
       }
@@ -428,15 +428,15 @@ int32_t C_RtfExportWidget::ExportToRtf(const std::string & orc_RtfPath, const st
 
       // Project
       c_ConfigXml.c_Title = "Project Documentation";
-      c_ConfigXml.c_Name = C_PuiProject::h_GetInstance()->GetName().toStdString().c_str();
+      c_ConfigXml.c_Name = C_PuiProject::h_GetInstance()->GetName().toStdString();
       c_ConfigXml.c_Version = C_PuiProject::h_GetInstance()->c_Version;
       c_ConfigXml.c_Created =
-         static_cast<std::string>(c_CurrentTime.toString("dd.MM.yyyy hh:mm").toStdString().c_str());
+         static_cast<std::string>(c_CurrentTime.toString("dd.MM.yyyy hh:mm").toStdString());
       c_ConfigXml.c_Author = C_PuiProject::h_GetInstance()->c_Editor;
-      c_ConfigXml.c_SysDefPath = c_SysDefPathTmp.toStdString().c_str();
-      c_ConfigXml.c_DevicesIniPath = C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString().c_str();
+      c_ConfigXml.c_SysDefPath = c_SysDefPathTmp.toStdString();
+      c_ConfigXml.c_DevicesIniPath = C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString();
       c_ConfigXml.c_OutputPath = orc_RtfPath;
-      c_ConfigXml.c_NetworkTopologyImage = c_PathNetworkTopologyScreenshot.toStdString().c_str();
+      c_ConfigXml.c_NetworkTopologyImage = c_PathNetworkTopologyScreenshot.toStdString();
       // openSYDE
       c_ConfigXml.c_OpenSydeVersion = C_PuiProject::h_GetInstance()->c_OpenSydeVersion; // used openSYDE version not
                                                                                         // current APPLICATION_VERSION
@@ -643,7 +643,7 @@ void C_RtfExportWidget::m_RtfPathClicked(void)
 {
    QString c_Folder; // for default folder
    const std::string c_Tmp =
-      C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditRtfPath->GetPath()).toStdString().c_str();
+      C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditRtfPath->GetPath()).toStdString();
 
    const QFileInfo c_TmpInfo(c_Tmp.c_str());
    if (c_TmpInfo.dir().exists() == true)
@@ -665,7 +665,7 @@ void C_RtfExportWidget::m_RtfPathClicked(void)
 
    if (c_FullRtfFilePath != "")
    {
-      this->SetRtfPath(c_FullRtfFilePath.toStdString().c_str());
+      this->SetRtfPath(c_FullRtfFilePath.toStdString());
    }
 }
 
@@ -679,7 +679,7 @@ void C_RtfExportWidget::m_LogoPathClicked(void) const
    QString c_Folder; // for default folder
 
    const std::string c_Tmp =
-      C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditLogoPath->GetPath()).toStdString().c_str();
+      C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditLogoPath->GetPath()).toStdString();
 
    const QFileInfo c_TmpInfo(c_Tmp.c_str());
    if (c_TmpInfo.dir().exists() == true)
@@ -696,7 +696,7 @@ void C_RtfExportWidget::m_LogoPathClicked(void) const
                                                                      c_Folder, c_Filter, "*.jpg");
    if (c_FullLogoFilePath.isEmpty() == false)
    {
-      this->SetCompanyLogoPath(c_FullLogoFilePath.toStdString().c_str());
+      this->SetCompanyLogoPath(c_FullLogoFilePath.toStdString());
    }
 }
 

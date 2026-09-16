@@ -144,7 +144,7 @@ int32_t C_SdCodeGenerationModel::Init(const std::vector<uint32_t> & orc_ElementI
                c_ToolTip += c_Indentation + "Generation Directory: ";
                c_ToolTip += rc_Application.c_GeneratePath;
                c_ToolTip += c_Indentation + "Structure Version: ";
-               c_ToolTip += QString::number(rc_Application.u16_GenCodeVersion).toStdString().c_str();
+               c_ToolTip += QString::number(rc_Application.u16_GenCodeVersion).toStdString();
                c_ToolTip += c_Indentation + "Output File: ";
                if (rc_Application.c_ResultPaths.size() == 2)
                {

@@ -116,7 +116,7 @@ void C_SyvClipBoardHelper::mh_StoreDashboardToClipboard(const C_PuiSvDashboard &
    std::string c_XmlContent;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.CreateAndSelectNodeChild(orc_GenericTagName.toStdString().c_str());
+   c_StringXml.CreateAndSelectNodeChild(orc_GenericTagName.toStdString());
    c_StringXml.CreateAndSelectNodeChild("rail-assignments");
    C_PuiSvHandlerFiler::h_SaveReadRails(orc_Rails, c_StringXml);
    c_StringXml.SelectNodeParent();
@@ -150,7 +150,7 @@ void C_SyvClipBoardHelper::mh_StoreElementIdGroups(const QMap<C_PuiSvDbNodeDataP
    {
       C_SyvClipBoardHelper::mh_StoreElementIdGroup(c_It.key(), c_It.value(), orc_XmlParser);
    }
-   tgl_assert(orc_XmlParser.SelectNodeParent() == orc_GenericTagName.toStdString().c_str());
+   tgl_assert(orc_XmlParser.SelectNodeParent() == orc_GenericTagName.toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -203,12 +203,12 @@ int32_t C_SyvClipBoardHelper::mh_LoadDashboardFromClipboard(C_PuiSvDashboard & o
       //side effect of the parser being empty
       s32_Retval = C_CONFIG;
    }
-   else if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString().c_str())
+   else if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString())
    {
       if (c_StringXml.SelectNodeChild("gui-only") == "gui-only")
       {
          s32_Retval = C_PuiSvDashboardFiler::h_LoadDashboard(orc_Data, c_StringXml, true);
-         tgl_assert(c_StringXml.SelectNodeParent() == orc_GenericTagName.toStdString().c_str());
+         tgl_assert(c_StringXml.SelectNodeParent() == orc_GenericTagName.toStdString());
       }
       else
       {
@@ -217,7 +217,7 @@ int32_t C_SyvClipBoardHelper::mh_LoadDashboardFromClipboard(C_PuiSvDashboard & o
       if ((s32_Retval == C_NO_ERR) && (c_StringXml.SelectNodeChild("rail-assignments") == "rail-assignments"))
       {
          s32_Retval = C_PuiSvHandlerFiler::h_LoadReadRails(orc_Rails, c_StringXml);
-         tgl_assert(c_StringXml.SelectNodeParent() == orc_GenericTagName.toStdString().c_str());
+         tgl_assert(c_StringXml.SelectNodeParent() == orc_GenericTagName.toStdString());
       }
       else
       {
@@ -284,7 +284,7 @@ int32_t C_SyvClipBoardHelper::mh_LoadElementIdGroups(QMap<C_PuiSvDbNodeDataPoolL
          tgl_assert(orc_XmlParser.SelectNodeParent() == "element-id-groups");
       }
       //Return
-      tgl_assert(orc_XmlParser.SelectNodeParent() == orc_GenericTagName.toStdString().c_str());
+      tgl_assert(orc_XmlParser.SelectNodeParent() == orc_GenericTagName.toStdString());
    }
    return s32_Retval;
 }

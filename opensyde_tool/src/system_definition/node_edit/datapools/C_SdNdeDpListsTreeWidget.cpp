@@ -171,7 +171,7 @@ void C_SdNdeDpListsTreeWidget::SetDataPool(const uint32_t & oru32_NodeIndex, con
 
    osc_write_log_performance_stop(
       u16_TimerId, static_cast<QString>("Switch list tree to Datapool %1").arg(
-         this->mu32_DataPoolIndex).toStdString().c_str());
+         this->mu32_DataPoolIndex).toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

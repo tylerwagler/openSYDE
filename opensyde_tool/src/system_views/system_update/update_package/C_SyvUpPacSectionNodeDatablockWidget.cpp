@@ -77,7 +77,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(const QString & orc_File,
 {
    bool q_FileIsOk = false;
 
-   if (orc_File == mhc_REMOVE_PATH_TEXT.toStdString().c_str())
+   if (orc_File == mhc_REMOVE_PATH_TEXT.toStdString())
    {
       // Special case. Removing file. No check necessary
       if (this->me_Type == C_OscNodeApplication::ePARAMETER_SET_HALC)
@@ -776,7 +776,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::m_InitSpecificItem(const stw::opensyd
                // System definition default path
                pc_ParamWidget->SetAppFile(c_DefaultPath, true);
                //Set initial param set info
-               c_ParamInfo.SetContent(c_DefaultPath.toStdString().c_str(), c_FileInfo.GetLastKnownCrc());
+               c_ParamInfo.SetContent(c_DefaultPath.toStdString(), c_FileInfo.GetLastKnownCrc());
             }
             pc_ParamWidget->SetSkipOfUpdateFile(c_ViewParamSetSkipFlags[u32_ParamSetFileCounter]);
 

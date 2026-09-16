@@ -244,8 +244,8 @@ void C_PopSaveAsDialogWidget::m_OnSave(void)
    const QString c_BasePath = this->mpc_Ui->pc_LineEditPath->GetPath();
    const QString c_Name = this->mpc_Ui->pc_LineEditName->text();
 
-   const bool q_ValidName = C_OscUtils::h_CheckValidFileName(c_Name.toStdString().c_str());
-   const bool q_ValidPath = C_OscUtils::h_CheckValidFilePath(c_BasePath.toStdString().c_str());
+   const bool q_ValidName = C_OscUtils::h_CheckValidFileName(c_Name.toStdString());
+   const bool q_ValidPath = C_OscUtils::h_CheckValidFilePath(c_BasePath.toStdString());
 
    if ((q_ValidName == true) && (q_ValidPath == true))
    {

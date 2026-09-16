@@ -445,10 +445,10 @@ void C_CamMosLoggingWidget::m_CheckAndStartLogging()
    bool q_Continue = true;
 
    // check directory
-   q_ValidDir = stw::opensyde_core::C_OscUtils::h_CheckValidFilePath(c_ResolvedPath.toStdString().c_str());
+   q_ValidDir = stw::opensyde_core::C_OscUtils::h_CheckValidFilePath(c_ResolvedPath.toStdString());
 
    // check file name
-   q_ValidName = stw::opensyde_core::C_OscUtils::h_CheckValidFileName(rc_LoggingData.c_FileName.toStdString().c_str());
+   q_ValidName = stw::opensyde_core::C_OscUtils::h_CheckValidFileName(rc_LoggingData.c_FileName.toStdString());
 
    if ((q_ValidDir == false) || (q_ValidName == false))
    {

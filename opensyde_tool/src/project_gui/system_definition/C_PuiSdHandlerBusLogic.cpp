@@ -63,7 +63,7 @@ uint32_t C_PuiSdHandlerBusLogic::AddBusAndSort(C_OscSystemBus & orc_OscBus, cons
 
    if (opc_Name != nullptr)
    {
-      orc_OscBus.c_Name = opc_Name->toStdString().c_str();
+      orc_OscBus.c_Name = opc_Name->toStdString();
    }
    else
    {

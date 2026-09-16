@@ -441,7 +441,7 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
                             this->mu32_DomainIndex,
                             this->mu32_ChannelIndex, u32_ParameterIndex, u32_ParameterElementIndex,
                             this->mq_ChannelCase,
-                            c_Value.toStdString().c_str()) == C_NO_ERR)
+                            c_Value.toStdString()) == C_NO_ERR)
                      {
                         q_Retval = true;
                         //Linked values
@@ -452,7 +452,7 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
                                          this->mu32_DomainIndex,
                                          c_LinkedChannels[u32_It], u32_ParameterIndex, u32_ParameterElementIndex,
                                          this->mq_ChannelCase,
-                                         c_Value.toStdString().c_str()) == C_NO_ERR);
+                                         c_Value.toStdString()) == C_NO_ERR);
                         }
                      }
                   }
@@ -474,7 +474,7 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
                                this->mu32_DomainIndex,
                                this->mu32_ChannelIndex, u32_ParameterIndex, u32_ParameterElementIndex,
                                this->mq_ChannelCase,
-                               c_Names.at(s32_It).toStdString().c_str(), c_Bits.at(s32_It)) == C_NO_ERR)
+                               c_Names.at(s32_It).toStdString(), c_Bits.at(s32_It)) == C_NO_ERR)
                         {
                            q_Retval = true;
                            //Linked values
@@ -486,7 +486,7 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
                                     this->mu32_DomainIndex,
                                     c_LinkedChannels[u32_It], u32_ParameterIndex, u32_ParameterElementIndex,
                                     this->mq_ChannelCase,
-                                    c_Names.at(s32_It).toStdString().c_str(), c_Bits.at(s32_It)) == C_NO_ERR);
+                                    c_Names.at(s32_It).toStdString(), c_Bits.at(s32_It)) == C_NO_ERR);
                            }
                         }
                      }

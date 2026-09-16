@@ -463,7 +463,7 @@ void C_CamMainWindow::dropEvent(QDropEvent * const opc_Event)
    if (mh_CheckMime(pc_MimeData, &c_FilePath) == true)
    {
       // Check if path is a valid path with no irregular characters
-      if (C_OscUtils::h_CheckValidFilePath(c_FilePath.toStdString().c_str()) == false)
+      if (C_OscUtils::h_CheckValidFilePath(c_FilePath.toStdString()) == false)
       {
          C_OgeWiUtil::h_ShowPathInvalidError(this, c_FilePath);
       }
@@ -757,7 +757,7 @@ void C_CamMainWindow::m_LoadInitialProject(void)
       for (s32_Pos = 0; s32_Pos < c_Projects.size(); ++s32_Pos)
       {
          // directly use project handler because we do not want an error message for every fail
-         if (C_CamProHandler::h_GetInstance()->LoadFromFile(c_Projects.at(s32_Pos).toStdString().c_str()) == C_NO_ERR)
+         if (C_CamProHandler::h_GetInstance()->LoadFromFile(c_Projects.at(s32_Pos).toStdString()) == C_NO_ERR)
          {
             q_ProjectLoadSuccess = true;
             break;
@@ -1316,7 +1316,7 @@ void C_CamMainWindow::m_OnDatabaseLoadFinished(const int32_t os32_Result)
                if (C_CamDbHandler::h_GetInstance()->GetContainsDbc(this->mc_CurrentLoadedFileOrg) == false)
                {
                   C_CieConverter::C_CieCommDefinition c_DbcDefinition;
-                  if (pc_MessageMonitor->GetDbcFile(this->mc_CurrentLoadedFile.toStdString().c_str(),
+                  if (pc_MessageMonitor->GetDbcFile(this->mc_CurrentLoadedFile.toStdString(),
                                                     c_DbcDefinition) == C_NO_ERR)
                   {
                      //Add to currently loaded files
@@ -1336,7 +1336,7 @@ void C_CamMainWindow::m_OnDatabaseLoadFinished(const int32_t os32_Result)
                   const stw::opensyde_core::C_OscSystemDefinition c_Tmp;
                   stw::opensyde_core::C_OscComMessageLoggerOsySysDefConfig c_SystemDefinition(c_Tmp, 0UL);
                   //boundary: the callee now reports std::error_code
-                  if (pc_MessageMonitor->GetOsySysDef(this->mc_CurrentLoadedFile.toStdString().c_str(),
+                  if (pc_MessageMonitor->GetOsySysDef(this->mc_CurrentLoadedFile.toStdString(),
                                                       c_SystemDefinition).value() == C_NO_ERR)
                   {
                      //Add to currently loaded files

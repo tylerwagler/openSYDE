@@ -1418,7 +1418,7 @@ void C_SdBueComIfDescriptionWidget::LoadUserSettings(void)
                      C_PuiSdHandler::h_GetInstance()->GetOscCanDataPoolListElement(c_MessageId, u32_ItSignal);
                   if (pc_OscData != nullptr)
                   {
-                     if (pc_OscData->c_Name == c_SelectedSignalName.toStdString().c_str())
+                     if (pc_OscData->c_Name == c_SelectedSignalName.toStdString())
                      {
                         u32_FoundIndex = u32_ItSignal;
                         q_Found = true;

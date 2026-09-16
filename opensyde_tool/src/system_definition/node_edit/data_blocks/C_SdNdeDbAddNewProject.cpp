@@ -357,9 +357,9 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
                c_Path = QDir::cleanPath(c_TspFileInfo.absoluteDir().absoluteFilePath(
                                            this->mc_Tsp.c_TemplatePath.c_str()));
                QApplication::setOverrideCursor(Qt::WaitCursor);
-               if (C_OscZipFile::h_UnpackZipFile(c_Path.toStdString().c_str(),
+               if (C_OscZipFile::h_UnpackZipFile(c_Path.toStdString(),
                                                  C_PuiUtil::h_GetAbsolutePathFromProject(
-                                                    this->mpc_Ui->pc_LineEditCreateIn->GetPath()).toStdString().c_str(),
+                                                    this->mpc_Ui->pc_LineEditCreateIn->GetPath()).toStdString(),
                                                  &c_ErrorText) == stw::errors::Errc::success)
                {
                   this->mrc_ParentDialog.accept();
@@ -682,7 +682,7 @@ void C_SdNdeDbAddNewProject::m_ApplyV2PathAdaptationToV3()
       const QString c_ProjectPath =
          C_Uti::h_ConcatPathIfNecessary(this->mpc_Ui->pc_LineEditCreateIn->GetPath(),
                                         rc_App.c_ProjectPath.c_str());
-      rc_App.c_ProjectPath = c_ProjectPath.toStdString().c_str();
+      rc_App.c_ProjectPath = c_ProjectPath.toStdString();
    }
 }
 

@@ -259,7 +259,7 @@ bool C_PuiProject::IsPasswordNecessary(void)
 
    if (this->m_IsServiceModeProject() == true)
    {
-      if (C_OscZipFile::h_IsZipFile(this->GetPath().toStdString().c_str()))
+      if (C_OscZipFile::h_IsZipFile(this->GetPath().toStdString()))
       {
          // Not a zip file, so it is encrypted
          q_Return = true;
@@ -715,13 +715,13 @@ int32_t C_PuiProject::m_SaveServiceModeProject(const QString & orc_FilePath, con
       {
          std::set<std::string> c_AllFilesRelative;
          C_OscZipFile::h_AppendFilesRelative(c_AllFilesRelative, c_AllFilesAbsolute,
-                                             c_TemporaryPath.toStdString().c_str());
+                                             c_TemporaryPath.toStdString());
 
          // Create the encrypted zip file
-         s32_Retval = C_OscSecurityAesFile::h_CreateEncryptedZipFile(c_TemporaryPath.toStdString().c_str(),
+         s32_Retval = C_OscSecurityAesFile::h_CreateEncryptedZipFile(c_TemporaryPath.toStdString(),
                                                                      c_AllFilesRelative,
-                                                                     orc_FilePath.toStdString().c_str(),
-                                                                     orc_Password.toStdString().c_str(),
+                                                                     orc_FilePath.toStdString(),
+                                                                     orc_Password.toStdString(),
                                                                      &c_ErrorString).value();
       }
    }
@@ -767,7 +767,7 @@ int32_t C_PuiProject::m_LoadProject(uint16_t * const opu16_FileVersion,
    else
    {
       //Load project file
-      s32_Retval = C_OscProjectFiler::h_Load(*this, this->mc_Path.toStdString().c_str()).value();
+      s32_Retval = C_OscProjectFiler::h_Load(*this, this->mc_Path.toStdString()).value();
       if (s32_Retval == C_NO_ERR)
       {
          QString c_SystemDefintionPath;
@@ -779,16 +779,16 @@ int32_t C_PuiProject::m_LoadProject(uint16_t * const opu16_FileVersion,
             if (c_FileInfoSysDef.exists() == false)
             {
                osc_write_log_info("Loading project",
-                                  static_cast<std::string>("Could not find system definition file \"") + c_SystemDefintionPath.toStdString().c_str() +
+                                  static_cast<std::string>("Could not find system definition file \"") + c_SystemDefintionPath.toStdString() +
                                   "\".");
                mh_AdaptProjectPathToSystemDefinitionV2(this->mc_Path, c_SystemDefintionPath);
                osc_write_log_info("Loading project",
-                                  static_cast<std::string>("Trying previous version 2 path \"") + c_SystemDefintionPath.toStdString().c_str() +
+                                  static_cast<std::string>("Trying previous version 2 path \"") + c_SystemDefintionPath.toStdString() +
                                   "\".");
             }
             //Load system definition
             s32_Retval = C_PuiSdHandler::h_GetInstance()->LoadFromFile(
-               c_SystemDefintionPath.toStdString().c_str(), opu16_FileVersion, opc_ErrorDetailsMissingDevices);
+               c_SystemDefintionPath.toStdString(), opu16_FileVersion, opc_ErrorDetailsMissingDevices);
             if (s32_Retval == C_NO_ERR)
             {
                QString c_SystemViewsPath;
@@ -800,11 +800,11 @@ int32_t C_PuiProject::m_LoadProject(uint16_t * const opu16_FileVersion,
                   if (c_FileInfoSysView.exists() == false)
                   {
                      osc_write_log_info("Loading project",
-                                        static_cast<std::string>("Could not find system views file \"") + c_SystemViewsPath.toStdString().c_str() +
+                                        static_cast<std::string>("Could not find system views file \"") + c_SystemViewsPath.toStdString() +
                                         "\".");
                      mh_AdaptProjectPathToSystemViewsV1(this->mc_Path, c_SystemViewsPath);
                      osc_write_log_info("Loading project",
-                                        static_cast<std::string>("Trying previous version 1 path \"") + c_SystemViewsPath.toStdString().c_str() +
+                                        static_cast<std::string>("Trying previous version 1 path \"") + c_SystemViewsPath.toStdString() +
                                         "\".");
                   }
                   //Load system views
@@ -864,9 +864,9 @@ int32_t C_PuiProject::m_LoadServiceModeProject(const QString & orc_Password, uin
    std::string c_ErrorString;
 
    // Decrypt the encrypted zip file
-   s32_Retval = C_OscSecurityAesFile::h_UnpackEncryptedZipFile(c_OriginalPath.toStdString().c_str(),
-                                                               c_TemporaryPath.toStdString().c_str(),
-                                                               orc_Password.toStdString().c_str(),
+   s32_Retval = C_OscSecurityAesFile::h_UnpackEncryptedZipFile(c_OriginalPath.toStdString(),
+                                                               c_TemporaryPath.toStdString(),
+                                                               orc_Password.toStdString(),
                                                                &c_ErrorString).value();
 
    if (s32_Retval == C_NO_ERR)
@@ -942,9 +942,9 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
       C_PuiProject::h_HandlePendingEvents();
       //the project filers report std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = C_OscProjectFiler::h_Save(*this,
-                                             orc_FilePath.toStdString().c_str(),
+                                             orc_FilePath.toStdString(),
                                              stw::opensyde_gui_logic::C_Uti::h_GetApplicationVersion(
-                                                false).toStdString().c_str()).value();
+                                                false).toStdString()).value();
       if (s32_Retval == C_NO_ERR)
       {
          // save system definition only if it has changed
@@ -961,7 +961,7 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
                {
                   s32_Retval =
                      C_PuiSdHandler::h_GetInstance()->SaveToFile(
-                        c_SystemDefintionPath.toStdString().c_str(), oq_UpdateInternalState);
+                        c_SystemDefintionPath.toStdString(), oq_UpdateInternalState);
                }
                else
                {

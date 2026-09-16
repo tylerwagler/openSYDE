@@ -251,7 +251,7 @@ void C_SdNdeHalcChannelWidget::SaveUserSettings(void) const
 void C_SdNdeHalcChannelWidget::m_OnNameEdited(void)
 {
    int32_t s32_Return;
-   const std::string c_NewName = this->mpc_Ui->pc_LeName->text().toStdString().c_str();
+   const std::string c_NewName = this->mpc_Ui->pc_LeName->text().toStdString();
 
    // update data
    s32_Return =  C_PuiSdHandler::h_GetInstance()->SetHalcDomainChannelConfigName(mu32_NodeIndex, mu32_DomainIndex,
@@ -270,7 +270,7 @@ void C_SdNdeHalcChannelWidget::m_OnNameEdited(void)
 void C_SdNdeHalcChannelWidget::m_OnCommentEdited(void)
 {
    int32_t s32_Return;
-   const std::string c_NewComment = this->mpc_Ui->pc_TedComment->toPlainText().toStdString().c_str();
+   const std::string c_NewComment = this->mpc_Ui->pc_TedComment->toPlainText().toStdString();
 
    // update data
    s32_Return = C_PuiSdHandler::h_GetInstance()->SetHalcDomainChannelConfigComment(mu32_NodeIndex, mu32_DomainIndex,
@@ -693,7 +693,7 @@ void C_SdNdeHalcChannelWidget::m_ConnectWidgets(const bool oq_Connect) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcChannelWidget::m_CheckName(const QString & orc_NewName) const
 {
-   const std::string c_NewName = orc_NewName.toStdString().c_str();
+   const std::string c_NewName = orc_NewName.toStdString();
 
    //check name
    const bool q_NameIsUnique =
