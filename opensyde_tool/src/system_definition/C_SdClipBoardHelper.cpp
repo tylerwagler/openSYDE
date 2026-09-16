@@ -95,9 +95,13 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPool(C_OscNodeDataPool & orc_OscContent
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(mh_GetClipBoard().toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == "clip-board")
+   if (c_StringXml.LoadFromString(mh_GetClipBoard().toStdString()))
+   {
+      //not XML at all; the SelectRoot check below rejects this too, but only as a
+      //side effect of the parser being empty
+      s32_Retval = C_CONFIG;
+   }
+   else if (c_StringXml.SelectRoot() == "clip-board")
    {
       if (c_StringXml.SelectNodeChild("gui") == "gui")
       {
@@ -205,9 +209,13 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolLists(std::vector<C_OscNodeDataPool
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(mh_GetClipBoard().toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == "clip-board")
+   if (c_StringXml.LoadFromString(mh_GetClipBoard().toStdString()))
+   {
+      //not XML at all; the SelectRoot check below rejects this too, but only as a
+      //side effect of the parser being empty
+      s32_Retval = C_CONFIG;
+   }
+   else if (c_StringXml.SelectRoot() == "clip-board")
    {
       if (c_StringXml.SelectNodeChild("gui") == "gui")
       {
@@ -371,9 +379,13 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListElementsFromString(
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(orc_Input.toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == "clip-board")
+   if (c_StringXml.LoadFromString(orc_Input.toStdString()))
+   {
+      //not XML at all; the SelectRoot check below rejects this too, but only as a
+      //side effect of the parser being empty
+      s32_Retval = C_CONFIG;
+   }
+   else if (c_StringXml.SelectRoot() == "clip-board")
    {
       if (c_StringXml.SelectNodeChild("gui") == "gui")
       {
@@ -464,9 +476,13 @@ int32_t C_SdClipBoardHelper::h_LoadIndicesFromString(std::vector<uint32_t> & orc
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(orc_Input.toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == "clip-board")
+   if (c_StringXml.LoadFromString(orc_Input.toStdString()))
+   {
+      //not XML at all; the SelectRoot check below rejects this too, but only as a
+      //side effect of the parser being empty
+      s32_Retval = C_CONFIG;
+   }
+   else if (c_StringXml.SelectRoot() == "clip-board")
    {
       if (c_StringXml.SelectNodeChild("indices") == "indices")
       {
@@ -588,9 +604,13 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromString(
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(orc_Input.toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == "clip-board")
+   if (c_StringXml.LoadFromString(orc_Input.toStdString()))
+   {
+      //not XML at all; the SelectRoot check below rejects this too, but only as a
+      //side effect of the parser being empty
+      s32_Retval = C_CONFIG;
+   }
+   else if (c_StringXml.SelectRoot() == "clip-board")
    {
       if (c_StringXml.SelectNodeChild("core") == "core")
       {
@@ -811,9 +831,13 @@ int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_M
    const QString c_Input = C_SdClipBoardHelper::mh_GetClipBoard();
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(c_Input.toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == "clip-board")
+   if (c_StringXml.LoadFromString(c_Input.toStdString()))
+   {
+      //not XML at all; the SelectRoot check below rejects this too, but only as a
+      //side effect of the parser being empty
+      s32_Retval = C_CONFIG;
+   }
+   else if (c_StringXml.SelectRoot() == "clip-board")
    {
       if (c_StringXml.SelectNodeChild("core") == "core")
       {
@@ -1071,9 +1095,13 @@ int32_t C_SdClipBoardHelper::h_LoadMessageIndexFromString(const QString & orc_In
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(orc_Input.toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == "clip-board")
+   if (c_StringXml.LoadFromString(orc_Input.toStdString()))
+   {
+      //not XML at all; the SelectRoot check below rejects this too, but only as a
+      //side effect of the parser being empty
+      s32_Retval = C_RANGE;
+   }
+   else if (c_StringXml.SelectRoot() == "clip-board")
    {
       if (c_StringXml.SelectNodeChild("core") == "core")
       {
@@ -1189,9 +1217,13 @@ int32_t C_SdClipBoardHelper::h_LoadDataSnapShotFromClipboard(C_SdTopologyDataSna
    const QString c_Input = C_SdClipBoardHelper::mh_GetClipBoard();
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(c_Input.toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == "opensyde-system-definition")
+   if (c_StringXml.LoadFromString(c_Input.toStdString()))
+   {
+      //not XML at all; the SelectRoot check below rejects this too, but only as a
+      //side effect of the parser being empty
+      s32_Retval = C_RANGE;
+   }
+   else if (c_StringXml.SelectRoot() == "opensyde-system-definition")
    {
       //the project filers report std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = C_OscNodeSquadFiler::h_LoadNodeGroups(orc_Data.c_OscNodeGroups, c_StringXml).value();
@@ -1310,9 +1342,13 @@ int32_t C_SdClipBoardHelper::h_LoadHalcItemConfigFromClipboard(C_OscHalcConfigSt
    const QString c_Input = C_SdClipBoardHelper::mh_GetClipBoard();
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(c_Input.toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == "clip-board")
+   if (c_StringXml.LoadFromString(c_Input.toStdString()))
+   {
+      //not XML at all; the SelectRoot check below rejects this too, but only as a
+      //side effect of the parser being empty
+      s32_Retval = C_CONFIG;
+   }
+   else if (c_StringXml.SelectRoot() == "clip-board")
    {
       s32_Retval = C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(orc_Data, c_StringXml).value();
    }
@@ -1400,9 +1436,13 @@ int32_t C_SdClipBoardHelper::mh_LoadSignalsFromString(const QString & orc_Input,
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(orc_Input.toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == "clip-board")
+   if (c_StringXml.LoadFromString(orc_Input.toStdString()))
+   {
+      //not XML at all; the SelectRoot check below rejects this too, but only as a
+      //side effect of the parser being empty
+      s32_Retval = C_RANGE;
+   }
+   else if (c_StringXml.SelectRoot() == "clip-board")
    {
       if (c_StringXml.SelectNodeChild("core") == "core")
       {

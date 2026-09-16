@@ -506,8 +506,9 @@ void C_SdBueSignalPropertiesWidget::m_CoLoadEdsRestricitions(void)
 
             // Message Tx flag is relative to the device, not the manager when using the EDS file content
             // PDO Mapping
-            pc_Manager->GetEdsFileContent().IsPdoMappingRo(pc_Message->u16_CanOpenManagerPdoIndex,
-                                                           !this->mc_MessageId.q_MessageIsTx, q_RoFlag);
+            //a missing EDS entry leaves the start bit editable
+            (void)pc_Manager->GetEdsFileContent().IsPdoMappingRo(pc_Message->u16_CanOpenManagerPdoIndex,
+                                                                 !this->mc_MessageId.q_MessageIsTx, q_RoFlag);
 
             this->mpc_Ui->pc_SpinBoxStartBit->setEnabled(!q_RoFlag);
          }

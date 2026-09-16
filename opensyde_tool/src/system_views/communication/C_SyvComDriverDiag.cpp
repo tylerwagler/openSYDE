@@ -165,7 +165,7 @@ int32_t C_SyvComDriverDiag::InitDiag(void)
    if (s32_Return == C_NO_ERR)
    {
       // pem folder is optional -> no error handling
-      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
+      (void)mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
 
       //boundary: the callee now reports std::error_code
       s32_Return = C_OscComDriverProtocol::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst(),

@@ -197,9 +197,13 @@ int32_t C_SyvClipBoardHelper::mh_LoadDashboardFromClipboard(C_PuiSvDashboard & o
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(mh_GetClipBoard().toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString().c_str())
+   if (c_StringXml.LoadFromString(mh_GetClipBoard().toStdString()))
+   {
+      //not XML at all; the SelectRoot check below rejects this too, but only as a
+      //side effect of the parser being empty
+      s32_Retval = C_CONFIG;
+   }
+   else if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString().c_str())
    {
       if (c_StringXml.SelectNodeChild("gui-only") == "gui-only")
       {
