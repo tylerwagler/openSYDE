@@ -279,7 +279,12 @@ std::error_code C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & o
       }
 
       //check whether all referenced objects exists:
-      c_Return = m_CheckForExistingObjects("MandatoryObjects", c_IniFile);
+      //guarded: the loop above aborts on a malformed object description, and an unconditional
+      //assignment here would throw that error away along with the message it put in mc_LastError
+      if (!c_Return)
+      {
+         c_Return = m_CheckForExistingObjects("MandatoryObjects", c_IniFile);
+      }
       if (!c_Return)
       {
          c_Return = m_CheckForExistingObjects("OptionalObjects", c_IniFile);

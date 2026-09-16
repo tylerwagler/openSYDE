@@ -453,3 +453,28 @@ TEST(XmlParserErrorApi, LogParserSucceedsSilently)
    EXPECT_FALSE(static_cast<bool>(c_Spy.SelectNodeChildError("child")));
    EXPECT_EQ(0U, c_Spy.mu32_NodeMissingReports);
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   A "0x"-prefixed attribute is read as hexadecimal
+
+   Regression pin. The hex-prefix check kept its 1-based C_SclString indices, so it never
+   matched. Every "0x" value fell through to the decimal query path, which the comment
+   there says cannot handle "0x" -- so the default came back instead, with no error.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(XmlParser, ReadsHexAttributes)
+{
+   stw::opensyde_core::C_OscXmlParser c_Parser;
+
+   c_Parser.CreateAndSelectNodeChild("root");
+   c_Parser.SetAttributeString("hex", "0x1F");
+   c_Parser.SetAttributeString("bighex", "0xFFFFFFFFFFFFFFFF");
+   c_Parser.SetAttributeString("dec", "31");
+
+   EXPECT_EQ(0x1FULL, c_Parser.GetAttributeUint64("hex", 0ULL));
+   EXPECT_EQ(0xFFFFFFFFFFFFFFFFULL, c_Parser.GetAttributeUint64("bighex", 0ULL));
+   //the decimal path must keep working
+   EXPECT_EQ(31ULL, c_Parser.GetAttributeUint64("dec", 0ULL));
+   //an absent attribute still yields the default
+   EXPECT_EQ(5ULL, c_Parser.GetAttributeUint64("absent", 5ULL));
+}

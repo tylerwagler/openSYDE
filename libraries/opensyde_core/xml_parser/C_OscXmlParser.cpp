@@ -569,7 +569,10 @@ uint64_t C_OscXmlParserBase::GetAttributeUint64(const std::string & orc_Name, co
    c_Text = this->GetAttributeString(orc_Name);
    if (c_Text != "")
    {
-      if ((c_Text.length() >= 2) && ((c_Text[1] == '0') && (c_Text[2] == 'x')))
+      //index 0/1: std::string is 0-based. The 1-based indices kept from C_SclString meant this
+      //never matched a "0x" prefix, so every hex attribute silently fell through to the decimal
+      //path -- which cannot parse "0x" and returned the default.
+      if ((c_Text.length() >= 2) && ((c_Text[0] == '0') && (c_Text[1] == 'x')))
       {
          //do not use XMLElement::Query function: it can not handle hexadecimal values with "0x"
           std::istringstream c_Stream(SubStringCompat(c_Text, 3UL, c_Text.length() - 2UL).c_str());

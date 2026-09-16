@@ -705,3 +705,83 @@ call.
 **981 declarations, 99 sites, 11 defects.** Nine of the eleven are the same
 shape: an error path that leaves an out-param unwritten, and a caller that
 reads it anyway.
+
+## The 1-based indexing residue: four silent parser failures
+
+Following the EDS question turned up a defect class the whole sweep had missed,
+because none of its tools look for it.
+
+`C_SclString` was **1-based**. `std::string` is 0-based. The phase-3 migration
+handled the method calls correctly -- that is what `SubStringCompat`, `PosCompat`
+and the rest of `C_SclStringUtil.hpp` exist for, and they carry the conversion in
+their names and comments. What it did not handle is **raw `operator[]` with a
+literal index**, which changes meaning silently and compiles either way.
+
+Four sites, all found by one grep:
+
+```
+grep -rnE "\w+\[[0-9]\]\s*[=!]=\s*'" --include='*.cpp' libraries opensyde_tool
+```
+
+| Site | What it was testing | Effect |
+|------|--------------------|--------|
+| `C_SclIniFile.cpp:161,165` | `[` and `;` at line start | **No INI section or comment was ever recognised** |
+| `C_OscXmlParser.cpp:572` | `0x` prefix on an attribute | every hex attribute returned its default |
+| `C_OscHalcDefContentBitmaskItem.cpp:132` | `0x` prefix on a bitmask | `0x10` silently parsed as `0` |
+| `C_OscUtils.cpp:949` | `//` or `\\` UNC prefix | UNC paths treated as relative, base dir prepended |
+
+The `C_SclIniFile` one is the serious one. `SectionExists` returned false for
+every section, so **every** `ReadString`/`ReadInteger`/`ReadBool` fell back to its
+default. That is silent by construction: a missing key is not an error, it is a
+default. It takes out CANopen EDS/DCF import and the CAN Monitor protocol
+parameter files.
+
+Each of the four pairs the wrong index with a **correctly** migrated 1-based
+`SubStringCompat(..., 3UL, ...)` right beneath it. That is the signature: the
+substring extraction was converted, the guard in front of it was not. A site
+where both were converted looks identical to a site where neither was.
+
+`TglFile.cpp:613` matches the same grep and is **correct** -- `"C:\"` genuinely
+has `:` at index 1. The pattern finds candidates, not bugs.
+
+### Why nothing caught this
+
+- It compiles. `std::string::operator[]` at `size()` is defined and returns
+  `'\0'`, so there is not even UB to trip a sanitiser.
+- Every failure mode is a *default*, not an error. No log line, no error code.
+- `[[nodiscard]]` cannot see it: the return values are all used.
+- **None of these classes had any test at all.** `C_SclIniFile` had none, the
+  XML hex path had none, the bitmask parser had none.
+
+That last point is the whole story. `test_scl_ini_file.cpp`,
+`test_string_prefix_parsing.cpp` and `test_canopen_eds.cpp` are new, and the
+first assertion in each is the one that was failing in production.
+
+### A second bug in the EDS loader
+
+Separately, `C_OscCanOpenObjectDictionary::LoadFromFile` aborted its parse loop on
+a malformed object description and then **overwrote the error two lines later**:
+
+```cpp
+if (c_Return) { break; }          // "error in EDS file; abort"
+}
+c_Return = m_CheckForExistingObjects("MandatoryObjects", c_IniFile);   // clobbers it
+```
+
+The three following checks were already guarded with `if (!c_Return)`; the first
+was not. So a malformed EDS imported as success while `GetLastErrorText()` still
+held the real message -- incoherent state the caller had no way to detect.
+
+### Still open here
+
+`C_OscCanOpenEdsDeviceInfoBlock::LoadFromIni` and its `FileInfoBlock` twin
+document `Errc::config` for a missing value and **never return it**. Both read
+through `ReadString`/`ReadBool` with defaults instead of the validating
+`h_Load*ValueFromIniFile` helpers that sit unused in the same file -- four public
+functions with **zero callers**, kept behind a `//lint -e{8062} Kept for later
+error reporting` comment. The plumbing above them is live and reaches the user.
+
+Wiring it up would make EDS import stricter, which can reject files that work
+today. The original author's own "Maybe mandatory values" comment says they were
+unsure which keys are mandatory. **That is a product decision, not a sweep
+decision**, so it is recorded here rather than made.

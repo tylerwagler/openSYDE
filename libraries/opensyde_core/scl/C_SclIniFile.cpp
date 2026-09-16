@@ -158,11 +158,14 @@ bool C_SclIniFile::m_Load(const std::string & orc_FileName)
       {
          //don't use c_Line.Pos to check for characters at specific positions as this would search through the whole
          // line needlessly
-         if (rc_Line[1] == mcn_CommentIndicator)
+         //index 0: std::string is 0-based. C_SclString was 1-based, and this check kept its
+         //index through the migration, so it tested the second character of every line --
+         //no section header and no comment was ever recognised.
+         if (rc_Line[0] == mcn_CommentIndicator)
          {
             c_Comment += (rc_Line + "\n");
          }
-         else if (rc_Line[1] == '[') // new section
+         else if (rc_Line[0] == '[') // new section
          {
             mc_Sections.emplace_back();
             pc_CurrentSection = &mc_Sections[u16_NumSections];
