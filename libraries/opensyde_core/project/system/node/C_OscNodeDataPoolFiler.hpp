@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <system_error>
+#include <expected>
 
 #include "C_OscNodeDataPool.hpp"
 #include "C_OscXmlParser.hpp"
@@ -76,7 +77,10 @@ public:
    static void h_SaveDataPoolListDataSets(const std::vector<C_OscNodeDataPoolDataSet> & orc_NodeDataPoolListDataSets,
                                           C_OscXmlParserBase & orc_XmlParser);
    static std::string h_DataPoolToString(const C_OscNodeDataPool::E_Type & ore_DataPool);
-   [[nodiscard]] static std::error_code h_StringToDataPool(const std::string & orc_String, C_OscNodeDataPool::E_Type & ore_Type);
+   //Phase 5 follow-up pilot: returns the value rather than writing an out parameter the caller
+   //has to remember to default. On failure there is no value to read by mistake.
+   [[nodiscard]] static std::expected<C_OscNodeDataPool::E_Type, std::error_code> h_StringToDataPool(
+      const std::string & orc_String);
 
    static void h_SaveDataPoolElementType(const C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
                                          C_OscXmlParserBase & orc_XmlParser);

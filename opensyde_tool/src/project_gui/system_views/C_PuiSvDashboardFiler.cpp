@@ -286,8 +286,10 @@ void C_PuiSvDashboardFiler::h_LoadUiIndex(C_PuiSvDbNodeDataPoolListElementId & o
       }
       if (orc_XmlParser.SelectNodeChild("invalid-type-placeholder") == "invalid-type-placeholder")
       {
-         //Enclosing function returns void; an unknown type string leaves the default in place
-         (void)C_OscNodeDataPoolFiler::h_StringToDataPool(orc_XmlParser.GetNodeContent(), e_InvalidTypePlaceholder);
+         //An unknown type string keeps the eDIAG default, which value_or now says outright
+         e_InvalidTypePlaceholder =
+            C_OscNodeDataPoolFiler::h_StringToDataPool(orc_XmlParser.GetNodeContent()).value_or(
+               e_InvalidTypePlaceholder);
          //Return
          orc_XmlParser.SelectNodeParent();
       }

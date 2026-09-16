@@ -214,7 +214,17 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolLists(std::vector<C_OscNodeDataPool
          if (c_StringXml.SelectNodeChild("type") == "type")
          {
             //the project filers report std::error_code now; this class keeps the STW int32_t convention
-            s32_Retval = C_OscNodeDataPoolFiler::h_StringToDataPool(c_StringXml.GetNodeContent(), ore_Type).value();
+            const std::expected<C_OscNodeDataPool::E_Type, std::error_code> c_Type =
+               C_OscNodeDataPoolFiler::h_StringToDataPool(c_StringXml.GetNodeContent());
+            if (c_Type.has_value())
+            {
+               ore_Type = *c_Type;
+               s32_Retval = C_NO_ERR;
+            }
+            else
+            {
+               s32_Retval = c_Type.error().value();
+            }
             if (s32_Retval == C_NO_ERR)
             {
                //Return
