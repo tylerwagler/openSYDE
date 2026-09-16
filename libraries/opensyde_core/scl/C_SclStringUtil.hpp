@@ -489,7 +489,16 @@ inline double ToDoubleCompat(const std::string & orc_Str)
 }
 
 /// Replacement for str.Printf(format, ...) — uses vsnprintf internally.
-inline std::string PrintFormattedCompat(const char * const opcn_Format, ...)
+///
+/// The format attribute makes the compiler type-check every call site exactly as it
+/// does for printf. Without it a varargs function is unchecked, and a wrong conversion
+/// or a missing argument is undefined behaviour that no test reliably catches.
+#if defined(__GNUC__) || defined(__clang__)
+#define OSY_PRINTF_LIKE(FMT, ARGS) __attribute__((format(printf, FMT, ARGS)))
+#else
+#define OSY_PRINTF_LIKE(FMT, ARGS)
+#endif
+OSY_PRINTF_LIKE(1, 2) inline std::string PrintFormattedCompat(const char * const opcn_Format, ...)
 {
    va_list c_Args;
    va_start(c_Args, opcn_Format);

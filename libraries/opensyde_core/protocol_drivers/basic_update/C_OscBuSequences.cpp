@@ -661,7 +661,7 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
                {
                   std::string c_Text;
                   c_Text = PrintFormattedCompat("Transferring area %02d/%02d  byte %08d/%08d",
-                                        u16_Area + 1, pc_HexDump->at_Blocks.size(),
+                                        u16_Area + 1, static_cast<int32_t>(pc_HexDump->at_Blocks.size()),
                                         s32_Size - s32_RemainingBytes, s32_Size);
                   u64_TotalSizeTransferred += c_Data.size();
                   m_ReportProgress(c_Return.value(), c_Text);
@@ -691,7 +691,8 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
          {
             std::string c_Text;
             c_Text = PrintFormattedCompat("Transferring area %02d/%02d  byte %08d/%08d",
-                                  u16_Area + 1, pc_HexDump->at_Blocks.size(), s32_Size, s32_Size);
+                                  u16_Area + 1, static_cast<int32_t>(pc_HexDump->at_Blocks.size()), s32_Size,
+                                  s32_Size);
 
             const uint8_t u8_MAX_PERCENTAGE = 100;
             m_ReportProgressPercentage(u8_MAX_PERCENTAGE, false);
