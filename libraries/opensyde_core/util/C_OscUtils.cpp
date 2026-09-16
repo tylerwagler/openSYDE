@@ -945,9 +945,11 @@ std::string C_OscUtils::h_ConcatPathIfNecessary(const std::string & orc_BaseDir,
 
    //special scenario: if the path starts with "\\" or "//" is is a UNC network path
    //for our purpose we consider it an absolute path (concatting would have weird results)
+   //index 0/1: std::string is 0-based. The 1-based indices kept from C_SclString meant a UNC
+   //path was never recognised, so it was treated as relative and the base dir was prepended.
    if ((orc_RelativeOrAbsolutePath.length() >= 2U) &&
-       (((orc_RelativeOrAbsolutePath[1] == '/') && (orc_RelativeOrAbsolutePath[2] == '/')) ||
-        ((orc_RelativeOrAbsolutePath[1] == '\\') && (orc_RelativeOrAbsolutePath[2] == '\\'))))
+       (((orc_RelativeOrAbsolutePath[0] == '/') && (orc_RelativeOrAbsolutePath[1] == '/')) ||
+        ((orc_RelativeOrAbsolutePath[0] == '\\') && (orc_RelativeOrAbsolutePath[1] == '\\'))))
    {
       q_IsRelativePath = false;
    }

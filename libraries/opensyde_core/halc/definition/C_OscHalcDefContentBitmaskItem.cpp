@@ -129,7 +129,10 @@ std::error_code C_OscHalcDefContentBitmaskItem::mh_ParseUintFromString(const std
    }
    else
    {
-      if (((orc_Item.length() > 2UL) && (orc_Item[1] == '0')) && (orc_Item[2] == 'x'))
+      //index 0/1: std::string is 0-based. The 1-based indices kept from C_SclString meant a
+      //"0x" bitmask never took the hex path; the decimal path then stopped at the 'x' and
+      //produced 0 without reporting a failure.
+      if (((orc_Item.length() > 2UL) && (orc_Item[0] == '0')) && (orc_Item[1] == 'x'))
       {
           const std::string c_Hex = SubStringCompat(orc_Item, 3UL, orc_Item.length() - 2UL);
          std::stringstream c_Stream(c_Hex.c_str());
