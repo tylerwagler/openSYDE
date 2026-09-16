@@ -478,3 +478,86 @@ TEST(XmlParser, ReadsHexAttributes)
    //an absent attribute still yields the default
    EXPECT_EQ(5ULL, c_Parser.GetAttributeUint64("absent", 5ULL));
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Every attribute getter honours the "0x" notation it documents
+
+   Seven of the eight getters documented "Can handle 0x notation to interpret hex values"
+   and called std::stoi/std::stoll with no base. Those are hard-wired to base 10: they
+   read the leading '0', stop at the 'x', and return 0 without throwing. So every hex
+   attribute silently became 0 while the getter reported success.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(XmlParser, AllGettersHandleHexNotation)
+{
+   stw::opensyde_core::C_OscXmlParser c_Parser;
+
+   c_Parser.CreateAndSelectNodeChild("root");
+   c_Parser.SetAttributeString("hex", "0x1F");
+   c_Parser.SetAttributeString("neghex", "-0x1F");
+   c_Parser.SetAttributeString("dec", "31");
+
+   EXPECT_EQ(31, c_Parser.GetAttributeSint32("hex", 0));
+   EXPECT_EQ(31U, c_Parser.GetAttributeUint32("hex", 0U));
+   EXPECT_EQ(31LL, c_Parser.GetAttributeSint64("hex", 0LL));
+   EXPECT_EQ(31ULL, c_Parser.GetAttributeUint64("hex", 0ULL));
+
+   EXPECT_EQ(-31, c_Parser.GetAttributeSint32("neghex", 0));
+   EXPECT_EQ(-31LL, c_Parser.GetAttributeSint64("neghex", 0LL));
+
+   //decimal must keep working, and a leading zero must not be read as octal
+   EXPECT_EQ(31, c_Parser.GetAttributeSint32("dec", 0));
+   c_Parser.SetAttributeString("leadingzero", "010");
+   EXPECT_EQ(10, c_Parser.GetAttributeSint32("leadingzero", 0));
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   The error-reporting getters inherit the same hex handling
+
+   They delegate to the plain getters, so they were wrong in exactly the same way while
+   reporting Errc::success.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(XmlParser, ErrorGettersHandleHexNotation)
+{
+   stw::opensyde_core::C_OscXmlParser c_Parser;
+
+   c_Parser.CreateAndSelectNodeChild("root");
+   c_Parser.SetAttributeString("hex", "0x20");
+
+   int32_t s32_Value = 0;
+   uint32_t u32_Value = 0U;
+   int64_t s64_Value = 0;
+   uint64_t u64_Value = 0U;
+
+   EXPECT_FALSE(static_cast<bool>(c_Parser.GetAttributeSint32Error("hex", s32_Value)));
+   EXPECT_EQ(32, s32_Value);
+   EXPECT_FALSE(static_cast<bool>(c_Parser.GetAttributeUint32Error("hex", u32_Value)));
+   EXPECT_EQ(32U, u32_Value);
+   EXPECT_FALSE(static_cast<bool>(c_Parser.GetAttributeSint64Error("hex", s64_Value)));
+   EXPECT_EQ(32LL, s64_Value);
+   EXPECT_FALSE(static_cast<bool>(c_Parser.GetAttributeUint64Error("hex", u64_Value)));
+   EXPECT_EQ(32ULL, u64_Value);
+
+   //a missing attribute still reports Errc::config
+   EXPECT_EQ(stw::errors::Errc::config, c_Parser.GetAttributeUint32Error("absent", u32_Value));
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   The uint32 getter reaches its full range
+
+   std::stoi tops out at INT32_MAX, so a value above it threw and fell back to the
+   default. stoul covers the whole unsigned range.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(XmlParser, Uint32GetterCoversFullRange)
+{
+   stw::opensyde_core::C_OscXmlParser c_Parser;
+
+   c_Parser.CreateAndSelectNodeChild("root");
+   c_Parser.SetAttributeString("big", "4294967295");
+   c_Parser.SetAttributeString("bighex", "0xFFFFFFFF");
+
+   EXPECT_EQ(4294967295U, c_Parser.GetAttributeUint32("big", 0U));
+   EXPECT_EQ(4294967295U, c_Parser.GetAttributeUint32("bighex", 0U));
+}

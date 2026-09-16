@@ -785,3 +785,84 @@ Wiring it up would make EDS import stricter, which can reject files that work
 today. The original author's own "Maybe mandatory values" comment says they were
 unsure which keys are mandatory. **That is a product decision, not a sweep
 decision**, so it is recorded here rather than made.
+
+## The same migration, the other half: hex parsed as decimal
+
+The `[0]`/`[1]` fixes closed the *indexing* half of the `C_SclString` migration.
+The *parsing* half was still open, and it is worse.
+
+`C_SclString::ToInt()` was **hex-aware and threw on bad input**. The migration
+replaced it with `std::stoi`, which throws but is **hard-wired to base 10**.
+`std::stoi("0x10")` reads the leading `0`, stops at the `x`, and returns **0**
+without throwing. Every `try`/`catch` around it stays quiet.
+
+`C_SclStringUtil.hpp` already documents this exact failure -- `ToIntCompat`'s
+comment says so in as many words, and `ScanBaseCompat` exists to pick base 16 for
+a `"0x"` prefix without treating a leading `0` as octal. The helper was written;
+these call sites were never moved onto it.
+
+### Seven of eight XML attribute getters claimed hex and did not do it
+
+Every one carries the line *"Can handle "0x" notation to interpret hex values"*,
+and each explains that it avoids `XMLElement::Query` **precisely because Query
+cannot parse hex**. Then it calls `std::stoi(c_Text)`.
+
+| Getter | Documented hex | Implemented |
+|--------|---------------|-------------|
+| `GetAttributeSint32` / `Uint32` / `Sint64` | yes | **no** |
+| `GetAttributeUint64` | yes | yes (and it was broken too -- see the indexing section) |
+| the four `*Error` variants | yes | **no** -- they delegate to the plain getters |
+
+Fixing three functions fixes all eight, because the `*Error` variants delegate.
+
+### What that actually broke: every parameter set file
+
+Two production writers emit `"0x"`-prefixed values, and both are on the same file
+format:
+
+- `C_OscChecksummedXml::SaveToFile` writes the file CRC as `"0x" + hex`, and
+  `LoadFromFile` read it back with `GetAttributeUint32` -- so `u16_CrcFromFile`
+  was **always 0** and the comparison against the real CRC always failed.
+  **The class could not load a file it had just written.**
+- `C_OscParamSetFilerBase::h_SaveFileVersion` writes `"0x0001"`, and
+  `h_CheckFileVersion` read it with a base-10 `std::stoi`, got 0, and logged
+  *"Version defined by 'file-version' is not supported."*
+
+`C_OscChecksummedXml` is used by exactly one thing: the parameter set (`.syde_psi`)
+filers. So loading any parameter set failed twice over, on the CRC and on the
+version.
+
+This was verified by round trip, not by reading: save a checksummed file, load it
+back, and the load returns `C_CHECKSUM`. That probe is now
+`ChecksummedXml.RoundTripsItsOwnOutput`.
+
+**Every other filer writes its version with `std::to_string`**, i.e. decimal, so
+their `std::stoi` readers are correct. The paramset filer is the only one that
+writes hex, which is why this is contained to one file format rather than all of
+them.
+
+### The scans that found nothing
+
+Worth recording, because negatives are cheap to re-run and expensive to redo:
+
+- **1-based helper result fed into a 0-based `std::string` API** (`PosCompat` etc.
+  into `.substr`/`.erase`/`operator[]`, and `.find()` into `SubStringCompat`):
+  **zero hits**, across 45 `PosCompat`, 36 `SubStringCompat`, 7 `DeleteCompat`,
+  4 `InsertCompat` uses. The scanner was validated against planted cases first --
+  it fires on all three shapes.
+- **Raw literal indexing on string-typed variables**: 44 candidates, all benign
+  after the earlier fixes -- `&c_Text[0]` buffer idioms, `QStringList`/vector
+  indexing, and `TglFile.cpp:613` where `"C:\"` really does have `:` at index 1.
+
+So the migration's remaining residue is **parsing**, not indexing. The 68
+remaining `std::sto*` calls without an explicit base were checked against their
+writers; all are decimal by contract (file versions via `to_string`, DLC,
+counters, dates, and `c_RawValueDec` which says so in its name).
+
+### Negative controls matter here
+
+Both fixes make a check *pass* that previously failed. That is exactly the shape
+where a "fix" can be a disabled check, so the tests include the inverse:
+`ChecksummedXml.DetectsTamperedContent` and
+`ParamSetFileVersion.UnsupportedVersionIsRejected` pass **both** with and without
+the fix. Only the round-trip tests change state.
