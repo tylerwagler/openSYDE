@@ -167,6 +167,20 @@ signature goes through a PR rather than a local build. Push and read the result.
 **The 48-core build host** is for a fast single-platform answer while iterating —
 ~3 minutes for all eight tools against ~18 on a laptop. See `docs/remote-build.md`.
 
+**Check which compiler a build directory is actually using before drawing a
+conclusion from it.** CMake records the compiler in `CMakeCache.txt` on the first
+configure and keeps it; editing a toolchain file does not move an existing build
+directory onto the new compiler, it silently keeps the old one. The host's
+`build/Debug` predated the move to clang and was still building with GCC 14 long
+after the toolchain said `clang++`, which quietly made every eight-tool check
+there a statement about a compiler we do not ship. One line tells you:
+
+```bash
+grep CMAKE_CXX_COMPILER_AR build/Debug/CMakeCache.txt   # gcc-ar-14 vs llvm-ar-19
+```
+
+Wipe the directory to pick up a toolchain change.
+
 ```bash
 ssh claude@claude 'cd ~/Projects/openSYDE && git fetch origin && git checkout develop \
   && git pull --ff-only origin develop && git submodule update --init --recursive \

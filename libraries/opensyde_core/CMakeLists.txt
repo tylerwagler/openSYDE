@@ -946,10 +946,18 @@ set(OPENSYDE_CORE_INCLUDE_DIRECTORIES
    ${OPENSYDE_CORE_SECURITY_INCLUDE_DIRECTORIES}
 )
 
-#deactivate warnings for miniz due to external component; but only for GCC as the switch is compiler specific
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+# Vendored third-party sources are not held to our warning bar; we do not patch them,
+# so a warning here is noise that can only be silenced by diverging from upstream.
+#
+# This was previously gated on CMAKE_CXX_COMPILER_ID STREQUAL "GNU", from when Linux
+# built with GCC. The project builds with clang on all three platforms now, so the
+# guard silenced nothing -- which only became visible when the flags below were added
+# and tinyxml2 and miniz were the sole sources that tripped them. "-w" is understood
+# by both compilers; keep the predicate on the flag spelling, not on the vendor.
+if(NOT MSVC)
    set_source_files_properties(
      ${CMAKE_CURRENT_SOURCE_DIR}/miniz/miniz.c
+     ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/tinyxml2/tinyxml2.cpp
      PROPERTIES
      COMPILE_FLAGS "-w"
    )
@@ -973,7 +981,20 @@ add_library(opensyde_core ${OPENSYDE_CORE_SOURCES})
 # this ever blocks legitimate work, silence the specific warning at its site
 # with a comment explaining why, rather than dropping the flag.
 if(NOT MSVC)
-   target_compile_options(opensyde_core PRIVATE -Wall -Wextra -Werror)
+   # -Wnon-virtual-dtor, -Wimplicit-fallthrough and -Wcast-qual are each zero-finding
+   # across all eight tools today, measured on both clang 19 and GCC 14. They are here
+   # to keep it that way: each covers a class that is silent at runtime -- deleting
+   # through a base pointer without a virtual destructor, a missing break, and casting
+   # away const -- and that nothing else in the build would report.
+   #
+   # Flags deliberately NOT added, with the counts that decided it: -Wold-style-cast
+   # (10273), -Wsuggest-override (4661), -Wzero-as-null-pointer-constant (3047) are
+   # wholesale style changes, not defect classes. -Wswitch-enum (7), -Wfloat-equal (2)
+   # and -Wdouble-promotion (3) fire only where the code is deliberately right; the
+   # float comparisons already carry a lint suppression saying so.
+   target_compile_options(opensyde_core PRIVATE
+      -Wall -Wextra -Werror
+      -Wnon-virtual-dtor -Wimplicit-fallthrough -Wcast-qual)
 endif()
 
 # Enable large file support on Linux (required by miniz for 64-bit file I/O).

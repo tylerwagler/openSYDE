@@ -242,7 +242,8 @@ TEST(XmlParser, LoadInvalidXml_ReturnsError)
 TEST(XmlParser, SelectRootOnEmptyDocument_ReturnsEmpty)
 {
    stw::opensyde_core::C_OscXmlParser c_Parser;
-   c_Parser.LoadFromString("<?xml version=\"1.0\"?>");
+   //the declaration-only document may load or not; this test is about SelectRoot either way
+   (void)c_Parser.LoadFromString("<?xml version=\"1.0\"?>");
    EXPECT_TRUE(c_Parser.SelectRoot().empty());
 }
 

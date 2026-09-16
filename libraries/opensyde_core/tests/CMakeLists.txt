@@ -27,6 +27,13 @@ function(add_osc_test TEST_NAME TEST_SOURCE)
    if(TARGET OpenSSL::Crypto)
       target_link_libraries(${TEST_NAME} PRIVATE OpenSSL::SSL OpenSSL::Crypto)
    endif()
+   # Tests are code too, and were the one place in the tree building without -Werror.
+   # They sat at a single warning -- a discarded [[nodiscard]] return -- which is
+   # exactly the class the attribute exists to surface. Fixed, and held at zero here.
+   if(NOT MSVC)
+      target_compile_options(${TEST_NAME} PRIVATE -Wall -Wextra -Werror)
+   endif()
+
    # Do not propagate the core library's precompiled headers to test targets
    target_precompile_headers(${TEST_NAME} REUSE_FROM opensyde_core)
    # Let GTest list tests at runtime so add_test works without enumerating
