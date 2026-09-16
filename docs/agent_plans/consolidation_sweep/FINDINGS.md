@@ -785,3 +785,175 @@ Wiring it up would make EDS import stricter, which can reject files that work
 today. The original author's own "Maybe mandatory values" comment says they were
 unsure which keys are mandatory. **That is a product decision, not a sweep
 decision**, so it is recorded here rather than made.
+
+## The same migration, the other half: hex parsed as decimal
+
+The `[0]`/`[1]` fixes closed the *indexing* half of the `C_SclString` migration.
+The *parsing* half was still open, and it is worse.
+
+`C_SclString::ToInt()` was **hex-aware and threw on bad input**. The migration
+replaced it with `std::stoi`, which throws but is **hard-wired to base 10**.
+`std::stoi("0x10")` reads the leading `0`, stops at the `x`, and returns **0**
+without throwing. Every `try`/`catch` around it stays quiet.
+
+`C_SclStringUtil.hpp` already documents this exact failure -- `ToIntCompat`'s
+comment says so in as many words, and `ScanBaseCompat` exists to pick base 16 for
+a `"0x"` prefix without treating a leading `0` as octal. The helper was written;
+these call sites were never moved onto it.
+
+### Seven of eight XML attribute getters claimed hex and did not do it
+
+Every one carries the line *"Can handle "0x" notation to interpret hex values"*,
+and each explains that it avoids `XMLElement::Query` **precisely because Query
+cannot parse hex**. Then it calls `std::stoi(c_Text)`.
+
+| Getter | Documented hex | Implemented |
+|--------|---------------|-------------|
+| `GetAttributeSint32` / `Uint32` / `Sint64` | yes | **no** |
+| `GetAttributeUint64` | yes | yes (and it was broken too -- see the indexing section) |
+| the four `*Error` variants | yes | **no** -- they delegate to the plain getters |
+
+Fixing three functions fixes all eight, because the `*Error` variants delegate.
+
+### What that actually broke: every parameter set file
+
+Two production writers emit `"0x"`-prefixed values, and both are on the same file
+format:
+
+- `C_OscChecksummedXml::SaveToFile` writes the file CRC as `"0x" + hex`, and
+  `LoadFromFile` read it back with `GetAttributeUint32` -- so `u16_CrcFromFile`
+  was **always 0** and the comparison against the real CRC always failed.
+  **The class could not load a file it had just written.**
+- `C_OscParamSetFilerBase::h_SaveFileVersion` writes `"0x0001"`, and
+  `h_CheckFileVersion` read it with a base-10 `std::stoi`, got 0, and logged
+  *"Version defined by 'file-version' is not supported."*
+
+`C_OscChecksummedXml` is used by exactly one thing: the parameter set (`.syde_psi`)
+filers. So loading any parameter set failed twice over, on the CRC and on the
+version.
+
+This was verified by round trip, not by reading: save a checksummed file, load it
+back, and the load returns `C_CHECKSUM`. That probe is now
+`ChecksummedXml.RoundTripsItsOwnOutput`.
+
+**Every other filer writes its version with `std::to_string`**, i.e. decimal, so
+their `std::stoi` readers are correct. The paramset filer is the only one that
+writes hex, which is why this is contained to one file format rather than all of
+them.
+
+### The scans that found nothing
+
+Worth recording, because negatives are cheap to re-run and expensive to redo:
+
+- **1-based helper result fed into a 0-based `std::string` API** (`PosCompat` etc.
+  into `.substr`/`.erase`/`operator[]`, and `.find()` into `SubStringCompat`):
+  **zero hits**, across 45 `PosCompat`, 36 `SubStringCompat`, 7 `DeleteCompat`,
+  4 `InsertCompat` uses. The scanner was validated against planted cases first --
+  it fires on all three shapes.
+- **Raw literal indexing on string-typed variables**: 44 candidates, all benign
+  after the earlier fixes -- `&c_Text[0]` buffer idioms, `QStringList`/vector
+  indexing, and `TglFile.cpp:613` where `"C:\"` really does have `:` at index 1.
+
+So the migration's remaining residue is **parsing**, not indexing. The 68
+remaining `std::sto*` calls without an explicit base were checked against their
+writers; all are decimal by contract (file versions via `to_string`, DLC,
+counters, dates, and `c_RawValueDec` which says so in its name).
+
+### Negative controls matter here
+
+Both fixes make a check *pass* that previously failed. That is exactly the shape
+where a "fix" can be a disabled check, so the tests include the inverse:
+`ChecksummedXml.DetectsTamperedContent` and
+`ParamSetFileVersion.UnsupportedVersionIsRejected` pass **both** with and without
+the fix. Only the round-trip tests change state.
+
+### And the third form: 1-based *loop bounds*
+
+Indexing and parsing were two forms of the same migration residue. Loop bounds
+are the third, and the scan for it is one line:
+
+```
+for (...; <var> <= <something>.length(); ...)
+```
+
+An inclusive bound against a *count* is 1-based thinking. Two sites, both real:
+
+**`C_OscUtils::h_NiceifyStringForCeComment`** ran `1 <= index <= length` while
+indexing 0-based. So it **never examined character 0**, and its final iteration
+read and then *wrote* `c_Result[size()]` -- undefined for the non-const
+`operator[]`.
+
+This function exists to stop a Datapool comment from breaking the C file it is
+embedded in. With the old bounds, anything at position 0 passed straight
+through. Verified by reverting the fix against the new tests:
+
+| Input | Old output |
+|-------|-----------|
+| `*/rest` | `*/rest` -- **terminates the generated comment** |
+| `\nbc` | `\nbc` -- a raw newline inside a block comment |
+| `` `ackquote `` | unchanged |
+| `text\` | unchanged -- continues a C++ line comment |
+
+The sibling directly above it, `h_NiceifyStringForFileName`, is correct 0-based.
+Same file, same author, same pattern -- one converted, one not. That is the
+clearest illustration in the tree of why this class is invisible to review: the
+right and wrong versions are adjacent and look alike.
+
+**`opensyde_tsp_convert`'s `mh_Sanitize`** had the same bounds: it dropped the
+first character and appended a `_` for the terminator, so `"ESX-4CS-GW"` became
+`"SX_4CS_GW_"`. Its own doc comment says the answer should be `"ESX_4CS_GW"`.
+
+### The three forms, and what closes them
+
+| Form | Scan | Found |
+|------|------|-------|
+| Indexing | `\w+\[[0-9]\]\s*[=!]=\s*'` | 4 (PR #29) |
+| Parsing | `std::sto*` with no base, checked against its writer | 2 sites, 8 functions (PR #30) |
+| Loop bounds | `<=` against `.size()`/`.length()` | 2 (PR #30) |
+
+All three are silent: wrong value, no error, no log, nothing for `[[nodiscard]]`
+or a sanitiser to catch. All three were invisible because the affected classes
+had no tests. The scans are cheap and worth re-running after any future
+string-handling change.
+
+## Handing a defect class to the compiler instead of to a grep
+
+`PrintFormattedCompat` is the project's `printf`. It is varargs, it had **no
+format attribute**, and so **not one of its ~200 call sites was ever checked** by
+either compiler. A wrong conversion or a missing argument there is undefined
+behaviour that no test reliably catches.
+
+Adding `__attribute__((format(printf, 1, 2)))` closes the class permanently, on
+every platform, with no scan to remember. It found **7** defects immediately:
+
+| Sites | Problem | Found by |
+|-------|---------|----------|
+| 4 | `%02d` passed a 64-bit `size_type` | macOS + Linux |
+| 3 | `%llu` passed a `unsigned long` | **Linux only** |
+
+The split in that last column is the argument for the attribute all by itself.
+`uint64_t` is `unsigned long` on Linux and `unsigned long long` on macOS and
+Windows, so `"%013llu"` is correct on two of the three platforms this project
+ships and wrong on the third. The local macOS build was silent; the Linux build
+host rejected it. `PRIu64` is the portable spelling.
+
+### What the hand-written scan could and could not do
+
+A scan for **argument-count** mismatches across all 200 call sites found **none**
+-- but only after it was taught that C++ concatenates adjacent string literals.
+The first version read just the first literal of a wrapped format string and
+reported **eleven** false positives, including several that looked completely
+convincing (`"...%s...%04X.%02X"` with apparently two arguments, where the third
+was simply on the next line).
+
+It was validated against planted cases before its zero was believed, and the one
+site it flagged most confidently was checked by hand and found correct.
+
+That scan cannot see a **type** mismatch at all, which is the entire set of what
+was actually wrong here. The compiler found 7; the scan would have found 0.
+
+**The general lesson for the rest of this sweep:** where a defect class can be
+handed to the compiler, hand it over. A grep has to be remembered, re-run, and
+re-validated every time; an attribute runs on every build forever, on all three
+platforms, and cannot be forgotten. `[[nodiscard]]` earned its place the same
+way.

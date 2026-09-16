@@ -116,7 +116,11 @@ std::error_code C_OscParamSetFilerBase::h_CheckFileVersion(C_OscXmlParserBase & 
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(std::stoi(orc_XmlParser.GetNodeContent()));
+         //h_SaveFileVersion writes this node as "0x" + hex. std::stoi without a base is
+         //hard-wired to base 10, so it read every version as 0 and the check below then
+         //rejected the file as an unsupported version.
+         const std::string c_Content = orc_XmlParser.GetNodeContent();
+         u16_FileVersion = static_cast<uint16_t>(std::stoi(c_Content, nullptr, stw::scl::ScanBaseCompat(c_Content)));
       }
       catch (...)
       {

@@ -637,7 +637,7 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeHex(const stw::hex_file:
          {
             std::string c_Text;
             c_Text = PrintFormattedCompat("Writing data for area %02d/%02d  byte %08u/%08u ...",
-                                  s32_Area + 1, orc_HexDataDump.at_Blocks.size(),
+                                  s32_Area + 1, static_cast<int32_t>(orc_HexDataDump.at_Blocks.size()),
                                   u32_AreaSize - u32_RemainingBytes, u32_AreaSize);
             q_Abort = m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_TRANSFER_START, C_NO_ERR,
                                        u8_ProgressPercentage, mc_CurrentNode, c_Text);
@@ -707,7 +707,8 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeHex(const stw::hex_file:
          //report "final" status:
          std::string c_Text;
          c_Text = PrintFormattedCompat("Writing data for area %02d/%02d  byte %08u/%08u ...",
-                               s32_Area + 1, orc_HexDataDump.at_Blocks.size(), u32_AreaSize, u32_AreaSize);
+                               s32_Area + 1, static_cast<int32_t>(orc_HexDataDump.at_Blocks.size()), u32_AreaSize,
+                               u32_AreaSize);
          (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_TRANSFER_START, C_NO_ERR,
                                 u8_ProgressPercentage, mc_CurrentNode, c_Text);
 

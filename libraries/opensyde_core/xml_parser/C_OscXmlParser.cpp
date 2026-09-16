@@ -473,7 +473,10 @@ int32_t C_OscXmlParserBase::GetAttributeSint32(const std::string & orc_Name, con
    {
       try
       {
-          s32_Value = std::stoi(c_Text);
+          //ScanBaseCompat selects base 16 for a "0x" prefix and base 10 otherwise. Without it
+          //std::stoi is hard-wired to base 10 and returns 0 for every hex value, silently --
+          //which contradicts this function's own documented "can handle 0x notation".
+          s32_Value = std::stoi(c_Text, nullptr, ScanBaseCompat(c_Text));
       }
       catch (...)
       {
@@ -506,7 +509,8 @@ uint32_t C_OscXmlParserBase::GetAttributeUint32(const std::string & orc_Name, co
    {
       try
       {
-          u32_Value = static_cast<uint32_t>(std::stoi(c_Text));
+          //see GetAttributeSint32; stoul rather than stoi so the full uint32 range is reachable
+          u32_Value = static_cast<uint32_t>(std::stoul(c_Text, nullptr, ScanBaseCompat(c_Text)));
       }
       catch (...)
       {
@@ -539,7 +543,8 @@ int64_t C_OscXmlParserBase::GetAttributeSint64(const std::string & orc_Name, con
    {
       try
       {
-          s64_Value = std::stoll(c_Text);
+          //see GetAttributeSint32
+          s64_Value = std::stoll(c_Text, nullptr, ScanBaseCompat(c_Text));
       }
       catch (...)
       {
