@@ -502,3 +502,64 @@ Two things that will otherwise waste time: without the build step it fails with
 "PCH file not found", and without `--header-filter` it silently suppresses
 everything in project headers (it reported "Suppressed 25593 warnings" and
 printed nothing).
+
+---
+
+## `[[nodiscard]]` rollout: what landed, and what is left (2026-09-16)
+
+Four subsystems are done. **700 declarations carry the attribute**, and every
+call site it flagged has been either propagated or marked `(void)` with the
+reason written next to it.
+
+| Subsystem | Annotated | Sites resolved | Propagated |
+|---|---|---|---|
+| `halc/` + `data_dealer/` | 164 | 12 | 3 |
+| `project/` | 206 | 22 | 4 |
+| `protocol_drivers/` | 318 | 29 | 0 |
+
+**Of 63 call sites, only 7 were genuinely dropped errors.** The rest were
+already correct and are now documented as such. `protocol_drivers` in particular
+produced **zero** — every one of its 29 was teardown, cleanup on an error path
+where assigning would have replaced a real result, or a call whose enclosing
+function returns `void`. Several were settled by comments already in the code
+("Stop routing always to clean up"; "this session request will return with an
+error. This error can be ignored").
+
+### Still unannotated
+
+| Subsystem | `std::error_code` declarations without the attribute |
+|---|---|
+| `exports/` | 53 |
+| `system_update_package/` | 37 |
+| `security/` | 35 |
+| `imports/` | 32 |
+| `xml_parser/` | 25 |
+| `protocol_drivers/` | 12 (deliberate, below) |
+
+The 12 in `protocol_drivers` are the five deferred callees --
+`SetNodeIdentifiers`, `SendCanMessageDirect`, `HandleCanMessage`, `Cycle`,
+`m_HandleAsyncResponse` -- each carrying a comment at its declaration saying why.
+Whether a caller should abort on one failed send is a protocol decision.
+
+### Two markings that want a product decision
+
+Both are `(void)` today because there is nowhere sensible to report from, not
+because the failure does not matter:
+
+- `C_NagMainWindow` and the device definition load. Now at least reported
+  through a dialog, but the underlying `LoadFromPaths` had to be taught to
+  report failure at all first -- it returned `Errc::success` unconditionally.
+- `C_SyvDaDashboardsWidget::m_InitOsyDriver` discarding `StartLogging`. A
+  failure means CAN signal interpretation does not start on the dashboard. It
+  sits inside `switch (s32_Retval)`, so propagating is a restructure.
+
+### The build host is a weaker checker than CI
+
+`C_SyvDaDashboardsWidget`'s discard was rejected by all three CI runners and
+accepted by the 48-core build host, which runs clang 19.1.7. The declaration is
+annotated, there is no unannotated override, and clearing the precompiled
+headers changes nothing -- clang 19 simply does not emit `-Wunused-result`
+there.
+
+**So "all eight tools build on the host" does not mean CI will agree.** For
+warning-driven work, the host is a fast first pass and CI is the authority.

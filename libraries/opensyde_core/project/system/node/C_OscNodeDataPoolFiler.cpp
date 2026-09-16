@@ -15,6 +15,7 @@
 #include <limits>
 #include <sstream>
 #include <system_error>
+#include <expected>
 #include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscErrorCategory.hpp"
@@ -177,9 +178,12 @@ std::error_code C_OscNodeDataPoolFiler::h_LoadDataPool(C_OscNodeDataPool & orc_N
    orc_NodeDataPool.u32_NvmSize = orc_XmlParser.GetAttributeUint32("nvm-size");
    if (orc_XmlParser.SelectNodeChild("type") == "type")
    {
-      c_Retval = h_StringToDataPool(orc_XmlParser.GetNodeContent(), orc_NodeDataPool.e_Type);
-      if (!c_Retval)
+      const std::expected<C_OscNodeDataPool::E_Type, std::error_code> c_Type =
+         h_StringToDataPool(orc_XmlParser.GetNodeContent());
+      c_Retval = c_Type.has_value() ? std::error_code() : c_Type.error();
+      if (c_Type.has_value())
       {
+         orc_NodeDataPool.e_Type = *c_Type;
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "data-pool");
       }
@@ -1032,35 +1036,35 @@ std::string C_OscNodeDataPoolFiler::h_DataPoolToString(const C_OscNodeDataPool::
    Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::error_code C_OscNodeDataPoolFiler::h_StringToDataPool(const std::string & orc_String,
-                                                           C_OscNodeDataPool::E_Type & ore_Type)
+std::expected<C_OscNodeDataPool::E_Type, std::error_code> C_OscNodeDataPoolFiler::h_StringToDataPool(
+   const std::string & orc_String)
 {
-   std::error_code c_Retval = Errc::success;
+   std::expected<C_OscNodeDataPool::E_Type, std::error_code> c_Retval;
 
    if (orc_String == "com")
    {
-      ore_Type = C_OscNodeDataPool::eCOM;
+      c_Retval = C_OscNodeDataPool::eCOM;
    }
    else if (orc_String == "nvm")
    {
-      ore_Type = C_OscNodeDataPool::eNVM;
+      c_Retval = C_OscNodeDataPool::eNVM;
    }
    else if (orc_String == "diag")
    {
-      ore_Type = C_OscNodeDataPool::eDIAG;
+      c_Retval = C_OscNodeDataPool::eDIAG;
    }
    else if (orc_String == "halc")
    {
-      ore_Type = C_OscNodeDataPool::eHALC;
+      c_Retval = C_OscNodeDataPool::eHALC;
    }
    else if (orc_String == "halc-nvm")
    {
-      ore_Type = C_OscNodeDataPool::eHALC_NVM;
+      c_Retval = C_OscNodeDataPool::eHALC_NVM;
    }
    else
    {
       osc_write_log_error("Loading Datapool", "Invalid Datapool type:" + orc_String);
-      c_Retval = Errc::range;
+      c_Retval = std::unexpected(make_error_code(Errc::range));
    }
 
    return c_Retval;
