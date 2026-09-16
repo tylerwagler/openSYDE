@@ -638,3 +638,70 @@ out-param, as `Validate` shows.
 Linux twin. Neither the local build nor the two Linux CI jobs compile that file
 -- only the Windows job does. When a fix lands in a `target_linux_*` file, grep
 the `target_windows_*` sibling before assuming a green build means anything.
+
+### What the tool trees added: 22 more sites
+
+Core built clean. The eight-tool build then produced **22** discarded returns
+that core-only building structurally cannot see, because core does not compile
+the GUI trees at all.
+
+**The first build reported 2 of the 22.** `build.sh` drives ninja without
+`-k 0`, so it stops at the first failing target. This is the second time in
+this sweep that a keep-going flag changed the size of a result by an order of
+magnitude. For any warning-driven sweep, `ninja -C build/Debug -k 0` directly,
+not `build.sh`.
+
+| Group | Sites | Real defects |
+|-------|-------|--------------|
+| `C_OscXmlParser::LoadFromString` in clipboard helpers | 13 | 0 (all correct by accident) |
+| `C_OscCanOpenObjectDictionary::Is*Ro` | 7 | 3 |
+| `C_OscSecurityPemDatabase::ParseFolder` | 3 | 0 (already documented as optional) |
+
+#### The clipboard group: correct by accident, 13 times
+
+Every one had the same shape -- parse a clipboard string, then read the parser
+without checking. All 13 are *currently* correct, because a failed parse leaves
+the parser empty, so the following `SelectRoot()` comparison does not match and
+the function falls into the `else` that already returns `C_CONFIG` (or
+`C_RANGE`). The parse check now returns that same code directly.
+
+Nothing is fixed here in the sense of changed behaviour. What changes is that
+correctness no longer depends on a guard fifty lines away continuing to exist.
+
+#### The CANopen group: the uninitialised-out-param class again
+
+`Is*Ro` leaves its `bool &` untouched when the EDS entry is missing. Three of
+the seven callers were wrong, each differently:
+
+- `C_SdBueMessageSelectorTreeWidget:2405` declared `bool q_IsPdoRo;`
+  **uninitialised** and branched on it. Stack garbage decided whether a PDO
+  appeared read-only.
+- `C_SdBueMessagePropertiesWidget` declared **one** flag and reused it across
+  four queries. A failed query left the previous control's read-only state
+  applied to the next one -- a stale value rather than an uninitialised one,
+  and invisible to any uninitialised-read analysis.
+- `C_SdBueMlvGraphicsScene:833` passed the member `mq_CoFixedMapping` directly,
+  so a failed query left another message's value in place.
+
+The other four already used a fresh flag defaulted to `false`, which is why the
+fix defaults to `false` everywhere: it matches what most of the tree already
+did. Whether a missing EDS entry *should* leave a control editable is a product
+question, not something to settle inside a warning sweep.
+
+That single-flag-reused-four-times case is worth dwelling on. It is not an
+uninitialised read, so `-Wconditional-uninitialized`, `-Wmaybe-uninitialized`
+and the clang analyser would all stay quiet on it forever. `[[nodiscard]]`
+found it because it does not look at the variable at all -- it looks at the
+call.
+
+### Running total for the attribute
+
+| | Declarations | Sites | Real defects |
+|---|---|---|---|
+| Wave 1 (4 core subsystems) | 700 | 63 | 7 |
+| Wave 2 (rest of core) | 281 | 14 | 1 |
+| Wave 2 (tool trees) | -- | 22 | 3 |
+
+**981 declarations, 99 sites, 11 defects.** Nine of the eleven are the same
+shape: an error path that leaves an out-param unwritten, and a caller that
+reads it anyway.
