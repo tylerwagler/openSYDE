@@ -50,7 +50,14 @@ public:
 
       mc_Saved = (pcn_Original != nullptr) ? pcn_Original : "C";
 
-      const char * const apcn_Candidates[] = {"de_DE.UTF-8", "de_DE.utf8", "de_DE", "fr_FR.UTF-8", "fr_FR"};
+      //Spellings differ per platform: glibc wants de_DE.UTF-8, macOS ships it too, and the
+      //Windows CRT uses its own names entirely. Try all of them so this test actually runs
+      //on all three targets rather than skipping into a false pass.
+      const char * const apcn_Candidates[] =
+      {
+         "de_DE.UTF-8", "de_DE.utf8", "de_DE", "fr_FR.UTF-8", "fr_FR",
+         "German_Germany.1252", "German_Germany.utf8", "German", "French_France.1252"
+      };
       for (const char * const pcn_Candidate : apcn_Candidates)
       {
          if (std::setlocale(LC_NUMERIC, pcn_Candidate) != nullptr)
