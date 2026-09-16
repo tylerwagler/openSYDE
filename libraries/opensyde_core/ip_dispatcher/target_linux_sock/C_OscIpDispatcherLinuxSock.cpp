@@ -153,12 +153,13 @@ C_OscIpDispatcherLinuxSock::C_OscIpDispatcherLinuxSock(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscIpDispatcherLinuxSock::~C_OscIpDispatcherLinuxSock(void)
 {
-   //make sure to release resources in case the user forgot to
+   //make sure to release resources in case the user forgot to.
+   //A destructor has nobody to report to, and the sockets are gone either way.
    for (uint16_t u16_Index = 0U; u16_Index < this->mc_SocketsTcp.size(); u16_Index++)
    {
-      this->C_OscIpDispatcherLinuxSock::CloseTcp(u16_Index);
+      (void)this->C_OscIpDispatcherLinuxSock::CloseTcp(u16_Index);
    }
-   this->C_OscIpDispatcherLinuxSock::CloseUdp();
+   (void)this->C_OscIpDispatcherLinuxSock::CloseUdp();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -588,7 +589,8 @@ std::error_code C_OscIpDispatcherLinuxSock::InitUdp(void)
    //close sockets in case of error:
    if (q_Error == true)
    {
-      this->CloseUdp();
+      //cleanup on an error path; the failure we report is the one that got us here
+      (void)this->CloseUdp();
    }
 
    return (q_Error == true) ? Errc::noact : Errc::success;

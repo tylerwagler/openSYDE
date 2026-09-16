@@ -361,10 +361,17 @@ std::string C_Md5Checksum::GetMD5(std::FILE * const opc_File)
          break;
       }
       //we have data: process it
-      mh_Md5Process(&c_Hash, &au8_Data[0], s32_BlockSize);
+      if (mh_Md5Process(&c_Hash, &au8_Data[0], s32_BlockSize))
+      {
+         return "";
+      }
    }
 
-   mh_Md5Done(&c_Hash, au8_Result);
+   //on failure au8_Result is never written, so returning it would hex-encode uninitialised stack
+   if (mh_Md5Done(&c_Hash, au8_Result))
+   {
+      return "";
+   }
 
    //Convert the hexadecimal checksum to a string
    for (uint8_t u8_Byte = 0U; u8_Byte < 16U; u8_Byte++)
@@ -394,8 +401,11 @@ std::string C_Md5Checksum::GetMD5(const uint8_t * const opu8_Data, const uint32_
    uint8_t au8_Result[16];
 
    mh_Md5Init(&c_Hash);
-   mh_Md5Process(&c_Hash, opu8_Data, ou32_Length);
-   mh_Md5Done(&c_Hash, au8_Result);
+   //on failure au8_Result is never written, so returning it would hex-encode uninitialised stack
+   if (mh_Md5Process(&c_Hash, opu8_Data, ou32_Length) || mh_Md5Done(&c_Hash, au8_Result))
+   {
+      return "";
+   }
 
    for (uint8_t u8_Byte = 0U; u8_Byte < 16U; u8_Byte++)
    {

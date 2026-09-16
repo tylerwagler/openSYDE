@@ -41,18 +41,18 @@ private:
    int64_t ms64_RealtimeMonotonicOffsetUs;
 
 protected:
-   virtual std::error_code m_CAN_Read_Msg(stw::can::T_STWCAN_Msg_RX & orc_Message);
+   [[nodiscard]] virtual std::error_code m_CAN_Read_Msg(stw::can::T_STWCAN_Msg_RX & orc_Message);
 
 public:
    C_OscLibcanBackendAdapter(std::unique_ptr< ::can::ICanBackend> opc_Backend, const ::can::ChannelConfig & orc_Config);
    virtual ~C_OscLibcanBackendAdapter(void);
 
-   virtual std::error_code CAN_Init(void);
-   virtual std::error_code CAN_Init(const int32_t os32_BitrateKBitS);
-   virtual std::error_code CAN_Exit(void);
-   virtual std::error_code CAN_Reset(void);
-   virtual std::error_code CAN_Send_Msg(const stw::can::T_STWCAN_Msg_TX & orc_Message);
-   virtual std::error_code CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const;
+   [[nodiscard]] virtual std::error_code CAN_Init(void);
+   [[nodiscard]] virtual std::error_code CAN_Init(const int32_t os32_BitrateKBitS);
+   [[nodiscard]] virtual std::error_code CAN_Exit(void);
+   [[nodiscard]] virtual std::error_code CAN_Reset(void);
+   [[nodiscard]] virtual std::error_code CAN_Send_Msg(const stw::can::T_STWCAN_Msg_TX & orc_Message);
+   [[nodiscard]] virtual std::error_code CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const;
 
    ::can::ICanBackend * GetBackend(void) const;
 };

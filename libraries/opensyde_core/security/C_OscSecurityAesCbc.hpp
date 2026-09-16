@@ -41,12 +41,12 @@ public:
    static const uint32_t hu32_KEY_LENGTH = 16U;
    static const uint32_t hu32_IV_LENGTH = 16U;
 
-   static std::error_code h_Encrypt(const uint8_t(&orau8_Key)[hu32_KEY_LENGTH],
-                                    const uint8_t(&orau8_InitVector)[hu32_IV_LENGTH], const std::vector<uint8_t> & orc_Input,
-                                    std::vector<uint8_t> & orc_Output);
-   static std::error_code h_Decrypt(const uint8_t(&orau8_Key)[hu32_KEY_LENGTH],
-                                    const uint8_t(&orau8_InitVector)[hu32_IV_LENGTH], const std::vector<uint8_t> & orc_Input,
-                                    std::vector<uint8_t> & orc_Output);
+   [[nodiscard]] static std::error_code h_Encrypt(const uint8_t(&orau8_Key)[hu32_KEY_LENGTH],
+                                                  const uint8_t(&orau8_InitVector)[hu32_IV_LENGTH], const std::vector<uint8_t> & orc_Input,
+                                                  std::vector<uint8_t> & orc_Output);
+   [[nodiscard]] static std::error_code h_Decrypt(const uint8_t(&orau8_Key)[hu32_KEY_LENGTH],
+                                                  const uint8_t(&orau8_InitVector)[hu32_IV_LENGTH], const std::vector<uint8_t> & orc_Input,
+                                                  std::vector<uint8_t> & orc_Output);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -35,7 +35,7 @@ public:
    const C_OscSecurityPemKeyInfo & GetKeyInfo(void) const;
    const std::string & GetMetaInfos(void) const;
 
-   virtual std::error_code LoadFromFile(const std::string & orc_FileName, std::string & orc_ErrorMessage);
+   [[nodiscard]] virtual std::error_code LoadFromFile(const std::string & orc_FileName, std::string & orc_ErrorMessage);
 
 protected:
    static const uint32_t mhu32_DEFAULT_BUFFER_SIZE;
@@ -43,15 +43,15 @@ protected:
    std::string mc_MetaInfo;
    C_OscSecurityPemKeyInfo mc_KeyInfo;
 
-   virtual std::error_code m_ReadPublicKey(const std::vector<uint8_t> & orc_FileContent,
-                                           std::string & orc_ErrorMessage);
-   virtual std::error_code m_ReadMetaInfos(const std::vector<uint8_t> & orc_FileContent,
-                                           std::string & orc_ErrorMessage);
+   [[nodiscard]] virtual std::error_code m_ReadPublicKey(const std::vector<uint8_t> & orc_FileContent,
+                                                         std::string & orc_ErrorMessage);
+   [[nodiscard]] virtual std::error_code m_ReadMetaInfos(const std::vector<uint8_t> & orc_FileContent,
+                                                         std::string & orc_ErrorMessage);
 
    //Pure virtual function. Implementation will differ depending on whether a regular key or an elliptic curve key is
    // expected.
-   virtual std::error_code m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent,
-                                            std::string & orc_ErrorMessage) = 0;
+   [[nodiscard]] virtual std::error_code m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent,
+                                                          std::string & orc_ErrorMessage) = 0;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

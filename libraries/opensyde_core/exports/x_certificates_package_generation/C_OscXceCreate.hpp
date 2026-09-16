@@ -29,32 +29,32 @@ class C_OscXceCreate :
    public C_OscXceBase
 {
 public:
-   static std::error_code h_CreatePackage(
-      const std::string & orc_PackagePath, const std::vector<std::string> & orc_CertificatesPath,
-      const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
-      std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage,
-      const std::string & orc_TemporaryDirectory = "");
+   [[nodiscard]] static std::error_code h_CreatePackage(
+                                                        const std::string & orc_PackagePath, const std::vector<std::string> & orc_CertificatesPath,
+                                                        const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
+                                                        std::vector<std::string> & orc_WarningMessages, std::string & orc_ErrorMessage,
+                                                        const std::string & orc_TemporaryDirectory = "");
 
 private:
    static const std::string mhc_USE_CASE;
 
-   static std::error_code mh_CheckParamsToCreatePackage(
-      const std::string & orc_PackagePath, const std::vector<std::string> & orc_CertificatesPath,
-      const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
-   static std::error_code mh_CheckFileExists(const std::string & orc_Path);
+   [[nodiscard]] static std::error_code mh_CheckParamsToCreatePackage(
+                                                                      const std::string & orc_PackagePath, const std::vector<std::string> & orc_CertificatesPath,
+                                                                      const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
+   [[nodiscard]] static std::error_code mh_CheckFileExists(const std::string & orc_Path);
    static C_OscXceManifest mh_CreateManifest(
       const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
-   static std::error_code mh_PrepareCertFiles(
-      const std::string & orc_TmpPath, const std::vector<std::string> & orc_CertificatesPath,
-      std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
-      std::set<std::string> & orc_XcertFiles);
+   [[nodiscard]] static std::error_code mh_PrepareCertFiles(
+                                                            const std::string & orc_TmpPath, const std::vector<std::string> & orc_CertificatesPath,
+                                                            std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
+                                                            std::set<std::string> & orc_XcertFiles);
    static std::string mh_GenOutFilePathPart(const std::string & orc_InPath,
                                                       const std::string & orc_TargetFolder);
-   static std::error_code mh_CopyFile(const std::string & orc_InPath, const std::string & orc_OutBasePath,
-                                      const std::string & orc_OutFolder, std::map<std::string,
-                                                                                            bool> & orc_ExistingFiles,
-                                      std::set<std::string> & orc_XcertFiles,
-                                      std::string * const opc_OutFilePath = nullptr);
+   [[nodiscard]] static std::error_code mh_CopyFile(const std::string & orc_InPath, const std::string & orc_OutBasePath,
+                                                    const std::string & orc_OutFolder, std::map<std::string,
+                                                    bool> & orc_ExistingFiles,
+                                                    std::set<std::string> & orc_XcertFiles,
+                                                    std::string * const opc_OutFilePath = nullptr);
    static std::string mh_GetUniqueFileName(const std::string & orc_InPath,
                                                      const std::string & orc_OutFolder,
                                                      std::map<std::string,

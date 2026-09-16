@@ -26,9 +26,9 @@ namespace opensyde_core
 class C_OscXcoManifestFiler
 {
 public:
-   static std::error_code h_LoadFile(C_OscXcoManifest & orc_Config, const std::string & orc_Path);
-   static std::error_code h_SaveFile(const C_OscXcoManifest & orc_Config, const std::string & orc_Path);
-   static std::error_code h_LoadData(C_OscXcoManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser);
+   [[nodiscard]] static std::error_code h_LoadFile(C_OscXcoManifest & orc_Config, const std::string & orc_Path);
+   [[nodiscard]] static std::error_code h_SaveFile(const C_OscXcoManifest & orc_Config, const std::string & orc_Path);
+   [[nodiscard]] static std::error_code h_LoadData(C_OscXcoManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveData(const C_OscXcoManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser);
 
    static const std::string hc_FILE_NAME;

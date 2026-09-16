@@ -33,7 +33,7 @@ public:
    C_OscCanOpenEdsDeviceInfoBlock c_DeviceInfo;
 
    void CalcHash(uint32_t & oru32_HashValue) const;
-   std::error_code LoadFromFile(stw::scl::C_SclIniFile & orc_File, std::string & orc_LastError);
+   [[nodiscard]] std::error_code LoadFromFile(stw::scl::C_SclIniFile & orc_File, std::string & orc_LastError);
 
    uint8_t GetGranularity(void) const;
 };

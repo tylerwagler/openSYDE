@@ -55,7 +55,7 @@ protected:
    const;
 
 private:
-   static std::error_code mh_DisassembleCanId(const uint32_t ou32_CanId, T_CanAddressInformation & or_CanAddressInformation);
+   [[nodiscard]] static std::error_code mh_DisassembleCanId(const uint32_t ou32_CanId, T_CanAddressInformation & or_CanAddressInformation);
 
    static std::string mh_ThreeByteVersionToString(const uint8_t * const opu8_Version);
    std::string m_RawDataToString(const uint8_t ou8_NumBytes, const uint8_t * const opu8_Data) const;

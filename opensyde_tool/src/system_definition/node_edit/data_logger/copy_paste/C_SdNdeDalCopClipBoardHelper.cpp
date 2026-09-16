@@ -209,9 +209,13 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadDataloggerFromClipboard(std::vector
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(mh_GetClipBoard().toStdString().c_str());
-
-   if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString().c_str())
+   if (c_StringXml.LoadFromString(mh_GetClipBoard().toStdString()))
+   {
+      //clipboard did not hold XML at all; the SelectRoot check below would reject it too,
+      //but only as a side effect of the parser being empty
+      s32_Retval = C_CONFIG;
+   }
+   else if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString())
    {
       //the project filers report std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = C_OscDataLoggerJobFiler::h_LoadData(orc_Data, c_StringXml).value();

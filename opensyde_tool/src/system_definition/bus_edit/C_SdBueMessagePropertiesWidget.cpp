@@ -556,22 +556,26 @@ void C_SdBueMessagePropertiesWidget::m_CoLoadEdsRestricitions(const C_OscCanMess
          tgl_assert(pc_Device != nullptr);
          if (pc_Device != nullptr)
          {
+            //one flag per query: these share nothing, and a query that fails must not leave the
+            //previous control's read-only state applied to the next one. A missing EDS entry
+            //leaves the control editable.
             bool q_RoFlag = false;
 
             const C_OscCanOpenObjectDictionary & rc_EdsContent = pc_Device->GetEdsFileContent();
 
             // Message Tx flag is relative to the device, not the manager when using the EDS file content
             // COB ID
-            rc_EdsContent.IsCobIdRo(opc_Message->u16_CanOpenManagerPdoIndex,
-                                    this->mq_CoDeviceIsTransmitter, q_RoFlag);
+            (void)rc_EdsContent.IsCobIdRo(opc_Message->u16_CanOpenManagerPdoIndex,
+                                          this->mq_CoDeviceIsTransmitter, q_RoFlag);
 
             this->mpc_Ui->pc_CheckBoxExtendedType->setEnabled(!q_RoFlag);
             this->mpc_Ui->pc_SpinBoxCobId->setEnabled(!q_RoFlag);
             this->mpc_Ui->pc_CheckBoxCobIdWithNodeId->setEnabled(!q_RoFlag);
 
             // Transmission type
-            rc_EdsContent.IsTransmissionTypeRo(opc_Message->u16_CanOpenManagerPdoIndex,
-                                               this->mq_CoDeviceIsTransmitter, q_RoFlag);
+            q_RoFlag = false;
+            (void)rc_EdsContent.IsTransmissionTypeRo(opc_Message->u16_CanOpenManagerPdoIndex,
+                                                     this->mq_CoDeviceIsTransmitter, q_RoFlag);
 
             this->mpc_Ui->pc_ComboBoxTxMethod->setEnabled(!q_RoFlag);
 
@@ -591,16 +595,18 @@ void C_SdBueMessagePropertiesWidget::m_CoLoadEdsRestricitions(const C_OscCanMess
             this->mpc_Ui->pc_SpinBoxCoPdoSyncNumber->setEnabled(!q_RoFlag);
 
             // Inhibit time
-            rc_EdsContent.IsInhibitTimeRo(opc_Message->u16_CanOpenManagerPdoIndex,
-                                          this->mq_CoDeviceIsTransmitter, q_RoFlag);
+            q_RoFlag = false;
+            (void)rc_EdsContent.IsInhibitTimeRo(opc_Message->u16_CanOpenManagerPdoIndex,
+                                                this->mq_CoDeviceIsTransmitter, q_RoFlag);
 
             this->mpc_Ui->pc_SpinBoxEarly->setEnabled(!q_RoFlag);
 
             // Event time
             // Special case: If the value is 0, the event time is already marked as read only
 
-            rc_EdsContent.IsEventTimerRo(opc_Message->u16_CanOpenManagerPdoIndex,
-                                         this->mq_CoDeviceIsTransmitter, q_RoFlag);
+            q_RoFlag = false;
+            (void)rc_EdsContent.IsEventTimerRo(opc_Message->u16_CanOpenManagerPdoIndex,
+                                               this->mq_CoDeviceIsTransmitter, q_RoFlag);
 
             if (this->mq_CoDeviceIsTransmitter == true)
             {

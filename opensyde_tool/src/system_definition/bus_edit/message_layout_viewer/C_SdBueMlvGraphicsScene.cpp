@@ -830,8 +830,11 @@ void C_SdBueMlvGraphicsScene::m_CoLoadEdsRestrictions(void)
          {
             // Message Tx flag is relative to the device, not the manager when using the EDS file content
             // PDO Mapping
-            pc_Manager->GetEdsFileContent().IsPdoMappingRo(pc_Message->u16_CanOpenManagerPdoIndex,
-                                                           !this->mc_MessageId.q_MessageIsTx, this->mq_CoFixedMapping);
+            //without the reset a failed query leaves the member holding another message's state
+            this->mq_CoFixedMapping = false;
+            (void)pc_Manager->GetEdsFileContent().IsPdoMappingRo(pc_Message->u16_CanOpenManagerPdoIndex,
+                                                                 !this->mc_MessageId.q_MessageIsTx,
+                                                                 this->mq_CoFixedMapping);
          }
       }
    }

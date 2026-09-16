@@ -96,7 +96,7 @@ public:
       Errc::noact     connection failed
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle) = 0;
+   [[nodiscard]] virtual std::error_code InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -110,7 +110,7 @@ public:
       Errc::range     invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code IsTcpConnected(const uint32_t ou32_Handle) = 0;
+   [[nodiscard]] virtual std::error_code IsTcpConnected(const uint32_t ou32_Handle) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -132,7 +132,7 @@ public:
       Errc::range     invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code ReConnectTcp(const uint32_t ou32_Handle) = 0;
+   [[nodiscard]] virtual std::error_code ReConnectTcp(const uint32_t ou32_Handle) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -150,7 +150,7 @@ public:
       Errc::noact     creation failed
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code InitUdp(void) = 0;
+   [[nodiscard]] virtual std::error_code InitUdp(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -166,7 +166,7 @@ public:
       Errc::range     invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code CloseTcp(const uint32_t ou32_Handle) = 0;
+   [[nodiscard]] virtual std::error_code CloseTcp(const uint32_t ou32_Handle) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -179,7 +179,7 @@ public:
       Errc::success   disconnected ...
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code CloseUdp(void) = 0;
+   [[nodiscard]] virtual std::error_code CloseUdp(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -197,7 +197,7 @@ public:
       Errc::range     invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data) = 0;
+   [[nodiscard]] virtual std::error_code SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -220,7 +220,7 @@ public:
       Errc::range     invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data) = 0;
+   [[nodiscard]] virtual std::error_code ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -249,10 +249,10 @@ public:
       Errc::warn      data is not for the server and/or client with the node identifier and bus identifier
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code ReadTcp(const uint32_t ou32_Handle, const uint8_t ou8_ClientBusIdentifier,
-                                   const uint8_t ou8_ClientNodeIdentifier,
-                                   const uint8_t ou8_ServerBusIdentifier,
-                                   const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data) = 0;
+   [[nodiscard]] virtual std::error_code ReadTcp(const uint32_t ou32_Handle, const uint8_t ou8_ClientBusIdentifier,
+                                                 const uint8_t ou8_ClientNodeIdentifier,
+                                                 const uint8_t ou8_ServerBusIdentifier,
+                                                 const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -276,11 +276,11 @@ public:
       Errc::noact     no data for these identifier
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier,
-                                         const uint8_t ou8_ClientNodeIdentifier,
-                                         const uint8_t ou8_ServerBusIdentifier,
-                                         const uint8_t ou8_ServerNodeIdentifier,
-                                         std::vector<uint8_t> & orc_Data) = 0;
+   [[nodiscard]] virtual std::error_code ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier,
+                                                       const uint8_t ou8_ClientNodeIdentifier,
+                                                       const uint8_t ou8_ServerBusIdentifier,
+                                                       const uint8_t ou8_ServerNodeIdentifier,
+                                                       std::vector<uint8_t> & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -296,7 +296,7 @@ public:
       Errc::rd_wr     error sending data
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code SendUdp(const std::vector<uint8_t> & orc_Data) = 0;
+   [[nodiscard]] virtual std::error_code SendUdp(const std::vector<uint8_t> & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -316,7 +316,7 @@ public:
       Errc::noact     no data received
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code ReadUdp(std::vector<uint8_t> &orc_Data, uint8_t(&orau8_Ip)[4]) = 0;
+   [[nodiscard]] virtual std::error_code ReadUdp(std::vector<uint8_t> &orc_Data, uint8_t(&orau8_Ip)[4]) = 0;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

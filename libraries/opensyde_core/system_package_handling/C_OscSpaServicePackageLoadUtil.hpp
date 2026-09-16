@@ -24,12 +24,12 @@ class C_OscSpaServicePackageLoadUtil
 {
 public:
    static std::string h_GetUnzipPath(const std::string & orc_TargetUnzipPath);
-   static std::error_code h_CheckParamsToProcessZipPackage(const std::string & orc_PackagePath,
-                                                   const std::string & orc_TargetUnzipPath,
-                                                   const std::string & orc_UseCase,
-                                                   std::string & orc_ErrorMessage);
-   static std::error_code h_SearchFilesInPath(const std::string & orc_PackagePath,
-                                      const std::vector<std::string> & orc_NecessaryFiles);
+   [[nodiscard]] static std::error_code h_CheckParamsToProcessZipPackage(const std::string & orc_PackagePath,
+                                                                         const std::string & orc_TargetUnzipPath,
+                                                                         const std::string & orc_UseCase,
+                                                                         std::string & orc_ErrorMessage);
+   [[nodiscard]] static std::error_code h_SearchFilesInPath(const std::string & orc_PackagePath,
+                                                            const std::vector<std::string> & orc_NecessaryFiles);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

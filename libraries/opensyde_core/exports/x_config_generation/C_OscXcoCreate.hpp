@@ -29,19 +29,19 @@ class C_OscXcoCreate :
    public C_OscXcoBase
 {
 public:
-   static std::error_code h_CreatePackage(const std::string & orc_PackagePath,
-                                          const C_OscSystemDefinition & orc_SystemDefinition,
-                                          const C_OscXcoManifest & orc_Manifest,
-                                          std::vector<std::string> & orc_WarningMessages,
-                                          std::string & orc_ErrorMessage,
-                                          const std::string & orc_TemporaryDirectory = "");
+   [[nodiscard]] static std::error_code h_CreatePackage(const std::string & orc_PackagePath,
+                                                        const C_OscSystemDefinition & orc_SystemDefinition,
+                                                        const C_OscXcoManifest & orc_Manifest,
+                                                        std::vector<std::string> & orc_WarningMessages,
+                                                        std::string & orc_ErrorMessage,
+                                                        const std::string & orc_TemporaryDirectory = "");
 
 private:
    static const std::string mhc_USE_CASE;
 
-   static std::error_code mh_CheckParamsToCreatePackage(const std::string & orc_PackagePath,
-                                                        const C_OscSystemDefinition & orc_SystemDefinition,
-                                                        const C_OscXcoManifest & orc_Manifest);
+   [[nodiscard]] static std::error_code mh_CheckParamsToCreatePackage(const std::string & orc_PackagePath,
+                                                                      const C_OscSystemDefinition & orc_SystemDefinition,
+                                                                      const C_OscXcoManifest & orc_Manifest);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

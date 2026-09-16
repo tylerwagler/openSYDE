@@ -195,10 +195,9 @@ e_CanMonL7Protocols C_CanMonProtocols::GetProtocolMode(void) const
 
 //---------------------------------------------------------------------------
 
-std::error_code C_CanMonProtocols::SetProtocolMode(const e_CanMonL7Protocols oe_L7Protocol)
+void C_CanMonProtocols::SetProtocolMode(const e_CanMonL7Protocols oe_L7Protocol)
 {
    me_ActiveProtocol = oe_L7Protocol;
-   return Errc::success;
 }
 
 //---------------------------------------------------------------------------
@@ -210,7 +209,7 @@ bool C_CanMonProtocols::GetDecimalMode(void) const
 
 //---------------------------------------------------------------------------
 
-std::error_code C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal)
+void C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal)
 {
    int32_t s32_Loop;
 
@@ -221,8 +220,6 @@ std::error_code C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal)
    {
       mapc_Protocols[s32_Loop]->SetDecimal(oq_Decimal);
    }
-
-   return Errc::success;
 }
 
 //-----------------------------------------------------------------------------

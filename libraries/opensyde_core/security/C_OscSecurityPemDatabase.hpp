@@ -34,17 +34,17 @@ public:
    const C_OscSecurityPemKeyInfo * GetPemFileBySerialNumber(const std::vector<uint8_t> & orc_SerialNumber) const;
    const C_OscSecurityPemKeyInfo * GetLevel7PemInformation(void) const;
 
-   std::error_code AddLevel7PemFile(const std::string & orc_Path);
-   std::error_code ParseFolder(const std::string & orc_FolderPath);
+   [[nodiscard]] std::error_code AddLevel7PemFile(const std::string & orc_Path);
+   [[nodiscard]] std::error_code ParseFolder(const std::string & orc_FolderPath);
 
 private:
    bool mq_StoredLevel7PemInformationValid;
    C_OscSecurityPemKeyInfo mc_StoredLevel7PemInformation;
    std::vector<C_OscSecurityPemKeyInfo> mc_StoredPemFiles;
 
-   std::error_code m_TryAddKeyFromPath(const std::string & orc_Path, const bool oq_AddToList);
-   std::error_code m_TryAddKey(const C_OscSecurityPemKeyInfo & orc_NewKey, std::string & orc_ErrorMessage,
-                               const bool oq_AddToList);
+   [[nodiscard]] std::error_code m_TryAddKeyFromPath(const std::string & orc_Path, const bool oq_AddToList);
+   [[nodiscard]] std::error_code m_TryAddKey(const C_OscSecurityPemKeyInfo & orc_NewKey, std::string & orc_ErrorMessage,
+                                             const bool oq_AddToList);
    static std::vector<std::string> mh_GetPemFiles(const std::string & orc_FolderPath);
 };
 

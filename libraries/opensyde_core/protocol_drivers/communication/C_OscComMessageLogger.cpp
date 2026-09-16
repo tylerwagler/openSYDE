@@ -225,7 +225,8 @@ void C_OscComMessageLogger::SetProtocol(const e_CanMonL7Protocols oe_Protocol)
    this->mc_ProtocolDec.SetProtocolMode(oe_Protocol);
 
    // Update the protocol names of all log files
-   this->mc_ProtocolDec.GetProtocolName(this->me_Protocol, c_ProtocolName);
+   //GetProtocolName writes c_ProtocolName on every path, including its error path
+   (void)this->mc_ProtocolDec.GetProtocolName(this->me_Protocol, c_ProtocolName);
    for (c_ItFile = this->mc_LoggingFiles.begin(); c_ItFile != this->mc_LoggingFiles.end(); ++c_ItFile)
    {
       c_ItFile->second->SetProtocolName(c_ProtocolName);
@@ -522,7 +523,8 @@ std::error_code C_OscComMessageLogger::AddLogFileAsc(const std::string & orc_Fil
    std::error_code c_Return = Errc::success;
    std::string c_ProtocolName;
 
-   this->mc_ProtocolDec.GetProtocolName(this->me_Protocol, c_ProtocolName);
+   //GetProtocolName writes c_ProtocolName on every path, including its error path
+   (void)this->mc_ProtocolDec.GetProtocolName(this->me_Protocol, c_ProtocolName);
    std::unique_ptr<C_OscComMessageLoggerFileAsc> pc_File =
       std::make_unique<C_OscComMessageLoggerFileAsc>(orc_FilePath, c_ProtocolName, oq_HexActive,
                                                      oq_RelativeTimeStampActive);

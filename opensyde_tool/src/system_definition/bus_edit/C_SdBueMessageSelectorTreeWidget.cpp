@@ -2402,8 +2402,9 @@ void C_SdBueMessageSelectorTreeWidget::m_InsertMessage(const uint32_t & oru32_Me
             const bool q_MessageIsTx = !(rc_MessageId.q_MessageIsTx); // the message is from CANopen manager view and
                                                                       // therefore this flag must be used inverse for
                                                                       // IsCobIdRo method
-            bool q_IsPdoRo;
-            pc_Manager->GetEdsFileContent().IsCobIdRo(u16_PdoIndex, q_MessageIsTx, q_IsPdoRo);
+            //a missing EDS entry leaves the PDO editable, matching the other CANopen read-only checks
+            bool q_IsPdoRo = false;
+            (void)pc_Manager->GetEdsFileContent().IsCobIdRo(u16_PdoIndex, q_MessageIsTx, q_IsPdoRo);
 
             if (q_IsPdoRo == true)
             {
@@ -2889,8 +2890,8 @@ void C_SdBueMessageSelectorTreeWidget::m_CoLoadEdsRestricitions(void)
 
                // Message Tx flag is relative to the device, not the manager when using the EDS file content
                // PDO Mapping
-               pc_Manager->GetEdsFileContent().IsPdoMappingRo(pc_Message->u16_CanOpenManagerPdoIndex,
-                                                              !rc_MsgId.q_MessageIsTx, q_RoFlag);
+               (void)pc_Manager->GetEdsFileContent().IsPdoMappingRo(pc_Message->u16_CanOpenManagerPdoIndex,
+                                                                    !rc_MsgId.q_MessageIsTx, q_RoFlag);
 
                this->mc_CoUniqueMessagesPdoMappingRo.push_back(static_cast<uint8_t>(q_RoFlag));
             }

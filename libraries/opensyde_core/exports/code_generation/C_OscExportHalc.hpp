@@ -32,25 +32,25 @@ class C_OscExportHalc
 public:
    static std::string h_GetFileName(const bool oq_IsSafe);
    static uint16_t h_ConvertOverallCodeVersion(const uint16_t ou16_GenCodeVersion);
-   static std::error_code h_CreateSourceCode(const std::string & orc_Path, const uint16_t ou16_GenCodeVersion,
-                                             const C_OscHalcConfig & orc_HalcConfig,
-                                             const stw::opensyde_core::C_OscNodeDataPool & orc_Datapool,
-                                             const std::string & orc_ExportToolInfo);
+   [[nodiscard]] static std::error_code h_CreateSourceCode(const std::string & orc_Path, const uint16_t ou16_GenCodeVersion,
+                                                           const C_OscHalcConfig & orc_HalcConfig,
+                                                           const stw::opensyde_core::C_OscNodeDataPool & orc_Datapool,
+                                                           const std::string & orc_ExportToolInfo);
 
 protected:
    static const bool mhq_IS_HEADER_FILE = false;
    static const bool mhq_IS_IMPLEMENTATION_FILE = true;
 
-   static std::error_code mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
-                                              const std::string & orc_Path, const C_OscHalcConfig & orc_HalcConfig,
-                                              const std::string & orc_ProjectId, const bool oq_IsSafe,
-                                              const uint16_t ou16_GenCodeVersion);
+   [[nodiscard]] static std::error_code mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
+                                                            const std::string & orc_Path, const C_OscHalcConfig & orc_HalcConfig,
+                                                            const std::string & orc_ProjectId, const bool oq_IsSafe,
+                                                            const uint16_t ou16_GenCodeVersion);
 
-   static std::error_code mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
-                                                      const std::string & orc_Path,
-                                                      const C_OscHalcConfig & orc_HalcConfig,
-                                                      const std::string & orc_ProjectId, const bool oq_IsSafe,
-                                                      const uint16_t ou16_GenCodeVersion);
+   [[nodiscard]] static std::error_code mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
+                                                                    const std::string & orc_Path,
+                                                                    const C_OscHalcConfig & orc_HalcConfig,
+                                                                    const std::string & orc_ProjectId, const bool oq_IsSafe,
+                                                                    const uint16_t ou16_GenCodeVersion);
 
    static void mh_AddHeader(const std::string & orc_ExportToolInfo, std::vector<std::string> & orc_Data,
                             const bool oq_FileType, const bool oq_IsSafe);
