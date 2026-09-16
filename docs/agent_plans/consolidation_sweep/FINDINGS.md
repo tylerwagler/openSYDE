@@ -915,3 +915,45 @@ All three are silent: wrong value, no error, no log, nothing for `[[nodiscard]]`
 or a sanitiser to catch. All three were invisible because the affected classes
 had no tests. The scans are cheap and worth re-running after any future
 string-handling change.
+
+## Handing a defect class to the compiler instead of to a grep
+
+`PrintFormattedCompat` is the project's `printf`. It is varargs, it had **no
+format attribute**, and so **not one of its ~200 call sites was ever checked** by
+either compiler. A wrong conversion or a missing argument there is undefined
+behaviour that no test reliably catches.
+
+Adding `__attribute__((format(printf, 1, 2)))` closes the class permanently, on
+every platform, with no scan to remember. It found **7** defects immediately:
+
+| Sites | Problem | Found by |
+|-------|---------|----------|
+| 4 | `%02d` passed a 64-bit `size_type` | macOS + Linux |
+| 3 | `%llu` passed a `unsigned long` | **Linux only** |
+
+The split in that last column is the argument for the attribute all by itself.
+`uint64_t` is `unsigned long` on Linux and `unsigned long long` on macOS and
+Windows, so `"%013llu"` is correct on two of the three platforms this project
+ships and wrong on the third. The local macOS build was silent; the Linux build
+host rejected it. `PRIu64` is the portable spelling.
+
+### What the hand-written scan could and could not do
+
+A scan for **argument-count** mismatches across all 200 call sites found **none**
+-- but only after it was taught that C++ concatenates adjacent string literals.
+The first version read just the first literal of a wrapped format string and
+reported **eleven** false positives, including several that looked completely
+convincing (`"...%s...%04X.%02X"` with apparently two arguments, where the third
+was simply on the next line).
+
+It was validated against planted cases before its zero was believed, and the one
+site it flagged most confidently was checked by hand and found correct.
+
+That scan cannot see a **type** mismatch at all, which is the entire set of what
+was actually wrong here. The compiler found 7; the scan would have found 0.
+
+**The general lesson for the rest of this sweep:** where a defect class can be
+handed to the compiler, hand it over. A grep has to be remembered, re-run, and
+re-validated every time; an attribute runs on every build forever, on all three
+platforms, and cannot be forgotten. `[[nodiscard]]` earned its place the same
+way.
