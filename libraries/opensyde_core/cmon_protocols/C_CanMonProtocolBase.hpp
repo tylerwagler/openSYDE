@@ -77,8 +77,8 @@ public:
    virtual void SetDecimal(const bool oq_Decimal);
 
    //overload if we have something to save (use protocol abbreviation as prefix for directives !)
-   virtual std::error_code SaveParamsToIni(stw::scl::C_SclIniFile & orc_IniFile, const std::string & orc_Section);
-   virtual std::error_code LoadParamsFromIni(stw::scl::C_SclIniFile & orc_IniFile, const std::string & orc_Section);
+   [[nodiscard]] virtual std::error_code SaveParamsToIni(stw::scl::C_SclIniFile & orc_IniFile, const std::string & orc_Section);
+   [[nodiscard]] virtual std::error_code LoadParamsFromIni(stw::scl::C_SclIniFile & orc_IniFile, const std::string & orc_Section);
 };
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -72,12 +72,12 @@ public:
    C_CanMonProtocols(const C_CanMonProtocols & orc_Source);               //copying will cause compiler error
    C_CanMonProtocols & operator = (const C_CanMonProtocols & orc_Source); //assignment will cause compiler error
 
-   std::error_code SetProtocolMode(const e_CanMonL7Protocols oe_L7Protocol);
+   void SetProtocolMode(const e_CanMonL7Protocols oe_L7Protocol);
    e_CanMonL7Protocols GetProtocolMode(void) const;
 
-   std::error_code GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, std::string & orc_Description) const;
+   [[nodiscard]] std::error_code GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, std::string & orc_Description) const;
 
-   std::error_code SetDecimalMode(const bool oq_Decimal);
+   void SetDecimalMode(const bool oq_Decimal);
    bool GetDecimalMode(void) const;
 
    static std::string FormatTimeStamp(const uint64_t ou64_TimeStampUs, const bool oq_LeftFillBlanks = false);
@@ -92,10 +92,10 @@ public:
    std::string MessageToStringLog(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
    std::string MessageToStringLog(const stw::can::T_STWCAN_Msg_TX & orc_Msg) const;
 
-   std::error_code SaveProtocolParametersToIni(const std::string & orc_FileName,
-                                       const std::string & orc_Section) const;
-   std::error_code LoadProtocolParametersFromIni(const std::string & orc_FileName,
-                                         const std::string & orc_Section) const;
+   [[nodiscard]] std::error_code SaveProtocolParametersToIni(const std::string & orc_FileName,
+                                                             const std::string & orc_Section) const;
+   [[nodiscard]] std::error_code LoadProtocolParametersFromIni(const std::string & orc_FileName,
+                                                               const std::string & orc_Section) const;
 };
 
 //----------------------------------------------------------------------------------------------------------------------

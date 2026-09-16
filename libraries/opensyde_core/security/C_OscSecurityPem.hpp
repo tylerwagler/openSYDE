@@ -30,17 +30,17 @@ class C_OscSecurityPem :
 public:
    C_OscSecurityPem();
 
-   static std::error_code h_ExtractModulusAndExponentFromFile(const std::string & orc_FileName,
-                                                      std::vector<uint8_t> & orc_Modulus,
-                                                      std::vector<uint8_t> & orc_Exponent,
-                                                      std::string & orc_ErrorMessage);
-   static std::error_code h_ExtractModulusAndExponent(const std::vector<uint8_t> & orc_PubKeyTextDecoded,
-                                              std::vector<uint8_t> & orc_Modulus, std::vector<uint8_t> & orc_Exponent,
-                                              std::string & orc_ErrorMessage);
+   [[nodiscard]] static std::error_code h_ExtractModulusAndExponentFromFile(const std::string & orc_FileName,
+                                                                            std::vector<uint8_t> & orc_Modulus,
+                                                                            std::vector<uint8_t> & orc_Exponent,
+                                                                            std::string & orc_ErrorMessage);
+   [[nodiscard]] static std::error_code h_ExtractModulusAndExponent(const std::vector<uint8_t> & orc_PubKeyTextDecoded,
+                                                                    std::vector<uint8_t> & orc_Modulus, std::vector<uint8_t> & orc_Exponent,
+                                                                    std::string & orc_ErrorMessage);
 
 protected:
-   virtual std::error_code m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent,
-                                            std::string & orc_ErrorMessage);
+   [[nodiscard]] virtual std::error_code m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent,
+                                                          std::string & orc_ErrorMessage);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

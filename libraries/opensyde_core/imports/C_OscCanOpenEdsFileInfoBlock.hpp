@@ -43,7 +43,7 @@ public:
    std::string c_ModifiedBy;       ///< Name or description of file creator, max 244 characters
 
    void CalcHash(uint32_t & oru32_HashValue) const;
-   std::error_code LoadFromIni(stw::scl::C_SclIniFile & orc_File, std::string & orc_LastError);
+   [[nodiscard]] std::error_code LoadFromIni(stw::scl::C_SclIniFile & orc_File, std::string & orc_LastError);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

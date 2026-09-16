@@ -56,21 +56,21 @@ public:
    ///can be raised later without breaking files written today.
    static constexpr uint32_t hu32_PBKDF2_ITERATIONS = 600000U;
 
-   static std::error_code h_EncryptFile(const std::string & orc_Key, const std::string & orc_InFilePath,
-                                const std::string & orc_OutFilePath);
+   [[nodiscard]] static std::error_code h_EncryptFile(const std::string & orc_Key, const std::string & orc_InFilePath,
+                                                      const std::string & orc_OutFilePath);
 
-   static std::error_code h_DecryptFile(const std::string & orc_Key, const std::string & orc_InFilePath,
-                                const std::string & orc_OutFilePath);
+   [[nodiscard]] static std::error_code h_DecryptFile(const std::string & orc_Key, const std::string & orc_InFilePath,
+                                                      const std::string & orc_OutFilePath);
 
-   static std::error_code h_CreateEncryptedZipFile(const std::string & orc_FolderPathToZip,
-                                           const std::set<std::string> & orc_SupFiles,
-                                           const std::string & orc_PathForZipFile,
-                                           const std::string & orc_Key,
-                                           std::string * const opc_ErrorMessage);
-   static std::error_code h_UnpackEncryptedZipFile(const std::string & orc_PathOfZipFile,
-                                           const std::string & orc_FolderPathToUnzip,
-                                           const std::string & orc_Key,
-                                           std::string * const opc_ErrorMessage);
+   [[nodiscard]] static std::error_code h_CreateEncryptedZipFile(const std::string & orc_FolderPathToZip,
+                                                                 const std::set<std::string> & orc_SupFiles,
+                                                                 const std::string & orc_PathForZipFile,
+                                                                 const std::string & orc_Key,
+                                                                 std::string * const opc_ErrorMessage);
+   [[nodiscard]] static std::error_code h_UnpackEncryptedZipFile(const std::string & orc_PathOfZipFile,
+                                                                 const std::string & orc_FolderPathToUnzip,
+                                                                 const std::string & orc_Key,
+                                                                 std::string * const opc_ErrorMessage);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

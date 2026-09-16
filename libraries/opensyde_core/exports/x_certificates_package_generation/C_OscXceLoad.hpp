@@ -27,17 +27,17 @@ class C_OscXceLoad :
    public C_OscXceBase
 {
 public:
-   static std::error_code h_ProcessPackage(const std::string & orc_PackagePath,
-                                           const std::string & orc_TargetUnzipPath, C_OscXceManifest & orc_Manifest,
-                                           std::vector<std::string> & orc_WarningMessages,
-                                           std::string & orc_ErrorMessage);
+   [[nodiscard]] static std::error_code h_ProcessPackage(const std::string & orc_PackagePath,
+                                                         const std::string & orc_TargetUnzipPath, C_OscXceManifest & orc_Manifest,
+                                                         std::vector<std::string> & orc_WarningMessages,
+                                                         std::string & orc_ErrorMessage);
 
 private:
    static const std::string mhc_USE_CASE;
 
-   static std::error_code mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
-                                                         const std::string & orc_TargetUnzipPath);
-   static std::error_code mh_CheckXcertFiles(const std::string & orc_PackagePath);
+   [[nodiscard]] static std::error_code mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
+                                                                       const std::string & orc_TargetUnzipPath);
+   [[nodiscard]] static std::error_code mh_CheckXcertFiles(const std::string & orc_PackagePath);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

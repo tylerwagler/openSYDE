@@ -23,9 +23,9 @@ namespace opensyde_core
 class C_OscSupSignatureFiler
 {
 public:
-   static std::error_code h_CreateSignatureFile(const std::string & orc_Path,
-                                                const std::string & orc_Signature);
-   static std::error_code h_LoadSignatureFile(const std::string & orc_Path, std::string & orc_Signature);
+   [[nodiscard]] static std::error_code h_CreateSignatureFile(const std::string & orc_Path,
+                                                              const std::string & orc_Signature);
+   [[nodiscard]] static std::error_code h_LoadSignatureFile(const std::string & orc_Path, std::string & orc_Signature);
    static std::string h_GetSignatureFileName(void);
 };
 

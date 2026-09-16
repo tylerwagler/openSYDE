@@ -125,18 +125,18 @@ public:
 class C_OscCanOpenObjectDictionary
 {
 private:
-   std::error_code m_CheckForExistingObjects(const std::string & orc_Blockname,
-                                             stw::scl::C_SclIniFile & orc_IniFile);
-   std::error_code m_GetObjectDescription(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
-                                          const bool oq_IsSubIndex, stw::scl::C_SclIniSection & orc_Section,
-                                          C_OscCanOpenObjectData & orc_Object);
+   [[nodiscard]] std::error_code m_CheckForExistingObjects(const std::string & orc_Blockname,
+                                                           stw::scl::C_SclIniFile & orc_IniFile);
+   [[nodiscard]] std::error_code m_GetObjectDescription(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
+                                                        const bool oq_IsSubIndex, stw::scl::C_SclIniSection & orc_Section,
+                                                        C_OscCanOpenObjectData & orc_Object);
    void m_RememberFileHash();
 
    std::string mc_LastError;
    uint32_t mu32_OriginalFileHash;
 
-   std::error_code m_IsSectionRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
-                                 const uint8_t ou8_OdSubIndex, bool & orq_IsRo) const;
+   [[nodiscard]] std::error_code m_IsSectionRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
+                                               const uint8_t ou8_OdSubIndex, bool & orq_IsRo) const;
    bool m_DoesSectionExist(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, const uint8_t ou8_OdSubIndex) const;
 
 public:
@@ -173,15 +173,15 @@ public:
 
    C_OscCanOpenObjectDictionary();
 
-   std::error_code LoadFromFile(const std::string & orc_File);
+   [[nodiscard]] std::error_code LoadFromFile(const std::string & orc_File);
    std::string GetLastErrorText() const;
    void CalcHash(uint32_t & oru32_HashValue) const;
 
    //General
    uint8_t GetNumHeartbeatConsumers() const;
-   std::error_code IsHeartbeatConsumerRo(bool & orq_IsRo) const;
+   [[nodiscard]] std::error_code IsHeartbeatConsumerRo(bool & orq_IsRo) const;
    bool IsHeartbeatProducerSupported(void) const;
-   std::error_code IsHeartbeatProducerRo(bool & orq_IsRo) const;
+   [[nodiscard]] std::error_code IsHeartbeatProducerRo(bool & orq_IsRo) const;
    bool IsEmcySupported() const;
    uint8_t GetGranularity() const;
    std::set<uint8_t> GetAllAvailableFactorySettingsSubIndices() const;
@@ -190,12 +190,12 @@ public:
    //Message
    bool DoesInhibitTimeSectionExist(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx) const;
    bool DoesEventTimerSectionExist(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx) const;
-   std::error_code IsCobIdRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
-   std::error_code IsInhibitTimeRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
-   std::error_code IsEventTimerRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
-   std::error_code IsTransmissionTypeRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
-   std::error_code IsSyncStartRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
-   std::error_code IsPdoMappingRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
+   [[nodiscard]] std::error_code IsCobIdRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
+   [[nodiscard]] std::error_code IsInhibitTimeRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
+   [[nodiscard]] std::error_code IsEventTimerRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
+   [[nodiscard]] std::error_code IsTransmissionTypeRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
+   [[nodiscard]] std::error_code IsSyncStartRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
+   [[nodiscard]] std::error_code IsPdoMappingRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, bool & orq_IsRo) const;
 
    //Util
    const C_OscCanOpenObjectData * GetCanOpenObject(const uint16_t ou16_OdIndex) const;

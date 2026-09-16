@@ -54,7 +54,7 @@ public:
       else            error at initialization
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code CAN_Init(void) = 0;
+   [[nodiscard]] virtual std::error_code CAN_Init(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -70,7 +70,7 @@ public:
       else            error at initialization
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code CAN_Init(const int32_t os32_BitrateKBitS) = 0;
+   [[nodiscard]] virtual std::error_code CAN_Init(const int32_t os32_BitrateKBitS) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -84,7 +84,7 @@ public:
       else            error
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code CAN_Exit(void) = 0;
+   [[nodiscard]] virtual std::error_code CAN_Exit(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -98,7 +98,7 @@ public:
       else            error
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code CAN_Reset(void) = 0;
+   [[nodiscard]] virtual std::error_code CAN_Reset(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -113,7 +113,7 @@ public:
       else            no message read or error
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message) = 0;
+   [[nodiscard]] virtual std::error_code CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -128,7 +128,7 @@ public:
       else            error trying to send message
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code CAN_Send_Msg(const T_STWCAN_Msg_TX & orc_Message) = 0;
+   [[nodiscard]] virtual std::error_code CAN_Send_Msg(const T_STWCAN_Msg_TX & orc_Message) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -145,7 +145,7 @@ public:
       else            error trying to get information
    */
    //-----------------------------------------------------------------------------
-   virtual std::error_code CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const = 0;
+   [[nodiscard]] virtual std::error_code CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const = 0;
 
    //-----------------------------------------------------------------------------
    /*!

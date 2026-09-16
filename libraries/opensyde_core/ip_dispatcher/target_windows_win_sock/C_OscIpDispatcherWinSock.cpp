@@ -640,7 +640,8 @@ std::error_code C_OscIpDispatcherWinSock::InitUdp(void)
    //close sockets in case of error:
    if (q_Error == true)
    {
-      this->CloseUdp();
+      //cleanup on an error path; the failure we report is the one that got us here
+      (void)this->CloseUdp();
    }
 
    return (q_Error == true) ? Errc::noact : Errc::success;

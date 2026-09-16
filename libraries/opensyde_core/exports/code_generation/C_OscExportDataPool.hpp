@@ -43,39 +43,39 @@ public:
 
    static std::string h_GetFileName(const C_OscNodeDataPool & orc_DataPool);
    static uint16_t h_ConvertOverallCodeVersion(const uint16_t ou16_GenCodeVersion);
-   static std::error_code h_CreateSourceCode(const std::string & orc_Path, const uint16_t ou16_GenCodeVersion,
-                                             const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport,
-                                             const C_OscNodeDataPool & orc_DataPool, const uint8_t ou8_DataPoolIndex,
-                                             const E_Linkage oe_Linkage, const uint8_t ou8_DataPoolIndexRemote,
-                                             const uint8_t ou8_ProcessId,
-                                             const std::string & orc_ExportToolInfo = "");
+   [[nodiscard]] static std::error_code h_CreateSourceCode(const std::string & orc_Path, const uint16_t ou16_GenCodeVersion,
+                                                           const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport,
+                                                           const C_OscNodeDataPool & orc_DataPool, const uint8_t ou8_DataPoolIndex,
+                                                           const E_Linkage oe_Linkage, const uint8_t ou8_DataPoolIndexRemote,
+                                                           const uint8_t ou8_ProcessId,
+                                                           const std::string & orc_ExportToolInfo = "");
 
 protected:
    static const bool mhq_IS_HEADER_FILE = false;
    static const bool mhq_IS_IMPLEMENTATION_FILE = true;
 
-   static std::error_code mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
-                                                      const std::string & orc_Path,
-                                                      const C_OscNodeDataPool & orc_DataPool,
-                                                      const std::string & orc_ProjectId,
-                                                      const uint16_t ou16_GenCodeVersion,
-                                                      const uint8_t ou8_DataPoolIndexRemote,
-                                                      const uint8_t ou8_ProcessId, const E_Linkage oe_Linkage);
-   static std::error_code mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
-                                              const std::string & orc_Path, const C_OscNodeDataPool & orc_DataPool,
-                                              const uint8_t ou8_DataPoolIndex, const std::string & orc_ProjectId,
-                                              const uint16_t ou16_GenCodeVersion, const E_Linkage oe_Linkage,
-                                              const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport);
+   [[nodiscard]] static std::error_code mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
+                                                                    const std::string & orc_Path,
+                                                                    const C_OscNodeDataPool & orc_DataPool,
+                                                                    const std::string & orc_ProjectId,
+                                                                    const uint16_t ou16_GenCodeVersion,
+                                                                    const uint8_t ou8_DataPoolIndexRemote,
+                                                                    const uint8_t ou8_ProcessId, const E_Linkage oe_Linkage);
+   [[nodiscard]] static std::error_code mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
+                                                            const std::string & orc_Path, const C_OscNodeDataPool & orc_DataPool,
+                                                            const uint8_t ou8_DataPoolIndex, const std::string & orc_ProjectId,
+                                                            const uint16_t ou16_GenCodeVersion, const E_Linkage oe_Linkage,
+                                                            const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport);
 
    static void mh_AddHeader(const std::string & orc_ExportToolInfo, std::vector<std::string> & orc_Data,
                             const C_OscNodeDataPool & orc_DataPool, const bool oq_FileType);
    static void mh_AddIncludes(std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_DataPool,
                               const bool oq_FileType);
-   static std::error_code mh_AddDefinesHeader(std::vector<std::string> & orc_Data,
-                                              const C_OscNodeDataPool & orc_DataPool, const uint8_t ou8_DataPoolIndex,
-                                              const std::string & orc_ProjectId, const uint16_t ou16_GenCodeVersion,
-                                              const E_Linkage oe_Linkage,
-                                              const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport);
+   [[nodiscard]] static std::error_code mh_AddDefinesHeader(std::vector<std::string> & orc_Data,
+                                                            const C_OscNodeDataPool & orc_DataPool, const uint8_t ou8_DataPoolIndex,
+                                                            const std::string & orc_ProjectId, const uint16_t ou16_GenCodeVersion,
+                                                            const E_Linkage oe_Linkage,
+                                                            const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport);
    static void mh_AddDefinesImpl(std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_DataPool,
                                  const std::string & orc_ProjectId, const uint16_t ou16_GenCodeVersion);
    static void mh_AddTypes(std::vector<std::string> & orc_Data, const C_OscNodeDataPool & orc_DataPool,

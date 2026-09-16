@@ -26,12 +26,12 @@ namespace opensyde_core
 class C_OscSecurityRsa
 {
 public:
-   static std::error_code h_SignSignature(const std::vector<uint8_t> & orc_PrivateKey,
-                                          const std::vector<uint8_t> & orc_Message,
-                                          std::vector<uint8_t> & orc_Signature);
-   static std::error_code h_VerifySignature(const std::vector<uint8_t> & orc_PublicKey,
-                                            const std::vector<uint8_t> & orc_ExpectedMessage,
-                                            const std::vector<uint8_t> & orc_Signature, bool & orq_Valid);
+   [[nodiscard]] static std::error_code h_SignSignature(const std::vector<uint8_t> & orc_PrivateKey,
+                                                        const std::vector<uint8_t> & orc_Message,
+                                                        std::vector<uint8_t> & orc_Signature);
+   [[nodiscard]] static std::error_code h_VerifySignature(const std::vector<uint8_t> & orc_PublicKey,
+                                                          const std::vector<uint8_t> & orc_ExpectedMessage,
+                                                          const std::vector<uint8_t> & orc_Signature, bool & orq_Valid);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -48,9 +48,9 @@ private:
    };
 
    static void mh_Md5Init(C_HashState * const opc_HashState);
-   static std::error_code mh_Md5Process(C_HashState * const opc_HashState, const uint8_t * opu8_Input,
-                                uint32_t ou32_InputLength);
-   static std::error_code mh_Md5Done(C_HashState * const opc_HashState, uint8_t * const opu8_Output);
+   [[nodiscard]] static std::error_code mh_Md5Process(C_HashState * const opc_HashState, const uint8_t * opu8_Input,
+                                                      uint32_t ou32_InputLength);
+   [[nodiscard]] static std::error_code mh_Md5Done(C_HashState * const opc_HashState, uint8_t * const opu8_Output);
    static void mh_Md5Compress(C_HashState * const opc_HashState, const uint8_t * const opu8_Buffer);
 };
 }

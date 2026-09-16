@@ -563,3 +563,78 @@ there.
 
 **So "all eight tools build on the host" does not mean CI will agree.** For
 warning-driven work, the host is a fast first pass and CI is the authority.
+
+## Wave 2: the remaining core subsystems
+
+The first rollout covered four subsystems. This wave annotated **everything
+else in core** that returns `std::error_code` -- 281 declarations across 53
+headers, in `exports`, `system_update_package`, `security`, `imports`,
+`xml_parser`, `zip`, `util`, `can_dispatcher`, `ip_dispatcher`,
+`cmon_protocols`, `system_package_handling`, `scl`, `data_dealer`, `hex_file`,
+`md5`, `tgl`, `stwerrors`, `conf_file_handler` and `stw_compid`.
+
+**281 declarations produced 14 discarded-return sites.** That ratio keeps
+falling (wave 1: 700 declarations, 63 sites), which is what you want -- it means
+the convention was already being followed by hand in most of the tree.
+
+Of the 14:
+
+| Sites | Disposition |
+|-------|-------------|
+| 4 | **Real defect** -- MD5 (below) |
+| 5 | Callee cannot fail; fixed by changing the callee, not the caller |
+| 5 | Legitimate `(void)`: destructors and error-path cleanup |
+
+### The defect: `C_Md5Checksum::GetMD5` hex-encoded uninitialised stack
+
+Both buffer and `FILE *` overloads discarded `mh_Md5Process` and `mh_Md5Done`.
+Those return `Errc::config` on a corrupt hash state, and on that path
+`au8_Result[16]` is **never written** -- so the function hex-encoded
+uninitialised stack and returned it as a valid-looking MD5. The header already
+documented "empty string if there are problems"; the code did not implement it.
+
+This is the third instance of the same class (uninitialised out-param read on an
+error path) that `[[nodiscard]]` has found, after `C_OscHalcConfigDomain` and
+`C_OscHexFile`. A wrong checksum is the worst shape for this bug: the caller
+cannot tell a garbage digest from a good one by looking at it.
+
+The failure path needs a corrupted `C_HashState`, so it is not reachable through
+the public API today. It was still worth fixing, and worth noting that **MD5 had
+no test coverage at all** -- `test_md5.cpp` now pins it against the RFC 1321
+appendix A.5 vectors, the 64-byte block boundary, both file entry points and the
+empty-string-on-failure contract.
+
+> Both times I wrote an expected digest from memory it was wrong and the
+> implementation was right. The vectors in that file are all checked against
+> Python `hashlib`, not against the code under test.
+
+### `std::error_code` returns that can never be anything but success
+
+Scanning core for functions whose every `return` is literally `Errc::success`
+found **17**. Only **4** are non-virtual:
+
+- `C_CanMonProtocols::SetProtocolMode` / `SetDecimalMode` -- plain setters.
+  Converted to `void`. This removes 5 of the 14 discard sites without writing a
+  single `(void)`, which is the better fix: a caller should not have to
+  acknowledge an error that cannot happen.
+- `C_HexFile::Validate` -- a **false positive**. Its error arrives through
+  `GetDataDump`'s out-param, which the scan does not model.
+- `C_OscCanOpenEdsDeviceInfoBlock::LoadFromIni` / `C_OscCanOpenEdsFileInfoBlock::LoadFromIni`
+  -- an INI parser that always reports success is suspicious in its own right.
+  Left alone; that is a separate question from this sweep.
+
+The other 13 are virtual overrides of interfaces whose *other* implementations
+do fail, so they have to keep the signature.
+
+**The scan's own limits:** the first version reported 66, because
+`return SomeCall();` contains no `Errc::` token and so looked infallible. The
+tightened version requires every `return` to be literally `Errc::success` or a
+local never assigned from a call. It still cannot see errors that arrive by
+out-param, as `Validate` shows.
+
+### Windows-only code is invisible to the Linux jobs
+
+`C_OscIpDispatcherWinSock.cpp:643` had the same discarded `CloseUdp()` as its
+Linux twin. Neither the local build nor the two Linux CI jobs compile that file
+-- only the Windows job does. When a fix lands in a `target_linux_*` file, grep
+the `target_windows_*` sibling before assuming a green build means anything.

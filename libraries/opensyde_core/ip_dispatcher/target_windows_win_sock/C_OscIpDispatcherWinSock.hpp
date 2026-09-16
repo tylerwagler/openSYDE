@@ -82,12 +82,12 @@ private:
    static std::map<C_BufferIdentifier, std::list<std::vector<uint8_t> > > mhc_TcpBuffer; ///< dispatcher buffer
    static std::mutex mhc_LockBuffer;
 
-   std::error_code m_GetAllInstalledInterfaceIps(void);
-   std::error_code m_ConnectTcp(C_TcpConnection & orc_Connection) const;
+   [[nodiscard]] std::error_code m_GetAllInstalledInterfaceIps(void);
+   [[nodiscard]] std::error_code m_ConnectTcp(C_TcpConnection & orc_Connection) const;
    //orx_Socket returns a socket descriptor, not an error code -> stays a SOCKET
    //lint -e{8080} //using type to match library interface
-   std::error_code m_ConfigureUdpSocket(const bool oq_ServerPort, const uint32_t ou32_IpToBindTo,
-                                        SOCKET & orx_Socket) const;
+   [[nodiscard]] std::error_code m_ConfigureUdpSocket(const bool oq_ServerPort, const uint32_t ou32_IpToBindTo,
+                                                      SOCKET & orx_Socket) const;
 
    static std::string mh_IpToText(const uint8_t (&orau8_Ip)[4]);
 
@@ -95,26 +95,26 @@ public:
    C_OscIpDispatcherWinSock(void);
    virtual ~C_OscIpDispatcherWinSock(void);
 
-   virtual std::error_code InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle);
-   virtual std::error_code InitUdp(void);
-   virtual std::error_code IsTcpConnected(const uint32_t ou32_Handle);
-   virtual std::error_code ReConnectTcp(const uint32_t ou32_Handle);
+   [[nodiscard]] virtual std::error_code InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle);
+   [[nodiscard]] virtual std::error_code InitUdp(void);
+   [[nodiscard]] virtual std::error_code IsTcpConnected(const uint32_t ou32_Handle);
+   [[nodiscard]] virtual std::error_code ReConnectTcp(const uint32_t ou32_Handle);
 
-   virtual std::error_code CloseTcp(const uint32_t ou32_Handle);
-   virtual std::error_code CloseUdp(void);
-   virtual std::error_code SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data);
-   virtual std::error_code ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data);
-   virtual std::error_code ReadTcp(const uint32_t ou32_Handle, const uint8_t ou8_ClientBusIdentifier,
-                                   const uint8_t ou8_ClientNodeIdentifier,
-                                   const uint8_t ou8_ServerBusIdentifier,
-                                   const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data);
-   virtual std::error_code ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier,
-                                         const uint8_t ou8_ClientNodeIdentifier,
-                                         const uint8_t ou8_ServerBusIdentifier,
-                                         const uint8_t ou8_ServerNodeIdentifier,
-                                         std::vector<uint8_t> & orc_Data);
-   virtual std::error_code SendUdp(const std::vector<uint8_t> & orc_Data);
-   virtual std::error_code ReadUdp(std::vector<uint8_t> &orc_Data, uint8_t(&orau8_Ip)[4]);
+   [[nodiscard]] virtual std::error_code CloseTcp(const uint32_t ou32_Handle);
+   [[nodiscard]] virtual std::error_code CloseUdp(void);
+   [[nodiscard]] virtual std::error_code SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data);
+   [[nodiscard]] virtual std::error_code ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data);
+   [[nodiscard]] virtual std::error_code ReadTcp(const uint32_t ou32_Handle, const uint8_t ou8_ClientBusIdentifier,
+                                                 const uint8_t ou8_ClientNodeIdentifier,
+                                                 const uint8_t ou8_ServerBusIdentifier,
+                                                 const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data);
+   [[nodiscard]] virtual std::error_code ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier,
+                                                       const uint8_t ou8_ClientNodeIdentifier,
+                                                       const uint8_t ou8_ServerBusIdentifier,
+                                                       const uint8_t ou8_ServerNodeIdentifier,
+                                                       std::vector<uint8_t> & orc_Data);
+   [[nodiscard]] virtual std::error_code SendUdp(const std::vector<uint8_t> & orc_Data);
+   [[nodiscard]] virtual std::error_code ReadUdp(std::vector<uint8_t> &orc_Data, uint8_t(&orau8_Ip)[4]);
 
    void LoadConfigFile(const std::string & orc_FileLocation);
 };

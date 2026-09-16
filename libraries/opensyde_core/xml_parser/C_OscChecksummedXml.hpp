@@ -53,8 +53,8 @@ private:
 public:
    C_OscChecksummedXml(void);
 
-    virtual std::error_code LoadFromFile(const std::string & orc_FileName);
-    virtual std::error_code SaveToFile(const std::string & orc_FileName);
+    [[nodiscard]] virtual std::error_code LoadFromFile(const std::string & orc_FileName);
+    [[nodiscard]] virtual std::error_code SaveToFile(const std::string & orc_FileName);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -36,7 +36,7 @@ public:
                                   const uint16_t ou16_MaxLength = 31U);
    static bool h_IsFloat64NearlyEqual(const double & orf64_Float1, const double & orf64_Float2);
    static bool h_IsFloat32NearlyEqual(const float & orf32_Float1, const float & orf32_Float2);
-   static std::error_code h_CreateFolderRecursively(const std::string & orc_Folder);
+   [[nodiscard]] static std::error_code h_CreateFolderRecursively(const std::string & orc_Folder);
    static std::string h_NiceifyStringForFileName(const std::string & orc_String);
    static std::string h_NiceifyStringForCeComment(const std::string & orc_String);
    static bool h_CheckValidFileName(const std::string & orc_String);
@@ -52,9 +52,9 @@ public:
    static void h_FileToString(const std::string & orc_FilePath, std::string & orc_OutputString);
    static void h_RangeCheckFloat(double & orf64_Value);
 
-   static std::error_code h_CopyFile(const std::string & orc_SourceFile, const std::string & orc_TargetFile,
-                                     std::string * const opc_ErrorPath = nullptr,
-                                     std::string * const opc_ErrorMessage = nullptr);
+   [[nodiscard]] static std::error_code h_CopyFile(const std::string & orc_SourceFile, const std::string & orc_TargetFile,
+                                                   std::string * const opc_ErrorPath = nullptr,
+                                                   std::string * const opc_ErrorMessage = nullptr);
    static std::string h_GetCommandLineAsString(const int32_t os32_Argc, char * const * const oppcn_Argv);
 
    //Utilities for path place holder parsing

@@ -36,8 +36,8 @@ public:
                                  const bool oq_HeaderFile);
    static void h_AddProjIdFunctionPrototype(std::vector<std::string> & orc_Data,
                                             const std::string & orc_MagicName);
-   static std::error_code h_SaveToFile(std::vector<std::string> & orc_Data, const std::string & orc_Path,
-                                       const std::string & orc_FileName, const bool oq_HeaderFile);
+   [[nodiscard]] static std::error_code h_SaveToFile(std::vector<std::string> & orc_Data, const std::string & orc_Path,
+                                                     const std::string & orc_FileName, const bool oq_HeaderFile);
    static void h_CollectFilePaths(std::vector<std::string> & orc_FilePaths,
                                   const std::string & orc_Path, const std::string & orc_FileName,
                                   const bool oq_SourceCode);

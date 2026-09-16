@@ -27,19 +27,19 @@ class C_OscXcoLoad :
    public C_OscXcoBase
 {
 public:
-   static std::error_code h_ProcessPackage(const std::string & orc_PackagePath,
-                                           const std::string & orc_TargetUnzipPath, C_OscXcoManifest & orc_Manifest,
-                                           std::string & orc_SystemDefinitionPath,
-                                           std::string & orc_DeviceDefinitionPath,
-                                           std::vector<std::string> & orc_WarningMessages,
-                                           std::string & orc_ErrorMessage);
+   [[nodiscard]] static std::error_code h_ProcessPackage(const std::string & orc_PackagePath,
+                                                         const std::string & orc_TargetUnzipPath, C_OscXcoManifest & orc_Manifest,
+                                                         std::string & orc_SystemDefinitionPath,
+                                                         std::string & orc_DeviceDefinitionPath,
+                                                         std::vector<std::string> & orc_WarningMessages,
+                                                         std::string & orc_ErrorMessage);
 
 private:
    static const std::string mhc_USE_CASE;
 
-   static std::error_code mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
-                                                         const std::string & orc_TargetUnzipPath);
-   static std::error_code mh_CheckXcfgFiles(const std::string & orc_PackagePath);
+   [[nodiscard]] static std::error_code mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
+                                                                       const std::string & orc_TargetUnzipPath);
+   [[nodiscard]] static std::error_code mh_CheckXcfgFiles(const std::string & orc_PackagePath);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
