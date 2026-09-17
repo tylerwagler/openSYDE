@@ -1281,7 +1281,9 @@ with a bare `std::stoi`, got `0`, and rejected the file as an unsupported versio
 #30's claim that "every other filer writes its version with `std::to_string`" was
 **incomplete**, because that search covered only `SetNodeContent` writers and this one
 uses `CreateNodeChild`. A writer-versus-reader table across every filer (in the PR)
-now shows this was the last hex writer paired with a base-10 reader.
+claimed this was the last hex writer paired with a base-10 reader. **It was not** --
+the service update package filers write their minor versions as `"0x000102"` and
+`"0x000101"` and read them with a bare `std::stoi`; see the package round-trip below.
 
 **Latent, not live.** Nothing in the product calls `h_Save` -- device definitions are
 authored by STW and shipped read-only, spelled in decimal, which is why the base-10
@@ -1443,6 +1445,7 @@ shape of its own.
 | cross-convention | `p = PosCompat(...)` then `X.substr(p)` / `X[p]` / `X.erase(p)` without `- 1` | suspect |
 | cross-convention | `p = X.find(...)` then `SubStringCompat(X, p, ...)` without `+ 1` | suspect |
 | compat with literals | `SubStringCompat(X, 1, ...)`, `PosCompat(...) == 5` | review only: 1 and 5 are *correct* under the 1-based contract |
+| last character | `X[X.length()]` / `X[X.size()]` | suspect: the 1-based "last character" reads the terminator on `std::string` (found the day after the sweep, in `C_OscSuSequences`; the tree has no other) |
 
 Array-typed names (`au8_`, `apc_`, `Buffer`, `.data()`) are excluded; the scanner
 walks back up to forty lines to find the `for` header that declares the counter so
@@ -1472,3 +1475,39 @@ the ones with no test is the shape table above.
 The scanner is not checked into the tree: it is thirteen regexes and a forty-line
 lookback, and the table above is its specification. If the class turns up a fifth
 shape, extend the table first, then the regexes.
+
+## The package filers, round-tripped at last (2026-09-18)
+
+`C_OscSupServiceUpdatePackageCreate` and `...Load` were the one filer family left out
+of both waves ("zip containers around filers already covered"). Wrong call: the
+container has logic of its own, and none of it worked. `test_sup_package` creates a
+package from a two-node system with a device manifest, two applications and a
+parameter set, then processes it back. Three defects stood between create and load:
+
+| Where | Defect | Effect |
+|---|---|---|
+| `C_OscSuSequences::h_CreateTemporaryFolder` | `orc_TargetPath[orc_TargetPath.length()]` -- the 1-based "last character", which reads the terminator on `std::string` | the "path must end in a delimiter" check **always** failed, so **no service update package could be created on `develop`** (SYDEsup, the GUI's package export). Phase 3b, 2026-08-24 |
+| `C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile` | bare `std::stoi` on a version written as `"0x000102"` | the filer's own check passed on a string compare but handed `0` to its caller, which refused the package as an unknown version |
+| `C_OscSupNodeDefinitionFiler::mh_CheckFileVersion` | the same on `"0x000101"` | every node definition inside a package rejected. `C_OscSupSignatureFiler` had the same parse; it writes decimal today, fixed alongside |
+
+So a package could neither be written nor, had one been written by older code, read.
+The first is the **fifth shape** of the 1-based residue (now in the scanner table; a
+grep for `[X.length()]` / `[X.size()]` subscripts finds no other in any tree), the
+other two are the `stoi`-on-hex class from wave 1 -- the pair the writer-versus-reader
+table missed because these writers spell a two-part version as one hex literal.
+
+Two behaviours the round-trip had to learn, both by design: only the *active* nodes
+are loaded back (inactive ones stay `UnloadedNodeWithNodeIndex<n>` without a device),
+and copied files carry their update position as a prefix (`1_app_a.hex`).
+
+The process-global `C_OscSystemDefinition::hc_Devices` only loads the package's own
+device root if nothing loaded device definitions earlier in the process, which is
+why this test is its own binary.
+
+Every remaining single-argument `std::stoi`/`stoll` in core was listed after this.
+One more was wrong: `C_SclIniFile::ReadInteger` (and the `ReadUint*` family on top of
+it) replaced `C_SclString::ToInt()`, which accepted `0x`, with a base-10 `std::stoi`;
+CiA 306 allows hex for every numeric EDS value, so `NrOfRxPDO=0x4` read as `0`.
+Fixed with `ScanBaseCompat`, pinned in `test_scl_ini_file`. The rest read values
+their own writers spell in decimal (covered by the round-trips) or values whose
+format is decimal by definition (DBC raw values, dates, availability indices).

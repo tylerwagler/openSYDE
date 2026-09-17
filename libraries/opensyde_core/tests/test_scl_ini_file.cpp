@@ -165,3 +165,29 @@ TEST(SclIniFile, RoundTripsThroughDisk)
 
    (void)std::filesystem::remove(c_Path);
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Integers spelled in hex read as the number, not as 0
+
+   ReadInteger replaced C_SclString::ToInt(), which accepted a "0x" prefix; the INI dialects read through this class
+   (CiA 306 EDS files among them) use it. A base-10-only std::stoi read "0x2A" as 0 -- silently, since 0 is a
+   perfectly good integer.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(SclIniFile, ReadsHexIntegers)
+{
+   const std::string c_Path = h_WriteIni("osy_test_hex.ini",
+                                         "[Alpha]\n"
+                                         "Dec=42\n"
+                                         "Hex=0x2A\n"
+                                         "HexUpper=0X2a\n"
+                                         "NegHex=-0x10\n"
+                                         "Count=0x0004\n");
+   C_SclIniFile c_Ini(c_Path);
+   EXPECT_EQ(42, c_Ini.ReadInteger("Alpha", "Dec", 0));
+   EXPECT_EQ(42, c_Ini.ReadInteger("Alpha", "Hex", 0));
+   EXPECT_EQ(42, c_Ini.ReadInteger("Alpha", "HexUpper", 0));
+   EXPECT_EQ(-16, c_Ini.ReadInteger("Alpha", "NegHex", 0));
+   EXPECT_EQ(4U, c_Ini.ReadUint16("Alpha", "Count", 0U));
+   (void)std::filesystem::remove(c_Path);
+}

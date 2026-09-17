@@ -166,7 +166,9 @@ std::error_code C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const std::s
       // file version
       tgl_assert(c_XmlParser.SelectNodeChild(mc_FILE_VERSION) == mc_FILE_VERSION);
       const std::string c_FileVersion = c_XmlParser.GetNodeContent();
-       oru32_FileVersion = static_cast<uint32_t>(std::stoi(c_FileVersion));
+      //minor version 1 is written as "0x000102": base 10 alone read it as 0 and the caller refused the package
+      oru32_FileVersion = static_cast<uint32_t>(std::stoi(c_FileVersion, nullptr,
+                                                          stw::scl::ScanBaseCompat(c_FileVersion)));
       tgl_assert(c_XmlParser.SelectRoot() == mc_ROOT_NAME); // we shall have a valid and
       // compatible update package
 

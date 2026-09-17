@@ -117,7 +117,8 @@ std::error_code C_OscSupSignatureFiler::h_LoadSignatureFile(const std::string & 
       // file version
       tgl_assert(c_XmlParser.SelectNodeChild(mc_FILE_VERSION) == mc_FILE_VERSION);
       const std::string c_FileVersion = c_XmlParser.GetNodeContent();
-      const uint32_t u32_FileVersion = static_cast<uint32_t>(std::stoi(c_FileVersion));
+      const uint32_t u32_FileVersion = static_cast<uint32_t>(std::stoi(c_FileVersion, nullptr,
+                                                                        stw::scl::ScanBaseCompat(c_FileVersion)));
       tgl_assert(c_XmlParser.SelectRoot() == mc_ROOT_NAME);
 
       if (u32_FileVersion == mu16_FILE_VERSION)

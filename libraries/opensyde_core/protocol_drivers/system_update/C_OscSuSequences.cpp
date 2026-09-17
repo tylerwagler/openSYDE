@@ -2106,7 +2106,8 @@ std::error_code C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_Os
    std::vector<C_DoFlash> c_NodesToFlashNewPaths = orc_ApplicationsToWrite;
    std::vector<std::string> c_NodeTargetPaths;
 
-   const char cn_LastCharacter = orc_TargetPath[orc_TargetPath.length()];
+   //the last character; on the 1-based string class this was [length()], which here reads the terminator
+   const char cn_LastCharacter = orc_TargetPath.empty() ? '\0' : orc_TargetPath.back();
 
    if ((cn_LastCharacter != '\\') && (cn_LastCharacter != '/'))
    {
