@@ -59,12 +59,11 @@ C_SyvDaItPaArDelegate::C_SyvDaItPaArDelegate(QObject * const opc_Parent) :
    Editor widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-QWidget * C_SyvDaItPaArDelegate::createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem & orc_Option,
+QWidget * C_SyvDaItPaArDelegate::createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem &,
                                               const QModelIndex & orc_Index) const
 {
    QWidget * pc_Retval = nullptr;
 
-   Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
    {
       pc_Retval = m_CreateEditor(opc_Parent, orc_Index);

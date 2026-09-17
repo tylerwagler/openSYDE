@@ -772,7 +772,7 @@ int32_t C_SyvComDriverDiag::SendTesterPresentToActiveNodes(void)
    \param[in]  ou16_ElementIndex    element index to read from
    \param[in]  opc_DashboardWidget   Optional pointer to dashboard widget data element
                                         Valid pointer: read value only for this widget with this Datapool element
-                                        NULL pointer:  read value for all widgets with this Datapool element
+                                        nullptr pointer:  read value for all widgets with this Datapool element
 
    \return
    C_RANGE   node index out of range
@@ -1525,8 +1525,8 @@ bool C_SyvComDriverDiag::m_IsRoutingSpecificNecessary(const C_OscNode & orc_Node
    \return
    Errc::success    Specific server necessary and legacy routing dispatcher created
    Errc::noact      No specific server necessary
-   Errc::config     opc_ProtocolOsyOfLastNodeOfRouting is NULL
-                    Diagnose protocol is NULL
+   Errc::config     opc_ProtocolOsyOfLastNodeOfRouting is nullptr
+                    Diagnose protocol is nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_SyvComDriverDiag::m_StartRoutingSpecific(

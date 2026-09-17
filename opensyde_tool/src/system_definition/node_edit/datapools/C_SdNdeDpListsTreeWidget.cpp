@@ -1398,7 +1398,7 @@ void C_SdNdeDpListsTreeWidget::m_CheckActions(void)
    \param[in]  orq_IgnoreSelectedItems    Optional indicator if selected item size should be ignored
 
    \return
-   NULL No active table
+   nullptr No active table
    else Active table
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1449,7 +1449,7 @@ const
    \param[in]  orq_IgnoreSelectedItems    Optional indicator if selected item size should be ignored
 
    \return
-   NULL No active table tree widget item
+   nullptr No active table tree widget item
    Else Active table tree widget item
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1579,15 +1579,7 @@ void C_SdNdeDpListsTreeWidget::m_UpdateDataSetCount(const uint32_t & oru32_NodeI
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListsTreeWidget::m_ScrollBarRangeChanged(const int32_t os32_Min, const int32_t os32_Max) const
 {
-   // manual showing and hiding of the scrollbar to stop resizing the parent widget when showing or hiding the scrollbar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->verticalScrollBar()->hide();
-   }
-   else
-   {
-      this->verticalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->verticalScrollBar(), os32_Min, os32_Max);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

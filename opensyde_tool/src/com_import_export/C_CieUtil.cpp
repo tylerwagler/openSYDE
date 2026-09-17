@@ -756,12 +756,10 @@ int32_t C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex, const C_OscCan
             // create message report for user
             const QPointer<C_OgePopUpDialog> c_PopUpDialogReportDialog =
                new C_OgePopUpDialog(opc_Parent, opc_Parent);
-            C_CieImportReportWidget * const pc_DialogImportReport =
-               new C_CieImportReportWidget(*c_PopUpDialogReportDialog, orc_FullFilePath, ou32_BusIndex,
+            new C_CieImportReportWidget(*c_PopUpDialogReportDialog, orc_FullFilePath, ou32_BusIndex,
                                            oe_ProtocolType, c_NodeAssignmentsConverted, c_SkippedImportDataAssigned,
                                            nullptr);
 
-            Q_UNUSED(pc_DialogImportReport)
 
             //Hide previous overlay before showing the next one
             c_PopUpDialogNodeAssignment->HideOverlay();
@@ -835,7 +833,6 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
    C_CieDcfEdsImportNodeSelectWidget * const pc_DialogNodeSelection =
       new C_CieDcfEdsImportNodeSelectWidget(*c_PopUpDialog, orc_FullFilePath, ou32_BusIndex);
 
-   Q_UNUSED(pc_DialogNodeSelection)
 
    if (c_PopUpDialog->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
@@ -892,11 +889,9 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
                   const std::vector<C_CieImportDataAssignment> c_SkippedImportDataAssigned;
 
                   const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(opc_Parent, opc_Parent);
-                  C_CieImportReportWidget * const pc_Dialog =
-                     new C_CieImportReportWidget(*c_New, orc_FullFilePath, ou32_BusIndex, oe_ProtocolType,
+                  new C_CieImportReportWidget(*c_New, orc_FullFilePath, ou32_BusIndex, oe_ProtocolType,
                                                  c_NodeAssignmentVector, c_SkippedImportDataAssigned, nullptr);
 
-                  Q_UNUSED(pc_Dialog)
 
                   //Resize
                   c_New->SetSize(mc_POPUP_REPORT_SIZE);

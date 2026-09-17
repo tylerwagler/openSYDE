@@ -602,3 +602,31 @@ QString C_OgeWiUtil::mh_GetFileName(QWidget * const opc_Parent, const QString & 
    return c_Retval;
    //lint -e{1746} Necessary because needs default parameter and is not recognized as const
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Show or hide a scroll bar from its rangeChanged signal
+
+   Connected to QScrollBar::rangeChanged. A range of (0, 0) means nothing to scroll, so the
+   bar is hidden explicitly rather than left to Qt's ScrollBarAsNeeded policy -- Qt's own
+   show/hide resizes the viewport and with it the parent widget, which is the flicker this
+   avoids. Was hand-copied into 26 slots across the GUI trees before it lived here.
+
+   \param[in]  opc_ScrollBar   the bar the signal came from
+   \param[in]  os32_Min        new minimum
+   \param[in]  os32_Max        new maximum
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OgeWiUtil::h_ShowHideScrollBar(QScrollBar * const opc_ScrollBar, const int32_t os32_Min, const int32_t os32_Max)
+{
+   if (opc_ScrollBar != nullptr)
+   {
+      if ((os32_Min == 0) && (os32_Max == 0))
+      {
+         opc_ScrollBar->hide();
+      }
+      else
+      {
+         opc_ScrollBar->show();
+      }
+   }
+}

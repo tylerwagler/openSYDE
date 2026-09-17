@@ -135,9 +135,8 @@ void C_SyvUpInformationWidget::SetUpdateStarted(void) const
    \param[in]  ou32_NodeIndex    Index of node
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpInformationWidget::SetUpdateNodeStarted(const uint32_t ou32_NodeIndex)
+void C_SyvUpInformationWidget::SetUpdateNodeStarted(const uint32_t)
 {
-   Q_UNUSED(ou32_NodeIndex)
    this->mu64_NodeStartTimeMs = this->mc_ElapsedTimer.elapsed();
 }
 
@@ -162,11 +161,9 @@ void C_SyvUpInformationWidget::SetUpdateNodeSuccess(const uint32_t ou32_NodeInde
    \param[in]  oq_IsPemFile      Flag if "application" was a PEM file
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpInformationWidget::SetUpdateApplicationStarted(const uint32_t ou32_NodeIndex, const bool oq_IsParam,
-                                                           const bool oq_IsPemFile) const
+void C_SyvUpInformationWidget::SetUpdateApplicationStarted(const uint32_t ou32_NodeIndex, const bool,
+                                                           const bool) const
 {
-   Q_UNUSED(oq_IsParam)
-   Q_UNUSED(oq_IsPemFile)
    this->mpc_Ui->pc_WidgetUpdatePackage->SetUpdateApplicationStarted(ou32_NodeIndex);
 }
 

@@ -841,7 +841,7 @@ int32_t C_SyvDaPeUpdateModeTableModel::h_EnumToColumn(const E_Columns oe_Value)
    \param[in]  os32_Index  Index
 
    \return
-   NULL Element not found
+   nullptr Element not found
    Else Valid element
 */
 //----------------------------------------------------------------------------------------------------------------------

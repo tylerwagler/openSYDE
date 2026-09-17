@@ -458,7 +458,6 @@ void C_CamMosFilterWidget::m_OnAddClicked()
                                                                  this->mpc_Ui->pc_ScrollAreaContents);
    C_CamMosFilterPopup * const pc_Dialog = new C_CamMosFilterPopup(c_FilterData, *c_New);
 
-   Q_UNUSED(pc_Dialog)
 
    //Resize
    c_New->SetSize(QSize(700, 820));
@@ -540,7 +539,6 @@ void C_CamMosFilterWidget::m_OnAddFilterFromContextmenu(const QList<int32_t> oc_
    C_CamMosFilterPopup * const pc_Dialog = new C_CamMosFilterPopup(c_FilterData, *c_New);
    pc_Dialog->SetAddFilterItem(oc_CanMsgId, oc_CanMsgXtd);
 
-   Q_UNUSED(pc_Dialog)
 
    //Resize
    c_New->SetSize(QSize(700, 820));

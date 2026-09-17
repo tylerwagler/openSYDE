@@ -55,7 +55,7 @@ using namespace stw::opensyde_gui_logic;
    \param[in]      ou16_ElementIndex   Element index
    \param[in]      opc_DashboardWidget Optional pointer to dashboard widget data element
                                           Valid pointer: read value only for this widget with this Datapool element
-                                          NULL pointer:  read value for all widgets with this Datapool element
+                                          nullptr pointer:  read value for all widgets with this Datapool element
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComPollingThreadDiag::m_SetRunParams(const C_SyvComPollingThreadDiag::E_Service oe_Service,
@@ -235,7 +235,7 @@ C_SyvComPollingThreadDiag::~C_SyvComPollingThreadDiag(void)
    \param[in]  ou16_ElementIndex    index of element to read from
    \param[in]  opc_DashboardWidget  Optional pointer to dashboard widget data element
                                        Valid pointer: read value only for this widget with this Datapool element
-                                       NULL pointer:  read value for all widgets with this Datapool element
+                                       nullptr pointer:  read value for all widgets with this Datapool element
 
    \return
    C_NO_ERR   started polling

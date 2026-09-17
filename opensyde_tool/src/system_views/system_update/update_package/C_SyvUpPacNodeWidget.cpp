@@ -772,7 +772,7 @@ bool C_SyvUpPacNodeWidget::CheckSecuritySettingsChanged() const
 
    \param[in]  orc_Pos  Position of application
 
-   \retval   NULL            No section list on the position
+   \retval   nullptr            No section list on the position
    \retval   Valid pointer   Pointer to section list
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -817,7 +817,7 @@ C_SyvUpPacSectionNodeWidget * C_SyvUpPacNodeWidget::GetSectionList(const QPoint 
 
    \return
    Pointer to application
-   NULL if no application was at the position
+   nullptr if no application was at the position
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpPacListNodeItemWidget * C_SyvUpPacNodeWidget::GetAndSelectApplication(const QPoint & orc_Pos)
@@ -856,7 +856,7 @@ const
 
    \return
    Pointer to application
-   NULL if no application was at the position
+   nullptr if no application was at the position
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpPacListNodeItemWidget * C_SyvUpPacNodeWidget::GetApplication(const QPoint & orc_Pos,
@@ -1666,7 +1666,7 @@ const
 
    \return
    Valid pointer     Pointer to list widget with this app as child
-   NULL              No parent was found
+   nullptr              No parent was found
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpPacSectionNodeWidget * C_SyvUpPacNodeWidget::m_GetAppParentList(C_SyvUpPacListNodeItemWidget * const opc_App)
@@ -1940,7 +1940,6 @@ void C_SyvUpPacNodeWidget::m_AddSecurityCertificatePackage()
    //Resize
    c_PopUpDialog->SetSize(QSize(1152, 853));
 
-   Q_UNUSED(pc_SecurityCertificatePackageDialog)
 
    // "Create" clicked
    if (c_PopUpDialog->exec() == static_cast<int32_t>(QDialog::Accepted))

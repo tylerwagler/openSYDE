@@ -1209,12 +1209,10 @@ void C_SyvUpPacListWidget::mouseDoubleClickEvent(QMouseEvent * const opc_Event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpPacListWidget::m_MoveItem(const int32_t os32_SourceIndex, const int32_t os32_TargetIndex)
+void C_SyvUpPacListWidget::m_MoveItem(const int32_t, const int32_t)
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   Q_UNUSED(os32_SourceIndex)
-   Q_UNUSED(os32_TargetIndex)
 
    // Update all position numbers in the node update information
    // The numbers in the widgets must be updated before

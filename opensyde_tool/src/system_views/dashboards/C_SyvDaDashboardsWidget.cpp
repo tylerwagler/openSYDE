@@ -203,10 +203,9 @@ void C_SyvDaDashboardsWidget::Save(void) const
 void C_SyvDaDashboardsWidget::OpenSettings(void)
 {
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
-   C_SyvDaPeUpdateModeConfiguration * const pc_Dialog = new C_SyvDaPeUpdateModeConfiguration(*c_New,
+   new C_SyvDaPeUpdateModeConfiguration(*c_New,
                                                                                              this->mu32_ViewIndex);
 
-   Q_UNUSED(pc_Dialog)
 
    //Resize
    c_New->SetSize(QSize(1400, 809));
@@ -486,7 +485,7 @@ void C_SyvDaDashboardsWidget::hideEvent(QHideEvent * const opc_Event)
    \param[in,out]  opc_Event  Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardsWidget::resizeEvent(QResizeEvent * const opc_Event)
+void C_SyvDaDashboardsWidget::resizeEvent(QResizeEvent *)
 {
    if ((this->mpc_Toolbox != nullptr) && (this->mpc_FixMinimizedToolbox != nullptr))
    {
@@ -497,7 +496,6 @@ void C_SyvDaDashboardsWidget::resizeEvent(QResizeEvent * const opc_Event)
 
       QWidget * pc_Widget = this->mpc_ToolboxParent;
 
-      Q_UNUSED(opc_Event)
 
       if (pc_Widget == nullptr)
       {
@@ -671,7 +669,7 @@ void C_SyvDaDashboardsWidget::m_UpdateShowValues(void) const
    \return
    C_NO_ERR      Operation success
    C_NOACT       No active nodes
-   C_CONFIG      Invalid system definition/view configuration or mpc_ComDriver is NULL
+   C_CONFIG      Invalid system definition/view configuration or mpc_ComDriver is nullptr
    C_RD_WR       Configured communication DLL does not exist
    C_OVERFLOW    Unknown transport protocol or unknown diagnostic server for at least one node
    C_BUSY        System view error detected
@@ -851,7 +849,7 @@ void C_SyvDaDashboardsWidget::m_DataPoolWrite(const uint32_t ou32_NodeIndex, con
    \param[in]       orc_Index             Detailed input parameter description
    \param[in]       opc_DashboardWidget   Optional pointer to dashboard widget data element
                                              Valid pointer: read value only for this widget with this Datapool element
-                                             NULL pointer:  read value for all widgets with this Datapool element
+                                             nullptr pointer:  read value for all widgets with this Datapool element
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardsWidget::m_DataPoolRead(const C_OscNodeDataPoolListElementId & orc_Index,

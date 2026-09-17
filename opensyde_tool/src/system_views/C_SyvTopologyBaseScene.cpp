@@ -149,10 +149,9 @@ void C_SyvTopologyBaseScene::Load(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175} intentionally no functionality in this implementation
-void C_SyvTopologyBaseScene::CopyFromManagerToScene(const QPointF * const opc_Pos)
+void C_SyvTopologyBaseScene::CopyFromManagerToScene(const QPointF *)
 {
    // Nothing to do yet
-   Q_UNUSED(opc_Pos)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -165,9 +164,8 @@ void C_SyvTopologyBaseScene::CopyFromManagerToScene(const QPointF * const opc_Po
    false    Item is not deletable
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SyvTopologyBaseScene::IsItemDeletable(const QGraphicsItem * const opc_Item) const
+bool C_SyvTopologyBaseScene::IsItemDeletable(const QGraphicsItem *) const
 {
-   Q_UNUSED(opc_Item)
 
    // no deleting here
    return false;
@@ -183,9 +181,8 @@ bool C_SyvTopologyBaseScene::IsItemDeletable(const QGraphicsItem * const opc_Ite
    false    Z order is not changeable
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SyvTopologyBaseScene::IsZetOrderChangeable(const QGraphicsItem * const opc_Item) const
+bool C_SyvTopologyBaseScene::IsZetOrderChangeable(const QGraphicsItem *) const
 {
-   Q_UNUSED(opc_Item)
 
    // no change of zorder allowed here
    return false;
@@ -201,9 +198,8 @@ bool C_SyvTopologyBaseScene::IsZetOrderChangeable(const QGraphicsItem * const op
    false    Item can not be alined
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SyvTopologyBaseScene::IsAlignmentUsable(const QGraphicsItem * const opc_Item) const
+bool C_SyvTopologyBaseScene::IsAlignmentUsable(const QGraphicsItem *) const
 {
-   Q_UNUSED(opc_Item)
 
    // no algining here
    return false;
@@ -227,7 +223,7 @@ bool C_SyvTopologyBaseScene::IsSceneRubberBandAvailable(void) const
 /*! \brief   Get current copy paste manager
 
    \return
-   NULL No copy paste manager
+   nullptr No copy paste manager
    Else Valid copy paste manager
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -240,7 +236,7 @@ stw::opensyde_gui_logic::C_SebBaseCopyPasteManager * C_SyvTopologyBaseScene::m_G
 /*! \brief   Get current copy paste manager
 
    \return
-   NULL No copy paste manager
+   nullptr No copy paste manager
    Else Valid copy paste manager
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -453,11 +449,9 @@ void C_SyvTopologyBaseScene::m_AddPcBusConnectorToScene(C_GiSvPcBusConnector * c
    false: No item was added
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SyvTopologyBaseScene::m_AddOfMime(const QMimeData * const opc_MimeData, const QPointF & orc_Position)
+bool C_SyvTopologyBaseScene::m_AddOfMime(const QMimeData *, const QPointF &)
 {
    // Nothing to do
-   Q_UNUSED(opc_MimeData)
-   Q_UNUSED(orc_Position)
 
    return false;
 }
@@ -486,7 +480,7 @@ void C_SyvTopologyBaseScene::m_Cut(void)
 /*! \brief   Check active busses
 
    \return
-   NULL No active bus
+   nullptr No active bus
    Else Active bus
 */
 //----------------------------------------------------------------------------------------------------------------------

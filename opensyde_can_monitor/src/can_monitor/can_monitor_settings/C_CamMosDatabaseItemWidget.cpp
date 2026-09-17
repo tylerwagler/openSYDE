@@ -61,6 +61,7 @@ C_CamMosDatabaseItemWidget::C_CamMosDatabaseItemWidget(const C_CamProDatabaseDat
    mpc_Ui(new Ui::C_CamMosDatabaseItemWidget),
    me_State(eLOADING),
    mq_AlreadyAskedUserReload(true),
+   mu8_FileOpenFailCounter(0U),
    mq_AlreadyAskedUserDelete(false),
    mq_ButtonPressed(false),
    mq_SuppressChangeSignal(false),
@@ -312,14 +313,13 @@ void C_CamMosDatabaseItemWidget::CheckFile(void)
    {
       const QFileInfo c_File(C_CamUti::h_GetAbsPathFromProj(this->mc_Database.c_Name));
       C_OgeWiCustomMessage c_Message(this);
-      static uint8_t hu8_FileOpenFailCounter = 0;
 
       // check file existence
       if ((c_File.exists() == true) && (c_File.isFile() == true))
       {
          const QDateTime c_Timestamp = c_File.lastModified();
          //reset fail counter
-         hu8_FileOpenFailCounter = 0;
+         this->mu8_FileOpenFailCounter = 0;
 
          // check if new timestamp
          if (this->mc_FileTimeStamp == c_Timestamp)
@@ -357,16 +357,16 @@ void C_CamMosDatabaseItemWidget::CheckFile(void)
       else
       {
          //File not found. Inrease fail counter
-         hu8_FileOpenFailCounter++;
+         this->mu8_FileOpenFailCounter++;
 
          //From time to time there are false positive messages (e.g.: when openSYDE GUI is saving the project and
          //at the same time openSYDE CAN Monitor is checking if database has been changed)
          //To avoid this messages simple approach is implemented: handle "file not found" case only after second occur
          // (= forgive one fail)
-         if (hu8_FileOpenFailCounter > 1)
+         if (this->mu8_FileOpenFailCounter > 1)
          {
             //reset for next use
-            hu8_FileOpenFailCounter = 0;
+            this->mu8_FileOpenFailCounter = 0;
 
             if (this->mq_AlreadyAskedUserDelete == false)
             {

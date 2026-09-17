@@ -187,7 +187,7 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::SetNodeAsManager(const bool oq_Manag
 /*! \brief   Sets the node item as CANopen Device
 
    \param[in]  oq_Device               Flag if CANopen Device
-   \param[in]  opc_DeviceId            Device Id (NULL if not a device)
+   \param[in]  opc_DeviceId            Device Id (nullptr if not a device)
    \param[in]  ou32_ManagerNodeIndex   Index of Manager Node which the Device is assigned to (if oq_Device == true)
    \param[in]  ou32_ManagerIntfIndex   Interface index of Manager Node which the Device is
                                           assigned to (if oq_Device == true)
@@ -337,13 +337,12 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::m_AdaptIcon(const bool oq_Checked)
    \param[in]  orc_Link    Link
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueNodeSelectorCheckBoxItemWidget::m_OnLinkSwitchToManager(const QString & orc_Link) const
+void C_SdBueNodeSelectorCheckBoxItemWidget::m_OnLinkSwitchToManager(const QString &) const
 {
    uint32_t u32_ManagerNodeIndex;
    uint32_t u32_ManagerIntfIndex;
    const C_OscNode * pc_ManagerNode;
 
-   Q_UNUSED(orc_Link)
 
    this->GetIndexes(u32_ManagerNodeIndex, u32_ManagerIntfIndex);
 

@@ -206,10 +206,9 @@ void C_GiSvDaParam::DeleteData(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaParam::ConnectionActiveChanged(const bool oq_Active, const QMap<uint32_t,
-                                                                             bool> & orc_MappingNodeToTrafficEncryptionStatus)
+                                                                             bool> &)
 {
    this->mq_Connected = oq_Active;
-   Q_UNUSED(orc_MappingNodeToTrafficEncryptionStatus)
    if (this->mpc_ParamWidget != nullptr)
    {
       this->mpc_ParamWidget->ConnectionActiveChanged(oq_Active);
@@ -421,7 +420,7 @@ uint32_t C_GiSvDaParam::GetViewIndex(void) const
 /*! \brief   Get table data item
 
    \return
-   NULL Error
+   nullptr Error
    Else Pointer to table data
 */
 //----------------------------------------------------------------------------------------------------------------------

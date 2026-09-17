@@ -1216,7 +1216,6 @@ bool C_SdNdeDpSelectorListWidget::m_OpenDataPoolSelectDialog(C_OscNodeDataPool &
    const QSize c_SIZE(620, 520);
 
    c_New->SetSize(c_SIZE);
-   Q_UNUSED(pc_Dialog)
 
    if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
@@ -1236,7 +1235,7 @@ bool C_SdNdeDpSelectorListWidget::m_OpenDataPoolSelectDialog(C_OscNodeDataPool &
    \param[in,out] orc_OscDataPool             Reference to the actual core Datapool object
    \param[in,out] orc_UiDataPool              Reference to the actual ui datapool object
    \param[in]     opc_SharedDatapoolId        In case of a new shared Datapool, the Id is the shared Datapool of the new
-                                              Datapool. In case of an edited or stand alone Datapool the pointer is NULL
+                                              Datapool. In case of an edited or stand alone Datapool the pointer is nullptr
    \param[in]     oq_NodeProgrammingSupport   Flag if node has programming support
    \param[in]     os32_DataPoolIndex          Flag for new Datapool (-1 is new Datapool, >= 0 is existing Datapool)
    \param[in]     oq_SelectName               Selects the Datapool name for instant editing
@@ -1305,7 +1304,6 @@ bool C_SdNdeDpSelectorListWidget::m_OpenDataPoolDialog(C_OscNodeDataPool & orc_O
       c_New->SetSize(c_SIZE);
    }
 
-   Q_UNUSED(pc_Dialog)
 
    if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
@@ -1437,7 +1435,7 @@ void C_SdNdeDpSelectorListWidget::m_OnItemCustomContextMenuRequested(const QPoin
 /*! \brief   Show custom context menu
 
    \param[in] orc_Pos   Local context menu position
-   \param[in] opc_Item  Pointer to clicked Datapool item. NULL if no specific item was clicked
+   \param[in] opc_Item  Pointer to clicked Datapool item. nullptr if no specific item was clicked
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpSelectorListWidget::m_OpenCustomContextMenu(const QPoint & orc_Pos,

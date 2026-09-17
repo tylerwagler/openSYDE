@@ -332,7 +332,7 @@ const std::vector<QString> C_CamDbDbc::GetFoundMessages(void) const
    \param[in]  ou32_Hash      Hash
 
    \return
-   NULL DBC message not found
+   nullptr DBC message not found
    Else Valid DBC message
 */
 //----------------------------------------------------------------------------------------------------------------------

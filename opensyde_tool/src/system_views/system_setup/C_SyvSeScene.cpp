@@ -611,13 +611,10 @@ void C_SyvSeScene::m_SelectionChanged(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeScene::m_OnPcBusConnectionStartConnect(const C_GiLiBusConnectorBase::E_ConnectState & ore_ConnectState,
-                                                   const QGraphicsItem * const opc_Item,
-                                                   const C_OscSystemBus::E_Type * const ope_Type,
-                                                   const C_GiLiBusConnectorBase * const opc_Connector) const
+                                                   const QGraphicsItem *,
+                                                   const C_OscSystemBus::E_Type *,
+                                                   const C_GiLiBusConnectorBase *) const
 {
-   Q_UNUSED(opc_Item)
-   Q_UNUSED(ope_Type)
-   Q_UNUSED(opc_Connector)
    if (this->mq_EditMode == true)
    {
       if (ore_ConnectState == C_GiLiBusConnectorBase::eTO_GENERIC)

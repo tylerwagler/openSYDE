@@ -272,9 +272,8 @@ void C_SyvDaItDashboardProgressBarWidget::resizeEvent(QResizeEvent * const opc_E
    \param[in,out]  opc_Event  Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItDashboardProgressBarWidget::paintEvent(QPaintEvent * const opc_Event)
+void C_SyvDaItDashboardProgressBarWidget::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    // Variables
    QPainter c_Painter(this);

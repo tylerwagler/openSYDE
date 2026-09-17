@@ -254,7 +254,7 @@ int32_t C_CamDbHandler::FindDbcMessage(const QString & orc_File, const QString &
    \param[out]  ope_ProtocolType    Protocol type
 
    \return
-   NULL OSC CAN message not found
+   nullptr OSC CAN message not found
    Else Valid OSC CAN message
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -286,7 +286,7 @@ const
    \param[in]  ou32_Hash      Hash
 
    \return
-   NULL OSC list not found
+   nullptr OSC list not found
    Else Valid OSC list
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -316,7 +316,7 @@ const stw::opensyde_core::C_OscNodeDataPoolList * C_CamDbHandler::GetOscList(con
    \param[in]  ou32_Hash      Hash
 
    \return
-   NULL ODBC message not found
+   nullptr ODBC message not found
    Else Valid DBC message
 */
 //----------------------------------------------------------------------------------------------------------------------

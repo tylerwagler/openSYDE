@@ -504,9 +504,8 @@ void C_SdNdeHalcConfigImportModel::CheckChannels(const std::vector<uint32_t> & o
    Column count
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeHalcConfigImportModel::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_SdNdeHalcConfigImportModel::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return 1;
 }
 

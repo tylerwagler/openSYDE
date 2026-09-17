@@ -97,9 +97,8 @@ void C_CamOgeSpiHandle::mouseDoubleClickEvent(QMouseEvent * const opc_Event)
    \param[in,out] opc_Event  Pointer to paint event
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamOgeSpiHandle::paintEvent(QPaintEvent * const opc_Event)
+void C_CamOgeSpiHandle::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    const int32_t s32_HANDLE_HEIGHT = 30;
    QPainter c_Painter(this);

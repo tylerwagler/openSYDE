@@ -68,7 +68,7 @@ const std::vector<C_CamProMessageData> & C_CamProHandler::GetMessages(void) cons
    \param[in]  ou32_Index  Message index
 
    \return
-   NULL Message not found
+   nullptr Message not found
    Else Valid message
 */
 //----------------------------------------------------------------------------------------------------------------------

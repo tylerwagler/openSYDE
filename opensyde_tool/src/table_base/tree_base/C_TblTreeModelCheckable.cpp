@@ -78,9 +78,8 @@ C_TblTreeModelCheckable::~C_TblTreeModelCheckable(void)
    Column count
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_TblTreeModelCheckable::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_TblTreeModelCheckable::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return 1;
 }
 

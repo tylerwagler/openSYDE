@@ -65,12 +65,11 @@ C_SyvDaPeUpdateModeTableDelegate::C_SyvDaPeUpdateModeTableDelegate(const uint32_
 */
 //----------------------------------------------------------------------------------------------------------------------
 QWidget * C_SyvDaPeUpdateModeTableDelegate::createEditor(QWidget * const opc_Parent,
-                                                         const QStyleOptionViewItem & orc_Option,
+                                                         const QStyleOptionViewItem &,
                                                          const QModelIndex & orc_Index) const
 {
    QWidget * pc_Retval = nullptr;
 
-   Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
    {
       C_OgeCbxTable * pc_ComboBox;

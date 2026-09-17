@@ -848,8 +848,7 @@ void C_CamGenTableView::m_HandleLinkClicked(const QModelIndex & orc_Index)
                C_CamGenTableModel::eKEY)
       {
          const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
-         C_CamGenKeySelect * const pc_Dialog =
-            new C_CamGenKeySelect(*c_New, static_cast<uint32_t>(s32_Row));
+         new C_CamGenKeySelect(*c_New, static_cast<uint32_t>(s32_Row));
 
          //Resize
          c_New->SetSize(QSize(600, 375));
@@ -857,7 +856,6 @@ void C_CamGenTableView::m_HandleLinkClicked(const QModelIndex & orc_Index)
          // Update settings on accept
          if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
          {
-            Q_UNUSED(pc_Dialog)
             this->mc_Model.UpdateMessageKey(static_cast<uint32_t>(s32_Row));
          }
          if (c_New != nullptr)

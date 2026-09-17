@@ -821,7 +821,6 @@ void C_SdBueMessageRxEntry::m_OnTimeoutConfigLinkClicked(void)
                                                     this->mu32_AutoReceiveTimeoutValue,
                                                     c_NodeName + this->mpc_Ui->pc_CheckBoxActive->text());
 
-      Q_UNUSED(pc_Dialog)
 
       //Resize
       c_New->SetSize(QSize(750, 380));

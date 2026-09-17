@@ -423,12 +423,5 @@ void C_SyvDcExistingNodeList::m_ScrollBarRangeChangedVer(const int32_t os32_Min,
 {
    // manual showing and hiding of the scroll bar to stop resizing the parent widget when showing or hiding the scroll
    // bar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->verticalScrollBar()->hide();
-   }
-   else
-   {
-      this->verticalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->verticalScrollBar(), os32_Min, os32_Max);
 }

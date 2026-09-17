@@ -121,14 +121,12 @@ void C_SdBueMlvBaseItem::SetFont(const QFont & orc_Font)
    \param[in,out]  opc_Widget    Widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMlvBaseItem::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-                               QWidget * const opc_Widget)
+void C_SdBueMlvBaseItem::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem *,
+                               QWidget *)
 {
    QPen c_Pen = opc_Painter->pen();
    QBrush c_Brush = opc_Painter->brush();
 
-   Q_UNUSED(opc_Option)
-   Q_UNUSED(opc_Widget)
 
    if (this->mq_DrawBackground == true)
    {

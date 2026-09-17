@@ -139,8 +139,8 @@ void C_SyvComDataDealer::RegisterWidget(C_PuiSvDbDataElementHandler * const opc_
    \param[in]     ou16_ElementIndex    element index
    \param[in]     opc_DashboardWidget  Optional pointer to dashboard widget data element
                                              Valid pointer: read value only for this widget with this Datapool element
-                                             NULL pointer:  read value for all widgets with this Datapool element
-   \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
+                                             nullptr pointer:  read value for all widgets with this Datapool element
+   \param[out]    opu8_NrCode          if != nullptr: negative response code in case of an error response
 
    \return
    Errc::success  data read and placed in data pool
@@ -189,7 +189,7 @@ std::error_code C_SyvComDataDealer::DataPoolReadWithWidget(const uint8_t ou8_Dat
    \param[in]     ou8_DataPoolIndex    data pool index
    \param[in]     ou16_ListIndex       list index
    \param[in]     ou16_ElementIndex    element index
-   \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
+   \param[out]    opu8_NrCode          if != nullptr: negative response code in case of an error response
 
    \return
    Errc::success  data read and placed in data pool
@@ -227,7 +227,7 @@ std::error_code C_SyvComDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex
    \param[in]     ou8_DataPoolIndex    data pool index
    \param[in]     ou16_ListIndex       list index
    \param[in]     ou16_ElementIndex    element index
-   \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
+   \param[out]    opu8_NrCode          if != nullptr: negative response code in case of an error response
 
    \return
    Errc::success data read and placed in data pool
@@ -264,7 +264,7 @@ std::error_code C_SyvComDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, con
 
    \param[in]     ou32_DataPoolIndex   Node datapool index
    \param[in]     ou32_ListIndex       Node datapool list index
-   \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
+   \param[out]    opu8_NrCode          if != nullptr: negative response code in case of an error response
 
    \return
    Errc::success  Reading of list successful
@@ -316,7 +316,7 @@ std::error_code C_SyvComDataDealer::NvmReadList(const uint32_t ou32_DataPoolInde
    \param[in]     ou16_ElementIndex    element index
    \param[in]     opc_DashboardWidget  Optional pointer to dashboard widget data element
                                              Valid pointer: read value only for this widget with this Datapool element
-                                             NULL pointer:  read value for all widgets with this Datapool element
+                                             nullptr pointer:  read value for all widgets with this Datapool element
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComDataDealer::m_OnReadDataPoolEventReceivedForWidget(const uint8_t ou8_DataPoolIndex,

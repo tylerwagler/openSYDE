@@ -100,9 +100,8 @@ void C_OgePubDashboard::SetFiles(const QString & orc_SvgActivated, const QString
    \param[in,out] opc_Event Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgePubDashboard::paintEvent(QPaintEvent * const opc_Event)
+void C_OgePubDashboard::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
    if ((this->isChecked() == true) && (this->mpc_RendererActivated != nullptr))
    {
       QPainter c_Painter(this);

@@ -66,11 +66,10 @@ C_GiSyScreenColorPickingEventFilter::~C_GiSyScreenColorPickingEventFilter(void)
    bool   if one event was chosen
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_GiSyScreenColorPickingEventFilter::eventFilter(QObject * const opc_Object, QEvent * const opc_Event)
+bool C_GiSyScreenColorPickingEventFilter::eventFilter(QObject *, QEvent * const opc_Event)
 {
    bool q_Result = false;
 
-   Q_UNUSED(opc_Object)
    switch (opc_Event->type()) //lint !e788 //only selected events handled by us on purpose
    {
    case QEvent::MouseMove:

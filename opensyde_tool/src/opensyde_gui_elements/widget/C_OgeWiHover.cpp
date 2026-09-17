@@ -581,9 +581,8 @@ void C_OgeWiHover::mouseMoveEvent(QMouseEvent * const opc_Event)
    \param[in,out] opc_Event Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeWiHover::mouseReleaseEvent(QMouseEvent * const opc_Event)
+void C_OgeWiHover::mouseReleaseEvent([[maybe_unused]] QMouseEvent * const opc_Event)
 {
-   Q_UNUSED(opc_Event)
 
    this->mu32_MouseMode = mu32_MOUSE_MODE_NO_FUNC;
 

@@ -1109,7 +1109,7 @@ C_SebBaseContextMenuManager * C_SdTopologyScene::m_GetContextMenuManager(void)
 /*! \brief   Get current copy paste manager
 
    \return
-   NULL No copy paste manager
+   nullptr No copy paste manager
    Else Valid copy paste manager
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1123,7 +1123,7 @@ C_SebBaseCopyPasteManager * C_SdTopologyScene::m_GetCopyPasteManager(void)
 /*! \brief   Get current copy paste manager
 
    \return
-   NULL No copy paste manager
+   nullptr No copy paste manager
    Else Valid copy paste manager
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1687,11 +1687,10 @@ void C_SdTopologyScene::m_Cut(void)
    false Abort
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdTopologyScene::m_HandleDeleteUserConfirmation(const QList<QGraphicsItem *> & orc_SelectedItems) const
+bool C_SdTopologyScene::m_HandleDeleteUserConfirmation(const QList<QGraphicsItem *> &) const
 {
    bool q_Retval = true;
 
-   Q_UNUSED(orc_SelectedItems)
 
    if (this->views().size() > 0)
    {
@@ -2674,7 +2673,7 @@ void C_SdTopologyScene::m_RemoveTextElementBusOfScene(const C_GiTextElementBus *
    \param[in]  ore_ConnectState  Connection state
    \param[in]  opc_Node          Relevant node (optional)
    \param[in]  ope_Type          Last used bus type (optional)
-                                 NULL: No special handling for any bus type
+                                 nullptr: No special handling for any bus type
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyScene::m_EnterConnectState(const C_GiLiBusConnector::E_ConnectState & ore_ConnectState,
@@ -3595,7 +3594,7 @@ void C_SdTopologyScene::mh_AddAndUpdateHigher(QList<uint32_t> & orc_Vec, const u
    \param[in]      ore_ConnectState    Connection state
    \param[in]      opc_Item            Bus connection item
    \param[in]      ope_Type            Last used bus type (optional)
-                                       NULL: No special handling for any bus type
+                                       nullptr: No special handling for any bus type
    \param[in,out]  opc_BusConnector    Bus connector
 */
 //----------------------------------------------------------------------------------------------------------------------

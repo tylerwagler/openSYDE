@@ -196,7 +196,7 @@ void C_GiInfo::UpdateTransform(const QTransform & orc_Transform)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiInfo::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-                     QWidget * const opc_Widget)
+                     QWidget *)
 {
    const QFontMetrics c_Metrics(this->mc_TextFont);
    const int32_t s32_TextOffset = static_cast<int32_t>(opc_Option->rect.height() - c_Metrics.height()) / 2L;
@@ -244,7 +244,6 @@ void C_GiInfo::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsIte
       }
    }
 
-   Q_UNUSED(opc_Widget)
 
    //Text
    opc_Painter->save();

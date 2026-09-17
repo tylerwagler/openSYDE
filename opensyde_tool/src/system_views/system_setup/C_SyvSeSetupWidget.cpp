@@ -331,7 +331,6 @@ void C_SyvSeSetupWidget::StartDeviceConfiguration(void)
       c_New = new C_OgePopUpDialog(this, this);
       pc_Dialog = new C_SyvDcWidget(*c_New, this->mu32_ViewIndex);
 
-      Q_UNUSED(pc_Dialog)
 
       //Resize
       c_New->SetSize(QSize(1100, 743));

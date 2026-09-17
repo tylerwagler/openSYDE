@@ -219,7 +219,7 @@ void C_SdBueNodeSelectorCheckBoxListWidget::SetSpecificNodeAsManager(const uint3
    \param[in]     ou32_Index              Index of Device Node
    \param[in]     ou32_SubIndex           Subindex of Device Node
    \param[in]     oq_Device               Flag if node is a CANopen Device
-   \param[in]     opc_DeviceId            Device Id (NULL if not a device)
+   \param[in]     opc_DeviceId            Device Id (nullptr if not a device)
    \param[in]     ou32_ManagerNodeIndex   Index of Manager Node which the Device is assigned to (if oq_Device == true)
    \param[in]     ou32_ManagerIntfIndex   Interface index of Manager Node which the Device is
                                           assigned to (if oq_Device == true)
@@ -329,7 +329,7 @@ void C_SdBueNodeSelectorCheckBoxListWidget::m_ScrollBarRangeChanged(const int32_
    \param[in]     ou32_SubIndex     Subindex of Node
 
    \retval   Valid pointer   Item found
-   \retval   NULL            No item with matching parameters found
+   \retval   nullptr            No item with matching parameters found
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueNodeSelectorCheckBoxItemWidget * C_SdBueNodeSelectorCheckBoxListWidget::m_GetItemWidget(

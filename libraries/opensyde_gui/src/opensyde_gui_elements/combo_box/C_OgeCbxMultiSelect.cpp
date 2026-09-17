@@ -145,9 +145,8 @@ QBitArray C_OgeCbxMultiSelect::GetValuesAsBitArray(void) const
    \param[in,out]  opc_Event  Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeCbxMultiSelect::paintEvent(QPaintEvent * const opc_Event)
+void C_OgeCbxMultiSelect::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    QStylePainter c_Painter(this);
    // draw the combo box frame, focusrect and selected etc.
@@ -170,9 +169,8 @@ void C_OgeCbxMultiSelect::paintEvent(QPaintEvent * const opc_Event)
    \param[in,out]  opc_Event  Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeCbxMultiSelect::mousePressEvent(QMouseEvent * const opc_Event)
+void C_OgeCbxMultiSelect::mousePressEvent(QMouseEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    if (this->mq_IsShown == false)
    {

@@ -367,10 +367,8 @@ void C_TblModelAction::m_BeginRemoveRows(const uint32_t ou32_FirstIndex, const u
    \param[in] ou32_LastIndex  Highest index of this section of removed items
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_TblModelAction::m_EndRemoveRows(const uint32_t ou32_FirstIndex, const uint32_t ou32_LastIndex)
+void C_TblModelAction::m_EndRemoveRows(const uint32_t, const uint32_t)
 {
-   Q_UNUSED(ou32_FirstIndex)
-   Q_UNUSED(ou32_LastIndex)
    this->endRemoveRows();
 }
 

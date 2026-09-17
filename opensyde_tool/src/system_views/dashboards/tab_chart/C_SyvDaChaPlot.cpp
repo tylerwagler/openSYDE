@@ -102,12 +102,9 @@ void C_SyvDaChaPlotTriangleItem::UpdateColor(const QColor & orc_Color)
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{952,8001,8011,9272}  //name of function and parameters dictated by base class
-double C_SyvDaChaPlotTriangleItem::selectTest(const QPointF & orc_Pos, bool oq_OnlySelectable,
-                                                 QVariant * const opc_Details) const
+double C_SyvDaChaPlotTriangleItem::selectTest(const QPointF &, bool,
+                                                 QVariant *) const
 {
-   Q_UNUSED(orc_Pos)
-   Q_UNUSED(oq_OnlySelectable)
-   Q_UNUSED(opc_Details)
 
    // Not necessary in this case
    return -1.0;

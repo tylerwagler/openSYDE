@@ -833,7 +833,6 @@ void C_SyvDaItPaWidgetNew::m_WriteElements(const std::vector<C_OscNodeDataPoolLi
                                                                                      c_InterestingChangedElements,
                                                                                      c_InterestingInvalidLists);
 
-               Q_UNUSED(pc_Dialog)
 
                //Resize
                c_New->SetSize(QSize(900, 800));
@@ -973,7 +972,6 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
                                                                                        orc_ElementIds,
                                                                                        orc_Id, ou32_ValidLayers,
                                                                                        c_File);
-               Q_UNUSED(pc_Dialog)
 
                //Resize
                c_New->SetSize(mc_POPUP_REPORT_SIZE);
@@ -1364,7 +1362,6 @@ void C_SyvDaItPaWidgetNew::m_RecordElements(const std::vector<C_OscNodeDataPoolL
          C_SyvDaItPaImageRecordWidget * const pc_Dialog =
             new C_SyvDaItPaImageRecordWidget(*c_New, *this->mpc_ComDriver, orc_ListIds, pc_View->GetName().c_str());
 
-         Q_UNUSED(pc_Dialog)
 
          //Resize
          c_New->SetSize(QSize(900, 801));

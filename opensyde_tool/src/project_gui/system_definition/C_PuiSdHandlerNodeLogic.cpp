@@ -196,7 +196,7 @@ void C_PuiSdHandlerNodeLogic::SetOscNodeEthernetConfiguration(const uint32_t ou3
    \param[in]  oru32_Index    Index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -223,7 +223,7 @@ const C_PuiSdNode * C_PuiSdHandlerNodeLogic::GetUiNode(const uint32_t & oru32_In
    \param[in]  oru32_Index    Index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -250,7 +250,7 @@ const C_OscNodeSquad * C_PuiSdHandlerNodeLogic::GetOscNodeSquadConst(const uint3
    \param[in]  oru32_Index    Index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -322,7 +322,7 @@ int32_t C_PuiSdHandlerNodeLogic::GetSortedOscNodeConst(const uint32_t & oru32_In
    \param[in]  oru32_Index    Index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -350,7 +350,7 @@ C_OscNode * C_PuiSdHandlerNodeLogic::GetOscNode(const uint32_t & oru32_Index)
    \param[in]  oru32_Index    Index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1942,7 +1942,7 @@ std::string C_PuiSdHandlerNodeLogic::GetUniqueDataPoolName(const uint32_t & oru3
 
    \return
    Found: Pointer to OSC data pool
-   Else:  NULL
+   Else:  nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPool * C_PuiSdHandlerNodeLogic::GetOscDataPool(const uint32_t & oru32_NodeIndex,
@@ -1971,7 +1971,7 @@ const C_OscNodeDataPool * C_PuiSdHandlerNodeLogic::GetOscDataPool(const uint32_t
 
    \return
    Found: Pointer to UI data pool
-   Else:  NULL
+   Else:  nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSdNodeDataPool * C_PuiSdHandlerNodeLogic::GetUiDataPool(const uint32_t & oru32_NodeIndex,
@@ -2622,7 +2622,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetApplication(const uint32_t ou32_NodeIndex, c
    \param[in]  ou32_ApplicationIndex   Application index
 
    \return
-   NULL Application not found
+   nullptr Application not found
    Else Valid application
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -3657,7 +3657,7 @@ int32_t C_PuiSdHandlerNodeLogic::GetDataPoolListDataSet(const uint32_t & oru32_N
 
    \return
    Found: Pointer to OSC data pool list data set
-   Else:  NULL
+   Else:  nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolDataSet * C_PuiSdHandlerNodeLogic::GetOscDataPoolListDataSet(const uint32_t & oru32_NodeIndex,
@@ -4130,7 +4130,7 @@ int32_t C_PuiSdHandlerNodeLogic::MoveDataPoolListDataSet(const uint32_t & oru32_
 
    \return
    Found: Pointer to OSC data pool list
-   Else:  NULL
+   Else:  nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolList * C_PuiSdHandlerNodeLogic::GetOscDataPoolList(const uint32_t & oru32_NodeIndex,
@@ -4161,7 +4161,7 @@ const
 
    \return
    Found: Pointer to UI data pool list
-   Else:  NULL
+   Else:  nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSdNodeDataPoolList * C_PuiSdHandlerNodeLogic::GetUiDataPoolList(const uint32_t & oru32_NodeIndex,
@@ -5511,7 +5511,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetDataPoolListElementNvmValueChanged(const uin
 
    \return
    Found: Pointer to OSC data pool list element
-   Else:  NULL
+   Else:  nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolListElement * C_PuiSdHandlerNodeLogic::GetOscDataPoolListElement(
@@ -5541,7 +5541,7 @@ const
 
    \return
    Found: Pointer to OSC data pool list element
-   Else:  NULL
+   Else:  nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolListElement * C_PuiSdHandlerNodeLogic::GetOscDataPoolListElement(
@@ -5561,7 +5561,7 @@ const C_OscNodeDataPoolListElement * C_PuiSdHandlerNodeLogic::GetOscDataPoolList
 
    \return
    Found: Pointer to UI data pool list element
-   Else:  NULL
+   Else:  nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSdNodeDataPoolListElement * C_PuiSdHandlerNodeLogic::GetUiDataPoolListElement(

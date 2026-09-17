@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QWidget>
+#include <QScrollBar>
 #include <QVariant>
 #include <QKeyEvent>
 #include <QFileDialog>
@@ -39,6 +40,7 @@ public:
                                                                const char * const opcn_Name,
                                                                const QVariant & orc_Value);
    static void h_SetWindowIcon(QWidget * const opc_Widget);
+   static void h_ShowHideScrollBar(QScrollBar * const opc_ScrollBar, const int32_t os32_Min, const int32_t os32_Max);
    static void h_CheckAndFixDialogPositionAndSize(QPoint & orc_GlobalPosition, QSize & orc_Size,
                                                   const uint32_t ou32_ScreenIndex, const QSize & orc_DefaultSize,
                                                   const bool oq_AddLogEntryForWindowSize = false);

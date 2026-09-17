@@ -351,9 +351,8 @@ void C_SyvUpPacSectionNodeWidget::SetSkipOfUpdateFile(const bool oq_Skip, C_SyvU
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_SyvUpPacSectionNodeWidget::RevertFile(C_SyvUpPacListNodeItemWidget * const opc_App)
+void C_SyvUpPacSectionNodeWidget::RevertFile(C_SyvUpPacListNodeItemWidget *)
 {
-   Q_UNUSED(opc_App)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -417,12 +416,11 @@ void C_SyvUpPacSectionNodeWidget::RemoveAllFiles(void)
    \param[in]  orc_DeviceInformation   Device info
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpPacSectionNodeWidget::UpdateDeviceInformation(const C_SyvUpDeviceInfo & orc_DeviceInformation)
+void C_SyvUpPacSectionNodeWidget::UpdateDeviceInformation(const C_SyvUpDeviceInfo &)
 {
    int32_t s32_AppWidgetCounter;
    bool q_AtLeastOneFileToDo = false;
 
-   Q_UNUSED(orc_DeviceInformation)
 
    //go through all applications in the UI
    for (s32_AppWidgetCounter = 0; s32_AppWidgetCounter < this->mpc_Ui->pc_FileVerticalLayout->count();
@@ -572,7 +570,7 @@ int32_t C_SyvUpPacSectionNodeWidget::CheckAllFiles(uint32_t & oru32_CountFiles, 
 
    \return
    Pointer to application
-   NULL if no application was at the position
+   nullptr if no application was at the position
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpPacListNodeItemWidget * C_SyvUpPacSectionNodeWidget::GetAndSelectApplication(const QPoint & orc_Pos)
@@ -596,7 +594,7 @@ const
 
    \return
    Pointer to application
-   NULL if no application was at the position
+   nullptr if no application was at the position
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpPacListNodeItemWidget * C_SyvUpPacSectionNodeWidget::GetApplication(const QPoint & orc_Pos,
@@ -925,10 +923,10 @@ int32_t C_SyvUpPacSectionNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlas
    false Invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SyvUpPacSectionNodeWidget::CheckMime(QStringList & orc_PathList, const QPoint & orc_Pos,
-                                            QStringList * const opc_RelevantFilePaths,
-                                            QStringList * const opc_RelevantParamSetImagePaths,
-                                            QStringList * const opc_RelevantPemFilePaths,
+bool C_SyvUpPacSectionNodeWidget::CheckMime([[maybe_unused]] QStringList & orc_PathList, const QPoint & orc_Pos,
+                                            QStringList *,
+                                            QStringList *,
+                                            QStringList *,
                                             C_SyvUpPacListNodeItemWidget ** const oppc_App) const
 {
    // One application is only usable in case of one specific path
@@ -939,10 +937,6 @@ bool C_SyvUpPacSectionNodeWidget::CheckMime(QStringList & orc_PathList, const QP
       // Address based nodes can only adapt existing applications
       C_SyvUpPacListNodeItemWidget * const pc_App = this->GetApplication(orc_Pos, &u32_FoundAppNumber);
 
-      Q_UNUSED(orc_PathList)
-      Q_UNUSED(opc_RelevantFilePaths)
-      Q_UNUSED(opc_RelevantParamSetImagePaths)
-      Q_UNUSED(opc_RelevantPemFilePaths)
 
       if (oppc_App != nullptr)
       {

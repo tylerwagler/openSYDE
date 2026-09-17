@@ -158,9 +158,8 @@ void C_OgeSpiVerticalNaviHandle::mouseDoubleClickEvent(QMouseEvent * const opc_E
    \param[in,out]  opc_Event  Pointer to paint event
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeSpiVerticalNaviHandle::paintEvent(QPaintEvent * const opc_Event)
+void C_OgeSpiVerticalNaviHandle::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    if (orientation() == Qt::Horizontal)
    {

@@ -143,9 +143,8 @@ void C_OgeSpiStandardHandle::SetMargins(const int32_t os32_MarginTop, const int3
    \param[in,out]  opc_Event  Pointer to paint event
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeSpiStandardHandle::paintEvent(QPaintEvent * const opc_Event)
+void C_OgeSpiStandardHandle::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    QPainter c_Painter(this);
    c_Painter.setPen(this->mc_Color);

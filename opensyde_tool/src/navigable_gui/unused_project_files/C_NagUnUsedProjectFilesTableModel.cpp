@@ -67,9 +67,8 @@ C_NagUnUsedProjectFilesTableModel::~C_NagUnUsedProjectFilesTableModel()
    Column count
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_NagUnUsedProjectFilesTableModel::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_NagUnUsedProjectFilesTableModel::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return static_cast<int32_t>(E_Columns::eCOLUMNCOUNT);
 }
 

@@ -88,6 +88,7 @@ private:
 
    E_LoadingState me_State;
    bool mq_AlreadyAskedUserReload;
+   uint8_t mu8_FileOpenFailCounter; ///< consecutive failed opens of THIS database; suppresses the repeat dialog
    bool mq_AlreadyAskedUserDelete;
    QDateTime mc_FileTimeStamp;
    bool mq_ButtonPressed;

@@ -1378,7 +1378,7 @@ QString C_CamMetTreeModel::mh_GetTpInfoString(const C_CamMetTreeLoggerData & orc
    \param[in]  os32_Row  Current row
 
    \return
-   NULL Message not found
+   nullptr Message not found
    Else Valid message
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1604,7 +1604,6 @@ int32_t C_CamMetTreeModel::SearchMessageData(const QString & orc_SearchString, c
                      q_SearchMessageResult = this->m_CheckDataForSearch(c_CopyData, orc_SearchString, oq_Next,
                                                                         s32_CurrentSignalIndexMultiplexed,
                                                                         q_LastMessageDummy);
-                     Q_UNUSED(q_LastMessageDummy)
 
                      if (q_SearchMessageResult == true)
                      {

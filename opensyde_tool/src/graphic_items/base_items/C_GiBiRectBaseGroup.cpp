@@ -355,13 +355,11 @@ C_GiBiRectBaseGroup::~C_GiBiRectBaseGroup()
    \param[in,out] opc_Widget  Widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiBiRectBaseGroup::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-                                QWidget * const opc_Widget)
+void C_GiBiRectBaseGroup::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem *,
+                                QWidget *)
 {
    QPen c_Pen = opc_Painter->pen();
 
-   Q_UNUSED(opc_Option)
-   Q_UNUSED(opc_Widget)
 
    c_Pen.setColor(mc_STYLE_GUIDE_COLOR_21);
    opc_Painter->setPen(c_Pen);
@@ -600,9 +598,8 @@ void C_GiBiRectBaseGroup::ApplySizeChange(const QPointF & orc_NewPos, const QSiz
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_GiBiRectBaseGroup::CopyStyle(const QGraphicsItem * const opc_GuidelineItem)
+void C_GiBiRectBaseGroup::CopyStyle(const QGraphicsItem *)
 {
-   Q_UNUSED(opc_GuidelineItem)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -958,9 +955,8 @@ void C_GiBiRectBaseGroup::mouseMoveEvent(QGraphicsSceneMouseEvent * const opc_Ev
    \param[in,out] opc_Event Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiBiRectBaseGroup::mouseReleaseEvent(QGraphicsSceneMouseEvent * const opc_Event)
+void C_GiBiRectBaseGroup::mouseReleaseEvent([[maybe_unused]] QGraphicsSceneMouseEvent * const opc_Event)
 {
-   Q_UNUSED(opc_Event)
 
    if (this->mq_BlockMoveAndResize == false)
    {

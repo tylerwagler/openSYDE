@@ -266,7 +266,7 @@ void C_GiLiBusConnector::GenerateHint(void)
 
    \return
    Pointer to connection
-   NULL: error = No data element found for connector
+   nullptr: error = No data element found for connector
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSdNodeConnectionId * C_GiLiBusConnector::GetConnectionData(void) const
@@ -308,9 +308,8 @@ void C_GiLiBusConnector::ChangeInterface(const uint8_t & oru8_NewInterface,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiBusConnector::Revert(stw::opensyde_gui::C_GiNode * const opc_StartingNode,
-                                const stw::opensyde_gui::C_GiNode * const opc_LastNode, const QPointF & orc_ScenePos)
+                                const stw::opensyde_gui::C_GiNode *, const QPointF & orc_ScenePos)
 {
-   Q_UNUSED(opc_LastNode)
    this->mpc_GenericSignalItem = opc_StartingNode;
    m_UpdatePort(orc_ScenePos);
    m_Reconnect();
@@ -368,12 +367,11 @@ void C_GiLiBusConnector::Reconnect(stw::opensyde_gui::C_GiNode * const opc_Start
    \param[in]      orc_Properties      Properties
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiBusConnector::Reconnect(const stw::opensyde_gui::C_GiLiBus * const opc_StartingBus,
+void C_GiLiBusConnector::Reconnect(const stw::opensyde_gui::C_GiLiBus *,
                                    const stw::opensyde_gui::C_GiLiBus * const opc_LastBus,
                                    const QPointF & orc_ConnectionPos, const int32_t & ors32_Interface,
                                    const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
-   Q_UNUSED(opc_StartingBus)
    this->m_SetBus(opc_LastBus);
    if (this->GetBusItem() != nullptr)
    {

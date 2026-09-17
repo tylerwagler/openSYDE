@@ -485,7 +485,7 @@ int32_t C_PuiBsElements::DeleteTextElement(const uint32_t & oru32_Index)
    \param[in]  oru32_Index    Boundary index
 
    \return
-   NULL Boundary not found
+   nullptr Boundary not found
    Else Valid boundary
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -532,7 +532,7 @@ int32_t C_PuiBsElements::SetBoundary(const uint32_t & oru32_Index, const C_PuiBs
    \param[in]  oru32_Index    Image index
 
    \return
-   NULL Image not found
+   nullptr Image not found
    Else Valid image
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -579,7 +579,7 @@ int32_t C_PuiBsElements::SetImage(const uint32_t & oru32_Index, const C_PuiBsIma
    \param[in]  oru32_Index    Line arrow index
 
    \return
-   NULL Line arrow not found
+   nullptr Line arrow not found
    Else Valid line arrow
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -626,7 +626,7 @@ int32_t C_PuiBsElements::SetLineArrow(const uint32_t & oru32_Index, const C_PuiB
    \param[in]  oru32_Index    Text element index
 
    \return
-   NULL Text element not found
+   nullptr Text element not found
    Else Valid text element
 */
 //----------------------------------------------------------------------------------------------------------------------

@@ -245,12 +245,11 @@ void C_CamMetWidget::SetActiveFilters(const uint32_t ou32_ActiveFilters) const
                                           Set to -1 if no known yet
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMetWidget::AddDatabaseOsySysDef(const QString & orc_PathSystemDefinition, const QString & orc_OrgPath,
+void C_CamMetWidget::AddDatabaseOsySysDef(const QString & orc_PathSystemDefinition, const QString &,
                                           const int32_t os32_BusIndex)
 {
    int32_t s32_Return;
 
-   Q_UNUSED(orc_OrgPath)
 
    if (os32_BusIndex >= 0)
    {
@@ -293,9 +292,8 @@ void C_CamMetWidget::AddDatabaseDbc(const QString & orc_PathDbc)
    \param[in]  orc_OrgPath       Org path
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMetWidget::RemoveDatabase(const QString & orc_PathDatabase, const QString & orc_OrgPath)
+void C_CamMetWidget::RemoveDatabase(const QString & orc_PathDatabase, const QString &)
 {
-   Q_UNUSED(orc_OrgPath)
    this->mpc_Ui->pc_TraceView->RemoveDatabase(orc_PathDatabase.toStdString());
 }
 
@@ -307,10 +305,9 @@ void C_CamMetWidget::RemoveDatabase(const QString & orc_PathDatabase, const QStr
    \param[in]  oq_Active         Flag if database shall be active or not for interpretation
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMetWidget::ActivateDatabase(const QString & orc_PathDatabase, const QString & orc_OrgPath,
+void C_CamMetWidget::ActivateDatabase(const QString & orc_PathDatabase, const QString &,
                                       const bool oq_Active)
 {
-   Q_UNUSED(orc_OrgPath)
    this->mpc_Ui->pc_TraceView->ActivateDatabase(orc_PathDatabase.toStdString(), oq_Active);
 }
 
@@ -328,12 +325,11 @@ void C_CamMetWidget::ActivateDatabase(const QString & orc_PathDatabase, const QS
    \param[in]  ou32_BusIndex              Bus index of CAN bus of system definition for monitoring
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMetWidget::SetDatabaseOsySysDefBus(const QString & orc_PathSystemDefinition, const QString & orc_OrgPath,
+void C_CamMetWidget::SetDatabaseOsySysDefBus(const QString & orc_PathSystemDefinition, const QString &,
                                              const uint32_t ou32_BusIndex)
 {
    int32_t s32_Return;
 
-   Q_UNUSED(orc_OrgPath)
 
    //boundary: the callee now reports std::error_code; the Qt signal below carries the integer
    s32_Return = this->mpc_Ui->pc_TraceView->SetOsySysDefBus(orc_PathSystemDefinition.toStdString(),

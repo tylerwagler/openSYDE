@@ -410,7 +410,7 @@ const QMap<QString, C_CamDbOsyMessageId> & C_CamDbOsy::GetFoundMessages(void) co
    \param[out]  ope_ProtocolType    Protocol type
 
    \return
-   NULL OSC CAN message not found
+   nullptr OSC CAN message not found
    Else Valid OSC CAN message
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -472,7 +472,7 @@ const
    \param[in]  ou32_Hash      Hash
 
    \return
-   NULL OSC list not found
+   nullptr OSC list not found
    Else Valid OSC list
 */
 //----------------------------------------------------------------------------------------------------------------------

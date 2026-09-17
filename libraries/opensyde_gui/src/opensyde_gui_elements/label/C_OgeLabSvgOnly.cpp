@@ -86,9 +86,8 @@ void C_OgeLabSvgOnly::SetSvg(const QString & orc_SvgPath)
    \param[in,out] opc_Event Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeLabSvgOnly::paintEvent(QPaintEvent * const opc_Event)
+void C_OgeLabSvgOnly::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
    if (this->mpc_Renderer != nullptr)
    {
       QPainter c_Painter(this);

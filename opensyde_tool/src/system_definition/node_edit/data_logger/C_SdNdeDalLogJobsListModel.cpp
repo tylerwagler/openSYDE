@@ -227,9 +227,8 @@ bool C_SdNdeDalLogJobsListModel::setData(const QModelIndex & orc_Index, const QV
    Row count
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeDalLogJobsListModel::rowCount(const QModelIndex & orc_Parent) const
+int32_t C_SdNdeDalLogJobsListModel::rowCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return static_cast<int32_t>(this->mc_LogJobsList.size());
 }
 

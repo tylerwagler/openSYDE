@@ -60,13 +60,12 @@ C_SdNdeDalLogJobDataSelectionTableDelegate::C_SdNdeDalLogJobDataSelectionTableDe
 */
 //----------------------------------------------------------------------------------------------------------------------
 QWidget * C_SdNdeDalLogJobDataSelectionTableDelegate::createEditor(QWidget * const opc_Parent,
-                                                                   const QStyleOptionViewItem & orc_Option,
+                                                                   const QStyleOptionViewItem &,
                                                                    const QModelIndex & orc_Index) const
 {
    QWidget * pc_Retval = nullptr;
    C_OgeLeContextMenuBase * pc_LineEdit = nullptr;
 
-   Q_UNUSED(orc_Option)
 
    if ((opc_Parent != nullptr) && (orc_Index.isValid() == true))
    {

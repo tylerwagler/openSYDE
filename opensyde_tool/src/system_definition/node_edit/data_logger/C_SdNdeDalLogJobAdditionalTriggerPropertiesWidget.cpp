@@ -831,7 +831,6 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_OnEditClicked()
       c_PopUpCatalog->SetSize(QSize(900, 500));
       pc_AdditionalTriggerDialog->SetNodeDataLoggerJob(this->mu32_NodeIndex, this->mu32_DataLoggerJobIndex);
 
-      Q_UNUSED(pc_AdditionalTriggerDialog)
       if (c_PopUpCatalog->exec() == static_cast<int32_t>(QDialog::Accepted))
       {
          m_SetExpertTriggerCondition();

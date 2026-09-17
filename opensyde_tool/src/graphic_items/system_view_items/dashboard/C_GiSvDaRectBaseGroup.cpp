@@ -471,11 +471,9 @@ void C_GiSvDaRectBaseGroup::UpdateShowValue(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_GiSvDaRectBaseGroup::UpdateTransparency(const uint32_t ou32_DataElementIndex, const int32_t os32_Value)
+void C_GiSvDaRectBaseGroup::UpdateTransparency(const uint32_t, const int32_t)
 {
    // Nothing to do in the base class implementation
-   Q_UNUSED(ou32_DataElementIndex)
-   Q_UNUSED(os32_Value)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -871,9 +869,8 @@ void C_GiSvDaRectBaseGroup::SetErrorForInvalidDlc(const C_OscNodeDataPoolListEle
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_GiSvDaRectBaseGroup::SetDrawingActive(const bool oq_Active)
+void C_GiSvDaRectBaseGroup::SetDrawingActive(const bool)
 {
-   Q_UNUSED(oq_Active)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -884,11 +881,9 @@ void C_GiSvDaRectBaseGroup::SetDrawingActive(const bool oq_Active)
    \param[in,out] opc_Widget  Widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaRectBaseGroup::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-                                  QWidget * const opc_Widget)
+void C_GiSvDaRectBaseGroup::paint(QPainter * const opc_Painter, [[maybe_unused]] const QStyleOptionGraphicsItem * const opc_Option,
+                                  QWidget *)
 {
-   Q_UNUSED(opc_Option)
-   Q_UNUSED(opc_Widget)
 
    if (this->isSelected() == true)
    {
@@ -921,9 +916,8 @@ void C_GiSvDaRectBaseGroup::paint(QPainter * const opc_Painter, const QStyleOpti
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
 void C_GiSvDaRectBaseGroup::ConfigureContextMenu(C_SyvDaContextMenuManager * const opc_ContextMenuManager,
-                                                 const bool oq_Active)
+                                                 const bool)
 {
-   Q_UNUSED(oq_Active)
 
    // Activate the "default specific" actions again.
    // Can be deactivated by derived classes which do not want any of the default functions
@@ -988,7 +982,7 @@ void C_GiSvDaRectBaseGroup::SetZetValueCustom(const double of64_ZetValue)
 
    \return
    - Pointer to dashboard if valid
-   - NULL
+   - nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDashboard * C_GiSvDaRectBaseGroup::m_GetSvDashboard(void) const

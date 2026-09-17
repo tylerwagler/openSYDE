@@ -1136,7 +1136,7 @@ int32_t C_SyvComMessageMonitor::m_AddDbcFile(const std::string & orc_PathDbc)
 
    \return
    Pointer     Matching CAN message found and pointer to message is returned
-   NULL        No matching CAN message found
+   nullptr        No matching CAN message found
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_CieConverter::C_CieCanMessage * C_SyvComMessageMonitor::m_CheckDbcFile(const T_STWCAN_Msg_RX & orc_Msg)

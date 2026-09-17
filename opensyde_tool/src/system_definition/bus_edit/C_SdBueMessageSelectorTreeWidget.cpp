@@ -347,7 +347,6 @@ void C_SdBueMessageSelectorTreeWidget::AddMessageFromCatalog(void)
    //Resize
    c_PopUpCatalog->SetSize(QSize(1000, 900));
 
-   Q_UNUSED(pc_AddMessageFromCatalogDialog)
 
    if (c_PopUpCatalog->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
@@ -365,13 +364,11 @@ void C_SdBueMessageSelectorTreeWidget::AddMessageFromCatalog(void)
          // Create message report for user
          const QPointer<C_OgePopUpDialog> c_PopUpDialogReportDialog =
             new C_OgePopUpDialog(this, this);
-         C_CieImportReportWidget * const pc_DialogImportReport =
-            new C_CieImportReportWidget(*c_PopUpDialogReportDialog,
+         new C_CieImportReportWidget(*c_PopUpDialogReportDialog,
                                         pc_AddMessageFromCatalogDialog->GetCatalogFilePath(), this->mu32_BusIndex,
                                         C_OscCanProtocol::eJ1939, c_NodeAssignments, c_SkippedImportDataAssigned,
                                         nullptr, false, true);
 
-         Q_UNUSED(pc_DialogImportReport)
 
          //Hide previous overlay before showing the next one
          c_PopUpCatalog->HideOverlay();
@@ -2291,7 +2288,6 @@ void C_SdBueMessageSelectorTreeWidget::m_AddCoSignal(const C_OscCanMessageIdenti
    //Resize
    c_PopUp->SetSize(QSize(800, 800));
 
-   Q_UNUSED(pc_AddDialog)
 
    if (c_PopUp->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
@@ -2459,11 +2455,9 @@ void C_SdBueMessageSelectorTreeWidget::m_InsertSignal(QTreeWidgetItem * const op
 } //lint !e429  //no memory leak because of the parent of pc_Signal by insertChild and the Qt memory management
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMessageSelectorTreeWidget::m_SelectionChanged(const QItemSelection & orc_Selected,
-                                                          const QItemSelection & orc_Deselected)
+void C_SdBueMessageSelectorTreeWidget::m_SelectionChanged(const QItemSelection &,
+                                                          const QItemSelection &)
 {
-   Q_UNUSED(orc_Selected)
-   Q_UNUSED(orc_Deselected)
 
    int32_t s32_CounterTopLevelItem;
    C_SdBueMessageSelectorTreeWidgetItem * pc_TopLevelItem;
@@ -2660,15 +2654,7 @@ void C_SdBueMessageSelectorTreeWidget::m_TreeSizeChanged(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageSelectorTreeWidget::m_ScrollBarRangeChanged(const int32_t os32_Min, const int32_t os32_Max) const
 {
-   // manual showing and hiding of the scrollbar to stop resizing the parent widget when showing or hiding the scrollbar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->verticalScrollBar()->hide();
-   }
-   else
-   {
-      this->verticalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->verticalScrollBar(), os32_Min, os32_Max);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

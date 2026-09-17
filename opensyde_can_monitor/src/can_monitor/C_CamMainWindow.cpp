@@ -1370,9 +1370,8 @@ void C_CamMainWindow::m_OnDatabaseLoadFinished(const int32_t os32_Result)
    \param[in]  oq_IsUpdate    Is update
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMainWindow::m_OnDatabaseRemove(const QString & orc_File, const QString & orc_OrgPath, const bool oq_IsUpdate)
+void C_CamMainWindow::m_OnDatabaseRemove(const QString &, const QString & orc_OrgPath, const bool oq_IsUpdate)
 {
-   Q_UNUSED(orc_File)
    //on removal QFileInfo might fail but the file should only be in one database
    C_CamDbHandler::h_GetInstance()->RemoveOsyFile(orc_OrgPath);
    C_CamDbHandler::h_GetInstance()->RemoveDbcFile(orc_OrgPath);
@@ -1393,9 +1392,8 @@ void C_CamMainWindow::m_OnDatabaseRemove(const QString & orc_File, const QString
    \param[in]  oq_Active      New activation state
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMainWindow::m_OnActivateDatabase(const QString & orc_File, const QString & orc_OrgPath, const bool oq_Active)
+void C_CamMainWindow::m_OnActivateDatabase(const QString &, const QString & orc_OrgPath, const bool oq_Active)
 {
-   Q_UNUSED(orc_File)
    //the file should only be in one database
    C_CamDbHandler::h_GetInstance()->SetDbcActive(orc_OrgPath, oq_Active);
    C_CamDbHandler::h_GetInstance()->SetOsyActive(orc_OrgPath, oq_Active);
@@ -1420,12 +1418,11 @@ void C_CamMainWindow::m_OnActivateDatabase(const QString & orc_File, const QStri
    \param[in]  ou32_BusIndex  New bus index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMainWindow::m_OnOsyChangeBus(const QString & orc_File, const QString & orc_OrgPath,
+void C_CamMainWindow::m_OnOsyChangeBus(const QString &, const QString & orc_OrgPath,
                                        const uint32_t ou32_BusIndex)
 {
    bool q_AnyChange = true;
 
-   Q_UNUSED(orc_File)
 
    C_CamDbHandler::h_GetInstance()->ReplaceOsyBusIndex(orc_OrgPath, ou32_BusIndex, q_AnyChange);
 

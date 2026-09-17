@@ -394,7 +394,6 @@ void C_SyvUpPacWidget::m_ButtonCreatePackage(void)
    //Resize
    c_PopUpDialog->SetSize(QSize(700, 435));
 
-   Q_UNUSED(pc_ServiceUpdatePackageDialog)
 
    // "Continue" clicked
    if (c_PopUpDialog->exec() == static_cast<int32_t>(QDialog::Accepted))
@@ -486,7 +485,6 @@ bool C_SyvUpPacWidget::m_ShowSecureArchiveFileDialog(QString & orc_Password, QSt
    //Resize
    c_PopUpDialog->SetSize(QSize(850, 380));
 
-   Q_UNUSED(pc_SecureArchiveDialog)
 
    // "Create" clicked
    if (c_PopUpDialog->exec() == static_cast<int32_t>(QDialog::Accepted))

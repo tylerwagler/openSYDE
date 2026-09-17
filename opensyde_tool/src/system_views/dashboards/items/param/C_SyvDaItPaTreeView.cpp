@@ -19,6 +19,7 @@
 #include "C_OgePopUpDialog.hpp"
 #include "C_SyvDaItPaArWidget.hpp"
 #include "C_SyvDaItPaTreeView.hpp"
+#include "C_OgeWiUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -846,7 +847,6 @@ void C_SyvDaItPaTreeView::m_HandleLinkClicked(const QModelIndex & orc_Index)
          bool q_Ecu;
          const QPointer<C_OgePopUpDialog> c_Dialog = new C_OgePopUpDialog(
             pc_ParamWidget->GetPopUpParent(), pc_ParamWidget->GetPopUpParent());
-         C_SyvDaItPaArWidget * pc_ArrayEditWidget;
          const uint32_t u32_ItParamIndex = this->mc_Model.GetParamIndexId(c_Id);
 
          const C_SyvDaItPaTreeModel::E_Columns e_Col = C_SyvDaItPaTreeModel::h_ColumnToEnum(orc_Index.column());
@@ -859,8 +859,7 @@ void C_SyvDaItPaTreeView::m_HandleLinkClicked(const QModelIndex & orc_Index)
          {
             q_Ecu = false;
          }
-         pc_ArrayEditWidget = new C_SyvDaItPaArWidget(*c_Dialog, u32_ItParamIndex, this->mpc_DataWidget, q_Ecu);
-         Q_UNUSED(pc_ArrayEditWidget)
+         new C_SyvDaItPaArWidget(*c_Dialog, u32_ItParamIndex, this->mpc_DataWidget, q_Ecu);
          //Resize
          c_Dialog->SetSize(QSize(871, 318));
          if (c_Dialog->exec() != static_cast<int32_t>(QDialog::Accepted))
@@ -1024,27 +1023,11 @@ void C_SyvDaItPaTreeView::m_HandleActionRemove(const C_OscNodeDataPoolListElemen
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeView::m_ScrollBarRangeChangedVer(const int32_t os32_Min, const int32_t os32_Max) const
 {
-   // manual showing and hiding of the scrollbar to stop resizing the parent widget when showing or hiding the scrollbar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->verticalScrollBar()->hide();
-   }
-   else
-   {
-      this->verticalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->verticalScrollBar(), os32_Min, os32_Max);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeView::m_ScrollBarRangeChangedHor(const int32_t os32_Min, const int32_t os32_Max) const
 {
-   // manual showing and hiding of the scrollbar to stop resizing the parent widget when showing or hiding the scrollbar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->horizontalScrollBar()->hide();
-   }
-   else
-   {
-      this->horizontalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->horizontalScrollBar(), os32_Min, os32_Max);
 }

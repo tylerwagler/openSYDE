@@ -49,7 +49,7 @@ C_TblTreItem::C_TblTreItem(void) :
    \param[in] ou32_Index Index to search for in child items
 
    \return
-   NULL Index not found
+   nullptr Index not found
    Else Valid item
 */
 //----------------------------------------------------------------------------------------------------------------------

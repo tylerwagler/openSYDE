@@ -470,9 +470,8 @@ void C_GiSvDaSliderBase::SetValuePe(const int32_t os32_Value, const int32_t os32
    \param[in]  ou32_WidgetDataPoolElementIndex  Index of new registered element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaSliderBase::m_OnDataElementRegistered(const uint32_t ou32_WidgetDataPoolElementIndex)
+void C_GiSvDaSliderBase::m_OnDataElementRegistered(const uint32_t)
 {
-   Q_UNUSED(ou32_WidgetDataPoolElementIndex)
    this->m_UpdateStaticValues();
 }
 

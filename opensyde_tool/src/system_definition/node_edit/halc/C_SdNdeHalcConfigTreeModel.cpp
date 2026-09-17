@@ -78,9 +78,8 @@ C_SdNdeHalcConfigTreeModel::~C_SdNdeHalcConfigTreeModel()
    Number of columns, namely 3
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeHalcConfigTreeModel::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_SdNdeHalcConfigTreeModel::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return 3;
 }
 
@@ -786,12 +785,12 @@ bool C_SdNdeHalcConfigTreeModel::mh_GetParameterElementIndexe(const QModelIndex 
    If it does not belong to a parameter struct, i.e. if the parameter has no elements, the data structure of
    the parameter itself is returned.
 
-   Returns NULL if either some configuration is wrong or if the index belongs to a parameter that has elements.
+   Returns nullptr if either some configuration is wrong or if the index belongs to a parameter that has elements.
 
    \param[in]  orc_Index   Model index
 
    \return
-   NULL  no corresponding parameter data found
+   nullptr  no corresponding parameter data found
    else  corresponding parameter data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -839,12 +838,12 @@ const C_OscHalcConfigParameter * C_SdNdeHalcConfigTreeModel::m_GetParameterEleme
    If it does not belong to a parameter struct, i.e. if the parameter has no elements, the data structure of
    the parameter itself is returned.
 
-   Returns NULL if either some configuration is wrong or if the index belongs to a parameter that has elements.
+   Returns nullptr if either some configuration is wrong or if the index belongs to a parameter that has elements.
 
    \param[in]  orc_Index   Model index
 
    \return
-   NULL  no corresponding parameter definition data found
+   nullptr  no corresponding parameter definition data found
    else  corresponding parameter definition data
 */
 //----------------------------------------------------------------------------------------------------------------------

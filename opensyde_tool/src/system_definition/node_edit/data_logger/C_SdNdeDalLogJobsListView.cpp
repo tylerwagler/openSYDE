@@ -312,11 +312,9 @@ void C_SdNdeDalLogJobsListView::keyPressEvent(QKeyEvent * const opc_KeyEvent)
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobsListView::m_LogJobDeleted(const QModelIndex & orc_Parent, const int32_t os32_First,
-                                                const int32_t os32_Last)
+void C_SdNdeDalLogJobsListView::m_LogJobDeleted(const QModelIndex &, const int32_t os32_First,
+                                                const int32_t)
 {
-   Q_UNUSED(orc_Parent)
-   Q_UNUSED(os32_Last)
 
    int32_t s32_CurrentIndex = os32_First;
 
@@ -339,15 +337,7 @@ void C_SdNdeDalLogJobsListView::m_LogJobDeleted(const QModelIndex & orc_Parent, 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobsListView::m_ShowHideVerticalScrollBar(const int32_t os32_Min, const int32_t os32_Max) const
 {
-   // manual showing and hiding of the scrollbar to stop resizing the parent widget when showing or hiding the scrollbar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->verticalScrollBar()->hide();
-   }
-   else
-   {
-      this->verticalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->verticalScrollBar(), os32_Min, os32_Max);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -359,13 +349,5 @@ void C_SdNdeDalLogJobsListView::m_ShowHideVerticalScrollBar(const int32_t os32_M
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobsListView::m_ShowHideHorizontalScrollBar(const int32_t os32_Min, const int32_t os32_Max) const
 {
-   // manual showing and hiding of the scrollbar to stop resizing the parent widget when showing or hiding the scrollbar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->horizontalScrollBar()->hide();
-   }
-   else
-   {
-      this->horizontalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->horizontalScrollBar(), os32_Min, os32_Max);
 }

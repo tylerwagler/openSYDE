@@ -72,9 +72,8 @@ C_NagTopTreeModel::~C_NagTopTreeModel()
    Number of columns, namely 1
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_NagTopTreeModel::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_NagTopTreeModel::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return 1;
 }
 

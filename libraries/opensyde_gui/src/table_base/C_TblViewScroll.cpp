@@ -15,6 +15,7 @@
 #include <QScrollBar>
 #include "C_TblViewScroll.hpp"
 #include "constants.hpp"
+#include "C_OgeWiUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -66,27 +67,11 @@ C_TblViewScroll::C_TblViewScroll(QWidget * const opc_Parent) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblViewScroll::m_ScrollBarRangeChangedVer(const int32_t os32_Min, const int32_t os32_Max) const
 {
-   // manual showing and hiding of the scrollbar to stop resizing the parent widget when showing or hiding the scrollbar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->verticalScrollBar()->hide();
-   }
-   else
-   {
-      this->verticalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->verticalScrollBar(), os32_Min, os32_Max);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblViewScroll::m_ScrollBarRangeChangedHor(const int32_t os32_Min, const int32_t os32_Max) const
 {
-   // manual showing and hiding of the scrollbar to stop resizing the parent widget when showing or hiding the scrollbar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->horizontalScrollBar()->hide();
-   }
-   else
-   {
-      this->horizontalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->horizontalScrollBar(), os32_Min, os32_Max);
 }

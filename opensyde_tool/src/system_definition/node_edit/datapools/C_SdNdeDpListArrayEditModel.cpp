@@ -447,7 +447,7 @@ C_OscNodeDataPoolContent::E_Type C_SdNdeDpListArrayEditModel::GetType(void) cons
 
    \return
    OSC node data pool list element
-   Else NULL
+   Else nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolListElement * C_SdNdeDpListArrayEditModel::GetOscElement(void) const

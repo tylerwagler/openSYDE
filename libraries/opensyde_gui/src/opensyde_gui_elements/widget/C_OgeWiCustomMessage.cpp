@@ -167,9 +167,8 @@ void C_OgeWiCustomMessage::HandleMousePressEvent(const QMouseEvent * const opc_E
    \param[in,out]  opc_Event  Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeWiCustomMessage::HandleMouseReleaseEvent(const QMouseEvent * const opc_Event)
+void C_OgeWiCustomMessage::HandleMouseReleaseEvent(const QMouseEvent *)
 {
-   Q_UNUSED(opc_Event)
    mq_Pressed = false;
 }
 

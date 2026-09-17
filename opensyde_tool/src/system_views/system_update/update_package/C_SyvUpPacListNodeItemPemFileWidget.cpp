@@ -84,11 +84,9 @@ void C_SyvUpPacListNodeItemPemFileWidget::ViewFileInfo(void)
    if (this->GetAppFilePath().compare("") != 0)
    {
       const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
-      C_SyvUpPacPemFileInfoPopUp * const pc_InfoDialog =
-         new C_SyvUpPacPemFileInfoPopUp(*c_New,
+      new C_SyvUpPacPemFileInfoPopUp(*c_New,
                                         this->GetAppAbsoluteFilePath());
 
-      Q_UNUSED(pc_InfoDialog)
 
       //Resize
       c_New->SetSize(QSize(1000, 761));

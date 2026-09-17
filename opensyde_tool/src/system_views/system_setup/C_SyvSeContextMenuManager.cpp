@@ -66,12 +66,11 @@ C_SyvSeContextMenuManager::~C_SyvSeContextMenuManager()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeContextMenuManager::HandleContextMenuEvent(QGraphicsSceneContextMenuEvent * const opc_Event,
                                                        const QList<QGraphicsItem *> & orc_SelectedItems,
-                                                       const bool & orq_ShowPaste)
+                                                       const bool &)
 {
    // No generic functions necessary here. Do not call base function.
    bool q_ShowMenu = false;
 
-   Q_UNUSED(orq_ShowPaste)
 
    // reset all previous configurations
    this->mpc_ActiveItem = nullptr;

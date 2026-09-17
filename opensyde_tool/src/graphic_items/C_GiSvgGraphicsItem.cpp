@@ -121,14 +121,12 @@ void C_GiSvgGraphicsItem::Redraw(void)
    \param[in]     opc_Widget     Optional widget to paint on
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvgGraphicsItem::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-                                QWidget * const opc_Widget)
+void C_GiSvgGraphicsItem::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem *,
+                                QWidget *)
 {
    if (this->mpc_SvgRenderer != nullptr)
    {
       //Icon
       this->mpc_SvgRenderer->render(opc_Painter, this->rect());
    }
-   Q_UNUSED(opc_Option)
-   Q_UNUSED(opc_Widget)
 }

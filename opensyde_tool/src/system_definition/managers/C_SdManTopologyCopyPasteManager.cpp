@@ -76,13 +76,12 @@ C_SdManTopologyCopyPasteManager::~C_SdManTopologyCopyPasteManager(void)
    Warning: calling function has to delete the created object
 
    \return
-   NULL No valid data snap shot found
+   nullptr No valid data snap shot found
    Else Valid data snapshot
 */
 //----------------------------------------------------------------------------------------------------------------------
-const C_PuiBsElements * C_SdManTopologyCopyPasteManager::GetSnapshot(QWidget * const opc_Parent)
+const C_PuiBsElements * C_SdManTopologyCopyPasteManager::GetSnapshot(QWidget *)
 {
-   Q_UNUSED(opc_Parent)
    return &this->mc_LastKnownData;
 }
 

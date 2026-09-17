@@ -179,9 +179,8 @@ void C_SdTopologyToolbox::InitStaticNames(void) const
    \param[in,out] opc_Event Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdTopologyToolbox::enterEvent(QEnterEvent * const opc_Event)
+void C_SdTopologyToolbox::enterEvent(QEnterEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    this->setCursor(Qt::ArrowCursor);
    this->parentWidget()->setMouseTracking(false);
@@ -196,9 +195,8 @@ void C_SdTopologyToolbox::enterEvent(QEnterEvent * const opc_Event)
    \param[in,out] opc_Event Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdTopologyToolbox::leaveEvent(QEvent * const opc_Event)
+void C_SdTopologyToolbox::leaveEvent(QEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    this->parentWidget()->setMouseTracking(true);
 }

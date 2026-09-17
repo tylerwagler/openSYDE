@@ -76,7 +76,7 @@ uint32_t C_CamCanTpDecoder::m_GetSessionKey(const stw::can::T_STWCAN_Msg_RX & or
 
    \param[in]  ou32_Key  Session key (CAN ID)
 
-   \return  Pointer to session (never NULL)
+   \return  Pointer to session (never nullptr)
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_CamCanTpSession * C_CamCanTpDecoder::m_FindOrCreateSession(const uint32_t ou32_Key)

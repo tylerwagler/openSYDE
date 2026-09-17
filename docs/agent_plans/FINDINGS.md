@@ -1088,3 +1088,108 @@ Note that `HexStringParsing.ToDoubleCompatIsLocaleIndependent` **skips** when th
 host has no comma locale generated -- as it did on the Release run here. A test
 that silently skips is not protecting anything on that machine; the new tests skip
 the same way for the same reason, and say so in the skip message.
+
+## GUI tree audit (2026-09-17)
+
+The core sweep's four dimensions -- modernisation, performance, dedup, smells --
+applied to the trees it explicitly left out: `opensyde_tool/src` (377K lines),
+`libraries/opensyde_gui` (31K), CAN Monitor (41K) and SYDEflash (10K). **Three
+times the size of core**, so the method was scan-generated candidates with every
+count verified before it became a finding.
+
+That verification step is the headline. **Every large scanner count overstated,
+some of them by orders of magnitude:**
+
+| Scanner said | After verification | What it actually was |
+|---|---|---|
+| 188 `delete this` | **0** | all `delete this->mpc_Ui;` -- the regex matched the prefix |
+| 440 `new` without a Qt parent | **26** owning pointers | 115 are parented to `this`; the rest are handed to a layout, which takes ownership |
+| 4,931 `== true` / `== false` | **0** defects | the STW house style, applied consistently |
+| 11 blocking sleeps in GUI code | **0** defects | worker-thread yields and one deliberate 50 ms bus-settle after a modal dialog |
+| 25 mutable statics | **1** bug | the rest are singleton instances and per-import state that is cleared on entry |
+| 4 swallowing `catch(...)` | **0** defects | two wrap `std::map::at` on optional lookups, two are shutdown paths |
+
+A scan is a question, not an answer. The cost of asking is seconds; the cost of
+acting on an unverified count is a wasted PR at best.
+
+### What the trees already got right
+
+Worth stating, because it narrows where to look next. **Zero** string-based
+`SIGNAL`/`SLOT` connects -- every connection is the compile-checked pointer form.
+**Zero** C-style numeric casts. **Zero** `foreach`. The GUI is more modern on those
+axes than a codebase this age usually is.
+
+### Tier 1 -- a real bug
+
+**`C_CamMosDatabaseItemWidget::m_OnUpdate` kept a per-widget counter in a `static`
+local.** `hu8_FileOpenFailCounter` counts consecutive failed opens of *a* database
+to suppress a repeated "could not open" dialog. There is one widget per database,
+and one counter for all of them -- so database A's failures suppressed database
+B's dialog, and B's success reset A's count. Now a member. Identical to core sweep
+finding #2, "per-instance data clobbered by a static local".
+
+### Tier 2 -- duplication, measured
+
+Byte-identical function bodies (whitespace-normalised, at least 8 lines) across
+different files: **53 groups, 1,154 redundant lines.** The three largest:
+
+- **The scroll-bar show/hide slot, 26 copies.** 17 vertical, 9 horizontal, 10
+  lines each, connected to `rangeChanged` on scroll areas, table views, tree views
+  and list widgets that share no base but `QAbstractScrollArea`. Now one helper,
+  `C_OgeWiUtil::h_ShowHideScrollBar`, and each slot is a one-liner. −167 lines.
+- **`mouseMoveEvent`, 6 copies** of 13 lines across table views.
+- **User settings, duplicated per application.** `C_UsHandler::GetRecentFolders`
+  (30 lines), `C_UsFiler::mh_LoadRecentProjects` (29), `GetMostRecentFolder` (25)
+  are identical in `opensyde_tool` and CAN Monitor. The user-settings layer was
+  copied per app rather than shared through `opensyde_gui`. Open.
+
+Smaller groups: `Equals` ×4 across data-pool models, `Clear` ×3 across tree
+models, `headerData` ×2 at 32 lines, `m_InitButtonIcons` ×2 at 28. All open; the
+full list is in the scan output and each is mechanical.
+
+### Tier 3 -- modernisation, mechanical and rule-backed
+
+- **243 `Q_UNUSED` → 0.** `CLAUDE.md` forbids it outright. What the 243 turned out
+  to be, once the compiler had adjudicated every one:
+  - **188** silenced an unused parameter in a Qt override → parameter name dropped.
+  - **10** silenced a parameter used only under `#ifdef` → `[[maybe_unused]]`,
+    because dropping the name would break the Windows build Linux cannot see.
+  - **44** silenced a variable that *is* used later in the function → pure noise,
+    deleted. Almost certainly left behind after the code grew around them.
+  - **12** silenced a widget constructed purely for its side effect (it installs
+    itself into a parent-owned pop-up) → the idiomatic bare `new` statement.
+- **151 `NULL`** → `nullptr`. Mechanical, code only -- strings and comments untouched.
+
+  A false alarm from that pass is worth recording: several diagnostics came back as
+  *warnings* rather than errors, which looked like `-Werror` was not applied to part
+  of `opensyde_tool` and CAN Monitor. The ninja graph shows every one of those files
+  compiled once, with `-Werror`, and the final build has zero diagnostics. The
+  warning text was an artifact of that build round -- most plausibly ccache replaying
+  stderr from a stale compile. The archived TODO's "warnings as errors, done
+  everywhere" stands.
+- **26 raw owning pointers with a manual `delete`** → `std::unique_ptr`. Seven are
+  `QSvgRenderer`, three `C_NagToolTip`. Same class as core sweep #10. Not 440 --
+  see the table above.
+- **69 Qt integer typedefs** (`qint32`, `qreal`) mixed with `<cstdint>`. Cosmetic.
+- **30 `#define` constants** → `constexpr`. Cosmetic.
+
+### Tier 4 -- design-level, noted not actioned
+
+- **31 `QApplication::processEvents()` calls**, concentrated in the update and
+  device-configuration widgets, keeping the UI alive through long operations. The
+  re-entrancy hazard is real -- a user can click during the loop -- but the fix is
+  moving the work to a thread, which is a redesign per widget, not a sweep item.
+- **805 `dynamic_cast` / `qobject_cast`**, hot in the scenes (52 in
+  `C_SdTopologyScene` alone). A design property of the graphics-item model.
+- **`C_CieImportDbc` holds its warnings and error text in `static` members.**
+  Cleared on entry so not a bug, but not re-entrant, and instance state would cost
+  nothing.
+- **Two `catch(...)` around `std::map::at`** could narrow to `std::out_of_range`.
+
+### What was not scanned
+
+Performance beyond the surface: the 223 "QString built inside a loop" candidates
+are almost certainly dominated by cases the compiler already handles, and telling
+the real ones apart needs a profiler, not a regex. Phase 7.1 is the precedent --
+the plan's diagnosis was wrong and the measurement was right. Deferred until
+there is a workload to measure against.

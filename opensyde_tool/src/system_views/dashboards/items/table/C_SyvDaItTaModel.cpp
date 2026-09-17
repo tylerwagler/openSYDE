@@ -993,10 +993,9 @@ QVariant C_SyvDaItTaModel::data(const QModelIndex & orc_Index, const int32_t os3
 */
 //-----------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_SyvDaItTaModel::CopySelectedItems(const std::vector<uint32_t> & orc_SelectedIndices) const
+void C_SyvDaItTaModel::CopySelectedItems(const std::vector<uint32_t> &) const
 {
    //Copy paste not supported
-   Q_UNUSED(orc_SelectedIndices)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1258,11 +1257,10 @@ uint32_t C_SyvDaItTaModel::m_AddNewItem(const uint32_t ou32_SelectedIndex)
    Indices of new items
 */
 //-----------------------------------------------------------------------------
-std::vector<uint32_t> C_SyvDaItTaModel::m_PasteItems(const uint32_t ou32_SelectedIndex)
+std::vector<uint32_t> C_SyvDaItTaModel::m_PasteItems(const uint32_t)
 {
    std::vector<uint32_t> c_Retval;
    //Paste not supported
-   Q_UNUSED(ou32_SelectedIndex)
    return c_Retval;
 }
 

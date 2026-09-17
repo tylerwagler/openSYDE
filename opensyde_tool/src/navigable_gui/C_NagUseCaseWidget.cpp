@@ -90,11 +90,10 @@ QList<C_NagToolBarButtonProperties> C_NagUseCaseWidget::GetVecToolBarFuncNames(v
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_NagUseCaseWidget::UserInputFunc(const uint32_t ou32_FuncNumber)
+void C_NagUseCaseWidget::UserInputFunc(const uint32_t)
 {
    // empty implementation if the derived class doesn't need function
    // it can not be a pure virtual function
-   Q_UNUSED(ou32_FuncNumber)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -123,17 +122,12 @@ void C_NagUseCaseWidget::Save(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_NagUseCaseWidget::OpenDetail(const int32_t os32_Index, const int32_t os32_SubIndex,
-                                    const int32_t os32_SubSubIndex, const int32_t os32_SubSubSubIndex,
-                                    const int32_t os32_Flag)
+void C_NagUseCaseWidget::OpenDetail(const int32_t, const int32_t,
+                                    const int32_t, const int32_t,
+                                    const int32_t)
 {
    // empty implementation if the derived class doesn't need function
    // it can not be a pure virtual function
-   Q_UNUSED(os32_Index)
-   Q_UNUSED(os32_SubIndex)
-   Q_UNUSED(os32_SubSubIndex)
-   Q_UNUSED(os32_SubSubSubIndex)
-   Q_UNUSED(os32_Flag)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -165,13 +159,10 @@ bool C_NagUseCaseWidget::PrepareToClose(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_NagUseCaseWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t ou32_Index, const uint32_t ou32_Flag)
+void C_NagUseCaseWidget::SetSubMode(const int32_t, const uint32_t, const uint32_t)
 {
    // empty implementation if the derived class doesn't need function
    // it can not be a pure virtual function
-   Q_UNUSED(os32_SubMode)
-   Q_UNUSED(ou32_Index)
-   Q_UNUSED(ou32_Flag)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -184,10 +175,9 @@ void C_NagUseCaseWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t o
    False Not handled
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_NagUseCaseWidget::GlobalUserKeyPress(QKeyEvent * const opc_Event)
+bool C_NagUseCaseWidget::GlobalUserKeyPress(QKeyEvent *)
 {
    // nothing to do here
-   Q_UNUSED(opc_Event)
 
    return false;
 }

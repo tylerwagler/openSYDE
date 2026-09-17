@@ -81,9 +81,8 @@ C_OgeSpiHorizontalNavigationHandle::C_OgeSpiHorizontalNavigationHandle(const Qt:
    \param[in,out]  opc_Event  Pointer to paint event
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeSpiHorizontalNavigationHandle::paintEvent(QPaintEvent * const opc_Event)
+void C_OgeSpiHorizontalNavigationHandle::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    if (orientation() == Qt::Vertical)
    {

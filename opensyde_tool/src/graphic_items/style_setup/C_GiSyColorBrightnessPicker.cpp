@@ -94,9 +94,8 @@ void C_GiSyColorBrightnessPicker::SetColorWithHs(const int32_t os32_Hue, const i
    \param[in,out]  opc_Event  Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSyColorBrightnessPicker::paintEvent(QPaintEvent * const opc_Event)
+void C_GiSyColorBrightnessPicker::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    const QRect c_Rect(0, 0, width(), height());
    if ((this->mpc_Pixmap == nullptr) ||
@@ -178,8 +177,7 @@ void C_GiSyColorBrightnessPicker::mousePressEvent(QMouseEvent * const opc_Event)
    \param[in,out]  opc_Event  Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSyColorBrightnessPicker::mouseReleaseEvent(QMouseEvent * const opc_Event)
+void C_GiSyColorBrightnessPicker::mouseReleaseEvent(QMouseEvent *)
 {
-   Q_UNUSED(opc_Event)
    Q_EMIT SigColorSelected();
 }

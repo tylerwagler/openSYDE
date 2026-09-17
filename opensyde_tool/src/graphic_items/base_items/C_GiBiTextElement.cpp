@@ -361,10 +361,8 @@ void C_GiBiTextElement::m_UpdateTextElementData(C_PuiBsTextElement * const opc_D
 
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_GiBiTextElement::m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight)
+void C_GiBiTextElement::m_ResizeUpdateItems(const double, const double)
 {
-   Q_UNUSED(of64_DiffWidth)
-   Q_UNUSED(of64_DiffHeight)
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -97,9 +97,8 @@ void C_GiSvPcBusConnector::GenerateHint(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvPcBusConnector::SetAnimated(const bool oq_Active, const bool oq_Inverse, const bool oq_SpeedUp,
-                                       const QPolygonF oc_Polygon, const bool oq_ShowOrignalLine)
+                                       const QPolygonF oc_Polygon, const bool)
 {
-   Q_UNUSED(oq_ShowOrignalLine)
    if (oq_Active == false)
    {
       C_GiLiBusConnectorBase::SetAnimated(oq_Active, oq_Inverse, oq_SpeedUp, oc_Polygon, true);
@@ -169,11 +168,10 @@ void C_GiSvPcBusConnector::SetEditMode(const bool oq_Active)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvPcBusConnector::m_OnIterationGenericInteractionPointMove(QGraphicsItem * const opc_HighestParentItem,
-                                                                    const QPointF & orc_CurPos,
+                                                                    const QPointF &,
                                                                     bool & orq_RestoreMouseCursor)
 {
    //Not allowed -> only cursor handling
-   Q_UNUSED(orc_CurPos)
    m_OnIterationBusInteractionPointMoveCleanUp(opc_HighestParentItem, orq_RestoreMouseCursor);
 }
 
@@ -203,11 +201,10 @@ bool C_GiSvPcBusConnector::m_OnGenericInteractionPointMouseRelease(const QPointF
    \param[in] orc_ScenePos Scene position
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvPcBusConnector::m_OnBusChange(const QPointF & orc_ScenePos)
+void C_GiSvPcBusConnector::m_OnBusChange(const QPointF &)
 {
    //Manually stop reconnection mode
    m_Reconnect();
-   Q_UNUSED(orc_ScenePos)
 }
 
 //----------------------------------------------------------------------------------------------------------------------

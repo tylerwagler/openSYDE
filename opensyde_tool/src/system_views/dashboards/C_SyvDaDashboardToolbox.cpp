@@ -95,9 +95,8 @@ void C_SyvDaDashboardToolbox::InitStaticNames(void) const
    \param[in,out] opc_Event Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardToolbox::enterEvent(QEnterEvent * const opc_Event)
+void C_SyvDaDashboardToolbox::enterEvent(QEnterEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    this->setCursor(Qt::ArrowCursor);
    this->parentWidget()->setMouseTracking(false);
@@ -112,9 +111,8 @@ void C_SyvDaDashboardToolbox::enterEvent(QEnterEvent * const opc_Event)
    \param[in,out] opc_Event Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardToolbox::leaveEvent(QEvent * const opc_Event)
+void C_SyvDaDashboardToolbox::leaveEvent(QEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    this->parentWidget()->setMouseTracking(true);
 }

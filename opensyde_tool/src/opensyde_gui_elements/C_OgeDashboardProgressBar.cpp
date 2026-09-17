@@ -85,7 +85,7 @@ void C_OgeDashboardProgressBar::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Sty
    \param[in,out] opc_Event Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeDashboardProgressBar::paintEvent(QPaintEvent * const opc_Event)
+void C_OgeDashboardProgressBar::paintEvent([[maybe_unused]] QPaintEvent * const opc_Event)
 {
    if ((this->me_Style == C_PuiSvDbWidgetBase::eOPENSYDE) || (this->me_Style == C_PuiSvDbWidgetBase::eFLAT))
    {
@@ -94,7 +94,6 @@ void C_OgeDashboardProgressBar::paintEvent(QPaintEvent * const opc_Event)
       const int32_t s32_MinimumToMaximumDistance = this->maximum() - this->minimum();
       const float f32_MinimumToMaximumDistance = static_cast<float>(s32_MinimumToMaximumDistance);
 
-      Q_UNUSED(opc_Event)
       if (this->orientation() == Qt::Horizontal)
       {
          const int32_t s32_SegmentCount = std::max(this->rect().width() / 50, 1);

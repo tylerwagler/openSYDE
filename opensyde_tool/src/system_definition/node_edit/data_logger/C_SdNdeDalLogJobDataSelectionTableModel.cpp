@@ -173,9 +173,8 @@ void C_SdNdeDalLogJobDataSelectionTableModel::DoRemoveRows(const std::vector<uin
    Column count
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeDalLogJobDataSelectionTableModel::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_SdNdeDalLogJobDataSelectionTableModel::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return 5;
 }
 
@@ -404,9 +403,8 @@ QVariant C_SdNdeDalLogJobDataSelectionTableModel::data(const QModelIndex & orc_I
    Row count
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeDalLogJobDataSelectionTableModel::rowCount(const QModelIndex & orc_Parent) const
+int32_t C_SdNdeDalLogJobDataSelectionTableModel::rowCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return static_cast<int32_t>(this->mc_LoggingDataList.size());
 }
 

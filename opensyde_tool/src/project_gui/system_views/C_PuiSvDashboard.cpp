@@ -339,7 +339,7 @@ void C_PuiSvDashboard::SetLabels(const std::vector<C_PuiSvDbLabel> & orc_Value)
    \param[in]  ou32_Index  Widget index
 
    \return
-   NULL Widget not found
+   nullptr Widget not found
    Else Valid widget
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -383,7 +383,7 @@ void C_PuiSvDashboard::SetParams(const std::vector<C_PuiSvDbParam> & orc_Value)
    \param[in]  ou32_Index  Widget index
 
    \return
-   NULL Widget not found
+   nullptr Widget not found
    Else Valid widget
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -427,7 +427,7 @@ void C_PuiSvDashboard::SetPieCharts(const std::vector<C_PuiSvDbPieChart> & orc_V
    \param[in]  ou32_Index  Widget index
 
    \return
-   NULL Widget not found
+   nullptr Widget not found
    Else Valid widget
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -471,7 +471,7 @@ void C_PuiSvDashboard::SetSpinBoxes(const std::vector<C_PuiSvDbSpinBox> & orc_Va
    \param[in]  ou32_Index  Widget index
 
    \return
-   NULL Widget not found
+   nullptr Widget not found
    Else Valid widget
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -515,7 +515,7 @@ void C_PuiSvDashboard::SetSliders(const std::vector<C_PuiSvDbSlider> & orc_Value
    \param[in]  ou32_Index  Widget index
 
    \return
-   NULL Widget not found
+   nullptr Widget not found
    Else Valid widget
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -559,7 +559,7 @@ void C_PuiSvDashboard::SetProgressBars(const std::vector<C_PuiSvDbProgressBar> &
    \param[in]  ou32_Index  Widget index
 
    \return
-   NULL Widget not found
+   nullptr Widget not found
    Else Valid widget
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -603,7 +603,7 @@ void C_PuiSvDashboard::SetTables(const std::vector<C_PuiSvDbTable> & orc_Value)
    \param[in]  ou32_Index  Widget index
 
    \return
-   NULL Widget not found
+   nullptr Widget not found
    Else Valid widget
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -647,7 +647,7 @@ void C_PuiSvDashboard::SetToggles(const std::vector<C_PuiSvDbToggle> & orc_Value
    \param[in]  ou32_Index  Widget index
 
    \return
-   NULL Widget not found
+   nullptr Widget not found
    Else Valid widget
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -669,7 +669,7 @@ const C_PuiSvDbToggle * C_PuiSvDashboard::GetToggle(const uint32_t ou32_Index) c
    \param[in]  ou32_Index  Widget index
 
    \return
-   NULL Widget base item not found
+   nullptr Widget base item not found
    Else Valid widget base item
 */
 //----------------------------------------------------------------------------------------------------------------------

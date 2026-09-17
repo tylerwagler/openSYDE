@@ -230,7 +230,7 @@ void C_NagViewList::SetActive(const uint32_t ou32_ViewIndex, const int32_t os32_
    \param[in]  os32_Index   Item index
 
    \return
-   NULL Item not found
+   nullptr Item not found
    Else Valid item
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -351,11 +351,10 @@ void C_NagViewList::dropEvent(QDropEvent * const opc_Event)
    \param[in]  oc_SupportedActions  Supported actions
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_NagViewList::startDrag(const Qt::DropActions oc_SupportedActions)
+void C_NagViewList::startDrag(const Qt::DropActions)
 {
    const QModelIndexList c_SelectedIndices = this->selectedIndexes();
 
-   Q_UNUSED(oc_SupportedActions)
    if (c_SelectedIndices.size() > 0)
    {
       this->m_StartDrag(c_SelectedIndices.at(0));

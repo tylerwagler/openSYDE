@@ -288,7 +288,6 @@ void C_SebUnoBaseManager::AdaptZetOrder(const QList<QGraphicsItem *> & orc_Selec
    QList<QGraphicsItem *> c_List;
    C_SebUnoZetOrderCommand * pc_ZetOrderCommand;
 
-   Q_UNUSED(orc_Items)
 
    C_SebUnoZetOrderCommand::h_AdaptZetOrder(this->mpc_Scene, orc_Items, orc_SelectedItems, oq_BringToFront, c_Changes);
 

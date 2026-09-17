@@ -61,7 +61,7 @@ C_SyvDaItPaTreeDelegate::C_SyvDaItPaTreeDelegate(QObject * const opc_Parent) :
 /*! \brief   Get current editor
 
    \return
-   NULL Editor not found
+   nullptr Editor not found
    Else Valid editor
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -83,12 +83,11 @@ QWidget * C_SyvDaItPaTreeDelegate::GetEditor(void)
    Editor widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-QWidget * C_SyvDaItPaTreeDelegate::createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem & orc_Option,
+QWidget * C_SyvDaItPaTreeDelegate::createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem &,
                                                 const QModelIndex & orc_Index) const
 {
    QWidget * pc_Retval = nullptr;
 
-   Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
    {
       C_OscNodeDataPoolListElementId c_Id;

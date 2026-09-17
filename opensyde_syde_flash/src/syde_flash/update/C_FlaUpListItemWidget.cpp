@@ -336,7 +336,6 @@ void C_FlaUpListItemWidget::m_ViewFileInfo()
 
       const C_FlaUpHexFileView * const pc_HexViewFileDialog = new C_FlaUpHexFileView(*c_New, *pc_HexFileInfo);
 
-      Q_UNUSED(pc_HexViewFileDialog)
       if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
       {
          // do nothing

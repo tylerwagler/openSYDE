@@ -76,9 +76,8 @@ void C_OgePubSvgIconWithTextBase::SetMargins(const int32_t os32_MarginLeft, cons
    \param[in,out] opc_Event  Pointer to paint event
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgePubSvgIconWithTextBase::paintEvent(QPaintEvent * const opc_Event)
+void C_OgePubSvgIconWithTextBase::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
    if (this->mpc_SvgRendererEnabled != nullptr)
    {
       QTextOption c_Option;

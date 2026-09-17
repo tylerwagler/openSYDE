@@ -115,9 +115,8 @@ QSize C_GiSyColorPicker::sizeHint(void) const
    \param[in,out]   opc_Event   Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSyColorPicker::paintEvent(QPaintEvent * const opc_Event)
+void C_GiSyColorPicker::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    QPainter c_Painter(this);
    c_Painter.setRenderHint(QPainter::Antialiasing);
@@ -167,9 +166,8 @@ void C_GiSyColorPicker::mousePressEvent(QMouseEvent * const opc_Event)
    \param[in,out]   opc_Event   Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSyColorPicker::mouseReleaseEvent(QMouseEvent * const opc_Event)
+void C_GiSyColorPicker::mouseReleaseEvent(QMouseEvent *)
 {
-   Q_UNUSED(opc_Event)
    Q_EMIT SigColorSelected();
 }
 
@@ -179,9 +177,8 @@ void C_GiSyColorPicker::mouseReleaseEvent(QMouseEvent * const opc_Event)
    \param[in,out]   opc_Event   Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSyColorPicker::resizeEvent(QResizeEvent * const opc_Event)
+void C_GiSyColorPicker::resizeEvent(QResizeEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    QImage c_Image((width() - (frameWidth() * 2)), (height() - (frameWidth() * 2)), QImage::Format_RGB32);
    //lint -e{826,927,9176}  Cast is necessary due to Qt interface. See Qt documentation for scanLine

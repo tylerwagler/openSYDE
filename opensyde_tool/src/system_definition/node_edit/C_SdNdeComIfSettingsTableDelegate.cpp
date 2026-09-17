@@ -73,10 +73,9 @@ C_SdNdeComIfSettingsTableDelegate::C_SdNdeComIfSettingsTableDelegate(QObject * c
 */
 //----------------------------------------------------------------------------------------------------------------------
 QWidget * C_SdNdeComIfSettingsTableDelegate::createEditor(QWidget * const opc_Parent,
-                                                          const QStyleOptionViewItem & orc_Option,
+                                                          [[maybe_unused]] const QStyleOptionViewItem & orc_Option,
                                                           const QModelIndex & orc_Index) const
 {
-   Q_UNUSED(orc_Option)
    QWidget * pc_Retval = nullptr;
    C_OgeSpxToolTipBase * pc_SpinBox = nullptr;
    const uint8_t u8_Maximum = C_SdUtil::h_GetNodeIdMaximum(this->mu32_NodeIndex);

@@ -300,11 +300,10 @@ void C_FlaSenSearchNodePopup::m_ScanNodes(const uint32_t ou32_FlashloaderResetWa
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaSenSearchNodePopup::m_DeviceInfoReceived(
    const std::vector<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
-   const bool oq_SecurityFeatureUsed)
+   const bool)
 {
    //SYDEflash is not able to cope with Security mechanisms and we don't want to give additional user feedback if a Node
    // has Security activated. In the Search Node context there is no functional restriction anyway.
-   Q_UNUSED(oq_SecurityFeatureUsed)
 
    if (orc_DeviceInfoResult.size() == 0)
    {

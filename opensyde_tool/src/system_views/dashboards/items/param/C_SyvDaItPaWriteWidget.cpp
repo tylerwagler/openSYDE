@@ -1674,7 +1674,7 @@ QString C_SyvDaItPaWriteWidget::mh_GetId(const C_OscNodeDataPoolListId & orc_Id)
    \param[in]  ou32_ElementIndex    Element index
 
    \return
-   NULL Element not found
+   nullptr Element not found
    Else Valid element
 */
 //----------------------------------------------------------------------------------------------------------------------
