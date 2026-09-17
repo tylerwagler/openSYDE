@@ -97,13 +97,12 @@ bool C_OgePubIconOnly::event(QEvent * const opc_Event)
    \param[in,out]  opc_Event  Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgePubIconOnly::paintEvent(QPaintEvent * const opc_Event)
+void C_OgePubIconOnly::paintEvent(QPaintEvent *)
 {
    QPainter c_Painter(this);
    QPixmap c_Pixmap;
    const QSize c_Size = this->size();
 
-   Q_UNUSED(opc_Event)
 
    // TODO icon states: deactivated because we need more time to adapt all icon-only-buttons
    if (this->isEnabled() == false)
@@ -136,16 +135,14 @@ void C_OgePubIconOnly::paintEvent(QPaintEvent * const opc_Event)
    \param[in]  orc_IconPathDisabled    String for disabled icon path
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgePubIconOnly::SetCustomIcons(const QString & orc_IconPathNormal, const QString & orc_IconPathHovered,
-                                      const QString & orc_IconPathClicked, const QString & orc_IconPathDisabled)
+void C_OgePubIconOnly::SetCustomIcons(const QString & orc_IconPathNormal, const QString &,
+                                      const QString &, const QString & orc_IconPathDisabled)
 {
    const QSize c_Size = this->size();
 
    mc_IconNormal = QIcon(orc_IconPathNormal).pixmap(c_Size);
    this->setIcon(mc_IconNormal);
    // TODO icon states: because we need more time to adapt all icon-only-buttons
-   Q_UNUSED(orc_IconPathHovered)
-   Q_UNUSED(orc_IconPathClicked)
    //   mc_IconHovered = QIcon(oc_IconPathHovered).pixmap(c_Size);
    //   mc_IconClicked = QIcon(oc_IconPathClicked).pixmap(c_Size);
    mc_IconDisabled = QIcon(orc_IconPathDisabled).pixmap(c_Size);

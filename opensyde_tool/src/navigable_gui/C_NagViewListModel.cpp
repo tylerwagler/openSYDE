@@ -118,13 +118,11 @@ int32_t C_NagViewListModel::rowCount(const QModelIndex & orc_Parent) const
    Data
 */
 //----------------------------------------------------------------------------------------------------------------------
-QVariant C_NagViewListModel::data(const QModelIndex & orc_Index, const int32_t os32_Role) const
+QVariant C_NagViewListModel::data(const QModelIndex &, const int32_t) const
 {
    QVariant c_Retval;
 
    //No content
-   Q_UNUSED(orc_Index)
-   Q_UNUSED(os32_Role)
    return c_Retval;
 }
 
@@ -174,13 +172,12 @@ QStringList C_NagViewListModel::mimeTypes(void) const
    Mime data for drag event
 */
 //----------------------------------------------------------------------------------------------------------------------
-QMimeData * C_NagViewListModel::mimeData(const QModelIndexList & orc_Indices) const
+QMimeData * C_NagViewListModel::mimeData([[maybe_unused]] const QModelIndexList & orc_Indices) const
 {
    QMimeData * pc_Retval = nullptr;
 
    if (orc_Indices.size() > 0)
    {
-      Q_UNUSED(orc_Indices)
       pc_Retval = new QMimeData();
       pc_Retval->setData(this->mimeTypes().at(0), QString::number(orc_Indices.at(0).row()).toStdString().c_str());
    }

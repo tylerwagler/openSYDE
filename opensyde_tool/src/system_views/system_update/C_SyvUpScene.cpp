@@ -552,9 +552,8 @@ bool C_SyvUpScene::IsAnyItemAddable(void) const
    false    Item is not movable
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SyvUpScene::IsItemMovable(const QGraphicsItem * const opc_Item) const
+bool C_SyvUpScene::IsItemMovable(const QGraphicsItem *) const
 {
-   Q_UNUSED(opc_Item)
    return false;
 }
 
@@ -568,9 +567,8 @@ bool C_SyvUpScene::IsItemMovable(const QGraphicsItem * const opc_Item) const
    false    Item is not selectable
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SyvUpScene::IsItemSelectable(const QGraphicsItem * const opc_Item) const
+bool C_SyvUpScene::IsItemSelectable(const QGraphicsItem *) const
 {
-   Q_UNUSED(opc_Item)
    return false;
 }
 

@@ -358,9 +358,8 @@ void C_SyvUpProgressLog::m_OpenLink(void) const
    \param[in] os32_Max New scroll bar maximum
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpProgressLog::m_ScrollToBottom(const int32_t os32_Min, const int32_t os32_Max) const
+void C_SyvUpProgressLog::m_ScrollToBottom(const int32_t, const int32_t os32_Max) const
 {
-   Q_UNUSED(os32_Min)
    this->mpc_Ui->pc_ScrollArea->verticalScrollBar()->setValue(os32_Max);
 }
 

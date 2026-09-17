@@ -436,9 +436,8 @@ void C_GiLiLineGroup::SetDefaultCursor(const QCursor & orc_Value)
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_GiLiLineGroup::CopyStyle(const QGraphicsItem * const opc_GuidelineItem)
+void C_GiLiLineGroup::CopyStyle(const QGraphicsItem *)
 {
-   Q_UNUSED(opc_GuidelineItem)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1200,11 +1199,9 @@ void C_GiLiLineGroup::TriggerSigChangedGraphic(void)
    \param[in,out] opc_Widget  Widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiLineGroup::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-                            QWidget * const opc_Widget)
+void C_GiLiLineGroup::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem *,
+                            QWidget *)
 {
-   Q_UNUSED(opc_Option)
-   Q_UNUSED(opc_Widget)
 
    // do not call the original function to avoid drawing the bounding rect
    /* Draw bounding */

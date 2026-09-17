@@ -89,12 +89,11 @@ C_SdNdeDpListTableDelegate::C_SdNdeDpListTableDelegate(QObject * const opc_Paren
    Editor widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem & orc_Option,
+QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem &,
                                                    const QModelIndex & orc_Index) const
 {
    QWidget * pc_Retval = nullptr;
 
-   Q_UNUSED(orc_Option)
    if ((orc_Index.isValid() == true) && (this->mpc_Model != nullptr))
    {
       C_OgeSpxFactor * pc_SpinBoxFactor;

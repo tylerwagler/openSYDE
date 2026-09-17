@@ -20,6 +20,7 @@
 #include <QLabel>
 #include "constants.hpp"
 #include "C_OgeTableWidgetComIf.hpp"
+#include "C_OgeWiUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -447,13 +448,5 @@ void C_OgeTableWidgetComIf::m_HandleMouseMoveToolTip(const QPoint & orc_GlobalPo
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeTableWidgetComIf::m_ScrollBarRangeChangedVer(const int32_t os32_Min, const int32_t os32_Max) const
 {
-   // manual showing and hiding of the scrollbar to stop resizing the parent widget when showing or hiding the scrollbar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->verticalScrollBar()->hide();
-   }
-   else
-   {
-      this->verticalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->verticalScrollBar(), os32_Min, os32_Max);
 }

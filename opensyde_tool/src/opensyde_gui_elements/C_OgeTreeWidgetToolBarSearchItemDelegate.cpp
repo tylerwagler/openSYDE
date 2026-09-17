@@ -134,8 +134,7 @@ void C_OgeTreeWidgetToolBarSearchItemDelegate::paint(QPainter * const opc_Painte
 */
 //----------------------------------------------------------------------------------------------------------------------
 QSize C_OgeTreeWidgetToolBarSearchItemDelegate::sizeHint(const QStyleOptionViewItem & orc_Option,
-                                                         const QModelIndex & orc_Index) const
+                                                         const QModelIndex &) const
 {
-   Q_UNUSED(orc_Index)
    return QSize(orc_Option.rect.width(), 40);
 }

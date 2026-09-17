@@ -2630,7 +2630,6 @@ void C_SdBueMessagePropertiesWidget::m_OnEditJ1939PgPropertiesClicked(void)
 
    c_PopUp->SetSize(c_SIZE);
 
-   Q_UNUSED(pc_AddDialog)
 
    if (c_PopUp->exec() == static_cast<int32_t>(QDialog::Accepted))
    {

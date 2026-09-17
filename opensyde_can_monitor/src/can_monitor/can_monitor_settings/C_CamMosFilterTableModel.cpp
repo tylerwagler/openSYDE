@@ -315,10 +315,9 @@ QVariant C_CamMosFilterTableModel::data(const QModelIndex & orc_Index, const int
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  nothing needs to be done here
-void C_CamMosFilterTableModel::CopySelectedItems(const std::vector<uint32_t> & orc_SelectedIndices) const
+void C_CamMosFilterTableModel::CopySelectedItems(const std::vector<uint32_t> &) const
 {
    // nothing needs to be done here
-   Q_UNUSED(orc_SelectedIndices)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -680,12 +679,11 @@ uint32_t C_CamMosFilterTableModel::m_AddNewItem(const uint32_t ou32_SelectedInde
    Indices of new items
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_CamMosFilterTableModel::m_PasteItems(const uint32_t ou32_SelectedIndex)
+std::vector<uint32_t> C_CamMosFilterTableModel::m_PasteItems(const uint32_t)
 {
    const std::vector<uint32_t> c_Retval;
 
    // nothing needs to be done here
-   Q_UNUSED(ou32_SelectedIndex)
    return c_Retval;
 }
 
@@ -725,9 +723,7 @@ void C_CamMosFilterTableModel::m_DeleteItem(const uint32_t ou32_Index)
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  nothing needs to be done here
-void C_CamMosFilterTableModel::m_MoveItem(const uint32_t ou32_SourceIndex, const uint32_t ou32_TargetIndex)
+void C_CamMosFilterTableModel::m_MoveItem(const uint32_t, const uint32_t)
 {
    // nothing needs to be done here
-   Q_UNUSED(ou32_SourceIndex)
-   Q_UNUSED(ou32_TargetIndex)
 }

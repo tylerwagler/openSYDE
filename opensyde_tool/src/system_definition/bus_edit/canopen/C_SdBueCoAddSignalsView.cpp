@@ -16,6 +16,7 @@
 #include <QMouseEvent>
 
 #include "C_SdBueCoAddSignalsView.hpp"
+#include "C_OgeWiUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -244,15 +245,7 @@ void C_SdBueCoAddSignalsView::m_InitColumns(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueCoAddSignalsView::m_ShowHideVerticalScrollBar(const int32_t os32_Min, const int32_t os32_Max) const
 {
-   // manual showing and hiding of the scrollbar to stop resizing the parent widget when showing or hiding the scrollbar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->verticalScrollBar()->hide();
-   }
-   else
-   {
-      this->verticalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->verticalScrollBar(), os32_Min, os32_Max);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -264,15 +257,7 @@ void C_SdBueCoAddSignalsView::m_ShowHideVerticalScrollBar(const int32_t os32_Min
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueCoAddSignalsView::m_ShowHideHorizontalScrollBar(const int32_t os32_Min, const int32_t os32_Max) const
 {
-   // manual showing and hiding of the scrollbar to stop resizing the parent widget when showing or hiding the scrollbar
-   if ((os32_Min == 0) && (os32_Max == 0))
-   {
-      this->horizontalScrollBar()->hide();
-   }
-   else
-   {
-      this->horizontalScrollBar()->show();
-   }
+   stw::opensyde_gui_logic::C_OgeWiUtil::h_ShowHideScrollBar(this->horizontalScrollBar(), os32_Min, os32_Max);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

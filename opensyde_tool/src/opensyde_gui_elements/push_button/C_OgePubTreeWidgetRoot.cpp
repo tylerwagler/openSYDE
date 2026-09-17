@@ -51,12 +51,11 @@ C_OgePubTreeWidgetRoot::C_OgePubTreeWidgetRoot(QWidget * const opc_Parent) :
    \param[in,out]  opc_Event  Pointer to paint event
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgePubTreeWidgetRoot::paintEvent(QPaintEvent * const opc_Event)
+void C_OgePubTreeWidgetRoot::paintEvent(QPaintEvent *)
 {
    QPainter c_Painter(this);
    const QPixmap c_Pixmap = this->icon().pixmap(this->ms32_IconSize, this->ms32_IconSize);
 
-   Q_UNUSED(opc_Event)
 
    c_Painter.save();
 

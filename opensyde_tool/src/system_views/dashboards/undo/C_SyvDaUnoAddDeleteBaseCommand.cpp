@@ -564,7 +564,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_Delete(void)
    \param[in] opc_DataElement     Data element
 
    \return
-   NULL Widget not found
+   nullptr Widget not found
    Else Valid widget
 */
 //----------------------------------------------------------------------------------------------------------------------

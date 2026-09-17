@@ -166,9 +166,8 @@ void C_OgePubSvgIconOnly::SetSvg(const QString & orc_PathEnabled, const QString 
    \param[in,out] opc_Event  Pointer to paint event
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgePubSvgIconOnly::paintEvent(QPaintEvent * const opc_Event)
+void C_OgePubSvgIconOnly::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
    if (this->mpc_SvgRendererEnabled != nullptr)
    {
       QPainter c_Painter(this);

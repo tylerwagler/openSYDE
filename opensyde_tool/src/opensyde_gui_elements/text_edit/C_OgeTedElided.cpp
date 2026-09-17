@@ -56,7 +56,7 @@ C_OgeTedElided::C_OgeTedElided(QWidget * const opc_Parent) :
    \param[in,out]  opc_Event  Pointer to paint event
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeTedElided::paintEvent(QPaintEvent * const opc_Event)
+void C_OgeTedElided::paintEvent(QPaintEvent *)
 {
    QPainter c_Painter(this->viewport());
    const QFontMetrics c_FontMetrics = c_Painter.fontMetrics();
@@ -66,7 +66,6 @@ void C_OgeTedElided::paintEvent(QPaintEvent * const opc_Event)
    int32_t s32_PosVertical = 4;
    const int32_t s32_LineWidth = this->width() - 8;
 
-   Q_UNUSED(opc_Event)
 
    while (c_Content != "")
    {

@@ -1315,7 +1315,7 @@ void C_GiNode::ChangeInterface(const uint8_t ou8_Interface, const C_GiLiBusConne
    \param[in,out]  opc_Connection   Connection to search for
 
    \return
-   NULL Error
+   nullptr Error
    else Pointer to associated node connection id
 */
 //----------------------------------------------------------------------------------------------------------------------

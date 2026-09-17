@@ -146,7 +146,7 @@ void C_PuiSdHandlerBusLogic::SetOscBus(const uint32_t ou32_Index, const C_OscSys
    \param[in]  oru32_Index    Index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ const C_PuiSdBus * C_PuiSdHandlerBusLogic::GetUiBus(const uint32_t & oru32_Index
    \param[in]  oru32_Index    Index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -948,7 +948,7 @@ void C_PuiSdHandlerBusLogic::SetUiNodeConnectionId(const uint32_t ou32_NodeIndex
    \param[in]  ou32_DatapoolIndex   Datapool index
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -974,7 +974,7 @@ const C_OscCanProtocol * C_PuiSdHandlerBusLogic::GetCanProtocol(const uint32_t &
    \param[in]  oru32_DatapoolIndex  Datapool index
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1025,7 +1025,7 @@ const
    \param[in]  oru32_DatapoolIndex  Datapool index
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1106,7 +1106,7 @@ const C_PuiSdNodeDataPoolList * C_PuiSdHandlerBusLogic::GetUiCanDataPoolList(con
    \param[in]  ou32_DatapoolIndex   Datapool index
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1146,7 +1146,7 @@ const
    \param[in]  ou32_DatapoolIndex      Datapool index
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1242,7 +1242,7 @@ int32_t C_PuiSdHandlerBusLogic::GetCanProtocolType(const uint32_t ou32_NodeIndex
    \param[in]  orc_MessageId  Message identification indices
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1349,7 +1349,7 @@ int32_t C_PuiSdHandlerBusLogic::GetCanMessageComplete(const C_OscCanMessageIdent
    \param[in]  orq_MessageIsTx         Flag if message is tx type (else rx type assumed)
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1376,7 +1376,7 @@ const C_OscNodeDataPoolList * C_PuiSdHandlerBusLogic::GetOscCanDataPoolList(cons
    \param[in]  oru32_SignalIndex    Signal index
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1403,7 +1403,7 @@ const C_OscCanSignal * C_PuiSdHandlerBusLogic::GetCanSignal(const C_OscCanMessag
    \param[in]  orc_MessageId  Message identification indices
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1440,7 +1440,7 @@ const
    \param[in]  oru32_SignalIndex    Signal index
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1468,7 +1468,7 @@ const C_PuiSdNodeCanSignal * C_PuiSdHandlerBusLogic::GetUiCanSignal(
    \param[in]  oru32_SignalIndex    Signal index
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1506,7 +1506,7 @@ const
    \param[in]  oru32_SignalIndex    Signal index
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1545,7 +1545,7 @@ const
    \param[in]  oe_Type              Interface type
 
    \return
-   NULL Connection not found
+   nullptr Connection not found
    Else Valid connection
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -3012,7 +3012,7 @@ std::map<std::string, bool> C_PuiSdHandlerBusLogic::m_GetExistingSignalNames(
    \param[in]  ou32_DatapoolIndex   Datapool index
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -3052,7 +3052,7 @@ C_PuiSdNodeCanProtocol * C_PuiSdHandlerBusLogic::m_GetUiCanProtocol(const uint32
    \param[in]  orq_MessageIsTx         Flag if message is tx type (else rx type assumed)
 
    \return
-   NULL No matching data found
+   nullptr No matching data found
    Else Pointer to data
 */
 //----------------------------------------------------------------------------------------------------------------------

@@ -104,14 +104,13 @@ void C_OgeOverlay::h_SetTopWidget(QWidget * const opc_TopWidget)
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-void C_OgeOverlay::paintEvent(QPaintEvent * const opc_Event)
+void C_OgeOverlay::paintEvent(QPaintEvent *)
 {
    QPainter c_Painter(this);
 
    c_Painter.setPen(Qt::NoPen);
    c_Painter.setBrush(QColor(200, 200, 200, 200));
    c_Painter.drawRect(0, 0, this->width(), this->height());
-   Q_UNUSED(opc_Event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------

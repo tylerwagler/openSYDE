@@ -57,7 +57,7 @@ C_PuiSdHandlerHalc::C_PuiSdHandlerHalc(QObject * const opc_Parent) :
    \param[in]  ou32_NodeIndex    Node index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else HALC config
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ const C_OscHalcConfig * C_PuiSdHandlerHalc::GetHalcConfig(const uint32_t ou32_No
    \param[in]  ou32_DomainIndex  Domain index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else HALC config domain
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -114,7 +114,7 @@ const C_OscHalcConfigDomain * C_PuiSdHandlerHalc::GetHalcDomainConfigDataConst(c
    \param[in]  oq_UseChannelIndex   Use channel index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else HALC config domain channel
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -161,7 +161,7 @@ const C_OscHalcConfigChannel * C_PuiSdHandlerHalc::GetHalcDomainChannelConfigDat
    \param[in]  oq_UseChannelIndex   Use channel index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else HALC config domain channel parameter
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -200,7 +200,7 @@ const C_OscHalcConfigParameterStruct * C_PuiSdHandlerHalc::GetHalcDomainChannelP
    \param[in]  ou32_DomainIndex  Domain index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else HALC file domain
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -229,7 +229,7 @@ const C_OscHalcDefDomain * C_PuiSdHandlerHalc::GetHalcDomainFileDataConst(const 
    \param[in]  ou32_Channel      Channel
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else HALC file channel
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -266,7 +266,7 @@ const C_OscHalcDefChannelDef * C_PuiSdHandlerHalc::GetHalcDomainFileChannelDataC
    \param[in]  ou32_UseCaseIndex    Use case index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else HALC file domain use case
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -305,7 +305,7 @@ const
    \param[in]  ou32_AvailabilityIndex  Availability index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else HALC file domain use case availability
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -345,7 +345,7 @@ const C_OscHalcDefChannelAvailability * C_PuiSdHandlerHalc::GetHalcDomainFileUse
    \param[in]  ou32_Index        Index
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else HALC file domain variable
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -428,7 +428,7 @@ const C_OscHalcDefStruct * C_PuiSdHandlerHalc::GetHalcDomainFileVariableData(con
 
    \return
    Found: Pointer to OSC data pool of type HAL and safety type oq_SafeDatapool
-   Else:  NULL
+   Else:  nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPool * C_PuiSdHandlerHalc::GetHalcDatapool(const uint32_t ou32_NodeIndex,
@@ -486,11 +486,6 @@ C_OscHalcDefDomain::E_Category C_PuiSdHandlerHalc::GetDomainCategoryFromDpId(
          e_Category = pc_Domain->e_Category;
 
          // we don't need those here
-         Q_UNUSED(q_IsSafetyFlagIndex)
-         Q_UNUSED(q_IsChanNumIndex)
-         Q_UNUSED(q_IsUseCaseIndex)
-         Q_UNUSED(u32_ChannelIndex)
-         Q_UNUSED(q_UseChannelIndex)
       }
    }
 

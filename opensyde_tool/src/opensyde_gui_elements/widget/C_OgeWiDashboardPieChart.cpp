@@ -163,7 +163,7 @@ void C_OgeWiDashboardPieChart::resizeEvent(QResizeEvent * const opc_Event)
    \param[in,out] opc_Event Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeWiDashboardPieChart::paintEvent(QPaintEvent * const opc_Event)
+void C_OgeWiDashboardPieChart::paintEvent([[maybe_unused]] QPaintEvent * const opc_Event)
 {
    //Progress of value
    const int32_t s32_Value = this->ms32_Value - this->ms32_Min;
@@ -189,7 +189,6 @@ void C_OgeWiDashboardPieChart::paintEvent(QPaintEvent * const opc_Event)
    QRect c_RimRect;         // rectangle of the rim
    QRect c_PieRect;         // rectangle of the Pies
 
-   Q_UNUSED(opc_Event)
    c_Painter.setRenderHint(QPainter::Antialiasing, true);
 
    // Configure display string

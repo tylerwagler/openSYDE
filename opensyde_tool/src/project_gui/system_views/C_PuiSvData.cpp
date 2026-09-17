@@ -284,7 +284,7 @@ const std::vector<C_PuiSvDashboard> & C_PuiSvData::GetDashboards(void) const
    \param[in]  ou32_Index  Dashboard index
 
    \return
-   NULL Not found
+   nullptr Not found
    Else Requested dashboard
 */
 //----------------------------------------------------------------------------------------------------------------------

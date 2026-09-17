@@ -168,9 +168,8 @@ std::map<uint32_t, std::vector<uint32_t> > C_SdBueCoAddSignalsModel::h_GetUnique
    Column count
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdBueCoAddSignalsModel::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_SdBueCoAddSignalsModel::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return 3;
 }
 
@@ -678,7 +677,7 @@ void C_SdBueCoAddSignalsModel::m_GetData(const E_Columns oe_Column, const uint32
 /*! \brief  Get EDS dictionary
 
    \return
-   NULL Not found
+   nullptr Not found
    Else EDS dictionary
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -699,7 +698,7 @@ const C_OscCanOpenObjectDictionary * C_SdBueCoAddSignalsModel::m_GetEdsDictionar
 /*! \brief  Get mappable signals
 
    \return
-   NULL Not found
+   nullptr Not found
    Else Mappable signals
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -721,7 +720,7 @@ const std::vector<C_OscCanOpenManagerMappableSignal> * C_SdBueCoAddSignalsModel:
 /*! \brief  Get device info
 
    \return
-   NULL Not found
+   nullptr Not found
    Else Device info
 */
 //----------------------------------------------------------------------------------------------------------------------

@@ -582,7 +582,7 @@ int32_t C_GiSvDaTableBase::GetLastValueUnscaled(const uint32_t ou32_WidgetDataPo
 /*! \brief   Get table data item
 
    \return
-   NULL Error
+   nullptr Error
    Else Pointer to table data
 */
 //----------------------------------------------------------------------------------------------------------------------

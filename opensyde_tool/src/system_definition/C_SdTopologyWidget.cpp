@@ -267,9 +267,8 @@ void C_SdTopologyWidget::PrepareToClose(void) const
    \param[in,out]  opc_Event  Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdTopologyWidget::resizeEvent(QResizeEvent * const opc_Event)
+void C_SdTopologyWidget::resizeEvent(QResizeEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    // only resize if scene is active to avoid bad toolbox geometry in case of "open tool with *.syde double click"
    //   if (this->mpc_Scene->isActive() == true)

@@ -501,9 +501,8 @@ void C_TblTreDataElementModel::h_CleanUp(void)
    Column count
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_TblTreDataElementModel::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_TblTreDataElementModel::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return 1;
 }
 

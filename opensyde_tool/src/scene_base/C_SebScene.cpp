@@ -256,9 +256,8 @@ void C_SebScene::DisplaySpecificItemToolTip(const QPointF & orc_ScenePos)
    false    Cursor is not on a relevant position
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SebScene::IsMousePosRelevantForProxyWidgetInteraction(const QPointF & orc_ScenePos)
+bool C_SebScene::IsMousePosRelevantForProxyWidgetInteraction(const QPointF &)
 {
-   Q_UNUSED(orc_ScenePos)
 
    return false;
 }
@@ -291,10 +290,8 @@ bool C_SebScene::IsSelectionRelevantForProxyWidgetInteraction(void) const
    \retval   false  Override cursor is not necessary
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SebScene::IsOverrideCursorNecessary(const QPointF & orc_ScenePos, Qt::CursorShape & ore_Cursor) const
+bool C_SebScene::IsOverrideCursorNecessary(const QPointF &, Qt::CursorShape &) const
 {
-   Q_UNUSED(orc_ScenePos)
-   Q_UNUSED(ore_Cursor)
 
    return false;
 }
@@ -382,7 +379,7 @@ int32_t C_SebScene::RemoveBendLine(QGraphicsItem * const opc_Item, const QPointF
    \param[in]  oru64_Id    Unique item ID
 
    \return
-   NULL: not found
+   nullptr: not found
    else: pointer to item
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1184,10 +1181,8 @@ void C_SebScene::m_HandleProxyWidgetInteractionChange(const bool & orq_On)
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in implementation of pure virtual function of base class
-void C_SebScene::m_AddImage(const QString & orc_Path, const QPointF & orc_Position)
+void C_SebScene::m_AddImage(const QString &, const QPointF &)
 {
-   Q_UNUSED(orc_Path)
-   Q_UNUSED(orc_Position)
    //Add image if necessary
 }
 
@@ -1454,9 +1449,8 @@ bool C_SebScene::m_IsUndoAvailable(void) const
    false Abort
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SebScene::m_HandleDeleteUserConfirmation(const QList<QGraphicsItem *> & orc_SelectedItems) const
+bool C_SebScene::m_HandleDeleteUserConfirmation(const QList<QGraphicsItem *> &) const
 {
-   Q_UNUSED(orc_SelectedItems)
    return true;
 }
 
@@ -1467,10 +1461,9 @@ bool C_SebScene::m_HandleDeleteUserConfirmation(const QList<QGraphicsItem *> & o
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in implementation of pure virtual function of base class
-void C_SebScene::m_PasteOfClipBoard(const QPointF * const opc_Pos)
+void C_SebScene::m_PasteOfClipBoard(const QPointF *)
 {
    //Default no action
-   Q_UNUSED(opc_Pos)
 }
 
 //----------------------------------------------------------------------------------------------------------------------

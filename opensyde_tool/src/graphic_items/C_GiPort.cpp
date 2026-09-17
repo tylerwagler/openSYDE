@@ -97,11 +97,9 @@ QRectF C_GiPort::boundingRect() const
    \param[in]     opc_Widget     Optional widget to paint on
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiPort::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-                     QWidget * const opc_Widget)
+void C_GiPort::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem *,
+                     QWidget *)
 {
-   Q_UNUSED(opc_Option)
-   Q_UNUSED(opc_Widget)
 
    QFont c_Font;
    QLinearGradient c_Gradient;

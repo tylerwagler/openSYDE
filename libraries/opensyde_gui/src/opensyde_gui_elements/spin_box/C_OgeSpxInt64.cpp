@@ -387,7 +387,7 @@ void C_OgeSpxInt64::stepBy(const int32_t os32_Steps)
    Acceptable   Completely valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-QValidator::State C_OgeSpxInt64::validate(QString & orc_Input, int32_t & ors32_Pos) const
+QValidator::State C_OgeSpxInt64::validate(QString & orc_Input, int32_t &) const
 {
    QValidator::State e_Retval;
    if (((orc_Input.compare("") == 0) || (orc_Input.compare("+") == 0)) || (orc_Input.compare("-") == 0))
@@ -402,7 +402,6 @@ QValidator::State C_OgeSpxInt64::validate(QString & orc_Input, int32_t & ors32_P
       bool q_IsOverMaximum;
       const QString c_ValueOnly = this->m_ExtractSpinBoxValue(orc_Input);
 
-      Q_UNUSED(ors32_Pos)
       if (this->mq_IsUnsigned == true)
       {
           const uint64_t u64_Test = c_ValueOnly.toULongLong(pc_Result);

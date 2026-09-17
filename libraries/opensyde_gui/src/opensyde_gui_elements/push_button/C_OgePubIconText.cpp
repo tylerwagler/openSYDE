@@ -63,9 +63,8 @@ void C_OgePubIconText::SetIconSize(const int32_t os32_IconSize)
    \param[in,out] opc_Event  Pointer to paint event
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgePubIconText::paintEvent(QPaintEvent * const opc_Event)
+void C_OgePubIconText::paintEvent(QPaintEvent *)
 {
-   Q_UNUSED(opc_Event)
 
    QPainter c_Painter(this);
    QPixmap c_Pixmap;

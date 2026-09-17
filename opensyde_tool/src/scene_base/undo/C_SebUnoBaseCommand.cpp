@@ -77,7 +77,7 @@ C_SebUnoBaseCommand::~C_SebUnoBaseCommand(void)
 
    \return
    array with items:
-   NULL: not found
+   nullptr: not found
    else: pointer to item
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ vector<QGraphicsItem *> C_SebUnoBaseCommand::m_GetSceneItems(void) const
    \param[in] oru64_Id Unique ID
 
    \return
-   NULL: not found
+   nullptr: not found
    else: pointer to item
 */
 //----------------------------------------------------------------------------------------------------------------------

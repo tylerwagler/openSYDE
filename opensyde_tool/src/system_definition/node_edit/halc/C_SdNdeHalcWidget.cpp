@@ -718,10 +718,9 @@ void C_SdNdeHalcWidget::m_ShowOverview(const bool oq_Show) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcWidget::m_OnChannelSelected(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                            const bool oq_UseChannelIndex) const
+                                            const bool) const
 {
    // channel index only matters in case domain has any channels
-   Q_UNUSED(oq_UseChannelIndex)
 
    this->mpc_Ui->pc_WiChannelEdit->SetChannel(ou32_DomainIndex, ou32_ChannelIndex);
    this->m_ShowOverview(false);

@@ -1110,7 +1110,6 @@ void C_SyvDaPeBase::m_Configuration(void) const
    //Resize
    c_New->SetSize(QSize(1400, 809));
 
-   Q_UNUSED(pc_Dialog)
 
    if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
    {

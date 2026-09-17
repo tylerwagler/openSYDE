@@ -180,9 +180,8 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::m_FillMessageInfo()
    Column count
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdBueJ1939AddMessagesFromCatalogTreeModel::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_SdBueJ1939AddMessagesFromCatalogTreeModel::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return 4;
 }
 
@@ -489,9 +488,8 @@ int32_t C_SdBueJ1939AddMessagesFromCatalogTreeModel::h_EnumToColumn(
    \retval   C_NO_ERR   Init successful
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdBueJ1939AddMessagesFromCatalogTreeModel::Init(const std::vector<uint32_t> & orc_ElementIndices)
+int32_t C_SdBueJ1939AddMessagesFromCatalogTreeModel::Init(const std::vector<uint32_t> &)
 {
-   Q_UNUSED(orc_ElementIndices)
    return C_NO_ERR;
 }
 

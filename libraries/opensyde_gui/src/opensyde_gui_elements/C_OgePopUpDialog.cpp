@@ -237,9 +237,8 @@ void C_OgePopUpDialog::HandleMousePressEvent(const QMouseEvent * const opc_Event
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-void C_OgePopUpDialog::HandleMouseReleaseEvent(const QMouseEvent * const opc_Event)
+void C_OgePopUpDialog::HandleMouseReleaseEvent(const QMouseEvent *)
 {
-   Q_UNUSED(opc_Event)
    mq_Pressed = false;
 }
 
@@ -299,7 +298,7 @@ void C_OgePopUpDialog::SetSize(const QSize & orc_Size)
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Resize widget to allowed maximum
 
-   If opc_Widget is NULL, the top widget will be used as orientation.
+   If opc_Widget is nullptr, the top widget will be used as orientation.
 
    \param[in]  opc_Widget  Optional widget for orientation for maximum size
 */

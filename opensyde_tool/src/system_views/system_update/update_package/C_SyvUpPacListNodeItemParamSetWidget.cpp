@@ -113,12 +113,10 @@ void C_SyvUpPacListNodeItemParamSetWidget::ViewFileInfo(void)
    if (this->GetAppFilePath().compare("") != 0)
    {
       const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
-      C_SyvUpPacParamSetFileInfoPopUp * const pc_InfoDialog =
-         new C_SyvUpPacParamSetFileInfoPopUp(*c_New,
+      new C_SyvUpPacParamSetFileInfoPopUp(*c_New,
                                              this->GetAppAbsoluteFilePath(),
                                              this->mu32_NodeIndex);
 
-      Q_UNUSED(pc_InfoDialog)
 
       //Resize
       c_New->SetSize(QSize(1000, 761));

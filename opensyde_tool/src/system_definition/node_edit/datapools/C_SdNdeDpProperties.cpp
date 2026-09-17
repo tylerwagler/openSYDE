@@ -69,7 +69,7 @@ const int32_t C_SdNdeDpProperties::mhs32_VERSION_INDEX_V2 = 1;
    \param[in]      oq_NodeProgrammingSupport    Flag if node has programming support.
                                                 If false the application and scope section will be hided
    \param[in]      opc_SharedDatapoolId         In case of a new shared Datapool, the Id is the shared Datapool of the new
-                                                Datapool. In case of an edited or stand alone Datapool the pointer is NULL
+                                                Datapool. In case of an edited or stand alone Datapool the pointer is nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNodeDataPool * const opc_OscDataPool,
@@ -799,9 +799,8 @@ void C_SdNdeDpProperties::m_LoadCodeGenerationAndApplication(void) const
    \param[in]  os32_Value   New value of spin box
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpProperties::m_SpinBoxSizeChanged(const int32_t os32_Value) const
+void C_SdNdeDpProperties::m_SpinBoxSizeChanged(const int32_t) const
 {
-   Q_UNUSED(os32_Value)
 
    this->m_UpdateSizePrediction();
 }

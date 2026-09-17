@@ -1099,7 +1099,7 @@ C_SebBaseContextMenuManager * C_SyvDaDashboardScene::m_GetContextMenuManager(voi
 /*! \brief   Get current copy paste manager
 
    \return
-   NULL No copy paste manager
+   nullptr No copy paste manager
    Else Valid copy paste manager
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1113,7 +1113,7 @@ stw::opensyde_gui_logic::C_SebBaseCopyPasteManager * C_SyvDaDashboardScene::m_Ge
 /*! \brief   Get current copy paste manager
 
    \return
-   NULL No copy paste manager
+   nullptr No copy paste manager
    Else Valid copy paste manager
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -1354,11 +1354,10 @@ bool C_SyvDaDashboardScene::m_IsUndoAvailable(void) const
    false Abort
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SyvDaDashboardScene::m_HandleDeleteUserConfirmation(const QList<QGraphicsItem *> & orc_SelectedItems) const
+bool C_SyvDaDashboardScene::m_HandleDeleteUserConfirmation(const QList<QGraphicsItem *> &) const
 {
    bool q_Retval = true;
 
-   Q_UNUSED(orc_SelectedItems)
 
    if (this->views().size() > 0)
    {

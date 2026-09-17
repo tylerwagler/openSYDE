@@ -346,15 +346,10 @@ void C_NagNaviBarWidget::SetMode(const int32_t os32_Mode, const int32_t os32_Sub
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in deactivated implementation
-void C_NagNaviBarWidget::MarkModeForDataChanged(const bool oq_Changed, const bool oq_All, const int32_t os32_Mode,
-                                                const int32_t os32_SubMode, const uint32_t ou32_Index) const
+void C_NagNaviBarWidget::MarkModeForDataChanged(const bool, const bool, const int32_t,
+                                                const int32_t, const uint32_t) const
 {
    //Currently deactivated
-   Q_UNUSED(oq_Changed)
-   Q_UNUSED(oq_All)
-   Q_UNUSED(os32_Mode)
-   Q_UNUSED(os32_SubMode)
-   Q_UNUSED(ou32_Index)
 }
 
 //----------------------------------------------------------------------------------------------------------------------

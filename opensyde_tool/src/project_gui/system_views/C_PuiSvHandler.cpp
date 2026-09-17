@@ -182,7 +182,7 @@ bool C_PuiSvHandler::HasHashChanged(void) const
    \param[in]  ou32_Index  View index
 
    \return
-   NULL View not found
+   nullptr View not found
    Else Valid view
 */
 //----------------------------------------------------------------------------------------------------------------------

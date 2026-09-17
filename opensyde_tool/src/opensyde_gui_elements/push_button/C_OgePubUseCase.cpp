@@ -56,14 +56,13 @@ C_OgePubUseCase::C_OgePubUseCase(QWidget * const opc_Parent) :
    \param[in,out]  opc_Event  Pointer to paint event
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgePubUseCase::paintEvent(QPaintEvent * const opc_Event)
+void C_OgePubUseCase::paintEvent(QPaintEvent *)
 {
    QPainter c_Painter(this);
    QBrush c_Brush;
    //QGraphicsDropShadowEffect *pc_shadow;
    QPixmap c_Pixmap;
 
-   Q_UNUSED(opc_Event)
 
    c_Brush.setStyle(Qt::SolidPattern);
 

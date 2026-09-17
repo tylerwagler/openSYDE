@@ -139,9 +139,8 @@ void C_PopPasswordDialogWidget::HandleMousePressEvent(const QMouseEvent * const 
    \param[in,out]  opc_Event  Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PopPasswordDialogWidget::HandleMouseReleaseEvent(const QMouseEvent * const opc_Event)
+void C_PopPasswordDialogWidget::HandleMouseReleaseEvent(const QMouseEvent *)
 {
-   Q_UNUSED(opc_Event)
    mq_Pressed = false;
 }
 

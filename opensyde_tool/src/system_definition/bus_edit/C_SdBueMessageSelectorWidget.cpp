@@ -331,11 +331,10 @@ void C_SdBueMessageSelectorWidget::OnSignalNameChange(const C_OscCanMessageIdent
    \param[in]  orc_MessageId  Message identification indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMessageSelectorWidget::OnSignalStartBitChange(const C_OscCanMessageIdentificationIndices & orc_MessageId)
+void C_SdBueMessageSelectorWidget::OnSignalStartBitChange(const C_OscCanMessageIdentificationIndices &)
 const
 {
    //Not necessary right now but kept if just sorting one tree sub element is supported
-   Q_UNUSED(orc_MessageId)
    //Handles resorting
    this->mpc_Ui->pc_MessageTreeWidget->OnMessageNameChange();
 }

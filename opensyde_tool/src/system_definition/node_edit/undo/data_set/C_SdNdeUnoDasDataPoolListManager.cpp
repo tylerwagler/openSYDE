@@ -256,7 +256,7 @@ void C_SdNdeUnoDasDataPoolListManager::DoDataChangeElements(const uint32_t & oru
    Internal undo command is reseted
 
    \return
-   NULL No changes
+   nullptr No changes
    Else Undocommand accumulating all changes
 */
 //----------------------------------------------------------------------------------------------------------------------

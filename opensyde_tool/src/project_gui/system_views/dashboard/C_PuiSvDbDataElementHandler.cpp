@@ -152,10 +152,8 @@ int32_t C_PuiSvDbDataElementHandler::RegisterDataPoolElement(
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
 void C_PuiSvDbDataElementHandler::RegisterDataPoolElementCyclicError(
-   const C_PuiSvDbNodeDataPoolListElementId & orc_WidgetDataPoolElementId, const uint8_t ou8_ErrorCode)
+   const C_PuiSvDbNodeDataPoolListElementId &, const uint8_t)
 {
-   Q_UNUSED(orc_WidgetDataPoolElementId)
-   Q_UNUSED(ou8_ErrorCode)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -661,9 +659,8 @@ const
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_PuiSvDbDataElementHandler::m_OnDataElementRegistered(const uint32_t ou32_WidgetDataPoolElementIndex)
+void C_PuiSvDbDataElementHandler::m_OnDataElementRegistered(const uint32_t)
 {
-   Q_UNUSED(ou32_WidgetDataPoolElementIndex)
    // Nothing to do here
 }
 

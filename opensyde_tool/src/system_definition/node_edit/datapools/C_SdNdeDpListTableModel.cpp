@@ -1585,7 +1585,7 @@ QMimeData * C_SdNdeDpListTableModel::mimeData(const QModelIndexList & orc_Indice
 
    \return
    OSC node data pool list element
-   Else NULL
+   Else nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolListElement * C_SdNdeDpListTableModel::GetOscElement(const QModelIndex & orc_Index)

@@ -61,12 +61,11 @@ C_SdNdeDpListArrayEditDelegate::C_SdNdeDpListArrayEditDelegate(QObject * const o
 */
 //----------------------------------------------------------------------------------------------------------------------
 QWidget * C_SdNdeDpListArrayEditDelegate::createEditor(QWidget * const opc_Parent,
-                                                       const QStyleOptionViewItem & orc_Option,
+                                                       const QStyleOptionViewItem &,
                                                        const QModelIndex & orc_Index) const
 {
    QWidget * pc_Retval = nullptr;
 
-   Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
    {
       pc_Retval = m_CreateEditor(opc_Parent, orc_Index);

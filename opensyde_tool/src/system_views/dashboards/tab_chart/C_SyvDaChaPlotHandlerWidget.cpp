@@ -1888,7 +1888,7 @@ void C_SyvDaChaPlotHandlerWidget::m_PrepareNextColorSection(void)
    \param[in]  ou32_DataPoolElementConfigIndex  Datapool element identification
 
    \retval   Valid pointer
-   \retval   NULL
+   \retval   nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 QCPAxis * C_SyvDaChaPlotHandlerWidget::m_GetVerticalAxis(const uint32_t ou32_DataPoolElementConfigIndex) const
@@ -2052,7 +2052,7 @@ void C_SyvDaChaPlotHandlerWidget::mh_AdaptAxisGridColor(const QCPAxis * const op
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Scales the current range of y axes with a little bit of space
 
-   \param[in]  opc_Axis    Optional specific axis. If NULL all y axes will be adapted
+   \param[in]  opc_Axis    Optional specific axis. If nullptr all y axes will be adapted
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::m_AdaptVerticalAxisWithSpace(QCPAxis * const opc_Axis)

@@ -1383,9 +1383,8 @@ QVariant C_SyvDaItPaTreeModel::headerData(const int32_t os32_Section, const Qt::
    Column count
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDaItPaTreeModel::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_SyvDaItPaTreeModel::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return 12;
 }
 
@@ -3181,7 +3180,7 @@ void C_SyvDaItPaTreeModel::mh_InitElement(C_TblTreItem * const opc_TreeNode, con
    \param[in]  ou32_DataIndex    Data index in param item
 
    \return
-   NULL Value not found
+   nullptr Value not found
    Else Valid value
 */
 //----------------------------------------------------------------------------------------------------------------------

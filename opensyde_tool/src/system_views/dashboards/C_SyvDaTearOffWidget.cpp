@@ -453,13 +453,12 @@ void C_SyvDaTearOffWidget::keyPressEvent(QKeyEvent * const opc_Event)
    \param[in]  oq_Active   New active flag
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaTearOffWidget::m_OnActiveChange(const C_OgeWiDashboardTab * const opc_Source, const bool oq_Active)
+void C_SyvDaTearOffWidget::m_OnActiveChange(const C_OgeWiDashboardTab *, const bool oq_Active)
 {
    if (this->mpc_Dashboard != nullptr)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mpc_Dashboard->GetViewIndex());
 
-      Q_UNUSED(opc_Source)
       if (pc_View != nullptr)
       {
          const uint32_t u32_DataIndex = this->mpc_Dashboard->GetDashboardIndex();
@@ -478,9 +477,8 @@ void C_SyvDaTearOffWidget::m_OnActiveChange(const C_OgeWiDashboardTab * const op
    \param[in]  opc_Source  Signal source widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaTearOffWidget::m_OnCopy(const C_OgeWiDashboardTab * const opc_Source) const
+void C_SyvDaTearOffWidget::m_OnCopy(const C_OgeWiDashboardTab *) const
 {
-   Q_UNUSED(opc_Source)
    if (this->mpc_Dashboard != nullptr)
    {
       const C_PuiSvData * pc_View;

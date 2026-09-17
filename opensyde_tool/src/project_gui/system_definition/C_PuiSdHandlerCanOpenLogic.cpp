@@ -44,7 +44,7 @@ using namespace stw::opensyde_gui;
    \param[in]  ou8_InterfaceNumber  Interface number
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ const C_OscCanOpenManagerInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenManager(co
    \param[in]       orc_MessageId     Message id
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ const C_OscCanOpenManagerInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenManager(
    \param[in]  ou32_BusIndex  Index of CAN bus
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -196,7 +196,7 @@ int32_t C_PuiSdHandlerCanOpenLogic::GetCanOpenManagerNodeOnBus(const uint32_t ou
    \param[in]  orc_DeviceId         Device ID
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -228,7 +228,7 @@ const
    \param[in]       orc_MessageId     Message id
 
    \return
-   NULL Data not found
+   nullptr Data not found
    Else Valid data
 */
 //----------------------------------------------------------------------------------------------------------------------

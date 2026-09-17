@@ -260,9 +260,8 @@ void C_SebBaseContextMenuManager::m_SetActionsInvisible(void)
    \retval   False   Setup style menu should stay hidden
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SebBaseContextMenuManager::m_ItemTypeHasSetupStyle(const int32_t os32_ItemType)
+bool C_SebBaseContextMenuManager::m_ItemTypeHasSetupStyle(const int32_t)
 {
-   Q_UNUSED(os32_ItemType)
    return false;
 }
 

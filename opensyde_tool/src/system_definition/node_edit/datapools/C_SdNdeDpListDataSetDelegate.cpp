@@ -68,12 +68,11 @@ C_SdNdeDpListDataSetDelegate::C_SdNdeDpListDataSetDelegate(QObject * const opc_P
 */
 //----------------------------------------------------------------------------------------------------------------------
 QWidget * C_SdNdeDpListDataSetDelegate::createEditor(QWidget * const opc_Parent,
-                                                     const QStyleOptionViewItem & orc_Option,
+                                                     const QStyleOptionViewItem &,
                                                      const QModelIndex & orc_Index) const
 {
    QWidget * pc_Retval = nullptr;
 
-   Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
    {
       C_OgeLeContextMenuBase * pc_LineEdit;

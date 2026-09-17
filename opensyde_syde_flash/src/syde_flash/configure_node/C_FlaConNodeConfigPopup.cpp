@@ -483,11 +483,10 @@ void C_FlaConNodeConfigPopup::m_FinishConfig(const int32_t os32_SequenceResult)
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaConNodeConfigPopup::m_DeviceInfoRead(
    const std::vector<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
-   const bool oq_SecurityFeatureUsed)
+   const bool)
 {
    //SYDEflash is not able to cope with Security mechanisms and we don't want to give additional user feedback if a Node
    // has Security activated. Configure Node will run into an error that is handled gracefully and reported to log file
-   Q_UNUSED(oq_SecurityFeatureUsed)
 
    uint8_t u8_FoundNodeCounter = 0;
 

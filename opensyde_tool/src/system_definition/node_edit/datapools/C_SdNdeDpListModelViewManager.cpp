@@ -93,7 +93,7 @@ void C_SdNdeDpListModelViewManager::Clear(void)
    \param[in]  oru32_ListIndex      Node data pool list index
 
    \return
-   NULL Not registered
+   nullptr Not registered
    Else Registered view
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -175,7 +175,7 @@ C_SdNdeDpListDataSetModel * C_SdNdeDpListModelViewManager::GetDataSetModel(const
                                     Else use data set index
 
    \return
-   NULL Not registered
+   nullptr Not registered
    Else Registered view
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -264,7 +264,7 @@ C_SdNdeDpListArrayEditModel * C_SdNdeDpListModelViewManager::GetArrayEditModel(c
    \param[in]  oru32_ListIndex      Node data pool list index
 
    \return
-   NULL Not registered
+   nullptr Not registered
    Else Registered view
 */
 //----------------------------------------------------------------------------------------------------------------------

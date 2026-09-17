@@ -89,7 +89,7 @@ const std::vector<C_OscRoutingRoute> * C_SyvRoRouteCalculation::GetRoutes(void) 
 
    \return
    Valid Pointer:    Best route to target
-   NULL:             No route found
+   nullptr:             No route found
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscRoutingRoute * C_SyvRoRouteCalculation::GetBestRoute(void) const

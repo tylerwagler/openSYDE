@@ -176,10 +176,8 @@ void C_GiImageGroupWithoutData::m_LateImageInit(const QString & orc_ImagePath)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiImageGroupWithoutData::m_ResizeUpdateItems(const double of64_DiffWidth, const double of64_DiffHeight)
+void C_GiImageGroupWithoutData::m_ResizeUpdateItems([[maybe_unused]] const double of64_DiffWidth, [[maybe_unused]] const double of64_DiffHeight)
 {
-   Q_UNUSED(of64_DiffWidth)
-   Q_UNUSED(of64_DiffHeight)
    if (this->mq_IsSvgFlag == true)
    {
       if (this->mpc_SvgGraphicsItem != nullptr)

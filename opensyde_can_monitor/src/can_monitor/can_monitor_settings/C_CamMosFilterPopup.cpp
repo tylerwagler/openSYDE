@@ -698,9 +698,8 @@ void C_CamMosFilterPopup::m_OnDeleteKeyPressed(void) const
    \param[in]  orc_PrevIndex  Previous index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMosFilterPopup::m_OnRowChanged(const QModelIndex & orc_NewIndex, const QModelIndex & orc_PrevIndex) const
+void C_CamMosFilterPopup::m_OnRowChanged(const QModelIndex & orc_NewIndex, const QModelIndex &) const
 {
-   Q_UNUSED(orc_PrevIndex)
 
    // update settings section
    const QList<C_CamProFilterItemData> & rc_Data = this->mpc_TableModel->GetFilterItemsData();

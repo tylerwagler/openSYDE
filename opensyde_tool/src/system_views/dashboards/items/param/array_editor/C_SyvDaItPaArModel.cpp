@@ -371,7 +371,7 @@ C_OscNodeDataPoolContent::E_Type C_SyvDaItPaArModel::GetType(void) const
 
    \return
    OSC node data pool list element
-   Else NULL
+   Else nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolListElement * C_SyvDaItPaArModel::GetOscElement(void) const
@@ -394,7 +394,7 @@ const C_OscNodeDataPoolListElement * C_SyvDaItPaArModel::GetOscElement(void) con
 
    \return
    Data element
-   Else NULL
+   Else nullptr
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolContent * C_SyvDaItPaArModel::GetElementData(void) const
@@ -432,7 +432,7 @@ void C_SyvDaItPaArModel::Reset(void)
 /*! \brief   Get current generic element ID
 
    \return
-   NULL Generic element ID not found
+   nullptr Generic element ID not found
    Else Valid generic element ID
 */
 //----------------------------------------------------------------------------------------------------------------------

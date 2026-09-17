@@ -147,12 +147,9 @@ void C_GiLiLineConnection::SetDefaultCursor(const QCursor & orc_Value)
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_GiLiLineConnection::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-                                 QWidget * const opc_Widget)
+void C_GiLiLineConnection::paint(QPainter *, const QStyleOptionGraphicsItem *,
+                                 QWidget *)
 {
-   Q_UNUSED(opc_Painter)
-   Q_UNUSED(opc_Option)
-   Q_UNUSED(opc_Widget)
 
    // no need of drawing this line. It is only a helper class
 }

@@ -206,7 +206,7 @@ bool C_SdNdeDpListArrayEditView::Equals(const uint32_t & oru32_NodeIndex, const 
    Internal undo command is reseted
 
    \return
-   NULL No changes
+   nullptr No changes
    Else Undocommand accumulating all changes
 */
 //----------------------------------------------------------------------------------------------------------------------

@@ -1600,12 +1600,11 @@ void C_SdNdeNodePropertiesWidget::m_RegisterNameChange(void)
    \param[in]  ou32_Column    Column
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeNodePropertiesWidget::m_CheckComInterface(const uint32_t ou32_Row, const uint32_t ou32_Column) const
+void C_SdNdeNodePropertiesWidget::m_CheckComInterface(const uint32_t, const uint32_t ou32_Column) const
 {
    const int32_t s32_COL_NODE_ID = static_cast<int32_t> (C_SdNdeComIfSettingsTableDelegate::eNODEID);
    const int32_t s32_COL_IP = static_cast<int32_t> (C_SdNdeComIfSettingsTableDelegate::eIPADDRESS);
 
-   Q_UNUSED(ou32_Row)
 
    //node id or ip change?
    if ((ou32_Column == s32_COL_NODE_ID) || (ou32_Column == s32_COL_IP))
@@ -1944,11 +1943,9 @@ void C_SdNdeNodePropertiesWidget::m_IpAddressClick(const uint32_t ou32_Row)
    {
       //Set parent for better hierarchy handling via window manager
       const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this->parentWidget(), this->parentWidget());
-      C_SdNdeIpAddressConfigurationWidget * const pc_Dialog =
-         new C_SdNdeIpAddressConfigurationWidget(*c_New, this->mu32_NodeIndex, ou32_Row);
+      new C_SdNdeIpAddressConfigurationWidget(*c_New, this->mu32_NodeIndex, ou32_Row);
       const QSize c_SIZE(600, 416);
 
-      Q_UNUSED(pc_Dialog)
 
       //Resize
       c_New->SetSize(c_SIZE);

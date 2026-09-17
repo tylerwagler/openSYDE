@@ -82,7 +82,7 @@ C_SyvDaCopyPasteManager::~C_SyvDaCopyPasteManager(void)
    \param[in,out]  opc_Parent    Optional pointer to parent
 
    \return
-   NULL No valid data snap shot found
+   nullptr No valid data snap shot found
    Else Valid data snapshot
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ const C_PuiBsElements * C_SyvDaCopyPasteManager::GetSnapshot(QWidget * const opc
 /*! \brief  Get rails
 
    \return
-   NULL No valid rails found
+   nullptr No valid rails found
    Else Valid rails
 */
 //----------------------------------------------------------------------------------------------------------------------

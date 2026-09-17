@@ -599,14 +599,13 @@ void C_GiSvPc::m_DetectIconSize(void)
    \param[in] oq_Initial      Initial flag
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvPc::m_UpdateItems(const double of64_DiffWidth, const double of64_DiffHeight, const bool oq_Initial)
+void C_GiSvPc::m_UpdateItems(const double of64_DiffWidth, const double, const bool oq_Initial)
 {
    const int32_t s32_OldIconSize = this->ms32_IconSize;
 
    // update the scale category
    this->m_DetectIconSize();
 
-   Q_UNUSED(of64_DiffHeight)
    // adapt conflict icon
    if (oq_Initial == false)
    {

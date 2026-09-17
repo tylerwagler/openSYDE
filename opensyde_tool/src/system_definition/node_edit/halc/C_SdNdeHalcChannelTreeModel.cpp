@@ -85,9 +85,8 @@ C_SdNdeHalcChannelTreeModel::~C_SdNdeHalcChannelTreeModel()
    Number of columns, namely 1
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeHalcChannelTreeModel::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_SdNdeHalcChannelTreeModel::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return 1;
 }
 
@@ -300,8 +299,6 @@ void C_SdNdeHalcChannelTreeModel::Paste(QWidget * const opc_Parent, const QModel
          bool q_ChannelCase;
          C_SdNdeHalcChannelTreeModel::h_GetIndexesFromModelIndex(*(orc_TargetIndexes.begin()), u32_DomainIndex,
                                                                  u32_ChannelIndex, q_ChannelCase);
-         Q_UNUSED(q_ChannelCase)
-         Q_UNUSED(u32_ChannelIndex)
          // update error icons
          this->CheckError(u32_DomainIndex);
       }

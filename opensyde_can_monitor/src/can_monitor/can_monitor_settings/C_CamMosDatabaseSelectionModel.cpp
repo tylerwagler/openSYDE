@@ -144,9 +144,8 @@ std::vector<std::array<QString,
    Column count
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CamMosDatabaseSelectionModel::columnCount(const QModelIndex & orc_Parent) const
+int32_t C_CamMosDatabaseSelectionModel::columnCount(const QModelIndex &) const
 {
-   Q_UNUSED(orc_Parent)
    return 1;
 }
 

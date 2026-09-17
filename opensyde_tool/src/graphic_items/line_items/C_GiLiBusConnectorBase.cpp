@@ -283,10 +283,9 @@ void C_GiLiBusConnectorBase::GetBusInteractionScenePos(QPointF & orc_ScenePos) c
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiBusConnectorBase::RevertBus(const stw::opensyde_gui::C_GiLiBus * const opc_StartingBus,
-                                       const stw::opensyde_gui::C_GiLiBus * const opc_LastBus,
+                                       const stw::opensyde_gui::C_GiLiBus *,
                                        const QPointF & orc_ScenePos)
 {
-   Q_UNUSED(opc_LastBus)
    this->m_SetBus(opc_StartingBus);
    m_UpdateConnection(orc_ScenePos);
    m_Reconnect();
@@ -482,7 +481,7 @@ void C_GiLiBusConnectorBase::m_UpdateConnection(const QPointF & orc_ScenePos)
 /*! \brief  Get current connection
 
    \return
-   NULL: Invalid
+   nullptr: Invalid
    else: Current connection
 */
 //----------------------------------------------------------------------------------------------------------------------

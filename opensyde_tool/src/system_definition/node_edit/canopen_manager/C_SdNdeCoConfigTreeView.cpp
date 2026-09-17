@@ -795,7 +795,6 @@ void C_SdNdeCoConfigTreeView::m_OnAddDevice(void)
       const QSize c_SIZE(1200, 829);
       c_PopUp->SetSize(c_SIZE);
 
-      Q_UNUSED(pc_AddDialog)
 
       if (c_PopUp->exec() == static_cast<int32_t>(QDialog::Accepted))
       {
@@ -877,13 +876,11 @@ void C_SdNdeCoConfigTreeView::m_OnAddDeviceReport(const uint32_t ou32_SelectedNo
             const std::vector<C_CieImportDataAssignment> c_InvalidNodeAssignmentVector = {c_InvalidNodeAssignment};
 
             const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
-            C_CieImportReportWidget * const pc_Dialog =
-               new C_CieImportReportWidget(*c_New, orc_EdsPath, rc_CurInterface.u32_BusIndex,
+            new C_CieImportReportWidget(*c_New, orc_EdsPath, rc_CurInterface.u32_BusIndex,
                                            C_OscCanProtocol::eCAN_OPEN,
                                            c_NodeAssignmentVector, c_InvalidNodeAssignmentVector,
                                            &pc_Node->c_Properties.c_Name, true);
 
-            Q_UNUSED(pc_Dialog)
 
             //Resize
             c_New->SetSize(mc_POPUP_REPORT_SIZE);

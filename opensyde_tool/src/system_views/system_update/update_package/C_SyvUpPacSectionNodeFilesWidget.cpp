@@ -558,7 +558,7 @@ void C_SyvUpPacSectionNodeFilesWidget::SetCountSkippedParamSetFiles(const uint32
    \param[in]  orc_UpdateInfo    Configured update configuration of view
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpPacSectionNodeFilesWidget::m_InitSpecificItem(const stw::opensyde_core::C_OscNode & orc_Node,
+void C_SyvUpPacSectionNodeFilesWidget::m_InitSpecificItem(const stw::opensyde_core::C_OscNode &,
                                                           const stw::opensyde_core::C_OscViewNodeUpdate & orc_UpdateInfo)
 {
    const std::vector<std::string> c_ViewAppPaths = orc_UpdateInfo.GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
@@ -571,7 +571,6 @@ void C_SyvUpPacSectionNodeFilesWidget::m_InitSpecificItem(const stw::opensyde_co
    const bool q_ViewPemSkipFlag = orc_UpdateInfo.GetSkipUpdateOfPemFile();
    uint32_t u32_Counter;
 
-   Q_UNUSED(orc_Node)
 
    if (c_ViewFileSkipFlags.size() != c_ViewAppPaths.size())
    {

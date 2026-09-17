@@ -54,7 +54,7 @@ C_OgePubUseCaseNav::C_OgePubUseCaseNav(QWidget * const opc_Parent) :
    \param[in,out]  opc_Event  Pointer to paint event
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgePubUseCaseNav::paintEvent(QPaintEvent * const opc_Event)
+void C_OgePubUseCaseNav::paintEvent(QPaintEvent *)
 {
    QPainter c_Painter(this);
    QBrush c_Brush;
@@ -63,7 +63,6 @@ void C_OgePubUseCaseNav::paintEvent(QPaintEvent * const opc_Event)
    const QColor c_COL_BACKGROUND(71, 71, 99, 255);
    const QColor c_COL_BACKGROUND_DARK(19, 19, 45, 255);
 
-   Q_UNUSED(opc_Event)
 
    // paint the main rectangle
    c_Brush.setColor(c_COL_BACKGROUND);

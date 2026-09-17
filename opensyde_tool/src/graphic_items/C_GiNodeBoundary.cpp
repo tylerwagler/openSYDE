@@ -96,11 +96,9 @@ QRectF C_GiNodeBoundary::boundingRect() const
    \param[in]     opc_Widget     Optional widget to paint on
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiNodeBoundary::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-                             QWidget * const opc_Widget)
+void C_GiNodeBoundary::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem *,
+                             QWidget *)
 {
-   Q_UNUSED(opc_Option)
-   Q_UNUSED(opc_Widget)
 
    QPen c_Pen;
 
