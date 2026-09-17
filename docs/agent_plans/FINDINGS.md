@@ -1586,3 +1586,41 @@ log, no failure, no verdict. It now writes the report to stderr first, as the Li
 implementation always has, and shows the dialog only when `OSY_ASSERT_NO_DIALOG` is
 unset; the Windows CI step sets it. Any assertion on Windows CI is now a visible
 line in the log instead of a silent hang.
+
+## Security: signatures, PEM material, key agreement (2026-09-17)
+
+`security/` had one test (the AES file container). `test_security_signatures` now
+covers what the secure update flow is built on, with keys and self-signed
+certificates generated in the test through OpenSSL: RSA sign -> verify against the
+certificate (and a flipped bit, and a stranger's certificate), the PEM loader
+(private key as DER PKCS#8, certificate as DER, serial number, key-usage and
+extended-key-usage flags, meta text, modulus/exponent), the PEM database's folder
+scan and serial-number index (a certificate without its key is skipped, not fatal),
+the secure-update PEM's usage rule (digitalSignature + emailProtection or
+`overflow`), ECDSA P-256 sign -> verify with the DER round-trip the packages use,
+ECDH key agreement between two parties and AES-CBC.
+
+### `C_OscSecurityEcdhAes::CreateEcKeys` freed its key context twice
+
+After a successful `EVP_PKEY_keygen` the context was freed "as not needed any
+longer" -- and then freed again on the way out, on the success path and the
+fall-through alike. A double free on **every successful key generation**: abort on
+macOS, segfault on Linux, confirmed under AddressSanitizer. The only production
+caller is `C_OscProtocolSecuritySubLayer`, the ECDH key exchange that opens an
+encrypted session with an ECU, so every attempt at encrypted traffic took the PC
+tool down at the handshake. The code arrived with the Release 37 port
+(2026-05-04); whether upstream carries the same double free is worth a look
+before the next merge.
+
+Two facts the tests had to learn: the PEM loader stores a certificate serial as
+the ASN.1 INTEGER's *content* bytes (tag, length and a leading zero pad stripped),
+and the ECDH public key travels compressed (33 bytes), not as the 64-byte X||Y the
+ECDSA side uses.
+
+### On the way: a wedged build directory
+
+Debugging the abort with `lldb --batch` on macOS left a `debugserver` behind and
+the next `ninja` in that build directory went into uninterruptible sleep (`U`),
+where no signal reaches it; every later `ninja` there followed. The fix was to
+build in a fresh directory. If `ninja` produces no output at all and `ps` shows
+`U`, that is what happened; do not spend time on the build itself.

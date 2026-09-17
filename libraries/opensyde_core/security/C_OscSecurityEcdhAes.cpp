@@ -236,7 +236,8 @@ std::error_code C_OscSecurityEcdhAes::CreateEcKeys(uint8_t (&orau8_PublicKey)[hu
             {
                // generate the keypair
                x_Result = EVP_PKEY_keygen(pc_KeyContext, &mpc_TheKey);
-               EVP_PKEY_CTX_free(pc_KeyContext); //not needed any longer
+               //the context is freed once, below, on every path out of this block -- freeing it here as well was a
+               //double free on every successful key generation
             }
             if (x_Result == 1)
             {
