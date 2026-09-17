@@ -1,5 +1,12 @@
 # openSYDE TODO
 
+> **ARCHIVED.** The open items here -- dark mode, the About-dialog library
+> versions, and the low-value-UX audit -- have moved to `../ROADMAP.md`, which
+> carries the dark-mode scope and the three smaller fallback options in full.
+> The rest of this file records finished work and is kept for its detail:
+> the data-logger validator rewrite, the `#ifdef _WIN32` coverage gap, the core
+> warning cleanup, and the `.toStdString().c_str()` method notes.
+
 Cross-cutting follow-ups that aren't tied to a specific consolidation phase.
 For phase-specific work, see `docs/agent_plans/`.
 For in-code `TODO` / `FIXME` / `HACK` comments tracked individually,

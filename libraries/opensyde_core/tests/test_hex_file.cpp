@@ -375,9 +375,9 @@ TEST(HexFileError, MessagesAreDescriptive)
 }
 
 /* -- Address lookup and pattern search ------------------------------------------------------------------------------ */
-/* GetDataByAddress and FindPattern are two of the three functions PLAN.md records as
-   deliberately staying on int32_t because they use a FOREIGN convention -- plain 0 / -1 / -2,
-   not STW error codes. Nothing pinned that convention, which is exactly the thing a future
+/* GetDataByAddress and FindPattern deliberately stay on int32_t: they use a FOREIGN
+   convention -- plain 0 / -1 / -2, not STW error codes.
+   Nothing pinned that convention, which is exactly the thing a future
    error-code migration could silently get wrong by bridging them with
    make_error_code_from_stw. These tests are that pin. */
 
@@ -476,8 +476,8 @@ TEST(HexFile, FindPattern_MissingPatternReturnsMinusOne)
 
 /* -- Record reformatting -------------------------------------------------------------------------------------------- */
 /* Optimize and OptimizeLinear rewrite the record layout. OptimizeLinear is the one that
-   allocates a raw uint16_t[] image and fills gaps; PLAN.md flags its allocation as the
-   reason the hex parser was left alone. Neither had any coverage. */
+   allocates a raw uint16_t[] image and fills gaps, which is why the hex parser was left
+   alone. Neither had any coverage. */
 
 TEST(HexFile, Optimize_RewritesRecordsAndPreservesContent)
 {

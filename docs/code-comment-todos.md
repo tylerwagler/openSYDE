@@ -6,7 +6,7 @@ on `2026-05-06` against `libraries/opensyde_gui/`, `opensyde_tool/src/`,
 `opensyde_can_monitor/src/`, `opensyde_syde_flash/src/`.
 
 For cross-cutting follow-ups that aren't tied to a code-line marker,
-see `docs/TODO.md`.
+see `docs/agent_plans/ROADMAP.md`.
 
 **Counts at snapshot:** 62 markers — 60 `TODO`, 1 `HACK`, 0 `FIXME`, 0 `XXX`.
 **As of 2026-05-06 cleanup pass:** 53 markers remaining (9 deleted, 1 reworded — see strike-throughs below).

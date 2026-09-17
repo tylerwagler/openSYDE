@@ -1,5 +1,10 @@
 # Scope: Removing `stwtypes.hpp`
 
+> **ARCHIVED — and this document was wrong.** It says "scoping, not yet started".
+> `stwtypes.hpp` (C++) has been removed; `stwtypes.h` (C) deliberately remains as
+> the contract for generated controller code.
+> Open work lives in `../../ROADMAP.md`.
+
 Status: scoping (not yet started implementation). Owner: Tyler. Date: 2026-09-09.
 
 ## Goal
