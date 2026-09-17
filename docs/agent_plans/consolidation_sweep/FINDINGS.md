@@ -1029,3 +1029,62 @@ non-MSVC compiler.
 And the test targets were the one place in the tree building without `-Werror`.
 They sat at exactly one warning -- a discarded `[[nodiscard]]` return, the very
 class the attribute exists to surface. Fixed, and they are held at zero now.
+
+## Round-trip testing, and the locale bug it found
+
+The September sweep's defects all lived in **integration paths**, not in functions:
+`C_OscChecksummedXml` could not reload the file it had just written, and a
+parameter set's own version did not survive the trip. No unit test over a single
+function can see that class. So the systematic version of the technique is a
+save/load round trip per filer, with `CalcHash` as a deep-equality oracle where
+the class provides one.
+
+`test_filer_roundtrip.cpp` starts that: `C_OscSystemBusFiler` (parser level, with
+and without CAN-FD), `C_OscProjectFiler` and `C_OscDataLoggerJobFiler` (both
+through a real file, because that is the path the CRC bug lived in). **All pass** --
+those three filers are clean.
+
+### Float attributes followed the process locale
+
+Chasing the same thread into *how* values are serialised found a real one.
+
+`SetAttributeFloat32/64` and `GetAttributeFloat32/64` went through tinyxml2, which
+formats and parses floating point with `snprintf` and `sscanf`. **Both honour
+`LC_NUMERIC`.** openSYDE never calls `setlocale` itself, so it inherits whatever Qt
+set from the environment. Under a German or French locale the writer emits:
+
+```xml
+<element factor="1,5"/>
+```
+
+Still well-formed XML. Read back anywhere else, `sscanf` stops at the comma and the
+value becomes **1**. Exposed: every `f64_Factor` and `f64_Offset` on every Datapool
+element, and every float Datapool value -- min, max, default and actual.
+
+A same-locale round trip works, so the user who creates the file never sees a
+problem. It only appears when the project is shared, and it appears as data that is
+simply wrong rather than as an error.
+
+The tell that this was an oversight rather than a decision: `C_SclStringUtil`
+already defends its *own* parsing against precisely this, with `strtod_l` against an
+explicit `"C"` locale and a comment explaining why. The XML parser was left out.
+
+Fixed in core so the CLI tools benefit too: writing goes through
+`std::format("{}", …)`, which is always the C locale and gives the shortest exactly
+round-tripping representation; reading goes through `ToDoubleCompat`, which is
+locale-independent **and** accepts one `,`, so projects already written with a comma
+now read back with their real values instead of being truncated.
+
+### The controls matter, again
+
+Three of the four new tests fail without the fix. The fourth --
+`RoundTripsAwkwardValues`, covering `0.0`, `-0.0`, `1e-300`, `1e300` and friends --
+**passes in both states**. It is there because changing the write path from
+tinyxml2's `%.17g` to `std::format("{}")` could have quietly cost precision, and a
+fix that corrupts ordinary values while fixing exotic ones would otherwise look
+like a success.
+
+Note that `HexStringParsing.ToDoubleCompatIsLocaleIndependent` **skips** when the
+host has no comma locale generated -- as it did on the Release run here. A test
+that silently skips is not protecting anything on that machine; the new tests skip
+the same way for the same reason, and say so in the skip message.

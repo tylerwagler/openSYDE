@@ -20,6 +20,7 @@
 #include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParser.hpp"
 #include "tinyxml2.h"
+#include <format>
 #include "C_SclStringUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -648,10 +649,19 @@ float C_OscXmlParserBase::GetAttributeFloat32(const std::string & orc_Name, cons
 
    if (mpc_CurrentNode != nullptr)
    {
-      const tinyxml2::XMLError e_Error = mpc_CurrentNode->QueryFloatAttribute(orc_Name.c_str(), &f32_Value);
-      if (e_Error != tinyxml2::XML_SUCCESS)
+      //not QueryFloatAttribute: tinyxml2 parses through sscanf, which honours LC_NUMERIC and
+      //stops at the '.' under a comma-decimal locale. ToDoubleCompat is locale-independent,
+      //and it also accepts one ',' so a file already written with a comma still reads back.
+      if (this->AttributeExists(orc_Name))
       {
-         f32_Value = of32_Default;
+         try
+         {
+            f32_Value = static_cast<float>(stw::scl::ToDoubleCompat(this->GetAttributeString(orc_Name)));
+         }
+         catch (...)
+         {
+            f32_Value = of32_Default;
+         }
       }
    }
    return f32_Value;
@@ -675,10 +685,17 @@ double C_OscXmlParserBase::GetAttributeFloat64(const std::string & orc_Name, con
 
    if (mpc_CurrentNode != nullptr)
    {
-      const tinyxml2::XMLError e_Error = mpc_CurrentNode->QueryDoubleAttribute(orc_Name.c_str(), &f64_Value);
-      if (e_Error != tinyxml2::XML_SUCCESS)
+      //see GetAttributeFloat32 for why this does not use QueryDoubleAttribute
+      if (this->AttributeExists(orc_Name))
       {
-         f64_Value = of64_Default;
+         try
+         {
+            f64_Value = stw::scl::ToDoubleCompat(this->GetAttributeString(orc_Name));
+         }
+         catch (...)
+         {
+            f64_Value = of64_Default;
+         }
       }
    }
    return f64_Value;
@@ -1267,7 +1284,11 @@ void C_OscXmlParserBase::SetAttributeFloat32(const std::string & orc_Name, const
 {
    if (mpc_CurrentNode != nullptr)
    {
-      mpc_CurrentNode->SetAttribute(orc_Name.c_str(), of32_Value);
+      //not SetAttribute(float): tinyxml2 formats through snprintf, which honours LC_NUMERIC and
+      //writes "1,5" under a comma-decimal locale -- a project saved on a German desktop then
+      //loses every float when read anywhere else. std::format is always the C locale, and "{}"
+      //is the shortest representation that round trips exactly.
+      mpc_CurrentNode->SetAttribute(orc_Name.c_str(), std::format("{}", of32_Value).c_str());
    }
 }
 
@@ -1284,7 +1305,8 @@ void C_OscXmlParserBase::SetAttributeFloat64(const std::string & orc_Name, const
 {
    if (mpc_CurrentNode != nullptr)
    {
-      mpc_CurrentNode->SetAttribute(orc_Name.c_str(), of64_Value);
+      //see SetAttributeFloat32 for why this does not use SetAttribute(double)
+      mpc_CurrentNode->SetAttribute(orc_Name.c_str(), std::format("{}", of64_Value).c_str());
    }
 }
 
