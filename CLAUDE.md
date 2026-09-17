@@ -467,16 +467,46 @@ because it is the historical cross-compile lane); `toolchain_macos.cmake` and
 If a native build starts failing to find a package it should obviously have, check
 this before hunting the package.
 
-**The build uses one shared toolchain file, plus per-tool `pjt/lint_config.cmake`.**
+**Every tool's CMakeLists has the same shape, and the shared parts live in `cmake/`.**
+Each tool is `<tool>/pjt/CMakeLists.txt` (including `opensyde_tool`, whose file used to
+sit one level deeper at `pjt/openSYDE/` and was special-cased in the root CMakeLists and
+`build.sh`). Each one opens the same way:
+
+```cmake
+cmake_minimum_required(VERSION 3.25)
+project(<Name> LANGUAGES CXX)
+include(${CMAKE_CURRENT_LIST_DIR}/../../cmake/osy_tool_common.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../../cmake/lint_config.cmake)
+set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
+```
+
+`osy_tool_common.cmake` holds what is genuinely identical across all eight: the C++23
+standard and the `osy_tool_werror(<targets>)` function that turns warnings into errors
+on the targets we own. `lint_config.cmake` is the PC-lint generator. Source lists,
+include directories and the `OPENSYDE_CORE_SKIP_*` selection stay in each tool -- that
+is what makes each tool a different tool.
+
+Before 2026-09-17 every tool carried its own copy of both, and they had drifted: two
+tools had an older `lint_config.cmake` missing a fix the other six had, three named the
+core build directory differently, two did not pin the C++ standard, and the `-Werror`
+block existed in three spellings. It was also why splitting CAN Monitor and SYDEflash
+out of `opensyde_tool/` once left them unable to build at all -- the per-tool copy did
+not come across. A shared file cannot be forgotten that way.
+
+Paths in a tool's CMakeLists are written from `${PROJECT_ROOT}`, never as bare `../`.
+Core is always `add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core
+${CMAKE_BINARY_DIR}/opensyde_core)` behind the `if(NOT TARGET opensyde_core)` guard.
+
 `build.sh` passes a single `-DCMAKE_TOOLCHAIN_FILE=cmake/toolchain_{linux,macos,windows}.cmake`
-(selected by `uname`) for the whole root build; the older per-tool
-`pjt/toolchain_linux.cmake` files are vestigial standalone-config leftovers, not what
-the unified build uses. Each tool's `CMakeLists.txt` still does
-`include(lint_config.cmake)` from its own `pjt/` directory, so that file is per-tool.
-When CAN Monitor and SYDEflash were split out of `opensyde_tool/` into their own
-top-level trees, their `lint_config.cmake` did not come across and neither tool could
-build on Linux at all (restored 2026-09-06, invisible until the GUI CI job was
-repaired the same day). If a new tool is split out the same way, check for that file.
+(selected by `uname`) for the whole root build. The per-tool `pjt/toolchain_*.cmake`
+files that used to sit beside some CMakeLists were vestigial leftovers from standalone
+configures, referenced by nothing, and are gone.
+
+**A standalone GUI-tool configure on macOS needs more than the toolchain file.** The
+Homebrew `qtbase` and `qtsvg` kegs are split, and `find_package(Qt6 COMPONENTS Svg)`
+looks for `Qt6Svg` relative to `Qt6_DIR`, where it is not. The unified `build.sh` build
+works; `cmake -S opensyde_can_monitor/pjt` on its own does not. This predates the shared
+scaffolding (verified against an untouched `develop` worktree) and is on the roadmap.
 
 ## Agent Workspace Rules
 

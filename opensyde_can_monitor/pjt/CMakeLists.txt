@@ -1,5 +1,5 @@
-# minimum 3.24 for FetchContent, FILE_SET, and modern CMake policies
-cmake_minimum_required(VERSION 3.24)
+# 3.25 tree-wide: the root CMakeLists requires it, and a standalone configure of one tool should not accept less
+cmake_minimum_required(VERSION 3.25)
 
 if(POLICY CMP0177)
    cmake_policy(SET CMP0177 NEW)
@@ -10,8 +10,10 @@ endif()
 
 project(openSYDE_CAN_Monitor LANGUAGES CXX)
 
+include(${CMAKE_CURRENT_LIST_DIR}/../../cmake/osy_tool_common.cmake)
+
 #include script to generate PC-lint configuration files
-include(lint_config.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../../cmake/lint_config.cmake)
 
 # Sets CMAKE_AUTOUIC and CMAKE_AUTOMOC to ON for ui files compiling
 set(CMAKE_AUTOUIC ON)
@@ -42,8 +44,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
    set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
 endif()
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
@@ -602,27 +602,4 @@ endif(COMMAND add_pc_lint)
 set(REPO_ROOT ${PROJECT_ROOT}/..)
 install(TARGETS openSYDE_CAN_Monitor DESTINATION ${REPO_ROOT}/result/${CMAKE_BUILD_TYPE}/openSYDE_CAN_Monitor)
 
-# --- WARNINGS AS ERRORS -----------------------------------------------------------------------------------------------
-# opensyde_core has built with -Wall -Wextra -Werror and zero diagnostics since the
-# core warning sweep. These trees already compiled with -Wall -Wextra -Wpedantic but
-# without -Werror, and every line we own here is warning-free -- so this only pins
-# what is already true.
-#
-# It matters because the -Wparentheses that would have caught C_OscViewFiler's nine
-# inverted security-option comparisons was emitted by *these* builds, and read by
-# nobody.
-#
-# Deliberately target-scoped rather than appended to CMAKE_CXX_FLAGS or
-# add_compile_options: those are directory-scoped and propagate into
-# add_subdirectory targets, including the vendored can-libraries submodule, whose
-# flex-generated Vector_DBC/Scanner.cpp emits two -Woverloaded-virtual warnings we
-# neither own nor can fix. Target scope keeps -Werror on our sources only.
-#
-# if(TARGET ...) because some of these are defined conditionally.
-if(NOT MSVC)
-   foreach(OSY_WERROR_TARGET openSYDE_CAN_Monitor)
-      if(TARGET ${OSY_WERROR_TARGET})
-         target_compile_options(${OSY_WERROR_TARGET} PRIVATE -Werror)
-      endif()
-   endforeach()
-endif()
+osy_tool_werror(openSYDE_CAN_Monitor)

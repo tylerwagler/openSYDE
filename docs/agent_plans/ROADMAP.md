@@ -130,7 +130,21 @@ doing only where a benchmark shows it matters — 7.1 is the cautionary tale: th
 plan's prescribed fix was 1.4x and the actual win came from somewhere the plan had
 not looked.
 
-### 10. Low / cosmetic bucket
+### 10. Standalone GUI-tool configure on macOS
+
+`cmake -S opensyde_can_monitor/pjt` (or `opensyde_tool/pjt`) on a Mac fails with
+`Failed to find required Qt component "Svg"`. Homebrew ships `qtbase` and `qtsvg` as
+separate kegs, and `find_package(Qt6 COMPONENTS Svg)` looks for `Qt6Svg` relative to
+`Qt6_DIR`, where it is not. The unified `build.sh` build is unaffected, and CI uses
+`install-qt-action` rather than Homebrew, so nothing shipped is at risk -- but the
+standalone path `CLAUDE.md` promises does not work on this platform.
+
+Verified pre-existing against an untouched `develop` worktree on 2026-09-17. Likely fix:
+add the `qtsvg` keg to `QT_ADDITIONAL_PACKAGES_PREFIX_PATH` in `toolchain_macos.cmake`,
+or make the standalone configure go through whatever `build.sh` does. Small, but it
+needs a Mac to verify.
+
+### 11. Low / cosmetic bucket
 
 `std::endl` → `"\n"` in console logging; ~208 `#define` wire-constants →
 `constexpr`; god-functions with 16–18 parameter signatures; `== true` / `== false`;

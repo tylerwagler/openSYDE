@@ -1,5 +1,6 @@
 # cmake toolchain file for Linux 64-bit compilation
-# usage: cmake ../pjt -DCMAKE_TOOLCHAIN_FILE=../pjt/toolchain_linux.cmake 
+# usage (standalone tool): cmake ../pjt -DCMAKE_TOOLCHAIN_FILE=../../cmake/toolchain_linux.cmake
+# build.sh passes this file for the unified root build; no tool carries its own copy. 
 
 # Let CMake auto-detect the system
 set(CMAKE_SYSTEM_NAME Linux)
