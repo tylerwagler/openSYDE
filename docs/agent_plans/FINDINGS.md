@@ -1355,7 +1355,7 @@ it reads foreign files rather than our own. Now `ScanBaseCompat`, like the rest.
 **The lesson is the one from the earlier residue sweeps, sharpened:** the three
 known shapes were raw `[1]`, `<= length()` bounds and `std::stoi` on hex. The fourth
 shape is `[i + 1]` under a 0-based loop, and it is invisible to every scanner that
-looked for the first three. It is now in the checklist.
+looked for the first three. The tree-wide hunt for it is the next section.
 
 ### Two smaller filer defects, fixed
 
@@ -1413,3 +1413,62 @@ looked for the first three. It is now in the checklist.
 
 * `C_OscSup*` filers (system update packages): zip containers around the system
   definition and view filers, which are covered.
+
+## The fourth residue shape, hunted tree-wide (2026-09-17)
+
+The HALC and EDS defects above were found by a round-trip, not by a scan, and the
+scan that followed was one grep. This is the proper pass: a scanner validated on
+planted positives first, then run over every tree we own (`opensyde_core`,
+`opensyde_gui`, all eight tools; not `can-libraries`, `qcustomplot`, `tinyxml2`).
+
+### What it looks for
+
+Every shape is index arithmetic that meant one thing on the 1-based `C_SclString`
+and means another on `std::string` or `std::vector`. The compat helpers
+(`PosCompat`, `SubStringCompat`, `InsertCompat`, `DeleteCompat`, `LastPosCompat`,
+`LastDelimiterCompat`) are still **1-based by contract** -- their comments and
+bodies say so -- which is what makes mixing them with raw `std::string` calls a
+shape of its own.
+
+| Shape | Pattern | Verdict rule |
+|---|---|---|
+| one ahead | `X[i + 1]` | suspect when `i` starts at 0 and the bound is `< X.length()/size()` without a `- 1` |
+| one behind | `X[i - 1]` | suspect when `i` starts at 0 (underflow at the first iteration) |
+| pair extract | `std::string(1, X[i + 1])` | as above |
+| first skipped | `for (i = 1; i < X.length()/size(); ...)` | review: legitimate when element 0 is handled before the loop |
+| overrun | `for (i = 0; i <= X.length()/size(); ...)` | suspect |
+| 1-based found test | `.find(...) > 0` or `>= 1` | suspect: `npos > 0` is true |
+| 1-based at-start test | `.find(...) == 1` | review |
+| from the start | `.substr(1, ...)` | review |
+| cross-convention | `p = PosCompat(...)` then `X.substr(p)` / `X[p]` / `X.erase(p)` without `- 1` | suspect |
+| cross-convention | `p = X.find(...)` then `SubStringCompat(X, p, ...)` without `+ 1` | suspect |
+| compat with literals | `SubStringCompat(X, 1, ...)`, `PosCompat(...) == 5` | review only: 1 and 5 are *correct* under the 1-based contract |
+
+Array-typed names (`au8_`, `apc_`, `Buffer`, `.data()`) are excluded; the scanner
+walks back up to forty lines to find the `for` header that declares the counter so
+it can read the start value and the bound.
+
+### What the tree said
+
+| Shape | Hits | Outcome |
+|---|---|---|
+| `X[i + 1]` | 22 | 1 suspect: `C_OscProtocolSerialNumber` -- correct, steps by two. 21 reviewed: all guarded (`(pos + 1) < len` in the trigger parser and `ScanBaseCompat`, `(i + 1) < argc` in `tsp_convert`, nibble pairs in `C_HexFile`, byte offsets in the protocol driver, `tinyxml2`) |
+| `X[i - 1]` | 5 | all guarded by an explicit `> 0` |
+| first skipped | 14 | all the "element 0 before the loop, then pairs" idiom |
+| overrun | 2 | **1 defect**: `C_OscXcoCreate::mh_CheckParamsToCreatePackage` looped `<= c_Nodes.size()` and dereferenced -- the missing-node case the loop exists to detect read one past the end first, and with no nodes at all it read `c_Nodes[0]` of an empty vector (crashes in the pin). The other is `FindCaseInsensitiveCompat`'s `start + sub.size() <= str.size()`, which is right |
+| found / at-start tests, `substr(1` | 0 | |
+| cross-convention, both directions | 0 | |
+| compat with literals | 56 | all consistent with the 1-based contract |
+
+So after #37 the tree holds exactly one more instance of the class, now fixed and
+pinned by `test_xco_create`. The three earlier grep-style scans in this document
+would not have found it: it is a container, not a string, and the shape is a
+bound, not a subscript. Put differently, the residue is not about strings at all;
+it is about *every* loop the migration touched, and the only reliable oracle for
+the ones with no test is the shape table above.
+
+### Not done here
+
+The scanner is not checked into the tree: it is thirteen regexes and a forty-line
+lookback, and the table above is its specification. If the class turns up a fifth
+shape, extend the table first, then the regexes.
