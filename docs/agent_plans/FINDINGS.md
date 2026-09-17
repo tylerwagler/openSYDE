@@ -1446,6 +1446,7 @@ shape of its own.
 | cross-convention | `p = X.find(...)` then `SubStringCompat(X, p, ...)` without `+ 1` | suspect |
 | compat with literals | `SubStringCompat(X, 1, ...)`, `PosCompat(...) == 5` | review only: 1 and 5 are *correct* under the 1-based contract |
 | last character | `X[X.length()]` / `X[X.size()]` | suspect: the 1-based "last character" reads the terminator on `std::string` (found the day after the sweep, in `C_OscSuSequences`; the tree has no other) |
+| second-to-last | `X[X.length() - 1]` / `X[X.size() - 1]` | review: on the 1-based class this was the *second-to-last* character; on `std::string` it is the last. Every hit needs its intent read -- 63 in the trees, 62 are "last element" of a container and correct, one (`C_OscCanProtocol::h_ListIsComTx`) meant second-to-last and was wrong |
 
 Array-typed names (`au8_`, `apc_`, `Buffer`, `.data()`) are excluded; the scanner
 walks back up to forty lines to find the `for` header that declares the counter so
@@ -1476,7 +1477,7 @@ The scanner is not checked into the tree: it is thirteen regexes and a forty-lin
 lookback, and the table above is its specification. If the class turns up a fifth
 shape, extend the table first, then the regexes.
 
-## The package filers, round-tripped at last (2026-09-18)
+## The package filers, round-tripped at last (2026-09-17)
 
 `C_OscSupServiceUpdatePackageCreate` and `...Load` were the one filer family left out
 of both waves ("zip containers around filers already covered"). Wrong call: the
@@ -1511,3 +1512,52 @@ CiA 306 allows hex for every numeric EDS value, so `NrOfRxPDO=0x4` read as `0`.
 Fixed with `ScanBaseCompat`, pinned in `test_scl_ini_file`. The rest read values
 their own writers spell in decimal (covered by the round-trips) or values whose
 format is decimal by definition (DBC raw values, dates, availability indices).
+
+## The last untested families: exporters, magician, TSP (2026-09-17)
+
+After the package filers, the survey of "file-format classes with no test at all"
+left three: the C code exporters (`C_OscExport*`, what `syde_coder_c` ships), the
+HALC magician (HALC configuration -> datapools) and the target-support-package
+loader. All three have tests now, built on the node and HALC models the round-trips
+already used (moved into `tests/osy_test_models.hpp` for sharing).
+
+### One defect, and it is the worst kind: `h_ListIsComTx` never said yes
+
+`C_OscCanProtocol::h_ListIsComTx` decides whether a COM datapool list is the Tx or
+the Rx list of an interface by its name (`CAN1_TX` / `CAN1_RX`). The comment says
+"check second to last letter"; the code did `c_Name[c_Name.length() - 1]`, which on
+the 1-based string *was* the second-to-last letter and on `std::string` is the last
+-- `'X'` for both. So **no list was ever a Tx list**: `h_GetComListIndex(..., Tx)`
+found nothing and left its output untouched, `h_GetComListIndex(..., Rx)` returned
+the Tx list. Every mapping of a CAN message to a datapool element goes through these
+two -- the bus editor's signal assignment, the DBC sync, the CAN monitor's signal
+values and the comm-stack code export, which is where it surfaced ("Datapool does
+not exist for specified communication protocol"). Pinned directly in
+`test_can_protocol` and indirectly by the export.
+
+This is the **sixth shape**: `[length() - 1]` meaning second-to-last. It cannot be
+scanned for -- the same expression is the correct 0-based "last element" everywhere
+else (62 other hits, all fine) -- only read for intent, which the comment made easy
+here. The scanner table carries it as a review item.
+
+### What the tests pin
+
+* **Code export** (`test_code_export`): a programmable application over the shared
+  node model exports ten files (init, three datapools, one comm stack). No golden
+  file; the oracle is invariants a migration defect would break (every reported file
+  exists, no terminators, balanced braces, tool info present) plus content pins
+  chosen from a reviewed export: element indices, scaling defines, min/max/data-set
+  values, message and mux indices, signal geometry, CAN ids, the datapool reference.
+* **HALC magician** (`test_halc_magician`): a two-level NVM configuration with two
+  copies yields four `eHALC_NVM` datapools in the documented order, with the four
+  lists per domain, the channel-number/use-case/parameter variables named by
+  `C_OscHalcMagicianUtil`, non-safe variables as arrays of the two non-safe
+  channels and safe ones as scalars. The generator's list handler fires
+  `tgl_assert` three times on the way -- it probes the domain parameters with a
+  channel-parameter element index before falling back to the channel parameters,
+  and asserts inside the probe. Correct result, noisy path; upstream logic, left.
+* **Target support package** (`test_tsp_filer`): version 3 yields every field;
+  versions 1 and 2 are answered with `busy`, meaning "use the converter's loader".
+  `C_OscTargetSupportPackageV2Filer.hpp` in core was a declaration with no
+  definition and no includer (the V2 loader moved to `opensyde_tsp_convert`);
+  removed.
