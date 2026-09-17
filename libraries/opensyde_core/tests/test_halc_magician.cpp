@@ -95,4 +95,24 @@ TEST(HalcMagician, GeneratesSafeAndNonSafeDatapools)
    EXPECT_EQ(1U, rc_NonSafeParams.c_DataSets.size()) << "the configuration list carries the data set";
    EXPECT_EQ(C_OscNodeDataPoolContent::eUINT16, rc_NonSafeParams.c_Elements[4].GetType()) << "debounce is uint16";
    EXPECT_EQ(C_OscNodeDataPoolContent::eUINT8, rc_NonSafeParams.c_Elements[2].GetType()) << "enum on uint8";
+
+   //the configuration data set is filled through the list-index probe: channel numbers of the two non-safe channels,
+   //their default use-case values (DI_2 -> "off" = 0, DI_3 -> "frequency" = 1) and the parameters' initial values
+   ASSERT_EQ(5U, rc_NonSafeParams.c_DataSets.size() == 1U ? rc_NonSafeParams.c_Elements.size() : 0U);
+   const auto h_U8 = [](const C_OscNodeDataPoolListElement & orc_El, const uint32_t ou32_Index) -> uint32_t
+   {
+      return orc_El.c_DataSetValues[0].GetValueArrU8Element(ou32_Index);
+   };
+   const auto h_U16 = [](const C_OscNodeDataPoolListElement & orc_El, const uint32_t ou32_Index) -> uint32_t
+   {
+      return orc_El.c_DataSetValues[0].GetValueArrU16Element(ou32_Index);
+   };
+   EXPECT_EQ(1U, h_U16(rc_NonSafeParams.c_Elements[0], 0U)) << "channel number of DI_2";
+   EXPECT_EQ(2U, h_U16(rc_NonSafeParams.c_Elements[0], 1U)) << "channel number of DI_3";
+   EXPECT_EQ(0U, h_U8(rc_NonSafeParams.c_Elements[1], 0U)) << "DI_2 use-case value";
+   EXPECT_EQ(1U, h_U8(rc_NonSafeParams.c_Elements[1], 1U)) << "DI_3 use-case value";
+   EXPECT_EQ(0U, h_U8(rc_NonSafeParams.c_Elements[2], 0U)) << "mode initial (Level)";
+   EXPECT_EQ(1U, h_U8(rc_NonSafeParams.c_Elements[3], 1U)) << "flags initial (Invert)";
+   EXPECT_EQ(5U, h_U16(rc_NonSafeParams.c_Elements[4], 0U)) << "debounce initial";
+   EXPECT_EQ(5U, h_U16(rc_NonSafeParams.c_Elements[4], 1U)) << "debounce initial";
 }

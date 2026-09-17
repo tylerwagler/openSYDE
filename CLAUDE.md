@@ -507,6 +507,13 @@ ${CMAKE_BINARY_DIR}/opensyde_core)` behind the `if(NOT TARGET opensyde_core)` gu
 files that used to sit beside some CMakeLists were vestigial leftovers from standalone
 configures, referenced by nothing, and are gone.
 
+**`tgl_assert` on Windows is a message box.** `TglReportAssertion` writes the report
+to stderr and then shows a `MessageBoxA`; on a headless machine that dialog waits
+forever. `OSY_ASSERT_NO_DIALOG=1` keeps it on stderr only, and the Windows CI test step
+sets it -- a fired assertion is a log line there, not a six-hour hang. If a Windows job
+ever sits in "Build + run core unit tests" far past its usual time, that is the first
+thing to check.
+
 **A standalone GUI-tool configure on macOS needs more than the toolchain file.** The
 Homebrew `qtbase` and `qtsvg` kegs are split, and `find_package(Qt6 COMPONENTS Svg)`
 looks for `Qt6Svg` relative to `Qt6_DIR`, where it is not. The unified `build.sh` build

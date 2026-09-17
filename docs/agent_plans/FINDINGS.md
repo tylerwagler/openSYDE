@@ -1552,12 +1552,37 @@ here. The scanner table carries it as a review item.
   copies yields four `eHALC_NVM` datapools in the documented order, with the four
   lists per domain, the channel-number/use-case/parameter variables named by
   `C_OscHalcMagicianUtil`, non-safe variables as arrays of the two non-safe
-  channels and safe ones as scalars. The generator's list handler fires
-  `tgl_assert` three times on the way -- it probes the domain parameters with a
-  channel-parameter element index before falling back to the channel parameters,
-  and asserts inside the probe. Correct result, noisy path; upstream logic, left.
+  channels and safe ones as scalars, and -- the part that found a defect -- the
+  configuration data set holding each channel's number, use-case value and
+  parameter initial values.
+
+  **The magician mislaid channel values.** `m_GetListIndex` computes where a
+  variable sits in the generated list. For the domains *before* the one asked
+  about it chooses domain values or channel values by "does this domain have
+  channels"; for the domain itself it *probed* the domain values first and
+  accepted any in-range hit. A domain with channels that also carries domain
+  parameters (the format allows it; the model here has one) therefore got every
+  channel variable's index computed against the domain parameters: the `flags`
+  initial value landed in `mode`'s slot. The probe's misses also went through
+  `tgl_assert`, three dialogs' worth on Windows. Now the same branch as for the
+  passed domains, and `mh_GetSubElementIndex` reports `range` instead of skipping
+  silently when an element index does not fit.
+
+  Whether STW's own device definitions ever combine domain and channel parameters
+  in one domain is not known here; if they do, generated HALC datapools on this
+  branch had wrong configuration values in exactly that domain.
 * **Target support package** (`test_tsp_filer`): version 3 yields every field;
   versions 1 and 2 are answered with `busy`, meaning "use the converter's loader".
   `C_OscTargetSupportPackageV2Filer.hpp` in core was a declaration with no
   definition and no includer (the V2 loader moved to `opensyde_tsp_convert`);
   removed.
+
+### `tgl_assert` on Windows is a message box, and CI has nobody to press OK
+
+The Windows `TglReportAssertion` showed a `MessageBoxA` and nothing else. The
+magician's three (then-)spurious asserts made the Windows core-test step wait on a
+dialog for as long as GitHub allows (six hours) before the run was cancelled -- no
+log, no failure, no verdict. It now writes the report to stderr first, as the Linux
+implementation always has, and shows the dialog only when `OSY_ASSERT_NO_DIALOG` is
+unset; the Windows CI step sets it. Any assertion on Windows CI is now a visible
+line in the log instead of a silent hang.
