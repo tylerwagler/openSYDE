@@ -110,7 +110,7 @@ add_subdirectory(libraries/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
 option(OPENSYDE_BUILD_GUI_TOOLS "Build the Qt GUI tools (openSYDE, CAN Monitor, SYDEflash)" ON)
 
 if(OPENSYDE_BUILD_GUI_TOOLS)
-   add_subdirectory(opensyde_tool/pjt/openSYDE        ${CMAKE_BINARY_DIR}/opensyde)
+   add_subdirectory(opensyde_tool/pjt                 ${CMAKE_BINARY_DIR}/opensyde)
    add_subdirectory(opensyde_can_monitor/pjt          ${CMAKE_BINARY_DIR}/canmonitor)
    add_subdirectory(opensyde_syde_flash/pjt           ${CMAKE_BINARY_DIR}/sydeflash)
 endif()

@@ -1193,3 +1193,66 @@ are almost certainly dominated by cases the compiler already handles, and tellin
 the real ones apart needs a profiler, not a regex. Phase 7.1 is the precedent --
 the plan's diagnosis was wrong and the measurement was right. Deferred until
 there is a workload to measure against.
+
+## Tool CMake consistency (2026-09-17)
+
+Eight tools, eight `CMakeLists.txt`, and a survey across twelve axes found drift on
+nine of them. None of it was a build break -- everything built -- which is exactly why
+it had accumulated. The three axes that were already consistent are worth naming
+because they are the ones that *should* differ per tool: source lists, include
+directories, and the `OPENSYDE_CORE_SKIP_*` selection, all in one uniform `set(X 0/1)`
+style.
+
+| Axis | Before | After |
+|------|--------|-------|
+| CMakeLists location | `opensyde_tool/pjt/openSYDE/`, everyone else `pjt/` | all `pjt/`; two special cases removed from root CMakeLists and `build.sh` |
+| `lint_config.cmake` | 8 copies; **2 were an older version** missing the `NOTFOUND` guard and `REMOVE_DUPLICATES` the other 6 had | one `cmake/lint_config.cmake` |
+| `-Werror` block | copied 8×, three spellings | `osy_tool_werror(<targets>)` in `cmake/osy_tool_common.cmake` |
+| C++ standard | 6 pinned it, 2 did not | shared include pins it for all |
+| `cmake_minimum_required` | root 3.25, **core and all 8 tools 3.24** | 3.25 everywhere; `CLAUDE.md`'s claim is now true |
+| core build-dir name | `opensyde_core` ×5, `osy_core` ×3 | `opensyde_core` |
+| path style | `${PROJECT_ROOT}/…` ×7, bare `../…` in `coder_c` (and one `.rc` in `flash_tool`) | `${PROJECT_ROOT}` everywhere |
+| per-tool `toolchain_*.cmake` | 6 files across 5 tools, one of them `toolchain_ubuntu.cmake` in a single tool, **referenced by nothing** | gone |
+| `project()` form | `project(X LANGUAGES CXX)`, `project("x")`, mixed | `project(X LANGUAGES CXX)`; names unchanged |
+| version file | 7 tools had one, `tsp_convert` had **no version at all** | `tsp_convert` at 1.0.0, printed in its banner |
+| duplicate `SKIP_*` line | `flash_tool` set `PROTOCOL_DRIVERS_MONITOR` twice | once |
+| stale comments | "minimum 3.24" above a 3.25 line; "C++17 to match…" above `CMAKE_CXX_STANDARD 23` | fixed |
+
+### Deliberately left alone
+
+- **`project()` names.** `openSYDE`, `SYDEflash`, `console_system_updater_sydesup`,
+  `osy_tsp_convert` -- four naming schemes. But the names are also the target names,
+  and those are wired into `build.sh`'s deploy table, the CI workflow and the result
+  paths. Renaming for tidiness would ripple through all of that for no functional gain.
+- **`src/<toolname>/` in CAN Monitor and SYDEflash.** Six tools put sources directly in
+  `src/`; these two keep a namespace directory from when they were split out of
+  `opensyde_tool`. Their `version_config.hpp` sits at *their* source root, which is
+  consistent within that convention. Flattening is hundreds of path edits for cosmetics.
+- **`-Wno-deprecated-declarations`.** Five tools add it, three do not. That is per-tool
+  need (Qt deprecations in the GUI tools), not scaffolding drift.
+
+### Two near-misses
+
+**`coder_c` did not define `PROJECT_ROOT`.** It was the one tool writing bare `../`
+paths, so it never needed the variable. The first pass of the core-path unification
+rewrote its `add_subdirectory` to the `${PROJECT_ROOT}` form *before* checking that,
+which would have expanded to `/../libraries/opensyde_core` and failed configure.
+Caught by grepping for the definition before building, not by the build. A mechanical
+"make these lines look alike" pass has to check what each line's spelling *depended
+on*.
+
+**The macOS standalone GUI configure fails -- and did before.** With the shared
+scaffolding in place, `cmake -S opensyde_can_monitor/pjt` on the Mac failed with
+`Failed to find required Qt component "Svg"`. That looked like a regression until the
+identical configure was run against an untouched `develop` worktree and failed
+identically. It is the split `qtbase`/`qtsvg` Homebrew kegs; the unified `build.sh`
+build is unaffected. Pre-existing, recorded on the roadmap, and a reminder that a
+verification that fails needs a control before it counts as evidence of anything.
+
+### Verification
+
+Fresh configure (build directory wiped, because the moved CMakeLists and shared
+includes change the configure graph and a stale directory could mask exactly the
+errors being tested for) and eight-tool build on the Linux host: clean. Standalone
+CLI configure on macOS: clean, core present, C++23 in flags. `tsp_convert` rebuilt and
+run: prints its version.

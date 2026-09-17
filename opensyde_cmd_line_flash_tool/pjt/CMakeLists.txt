@@ -1,10 +1,12 @@
-# minimum 3.24 for FetchContent, FILE_SET, and modern CMake policies
-cmake_minimum_required(VERSION 3.24)
+# 3.25 tree-wide: the root CMakeLists requires it, and a standalone configure of one tool should not accept less
+cmake_minimum_required(VERSION 3.25)
 
-project("osy_cmd_line_flash_tool")
+project(osy_cmd_line_flash_tool LANGUAGES CXX)
+
+include(${CMAKE_CURRENT_LIST_DIR}/../../cmake/osy_tool_common.cmake)
 
 #include script to generate PC-lint configuration files
-include(lint_config.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../../cmake/lint_config.cmake)
 
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 
@@ -29,7 +31,6 @@ set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_BASIC      0)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_SYSTEM     1)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_MONITOR    1)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_COMMON     0)
-set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_MONITOR    1)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING            1)
 set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING     1)
 set(OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION   1)
@@ -48,7 +49,7 @@ endif()
 # every subsystem enabled before adding the tools, so a whole-repo build shares a
 # single core archive instead of compiling it once per tool.
 if(NOT TARGET opensyde_core)
-   add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/osy_core)
+   add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
 endif()
 
 # warn a lot
@@ -69,9 +70,6 @@ set(CMAKE_C_FLAGS "${OSY_GCC_ONLY_WARNINGS} -Wall -Wextra -Wunused -Wuninitializ
    -Wunused-macros -Wcast-align -Wno-multichar -Wredundant-decls -Wnested-externs \
    -Wno-deprecated-declarations")
 # For C++ do not add "-Wdouble-promotion" as it causes a warning in tinyxml.cpp which we do not want to modify
-# C++17 to match the other openSYDE apps and to satisfy libcan's INTERFACE cxx_std_14 minimum.
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${OSY_GCC_ONLY_WARNINGS} -Wall -Wextra -Wunused -Wuninitialized -Wsign-compare  \
    -Wmissing-include-dirs -Wshadow -Wno-multichar -Wredundant-decls -Wno-deprecated-declarations")
 
@@ -96,7 +94,7 @@ set(OSY_CMD_LINE_FLASH_TOOL_SOURCES
    ${PROJECT_ROOT}/src/C_BasicFlashTool.hpp
    ${PROJECT_ROOT}/src/C_BasicUpdateSequence.hpp
 
-   ../src/resources.rc
+   ${PROJECT_ROOT}/src/resources.rc
 )
 
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
@@ -127,27 +125,4 @@ endif(COMMAND add_pc_lint)
 set(REPO_ROOT ${PROJECT_ROOT}/..)
 install(TARGETS osy_cmd_line_flash_tool DESTINATION ${REPO_ROOT}/result/${CMAKE_BUILD_TYPE}/cmd_line_flash_tool)
 
-# --- WARNINGS AS ERRORS -----------------------------------------------------------------------------------------------
-# opensyde_core has built with -Wall -Wextra -Werror and zero diagnostics since the
-# core warning sweep. These trees already compiled with -Wall -Wextra -Wpedantic but
-# without -Werror, and every line we own here is warning-free -- so this only pins
-# what is already true.
-#
-# It matters because the -Wparentheses that would have caught C_OscViewFiler's nine
-# inverted security-option comparisons was emitted by *these* builds, and read by
-# nobody.
-#
-# Deliberately target-scoped rather than appended to CMAKE_CXX_FLAGS or
-# add_compile_options: those are directory-scoped and propagate into
-# add_subdirectory targets, including the vendored can-libraries submodule, whose
-# flex-generated Vector_DBC/Scanner.cpp emits two -Woverloaded-virtual warnings we
-# neither own nor can fix. Target scope keeps -Werror on our sources only.
-#
-# if(TARGET ...) because some of these are defined conditionally.
-if(NOT MSVC)
-   foreach(OSY_WERROR_TARGET osy_cmd_line_flash_tool)
-      if(TARGET ${OSY_WERROR_TARGET})
-         target_compile_options(${OSY_WERROR_TARGET} PRIVATE -Werror)
-      endif()
-   endforeach()
-endif()
+osy_tool_werror(osy_cmd_line_flash_tool)

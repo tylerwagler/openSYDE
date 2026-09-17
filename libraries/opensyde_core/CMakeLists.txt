@@ -42,7 +42,7 @@
 # </example>
 
 # minimum 3.24 for FetchContent, FILE_SET, and modern CMake policies
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.25)
 project("opensyde_core")
 
 # This library ships as part of the eight tools and is also configured standalone

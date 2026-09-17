@@ -43,6 +43,7 @@
 #include "C_OscXmlParser.hpp"
 #include "C_OscZipFile.hpp"
 #include "C_SclStringUtil.hpp"
+#include "version_config.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -67,7 +68,9 @@ static const std::string mhc_STANDARD_SYDE_CODER_C_PATH = "../connectors/syde_co
 //----------------------------------------------------------------------------------------------------------------------
 static void mh_PrintUsage(void)
 {
-   std::cout << "Usage: " << mhc_TOOL_NAME.c_str()
+   std::cout << mhc_TOOL_NAME.c_str() << " V" << PROJECT_VERSION_MAJOR << "." << PROJECT_VERSION_MINOR << "."
+             << PROJECT_VERSION_RELEASE << "\n"
+             << "Usage: " << mhc_TOOL_NAME.c_str()
              << " [--device-library <dir>] <input-v2.syde_tsp> <output-v3.syde_tsp>\n"
              << "\n"
              << "Converts a legacy openSYDE V2 Target Support Package to V3 format.\n"

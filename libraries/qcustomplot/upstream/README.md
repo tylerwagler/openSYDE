@@ -10,7 +10,7 @@ feature builds identically on Linux, macOS and Windows without a system package
 - **License:** GPL v3 or later (see GPL.txt) — openSYDE is GPL v3, so this is compatible.
 
 Only `qcustomplot.cpp` / `qcustomplot.h` are compiled. They are built as the
-`qcustomplot` static library (see opensyde_tool/pjt/openSYDE/CMakeLists.txt), with
+`qcustomplot` static library (see opensyde_tool/pjt/CMakeLists.txt), with
 Qt keywords enabled (`-UQT_NO_KEYWORDS`) because QCustomPlot uses bare
 signals/slots/foreach, and with warnings off — it is third-party code held to its
 own standard, like miniz.

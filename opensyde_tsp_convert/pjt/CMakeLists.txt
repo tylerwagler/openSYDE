@@ -1,10 +1,12 @@
-# minimum 3.24 for FetchContent, FILE_SET, and modern CMake policies
-cmake_minimum_required(VERSION 3.24)
+# 3.25 tree-wide: the root CMakeLists requires it, and a standalone configure of one tool should not accept less
+cmake_minimum_required(VERSION 3.25)
 
-project("osy_tsp_convert")
+project(osy_tsp_convert LANGUAGES CXX)
+
+include(${CMAKE_CURRENT_LIST_DIR}/../../cmake/osy_tool_common.cmake)
 
 #include script to generate PC-lint configuration files
-include(lint_config.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../../cmake/lint_config.cmake)
 
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 
@@ -51,12 +53,10 @@ endif()
 # every subsystem enabled before adding the tools, so a whole-repo build shares a
 # single core archive instead of compiling it once per tool.
 if(NOT TARGET opensyde_core)
-   add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/osy_core)
+   add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
 endif()
 
 # warn a lot — C++17 to match the rest of openSYDE
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # -Wmaybe-uninitialized and -Wlogical-op are GCC-only. clang has no such options,
 # and under -Werror an unknown warning flag is itself an error, so they must not
 # reach a clang command line. -Wuninitialized (kept unconditionally) is the
@@ -125,27 +125,4 @@ endif(COMMAND add_pc_lint)
 set(REPO_ROOT ${PROJECT_ROOT}/..)
 install(TARGETS osy_tsp_convert DESTINATION ${REPO_ROOT}/result/${CMAKE_BUILD_TYPE}/tsp_convert)
 
-# --- WARNINGS AS ERRORS -----------------------------------------------------------------------------------------------
-# opensyde_core has built with -Wall -Wextra -Werror and zero diagnostics since the
-# core warning sweep. These trees already compiled with -Wall -Wextra -Wpedantic but
-# without -Werror, and every line we own here is warning-free -- so this only pins
-# what is already true.
-#
-# It matters because the -Wparentheses that would have caught C_OscViewFiler's nine
-# inverted security-option comparisons was emitted by *these* builds, and read by
-# nobody.
-#
-# Deliberately target-scoped rather than appended to CMAKE_CXX_FLAGS or
-# add_compile_options: those are directory-scoped and propagate into
-# add_subdirectory targets, including the vendored can-libraries submodule, whose
-# flex-generated Vector_DBC/Scanner.cpp emits two -Woverloaded-virtual warnings we
-# neither own nor can fix. Target scope keeps -Werror on our sources only.
-#
-# if(TARGET ...) because some of these are defined conditionally.
-if(NOT MSVC)
-   foreach(OSY_WERROR_TARGET osy_tsp_convert)
-      if(TARGET ${OSY_WERROR_TARGET})
-         target_compile_options(${OSY_WERROR_TARGET} PRIVATE -Werror)
-      endif()
-   endforeach()
-endif()
+osy_tool_werror(osy_tsp_convert)
