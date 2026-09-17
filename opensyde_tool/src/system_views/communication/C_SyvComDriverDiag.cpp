@@ -453,7 +453,7 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
                                                                                           m_GetActiveNodeName(
                                                                                              u32_ActiveNode)
                                                                                           .c_str())).arg(
-                     C_Uti::h_StwError(s32_Return)).toStdString().c_str());
+                     C_Uti::h_StwError(s32_Return)).toStdString());
                s32_Return = C_COM;
                orc_ErrorDetails += m_GetActiveNodeName(u32_ActiveNode).c_str();
                break;
@@ -674,7 +674,7 @@ int32_t C_SyvComDriverDiag::StopCyclicTransmissions(void)
                osc_write_log_warning("Asynchronous communication",
                                      static_cast<QString>("Node \"%1\" - DataPoolStopEventDriven - warning: %2\n").
                                      arg(static_cast<QString>(m_GetActiveNodeName(u32_ActiveNode).c_str())).
-                                     arg(C_Uti::h_StwError(s32_Return2)).toStdString().c_str());
+                                     arg(C_Uti::h_StwError(s32_Return2)).toStdString());
                s32_Return = C_COM;
             }
          }
@@ -1217,7 +1217,7 @@ const
    }
    else
    {
-      const std::string c_Path = orc_Path.toStdString().c_str();
+      const std::string c_Path = orc_Path.toStdString();
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != nullptr)
       {
@@ -1259,7 +1259,7 @@ int32_t C_SyvComDriverDiag::NvmSafeReadFileWithoutCrc(const uint32_t ou32_NodeIn
    }
    else
    {
-      const std::string c_Path = orc_Path.toStdString().c_str();
+      const std::string c_Path = orc_Path.toStdString();
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != nullptr)
       {
@@ -1301,7 +1301,7 @@ int32_t C_SyvComDriverDiag::NvmSafeCheckParameterFileContents(const uint32_t ou3
    }
    else
    {
-      const std::string c_Path = orc_Path.toStdString().c_str();
+      const std::string c_Path = orc_Path.toStdString();
       s32_Return = this->mc_DataDealers[u32_ActiveIndex]->NvmSafeCheckParameterFileContents(
          c_Path, orc_DataPoolLists).value();
    }
@@ -1334,7 +1334,7 @@ int32_t C_SyvComDriverDiag::NvmSafeUpdateCrcForFile(const uint32_t ou32_NodeInde
    }
    else
    {
-      const std::string c_Path = orc_Path.toStdString().c_str();
+      const std::string c_Path = orc_Path.toStdString();
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != nullptr)
       {

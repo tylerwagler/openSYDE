@@ -1181,18 +1181,18 @@ void C_SdHandlerWidget::m_RtfExport(void)
          c_PopUpDialog->SetSize(c_SIZE_IMPORT_REPORT);
 
          std::string c_RtfPath = static_cast<std::string>(
-            C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfPath().toStdString().c_str());
+            C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfPath().toStdString());
          std::string c_CompanyName = static_cast<std::string>(
-            C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfCompanyName().toStdString().c_str());
+            C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfCompanyName().toStdString());
          std::string c_CompanyLogoPath = static_cast<std::string>(
-            C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfCompanyLogoPath().toStdString().c_str());
+            C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfCompanyLogoPath().toStdString());
 
          if (c_RtfPath == "")
          {
             // get default file name with project path (if using the RTF dialog the first time)
             QString c_DefaultFilename = C_PuiProject::h_GetInstance()->GetName();
             c_DefaultFilename += ".rtf";
-            c_RtfPath = C_PuiUtil::h_GetAbsolutePathFromProject(c_DefaultFilename).toStdString().c_str();
+            c_RtfPath = C_PuiUtil::h_GetAbsolutePathFromProject(c_DefaultFilename).toStdString();
          }
 
          if (c_RtfPath != "")

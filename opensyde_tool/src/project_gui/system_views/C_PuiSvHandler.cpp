@@ -136,7 +136,7 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_Updat
          if (s32_Return == C_NO_ERR)
          {
             //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
-            s32_Return = c_XmlParser.SaveToFile(orc_Path.toStdString().c_str()).value();
+            s32_Return = c_XmlParser.SaveToFile(orc_Path.toStdString()).value();
             if (s32_Return != C_NO_ERR)
             {
                s32_Return = C_RD_WR;
@@ -425,7 +425,7 @@ int32_t C_PuiSvHandler::SetViewName(const uint32_t ou32_Index, const QString & o
    if (ou32_Index < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_Index];
-      rc_View.SetName(orc_Name.toStdString().c_str());
+      rc_View.SetName(orc_Name.toStdString());
    }
    else
    {
@@ -1219,7 +1219,7 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationPath(const uint32_t ou32_ViewInd
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
       //the core class reports std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = rc_View.SetNodeUpdateInformationPath(ou32_NodeIndex, ou32_Index,
-                                                        orc_Value.toStdString().c_str(), oe_Type).value();
+                                                        orc_Value.toStdString(), oe_Type).value();
    }
    else
    {
@@ -1281,7 +1281,7 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
       //the core class reports std::error_code now; this class keeps the STW int32_t convention
-      s32_Retval = rc_View.SetNodeUpdateInformationPemFilePath(ou32_NodeIndex, orc_Value.toStdString().c_str()).value();
+      s32_Retval = rc_View.SetNodeUpdateInformationPemFilePath(ou32_NodeIndex, orc_Value.toStdString()).value();
    }
    else
    {
@@ -1450,7 +1450,7 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationParamInfoContent(const uint32_t 
       s32_Retval =
          //the core class reports std::error_code now; this class keeps the STW int32_t convention
          rc_View.SetNodeUpdateInformationParamInfoContent(ou32_NodeIndex, ou32_Index,
-                                                          orc_FilePath.toStdString().c_str(), ou32_LastKnownCrc).value();
+                                                          orc_FilePath.toStdString(), ou32_LastKnownCrc).value();
    }
    else
    {
@@ -1528,7 +1528,7 @@ int32_t C_PuiSvHandler::InsertView(const uint32_t ou32_Index, const C_PuiSvData 
       if (oq_AutoAdaptName == true)
       {
          c_TmpView.SetName(C_Uti::h_GetUniqueNameQt(this->m_GetExistingViewNames(),
-                                                    c_TmpView.GetName().c_str()).toStdString().c_str());
+                                                    c_TmpView.GetName().c_str()).toStdString());
       }
       this->mc_Views.insert(this->mc_Views.begin() + ou32_Index, c_TmpView);
    }
@@ -1593,7 +1593,7 @@ int32_t C_PuiSvHandler::AddNodeUpdateInformationPath(const uint32_t ou32_ViewInd
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
       //the core class reports std::error_code now; this class keeps the STW int32_t convention
-      s32_Retval = rc_View.AddNodeUpdateInformationPath(ou32_NodeIndex, orc_Value.toStdString().c_str(), oe_Type).value();
+      s32_Retval = rc_View.AddNodeUpdateInformationPath(ou32_NodeIndex, orc_Value.toStdString(), oe_Type).value();
    }
    else
    {
@@ -3347,7 +3347,7 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading views");
       //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.toStdString().c_str()).value();
+      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.toStdString()).value();
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-system-views")
@@ -3448,7 +3448,7 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
    else
    {
       osc_write_log_error("Loading views",
-                          static_cast<std::string>("Could not find system views file \"") + orc_Path.toStdString().c_str() +
+                          static_cast<std::string>("Could not find system views file \"") + orc_Path.toStdString() +
                           "\".");
       s32_Retval = C_RANGE;
    }

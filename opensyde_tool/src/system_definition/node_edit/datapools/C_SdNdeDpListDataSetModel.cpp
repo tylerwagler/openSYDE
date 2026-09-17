@@ -843,6 +843,6 @@ bool C_SdNdeDpListDataSetModel::CheckName(const uint32_t & oru32_Index, const QS
    return C_PuiSdHandler::h_GetInstance()->CheckNodeDataPoolListDataSetNameAvailable(this->mu32_NodeIndex,
                                                                                      this->mu32_DataPoolIndex,
                                                                                      this->mu32_ListIndex,
-                                                                                     orc_Name.toStdString().c_str(),
+                                                                                     orc_Name.toStdString(),
                                                                                      &oru32_Index);
 }

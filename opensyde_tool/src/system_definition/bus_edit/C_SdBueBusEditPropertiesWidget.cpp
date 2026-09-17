@@ -608,9 +608,9 @@ void C_SdBueBusEditPropertiesWidget::SaveToData(void) const
       //name
       //Only accept new name if not in conflict
       if (C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(
-             this->mpc_Ui->pc_LineEditBusName->text().toStdString().c_str(), &this->mu32_BusIndex, nullptr))
+             this->mpc_Ui->pc_LineEditBusName->text().toStdString(), &this->mu32_BusIndex, nullptr))
       {
-         c_NewBus.c_Name = this->mpc_Ui->pc_LineEditBusName->text().toStdString().c_str();
+         c_NewBus.c_Name = this->mpc_Ui->pc_LineEditBusName->text().toStdString();
       }
       else
       {
@@ -619,7 +619,7 @@ void C_SdBueBusEditPropertiesWidget::SaveToData(void) const
       }
 
       //comment
-      c_NewBus.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString().c_str();
+      c_NewBus.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString();
 
       //Bus id
       c_NewBus.u8_BusId = static_cast<uint8_t>(this->mpc_Ui->pc_SpinBoxBusId->value());
@@ -689,9 +689,9 @@ void C_SdBueBusEditPropertiesWidget::m_CheckBusName(void)
 {
    const QString c_Text = this->mpc_Ui->pc_LineEditBusName->text();
    const bool q_NameIsUnique = C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(
-      c_Text.toStdString().c_str(), &this->mu32_BusIndex, nullptr);
+      c_Text.toStdString(), &this->mu32_BusIndex, nullptr);
    const bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(
-      this->mpc_Ui->pc_LineEditBusName->text().toStdString().c_str());
+      this->mpc_Ui->pc_LineEditBusName->text().toStdString());
 
    //set invalid text property
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LineEditBusName, "Valid", q_NameIsUnique && q_NameIsValid);

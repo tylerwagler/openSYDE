@@ -190,7 +190,7 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
          // import network of DBC file
          QApplication::setOverrideCursor(Qt::WaitCursor); // big DBC file can take some time to load
          QApplication::processEvents();                   // update cursor
-         s32_Return = C_CieExportDbc::h_ExportNetwork(c_FullFilePath.toStdString().c_str(), orc_CommDef,
+         s32_Return = C_CieExportDbc::h_ExportNetwork(c_FullFilePath.toStdString(), orc_CommDef,
                                                       c_Warnings, c_Error);
          QApplication::restoreOverrideCursor(); // get old cursor again
          QApplication::processEvents();         // update cursor
@@ -329,7 +329,7 @@ void C_CieUtil::h_AdaptName(std::string & orc_Name, std::string & orc_Comment, c
       //Translation: 1=Original name from file,2=Optional line break if there was some more content
       orc_Comment +=
          static_cast<QString>("%2Original name (from import source): %1").arg(orc_Name.c_str()).
-         arg(c_Addition.c_str()).toStdString().c_str();
+         arg(c_Addition.c_str()).toStdString();
       orc_Name = c_NewName;
    }
 }
@@ -442,7 +442,7 @@ int32_t C_CieUtil::h_GetDeviceInfo(const uint32_t ou32_DeviceNodeIndex, const ui
          //h_Import reports std::error_code; this function still uses the STW int32_t convention
          s32_Retval = C_OscImportEdsDcf::h_Import(
             C_PuiUtil::h_GetAbsolutePathFromProject(
-               orc_EdsPath).toStdString().c_str(),
+               orc_EdsPath).toStdString(),
             rc_CurInterface.u8_NodeId,
             c_OscRxMessageData,
             c_OscTxMessageData,
@@ -665,7 +665,7 @@ int32_t C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex, const C_OscCan
    // import network of DBC file
    QApplication::setOverrideCursor(Qt::WaitCursor); // big DBC file can take some time to load
    QApplication::processEvents();                   // update cursor
-   s32_ImportReturn = C_CieImportDbc::h_ImportNetwork(orc_FullFilePath.toStdString().c_str(),
+   s32_ImportReturn = C_CieImportDbc::h_ImportNetwork(orc_FullFilePath.toStdString(),
                                                       c_CommDef, c_WarningMessages, c_ErrorMessage, true);
    QApplication::restoreOverrideCursor(); // get old cursor again
    QApplication::processEvents();         // update cursor
@@ -867,7 +867,7 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
             std::vector<std::vector<std::string> > c_InvalidImportMessagesPerMessage;
             //h_Import reports std::error_code; the error reporting below still uses the STW int32_t convention
             const int32_t s32_ImportResult = C_OscImportEdsDcf::h_Import(
-               orc_FullFilePath.toStdString().c_str(), rc_CurInterface.u8_NodeId,
+               orc_FullFilePath.toStdString(), rc_CurInterface.u8_NodeId,
                c_OscRxMessageData,
                c_OscTxMessageData,
                c_ImportMessagesPerMessage, c_ParsingError, oe_ProtocolType,

@@ -251,7 +251,7 @@ void C_SdNdeDpViewWidget::SetNode(const uint32_t ou32_NodeIndex)
          for (uint32_t u32_ItDataPool = 0; u32_ItDataPool < pc_Node->c_DataPools.size(); ++u32_ItDataPool)
          {
             const C_OscNodeDataPool & rc_DataPool = pc_Node->c_DataPools[u32_ItDataPool];
-            if (rc_DataPool.c_Name == c_SelectedDataPoolName.toStdString().c_str())
+            if (rc_DataPool.c_Name == c_SelectedDataPoolName.toStdString())
             {
                //Match found
                q_RestoreDataPoolSelection = true;

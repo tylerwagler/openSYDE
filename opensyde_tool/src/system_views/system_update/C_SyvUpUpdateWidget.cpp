@@ -1315,8 +1315,8 @@ void C_SyvUpUpdateWidget::m_Connect(void)
       if (s32_Return == C_NO_ERR)
       {
          QString c_ErrorPath;
-         const std::string c_ExePath = C_Uti::h_GetExePath().toStdString().c_str();
-         const std::string c_TemporaryPath = c_ExePath + "/" + mhc_TEMP_FOLDER.toStdString().c_str() + "/";
+         const std::string c_ExePath = C_Uti::h_GetExePath().toStdString();
+         const std::string c_TemporaryPath = c_ExePath + "/" + mhc_TEMP_FOLDER.toStdString() + "/";
 
          // Copy all files to a temporary folder to have them "safe"
          s32_Return = this->mpc_UpSequences->SyvUpCreateTemporaryFolder(c_TemporaryPath,
@@ -2169,7 +2169,7 @@ void C_SyvUpUpdateWidget::m_HandleNodePreconditionError(QString & orc_ErrorText,
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_UpdateReportText(const QString & orc_NewTextPart) const
 {
-   osc_write_log_info("Update Node", orc_NewTextPart.toStdString().c_str());
+   osc_write_log_info("Update Node", orc_NewTextPart.toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

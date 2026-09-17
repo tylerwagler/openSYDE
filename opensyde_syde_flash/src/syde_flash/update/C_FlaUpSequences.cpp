@@ -430,7 +430,7 @@ void C_FlaUpSequences::m_ThreadFunc(void)
       break;
    case eUPDATENODE:
       //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
-      this->ms32_Result = this->UpdateNode(this->mc_HexFilePath.toStdString().c_str(),
+      this->ms32_Result = this->UpdateNode(this->mc_HexFilePath.toStdString(),
                                            this->mu32_RequestDownloadTimeout,
                                            this->mu32_TransferDataTimeout).value();
       break;

@@ -828,7 +828,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
                //the core reports std::error_code; this function threads the legacy int32_t through
                //GetUpdatePackage as well, so convert once at the boundary
                s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(
-                  c_FullPackagePath.toStdString().c_str(),
+                  c_FullPackagePath.toStdString(),
                   rc_SystemDefinition,
                   u32_ActiveBusIndex,
                   c_NodeActiveFlags,
@@ -844,7 +844,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
                // unencrypted V2 update package
                //the core reports std::error_code; converted at the boundary, see above
                s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackage(
-                  c_FullPackagePath.toStdString().c_str(),
+                  c_FullPackagePath.toStdString(),
                   rc_SystemDefinition,
                   u32_ActiveBusIndex,
                   c_NodeActiveFlags,

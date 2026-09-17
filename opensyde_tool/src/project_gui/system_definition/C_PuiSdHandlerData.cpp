@@ -84,7 +84,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const std::string & orc_Path, uint16_t 
          //the project filers report std::error_code now; this class keeps the STW int32_t convention
          s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
             mc_CoreDefinition, c_XmlParser,
-            C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString().c_str(),
+            C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString(),
             orc_Path, true, &u16_FileVersion, nullptr, false, nullptr, opc_ErrorDetailsMissingDevices).value();
          if (opu16_FileVersion != nullptr)
          {
@@ -889,14 +889,14 @@ void C_PuiSdHandlerData::m_FixNameIssues(void)
    {
       C_OscNode & rc_OscNode = this->mc_CoreDefinition.c_Nodes[u32_ItNode];
       rc_OscNode.c_Properties.c_Name = C_PuiSdHandlerData::h_AutomaticCeStringAdaptation(
-         rc_OscNode.c_Properties.c_Name.c_str()).toStdString().c_str();
+         rc_OscNode.c_Properties.c_Name.c_str()).toStdString();
    }
    for (uint32_t u32_ItNodeGroup = 0; u32_ItNodeGroup < this->mc_CoreDefinition.c_NodeSquads.size(); ++u32_ItNodeGroup)
    {
       C_OscNodeSquad & rc_OscNodeGroup = this->mc_CoreDefinition.c_NodeSquads[u32_ItNodeGroup];
       const QString c_Name = C_PuiSdHandlerData::h_AutomaticCeStringAdaptation(rc_OscNodeGroup.c_BaseName.c_str());
       //Enclosing function returns void; a rejected rename leaves the previous name in place
-      (void)rc_OscNodeGroup.SetBaseName(this->mc_CoreDefinition.c_Nodes, c_Name.toStdString().c_str());
+      (void)rc_OscNodeGroup.SetBaseName(this->mc_CoreDefinition.c_Nodes, c_Name.toStdString());
    }
 }
 
@@ -1033,7 +1033,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
          "Verifying System Definition",
          static_cast<QString>("UI part does not match core part: Number of nodes (UI %1 vs. core %2).").
          arg(this->mc_UiNodes.size()).
-         arg(this->mc_CoreDefinition.c_Nodes.size()).toStdString().c_str());
+         arg(this->mc_CoreDefinition.c_Nodes.size()).toStdString());
 
       s32_Return = C_CHECKSUM;
    }
@@ -1043,7 +1043,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
          "Verifying System Definition",
          static_cast<QString>("UI part does not match core part: Number of buses (UI %1 vs. core %2).").
          arg(this->mc_UiBuses.size()).
-         arg(this->mc_CoreDefinition.c_Buses.size()).toStdString().c_str());
+         arg(this->mc_CoreDefinition.c_Buses.size()).toStdString());
 
       s32_Return = C_CHECKSUM;
    }
@@ -1065,7 +1065,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                                     "(UI %2 vs. core %3).").
                arg(rc_OscNode.c_Properties.c_Name.c_str()).
                arg(rc_UiNode.c_UiDataPools.size()).
-               arg(rc_OscNode.c_DataPools.size()).toStdString().c_str());
+               arg(rc_OscNode.c_DataPools.size()).toStdString());
 
             s32_Return = C_CHECKSUM;
          }
@@ -1088,7 +1088,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                      arg(rc_OscNode.c_Properties.c_Name.c_str()).
                      arg(rc_OscDp.c_Name.c_str()).
                      arg(rc_UiDp.c_DataPoolLists.size()).
-                     arg(rc_OscDp.c_Lists.size()).toStdString().c_str());
+                     arg(rc_OscDp.c_Lists.size()).toStdString());
 
                   s32_Return = C_CHECKSUM;
                }
@@ -1112,7 +1112,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                            arg(rc_OscDp.c_Name.c_str()).
                            arg(rc_OscList.c_Name.c_str()).
                            arg(rc_UiList.c_DataPoolListElements.size()).
-                           arg(rc_OscList.c_Elements.size()).toStdString().c_str());
+                           arg(rc_OscList.c_Elements.size()).toStdString());
 
                         s32_Return = C_CHECKSUM;
                      }
@@ -1129,7 +1129,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                                     "(UI %2 vs. core %3).").
                arg(rc_OscNode.c_Properties.c_Name.c_str()).
                arg(rc_UiNode.c_UiCanProtocols.size()).
-               arg(rc_OscNode.c_ComProtocols.size()).toStdString().c_str());
+               arg(rc_OscNode.c_ComProtocols.size()).toStdString());
 
             s32_Return = C_CHECKSUM;
          }
@@ -1151,7 +1151,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                                           " of node %1 (UI %2 vs. core %3).").
                      arg(rc_OscNode.c_Properties.c_Name.c_str()).
                      arg(rc_UiProtocol.c_ComMessages.size()).
-                     arg(rc_OscProtocol.c_ComMessages.size()).toStdString().c_str());
+                     arg(rc_OscProtocol.c_ComMessages.size()).toStdString());
 
                   s32_Return = C_CHECKSUM;
                }
@@ -1200,7 +1200,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                                  arg(rc_OscNode.c_Properties.c_Name.c_str()).
                                  arg(rc_OscMsg.c_Name.c_str()).
                                  arg(rc_UiMsg.c_Signals.size()).
-                                 arg(rc_OscMsg.c_Signals.size()).toStdString().c_str());
+                                 arg(rc_OscMsg.c_Signals.size()).toStdString());
 
                               s32_Return = C_CHECKSUM;
                            }
@@ -1245,7 +1245,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                                  arg(rc_OscNode.c_Properties.c_Name.c_str()).
                                  arg(rc_OscMsg.c_Name.c_str()).
                                  arg(rc_UiMsg.c_Signals.size()).
-                                 arg(rc_OscMsg.c_Signals.size()).toStdString().c_str());
+                                 arg(rc_OscMsg.c_Signals.size()).toStdString());
 
                               s32_Return = C_CHECKSUM;
                            }

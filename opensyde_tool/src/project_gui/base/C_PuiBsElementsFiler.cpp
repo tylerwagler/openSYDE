@@ -647,7 +647,7 @@ void C_PuiBsElementsFiler::h_SaveTextElement(const C_PuiBsTextElement * const op
       orc_XmlParser.SelectNodeParent(); //back to "font-color"
       orc_XmlParser.SelectNodeParent(); //back to "text-element"
       orc_XmlParser.CreateAndSelectNodeChild("text-content");
-      orc_XmlParser.SetNodeContent(opc_TextElement->c_UiText.toStdString().c_str());
+      orc_XmlParser.SetNodeContent(opc_TextElement->c_UiText.toStdString());
       orc_XmlParser.SelectNodeParent(); //back to "text-element"
    }
 }
@@ -853,10 +853,10 @@ void C_PuiBsElementsFiler::mh_SaveImage(const C_PuiBsImage & orc_Image,
    orc_XmlParser.SelectNodeParent(); //back to "image"
    orc_XmlParser.CreateAndSelectNodeChild("image-data");
    mh_PixmapToString(orc_Image.c_UiImagePixmap, orc_Image.c_UiImageFormat, c_ImageBytes);
-   orc_XmlParser.SetNodeContent(c_ImageBytes.toStdString().c_str());
+   orc_XmlParser.SetNodeContent(c_ImageBytes.toStdString());
    orc_XmlParser.SelectNodeParent(); //back to "image"
    orc_XmlParser.CreateAndSelectNodeChild("image-format");
-   orc_XmlParser.SetNodeContent(orc_Image.c_UiImageFormat.toStdString().c_str());
+   orc_XmlParser.SetNodeContent(orc_Image.c_UiImageFormat.toStdString());
    orc_XmlParser.SelectNodeParent(); //back to "image"
 }
 
@@ -962,7 +962,7 @@ void C_PuiBsElementsFiler::mh_LoadFontStyle(QFont & orc_FontStyle,
 void C_PuiBsElementsFiler::mh_SaveFontStyle(const QFont & orc_FontStyle,
                                             stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser)
 {
-   orc_XmlParser.SetNodeContent(orc_FontStyle.toString().toStdString().c_str());
+   orc_XmlParser.SetNodeContent(orc_FontStyle.toString().toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

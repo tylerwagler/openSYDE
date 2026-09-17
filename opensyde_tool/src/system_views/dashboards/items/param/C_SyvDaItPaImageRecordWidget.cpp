@@ -213,13 +213,13 @@ C_OscParamSetInterpretedFileInfoData C_SyvDaItPaImageRecordWidget::h_GetFileInfo
    {
       c_Name = qgetenv("USERNAME");
    }
-   c_Retval.c_Creator = c_Name.toStdString().c_str();
-   c_Retval.c_DateTime = QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss").toStdString().c_str();
+   c_Retval.c_Creator = c_Name.toStdString();
+   c_Retval.c_DateTime = QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss").toStdString();
    c_Retval.c_ToolName = "openSYDE";
-   c_Retval.c_ToolVersion = C_Uti::h_GetApplicationVersion().toStdString().c_str();
-   c_Retval.c_ProjectName = C_PuiProject::h_GetInstance()->GetName().toStdString().c_str();
+   c_Retval.c_ToolVersion = C_Uti::h_GetApplicationVersion().toStdString();
+   c_Retval.c_ProjectName = C_PuiProject::h_GetInstance()->GetName().toStdString();
    c_Retval.c_ProjectVersion = C_PuiProject::h_GetInstance()->c_Version;
-   c_Retval.c_UserComment = orc_Comment.toStdString().c_str();
+   c_Retval.c_UserComment = orc_Comment.toStdString();
    return c_Retval;
 }
 
@@ -322,7 +322,7 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
       {
          if (("." + c_BaseInfo.completeSuffix()) == mhc_FILE_EXTENSION)
          {
-            if (C_OscUtils::h_CheckValidFilePath(c_BaseInfo.absoluteFilePath().toStdString().c_str()) == true)
+            if (C_OscUtils::h_CheckValidFilePath(c_BaseInfo.absoluteFilePath().toStdString()) == true)
             {
                // Check if file exists already
                QFile c_File;
@@ -1151,7 +1151,7 @@ void C_SyvDaItPaImageRecordWidget::m_ReportError(const QString & orc_FunctionNam
 
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
 
-   osc_write_log_info("Write NVM parameters", c_Text.toStdString().c_str());
+   osc_write_log_info("Write NVM parameters", c_Text.toStdString());
 
    c_Message.SetDescription(static_cast<QString>("Function %1 ended with error.").arg(
                                orc_FunctionName));

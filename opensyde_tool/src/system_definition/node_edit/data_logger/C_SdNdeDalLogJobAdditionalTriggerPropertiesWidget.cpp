@@ -102,7 +102,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::Save()
       c_NewValues.q_Enable =
          this->mpc_Ui->pc_ChkBoxAdditionalTrigger->isChecked();
       c_NewValues.c_ElementId = m_GetSelectedDataElement();
-      c_NewValues.c_Operation = m_GetOperationForCore().toStdString().c_str();
+      c_NewValues.c_Operation = m_GetOperationForCore().toStdString();
 
       // Apply threshold value
       m_ApplyContentValue(c_NewValues.c_Threshold);

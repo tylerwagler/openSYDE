@@ -221,7 +221,7 @@ int32_t C_CamProHandler::SetMessageName(const uint32_t ou32_Index, const QString
    if (ou32_Index < this->mc_Messages.size())
    {
       C_CamProMessageData & rc_Message = this->mc_Messages[ou32_Index];
-      rc_Message.c_Name = orc_Name.toStdString().c_str();
+      rc_Message.c_Name = orc_Name.toStdString();
    }
    else
    {
@@ -657,9 +657,9 @@ void C_CamProHandler::ReplaceDatabaseName(const QString & orc_PrevName, const QS
    for (uint32_t u32_It = 0UL; u32_It < this->mc_Messages.size(); ++u32_It)
    {
       C_CamProMessageData & rc_Message = this->mc_Messages[u32_It];
-      if (rc_Message.c_DataBaseFilePath == orc_PrevName.toStdString().c_str())
+      if (rc_Message.c_DataBaseFilePath == orc_PrevName.toStdString())
       {
-         rc_Message.c_DataBaseFilePath = orc_NewName.toStdString().c_str();
+         rc_Message.c_DataBaseFilePath = orc_NewName.toStdString();
       }
    }
 }
@@ -1064,7 +1064,7 @@ int32_t C_CamProHandler::SaveToFile(const std::string & orc_Path)
          osc_write_log_error("Saving Project",
                              static_cast<QString>(
                                 "Could not create folder for file \"" + c_File.absolutePath() +
-                                "\".").toStdString().c_str());
+                                "\".").toStdString());
          s32_Return = C_COM;
       }
    }

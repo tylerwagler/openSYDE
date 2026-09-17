@@ -318,7 +318,7 @@ void C_NagMainWidget::UpdateRecentProjects(void)
    {
       C_OscProject c_Tmp;
       //the project filers report std::error_code now; this class keeps the STW int32_t convention
-      if (C_OscProjectFiler::h_Load(c_Tmp, c_ItList->toStdString().c_str()).value() == C_NO_ERR)
+      if (C_OscProjectFiler::h_Load(c_Tmp, c_ItList->toStdString()).value() == C_NO_ERR)
       {
          c_Files.push_back(*c_ItList);
          c_Projects.push_back(c_Tmp);
@@ -841,7 +841,7 @@ void C_NagMainWidget::m_OnEditFinished(void)
    this->mpc_Ui->pc_LineEditVersion->setVisible(false);
 
    // memorize new version
-   C_PuiProject::h_GetInstance()->c_Version = c_NewVersion.toStdString().c_str();
+   C_PuiProject::h_GetInstance()->c_Version = c_NewVersion.toStdString();
 
    // display elided new version
    QFont c_Font = mc_STYLE_GUIDE_FONT_SEMIBOLD_24;

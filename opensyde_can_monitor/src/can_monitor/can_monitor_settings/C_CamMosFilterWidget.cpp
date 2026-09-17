@@ -449,7 +449,7 @@ void C_CamMosFilterWidget::m_OnAddClicked()
 
    for (uint32_t u32_ItFilter = 0UL; u32_ItFilter < c_Filters.size(); ++u32_ItFilter)
    {
-      c_Names[c_Filters[u32_ItFilter].c_Name.toStdString().c_str()] = true;
+      c_Names[c_Filters[u32_ItFilter].c_Name.toStdString()] = true;
    }
    c_FilterData.c_Name = C_Uti::h_GetUniqueNameQt(c_Names, c_ProposedName);
 
@@ -530,7 +530,7 @@ void C_CamMosFilterWidget::m_OnAddFilterFromContextmenu(const QList<int32_t> oc_
 
    for (uint32_t u32_ItFilter = 0UL; u32_ItFilter < c_Filters.size(); ++u32_ItFilter)
    {
-      c_Names[c_Filters[u32_ItFilter].c_Name.toStdString().c_str()] = true;
+      c_Names[c_Filters[u32_ItFilter].c_Name.toStdString()] = true;
    }
    c_FilterData.c_Name = C_Uti::h_GetUniqueNameQt(c_Names, c_ProposedName);
 

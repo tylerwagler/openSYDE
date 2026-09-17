@@ -85,7 +85,7 @@ void C_SdNdeDalLogJobDataSelectionTableModel::AddData(
          }
 
          rc_JobData.c_Namespace =
-            (C_PuiSdUtil::h_GetNamespaceDatapoolElement(rc_ConfiguredElementOptArrayId)).toStdString().c_str();
+            (C_PuiSdUtil::h_GetNamespaceDatapoolElement(rc_ConfiguredElementOptArrayId)).toStdString();
 
          if (orc_DataElements[u32_Index].q_UseCustomName == true)
          {
@@ -491,7 +491,7 @@ bool C_SdNdeDalLogJobDataSelectionTableModel::setData(const QModelIndex & orc_In
             case eCOMMENT:
                break;
             case eLOGGING_NAME:
-               this->mc_LoggingDataList.at(u32_Index).c_LoggingName = orc_Value.toString().toStdString().c_str();
+               this->mc_LoggingDataList.at(u32_Index).c_LoggingName = orc_Value.toString().toStdString();
                q_Retval = true;
                break;
             default:

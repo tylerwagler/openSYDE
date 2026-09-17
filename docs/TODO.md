@@ -133,67 +133,72 @@ What remains is *versions*, not names. Only Qt reports one (`qVersion()`):
 - **Miniz / Vector::DBC** — vendored; a version would have to be injected by
   CMake from the submodule.
 
-## Remove redundant `.toStdString().c_str()`
+## Remove redundant `.toStdString().c_str()` — done
 
-`qstring.toStdString().c_str()` appears **445 times** (re-counted; an earlier note said 472 before `libraries/` was done, and 434 after, both of which are wrong now). It is not
-a bug — no site stores the resulting pointer, so there is no dangling-pointer UB
-— but it is a redundant round trip:
+**436 occurrences -> 67.** 369 removed; the 63 that remain genuinely need a
+`const char*` and are correct as they stand.
 
-```
-QString -> std::string   (alloc + copy)
-        -> const char*   (free)
-        -> std::string   (strlen + alloc + copy again)
-```
-
-### Why it is there
+### Why it was there
 
 Upstream has the same pattern and **it was correct there**. The destinations used
-to be `C_SclString`, which had an implicit constructor from `const char*` and
-none from `std::string`, so `.c_str()` was the only way to assign. Phase 3
-replaced `C_SclString` with `std::string`, which made the `.c_str()` redundant —
-but a mechanical migration has no reason to notice, so it stayed.
+to be `C_SclString`, which had an implicit constructor from `const char*` and none
+from `std::string`, so `.c_str()` was the only way to assign. Phase 3 replaced
+`C_SclString` with `std::string`, which made the `.c_str()` redundant -- but a
+mechanical migration has no reason to notice, so it stayed.
 
-There is also a latent correctness wrinkle: `.c_str()` truncates at an embedded
-NUL. Harmless for paths and names; not something you want on a data field.
+Removing it also removes a latent wrinkle: `.c_str()` truncates at an embedded NUL.
+Harmless for paths and names, not something you want on a data field. Where the
+round trip is gone, that truncation is gone with it.
 
-### Distribution
+### How it was actually done
 
-| Tree | Occurrences |
-|---|---|
-| `opensyde_tool` | 381 |
-| `opensyde_can_monitor` | 46 |
-| `libraries` | 38 — **done**, see below |
-| `opensyde_syde_flash` | 7 |
+The earlier note here proposed hand-built `g++ -fsyntax-only` per file. That was
+not needed. The build system already knows the exact compile command for every
+file, so the reliable method is:
 
-### How to do it — do NOT blanket-sed
+1. Strip every `.toStdString().c_str()` **as bytes**, not as decoded text.
+2. Build all eight tools with `ninja -k 0` -- keep-going, so one round reports
+   *every* failure rather than the first.
+3. Restore `.c_str()` on exactly the reported lines.
+4. Rebuild.
 
-`libraries/` was completed as a trial: 38 removed, and **4 had to be restored**
-because those sites genuinely need a `const char*` (`QString::replace(int, int,
-const char *)` and two `QByteArray` overloads). That is roughly **1 in 10**, so a
-blind sweep across the remaining 434 would break something like 40 call sites.
+**It converged in one round:** 54 sites restored, then all eight tools clean.
 
-The compiler has to be in the loop. Two options:
+The predicted failure rate from the `libraries/` trial was about 1 in 10; the
+actual was 54 of 430, which is 1 in 8 -- close enough that the warning against a
+blanket sed was well founded.
 
-1. Per-file syntax check, which is fast and needs no full build:
-   ```
-   QT=$(pkg-config --cflags Qt6Widgets Qt6Core Qt6Gui Qt6Svg)
-   INC=$(for d in $(find libraries/opensyde_core libraries/opensyde_gui opensyde_tool/src \
-         -maxdepth 4 -type d -not -path '*miniz*' -not -path '*temp_*'); do echo -n "-I$d "; done)
-   g++ -fsyntax-only -std=c++17 -fPIC $QT $INC <file>
-   ```
-   Remove all `.c_str()` in a file, compile, restore only the lines that fail.
-2. Remove in bulk and let CI find the failures. Cheaper in effort, noisier in
-   history, and `opensyde_tool` at 381 sites would likely need several rounds.
+### Two traps worth remembering
 
-Option 1 is preferred, done a directory at a time.
+**Do the replacement on bytes.** The first attempt decoded each file, normalised
+line endings, and wrote back. `C_FlaUpSequences.cpp` has *mixed* endings -- 440
+CRLF lines and 7 LF -- so that silently converted those 7. Caught by comparing
+`git diff --shortstat` against `git diff --ignore-cr-at-eol --shortstat` (431 vs
+424). The search pattern contains no newline, so `raw.replace(...)` on bytes is
+both simpler and immune.
 
-### Status
+**The compiler catches types, not intent.** Three sites were `QString::asprintf`,
+where the argument really must be a `const char*` and dropping it would have
+passed a `std::string` through varargs -- undefined behaviour that still compiles.
+Those live in `C_PuiSvDbDataElementDisplayFormatter.cpp` and were excluded by hand
+before the sweep rather than left to the build. (With the `printf` format attribute
+now on `PrintFormattedCompat`, the equivalent mistake there *would* be caught.)
 
-- `libraries/` — done (34 removed, 4 correctly kept). One file,
-  `C_CieImportDbc.cpp`, could not be syntax-checked locally due to an include
-  path and rests on CI.
-- `opensyde_tool`, `opensyde_can_monitor`, `opensyde_syde_flash` — outstanding,
-  445 sites as of the phase 5 completion.
+**And the Linux build is blind to `#ifdef _WIN32`.** All eight tools built clean on
+Linux, and the Windows CI job then failed on four sites that pass a string to a
+Win32 API (`LPCSTR`, `GetFileVersionInfoSizeA`, `GetFileVersionInfoA`) in
+`C_HeHandler.cpp` and `C_Uti.cpp`. The Windows job runs `build.sh`, which does not
+pass `-k 0`, so it stops early and cannot be trusted to list them all in one go.
+
+Rather than iterate through 26-minute Windows runs, find them directly: diff the
+branch, map each changed line against the `_WIN32` conditional regions of its file,
+and check every hit. Validate that scanner against the sites the build already
+reported before believing a zero from it.
+
+Of the 67 kept: 54 found by the Linux compiler, 4 by the Windows compiler, 4 the
+`asprintf` arguments, 3 feeding `QVariant` (which has no `std::string`
+constructor), and 2 that were never this pattern at all -- `.c_str()).toStdString()`,
+the reverse.
 
 ## Windows-only code paths are never compiled — done
 

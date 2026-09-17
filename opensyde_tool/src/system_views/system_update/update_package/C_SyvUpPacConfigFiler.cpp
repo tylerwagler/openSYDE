@@ -65,7 +65,7 @@ int32_t C_SyvUpPacConfigFiler::h_LoadConfig(const QString & orc_FilePath, C_SyvU
       c_XmlParser.SetLogHeading("Loading Update Package Configuration");
 
       //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
-      s32_Return = c_XmlParser.LoadFromFile(orc_FilePath.toStdString().c_str()).value();
+      s32_Return = c_XmlParser.LoadFromFile(orc_FilePath.toStdString()).value();
 
       if (s32_Return == C_NO_ERR)
       {
@@ -193,7 +193,7 @@ int32_t C_SyvUpPacConfigFiler::h_SaveConfig(const QString & orc_FilePath, const 
       {
          // Save file
          //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
-         s32_Return = c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()).value();
+         s32_Return = c_XmlParser.SaveToFile(orc_FilePath.toStdString()).value();
       }
       else
       {
@@ -223,8 +223,8 @@ bool C_SyvUpPacConfigFiler::mh_SaveNode(C_OscXmlParser & orc_XmlParser, const C_
    {
       uint32_t u32_Counter;
 
-      orc_XmlParser.CreateNodeChild("name", orc_NodeConfig.c_Name.toStdString().c_str());
-      orc_XmlParser.CreateNodeChild("type", orc_NodeConfig.c_DeviceType.toStdString().c_str());
+      orc_XmlParser.CreateNodeChild("name", orc_NodeConfig.c_Name.toStdString());
+      orc_XmlParser.CreateNodeChild("type", orc_NodeConfig.c_DeviceType.toStdString());
 
       q_Success = (orc_XmlParser.CreateAndSelectNodeChild("applications") == "applications");
 
@@ -317,8 +317,8 @@ bool C_SyvUpPacConfigFiler::mh_SaveApp(C_OscXmlParser & orc_XmlParser, const C_S
    if (q_Success == true)
    {
       orc_XmlParser.CreateNodeChild("type", C_OscNodeApplication::h_ApplicationToString(orc_AppConfig.e_Type));
-      orc_XmlParser.CreateNodeChild("name", orc_AppConfig.c_Name.toStdString().c_str());
-      orc_XmlParser.CreateNodeChild("path", orc_AppConfig.c_Path.toStdString().c_str());
+      orc_XmlParser.CreateNodeChild("name", orc_AppConfig.c_Name.toStdString());
+      orc_XmlParser.CreateNodeChild("path", orc_AppConfig.c_Path.toStdString());
 
       // Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "applications");
@@ -336,7 +336,7 @@ bool C_SyvUpPacConfigFiler::mh_SaveParamSet(C_OscXmlParser & orc_XmlParser, cons
 
    if (q_Success == true)
    {
-      orc_XmlParser.CreateNodeChild("path", orc_Path.toStdString().c_str());
+      orc_XmlParser.CreateNodeChild("path", orc_Path.toStdString());
 
       // Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "parameter-set-images");
@@ -354,7 +354,7 @@ bool C_SyvUpPacConfigFiler::mh_SaveFile(C_OscXmlParser & orc_XmlParser, const QS
 
    if (q_Success == true)
    {
-      orc_XmlParser.CreateNodeChild("path", orc_Path.toStdString().c_str());
+      orc_XmlParser.CreateNodeChild("path", orc_Path.toStdString());
 
       // Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "files");

@@ -587,7 +587,7 @@ C_OscCanOpenManagerDeviceInfo C_SdNdeCoConfigTreeView::h_CreateNewDevice(const Q
    C_OscCanOpenManagerDeviceInfo c_Config;
    const QFileInfo c_FileInfo(orc_EdsPath);
 
-   c_Config.c_OriginalEdsFileName = QFileInfo(orc_EdsPath).fileName().toStdString().c_str();
+   c_Config.c_OriginalEdsFileName = QFileInfo(orc_EdsPath).fileName().toStdString();
    c_Config.c_ProjectEdsFilePath = orc_EdsPath.toStdString();
    tgl_assert(c_FileInfo.exists());
    C_SdNdeCoConfigTreeView::mh_InitMappableSignals(c_Config.c_EdsFileMappableSignals, c_Config.GetEdsFileContent(),

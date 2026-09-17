@@ -122,7 +122,7 @@ int32_t C_PuiSdHandlerDataLoggerLogic::AddDataLogger(const uint32_t ou32_NodeInd
 
       if (opc_Name != nullptr)
       {
-         c_NewJob.c_Properties.c_Name = opc_Name->toStdString().c_str();
+         c_NewJob.c_Properties.c_Name = opc_Name->toStdString();
       }
       else
       {

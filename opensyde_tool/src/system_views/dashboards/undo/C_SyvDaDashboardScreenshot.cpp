@@ -178,7 +178,7 @@ void C_SyvDaDashboardScreenshot::m_ShootScreenshot()
    }
 
    mc_ScreenshotIconChangeTimer.start(mhs32_SCREENSHOT_ICON_CHANGE_TIMEOUT);
-   C_SyvDaDashboardScreenshot::m_SaveScreenshot(oc_CurrentTabPixmap, this->accessibleName().toStdString().c_str());
+   C_SyvDaDashboardScreenshot::m_SaveScreenshot(oc_CurrentTabPixmap, this->accessibleName().toStdString());
 
    if ((this->mpc_GifLabel != nullptr) && (this->mpc_Movie != nullptr))
    {

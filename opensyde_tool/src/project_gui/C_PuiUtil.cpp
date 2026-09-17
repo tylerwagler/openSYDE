@@ -90,9 +90,9 @@ QString C_PuiUtil::h_MakeIndependentOfDbProjectPath(const QString & orc_DbProjec
 
 {
    QString c_Result = C_OscUtils::h_MakeIndependentOfDbProjectPath(
-      orc_DbProjectPath.toStdString().c_str(),
-      C_PuiProject::h_GetInstance()->GetFolderPath().toStdString().c_str(),
-      orc_Path.toStdString().c_str()).c_str();
+      orc_DbProjectPath.toStdString(),
+      C_PuiProject::h_GetInstance()->GetFolderPath().toStdString(),
+      orc_Path.toStdString()).c_str();
 
    // do some path beautifying
    if (c_Result.contains("%") == false)
@@ -120,9 +120,9 @@ QString C_PuiUtil::h_ResolvePlaceholderVariables(const QString & orc_Path, const
 
 {
    QString c_Result = C_OscUtils::h_ResolvePlaceholderVariables(
-      orc_Path.toStdString().c_str(),
-      C_PuiProject::h_GetInstance()->GetFolderPath().toStdString().c_str(),
-      orc_DbProjectPath.toStdString().c_str()).c_str();
+      orc_Path.toStdString(),
+      C_PuiProject::h_GetInstance()->GetFolderPath().toStdString(),
+      orc_DbProjectPath.toStdString()).c_str();
 
    // do some path beautifying
    if (c_Result.contains("%") == false)

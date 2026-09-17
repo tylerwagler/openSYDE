@@ -143,7 +143,7 @@ int32_t C_SyvUpPacSecureArchiveDialog::m_CheckPath(void)
    {
       s32_Return = C_RANGE;
    }
-   else if (C_OscUtils::h_CheckValidFilePath(this->GetPrivateKeyPath().toStdString().c_str()) == false)
+   else if (C_OscUtils::h_CheckValidFilePath(this->GetPrivateKeyPath().toStdString()) == false)
    {
       s32_Return = C_RD_WR;
    }

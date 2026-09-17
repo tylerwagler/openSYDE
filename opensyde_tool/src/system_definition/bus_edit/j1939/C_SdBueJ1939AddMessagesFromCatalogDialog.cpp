@@ -333,7 +333,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_LoadCatalog()
    QApplication::setOverrideCursor(Qt::WaitCursor); // big DBC file can take some time to load
    QApplication::processEvents();                   // update cursor
    this->ms32_ImportCatalogReturn = C_CieImportDbc::h_ImportNetwork(
-      c_FullFilePath.toStdString().c_str(),
+      c_FullFilePath.toStdString(),
       c_CieCommDef, c_WarningMessages, c_ErrorMessage,
       true);
 

@@ -957,7 +957,7 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
             //User settings store
             C_UsHandler::h_GetInstance()->SetProjSvParamImport(pc_View->GetName().c_str(), c_File);
 
-            s32_Result = c_ParamSetHandler.ReadFile(c_File.toStdString().c_str(), true, true).value();
+            s32_Result = c_ParamSetHandler.ReadFile(c_File.toStdString(), true, true).value();
 
             if (s32_Result == C_NO_ERR)
             {
@@ -1278,7 +1278,7 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                      if (q_Continue == true)
                      {
                         s32_Result = c_ParamSetFileHandler.CreateCleanFileWithoutCrc(
-                           c_FileName.toStdString().c_str(), true).value();
+                           c_FileName.toStdString(), true).value();
                      }
                      else
                      {
@@ -1559,7 +1559,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetDefaultFileName(const uint32_t ou32_ViewInde
    if (pc_View != nullptr)
    {
       const QString c_ViewPart1 = static_cast<QString>("View_%1_").arg(ou32_ViewIndex + 1);
-      const QString c_ViewPart1File = C_OscUtils::h_NiceifyStringForFileName(c_ViewPart1.toStdString().c_str()).c_str();
+      const QString c_ViewPart1File = C_OscUtils::h_NiceifyStringForFileName(c_ViewPart1.toStdString()).c_str();
       const QString c_ViewPart2 = C_PuiSdHandler::h_AutomaticCeStringAdaptation(pc_View->GetName().c_str());
       const QString c_DataElementFileName = mh_GetFile(orc_Id, ou32_ValidLayers);
       const QString c_ViewFileName = static_cast<QString>("%1%2").arg(c_ViewPart1File).arg(c_ViewPart2);

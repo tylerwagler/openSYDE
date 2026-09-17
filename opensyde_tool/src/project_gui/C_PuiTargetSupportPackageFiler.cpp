@@ -63,7 +63,7 @@ int32_t C_PuiTargetSupportPackageFiler::h_LoadTspV3(const QString & orc_TspPath,
    std::string c_NodePath;
    //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscTargetSupportPackageFiler::h_Load(orc_Tsp, c_NodePath,
-                                                               orc_TspPath.toStdString().c_str()).value();
+                                                               orc_TspPath.toStdString()).value();
    if (s32_Retval == C_NO_ERR)
    {
       QString c_FolderPath;
@@ -72,7 +72,7 @@ int32_t C_PuiTargetSupportPackageFiler::h_LoadTspV3(const QString & orc_TspPath,
       if (mh_DoUnzip(c_ZipFilePath, c_FolderPath) == C_NO_ERR)
       {
          const QString c_OscXmlPath = C_PuiTargetSupportPackageFiler::mh_GetOscNodeXmlPath(c_FolderPath);
-         s32_Retval = C_OscNodeFiler::h_LoadNodeFile(orc_OscNode, c_OscXmlPath.toStdString().c_str()).value();
+         s32_Retval = C_OscNodeFiler::h_LoadNodeFile(orc_OscNode, c_OscXmlPath.toStdString()).value();
          if (s32_Retval == C_NO_ERR)
          {
             const QString c_UiXmlPath = C_PuiTargetSupportPackageFiler::mh_GetUiNodeXmlPath(c_FolderPath);
@@ -125,7 +125,7 @@ int32_t C_PuiTargetSupportPackageFiler::mh_DoUnzip(const QString & orc_ZipFilePa
       //C_OscZipFile now reports std::error_code; this local is shared with
       //mh_DeleteFolder above, which still uses the STW int32_t convention
       s32_Retval = C_OscZipFile::h_UnpackZipFile(
-         orc_ZipFilePath.toStdString().c_str(), orc_FolderPath.toStdString().c_str(),
+         orc_ZipFilePath.toStdString(), orc_FolderPath.toStdString(),
          &c_ErrorText).value();
    }
    return s32_Retval;

@@ -369,11 +369,11 @@ void C_FlaSenDcBasicSequences::m_ReportDevicesInfoRead(
 
    if (c_Message == "Found 0 device(s):")
    {
-      osc_write_log_warning("Report", c_Message.toStdString().c_str());
+      osc_write_log_warning("Report", c_Message.toStdString());
    }
    else
    {
-      osc_write_log_info("Report", c_Message.toStdString().c_str());
+      osc_write_log_info("Report", c_Message.toStdString());
    }
 
    Q_EMIT (this->SigReportDevicesInfoRead(orc_DeviceInfoResult, oq_SecurityFeatureUsed));

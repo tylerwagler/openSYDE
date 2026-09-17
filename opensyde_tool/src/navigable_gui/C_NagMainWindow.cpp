@@ -112,7 +112,7 @@ C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
       c_StwPaths.reserve(static_cast<size_t>(c_RootPaths.size()));
       for (const QString & rc_Path : c_RootPaths)
       {
-         c_StwPaths.emplace_back(rc_Path.toStdString().c_str());
+         c_StwPaths.emplace_back(rc_Path.toStdString());
       }
       //lint -e{1938}  static const is guaranteed preinitialized before main
       //Kept rather than reported here: a constructor has nowhere to return to, and a modal dialog
@@ -615,7 +615,7 @@ void C_NagMainWindow::dropEvent(QDropEvent * const opc_Event)
              (mh_CheckMime(pc_MimeData, &c_FilePath) == true))
          {
             // Check if path is a valid path with no irregular characters
-            if (C_OscUtils::h_CheckValidFilePath(c_FilePath.toStdString().c_str()) == false)
+            if (C_OscUtils::h_CheckValidFilePath(c_FilePath.toStdString()) == false)
             {
                C_OgeWiUtil::h_ShowPathInvalidError(this, c_FilePath);
             }
@@ -1514,7 +1514,7 @@ bool C_NagMainWindow::m_ChangeMode(const int32_t os32_Mode, const int32_t os32_S
 
    osc_write_log_performance_stop(u16_TimerId, static_cast<QString>("Switch to mode %1 submode %2 index %3")
                                   .arg(this->ms32_Mode).arg(this->ms32_SubMode).arg(
-                                     this->mu32_Index).toStdString().c_str());
+                                     this->mu32_Index).toStdString());
 
    return q_Continue;
 }

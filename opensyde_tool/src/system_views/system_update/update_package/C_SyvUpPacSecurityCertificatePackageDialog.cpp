@@ -565,7 +565,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckUpdatePath()
       {
          s32_Return = C_RANGE;
       }
-      else if (C_OscUtils::h_CheckValidFilePath(this->GetPublicKeyPath().toStdString().c_str()) == false)
+      else if (C_OscUtils::h_CheckValidFilePath(this->GetPublicKeyPath().toStdString()) == false)
       {
          s32_Return = C_RD_WR;
       }
@@ -658,7 +658,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckAuthPemFiles(QString 
          {
             s32_Return = C_RANGE;
          }
-         else if (C_OscUtils::h_CheckValidFilePath(rc_CurFile.toStdString().c_str()) == false)
+         else if (C_OscUtils::h_CheckValidFilePath(rc_CurFile.toStdString()) == false)
          {
             s32_Return = C_RD_WR;
          }

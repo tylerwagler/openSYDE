@@ -118,7 +118,7 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeNameAvailable(const std::string & orc_Nam
       }
       if (q_Skip == false)
       {
-         const std::string c_CurName = C_PuiSdUtil::h_GetNodeBaseNameOrName(u32_ItNode).toStdString().c_str();
+         const std::string c_CurName = C_PuiSdUtil::h_GetNodeBaseNameOrName(u32_ItNode).toStdString();
          //Check conflict
          if (LowerCaseCompat(c_CurName) == LowerCaseCompat(orc_Name))
          {
@@ -526,10 +526,10 @@ void C_PuiSdHandlerNodeLogic::SetOscNodePropertiesDetailed(const uint32_t ou32_N
 
       //set name (special handling)
       //Enclosing function returns void; a rejected rename leaves the previous name in place
-      (void)this->mc_CoreDefinition.SetNodeName(ou32_NodeIndex, orc_Name.toStdString().c_str());
+      (void)this->mc_CoreDefinition.SetNodeName(ou32_NodeIndex, orc_Name.toStdString());
 
       //set other properties
-      rc_OscNode.c_Properties.c_Comment = orc_Comment.toStdString().c_str();
+      rc_OscNode.c_Properties.c_Comment = orc_Comment.toStdString();
       rc_OscNode.c_Properties.e_DiagnosticServer = oe_DiagnosticServer;
       rc_OscNode.c_Properties.e_FlashLoader = oe_FlashLoader;
       if (((orc_NodeIds.size() == orc_UpdateFlags.size()) && (orc_NodeIds.size() == orc_RoutingFlags.size())) &&
@@ -592,14 +592,14 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeAndSort(C_OscNode & orc_OscNode, const 
    const std::string c_DeviceName = (orc_OscNode.pc_DeviceDefinition !=
                                      nullptr) ? orc_OscNode.pc_DeviceDefinition->GetDisplayName() : "";
    const std::string c_DefaultDeviceName =
-      C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName.c_str()).toStdString().c_str();
+      C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName.c_str()).toStdString();
 
    orc_OscNode.c_Properties.c_Name = C_OscUtils::h_GetUniqueName(
       this->m_GetExistingNodeNames(), orc_OscNode.c_Properties.c_Name, this->GetNameMaxCharLimit(),
       c_DefaultDeviceName);
 
-   mc_CoreDefinition.AddNode(orc_OscNode, orc_SubDeviceName.toStdString().c_str(),
-                             orc_MainDevice.toStdString().c_str()); //add node and set device definition
+   mc_CoreDefinition.AddNode(orc_OscNode, orc_SubDeviceName.toStdString(),
+                             orc_MainDevice.toStdString()); //add node and set device definition
    // pointer
 
    //insert UI part at same position as OSC part:
@@ -643,7 +643,7 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
    c_NodeNames.reserve(orc_NodeNames.size());
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_NodeNames.size(); ++u32_ItNode)
    {
-      c_NodeNames.emplace_back(orc_NodeNames[u32_ItNode].toStdString().c_str());
+      c_NodeNames.emplace_back(orc_NodeNames[u32_ItNode].toStdString());
    }
 
    tgl_assert(orc_OscNodes.size() > 0);
@@ -657,8 +657,8 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
       const std::string c_DeviceName = (rc_OscNode.pc_DeviceDefinition !=
                                         nullptr) ? rc_OscNode.pc_DeviceDefinition->GetDisplayName() : "";
       const std::string c_DefaultDeviceName =
-         C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName.c_str()).toStdString().c_str();
-      c_Name = orc_NameProposal.isEmpty() ? c_DefaultDeviceName : orc_NameProposal.toStdString().c_str();
+         C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName.c_str()).toStdString();
+      c_Name = orc_NameProposal.isEmpty() ? c_DefaultDeviceName : orc_NameProposal.toStdString();
 
       // The proposed name would be identical for all sub nodes too. The sub node specific part of the name
       // will be added with SetBaseName
@@ -666,7 +666,7 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
          this->m_GetExistingNodeNames(), c_Name, this->GetNameMaxCharLimit(), c_DefaultDeviceName);
    }
 
-   this->mc_CoreDefinition.AddNodeSquad(orc_OscNodes, c_NodeNames, orc_MainDevice.toStdString().c_str()); //add node and
+   this->mc_CoreDefinition.AddNodeSquad(orc_OscNodes, c_NodeNames, orc_MainDevice.toStdString()); //add node and
                                                                                                           // set device
    // definition pointer
 
@@ -1539,9 +1539,9 @@ int32_t C_PuiSdHandlerNodeLogic::AddAutoGenCommDataPool(const uint32_t & oru32_N
    // special case layer 2 -> no spaces and no underscore number at the end
    c_ProtocolName = C_PuiSdUtil::h_ConvertProtocolTypeToDatapoolNameString(ore_ComProtocolType);
 
-   c_NewDatapool.c_Name = this->GetUniqueDataPoolName(oru32_NodeIndex, c_ProtocolName.toStdString().c_str());
+   c_NewDatapool.c_Name = this->GetUniqueDataPoolName(oru32_NodeIndex, c_ProtocolName.toStdString());
 
-   c_NewDatapool.c_Comment = c_Comment.toStdString().c_str();
+   c_NewDatapool.c_Comment = c_Comment.toStdString();
 
    // set the default safety flag to true if protocol is a safety protocol
    c_NewDatapool.q_IsSafety = ((ore_ComProtocolType == C_OscCanProtocol::eCAN_OPEN_SAFETY) ||
@@ -3256,7 +3256,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetDataPoolListName(const uint32_t & oru32_Node
          if (oru32_DataPoolListIndex < rc_OscDataPool.c_Lists.size())
          {
             C_OscNodeDataPoolList & rc_OscList = rc_OscDataPool.c_Lists[oru32_DataPoolListIndex];
-            rc_OscList.c_Name = orc_Value.toStdString().c_str();
+            rc_OscList.c_Name = orc_Value.toStdString();
             //Update addresses
             rc_OscDataPool.RecalculateAddress();
 
@@ -3341,7 +3341,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetDataPoolListComment(const uint32_t & oru32_N
          if (oru32_DataPoolListIndex < rc_OscDataPool.c_Lists.size())
          {
             C_OscNodeDataPoolList & rc_OscList = rc_OscDataPool.c_Lists[oru32_DataPoolListIndex];
-            rc_OscList.c_Comment = orc_Value.toStdString().c_str();
+            rc_OscList.c_Comment = orc_Value.toStdString();
             //Update addresses
             rc_OscDataPool.RecalculateAddress();
 
@@ -4877,10 +4877,10 @@ void C_PuiSdHandlerNodeLogic::h_InitDataElement(const C_OscNodeDataPool::E_Type 
       C_PuiSdHandler::h_AutomaticCeStringAdaptation(C_PuiSdHandlerNodeLogic::h_GetElementTypeName(ore_Type));
 
    //Translation: 1: Data element type
-   orc_OscElement.c_Name = static_cast<QString>(static_cast<QString>("New%1").arg(c_Type)).toStdString().c_str();
+   orc_OscElement.c_Name = static_cast<QString>(static_cast<QString>("New%1").arg(c_Type)).toStdString();
    //Translation: 1: Data element type
    orc_OscElement.c_Comment =
-      static_cast<QString>(static_cast<QString>("%1 description").arg(c_Type)).toStdString().c_str();
+      static_cast<QString>(static_cast<QString>("%1 description").arg(c_Type)).toStdString();
    //Default access value
    if (ore_Type == C_OscNodeDataPool::eDIAG)
    {
@@ -6233,13 +6233,13 @@ void C_PuiSdHandlerNodeLogic::m_SetUpComDataPool(const uint32_t & oru32_NodeInde
                   c_OscList.c_DataSets.push_back(c_DataSetInit);
 
                   //Add tx
-                  c_OscList.c_Name = (c_InterfaceName + "_TX").toStdString().c_str();
+                  c_OscList.c_Name = (c_InterfaceName + "_TX").toStdString();
 
                   rc_OscDataPool.c_Lists.push_back(c_OscList);
                   rc_UiDataPool.c_DataPoolLists.push_back(c_UiList);
 
                   //Add rx
-                  c_OscList.c_Name = (c_InterfaceName + "_RX").toStdString().c_str();
+                  c_OscList.c_Name = (c_InterfaceName + "_RX").toStdString();
 
                   rc_OscDataPool.c_Lists.push_back(c_OscList);
                   rc_UiDataPool.c_DataPoolLists.push_back(c_UiList);

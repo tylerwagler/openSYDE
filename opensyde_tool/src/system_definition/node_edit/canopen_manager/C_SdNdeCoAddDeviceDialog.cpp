@@ -179,7 +179,7 @@ int32_t C_SdNdeCoAddDeviceDialog::GetNodeSelection(uint32_t & oru32_NodeIndex, u
 //----------------------------------------------------------------------------------------------------------------------
 std::string C_SdNdeCoAddDeviceDialog::GetEdsFile(void)
 {
-   return C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath()).toStdString().c_str();
+   return C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath()).toStdString();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -435,7 +435,7 @@ void C_SdNdeCoAddDeviceDialog::m_OnLoadEds(void)
    bool q_Invalid = false;
    C_OscCanOpenObjectDictionary c_CanOpenObjDictionary;
    const std::string c_File =
-      C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath()).toStdString().c_str();
+      C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath()).toStdString();
    const QFileInfo c_FileInfo(c_File.c_str());
 
    if (!c_CanOpenObjDictionary.LoadFromFile(c_File))
