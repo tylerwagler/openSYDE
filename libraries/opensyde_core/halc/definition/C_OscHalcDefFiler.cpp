@@ -1328,7 +1328,7 @@ std::error_code C_OscHalcDefFiler::mh_SplitAvailabilityString(const std::string 
    for (uint32_t u32_ItChar = 0UL; (u32_ItChar < orc_AvailabilityString.length()) && (!c_Retval);
         ++u32_ItChar)
    {
-      const char cn_CurChar = orc_AvailabilityString[u32_ItChar + 1U];
+      const char cn_CurChar = orc_AvailabilityString[u32_ItChar];
       if (cn_CurChar == ',')
       {
          //Char:comma
@@ -1441,7 +1441,7 @@ std::error_code C_OscHalcDefFiler::mh_ParseAvailabilityStringSubElements(
 
          for (uint32_t u32_ItChar = 0UL; (u32_ItChar < rc_CurSubStr.length()) && (!c_Retval); ++u32_ItChar)
          {
-            const char cn_CurChar = rc_CurSubStr[u32_ItChar + 1U];
+            const char cn_CurChar = rc_CurSubStr[u32_ItChar];
             if (std::isdigit(cn_CurChar) != 0)
             {
                //Number

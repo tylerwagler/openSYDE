@@ -1264,7 +1264,11 @@ std::error_code C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_D
                uint16_t u16_FileVersion = 0U;
                try
                {
-                  u16_FileVersion = static_cast<uint16_t>(std::stoi(c_Xml.GetNodeContent()));
+                  //h_Save writes this node as "0x" + hex. A base-10 std::stoi read every saved version
+                  //as 0 and the check below rejected the file, so the filer could not load its own
+                  //output. ScanBaseCompat accepts both spellings, so hand-written decimal files still load.
+                  const std::string c_Content = c_Xml.GetNodeContent();
+                  u16_FileVersion = static_cast<uint16_t>(std::stoi(c_Content, nullptr, stw::scl::ScanBaseCompat(c_Content)));
                }
                catch (...)
                {

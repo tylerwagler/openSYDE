@@ -1560,14 +1560,14 @@ std::error_code C_OscImportEdsDcf::mh_GetIntegerValue(const std::string & orc_Co
       //Remove whitespace and $
       for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length(); ++u32_ItChar)
       {
-         const char cn_Character = orc_CoValue[u32_ItChar + 1U];
+         const char cn_Character = orc_CoValue[u32_ItChar];
          if ((cn_Character == ' ') || (cn_Character == '$'))
          {
             //Skip
          }
          else
          {
-            c_LowerCaseNoWhiteSpaceNumber += orc_CoValue[u32_ItChar + 1U];
+            c_LowerCaseNoWhiteSpaceNumber += cn_Character;
          }
       }
       //Lower case
@@ -1649,14 +1649,14 @@ std::error_code C_OscImportEdsDcf::mh_Get64IntegerValue(const std::string & orc_
       //Remove whitespace and $
       for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length(); ++u32_ItChar)
       {
-         const char cn_Character = orc_CoValue[u32_ItChar + 1U];
+         const char cn_Character = orc_CoValue[u32_ItChar];
          if ((cn_Character == ' ') || (cn_Character == '$'))
          {
             //Skip
          }
          else
          {
-            c_ReducedString += orc_CoValue[u32_ItChar + 1U];
+            c_ReducedString += cn_Character;
          }
       }
 
@@ -1665,7 +1665,8 @@ std::error_code C_OscImportEdsDcf::mh_Get64IntegerValue(const std::string & orc_
       {
          try
          {
-            ors64_Value = std::stoll(c_ReducedString);
+            //EDS limits and defaults are spelled in hex as often as in decimal; base 10 alone read "0xF0" as 0
+            ors64_Value = std::stoll(c_ReducedString, nullptr, stw::scl::ScanBaseCompat(c_ReducedString));
          }
          catch (...)
          {

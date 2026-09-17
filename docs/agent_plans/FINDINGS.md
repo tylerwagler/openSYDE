@@ -1256,3 +1256,160 @@ includes change the configure graph and a stale directory could mask exactly the
 errors being tested for) and eight-tool build on the Linux host: clean. Standalone
 CLI configure on macOS: clean, core present, C++23 in flags. `tsp_convert` rebuilt and
 run: prints its version.
+
+## Filer round-trips, wave 2 (2026-09-17)
+
+Continuing the technique that found the CRC and locale bugs: build an object with every
+field away from its default, save, load into a fresh object, compare -- `CalcHash` as
+the deep-equality oracle where the class offers one, individual fields alongside so a
+failure names what was lost.
+
+Covered, all **clean after the fixes below**: system bus, project, data logger job,
+node datapool (DIAG and NVM), X-config manifest, X-app properties, X-certificates
+manifest, device definition, CAN protocol (J1939 and CANopen), node squads, parameter
+set (interpreted and raw), system view core, system definition **file** (which drives
+the node, datapool and comm-protocol file filers through the real folder layout),
+CANopen manager file (with its EDS copy), HALC definition, HALC configuration and the
+HALC standalone export. Twenty-one round trips, nineteen filers. The `Sup*` package
+filers stay out: they are zip containers around filers already covered.
+
+### One defect: `C_OscDeviceDefinitionFiler` could not load what it wrote
+
+The saver writes `file-version` as `"0x" + IntToHexCompat(...)`; the loader parsed it
+with a bare `std::stoi`, got `0`, and rejected the file as an unsupported version.
+**The same defect as the parameter-set filer fixed in #30**, in a second filer -- and
+#30's claim that "every other filer writes its version with `std::to_string`" was
+**incomplete**, because that search covered only `SetNodeContent` writers and this one
+uses `CreateNodeChild`. A writer-versus-reader table across every filer (in the PR)
+now shows this was the last hex writer paired with a base-10 reader.
+
+**Latent, not live.** Nothing in the product calls `h_Save` -- device definitions are
+authored by STW and shipped read-only, spelled in decimal, which is why the base-10
+loader has always worked on them. Fixed anyway with the same `ScanBaseCompat` parse,
+which accepts both spellings: a filer that cannot read its own output is a defect
+waiting for its first caller.
+
+### The oracle has to know the model -- four lessons from the false alarms
+
+Every other failure in this wave was the test being wrong about what the filer
+*should* preserve. Each cost a round of investigation before it was recognised, so
+they are recorded here to be recognised faster next time:
+
+1. **Persistence is per-type.** The datapool element filer writes `diag-event-call`
+   only for `eDIAG` pools and `nvm-start-address` only for `eNVM`; the CAN message and
+   signal filers write the CANopen-manager fields only for `eCAN_OPEN` and the J1939
+   part only for `eJ1939`. `CalcHash` hashes all of those regardless of type. So a
+   source object must set only what its type persists, and the honest test is **one
+   round trip per type branch** -- which is also better coverage.
+2. **Constructors pre-populate.** `C_OscNodeDataPool()` adds one default list and
+   `C_OscNodeDataPoolList()` one default element. A test that pushes "two lists" onto a
+   fresh pool has three. The extra list came back faithfully; the count assertion was
+   what was wrong.
+3. **Loaders reject what savers accept.** The device-definition loader requires at least
+   one `sub-device` and at least one `interface`; the saver writes empty lists without
+   complaint. A real definition always has both. Not a defect, but worth knowing that
+   save does not validate.
+4. **Loaders transform.** The device-definition loader runs `TglExpandFileName` on the
+   image, toolbox-icon and company-logo paths, resolving them against the file's
+   directory and yielding `""` for anything not on disk; and for a definition with at
+   most one sub-device it **auto-fills** every interface implied by the bus counts as
+   connected, honouring saved `connected` flags only with two or more. So a load
+   followed by a save does not reproduce the original file. `c_CompanyLogoLink` is a
+   URL by name and a file path by treatment.
+
+Also: my field-listing grep silently dropped every numeric member for most of this
+wave, because its type pattern had no digits in it and `uint32_t` has two. It was
+noticed when a class "had no fields". Same lesson as every scanner in this sweep.
+
+### The big one: no HALC definition with use-cases could be loaded
+
+`C_OscHalcDefFiler::mh_SplitAvailabilityString` and `mh_ParseAvailabilityStringSubElements`
+both read `string[u32_ItChar + 1U]` inside a loop that starts at 0 -- the 1-based
+`C_SclString` subscript kept after the phase-3 migration to `std::string`. Every
+availability string was parsed shifted by one character: `"0,1,2"` became `",1,2"`
+and was rejected as "contains empty section"; `"all"` became `"ll"` plus the
+terminator and was rejected as an unexpected character. `availability` is a required
+attribute of every `channel-use-case`, so **every HALC definition with a use-case --
+which is every real one -- failed to load on `develop`**, and with it every node
+that references one. Nothing noticed because nothing on this branch had ever loaded
+a HALC file: no test, no CI job, and the GUI only under a human. Found the moment the
+round-trip saved a definition and read it back.
+
+The same signature turned up in `C_OscImportEdsDcf::mh_GetIntegerValue` and
+`mh_Get64IntegerValue`, the EDS/DCF importer's number parsers: `"254"` was read as
+`54` (transmission type), `"1"` as an empty string (mapping count), `"100"` as `0`
+(event timer). `"$NODEID+0x180"` survived only because the dropped character was the
+one the parser strips anyway. So a CANopen EDS import produced wrong or empty PDOs.
+Pinned by `CanOpenEds.ImportReadsNumericFieldsAtTheirRealPosition` through the
+public `h_Import`. A scan of every tree for `[<counter> + 1]` string subscripts found
+one more, in `C_OscProtocolSerialNumber`, which is correct (it pairs characters).
+
+The same importer had a third defect the pin exposed once the first two were fixed:
+`mh_Get64IntegerValue` converted with a bare `std::stoll`, base 10, so the hex
+spelling EDS files use for limits and defaults (`LowLimit=0x02`, `HighLimit=0xF0`,
+`DefaultValue=0x10`) parsed as `0` -- every imported signal got a 0..0 range and a 0
+default whenever the file wrote them in hex. The `std::stoi`-on-hex residue from the
+earlier waves, in the one parser the writer-versus-reader table did not cover because
+it reads foreign files rather than our own. Now `ScanBaseCompat`, like the rest.
+
+**The lesson is the one from the earlier residue sweeps, sharpened:** the three
+known shapes were raw `[1]`, `<= length()` bounds and `std::stoi` on hex. The fourth
+shape is `[i + 1]` under a 0-based loop, and it is invisible to every scanner that
+looked for the first three. It is now in the checklist.
+
+### Two smaller filer defects, fixed
+
+* **HALC configuration dropped a parameter struct's comment.** `mh_AddParameters`
+  seeds `C_OscHalcConfigParameterStruct::c_Comment` from the definition and `CalcHash`
+  covers it, but `mh_SaveIoParameterStruct` wrote only the elements of a struct (a
+  single value carried its comment inside `single-value`). Every load returned the
+  struct with an empty comment. The saver now writes it next to the elements and the
+  loader reads it when present, so older files still load.
+* **`C_OscDeviceDefinitionFiler` hex version** -- above.
+
+### Recorded, not changed
+
+* **`C_OscNodeComInterfaceSettings` hashes an IP that CAN interfaces never persist.**
+  `C_IpAddress()` seeds a default address on every interface, the node filer writes
+  it only for Ethernet, the loader zeros it for everything else, and `CalcHash`
+  covers it on all types. A CAN interface therefore hashes differently before and
+  after its first round trip. Harmless -- nothing reads a CAN interface's address and
+  the GUI computes its change-detection hash from loaded state -- but the round-trip
+  test has to zero it explicitly, and any future "did the model change" comparison
+  across a save will trip on it. The tidy fix is for the loader to keep the
+  constructor default rather than zero; left alone because it changes what a loaded
+  Ethernet interface without an `ip-address` node looks like, and that needs a look
+  at the GUI first.
+* **`C_OscHalcDefDomain::c_Comment` is hashed but has no element in the definition
+  format**, in either direction. Real device files never carry one; it is always
+  empty in practice. The domain *config* comment is a different field and persists.
+* **`C_OscHalcDef::CalcHash` covers the base fields only** -- it does not descend
+  into domains (the configuration's does). An oracle that trusts it says nothing
+  about the domains, which is how the def round-trip first "passed" while losing the
+  domain comment. The test compares domains individually now.
+
+### More oracle lessons, added to the four above
+
+5. **"Base path" means the file being written.** `C_OscNodeFiler::h_SaveNodeFile`
+   hands its own file path down as `orc_BasePath`; every side file (datapool, comm
+   protocol, CANopen EDS copy) goes next to *that file*. Passing a directory puts the
+   side files one level up.
+6. **Loaders defer.** The CANopen device loader only remembers the EDS path; the
+   dictionary is parsed on first `GetEdsFileContent()`, and `CalcHash` covers the
+   parsed dictionary. The target has to be asked for its content before the hashes
+   can be compared, or the comparison is between a parsed and an empty dictionary.
+7. **Qualify the base hash.** `CalcHash` is virtual; hashing through a base reference
+   still hashes the derived object. `obj.Base::CalcHash(h)` is the only way to
+   compare just the base part.
+8. **Some formats carry half the model on purpose.** The HALC standalone export holds
+   the configuration half only (domain id, channel names, parameter ids, channel and
+   domain configs), never the definition; its oracle is those pieces, not the
+   inherited domain hash.
+9. **Generated identifiers are length-checked at load.** A HALC display name plus its
+   domain's singular name must fit 31 characters (18 for the domain name after the
+   longest constant prefix). The saver does not check; the loader rejects the file.
+
+### Not in the wave
+
+* `C_OscSup*` filers (system update packages): zip containers around the system
+  definition and view filers, which are covered.

@@ -683,6 +683,12 @@ std::error_code C_OscHalcConfigFiler::mh_SaveIoParameterStruct(
    if (orc_ParameterStruct.c_ParameterElements.size() > 0UL)
    {
       c_Retval = mh_SaveIoParameters(orc_ParameterStruct.c_ParameterElements, orc_XmlParser);
+      if (!c_Retval)
+      {
+         //the struct's own comment (seeded from the definition, hashed like the element comments) has no other
+         //place in this layout: a single value carries it inside "single-value"
+         orc_XmlParser.CreateNodeChild("comment", orc_ParameterStruct.c_Comment);
+      }
    }
    else
    {
@@ -1091,6 +1097,12 @@ std::error_code C_OscHalcConfigFiler::mh_LoadIoParameterStruct(C_OscHalcConfigPa
 
    if (!c_Retval)
    {
+      //optional: files written before the struct comment was persisted do not have it
+      if (orc_XmlParser.SelectNodeChild("comment") == "comment")
+      {
+         orc_ParameterStruct.c_Comment = orc_XmlParser.GetNodeContent();
+         tgl_assert(orc_XmlParser.SelectNodeParent() == "parameter-struct");
+      }
       if (orc_XmlParser.SelectNodeChild("single-value") == "single-value")
       {
          c_Retval = mh_LoadIoParameter(orc_ParameterStruct, orc_XmlParser, "single-value");

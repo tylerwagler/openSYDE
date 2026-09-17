@@ -22,6 +22,10 @@
 #include <cstdint>
 #include "C_OscErrorCategory.hpp"
 #include "C_OscCanOpenObjectDictionary.hpp"
+#include "C_OscImportEdsDcf.hpp"
+#include "C_OscEdsDcfImportMessageGroup.hpp"
+#include "C_OscCanProtocol.hpp"
+#include "C_OscCanMessage.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -153,6 +157,73 @@ TEST(CanOpenEds, DanglingMandatoryObjectReferenceIsRejected)
 
    EXPECT_EQ(stw::errors::Errc::config, c_Result);
    EXPECT_NE("", c_Dictionary.GetLastErrorText());
+
+   (void)std::filesystem::remove(c_Path);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Importing a TPDO reads every numeric field at its real position
+
+   Regression pin for the EDS/DCF importer's integer parsers, which read each character one position ahead of the
+   loop counter (a leftover of the 1-based string class): "254" came back as 54, "1" as an empty string, and
+   "$NODEID+0x180" only survived because the dropped character happened to be the one the parser strips anyway.
+   One transmit PDO of the device with a node-id-relative COB-ID, transmission type 254, an event timer and a
+   single mapped UNSIGNED8 object with limits covers both parsers through the public import.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(CanOpenEds, ImportReadsNumericFieldsAtTheirRealPosition)
+{
+   const std::string c_Path = h_WriteEds(
+      "osy_eds_import_tpdo.eds",
+      "[FileInfo]\nFileName=import.eds\nFileVersion=1\nFileRevision=1\n"
+      "[DeviceInfo]\nVendorName=Test\nProductName=Importable\nNrOfRxPDO=0\nNrOfTxPDO=1\n"
+      "[MandatoryObjects]\nSupportedObjects=1\n1=0x1000\n"
+      "[1000]\nParameterName=Device Type\nObjectType=0x7\nDataType=0x0007\nAccessType=ro\nDefaultValue=0\nPDOMapping=0\n"
+      "[OptionalObjects]\nSupportedObjects=2\n1=0x1800\n2=0x1A00\n"
+      "[1800]\nParameterName=TPDO1 communication\nObjectType=0x9\nSubNumber=4\n"
+      "[1800sub0]\nParameterName=Highest sub-index\nObjectType=0x7\nDataType=0x0005\nAccessType=ro\nDefaultValue=5\nPDOMapping=0\n"
+      "[1800sub1]\nParameterName=COB-ID\nObjectType=0x7\nDataType=0x0007\nAccessType=rw\nDefaultValue=$NODEID+0x180\nPDOMapping=0\n"
+      "[1800sub2]\nParameterName=Transmission type\nObjectType=0x7\nDataType=0x0005\nAccessType=rw\nDefaultValue=254\nPDOMapping=0\n"
+      "[1800sub5]\nParameterName=Event timer\nObjectType=0x7\nDataType=0x0006\nAccessType=rw\nDefaultValue=100\nPDOMapping=0\n"
+      "[1A00]\nParameterName=TPDO1 mapping\nObjectType=0x9\nSubNumber=2\n"
+      "[1A00sub0]\nParameterName=Number of entries\nObjectType=0x7\nDataType=0x0005\nAccessType=rw\nDefaultValue=1\nPDOMapping=0\n"
+      "[1A00sub1]\nParameterName=Mapping entry 1\nObjectType=0x7\nDataType=0x0007\nAccessType=rw\nDefaultValue=0x60000108\nPDOMapping=0\n"
+      "[ManufacturerObjects]\nSupportedObjects=1\n1=0x6000\n"
+      "[6000]\nParameterName=Inputs\nObjectType=0x9\nSubNumber=2\n"
+      "[6000sub0]\nParameterName=Number of entries\nObjectType=0x7\nDataType=0x0005\nAccessType=ro\nDefaultValue=1\nPDOMapping=0\n"
+      "[6000sub1]\nParameterName=Speed\nObjectType=0x7\nDataType=0x0005\nAccessType=ro\nDefaultValue=0x10\n"
+      "LowLimit=0x02\nHighLimit=0xF0\nPDOMapping=1\n");
+
+   C_OscEdsDcfImportMessageGroup c_Rx;
+   C_OscEdsDcfImportMessageGroup c_Tx;
+   C_OscEdsDcfImportMessageGroup c_InvalidRx;
+   C_OscEdsDcfImportMessageGroup c_InvalidTx;
+   std::vector<std::vector<std::string> > c_Notes;
+   std::vector<std::vector<std::string> > c_InvalidNotes;
+   std::string c_Error;
+   const std::error_code c_Result = C_OscImportEdsDcf::h_Import(c_Path, 10U, c_Rx, c_Tx, c_Notes, c_Error,
+                                                                C_OscCanProtocol::eCAN_OPEN, c_InvalidRx, c_InvalidTx,
+                                                                c_InvalidNotes);
+   ASSERT_FALSE(static_cast<bool>(c_Result)) << c_Result.message() << " " << c_Error;
+
+   //the device's transmit PDO is what the manager receives
+   EXPECT_EQ(0U, c_Tx.c_OscMessageData.size());
+   EXPECT_EQ(0U, c_InvalidRx.c_OscMessageData.size()) << "the PDO was sorted out as invalid";
+   ASSERT_EQ(1U, c_Rx.c_OscMessageData.size());
+   const C_OscCanMessage & rc_Msg = c_Rx.c_OscMessageData[0];
+   EXPECT_EQ(0x18AU, rc_Msg.u32_CanId) << "$NODEID+0x180 with node id 10";
+   EXPECT_EQ(C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254, rc_Msg.e_TxMethod) << "transmission type read as 254";
+   ASSERT_EQ(1U, rc_Msg.c_Signals.size()) << "mapping count read as 1";
+   EXPECT_EQ(8U, rc_Msg.c_Signals[0].u16_ComBitLength);
+   EXPECT_EQ(0U, rc_Msg.c_Signals[0].u16_ComBitStart);
+   ASSERT_EQ(1U, c_Rx.c_OscSignalData.size());
+   EXPECT_EQ("Speed", c_Rx.c_OscSignalData[0].c_Name);
+   ASSERT_EQ(1U, c_Rx.c_SignalDefaultMinMaxValuesUsed.size());
+   EXPECT_EQ(0U, c_Rx.c_SignalDefaultMinMaxValuesUsed[0]) << "limits from the file, not the type defaults";
+   EXPECT_EQ(0x02U, c_Rx.c_OscSignalData[0].c_MinValue.GetValueU8());
+   EXPECT_EQ(0xF0U, c_Rx.c_OscSignalData[0].c_MaxValue.GetValueU8());
+   ASSERT_EQ(1U, c_Rx.c_OscSignalData[0].c_DataSetValues.size());
+   EXPECT_EQ(0x10U, c_Rx.c_OscSignalData[0].c_DataSetValues[0].GetValueU8()) << "hex default value";
 
    (void)std::filesystem::remove(c_Path);
 }
