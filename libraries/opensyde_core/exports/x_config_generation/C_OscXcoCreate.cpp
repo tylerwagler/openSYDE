@@ -199,7 +199,7 @@ std::error_code C_OscXcoCreate::mh_CheckParamsToCreatePackage(const std::string 
    if (!c_Return)
    {
       bool q_Contained = false;
-      for (uint32_t u32_It = 0UL; (u32_It <= orc_SystemDefinition.c_Nodes.size()) && (q_Contained == false); ++u32_It)
+      for (uint32_t u32_It = 0UL; (u32_It < orc_SystemDefinition.c_Nodes.size()) && (q_Contained == false); ++u32_It)
       {
          const C_OscNode & rc_Node = orc_SystemDefinition.c_Nodes[u32_It];
          if (rc_Node.c_Properties.c_Name == orc_Manifest.c_NodeName)

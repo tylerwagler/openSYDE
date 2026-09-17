@@ -201,7 +201,7 @@ Per-tool build directories under `build/`; deploy target defaults to
 Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `-DOPENSYDE_CORE_BUILD_TESTS=ON`, run with `ctest`.
 
-31 suites, 338 tests: `test_application_info_block`, `test_canopen_eds`,
+32 suites, 339 tests: `test_application_info_block`, `test_canopen_eds`,
 `test_checksummed_xml`, `test_checksums`, `test_cstdint`,
 `test_data_logger_trigger_parser`, `test_datapool_content_util`,
 `test_datapool_type_string`, `test_device_manager`, `test_dynamic_array`,
@@ -210,8 +210,8 @@ Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `test_osc_utils_niceify`, `test_project_metadata`, `test_protocol_driver_base`,
 `test_protocol_serial_number`, `test_scl_ini_file`, `test_scl_string`,
 `test_security_aes_file`, `test_string_prefix_parsing`, `test_stwerrors`,
-`test_tgl_file`, `test_tgl_time`, `test_view_security_options`, `test_xml_float_locale`,
-`test_xml_parser`.
+`test_tgl_file`, `test_tgl_time`, `test_view_security_options`, `test_xco_create`,
+`test_xml_float_locale`, `test_xml_parser`.
 
 The suite runs on all three platforms, so anything it touches must avoid
 platform-specific assumptions — `XmlParser.SaveAndLoadFile` hardcoded `/tmp/` and
