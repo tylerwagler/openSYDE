@@ -1,5 +1,8 @@
 # Core Sweep — Modernization / Optimization / Dedup / Smells
 
+> **ARCHIVED.** 14 of 19 items fixed. **The 5 open items have moved to
+> `../../ROADMAP.md`.** Statuses below are frozen.
+
 A four-dimension audit of `libraries/opensyde_core` (run 2026-09-09): modernization,
 optimization, deduplication, and design smells / correctness. Findings are verified
 against source, ranked by impact. This is the tracking document for the fixes.

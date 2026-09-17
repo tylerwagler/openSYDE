@@ -1,5 +1,8 @@
 # Plan: Reduce Redundant GUI Items in openSYDE
 
+> **ARCHIVED — complete.** All six phases closed (phase 6 as won't-fix).
+> Open work lives in `../../ROADMAP.md`.
+
 ## Context
 
 The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_gui_elements/`, of which **148 are documented as having zero functionality** — they exist solely so Qt stylesheets can target them by C++ class name. This pattern creates massive file bloat (296+ source files for empty shells), slows compilation, pollutes the class hierarchy, and makes the codebase harder to navigate. Beyond the stylesheet classes, there are additional redundancies in dashboard property panels, popup dialogs, title bars, and model-view-delegate implementations.

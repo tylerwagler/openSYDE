@@ -1,5 +1,10 @@
 # QSettings Migration Plan
 
+> **ARCHIVED — and this document was wrong.** It describes the migration as not
+> started. All three GUI apps were already on `QSettings` when this was checked on
+> 2026-09-17. Kept for the rationale in "Why not cherry-pick from dev".
+> Open work lives in `../../ROADMAP.md`.
+
 ## Goal
 
 Replace the custom `C_SclIniFile`-based user-settings persistence in all three

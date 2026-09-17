@@ -248,7 +248,7 @@ three target platforms build on every push:**
 The first three are not `continue-on-error`: they are the targets that have to
 gate, or CI stops meaning anything. **Static Analysis is deliberately advisory**
 — the clang analyser has a real false-positive rate here, and the known findings
-are triaged in `docs/agent_plans/consolidation_sweep/FINDINGS.md`. Read it before
+are triaged in `docs/agent_plans/FINDINGS.md`. Read it before
 acting on a finding; several are not bugs.
 
 macOS Qt comes from `install-qt-action`, not Homebrew. `brew install qt` drags
@@ -270,7 +270,8 @@ The Windows job exists because `#ifdef _WIN32` code used to be compiled by nothi
 we ran — 28 files carry `_WIN32` conditionals. Bringing them under a compiler
 immediately turned up a lost `.` in `TglFile`, a dead `TglTasks.hpp` include, a wide
 `WCHAR*` used as a `std::string`, an ill-formed `reinterpret_cast<HWND>(nullptr)`
-and a committed merge-conflict marker in a `.rc` file. See `docs/TODO.md`.
+and a committed merge-conflict marker in a `.rc` file. See
+`docs/agent_plans/archive/TODO.md`.
 
 ## Repository Layout
 
@@ -286,7 +287,7 @@ and a committed merge-conflict marker in a `.rc` file. See `docs/TODO.md`.
 | `opensyde_syde_sup/` | SYDEsup (CLI system updater) |
 | `opensyde_syde_x_gen/`, `opensyde_syde_coder_c/` | Generators |
 | `opensyde_cmd_line_flash_tool/`, `opensyde_tsp_convert/` | CLI utilities |
-| `docs/` | TODOs and agent plans |
+| `docs/` | Roadmap, findings, archived plans |
 
 Core library internals: `project/system/` (nodes, buses, definitions, and
 `node/data_logger/` with the trigger-expression parser), `halc/`,
@@ -364,7 +365,7 @@ Two such conflations have already been introduced and fixed here
 (`TglRemoveDirectory`, `mz_compress`) — both invisible in testing, because 0 means
 success on both sides. 16 sites still use the wrong idiom, all in
 `system_update_package/`; see the phase 5 section of
-`docs/agent_plans/codebase_audit/PLAN.md`.
+`docs/agent_plans/archive/codebase_audit/PLAN.md`.
 
 **Before bridging, read the callee's own `\return` block.** Not every function
 returning `int32_t` returns an STW code — TGL file helpers return plain 0/non-zero,
@@ -403,31 +404,29 @@ files, not a convention to copy.
 
 ## Current Work
 
-Tracked in `docs/agent_plans/codebase_audit/` — `PLAN.md` is the master plan (8
-phases), `analysis.md` the underlying audit, `PHASE3_PLAN.md` the string migration
-detail.
+**Open work is tracked in one place: `docs/agent_plans/ROADMAP.md`.** It carries the
+release-readiness picture, the ranked engineering backlog, the larger features
+(dark mode and its smaller fallbacks), and the decisions parked on a human.
 
-| Phase | Status |
-|-------|--------|
-| 0 — Test framework & CI | Done |
-| 1 — Correctness bugs | Done |
-| 2 — Remove `C_SclDynamicArray` → `std::vector` | Done |
-| 3 — Retire `C_SclString` → `std::string` | Done |
-| 3x — Retire `C_SclStringList` → `std::vector` (phase 3 follow-up) | Done |
-| 4 — Replace homegrown AES | Done for files; wire protocol deliberately out of scope. `C_OscSecurityAesFile` is AES-256-GCM + PBKDF2 (600k) with a versioned 56-byte header and key wiping. `C_OscSecurityAesCbc` remains AES-128-CBC and is still used by `C_OscProtocolSecuritySubLayer` — changing that is an ECU-side protocol change, not a PC-side one |
-| 5 — Error handling modernization | Done — every STW `int32_t` error return in `opensyde_core` is `std::error_code` (9 waves: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc, protocol_drivers, dispatchers/xml_parser/project plus a final six). Bridging scaffolding fell 238 → 8; 19 functions stay `int32_t` on purpose (foreign conventions). No `static_cast<Errc>` misuse remains |
-| 6 — Concurrency & singletons | 6.1 done (`std::call_once`; Meyer's singleton rejected). 6.2 done (`C_TglCriticalSection` and `TglTasks` deleted, 52 sites on `std::mutex`). 6.3 closed — no defect found |
-| 7 — Performance | 7.1 done — logging hot path **4.2x** (`BM_WriteLogInfo` ~2.6µs → ~0.62µs, Release). The win was allocation, a hand-written fixed-width timestamp, and a per-second `localtime_r` cache in `TglGetDateTimeNow` (366 → 60 ns) — **not** the `std::format` swap the plan prescribed, which alone was only 1.4x. 7.2 and 7.3 open — both need a decision before code, see `PLAN.md` |
-| 8 — Build system modernization | Done — CMake minimum 3.25, CI reworked, ccache added, unified root build (one opensyde_core, all eight tools). C++23 adopted tree-wide (root + core + tool toolchains) on 2026-09-08 |
+Two supporting documents:
 
-A whole-tree consolidation sweep ran 2026-09-13; findings, what was rejected and
-why, and the ranked remainder are in `docs/agent_plans/consolidation_sweep/FINDINGS.md`.
-Read that before starting any dedup work — several of the largest apparent wins
-are deliberately declined there.
+- `docs/agent_plans/FINDINGS.md` — durable findings from the consolidation sweeps:
+  defect classes and the scans that find them, ideas **rejected with the counts
+  that decided it**, and the methodology traps that made several scans wrong the
+  first time. Read this before starting anything from the roadmap.
+- `docs/agent_plans/archive/` — completed efforts, kept for their rationale and
+  especially their won't-fix decisions. Frozen; do not trust a status in there
+  without checking the code. Two archived plans described finished work as
+  unstarted, which is what prompted the consolidation.
 
-Cross-cutting follow-ups (dark mode, Linux version string, About dialog) live in
-`docs/TODO.md`; in-code `TODO`/`FIXME` markers are catalogued in
-`docs/code-comment-todos.md`.
+The 8-phase codebase audit that drove most of 2026 is complete except for 7.2
+(hardware CRC32) and 7.3 (move semantics), both of which have moved to the roadmap.
+Phase 7.1 is the cautionary tale worth knowing before doing 7.3: the logging hot
+path came out **4.2x** faster, but not from the change the plan prescribed — that
+one was 1.4x, and the real win was somewhere the plan had not looked. Measure
+first, in Release.
+
+In-code `TODO` / `FIXME` markers are catalogued in `docs/code-comment-todos.md`.
 
 ## Gotchas
 

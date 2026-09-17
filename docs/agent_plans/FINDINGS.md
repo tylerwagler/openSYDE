@@ -216,7 +216,7 @@ That is a large sweep and a separate decision.
 
 The `opensyde_tool` survey ranked this ~700 lines across 92 sites. There is a
 detailed, user-approved brief for it at
-`docs/agent_plans/gui_consolidation/phase3-brief.md` describing a
+`docs/agent_plans/archive/gui_consolidation/phase3-brief.md` describing a
 `C_OgePopUpContentBase` that hoists both the `mrc_ParentDialog` member and a
 22-line Ctrl+Enter `keyPressEvent`.
 

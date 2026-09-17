@@ -1,5 +1,9 @@
 # Plan: openSYDE Codebase Remediation
 
+> **ARCHIVED.** Phases 0-6 and 8 are complete; 7.1 is done. **7.2 (hardware CRC32)
+> and 7.3 (move semantics) remain open and have moved to `../../ROADMAP.md`.**
+> Statuses below are frozen as of the work finishing.
+
 ## Goal
 
 Systematically address the 20 issues identified in the codebase audit
