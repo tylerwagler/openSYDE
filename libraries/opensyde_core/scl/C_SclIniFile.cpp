@@ -578,7 +578,8 @@ int32_t C_SclIniFile::ReadInteger(const std::string & orc_Section, const std::st
    {
       try
       {
-          s32_Return = std::stoi(c_String);
+         //hex with a "0x" prefix is legal in the INI dialects read here (CiA 306 EDS among them), as ToInt() accepted
+         s32_Return = std::stoi(c_String, nullptr, ScanBaseCompat(c_String));
       }
       catch (...)
       {

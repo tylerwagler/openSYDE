@@ -695,7 +695,9 @@ std::error_code C_OscSupNodeDefinitionFiler::mh_CheckFileVersion(const bool oq_U
       uint16_t u16_FileVersion = 0U;
       try
       {
-          u16_FileVersion = static_cast<uint16_t>(std::stoi(orc_XmlParser.GetNodeContent()));
+         //minor version 1 is written as "0x000101": base 10 alone read it as 0 and rejected every such file
+         const std::string c_Content = orc_XmlParser.GetNodeContent();
+         u16_FileVersion = static_cast<uint16_t>(std::stoi(c_Content, nullptr, stw::scl::ScanBaseCompat(c_Content)));
       }
       catch (...)
       {
