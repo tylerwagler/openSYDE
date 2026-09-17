@@ -14,6 +14,8 @@
 
 #include <windows.h>
 #include <lmcons.h> //for UNLEN
+#include <cstdio>
+#include <cstdlib>
 #include <cstdint>
 #include "TglUtils.hpp"
 #include <string>
@@ -33,6 +35,31 @@ using namespace stw::tgl;
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
+namespace
+{
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Write an assertion report to stderr, and show it in a message box unless that is switched off
+
+   The message box is what a person at the desktop needs; on a headless machine (CI, a service) it blocks the
+   process forever with nobody to press OK. Setting the environment variable OSY_ASSERT_NO_DIALOG keeps the text
+   on stderr only, which is what the Linux implementation does unconditionally.
+
+   \param[in]  orc_Text     Report text
+   \param[in]  opcn_Title   Message box title
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void mh_ReportAssertionText(const std::string & orc_Text, const char * const opcn_Title)
+{
+   std::fputs((orc_Text + "\n").c_str(), stderr);
+   std::fflush(stderr);
+   if (std::getenv("OSY_ASSERT_NO_DIALOG") == nullptr)
+   {
+      MessageBoxA(GetFocus(), orc_Text.c_str(), opcn_Title, MB_OK); //lint !e1960
+                                                                     //provided by system headers; no problems expected
+   }
+}
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Report assertion
 
@@ -50,8 +77,7 @@ void stw::tgl::TglReportAssertion(const char * const opcn_Module, const char * c
 
    c_Text = static_cast<std::string>("Extremely nasty error\n (assertion in module ") + opcn_Module + ", function " +
             opcn_Func + ", line " + std::to_string(os32_Line) + ") !";
-   MessageBoxA(GetFocus(), c_Text.c_str(), "Error", MB_OK); //lint !e1960
-                                                            //provided by system headers; no problems expected
+   mh_ReportAssertionText(c_Text, "Error");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -72,8 +98,7 @@ void stw::tgl::TglReportAssertionDetail(const char * const opcn_DetailInfo, cons
 
    c_Text = static_cast<std::string>(opcn_DetailInfo) + "\nfunction  " + opcn_Func + "\nassertion in module  " +
             opcn_Module + ", line  " + std::to_string(os32_Line) + "!";
-   MessageBoxA(GetFocus(), c_Text.c_str(), "Detailed-Error", MB_OK); //lint !e1960
-                                                                     //provided by system headers; no problems expected
+   mh_ReportAssertionText(c_Text, "Detailed-Error");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

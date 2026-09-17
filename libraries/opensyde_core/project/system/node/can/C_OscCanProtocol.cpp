@@ -396,8 +396,9 @@ bool C_OscCanProtocol::h_ListIsComTx(const C_OscNodeDataPoolList & orc_List)
 
    if (orc_List.c_Name.length() >= 2)
    {
-      //Check second to last letter
-      if (orc_List.c_Name[orc_List.c_Name.length() - 1] == 'T')
+      //Check second to last letter: "_TX" vs "_RX". On the 1-based string class that was [length() - 1]; here it
+      //is [length() - 2] -- the old subscript read the last letter, 'X' for both, and no list was ever Tx
+      if (orc_List.c_Name[orc_List.c_Name.length() - 2] == 'T')
       {
          q_Retval = true;
       }

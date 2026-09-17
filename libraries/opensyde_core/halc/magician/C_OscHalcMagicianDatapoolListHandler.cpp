@@ -762,65 +762,43 @@ std::error_code C_OscHalcMagicianDatapoolListHandler::m_GetListIndex(const uint3
                   oru32_ListIndex += 1UL;
                }
 
-               //others
+               //others: a domain without channels keeps its variables in the domain values, one with channels in the
+               //channel values -- the same choice the loop over the passed domains makes. This used to probe the
+               //domain values first and take any in-range hit, which mislaid every channel variable of a domain that
+               //also had domain parameters
                switch (this->me_Selector)
                {
                case C_OscHalcDefDomain::eVA_PARAM:
-                  if (C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
-                         ou32_ParameterStructIndex,
-                         ou32_ParameterStructElementIndex, ou32_CurChannel,
-                         pc_CurrentDomainDef->c_DomainValues.c_Parameters, c_RelevantChannels,
-                         oru32_ListIndex) == Errc::range)
-                  {
-                     c_Retval = C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
-                        ou32_ParameterStructIndex,
-                        ou32_ParameterStructElementIndex, ou32_CurChannel,
-                        pc_CurrentDomainDef->c_ChannelValues.c_Parameters, c_RelevantChannels,
-                        oru32_ListIndex);
-                  }
+                  c_Retval = C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
+                     ou32_ParameterStructIndex, ou32_ParameterStructElementIndex, ou32_CurChannel,
+                     (pc_CurrentDomainConfig->c_ChannelConfigs.size() == 0UL) ?
+                     pc_CurrentDomainDef->c_DomainValues.c_Parameters :
+                     pc_CurrentDomainDef->c_ChannelValues.c_Parameters,
+                     c_RelevantChannels, oru32_ListIndex);
                   break;
                case C_OscHalcDefDomain::eVA_INPUT:
-                  if (C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
-                         ou32_ParameterStructIndex,
-                         ou32_ParameterStructElementIndex, ou32_CurChannel,
-                         pc_CurrentDomainDef->c_DomainValues.c_InputValues, c_RelevantChannels,
-                         oru32_ListIndex) == Errc::range)
-                  {
-                     c_Retval = C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
-                        ou32_ParameterStructIndex,
-                        ou32_ParameterStructElementIndex, ou32_CurChannel,
-                        pc_CurrentDomainDef->c_ChannelValues.c_InputValues, c_RelevantChannels,
-                        oru32_ListIndex);
-                  }
+                  c_Retval = C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
+                     ou32_ParameterStructIndex, ou32_ParameterStructElementIndex, ou32_CurChannel,
+                     (pc_CurrentDomainConfig->c_ChannelConfigs.size() == 0UL) ?
+                     pc_CurrentDomainDef->c_DomainValues.c_InputValues :
+                     pc_CurrentDomainDef->c_ChannelValues.c_InputValues,
+                     c_RelevantChannels, oru32_ListIndex);
                   break;
                case C_OscHalcDefDomain::eVA_OUTPUT:
-                  if (C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
-                         ou32_ParameterStructIndex,
-                         ou32_ParameterStructElementIndex, ou32_CurChannel,
-                         pc_CurrentDomainDef->c_DomainValues.
-                         c_OutputValues, c_RelevantChannels,
-                         oru32_ListIndex) == Errc::range)
-                  {
-                     c_Retval = C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
-                        ou32_ParameterStructIndex,
-                        ou32_ParameterStructElementIndex, ou32_CurChannel,
-                        pc_CurrentDomainDef->c_ChannelValues.c_OutputValues, c_RelevantChannels,
-                        oru32_ListIndex);
-                  }
+                  c_Retval = C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
+                     ou32_ParameterStructIndex, ou32_ParameterStructElementIndex, ou32_CurChannel,
+                     (pc_CurrentDomainConfig->c_ChannelConfigs.size() == 0UL) ?
+                     pc_CurrentDomainDef->c_DomainValues.c_OutputValues :
+                     pc_CurrentDomainDef->c_ChannelValues.c_OutputValues,
+                     c_RelevantChannels, oru32_ListIndex);
                   break;
                case C_OscHalcDefDomain::eVA_STATUS:
-                  if (C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
-                         ou32_ParameterStructIndex,
-                         ou32_ParameterStructElementIndex, ou32_CurChannel,
-                         pc_CurrentDomainDef->c_DomainValues.c_StatusValues, c_RelevantChannels,
-                         oru32_ListIndex) == Errc::range)
-                  {
-                     c_Retval = C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
-                        ou32_ParameterStructIndex,
-                        ou32_ParameterStructElementIndex, ou32_CurChannel,
-                        pc_CurrentDomainDef->c_ChannelValues.c_StatusValues, c_RelevantChannels,
-                        oru32_ListIndex);
-                  }
+                  c_Retval = C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
+                     ou32_ParameterStructIndex, ou32_ParameterStructElementIndex, ou32_CurChannel,
+                     (pc_CurrentDomainConfig->c_ChannelConfigs.size() == 0UL) ?
+                     pc_CurrentDomainDef->c_DomainValues.c_StatusValues :
+                     pc_CurrentDomainDef->c_ChannelValues.c_StatusValues,
+                     c_RelevantChannels, oru32_ListIndex);
                   break;
                default:
                   break;
@@ -909,7 +887,6 @@ std::error_code C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
       //Current struct
       for (uint32_t u32_ItEl = 0UL; u32_ItEl < ou32_ElementIndex; ++u32_ItEl)
       {
-         tgl_assert(u32_ItEl < orc_Values[ou32_Index].c_StructElements.size());
          if (u32_ItEl < orc_Values[ou32_Index].c_StructElements.size())
          {
             const C_OscHalcDefElement & rc_CurEl = orc_Values[ou32_Index].c_StructElements[u32_ItEl];
@@ -917,16 +894,23 @@ std::error_code C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(
                                                                                      static_cast<uint32_t>(
                                                                                         orc_RelevantChannels.size()));
          }
+         else
+         {
+            c_Retval = Errc::range;
+         }
       }
       //Current element
       if (orc_Values[ou32_Index].c_StructElements.size() > 0UL)
       {
-         tgl_assert(ou32_ElementIndex < orc_Values[ou32_Index].c_StructElements.size());
          if (ou32_ElementIndex < orc_Values[ou32_Index].c_StructElements.size())
          {
             C_OscHalcMagicianDatapoolListHandler::mh_GetSubDefElementIndex(orc_Values[ou32_Index].c_StructElements[
                                                                               ou32_ElementIndex], ou32_CurChannel,
                                                                            orc_RelevantChannels, oru32_ListIndex);
+         }
+         else
+         {
+            c_Retval = Errc::range;
          }
       }
       else

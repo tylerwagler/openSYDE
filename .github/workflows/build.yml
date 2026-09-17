@@ -209,6 +209,9 @@ jobs:
       - name: Build + run core unit tests
         shell: bash
         env:
+          # tgl_assert on Windows reports through a message box; with nobody to press OK a headless runner
+          # would wait for six hours. Keep the report on stderr only.
+          OSY_ASSERT_NO_DIALOG: "1"
           OPENSSL_ROOT_DIR: ${{ env.IQTA_TOOLS }}/OpenSSLv3/Win_x64
           CMAKE_PREFIX_PATH: ${{ env.QT_ROOT_DIR }};${{ env.IQTA_TOOLS }}/OpenSSLv3/Win_x64
         run: |
