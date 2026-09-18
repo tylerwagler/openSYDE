@@ -75,9 +75,11 @@ reads the device out, flashes a hex file and resets, and checks byte for byte wh
 received. The first run found the sixth never-worked feature above, and a second slip in
 the same file (a node's timeout was not reported when the sequence aborted on it). The UDS
 driver has its own suite over a scripted transport (`test_protocol_driver_osy`, 36 tests,
-no defect found). What still needs hardware: the CAN transport's segmentation and flow
-control, device configuration (`C_OscDcDeviceInformation`), routing through a gateway, and
-the file-based and NVM flashloader paths -- see open item 2.
+no defect found). The same device sits behind a
+`C_CanDispatcher` double too, so the CAN transport's segmentation and flow control are
+covered as well. What still needs hardware: device configuration
+(`C_OscDcDeviceInformation`), routing through a gateway, and the file-based and NVM
+flashloader paths -- see open item 2.
 
 ---
 
@@ -98,17 +100,18 @@ needs a wording decision first.
 
 ### 2. Extend the virtual ECU to CAN, routing and the other flashloader paths
 
-The Ethernet virtual ECU (`tests/test_su_sequences_virtual_ecu.cpp`) covers
-`C_OscSuSequences` end to end for an address-based flashloader on a directly connected
-node. The seam is `C_OscIpDispatcher`; the double is ~250 lines of DoIP framing plus a
-UDS server that answers the twenty services the sequences use. Extending it is the
-highest-value test work left, in this order:
+The virtual ECU (`tests/osy_virtual_ecu.hpp`, a UDS server; `test_su_sequences_virtual_ecu.cpp`
+behind `C_OscIpDispatcher`, `test_can_transport_virtual_ecu.cpp` behind `C_CanDispatcher`)
+covers `C_OscSuSequences` end to end for an address-based flashloader on a directly
+connected node, on both buses. Extending it is the highest-value test work left, in
+this order:
 
-- **CAN.** `C_CanDispatcher` is the same kind of seam (`CAN_Send_Msg` / `m_CAN_Read_Msg`
-  are virtual). A scripted CAN device has to speak the openSYDE-specific segmentation
-  that `C_OscProtocolDriverOsyTpCan` implements (single frame, first/consecutive, the
-  "without flow control" multi-frame mode), which is exactly the code nothing exercises
-  today. Expect it to be a few hundred lines; expect it to find something.
+- **CAN: done** (`test_can_transport_virtual_ecu`, 2026-09-18). `C_VirtualCanBus` behind
+  `C_CanDispatcher` reassembles single, first/consecutive and openSYDE multi frames,
+  answers first frames with flow control and segments the replies; the whole update
+  runs on a CAN system definition. It found nothing in the transport -- the state
+  machines are clean for these cases -- and it costs 5 s, which is the sequence's own
+  scan window for CAN activation.
 - **Routing.** A second node behind the first, so `StartRouting`, the routing routines
   (`0x0202`, `0x0205`) and `C_OscSuSequences::m_ReconnectToTargetServer` run.
 - **File-based flashloader, NVM (`.psi`) writes, PEM and the security flags.** All
