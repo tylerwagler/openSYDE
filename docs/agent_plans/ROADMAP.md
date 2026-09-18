@@ -9,7 +9,7 @@ Read `FINDINGS.md` before starting anything in here. Several of the most obvious
 scans worth re-running are written up with the traps that made their first versions
 wrong.
 
-Last consolidated: 2026-09-17.
+Last consolidated: 2026-09-18.
 
 ---
 
@@ -113,47 +113,26 @@ Well specified, self-contained, and the Google Benchmark harness already exists
 **Measure in Release** — see the benchmark note in `CLAUDE.md`; a Debug number here
 is a measurement of a different program.
 
-### 4. Endian reassembly hand-inlined at ~25 sites
-
-No shared `h_GetU32Big` / `h_GetU32Little` helper exists, so protocol drivers
-reassemble multi-byte values by hand. Mechanical, low risk, and each site is a
-chance for a transposition bug.
-
-### 5. `C_HexFile` error-code migration incomplete
-
-`hex_file/C_HexFile.cpp:2225` and `:2338` — `GetDataByAddress` and `FindPattern`
-still return raw `int32_t` despite the class having its own
-`C_HexFileErrorCategory`. Migrate via `m_MakeError`, return data by value or span.
-
-`tests/test_hex_file.cpp` already characterises both functions.
-
-### 6. Security AES file — duplicated I/O and a hand-coded header
-
-`security/C_OscSecurityAesFile.cpp` — the read/write blocks are duplicated between
-encrypt and decrypt, and the 56-byte header is encoded and decoded by hand with
-literal offsets. Extract shared helpers. The literal offsets are the risk: a header
-change has to be made correctly in two places.
-
-### 7. Filer error-API migration
+### 4. Filer error-API migration
 
 ~130 remaining call sites, roughly 270 lines. Mechanical, and the shape is settled
 by the `std::expected` pilot recorded in `FINDINGS.md`: **start from the
 value-or-default callers and leave the bridge sites alone** until the conventions
 are unified. Converting a bridge site costs about four lines and buys nothing.
 
-### 8. 135 range-for conversions
+### 5. 135 range-for conversions
 
 Blocked on naming judgement rather than on safety. Mechanical singularisation
 produces `Entrie` and `SubNodeIndexe`, so each needs a human to pick the name.
 
-### 9. Phase 7.3 — move semantics
+### 6. Phase 7.3 — move semantics
 
 Move constructors and assignment on large classes, `std::move` in hot paths. Worth
 doing only where a benchmark shows it matters — 7.1 is the cautionary tale: the
 plan's prescribed fix was 1.4x and the actual win came from somewhere the plan had
 not looked.
 
-### 10. Standalone GUI-tool configure on macOS
+### 7. Standalone GUI-tool configure on macOS
 
 `cmake -S opensyde_can_monitor/pjt` (or `opensyde_tool/pjt`) on a Mac fails with
 `Failed to find required Qt component "Svg"`. Homebrew ships `qtbase` and `qtsvg` as
@@ -167,7 +146,7 @@ add the `qtsvg` keg to `QT_ADDITIONAL_PACKAGES_PREFIX_PATH` in `toolchain_macos.
 or make the standalone configure go through whatever `build.sh` does. Small, but it
 needs a Mac to verify.
 
-### 11. Low / cosmetic bucket
+### 8. Low / cosmetic bucket
 
 `std::endl` → `"\n"` in console logging; ~208 `#define` wire-constants →
 `constexpr`; god-functions with 16–18 parameter signatures; `== true` / `== false`;

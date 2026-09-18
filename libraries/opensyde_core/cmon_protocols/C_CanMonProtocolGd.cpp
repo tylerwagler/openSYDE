@@ -12,6 +12,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp" //pre-compiled headers
+#include "C_OscEndian.hpp"
 
 #include <cstdint>
 #include "stwerrors.hpp"
@@ -544,27 +545,18 @@ std::string C_CanMonProtocolGd::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
       break;
    case GD_LIFE_MESSAGE:
       //life messages (with mapped system time in [ms])
-      u32_SysTime = static_cast<uint32_t>(orc_Msg.au8_Data[4]) +
-                    (static_cast<uint32_t>(orc_Msg.au8_Data[5]) << 8U) +
-                    (static_cast<uint32_t>(orc_Msg.au8_Data[6]) << 16U) +
-                    (static_cast<uint32_t>(orc_Msg.au8_Data[7]) << 24U);
+      u32_SysTime = stw::opensyde_core::C_OscEndian::h_GetU32Little(&orc_Msg.au8_Data[4]);
       c_Text = c_HelpSender +
                ", LIFE (SYSTIME: " + m_GetValueDecHex(u32_SysTime) + "ms)";
       break;
    case GD_LOGON:
       //logon messages (with mapped system time in [ms])
-      u32_SysTime = static_cast<uint32_t>(orc_Msg.au8_Data[4]) +
-                    (static_cast<uint32_t>(orc_Msg.au8_Data[5]) << 8U) +
-                    (static_cast<uint32_t>(orc_Msg.au8_Data[6]) << 16U) +
-                    (static_cast<uint32_t>(orc_Msg.au8_Data[7]) << 24U);
+      u32_SysTime = stw::opensyde_core::C_OscEndian::h_GetU32Little(&orc_Msg.au8_Data[4]);
       c_Text = c_HelpSender + ", LOGON (SYSTIME: " + m_GetValueDecHex(u32_SysTime) + "ms)";
       break;
    case GD_LOGOFF:
       //logon messages (with mapped system time in [ms])
-      u32_SysTime = static_cast<uint32_t>(orc_Msg.au8_Data[4]) +
-                    (static_cast<uint32_t>(orc_Msg.au8_Data[5]) << 8U) +
-                    (static_cast<uint32_t>(orc_Msg.au8_Data[6]) << 16U) +
-                    (static_cast<uint32_t>(orc_Msg.au8_Data[7]) << 24U);
+      u32_SysTime = stw::opensyde_core::C_OscEndian::h_GetU32Little(&orc_Msg.au8_Data[4]);
       c_Text = c_HelpSender + ", LOGOFF (SYSTIME: " + m_GetValueDecHex(u32_SysTime) + "ms)";
       break;
    default:

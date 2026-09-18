@@ -12,6 +12,8 @@
 #define CHEXFILEHPP
 
 #include <cstdio> //for "FILE"
+#include <optional>
+#include <span>
 #include <vector>
 #include <system_error>
 
@@ -133,8 +135,14 @@ public:
 
    const C_HexDataDump * GetDataDump(std::error_code & orc_ErrorResult);
 
-   int32_t GetDataByAddress(const uint32_t ou32_Address, uint16_t & oru16_NumBytes, uint8_t * const opu8_Data);
-   int32_t FindPattern(uint32_t & oru32_Address, const uint8_t ou8_PatternLength, const uint8_t * const opu8_Pattern);
+   //Data defined at an absolute address. The span points into the data dump and stays valid until
+   //the hex data changes. It is empty when nothing is defined at the address, and shorter than
+   //requested when the block ends before ou32_NumBytes; it never crosses a gap.
+   [[nodiscard]] std::span<const uint8_t> GetDataByAddress(const uint32_t ou32_Address, const uint32_t ou32_NumBytes);
+   //Address of the first occurrence of the pattern at or after ou32_StartAddress; a match never
+   //spans a gap. Empty when the pattern is not present (or is empty).
+   [[nodiscard]] std::optional<uint32_t> FindPattern(const uint32_t ou32_StartAddress,
+                                                     const std::span<const uint8_t> oc_Pattern);
 
    //call on HexFileErrc::record_overlay to find out offending address:
    uint32_t GetLastOverlayErrorAddress(void) const;
@@ -194,8 +202,8 @@ protected:
    static uint32_t mh_GetWord(const char * const opcn_String, const uint32_t ou32_Index, uint32_t & oru32_Word);
    static void mh_SetWord(char * const opcn_String, const uint32_t ou32_Index, const uint32_t ou32_Data);
 
-   static int32_t mh_FindPattern(const uint8_t * const opu8_Buffer, const uint8_t * const opu8_Pattern,
-                                 const uint32_t ou32_BufSize, const uint16_t ou16_PatternLength);
+   static std::optional<uint32_t> mh_FindPattern(const std::span<const uint8_t> oc_Buffer,
+                                                 const std::span<const uint8_t> oc_Pattern);
 };
 }
 }

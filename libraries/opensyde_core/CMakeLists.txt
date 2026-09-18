@@ -141,6 +141,7 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/tinyxml2/tinyxml2.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilBinaryHash.hpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscEndian.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtils.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stw_compid/stwcompid.h
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.hpp

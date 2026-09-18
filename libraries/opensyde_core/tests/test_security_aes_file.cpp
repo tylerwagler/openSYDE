@@ -25,10 +25,12 @@
 #include <vector>
 
 #include <cstdint>
+#include "C_OscErrorCategory.hpp"
 #include "C_OscSecurityAesFile.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
+using stw::errors::Errc;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -235,6 +237,85 @@ TEST(SecurityAesFile, EmptyInputRoundTrips)
    EXPECT_FALSE(static_cast<bool>(C_OscSecurityAesFile::h_DecryptFile("pw", c_Enc, c_Out)));
 
    EXPECT_EQ(0U, mh_ReadFile(c_Out).size());
+
+   (void)std::remove(c_In.c_str());
+   (void)std::remove(c_Enc.c_str());
+   (void)std::remove(c_Out.c_str());
+}
+
+/// The reader distinguishes "not one of our files" from "one of our files that does not
+/// verify". A header with a version this build does not know is Errc::config; a header that
+/// is fine but whose ciphertext was cut short is Errc::checksum, because GCM detects the
+/// truncation through the tag. A caller can tell a stale tool from a damaged file.
+TEST(SecurityAesFile, UnknownVersionIsConfigAndTruncationIsChecksum)
+{
+   const std::string c_In = "aes_ev_in.bin";
+   const std::string c_Enc = "aes_ev_enc.bin";
+   const std::string c_Bad = "aes_ev_bad.bin";
+   const std::string c_Out = "aes_ev_out.bin";
+
+   mh_WriteFile(c_In, mh_RepetitivePlaintext());
+   ASSERT_FALSE(static_cast<bool>(C_OscSecurityAesFile::h_EncryptFile("pw", c_In, c_Enc)));
+   const std::vector<uint8_t> c_Cipher = mh_ReadFile(c_Enc);
+   ASSERT_GT(c_Cipher.size(), C_OscSecurityAesFile::hu32_HEADER_LENGTH + 8U);
+
+   std::vector<uint8_t> c_Modified = c_Cipher;
+   c_Modified[6] = static_cast<uint8_t>(C_OscSecurityAesFile::hu8_FORMAT_VERSION + 1U);
+   mh_WriteFile(c_Bad, c_Modified);
+   EXPECT_EQ(std::error_code(Errc::config), C_OscSecurityAesFile::h_DecryptFile("pw", c_Bad, c_Out));
+
+   c_Modified = c_Cipher;
+   c_Modified[7] = static_cast<uint8_t>(C_OscSecurityAesFile::hu8_ALGO_AES256_GCM + 1U);
+   mh_WriteFile(c_Bad, c_Modified);
+   EXPECT_EQ(std::error_code(Errc::config), C_OscSecurityAesFile::h_DecryptFile("pw", c_Bad, c_Out));
+
+   //header only, no ciphertext at all: still a valid header, so it is the tag that rejects it
+   c_Modified.assign(c_Cipher.begin(), c_Cipher.begin() + C_OscSecurityAesFile::hu32_HEADER_LENGTH);
+   mh_WriteFile(c_Bad, c_Modified);
+   EXPECT_EQ(std::error_code(Errc::checksum), C_OscSecurityAesFile::h_DecryptFile("pw", c_Bad, c_Out));
+
+   //ciphertext cut short by eight bytes
+   c_Modified.assign(c_Cipher.begin(), c_Cipher.end() - 8);
+   mh_WriteFile(c_Bad, c_Modified);
+   EXPECT_EQ(std::error_code(Errc::checksum), C_OscSecurityAesFile::h_DecryptFile("pw", c_Bad, c_Out));
+
+   //shorter than a header cannot be one of our files
+   c_Modified.assign(c_Cipher.begin(), c_Cipher.begin() + 10);
+   mh_WriteFile(c_Bad, c_Modified);
+   EXPECT_EQ(std::error_code(Errc::config), C_OscSecurityAesFile::h_DecryptFile("pw", c_Bad, c_Out));
+
+   (void)std::remove(c_In.c_str());
+   (void)std::remove(c_Enc.c_str());
+   (void)std::remove(c_Bad.c_str());
+   (void)std::remove(c_Out.c_str());
+}
+
+/// The iteration count is read from the header, not assumed. A file that carries a different
+/// (valid) count must still open with the same password, which is what lets the default be
+/// raised later without breaking files written today.
+TEST(SecurityAesFile, IterationCountIsTakenFromTheHeader)
+{
+   const std::string c_In = "aes_it_in.bin";
+   const std::string c_Enc = "aes_it_enc.bin";
+   const std::string c_Out = "aes_it_out.bin";
+
+   mh_WriteFile(c_In, mh_RepetitivePlaintext());
+   ASSERT_FALSE(static_cast<bool>(C_OscSecurityAesFile::h_EncryptFile("pw", c_In, c_Enc)));
+   std::vector<uint8_t> c_Cipher = mh_ReadFile(c_Enc);
+
+   //the count is little endian at offset 8
+   const uint32_t u32_Stored = static_cast<uint32_t>(c_Cipher[8]) | (static_cast<uint32_t>(c_Cipher[9]) << 8U) |
+                               (static_cast<uint32_t>(c_Cipher[10]) << 16U) |
+                               (static_cast<uint32_t>(c_Cipher[11]) << 24U);
+   EXPECT_EQ(C_OscSecurityAesFile::hu32_PBKDF2_ITERATIONS, u32_Stored);
+
+   //a zero count is refused outright rather than handed to PBKDF2
+   c_Cipher[8] = 0U;
+   c_Cipher[9] = 0U;
+   c_Cipher[10] = 0U;
+   c_Cipher[11] = 0U;
+   mh_WriteFile(c_Enc, c_Cipher);
+   EXPECT_EQ(std::error_code(Errc::config), C_OscSecurityAesFile::h_DecryptFile("pw", c_Enc, c_Out));
 
    (void)std::remove(c_In.c_str());
    (void)std::remove(c_Enc.c_str());

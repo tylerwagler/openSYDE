@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_OscEndian.hpp"
 #include "C_SclStringUtil.hpp"
 
 #include <map>
@@ -154,16 +155,10 @@ void C_OscNodeDataPool::CalcDefinitionHash(uint32_t & oru32_HashValue, const E_C
          u32_DpNvmStartAddress = this->u32_NvmStartAddress;
          u32_DpNvmSize = this->u32_NvmSize;
       }
-      au8_Data[0] = static_cast<uint8_t>(u32_DpNvmStartAddress);
-      au8_Data[1] = static_cast<uint8_t>(u32_DpNvmStartAddress >> 8U);
-      au8_Data[2] = static_cast<uint8_t>(u32_DpNvmStartAddress >> 16U);
-      au8_Data[3] = static_cast<uint8_t>(u32_DpNvmStartAddress >> 24U);
+      C_OscEndian::h_SetU32Little(u32_DpNvmStartAddress, au8_Data);
       stw::scl::C_SclChecksums::CalcCRC32(&au8_Data[0], sizeof(u32_DpNvmStartAddress), oru32_HashValue);
 
-      au8_Data[0] = static_cast<uint8_t>(u32_DpNvmSize);
-      au8_Data[1] = static_cast<uint8_t>(u32_DpNvmSize >> 8U);
-      au8_Data[2] = static_cast<uint8_t>(u32_DpNvmSize >> 16U);
-      au8_Data[3] = static_cast<uint8_t>(u32_DpNvmSize >> 24U);
+      C_OscEndian::h_SetU32Little(u32_DpNvmSize, au8_Data);
       stw::scl::C_SclChecksums::CalcCRC32(&au8_Data[0], sizeof(u32_DpNvmSize), oru32_HashValue);
    }
 
@@ -186,17 +181,11 @@ void C_OscNodeDataPool::CalcDefinitionHash(uint32_t & oru32_HashValue, const E_C
 
       if  (oe_CrcType == eCT_NVM)
       {
-         au8_Data[0] = static_cast<uint8_t>(this->c_Lists[u32_ListCount].u32_NvmStartAddress);
-         au8_Data[1] = static_cast<uint8_t>(this->c_Lists[u32_ListCount].u32_NvmStartAddress >> 8U);
-         au8_Data[2] = static_cast<uint8_t>(this->c_Lists[u32_ListCount].u32_NvmStartAddress >> 16U);
-         au8_Data[3] = static_cast<uint8_t>(this->c_Lists[u32_ListCount].u32_NvmStartAddress >> 24U);
+         C_OscEndian::h_SetU32Little(this->c_Lists[u32_ListCount].u32_NvmStartAddress, au8_Data);
          stw::scl::C_SclChecksums::CalcCRC32(&au8_Data[0], sizeof(this->c_Lists[u32_ListCount].u32_NvmStartAddress),
                                              oru32_HashValue);
 
-         au8_Data[0] = static_cast<uint8_t>(this->c_Lists[u32_ListCount].u32_NvmSize);
-         au8_Data[1] = static_cast<uint8_t>(this->c_Lists[u32_ListCount].u32_NvmSize >> 8U);
-         au8_Data[2] = static_cast<uint8_t>(this->c_Lists[u32_ListCount].u32_NvmSize >> 16U);
-         au8_Data[3] = static_cast<uint8_t>(this->c_Lists[u32_ListCount].u32_NvmSize >> 24U);
+         C_OscEndian::h_SetU32Little(this->c_Lists[u32_ListCount].u32_NvmSize, au8_Data);
          stw::scl::C_SclChecksums::CalcCRC32(&au8_Data[0], sizeof(this->c_Lists[u32_ListCount].u32_NvmSize),
                                              oru32_HashValue);
       }
@@ -207,10 +196,7 @@ void C_OscNodeDataPool::CalcDefinitionHash(uint32_t & oru32_HashValue, const E_C
          const uint32_t u32_Size = this->c_Lists[u32_ListCount].c_Elements[u32_ElementCount].GetSizeByte();
          const uint8_t u8_Type =
             static_cast<uint8_t>(this->c_Lists[u32_ListCount].c_Elements[u32_ElementCount].GetType());
-         au8_Data[0] = static_cast<uint8_t>(u32_Size);
-         au8_Data[1] = static_cast<uint8_t>(u32_Size >> 8U);
-         au8_Data[2] = static_cast<uint8_t>(u32_Size >> 16U);
-         au8_Data[3] = static_cast<uint8_t>(u32_Size >> 24U);
+         C_OscEndian::h_SetU32Little(u32_Size, au8_Data);
          stw::scl::C_SclChecksums::CalcCRC32(&au8_Data[0], sizeof(u32_Size), oru32_HashValue);
          stw::scl::C_SclChecksums::CalcCRC32(&u8_Type, sizeof(u8_Type), oru32_HashValue);
 

@@ -1661,3 +1661,25 @@ element's own address and change notification all behave. No defect. The mock is
 the template for reaching `C_OscComDriverProtocol` and the update sequences: those
 sit on a CAN dispatcher rather than a diagnostic protocol, so the next mock is one
 level lower.
+
+## Byte-order sites: 25 read, 33 write, none transposed (2026-09-18)
+
+The roadmap carried "endian reassembly hand-inlined at ~25 sites" as a risk: every site was
+four casts, three shifts and an index, with the index order the only thing saying big from
+little endian. The sweep that replaced them with `C_OscEndian` (`util/C_OscEndian.hpp`,
+`test_endian`) read every one of them first. **No site was transposed.** The hand-written
+code was consistent throughout: the openSYDE protocol, DoIP and Intel hex offsets are big
+endian, CANopen SDO payloads, the STW "low/high" CAN protocols and the datapool hash
+inputs are little endian, and each site matched its wire format.
+
+So this was a maintainability change, not a bug fix, and the value is in what a future
+site looks like: `h_GetU32Big(&data[4])` names the order and reads exactly four bytes,
+and a wrong helper is one line to fix rather than 58 to re-audit. The scan that found the
+sites is `grep -rn "<< 24" --include='*.cpp'` for reads and `">> 24"` for writes, minus the
+MD5, CRC and tinyxml internals, which stay hand-written because they are the algorithm,
+not a wire format. `C_CanMonProtocolBase`'s `mh_BytesTo*` helpers were kept as the
+CAN-monitor-facing API and now delegate.
+
+Two things the sweep did change while it was there: `C_OscNodeDataPoolContent` carried
+its own private copies of all eight conversions (deleted, callers use the shared helper),
+and `C_OscExportCanOpenConfig` built a 4-byte payload with four `push_back` calls.
