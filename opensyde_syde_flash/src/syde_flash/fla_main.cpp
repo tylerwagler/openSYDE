@@ -19,6 +19,7 @@
 #include "C_FlaMainWindow.hpp"
 #include "C_PopErrorHandling.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_OscBuildInfo.hpp"
 #include "C_FlaUtiStyleSheets.hpp"
 #include "version_config.hpp"
 
@@ -74,7 +75,10 @@ int32_t main(int32_t os32_Argc, char * opacn_Argv[])
       stw::opensyde_core::C_OscLoggingHandler::h_SetCompleteLogFileLocation(c_FilePath.toStdString());
 
       osc_write_log_info("Startup", static_cast<QString>("Starting SYDEflash tool(MD5-Checksum: " +
-                                                         c_BinaryHash + ")").toStdString());
+                                                         c_BinaryHash + ", Build: " +
+                                                         QString::fromStdString(
+                                                            stw::opensyde_core::C_OscBuildInfo::h_GetSummary()) +
+                                                         ")").toStdString());
    }
    {
       //Set stylesheet (SECOND)

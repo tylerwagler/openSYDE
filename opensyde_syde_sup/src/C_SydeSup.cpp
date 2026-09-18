@@ -32,6 +32,7 @@
 #include "C_SupSuSequences.hpp"
 #include "C_SupCreatePackage.hpp"
 #include "C_OscUtilBinaryHash.hpp"
+#include "C_OscBuildInfo.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscHexFile.hpp"
 
@@ -373,16 +374,13 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char * 
       }
       else
       {
-         const std::string c_Date = __DATE__;
-         const std::string c_Time = __TIME__;
-
          // Initialize optional parameters and setup logging
          e_Return = this->m_InitOptionalParameters();
 
          // log extended version information
          h_WriteLog("SYDEsup Version", "SYDEsup Version: " + c_Version + ", MD5-Checksum: " + c_BinaryHash);
          h_WriteLog("SYDEsup Version", "   Binary: " + TglGetExePath(), false, mq_Quiet);
-         h_WriteLog("SYDEsup Version", "   Build date: " + c_Date + " " + c_Time, false, mq_Quiet);
+         h_WriteLog("SYDEsup Version", "   Build: " + C_OscBuildInfo::h_GetSummary(), false, mq_Quiet);
 
          // log command line call and parameters
          h_WriteLog("SYDEsup call",
@@ -957,7 +955,7 @@ void C_SydeSup::m_PrintVersion(const std::string & orc_Version, const std::strin
    if (oq_Detailed == true)
    {
       std::cout << "   Binary: " << TglGetExePath().c_str() <<
-         "\n   Build date: " << __DATE__ << " " << __TIME__ << &std::endl;
+         "\n   Build: " << C_OscBuildInfo::h_GetSummary().c_str() << &std::endl;
    }
 }
 

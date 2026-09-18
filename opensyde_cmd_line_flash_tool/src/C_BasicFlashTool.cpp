@@ -41,6 +41,7 @@ static int kbhit(void)
 #include "TglTime.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscUtilBinaryHash.hpp"
+#include "C_OscBuildInfo.hpp"
 #include "C_OscCanAdapterFactory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_BasicUpdateSequence.hpp"
@@ -127,6 +128,7 @@ void C_BasicFlashTool::Init(const int32_t os32_Argc, char * const * const oppcn_
    std::cout << "This is a very simple openSYDE tool for updating one device with one hex file." << std::endl;
    std::cout << "Version: " << c_ExeVersion.c_str() << std::endl;
    std::cout << "MD5-Checksum: " << c_BinaryHash.c_str() << std::endl;
+   std::cout << "Build: " << C_OscBuildInfo::h_GetSummary().c_str() << std::endl;
 
    // setup logging
    TglGetDateTimeNow(c_DateTime);
@@ -149,7 +151,8 @@ void C_BasicFlashTool::Init(const int32_t os32_Argc, char * const * const oppcn_
    std::cout << "Logging to file: " << c_LogFile.c_str() << "\n" << std::endl;
 
    osc_write_log_info("Starting tool",
-                      c_ExeName + " Version: " + c_ExeVersion + ", MD5-Checksum: " + c_BinaryHash);
+                      c_ExeName + " Version: " + c_ExeVersion + ", MD5-Checksum: " + c_BinaryHash + ", Build: " +
+                      C_OscBuildInfo::h_GetSummary());
    osc_write_log_info("Call",
                       "Command line: \"" + C_OscUtils::h_GetCommandLineAsString(os32_Argc, oppcn_Argv) + "\"");
 }

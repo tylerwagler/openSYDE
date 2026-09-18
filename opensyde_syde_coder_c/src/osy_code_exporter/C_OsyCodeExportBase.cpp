@@ -29,6 +29,7 @@
 #include "C_OsyCodeExportBase.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscUtilBinaryHash.hpp"
+#include "C_OscBuildInfo.hpp"
 #include <sstream>
 #include <iomanip>
 
@@ -179,6 +180,7 @@ C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::Init(const int32_t os32_A
 
    std::cout << "Version: " << mc_ExeVersion.c_str() << &std::endl;
    std::cout << "MD5-Checksum: " << mc_BinaryHash.c_str() << &std::endl;
+   std::cout << "Build: " << stw::opensyde_core::C_OscBuildInfo::h_GetSummary().c_str() << &std::endl;
 
    //configure logging engine to log to local file:
    //remove pre-existing file:
@@ -186,7 +188,8 @@ C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::Init(const int32_t os32_A
    stw::opensyde_core::C_OscLoggingHandler::h_SetWriteToFileActive(true);
    stw::opensyde_core::C_OscLoggingHandler::h_SetWriteToConsoleActive(false);
    stw::opensyde_core::C_OscLoggingHandler::h_SetCompleteLogFileLocation(mc_LogFileName);
-   osc_write_log_info("Starting tool", mc_ExeName + " Version: " + mc_ExeVersion + ", MD5-Checksum: " + mc_BinaryHash);
+   osc_write_log_info("Starting tool", mc_ExeName + " Version: " + mc_ExeVersion + ", MD5-Checksum: " + mc_BinaryHash +
+                      ", Build: " + stw::opensyde_core::C_OscBuildInfo::h_GetSummary());
    osc_write_log_info("Call", "Command line: \"" +
                       stw::opensyde_core::C_OscUtils::h_GetCommandLineAsString(os32_Argc, oppcn_Argv) + "\"");
 

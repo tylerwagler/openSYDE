@@ -38,10 +38,28 @@ platforms without publishing. The archives are the run's artifacts; download one
 and look inside. `workflow_dispatch` does the same, but GitHub only offers it once
 the workflow exists on the default branch (`master`).
 
+## Identifying a binary
+
+Every tool prints, next to its version and MD5 checksum, a line of the form
+
+```
+Build: v2026.09.18, source dated 2026-09-18T12:14:00+02:00
+```
+
+in its banner (command-line tools), its start-up log entry (all tools) and the About
+dialog (GUI tools). The first value is `git describe --tags --always --dirty` at build
+time: the tag on a tagged commit, `<tag>-<n>-g<hash>` after it, a bare short hash when
+no tag is reachable, and a `-dirty` suffix when the tree had uncommitted changes. The
+second is the committer date of that commit, not the wall-clock build time, so two
+builds of the same commit stamp identically and an incremental build does not re-link
+every tool. Both read `unknown` in a build from an exported tarball.
+
+The stamp lives in `libraries/opensyde_core/util/`: `osy_build_info.cmake` writes
+`osy_build_info.hpp` into the build directory before every build of `opensyde_core`,
+and `C_OscBuildInfo` is the only reader. Nothing to edit when cutting a release.
+
 ## Not done yet
 
 - Linux AppImage and macOS `.app` bundles with the Qt frameworks inside, so those
   archives run without a Qt installation the way the Windows one does.
-- A build-info header (`git describe`, build date) shown by the banners and About
-  dialogs -- today only SYDEsup prints a build date, from `__DATE__`.
 - Code signing and notarisation.

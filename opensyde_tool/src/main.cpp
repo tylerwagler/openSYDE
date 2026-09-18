@@ -20,6 +20,7 @@
 #include "C_NagMainWindow.hpp"
 #include "C_PuiProject.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_OscBuildInfo.hpp"
 #include "C_PopErrorHandling.hpp"
 #include <cstdint>
 #include "stwerrors.hpp"
@@ -90,7 +91,10 @@ int32_t main(int32_t os32_Argc, char * opacn_Argv[])
       osc_write_log_info("Startup", static_cast<QString>("Starting openSYDE Version: " +
                                                          stw::opensyde_gui_logic::C_Uti::h_GetApplicationVersion() +
                                                          ", MD5-Checksum: " +
-                                                         c_ExeHash).toStdString());
+                                                         c_ExeHash + ", Build: " +
+                                                         QString::fromStdString(
+                                                            stw::opensyde_core::C_OscBuildInfo::h_GetSummary()))
+                         .toStdString());
    }
    {
       //Set stylesheet (SECOND)
