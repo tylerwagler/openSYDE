@@ -486,23 +486,23 @@ public:
    static const uint8_t hu8_DIAGNOSTIC_SESSION_PROGRAMMING        = 0x02U;
 
    //negative response codes:
-   static const uint8_t hu8_NR_CODE_SERVICE_NOT_SUPPORTED              = 0x11U;
-   static const uint8_t hu8_NR_CODE_SUB_FUNCTION_NOT_SUPPORTED         = 0x12U;
-   static const uint8_t hu8_NR_CODE_INCORRECT_MESSAGE_LENGTH_OR_FORMAT = 0x13U;
-   static const uint8_t hu8_NR_CODE_RESPONSE_TOO_LONG                  = 0x14U;
-   static const uint8_t hu8_NR_CODE_CONDITIONS_NOT_CORRECT             = 0x22U;
-   static const uint8_t hu8_NR_CODE_REQUEST_SEQUENCE_ERROR             = 0x24U;
-   static const uint8_t hu8_NR_CODE_REQUEST_OUT_OF_RANGE               = 0x31U;
-   static const uint8_t hu8_NR_CODE_SECURITY_ACCESS_DENIED             = 0x33U;
-   static const uint8_t hu8_NR_CODE_INVALID_KEY                        = 0x35U;
-   static const uint8_t hu8_NR_CODE_EXCEEDED_NUMBER_OF_ATTEMPTS        = 0x36U;
-   static const uint8_t hu8_NR_CODE_REQUIRED_TIME_DELAY_NOT_EXPIRED    = 0x37U;
+   static constexpr uint8_t hu8_NR_CODE_SERVICE_NOT_SUPPORTED              = 0x11U;
+   static constexpr uint8_t hu8_NR_CODE_SUB_FUNCTION_NOT_SUPPORTED         = 0x12U;
+   static constexpr uint8_t hu8_NR_CODE_INCORRECT_MESSAGE_LENGTH_OR_FORMAT = 0x13U;
+   static constexpr uint8_t hu8_NR_CODE_RESPONSE_TOO_LONG                  = 0x14U;
+   static constexpr uint8_t hu8_NR_CODE_CONDITIONS_NOT_CORRECT             = 0x22U;
+   static constexpr uint8_t hu8_NR_CODE_REQUEST_SEQUENCE_ERROR             = 0x24U;
+   static constexpr uint8_t hu8_NR_CODE_REQUEST_OUT_OF_RANGE               = 0x31U;
+   static constexpr uint8_t hu8_NR_CODE_SECURITY_ACCESS_DENIED             = 0x33U;
+   static constexpr uint8_t hu8_NR_CODE_INVALID_KEY                        = 0x35U;
+   static constexpr uint8_t hu8_NR_CODE_EXCEEDED_NUMBER_OF_ATTEMPTS        = 0x36U;
+   static constexpr uint8_t hu8_NR_CODE_REQUIRED_TIME_DELAY_NOT_EXPIRED    = 0x37U;
    static const uint8_t hu8_NR_SECURE_DATA_TRANSMISSION_NOT_ALLOWED    = 0x39U;
    static const uint8_t hu8_NR_SECURE_DATA_VERIFICATION_FAILED         = 0x3AU;
-   static const uint8_t hu8_NR_CODE_UPLOAD_DOWNLOAD_NOT_ACCEPTED       = 0x70U;
-   static const uint8_t hu8_NR_CODE_GENERAL_PROGRAMMING_FAILURE        = 0x72U;
-   static const uint8_t hu8_NR_CODE_RESPONSE_PENDING                   = 0x78U;
-   static const uint8_t hu8_NR_CODE_SERVICE_NOT_SUPPORTED_IN_ACTIVE_SESSION = 0x7FU;
+   static constexpr uint8_t hu8_NR_CODE_UPLOAD_DOWNLOAD_NOT_ACCEPTED       = 0x70U;
+   static constexpr uint8_t hu8_NR_CODE_GENERAL_PROGRAMMING_FAILURE        = 0x72U;
+   static constexpr uint8_t hu8_NR_CODE_RESPONSE_PENDING                   = 0x78U;
+   static constexpr uint8_t hu8_NR_CODE_SERVICE_NOT_SUPPORTED_IN_ACTIVE_SESSION = 0x7FU;
 
    //result status of routine OSY_RC_SID_ROUTE_IP_2_IP_COMMUNICATION
    static const uint8_t hu8_OSY_IP_2_IP_STATUS_IDLE        = 0U;

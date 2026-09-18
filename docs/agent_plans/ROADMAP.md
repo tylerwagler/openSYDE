@@ -60,17 +60,24 @@ the migrations, each "the feature does not work" rather than an edge case:
 | **creating** a service update package, and loading one | phase 3b | #39 |
 | telling a COM datapool's Tx list from its Rx list — every message↔element mapping | phase 3 | #40 |
 | opening an encrypted session with an ECU (double free at ECDH key creation) | phase 3b | #41 |
+| **flashing a hex file** through the update sequences: a vector of null `unique_ptr`s dereferenced on the first file (segfault before the first byte) | the ownership sweep (054deae63a) | #50 |
 
 Plus the X-config missing-node check reading past the end (#38), the HALC magician
 mislaying channel values when a domain has both domain and channel parameters (#40),
 and hex INI values read as 0 (#39). `FINDINGS.md` carries the six shapes of the
 1-based residue with the scanner that finds five of them.
 
-What the suite still cannot reach is everything that talks to hardware: the
-protocol drivers, the data dealer, device configuration and the update sequences.
-A manual functional pass over those — run a system update through a gateway, CAN
-Monitor against a real bus, a secure session with an ECU — remains the highest-value
-pre-release activity, and it needs hardware.
+**Update, 2026-09-18.** The hardware-facing layer is reachable after all, at least on
+Ethernet: `C_OscIpDispatcher` is abstract, so a test double that owns a small UDS server
+(a "virtual ECU") runs the whole stack in-process -- update sequences, flash com driver,
+UDS driver, DoIP transport. `test_su_sequences_virtual_ecu` activates the flashloader,
+reads the device out, flashes a hex file and resets, and checks byte for byte what the ECU
+received. The first run found the sixth never-worked feature above, and a second slip in
+the same file (a node's timeout was not reported when the sequence aborted on it). The UDS
+driver has its own suite over a scripted transport (`test_protocol_driver_osy`, 36 tests,
+no defect found). What still needs hardware: the CAN transport's segmentation and flow
+control, device configuration (`C_OscDcDeviceInformation`), routing through a gateway, and
+the file-based and NVM flashloader paths -- see open item 2.
 
 ---
 
@@ -89,19 +96,31 @@ further divergence is a user-visible inconsistency nobody will notice until a
 support call. Consolidating changes the displayed text for one of the two, so it
 needs a wording decision first.
 
-### 2. Tests for the hardware-facing classes, with a mocked protocol
+### 2. Extend the virtual ECU to CAN, routing and the other flashloader paths
 
-Every file format, package, generator and security class in `opensyde_core` has a
-test now (#30, #37–#42). What has none is the layer that talks to devices:
-`C_OscDataDealer` / `C_OscDataDealerNvm` (datapool read/write over a protocol),
-`C_OscComDriverProtocol`, `C_OscSuSequences` (the update sequences),
-`C_OscDcDeviceInformation`, the routing execution (the calculation is tested).
+The Ethernet virtual ECU (`tests/test_su_sequences_virtual_ecu.cpp`) covers
+`C_OscSuSequences` end to end for an address-based flashloader on a directly connected
+node. The seam is `C_OscIpDispatcher`; the double is ~250 lines of DoIP framing plus a
+UDS server that answers the twenty services the sequences use. Extending it is the
+highest-value test work left, in this order:
 
-`C_OscDataDealerNvm` is the tractable one: it drives an abstract
-`C_OscDiagProtocolBase`, so a mock protocol that answers from a byte array would
-let the NVM read/write/list-CRC logic be exercised without a device. The rest need
-a loopback CAN or hardware. Given what the round-trips found in every other layer,
-assume this one is not clean either.
+- **CAN.** `C_CanDispatcher` is the same kind of seam (`CAN_Send_Msg` / `m_CAN_Read_Msg`
+  are virtual). A scripted CAN device has to speak the openSYDE-specific segmentation
+  that `C_OscProtocolDriverOsyTpCan` implements (single frame, first/consecutive, the
+  "without flow control" multi-frame mode), which is exactly the code nothing exercises
+  today. Expect it to be a few hundred lines; expect it to find something.
+- **Routing.** A second node behind the first, so `StartRouting`, the routing routines
+  (`0x0202`, `0x0205`) and `C_OscSuSequences::m_ReconnectToTargetServer` run.
+- **File-based flashloader, NVM (`.psi`) writes, PEM and the security flags.** All
+  branches of `UpdateSystem` the address-based test skips
+  (`m_FlashNodeOpenSydeFile`, `m_WriteNvmOpenSyde`, `m_WritePemOpenSydeFile`,
+  `m_WriteOpenSydeNodeStates`). The virtual ECU needs `RequestFileTransfer` and the
+  security services; the data dealer test has a mock NVM already.
+- **Device configuration.** `C_OscDcDeviceInformation` and the `C_OscDc*` sequences:
+  the UDP broadcasts (`GetDeviceInfo`, `SetIpAddress`) the double currently swallows.
+
+`C_OscDataDealerNvm` is done (#42). The routing *calculation* is tested; its execution
+is not.
 
 ### 3. Filer error-API migration
 

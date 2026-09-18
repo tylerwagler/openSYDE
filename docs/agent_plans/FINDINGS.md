@@ -1717,3 +1717,62 @@ small calls -- the 16-byte number says those get most of the gain too.
 The trap to note for anyone reading the archived plan: "hardware CRC32" and "the CRC32
 we use" are different polynomials, and the archive's 17-20x figure compares the two, not
 a faster implementation of ours.
+
+## A virtual ECU: the update sequences run without hardware (2026-09-18)
+
+The roadmap said the layer that talks to devices -- `C_OscSuSequences`, the flash com
+driver, the UDS driver, the transports -- needed hardware to test. It does not, on
+Ethernet. `C_OscIpDispatcher` is an abstract class with `InitTcp` / `SendTcp` / `ReadTcp`
+/ `SendUdp` / `ReadUdp`, and the DoIP framing the transport puts on it is eight header
+bytes, two logical addresses and the UDS payload. A dispatcher double that frames a
+reply from a small UDS server is enough to run the whole stack in-process, and the
+server can keep everything it was asked and everything it was given.
+
+`test_su_sequences_virtual_ecu.cpp` does that: one Ethernet bus, one node with a device
+definition whose reset waits are 10 ms, a virtual ECU that answers twenty services
+(session control, tester present, twelve read/write identifiers, security seed/key,
+four routines, download/transfer/exit, reset). The suite activates the flashloader,
+reads the device out, flashes a 700-byte image built with `C_HexFile::CreateHexFile`
+and resets, and then checks the image arrived byte for byte at its address, in the
+right number of `TransferData` pieces, with the signature address on the last exit.
+Eleven tests, 1.7 s, most of it the sequence's own 500 ms reset-wait floor.
+
+**What it found on the first run.**
+
+1. `m_FlashNodeOpenSydeHex` builds `std::vector<std::unique_ptr<C_OscHexFile>>` and
+   never allocates the elements, then calls `LoadFromFile` on the first. Every flash of
+   a hex file through `UpdateSystem` -- SYDEsup's purpose, the GUI's update view --
+   segfaulted before the first byte was sent. Introduced by the ownership sweep
+   (054deae63a), which turned a raw-pointer vector into unique_ptrs and dropped the
+   `new`. The sixth "feature never worked" defect on this branch; one line to fix.
+2. `ActivateFlashloader` with the default `oq_FailOnFirstError` broke out of the
+   node loop before the line that copies the node's timeout into its connect state, so
+   the GUI got an error without the node being marked as timed out. The copy now
+   happens before the `break` at both sites.
+3. `OsyReadFlashBlockData` parsed the response's optional tagged fields by testing
+   `c_ReceiveData[u32_Counter]` for the next tag -- including when the previous field
+   was the last byte of the response. Every real device that omits a trailing field
+   (the virtual one omits the timestamp and the additional information) made the
+   client read one byte past the vector. Harmless on most heaps, invisible on the
+   build host and on macOS, and an immediate `operator[]` assertion on Ubuntu 26.04,
+   whose GCC 15 libstdc++ checks bounds by default: the CI core job aborted twice
+   while the same binary passed everywhere else. The parser is now a loop that checks
+   each field's presence and length before reading it and reports `Errc::rd_wr` for a
+   field cut short. **The host now keeps an assertion-enabled core build
+   (`build/corehard`, `-D_GLIBCXX_ASSERTIONS`) next to the normal one; run both.**
+
+**What it did not find.** The UDS driver itself. `test_protocol_driver_osy.cpp` puts
+`C_OscProtocolDriverOsy` over a scripted `C_OscProtocolDriverOsyTpBase` and checks the
+encoding and decoding of the services the sequences and the data dealer use, plus
+negative responses, response-pending, wrong echoes, wrong lengths, silence and
+unsolicited events: 36 tests, all green on the first run. The 1-based residue and the
+endian sweep had been through that file already; this is the confirmation.
+
+**Method note.** The defect in (1) is invisible to every scan in this document: it is
+a correct use of a modern idiom that happens to be missing a line, in a function no
+test called. The only thing that finds it is calling the function. The archived plan's
+"needs hardware" was the reason nobody had; the seam was there all along. Before
+declaring a layer untestable, look for the abstract class it talks through. And (3)
+is the reason the Ubuntu runner is worth more than it looks: its standard library
+asserts on the reads the others let through, so a test that passes on the host and
+fails there is a real out-of-bounds access, not a flaky runner.

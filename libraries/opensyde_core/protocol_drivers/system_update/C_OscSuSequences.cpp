@@ -286,6 +286,7 @@ std::error_code C_OscSuSequences::m_FlashNodeOpenSydeHex(
    {
       (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_HEX_OPEN_START, C_NO_ERR, 0U, mc_CurrentNode,
                              "Opening HEX file " + orc_FilesToFlash[u32_File] + ".");
+      c_Files[u32_File] = std::make_unique<C_OscHexFile>();
       c_HexError = c_Files[u32_File]->LoadFromFile(orc_FilesToFlash[u32_File].c_str());
       if (c_HexError)
       {
@@ -2771,6 +2772,8 @@ std::error_code C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstE
                      q_AtLeastOneError = true;
                      if (oq_FailOnFirstError == true)
                      {
+                        //the node that made us stop still gets its state reported
+                        this->mc_ConnectStatesNodes[u16_Node].q_Timeout = (this->mc_TimeoutNodes[u16_Node] == 1U);
                         break;
                      }
                      c_Return = Errc::success;
@@ -3018,6 +3021,8 @@ std::error_code C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstE
                      q_AtLeastOneError = true;
                      if (oq_FailOnFirstError == true)
                      {
+                        //the node that made us stop still gets its state reported
+                        this->mc_ConnectStatesNodes[u16_Node].q_Timeout = (this->mc_TimeoutNodes[u16_Node] == 1U);
                         break;
                      }
                   }

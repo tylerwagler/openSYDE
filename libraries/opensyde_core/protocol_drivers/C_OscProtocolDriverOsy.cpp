@@ -6039,7 +6039,6 @@ std::error_code C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_
 
    std::vector<uint8_t> c_ReceiveData;
    std::vector<uint8_t> c_SendData;
-   std::vector<char> c_Text;
    const uint32_t u32_PrevTimeout = this->mu32_TimeoutPollingMs;
 
    c_SendData.resize(1);
@@ -6052,62 +6051,92 @@ std::error_code C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_
 
    if (c_Return == Errc::success)
    {
-      uint32_t u32_Counter = 0U;
-      //clear all information:
       orc_BlockInfo.ClearContent();
 
-      // parse response message for information
-      if (c_ReceiveData[u32_Counter] == C_FlashBlockInfo::hu8_ID_BLOCK_ADDRESSES)
+      //The response is a sequence of tagged fields, each optional. A device that omits a field
+      //ends the response one field early, so every tag is read only after checking it is there;
+      //the field's own length byte is checked against what is left as well. A device that
+      //claims more than it sent is reported, not read past.
+      size_t x_Offset = 0U;
+      bool q_Malformed = false;
+      const auto h_HasBytes = [&](const size_t ox_Count) { return (x_Offset + ox_Count) <= c_ReceiveData.size(); };
+      const auto h_TakeText = [&](const size_t ox_Length, std::string & orc_Text) {
+         orc_Text.assign(reinterpret_cast<const char *>(&c_ReceiveData[x_Offset]), ox_Length);
+         x_Offset += ox_Length;
+      };
+      while ((q_Malformed == false) && h_HasBytes(1U))
       {
-         const size_t x_Offset = static_cast<size_t>(u32_Counter); //lint !e8080 //using correct type for vector index
-
-         orc_BlockInfo.u32_BlockStartAddress = C_OscEndian::h_GetU32Big(&c_ReceiveData[x_Offset + 1U]);
-         orc_BlockInfo.u32_BlockEndAddress = C_OscEndian::h_GetU32Big(&c_ReceiveData[x_Offset + 5U]);
-         u32_Counter += 9U;
+         const uint8_t u8_Tag = c_ReceiveData[x_Offset];
+         if (u8_Tag == C_FlashBlockInfo::hu8_ID_BLOCK_ADDRESSES)
+         {
+            if (h_HasBytes(9U))
+            {
+               orc_BlockInfo.u32_BlockStartAddress = C_OscEndian::h_GetU32Big(&c_ReceiveData[x_Offset + 1U]);
+               orc_BlockInfo.u32_BlockEndAddress = C_OscEndian::h_GetU32Big(&c_ReceiveData[x_Offset + 5U]);
+               x_Offset += 9U;
+            }
+            else
+            {
+               q_Malformed = true;
+            }
+         }
+         else if (u8_Tag == C_FlashBlockInfo::hu8_ID_RESULT_SIGNATURE)
+         {
+            if (h_HasBytes(2U))
+            {
+               orc_BlockInfo.u8_SignatureValid = c_ReceiveData[x_Offset + 1U];
+               x_Offset += 2U;
+            }
+            else
+            {
+               q_Malformed = true;
+            }
+         }
+         else if (u8_Tag == C_FlashBlockInfo::hu8_ID_BUILD_TIMESTAMP)
+         {
+            //fixed layout: 11 characters of date, 8 of time, no length byte
+            if (h_HasBytes(1U + 11U + 8U))
+            {
+               x_Offset += 1U;
+               h_TakeText(11U, orc_BlockInfo.c_BuildDate);
+               h_TakeText(8U, orc_BlockInfo.c_BuildTime);
+            }
+            else
+            {
+               q_Malformed = true;
+            }
+         }
+         else if ((u8_Tag == C_FlashBlockInfo::hu8_ID_APPLICATION_VERSION) ||
+                  (u8_Tag == C_FlashBlockInfo::hu8_ID_APPLICATION_NAME) ||
+                  (u8_Tag == C_FlashBlockInfo::hu8_ID_ADDITIONAL_INFORMATION))
+         {
+            //length-prefixed text
+            const size_t x_Length = h_HasBytes(2U) ? static_cast<size_t>(c_ReceiveData[x_Offset + 1U]) : 0U;
+            if (h_HasBytes(2U + x_Length))
+            {
+               std::string * const pc_Target =
+                  (u8_Tag == C_FlashBlockInfo::hu8_ID_APPLICATION_VERSION) ? &orc_BlockInfo.c_ApplicationVersion :
+                  (u8_Tag == C_FlashBlockInfo::hu8_ID_APPLICATION_NAME) ? &orc_BlockInfo.c_ApplicationName :
+                  &orc_BlockInfo.c_AdditionalInformation;
+               x_Offset += 2U;
+               h_TakeText(x_Length, *pc_Target);
+            }
+            else
+            {
+               q_Malformed = true;
+            }
+         }
+         else
+         {
+            //not a tag we know: nothing after it can be placed either
+            break;
+         }
       }
-      if (c_ReceiveData[u32_Counter] == C_FlashBlockInfo::hu8_ID_RESULT_SIGNATURE)
+      if (q_Malformed == true)
       {
-         orc_BlockInfo.u8_SignatureValid = c_ReceiveData[static_cast<size_t>(u32_Counter) + 1U];
-         u32_Counter += 2U;
-      }
-      if (c_ReceiveData[u32_Counter] == C_FlashBlockInfo::hu8_ID_APPLICATION_VERSION)
-      {
-         const uint32_t u32_Length = static_cast<uint32_t>(c_ReceiveData[static_cast<size_t>(u32_Counter) + 1U]);
-         c_Text.resize(static_cast<size_t>(u32_Length) + 1U); //plus 1 for termination
-         c_Text[c_Text.size() - 1U] = '\0';                   //add termination
-         (void)std::memcpy(&c_Text[0], &c_ReceiveData[static_cast<size_t>(u32_Counter) + 2U], u32_Length);
-         orc_BlockInfo.c_ApplicationVersion = &c_Text[0];
-         u32_Counter += u32_Length + 2U;
-      }
-      if (c_ReceiveData[u32_Counter] == C_FlashBlockInfo::hu8_ID_BUILD_TIMESTAMP)
-      {
-         c_Text.resize(11U + 1U);           //plus 1 for termination
-         c_Text[c_Text.size() - 1U] = '\0'; //add termination
-         (void)std::memcpy(&c_Text[0], &c_ReceiveData[static_cast<size_t>(u32_Counter) + 1U], 11U);
-         orc_BlockInfo.c_BuildDate = &c_Text[0];
-         u32_Counter += (11U + 1U);
-         c_Text.resize(8U + 1U);            //plus 1 for termination
-         c_Text[c_Text.size() - 1U] = '\0'; //add termination
-         (void)std::memcpy(&c_Text[0], &c_ReceiveData[u32_Counter], 8U);
-         orc_BlockInfo.c_BuildTime = &c_Text[0];
-         u32_Counter += 8U;
-      }
-      if (c_ReceiveData[u32_Counter] == C_FlashBlockInfo::hu8_ID_APPLICATION_NAME)
-      {
-         const uint32_t u32_Length = static_cast<uint32_t>(c_ReceiveData[static_cast<size_t>(u32_Counter) + 1U]);
-         c_Text.resize(static_cast<size_t>(u32_Length) + 1U); //plus 1 for termination
-         c_Text[c_Text.size() - 1U] = '\0';                   //add termination
-         (void)std::memcpy(&c_Text[0], &c_ReceiveData[static_cast<size_t>(u32_Counter) + 2U], u32_Length);
-         orc_BlockInfo.c_ApplicationName = &c_Text[0];
-         u32_Counter += u32_Length + 2U;
-      }
-      if (c_ReceiveData[u32_Counter] == C_FlashBlockInfo::hu8_ID_ADDITIONAL_INFORMATION)
-      {
-         const uint32_t u32_Length = static_cast<uint32_t>(c_ReceiveData[static_cast<size_t>(u32_Counter) + 1U]);
-         c_Text.resize(static_cast<size_t>(u32_Length) + 1U); //plus 1 for termination
-         c_Text[c_Text.size() - 1U] = '\0';                   //add termination
-         (void)std::memcpy(&c_Text[0], &c_ReceiveData[static_cast<size_t>(u32_Counter) + 2U], u32_Length);
-         orc_BlockInfo.c_AdditionalInformation = &c_Text[0];
+         m_LogErrorWithHeader("Synchronous communication",
+                              "ReadFlashBlockData response ends inside a field. Ignoring the rest.", TGL_UTIL_FUNC_ID);
+         c_Return = Errc::rd_wr;
       }
    }
    if (opu8_NrCode != nullptr)
