@@ -49,6 +49,12 @@
 #include "C_OscSystemDefinition.hpp"
 #include "osy_virtual_ecu.hpp"
 
+#include <openssl/bn.h>
+#include <openssl/core_names.h>
+#include <openssl/evp.h>
+#include <openssl/pem.h>
+#include <openssl/x509.h>
+
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
 using stw::errors::Errc;
@@ -863,4 +869,121 @@ TEST_F(SuSequencesVirtualEcu, UpdateSystem_DebuggerFlagNeedsTheMatchingFeature)
    EXPECT_EQ(Errc::success, mc_Sequences.UpdateSystem(c_ToFlash, c_Order));
    ASSERT_EQ(1U, mc_Ecu.c_DebuggerActivations.size());
    EXPECT_FALSE(mc_Ecu.c_DebuggerActivations[0]);
+}
+
+/* -- The PEM write: a device learns which certificate may authenticate against it ---------------------------------- */
+
+namespace
+{
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   A self-signed RSA-1024 identity as PEM text, plus the two things the service sends: modulus and serial
+
+   The service (`OsyWriteSecurityAuthenticationKey`) takes a 128 byte modulus, which is RSA-1024. The security
+   suite's identity builder makes 2048 bit keys, so this is its small sibling rather than a share.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::string mh_WriteRsa1024Pem(const std::string & orc_Name, std::vector<uint8_t> & orc_Modulus,
+                               std::vector<uint8_t> & orc_Serial)
+{
+   EVP_PKEY * const pc_Key = EVP_PKEY_Q_keygen(nullptr, nullptr, "RSA", static_cast<size_t>(1024));
+   X509 * const pc_Cert = X509_new();
+   (void)X509_set_version(pc_Cert, 2);
+   (void)ASN1_INTEGER_set(X509_get_serialNumber(pc_Cert), 77L);
+   (void)X509_gmtime_adj(X509_getm_notBefore(pc_Cert), 0);
+   (void)X509_gmtime_adj(X509_getm_notAfter(pc_Cert), 60L * 60L * 24L * 365L);
+   X509_NAME * const pc_Subject = X509_get_subject_name(pc_Cert);
+   (void)X509_NAME_add_entry_by_txt(pc_Subject, "CN", MBSTRING_ASC,
+                                    reinterpret_cast<const unsigned char *>("osy virtual ecu operator"), -1, -1, 0);
+   (void)X509_set_issuer_name(pc_Cert, pc_Subject);
+   (void)X509_set_pubkey(pc_Cert, pc_Key);
+   (void)X509_sign(pc_Cert, pc_Key, EVP_sha256());
+
+   {
+      BIGNUM * pc_Modulus = nullptr;
+      EXPECT_EQ(1, EVP_PKEY_get_bn_param(pc_Key, OSSL_PKEY_PARAM_RSA_N, &pc_Modulus));
+      orc_Modulus.resize(128U);
+      EXPECT_EQ(128, BN_bn2binpad(pc_Modulus, orc_Modulus.data(), 128));
+      BN_free(pc_Modulus);
+   }
+   {
+      //the loader keeps the INTEGER's content and drops the two byte tag/length header
+      unsigned char * pu8_Der = nullptr;
+      const int x_Length = i2d_ASN1_INTEGER(X509_get_serialNumber(pc_Cert), &pu8_Der);
+      orc_Serial.assign(pu8_Der + 2, pu8_Der + x_Length);
+      OPENSSL_free(pu8_Der);
+   }
+
+   BIO * const pc_Bio = BIO_new(BIO_s_mem());
+   (void)PEM_write_bio_X509(pc_Bio, pc_Cert);
+   (void)PEM_write_bio_PKCS8PrivateKey(pc_Bio, pc_Key, nullptr, nullptr, 0, nullptr, nullptr);
+   char * pcn_Text = nullptr;
+   const long x_TextLength = BIO_get_mem_data(pc_Bio, &pcn_Text);
+   const std::string c_Path = (std::filesystem::temp_directory_path() / orc_Name).string();
+   {
+      std::ofstream c_Stream(c_Path, std::ofstream::binary | std::ofstream::trunc);
+      c_Stream.write(pcn_Text, x_TextLength);
+   }
+   BIO_free(pc_Bio);
+   X509_free(pc_Cert);
+   EVP_PKEY_free(pc_Key);
+   return c_Path;
+}
+}
+
+TEST_F(SuSequencesVirtualEcu, UpdateSystem_WritesThePemsPublicKeyAndSerialAsTheAuthenticationKey)
+{
+   mc_Ecu.u8_FeatureByte7 = 0x02U | 0x20U; //secure authentication supported
+   ASSERT_EQ(Errc::success, m_Init());
+   std::vector<uint8_t> c_Modulus;
+   std::vector<uint8_t> c_Serial;
+   const std::string c_Path = mh_WriteRsa1024Pem("osy_vecu_operator.pem", c_Modulus, c_Serial);
+
+   std::vector<C_OscSuSequences::C_DoFlash> c_ToFlash(1U);
+   c_ToFlash[0].c_PemFile = c_Path;
+   const std::vector<uint32_t> c_Order(1U, 0U);
+
+   EXPECT_EQ(Errc::success, mc_Sequences.UpdateSystem(c_ToFlash, c_Order));
+   EXPECT_TRUE(mc_Sequences.c_Errors.empty()) << mc_Sequences.ErrorsAsText();
+
+   //modulus (128), exponent right-aligned in four bytes (65537), then the certificate serial
+   ASSERT_EQ(1U, mc_Ecu.c_AuthenticationKeysWritten.size());
+   const std::vector<uint8_t> & rc_Sent = mc_Ecu.c_AuthenticationKeysWritten[0];
+   ASSERT_EQ(128U + 4U + c_Serial.size(), rc_Sent.size());
+   EXPECT_EQ(c_Modulus, std::vector<uint8_t>(rc_Sent.begin(), rc_Sent.begin() + 128));
+   EXPECT_EQ(std::vector<uint8_t>({0x00U, 0x01U, 0x00U, 0x01U}),
+             std::vector<uint8_t>(rc_Sent.begin() + 128, rc_Sent.begin() + 132));
+   EXPECT_EQ(c_Serial, std::vector<uint8_t>(rc_Sent.begin() + 132, rc_Sent.end()));
+
+   //written in the programming session at security level 1
+   EXPECT_NE(mc_Ecu.c_Sessions.end(), std::find(mc_Ecu.c_Sessions.begin(), mc_Ecu.c_Sessions.end(), 0x02U));
+   EXPECT_NE(mc_Ecu.c_SecurityLevelsUnlocked.end(),
+             std::find(mc_Ecu.c_SecurityLevelsUnlocked.begin(), mc_Ecu.c_SecurityLevelsUnlocked.end(), 1U));
+   EXPECT_TRUE(mc_Sequences.Saw(C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_FINISHED));
+
+   std::vector<C_OscSuSequencesNodeUpdateStates> c_States;
+   ASSERT_EQ(Errc::success, mc_Sequences.GetUpdateStates(c_States));
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StateSecuritySettings.e_FileLoaded);
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StateSecuritySettings.e_PemFileExtracted);
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StateSecuritySettings.e_SecureAuthenticationKeySent);
+
+   (void)std::remove(c_Path.c_str());
+}
+
+TEST_F(SuSequencesVirtualEcu, UpdateSystem_PemWriteNeedsTheAuthenticationFeature)
+{
+   mc_Ecu.u8_FeatureByte7 = 0x02U;
+   ASSERT_EQ(Errc::success, m_Init());
+   std::vector<uint8_t> c_Modulus;
+   std::vector<uint8_t> c_Serial;
+   const std::string c_Path = mh_WriteRsa1024Pem("osy_vecu_operator2.pem", c_Modulus, c_Serial);
+
+   std::vector<C_OscSuSequences::C_DoFlash> c_ToFlash(1U);
+   c_ToFlash[0].c_PemFile = c_Path;
+   const std::vector<uint32_t> c_Order(1U, 0U);
+
+   EXPECT_EQ(Errc::range, mc_Sequences.UpdateSystem(c_ToFlash, c_Order));
+   EXPECT_TRUE(mc_Sequences.Saw(C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_AVAILABLE_FEATURE_ERROR));
+   EXPECT_TRUE(mc_Ecu.c_AuthenticationKeysWritten.empty());
+
+   (void)std::remove(c_Path.c_str());
 }

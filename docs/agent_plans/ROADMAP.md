@@ -120,11 +120,12 @@ this order:
   tests drive `m_FlashNodeOpenSydeFile` (accept and reject) and `m_WriteNvmOpenSyde`
   with an image built by `C_OscParamSetHandler`. Nothing found in those paths; one
   slip found by reading next to them (`OsyWriteMemoryByAddress` under encryption).
-- **The security and debugger flags: done** (`m_WriteOpenSydeNodeStates`, 2026-09-18):
-  authentication and encryption activation and the debugger state, each gated on the
-  device's feature bits. **PEM write** (`m_WritePemOpenSydeFile`) remains: it needs an
-  RSA-1024 identity (the service takes a 128-byte modulus), best shared from
-  `test_security_signatures`' builder once #51 has landed.
+- **The security and debugger flags and the PEM write: done** (2026-09-18).
+  `m_WriteOpenSydeNodeStates` writes authentication and encryption activation and the
+  debugger state, each gated on the device's feature bits; `m_WritePemOpenSydeFile`
+  sends the certificate's modulus, exponent and serial as the authentication key (an
+  RSA-1024 identity, since the service takes a 128-byte modulus). With these, every
+  branch of `UpdateSystem` runs against the virtual ECU.
 - **Device configuration.** `C_OscDcDeviceInformation` and the `C_OscDc*` sequences:
   the UDP broadcasts (`GetDeviceInfo`, `SetIpAddress`) the double currently swallows.
 
