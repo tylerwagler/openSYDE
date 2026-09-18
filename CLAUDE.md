@@ -264,7 +264,7 @@ macOS Qt comes from `install-qt-action`, not Homebrew. `brew install qt` drags
 (`tools_llvm_mingw1706`), Ninja and OpenSSL through the same action.
 
 `.github/workflows/release.yml` builds all eight tools in **Release** on the three
-platforms, packages them (Windows with `windeployqt`, OpenSSL and the llvm-mingw
+platforms, packages them (Windows with an `llvm-objdump` import walk for Qt, OpenSSL and the llvm-mingw
 runtime next to the executables; Linux/macOS as bare binaries with a `RUNTIME.md`) and,
 on a `v*` tag, publishes a GitHub Release with the archives. It also runs, without
 publishing, on a pull request that touches the workflow, `build.sh`, `cmake/**` or a

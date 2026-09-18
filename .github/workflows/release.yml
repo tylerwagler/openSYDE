@@ -15,7 +15,7 @@
 # What the archives contain, per platform:
 #   linux-x86_64   the eight binaries; Qt 6 and OpenSSL 3 from the distribution at runtime
 #   macos-arm64    the eight binaries; Qt 6 and OpenSSL 3 from Homebrew at runtime
-#   windows-x86_64 the eight binaries with the Qt libraries and plugins (windeployqt),
+#   windows-x86_64 the eight binaries with the Qt libraries and plugins (import walk),
 #                  the OpenSSL DLLs and the llvm-mingw runtime next to them: runs as is
 #
 # Per-tool versions (version_config.hpp, shown in banners and About dialogs) are
@@ -146,28 +146,58 @@ jobs:
           TXT
               ;;
             windows-*)
-              # Qt libraries and plugins next to each GUI executable, then the OpenSSL DLLs and the
-              # llvm-mingw runtime (libc++, libunwind) into every tool folder that has an executable.
+              # Every executable gets the DLLs it imports, transitively, resolved against the Qt bin
+              # directory, the OpenSSL bin directory and the llvm-mingw runtime (libc++, libunwind).
+              # Anything not found in those three is a Windows system DLL and stays unresolved.
               #
-              # A Qt from install-qt-action has no bin/qt.conf, so qtpaths reports the prefix of the
-              # machine that built Qt and windeployqt cannot find the platform plugin. One line fixes it.
-              QT_BIN="${QT_ROOT_DIR}/bin"
-              if [ ! -f "${QT_BIN}/qt.conf" ]; then printf '[Paths]\nPrefix=..\n' > "${QT_BIN}/qt.conf"; fi
-              echo "windeployqt: ${QT_BIN}/windeployqt.exe"; "${QT_BIN}/qtpaths.exe" --query QT_INSTALL_PLUGINS || true
-              ls "${QT_ROOT_DIR}/plugins/platforms" || true
-              for exe in "${STAGE}"/openSYDE/openSYDE.exe "${STAGE}"/openSYDE_CAN_Monitor/openSYDE_CAN_Monitor.exe "${STAGE}"/SYDEflash/SYDEflash.exe; do
-                if [ -f "${exe}" ]; then
-                  "${QT_BIN}/windeployqt.exe" --release --no-translations --no-opengl-sw --no-system-d3d-compiler --no-compiler-runtime "${exe}"
-                fi
-              done
-              RUNTIME_DIR="$(dirname "$(command -v clang++)")"
+              # windeployqt is deliberately not used. With the llvm-mingw Qt that install-qt-action
+              # provides it classifies the release plugins as debug builds and refuses to deploy
+              # ("Unable to find the platform plugin"), and it cannot be argued out of it. The walk
+              # below does the same job with llvm-objdump, and it also covers the command-line tools.
+              SEARCH=("${QT_ROOT_DIR}/bin" "${IQTA_TOOLS}/OpenSSLv3/Win_x64/bin" "$(dirname "$(command -v clang++)")")
+              imports() { llvm-objdump -p "$1" | sed -n 's/^ *DLL Name: *//p' | tr -d '\r'; }
+              deploy_deps() { # deploy_deps <dest dir> <binary>...
+                local dest="$1"; shift
+                local queue=("$@") seen=" " bin name lname d
+                while [ "${#queue[@]}" -gt 0 ]; do
+                  bin="${queue[0]}"; queue=("${queue[@]:1}")
+                  while read -r name; do
+                    [ -n "${name}" ] || continue
+                    lname="$(printf '%s' "${name}" | tr 'A-Z' 'a-z')"
+                    case "${seen}" in *" ${lname} "*) continue;; esac
+                    seen="${seen}${lname} "
+                    for d in "${SEARCH[@]}"; do
+                      if [ -f "${d}/${name}" ]; then
+                        [ -f "${dest}/${name}" ] || cp "${d}/${name}" "${dest}/"
+                        queue+=("${d}/${name}")
+                        break
+                      fi
+                    done
+                  done < <(imports "${bin}")
+                done
+              }
               for dir in "${STAGE}"/*/; do
-                if ls "${dir}"/*.exe >/dev/null 2>&1; then
-                  cp "${IQTA_TOOLS}"/OpenSSLv3/Win_x64/bin/libcrypto-3-x64.dll "${IQTA_TOOLS}"/OpenSSLv3/Win_x64/bin/libssl-3-x64.dll "${dir}"
-                  for dll in libc++.dll libunwind.dll; do
-                    if [ -f "${RUNTIME_DIR}/${dll}" ]; then cp "${RUNTIME_DIR}/${dll}" "${dir}"; fi
+                exes=("${dir}"*.exe); [ -f "${exes[0]}" ] || continue
+                plugins=()
+                if imports "${exes[0]}" | grep -qi '^Qt6Gui.dll$'; then
+                  mkdir -p "${dir}platforms"
+                  cp "${QT_ROOT_DIR}/plugins/platforms/qwindows.dll" "${dir}platforms/"
+                  for sub in imageformats iconengines styles; do
+                    mkdir -p "${dir}${sub}"
+                    cp "${QT_ROOT_DIR}/plugins/${sub}/"*.dll "${dir}${sub}/"
                   done
+                  plugins=("${dir}"platforms/*.dll "${dir}"imageformats/*.dll "${dir}"iconengines/*.dll "${dir}"styles/*.dll)
                 fi
+                deploy_deps "${dir}" "${exes[@]}" ${plugins[@]+"${plugins[@]}"}
+                # Nothing that looks like ours may be left unresolved next to the executable.
+                for bin in "${dir}"*.exe "${dir}"*.dll ${plugins[@]+"${plugins[@]}"}; do
+                  [ -f "${bin}" ] || continue
+                  imports "${bin}" | while read -r name; do
+                    case "$(printf '%s' "${name}" | tr 'A-Z' 'a-z')" in
+                      qt6*|lib*) [ -f "${dir}${name}" ] || { echo "::error::${bin}: ${name} not deployed"; exit 1; } ;;
+                    esac
+                  done
+                done
               done
               cat > "${STAGE}/RUNTIME.md" <<'TXT'
           # Runtime requirements (Windows)
