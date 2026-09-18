@@ -20,10 +20,10 @@ machinery at all.
 
 | Gap | State |
 |-----|-------|
-| Release build in CI | **Never runs.** `build.yml` hardcodes `BUILD_TYPE: Debug` on all three platforms |
-| Artifacts | **None.** CI produces nothing downloadable |
-| Packaging | **None.** No AppImage, dmg, installer or archive |
-| Release workflow | **None.** No tag trigger, no notes |
+| Release build in CI | `release.yml` (2026-09-18): Release on all three platforms on every `v*` tag, and on PRs that touch the build |
+| Artifacts | one archive per platform with a `.sha256`, attached to the GitHub Release; workflow artifacts on PRs |
+| Packaging | Windows zip runs as is (`windeployqt` + OpenSSL + runtime); Linux/macOS tarballs need the platform's Qt 6 -- AppImage and `.app` bundles still open |
+| Release workflow | tag `v<date>` -> build, package, GitHub Release with generated notes (`docs/releasing.md`) |
 | Versioning | Seven hand-edited `version_config.hpp` files with unrelated numbers (tool `1.90.1`, CAN Monitor `1.86.0`, SYDEsup `1.15.0`, flash tool `1.0.1`). Root `project()` has no `VERSION`. Nothing ties a release to a tag |
 
 Release **was** built manually on 2026-09-16: all eight tools clean, and the core

@@ -263,6 +263,13 @@ macOS Qt comes from `install-qt-action`, not Homebrew. `brew install qt` drags
 `find_package`. Windows likewise installs Qt (`win64_llvm_mingw`), the toolchain
 (`tools_llvm_mingw1706`), Ninja and OpenSSL through the same action.
 
+`.github/workflows/release.yml` builds all eight tools in **Release** on the three
+platforms, packages them (Windows with `windeployqt`, OpenSSL and the llvm-mingw
+runtime next to the executables; Linux/macOS as bare binaries with a `RUNTIME.md`) and,
+on a `v*` tag, publishes a GitHub Release with the archives. It also runs, without
+publishing, on a pull request that touches the workflow, `build.sh`, `cmake/**` or a
+tool's `pjt/CMakeLists.txt`. See `docs/releasing.md`.
+
 `.github/workflows/bench.yml` is separate and `workflow_dispatch`-only: the Google
 Benchmark harness across the same three OSes, in **Release**. GitHub only offers
 `workflow_dispatch` for workflows present on the **default branch**, so a new

@@ -1,0 +1,214 @@
+# openSYDE CI — Release
+#
+# Release builds of all eight tools on the three platforms we ship, packaged as
+# downloadable archives, and -- on a version tag -- published as a GitHub Release
+# with generated notes. This is the only place a Release configuration is built in
+# CI; build.yml stays on Debug for speed.
+#
+# Triggers:
+#   - a tag "v*"            -> build, package, publish a GitHub Release
+#   - a pull request that   -> build and package only (the archives are workflow
+#     touches this file,       artifacts), so a change to the packaging is verified
+#     build.sh or the CMake    on all three platforms before it lands
+#   - workflow_dispatch     -> build and package only
+#
+# What the archives contain, per platform:
+#   linux-x86_64   the eight binaries; Qt 6 and OpenSSL 3 from the distribution at runtime
+#   macos-arm64    the eight binaries; Qt 6 and OpenSSL 3 from Homebrew at runtime
+#   windows-x86_64 the eight binaries with the Qt libraries and plugins (windeployqt),
+#                  the OpenSSL DLLs and the llvm-mingw runtime next to them: runs as is
+#
+# Per-tool versions (version_config.hpp, shown in banners and About dialogs) are
+# STW's product versions and stay untouched; the bundle is versioned by the tag.
+
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  pull_request:
+    paths:
+      - '.github/workflows/release.yml'
+      - 'build.sh'
+      - 'cmake/**'
+      - '**/pjt/CMakeLists.txt'
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  package:
+    name: Package (${{ matrix.slug }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-26.04
+            slug: linux-x86_64
+          - os: macos-14
+            slug: macos-arm64
+          - os: windows-2022
+            slug: windows-x86_64
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          fetch-depth: 0   # git describe needs the tags
+
+      # --- dependencies: the same as build.yml, per platform ---------------------------------------------------------
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            clang cmake ninja-build \
+            qt6-base-dev qt6-svg-dev qt6-tools-dev \
+            libgl1-mesa-dev libssl-dev \
+            flex bison libfl-dev
+
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update -q
+          brew install -q ninja bison flex openssl@3
+
+      - name: Install Qt (macOS)
+        if: runner.os == 'macOS'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          host: mac
+          target: desktop
+          arch: clang_64
+
+      - name: Install Qt + LLVM-MinGW + Ninja + OpenSSL (Windows)
+        if: runner.os == 'Windows'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          host: windows
+          target: desktop
+          arch: win64_llvm_mingw
+          modules: qtimageformats
+          tools: 'tools_llvm_mingw1706 tools_ninja tools_opensslv3_x64'
+          add-tools-to-path: true
+
+      - name: Install winflexbison (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          choco install --no-progress winflexbison3
+          $tools = Split-Path (Get-ChildItem C:\ProgramData\chocolatey\lib\winflexbison3 -Recurse -Filter win_flex.exe | Select-Object -First 1).FullName
+          Add-Content -Path $env:GITHUB_PATH -Value $tools
+
+      # --- build ---------------------------------------------------------------------------------------------------
+      - name: Build all tools (Release)
+        shell: bash
+        env:
+          OPENSSL_ROOT_DIR: ${{ runner.os == 'Windows' && format('{0}/OpenSSLv3/Win_x64', env.IQTA_TOOLS) || '' }}
+          CMAKE_PREFIX_PATH: ${{ runner.os == 'Windows' && format('{0};{1}/OpenSSLv3/Win_x64', env.QT_ROOT_DIR, env.IQTA_TOOLS) || '' }}
+        run: ./build.sh -b Release all
+
+      # --- package -------------------------------------------------------------------------------------------------
+      # One folder per tool, exactly as build.sh lays out result/Release, plus the licences,
+      # the README and a RUNTIME.md that says what the platform has to provide.
+      - name: Package
+        id: package
+        shell: bash
+        env:
+          SLUG: ${{ matrix.slug }}
+        run: |
+          set -euo pipefail
+          VERSION="$(git describe --tags --always --dirty)"
+          NAME="openSYDE-${VERSION}-${SLUG}"
+          STAGE="dist/${NAME}"
+          mkdir -p "${STAGE}"
+          cp -R result/Release/. "${STAGE}/"
+          cp license.txt gpl-3.0.txt README.md "${STAGE}/"
+          case "${SLUG}" in
+            linux-*)
+              cat > "${STAGE}/RUNTIME.md" <<'TXT'
+          # Runtime requirements (Linux)
+          The GUI tools (openSYDE, openSYDE_CAN_Monitor, SYDEflash) link the distribution's Qt 6 and OpenSSL 3.
+          On Ubuntu 24.04 / 26.04: `sudo apt install libqt6core6 libqt6gui6 libqt6widgets6 libqt6svg6 libqt6network6 libssl3`.
+          The command-line tools need OpenSSL 3 only.
+          TXT
+              ;;
+            macos-*)
+              cat > "${STAGE}/RUNTIME.md" <<'TXT'
+          # Runtime requirements (macOS)
+          The GUI tools link Qt 6.8 and OpenSSL 3; install them with Homebrew: `brew install qtbase qtsvg openssl@3`.
+          Bundled .app images with the Qt frameworks inside are on the roadmap.
+          TXT
+              ;;
+            windows-*)
+              # Qt libraries and plugins next to each GUI executable, then the OpenSSL DLLs and the
+              # llvm-mingw runtime (libc++, libunwind) into every tool folder that has an executable.
+              for exe in "${STAGE}"/openSYDE/openSYDE.exe "${STAGE}"/openSYDE_CAN_Monitor/openSYDE_CAN_Monitor.exe "${STAGE}"/SYDEflash/SYDEflash.exe; do
+                if [ -f "${exe}" ]; then
+                  windeployqt --release --no-translations --no-opengl-sw --no-system-d3d-compiler --no-compiler-runtime "${exe}"
+                fi
+              done
+              RUNTIME_DIR="$(dirname "$(command -v clang++)")"
+              for dir in "${STAGE}"/*/; do
+                if ls "${dir}"/*.exe >/dev/null 2>&1; then
+                  cp "${IQTA_TOOLS}"/OpenSSLv3/Win_x64/bin/libcrypto-3-x64.dll "${IQTA_TOOLS}"/OpenSSLv3/Win_x64/bin/libssl-3-x64.dll "${dir}"
+                  for dll in libc++.dll libunwind.dll; do
+                    if [ -f "${RUNTIME_DIR}/${dll}" ]; then cp "${RUNTIME_DIR}/${dll}" "${dir}"; fi
+                  done
+                fi
+              done
+              cat > "${STAGE}/RUNTIME.md" <<'TXT'
+          # Runtime requirements (Windows)
+          None: the Qt libraries and plugins, the OpenSSL DLLs and the compiler runtime are next to each executable.
+          TXT
+              ;;
+          esac
+          echo "== contents of ${NAME}"; find "${STAGE}" -maxdepth 2 | sort | sed 's|^dist/||'
+          cd dist
+          if [[ "${SLUG}" == windows-* ]]; then
+            7z a -bd "${NAME}.zip" "${NAME}" >/dev/null
+            ARCHIVE="${NAME}.zip"
+          else
+            tar -czf "${NAME}.tar.gz" "${NAME}"
+            ARCHIVE="${NAME}.tar.gz"
+          fi
+          if command -v sha256sum >/dev/null; then sha256sum "${ARCHIVE}" > "${ARCHIVE}.sha256"; else shasum -a 256 "${ARCHIVE}" > "${ARCHIVE}.sha256"; fi
+          cat "${ARCHIVE}.sha256"
+          echo "archive=${ARCHIVE}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.package.outputs.archive }}
+          path: |
+            dist/${{ steps.package.outputs.archive }}
+            dist/${{ steps.package.outputs.archive }}.sha256
+          if-no-files-found: error
+
+  # --- publish (tags only) ------------------------------------------------------------------------------------------
+  publish:
+    name: Publish GitHub Release
+    needs: package
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: write
+    steps:
+      - name: Download all archives
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls -l dist
+          gh release create "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}" \
+            --title "openSYDE ${GITHUB_REF_NAME}" --generate-notes dist/*
