@@ -1833,3 +1833,32 @@ rate says about the input. 1/256 per scalar is a leading byte; 1/2 is a sign bit
 is a leading word. This is the second time in this tree a fixed-width assumption about a
 variable-width number has bitten (the first was the 1-based indexing residue, a different
 shape of the same "the representation is not the value" mistake).
+
+## The virtual ECU, third round: file-based flashloader and NVM images (2026-09-18)
+
+The two `UpdateSystem` branches the address-based test skipped. The device grew
+`RequestFileTransfer` (mode, name, size; answers the block length), the nine-byte
+file-based transfer exit (whose first four bytes are the client's CRC32 over what it
+sent, checked against what arrived), the exit-result identifier the sequence reads
+back on success *and* on "general programming failure", and `ReadMemoryByAddress` /
+`WriteMemoryByAddress` over a byte map. The NVM test builds a real `.syde_psi` with
+`C_OscParamSetHandler` (raw entries plus the interpreted twin the format insists on,
+CRC stamped afterwards) and checks the 300-byte entry arrives as 246 + 54, which is
+the service size the device advertised minus the write header.
+
+**Nothing found in the paths themselves**: the file transfer, its CRC handshake, the
+result-string fallback and the NVM chunking all behaved. One slip found by reading the
+code next to them: `OsyWriteMemoryByAddress`, when traffic encryption is active,
+subtracted the encryption overhead from the driver's member `mu16_MaxServiceSize`
+instead of from the local block size (its read twin does it right). Every encrypted
+write shrank the driver's limit permanently, and the block size actually used was
+never reduced, so the request could exceed the encrypted limit. Fixed by inspection;
+not reachable by the harness without the security sub-layer, which is the next
+extension.
+
+The node-state flags (`m_WriteOpenSydeNodeStates`: authentication and encryption
+activation, debugger on/off, each gated on a feature bit) went in the same round and
+behaved.
+
+Running tally for the hardware-facing layer: the virtual ECU found three defects in
+the sequence and the UDS parser, none in either transport, none in these paths.

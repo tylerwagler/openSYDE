@@ -695,6 +695,34 @@ TEST_F(ProtocolDriverOsy, ReadMemoryByAddress_ShrinksAddressAndSizeToTheBytesThe
    EXPECT_EQ(mh_Bytes({1U, 2U, 3U, 4U, 5U}), c_Data);
 }
 
+TEST_F(ProtocolDriverOsy, WriteMemoryByAddress_SplitsAtTheServiceSizeAndExpectsTheHeaderEchoed)
+{
+   //service size 20 leaves 10 data bytes per request; 25 bytes take three requests at 0x1000, 0x100A, 0x1014
+   mc_Driver.SetMaxServiceSize(20U);
+   std::vector<uint8_t> c_Data(25U);
+   for (uint8_t u8_Index = 0U; u8_Index < 25U; ++u8_Index)
+   {
+      c_Data[u8_Index] = static_cast<uint8_t>(0x30U + u8_Index);
+   }
+   mc_Transport.Reply({mh_Bytes({0x7DU, 0x12U, 0x10U, 0x00U, 0x0AU})});
+   mc_Transport.Reply({mh_Bytes({0x7DU, 0x12U, 0x10U, 0x0AU, 0x0AU})});
+   mc_Transport.Reply({mh_Bytes({0x7DU, 0x12U, 0x10U, 0x14U, 0x05U})});
+
+   EXPECT_EQ(Errc::success, mc_Driver.OsyWriteMemoryByAddress(0x1000U, c_Data));
+
+   ASSERT_EQ(3U, mc_Transport.c_Requests.size());
+   EXPECT_EQ(mh_Bytes({0x3DU, 0x12U, 0x10U, 0x00U, 0x0AU, 0x30U, 0x31U, 0x32U, 0x33U, 0x34U, 0x35U, 0x36U, 0x37U, 0x38U,
+                       0x39U}),
+             mc_Transport.c_Requests[0]);
+   EXPECT_EQ(0x14U, mc_Transport.c_Requests[2][3]); //third block starts at 0x1014
+   EXPECT_EQ(0x05U, mc_Transport.c_Requests[2][4]); //and carries the last five bytes
+   EXPECT_EQ(10U, mc_Transport.c_Requests[2].size());
+
+   //an echo of another address is rd_wr
+   mc_Transport.Reply({mh_Bytes({0x7DU, 0x12U, 0x10U, 0x01U, 0x0AU})});
+   EXPECT_EQ(Errc::rd_wr, mc_Driver.OsyWriteMemoryByAddress(0x1000U, std::vector<uint8_t>(10U, 0U)));
+}
+
 /* -- Session, reset, keep-alive ------------------------------------------------------------------------------------- */
 
 TEST_F(ProtocolDriverOsy, DiagnosticSessionControl_ExpectsTheSessionEchoed)
