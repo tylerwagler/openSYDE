@@ -327,13 +327,16 @@ std::error_code C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(
                                        EC_POINT_get_affine_coordinates(
                            pc_EcGroup, pc_PublicKey, pc_Xpart, pc_Ypart,
                            nullptr);
-                        if ((x_Result == 1) && (BN_num_bytes(pc_Xpart) == 32) && (BN_num_bytes(pc_Ypart) == 32))
+                        //A coordinate is a number, not a byte string: about one key in 128 has an x or y
+                        //below 2^248 and so needs fewer than 32 bytes. Those keys are as valid as any other
+                        //and the wire format is fixed at 32 bytes each, so left-pad rather than reject.
+                        //(BN_num_bytes(x) == 32 here rejected every such certificate.)
+                        if ((x_Result == 1) && (BN_num_bytes(pc_Xpart) <= 32) && (BN_num_bytes(pc_Ypart) <= 32))
                         {
-                           //put x and y into array:
-                           x_Result = BN_bn2bin(pc_Xpart, &orau8_Binary[0]);
-                           tgl_assert(x_Result == 32); //size already checked; this would be unexpected
-                           x_Result = BN_bn2bin(pc_Ypart, &orau8_Binary[32]);
-                           tgl_assert(x_Result == 32); //size already checked; this would be unexpected
+                           x_Result = BN_bn2binpad(pc_Xpart, &orau8_Binary[0], 32);
+                           tgl_assert(x_Result == 32); //fits by the check above
+                           x_Result = BN_bn2binpad(pc_Ypart, &orau8_Binary[32], 32);
+                           tgl_assert(x_Result == 32); //fits by the check above
                            c_Result = Errc::success;
                         }
                         BN_clear_free(pc_Xpart);
