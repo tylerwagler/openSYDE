@@ -185,15 +185,6 @@ private:
    template <typename T> void m_GetValueArrayElement(const E_Type oe_Type, const uint32_t ou32_Index,
                                                      T & orc_Result) const;
 
-   static uint64_t mh_BinaryToUnsignedInt64Big(const uint8_t * const opu8_Data);
-   static uint32_t mh_BinaryToUnsignedInt32Big(const uint8_t * const opu8_Data);
-   static uint64_t mh_BinaryToUnsignedInt64Little(const uint8_t * const opu8_Data);
-   static uint32_t mh_BinaryToUnsignedInt32Little(const uint8_t * const opu8_Data);
-   static void mh_UnsignedInt64ToBinaryBig(const uint64_t ou64_Data, uint8_t * const opu8_Data);
-   static void mh_UnsignedInt32ToBinaryBig(const uint32_t ou32_Data, uint8_t * const opu8_Data);
-   static void mh_UnsignedInt64ToBinaryLittle(const uint64_t ou64_Data, uint8_t * const opu8_Data);
-   static void mh_UnsignedInt32ToBinaryLittle(const uint32_t ou32_Data, uint8_t * const opu8_Data);
-
    bool m_CompareArrayNotEqual(const C_OscNodeDataPoolContent & orc_Cmp, const uint32_t ou32_Index) const;
 
    // It is mutable because of the constness of the getter functions. Without the keyword mutable the getter functions

@@ -9,8 +9,11 @@
 */
 //----------------------------------------------------------------------------------------------------------------------
 #include "precomp_headers.hpp" //pre-compiled headers
+#include "C_OscEndian.hpp"
 
 #include <cstring>
+#include <optional>
+#include <span>
 #include <system_error>
 
 #include <cstdint>
@@ -28,6 +31,14 @@ using namespace stw::hex_file;
 using namespace stw::opensyde_core;
 using namespace stw::scl;
 using namespace stw::tgl;
+
+/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+///Every application information block (V1 and V2) starts with these five bytes
+static constexpr uint8_t mhau8_INFO_BLOCK_MAGIC_START[5] = {'L', 'x', '_', '?', 'z'};
+static constexpr std::span<const uint8_t> mhc_INFO_BLOCK_MAGIC_START(mhau8_INFO_BLOCK_MAGIC_START);
+///Marks the signature block
+static constexpr uint8_t mhau8_SIGNATURE_BLOCK_MAGIC[10] = {';', 'z', 'w', 'm', '2', 'K', 'g', 'U', 'Z', '!'};
+static constexpr std::span<const uint8_t> mhc_SIGNATURE_BLOCK_MAGIC(mhau8_SIGNATURE_BLOCK_MAGIC);
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   convert error reported by CHexFile to textual representation
@@ -94,7 +105,6 @@ std::error_code C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscA
    uint16_t u16_Size = static_cast<uint16_t>(c_Block.GetMaxSizeOnECU());
    std::vector<uint8_t> c_Buffer(u16_Size);
    uint8_t * const pu8_Buffer = c_Buffer.data();
-   uint16_t u16_Help;
 
    char acn_Magic[APPLICATION_INFO_MAGIC_LENGTH_V2];
 
@@ -102,24 +112,21 @@ std::error_code C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscA
 
    while (true)
    {
-      //FindPattern and GetDataByAddress are inherited from C_HexFile and report their own 0 / -1 / -2
-      //convention - neither the STW codes nor the hex_file category - so they get a plain local.
-      int32_t s32_HexResult;
-
       //exact match required:
       //V1 and V2 have the same beginning:
-      s32_HexResult = this->FindPattern(u32_Address, 5, reinterpret_cast<const uint8_t *>("Lx_?z"));
-      if (s32_HexResult != 0)
+      const std::optional<uint32_t> c_Found = this->FindPattern(u32_Address, mhc_INFO_BLOCK_MAGIC_START);
+      if (c_Found.has_value() == false)
       {
          break; //only stop if we cannot find any more pattern; in all other cases: continue searching
       }
+      u32_Address = *c_Found;
 
       //get part of dump:
-      u16_Help = APPLICATION_INFO_MAGIC_LENGTH_V2;
-      s32_HexResult = this->GetDataByAddress(u32_Address, u16_Help, reinterpret_cast<uint8_t *>(&acn_Magic[0]));
+      const std::span<const uint8_t> c_Magic = this->GetDataByAddress(u32_Address, APPLICATION_INFO_MAGIC_LENGTH_V2);
       c_Return = Errc::config; //until a magic we know about is recognised
-      if (s32_HexResult == 0)
+      if (c_Magic.size() == APPLICATION_INFO_MAGIC_LENGTH_V2)
       {
+         (void)memcpy(&acn_Magic[0], c_Magic.data(), APPLICATION_INFO_MAGIC_LENGTH_V2);
          //"Block0" ?
          if ((acn_Magic[6] == '.') || (oq_Block0Only == false))
          {
@@ -159,26 +166,17 @@ std::error_code C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscA
          //the alignment on PC is not neccessarily the same as on the ECU
          //-> we have to use a temporary buffer to copy the data over ...
          (void)memset(pu8_Buffer, 0, u16_Size);
-         s32_HexResult = this->GetDataByAddress(u32_Address, u16_Size, pu8_Buffer);
-         switch (s32_HexResult)
+         const std::span<const uint8_t> c_Data = this->GetDataByAddress(u32_Address, u16_Size);
+         if (c_Data.size() < 2U) //we need at least 2 bytes for the header information
          {
-         case 0:
-            break; //great ...
-         case -2:  //data read but not fully
-            if (u16_Size < 2U) //we need at least 2 bytes for the header information
-            {
-               //skip past this pattern before retrying, or FindPattern below matches the same
-               //address again and the loop never terminates
-               u32_Address += APPLICATION_INFO_MAGIC_LENGTH_V1;
-               continue;
-            }
-            break;
-         case -1:
-         default:
-            //as above: advance, or this is an infinite loop
+            //skip past this pattern before retrying, or FindPattern above matches the same
+            //address again and the loop never terminates
             u32_Address += APPLICATION_INFO_MAGIC_LENGTH_V1;
-            continue; //nothing we can handle or undefined error -> continue
+            continue;
          }
+         //the block may end before the maximum struct size; parse what is there
+         u16_Size = static_cast<uint16_t>(c_Data.size());
+         (void)memcpy(pu8_Buffer, c_Data.data(), u16_Size);
 
          c_Return = c_Block.ParseFromBLOB(pu8_Buffer, u16_Size);
          if (!c_Return)
@@ -243,13 +241,8 @@ std::error_code C_OscHexFile::CalcFileChecksum(uint32_t & oru32_Checksum)
    {
       //address (serialize to make the code endian-safe):
       const uint32_t u32_AddressOffset = pc_Dump->at_Blocks[u32_Index].u32_AddressOffset;
-      const uint8_t au8_AddressOffset[4] =
-      {
-         static_cast<uint8_t>(u32_AddressOffset),
-         static_cast<uint8_t>(u32_AddressOffset >> 8U),
-         static_cast<uint8_t>(u32_AddressOffset >> 16U),
-         static_cast<uint8_t>(u32_AddressOffset >> 24U),
-      };
+      uint8_t au8_AddressOffset[4];
+      C_OscEndian::h_SetU32Little(u32_AddressOffset, au8_AddressOffset);
 
       //address:
       C_SclChecksums::CalcCRC32(&au8_AddressOffset[0], 4U, oru32_Checksum);
@@ -286,11 +279,12 @@ std::error_code C_OscHexFile::GetSignatureBlockAddress(uint32_t & oru32_Address)
 
    oru32_Address = this->mu32_MinAdr;
 
-   //FindPattern is inherited from C_HexFile and reports 0 / -1, not an STW code.
-   //lint -e{926}
-   const int32_t s32_HexResult =
-      this->FindPattern(oru32_Address, 10, reinterpret_cast<const uint8_t *>(";zwm2KgUZ!"));
-   if (s32_HexResult != 0)
+   const std::optional<uint32_t> c_Found = this->FindPattern(this->mu32_MinAdr, mhc_SIGNATURE_BLOCK_MAGIC);
+   if (c_Found.has_value())
+   {
+      oru32_Address = *c_Found;
+   }
+   else
    {
       c_Return = Errc::noact;
    }

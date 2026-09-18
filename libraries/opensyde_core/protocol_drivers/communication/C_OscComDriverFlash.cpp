@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_OscEndian.hpp"
 
 #include <cstring>
 #include <system_error>
@@ -1349,10 +1350,7 @@ std::error_code C_OscComDriverFlash::SendOsyRequestTransferExitFileBased(
    {
       uint8_t au8_Signature[8];
       //place the CRC into the first four bytes; rest is reserved
-      au8_Signature[0] = static_cast<uint8_t>(ou32_CrcOverData >> 24U);
-      au8_Signature[1] = static_cast<uint8_t>(ou32_CrcOverData >> 16U);
-      au8_Signature[2] = static_cast<uint8_t>(ou32_CrcOverData >> 8U);
-      au8_Signature[3] = static_cast<uint8_t>(ou32_CrcOverData);
+      C_OscEndian::h_SetU32Big(ou32_CrcOverData, &au8_Signature[0]);
       au8_Signature[4] = 0U; //reserved: set to zero
       au8_Signature[5] = 0U; //reserved: set to zero
       au8_Signature[6] = 0U; //reserved: set to zero

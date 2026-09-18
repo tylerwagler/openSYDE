@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_OscEndian.hpp"
 
 #include <algorithm> //for sort
 #include <sstream>
@@ -153,11 +154,8 @@ void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, 
                                                      const uint32_t ou32_Value,
                                                      const std::string & orc_Comment)
 {
-   std::vector<uint8_t> c_ThePayload;
-   c_ThePayload.push_back(static_cast<uint8_t>(ou32_Value));
-   c_ThePayload.push_back(static_cast<uint8_t>(ou32_Value >> 8U));
-   c_ThePayload.push_back(static_cast<uint8_t>(ou32_Value >> 16U));
-   c_ThePayload.push_back(static_cast<uint8_t>(ou32_Value >> 24U));
+   std::vector<uint8_t> c_ThePayload(4U);
+   C_OscEndian::h_SetU32Little(ou32_Value, c_ThePayload.data());
 
    this->SetConciseEntry(ou16_Index, ou8_SubIndex, c_ThePayload, orc_Comment);
 }

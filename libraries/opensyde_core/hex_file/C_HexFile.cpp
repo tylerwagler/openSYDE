@@ -25,7 +25,9 @@
 //                          and binary data size in byte
 //************************************************************************
 #include "precomp_headers.hpp" //pre-compiled headers
+#include "C_OscEndian.hpp"
 
+#include <algorithm>
 #include <cstring>
 #include <cctype>
 
@@ -811,8 +813,7 @@ uint32_t C_HexFile::m_CopyHex2Mem(uint16_t * const opu16_BinImage, const uint32_
 
          if (u8_Command == mu8_CMD_XADR32) // address offset?
          {
-            u32_AdrOffset =  (static_cast<uint32_t>(pu8_HexLine[mu8_INTEL_DAT]) << 24U);
-            u32_AdrOffset |= (static_cast<uint32_t>(pu8_HexLine[mu8_INTEL_DAT + 1]) << 16U);
+            u32_AdrOffset = static_cast<uint32_t>(stw::opensyde_core::C_OscEndian::h_GetU16Big(&pu8_HexLine[mu8_INTEL_DAT])) << 16U;
          }
          else if (u8_Command == mu8_CMD_DATA) // data record?
          {
@@ -1504,8 +1505,7 @@ uint32_t C_HexFile::m_SetXAdrPtr(const uint32_t ou32_Adr)
       // check if offset command already exists
       if (pt_Next->pu8_HexLine[mu8_INTEL_CMD] == mu8_CMD_XADR32)
       {
-         u32_Offs = (static_cast<uint32_t>(pt_Next->pu8_HexLine[mu8_INTEL_DAT]) << 24U) +
-                    (static_cast<uint32_t>(pt_Next->pu8_HexLine[mu8_INTEL_DAT + 1U]) << 16U);
+         u32_Offs = static_cast<uint32_t>(stw::opensyde_core::C_OscEndian::h_GetU16Big(&pt_Next->pu8_HexLine[mu8_INTEL_DAT])) << 16U;
          if (u32_Offs == ou32_Adr)
          {
             u32_Ret = false;
@@ -1655,8 +1655,8 @@ uint32_t C_HexFile::m_CopyData(const char * const opcn_String, T_HexLine * const
       // calculate and store 32bit start address
       if (opt_HexLine->pu8_HexLine[mu8_INTEL_CMD] == mu8_CMD_XADR32)
       {
-         opt_HexLine->u32_XAdr = ((static_cast<uint32_t>(opt_HexLine->pu8_HexLine[mu8_INTEL_DAT]) << 24U) +
-                                  (static_cast<uint32_t>(opt_HexLine->pu8_HexLine[mu8_INTEL_DAT + 1]) << 16U));
+         opt_HexLine->u32_XAdr =
+            static_cast<uint32_t>(stw::opensyde_core::C_OscEndian::h_GetU16Big(&opt_HexLine->pu8_HexLine[mu8_INTEL_DAT])) << 16U;
       }
 
       // data record ?
@@ -2210,183 +2210,109 @@ const uint8_t * C_HexFile::NextLine(void)
 
 //-----------------------------------------------------------------------------
 /*!
-   \brief   returns a number of bytes from an absolute address
+   \brief   returns the bytes defined at an absolute address
 
-   Returns an array of bytes at the specified address.
+   Looks up the dump block containing ou32_Address and returns a view of up to ou32_NumBytes
+   bytes from there. The view ends where the block ends: gaps hold undefined data and are never
+   read across.
 
    \param[in]     ou32_Address   absolute address to read the data from
-   \param[in,out] oru16_NumBytes in:  number of bytes to read
-                                 out: number of bytes read
-   \param[out]    opu8_Data      data at the specified address
+   \param[in]     ou32_NumBytes  number of bytes wanted
 
    \return
-   0        data read (result in opu8_Data)
-   -1       error (data not found at specified address)
-   -2       data read (result in opu8_Data), but not all bytes were available before the next memory gap after
-             ou32_Address
+   view into the dump: empty if no data is defined at ou32_Address, shorter than ou32_NumBytes if
+   the block ends first
 */
 //-----------------------------------------------------------------------------
-int32_t C_HexFile::GetDataByAddress(const uint32_t ou32_Address, uint16_t & oru16_NumBytes, uint8_t * const opu8_Data)
+std::span<const uint8_t> C_HexFile::GetDataByAddress(const uint32_t ou32_Address, const uint32_t ou32_NumBytes)
 {
-   int32_t s32_Block;
-   uint32_t u32_Offset;
-   uint32_t u32_BlockLength;
-   const C_HexDataDump * pc_HexFileData;
-   int32_t s32_Return;
-   uint16_t u16_NumBytes;
-   uint32_t u32_Return;
-
    std::error_code c_DumpError;
-   pc_HexFileData = this->GetDataDump(c_DumpError);
-   u32_Return = c_DumpError ? ERR_NO_DATA : NO_ERR;
-   if (u32_Return != NO_ERR)
-   {
-      return -1;
-   }
+   const C_HexDataDump * const pc_HexFileData = this->GetDataDump(c_DumpError);
 
-   for (s32_Block = 0; s32_Block < static_cast<int32_t>(pc_HexFileData->at_Blocks.size()); s32_Block++)
+   if (!c_DumpError)
    {
-      u32_BlockLength = pc_HexFileData->at_Blocks[s32_Block].au8_Data.size();
-      if ((ou32_Address <= (pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset + u32_BlockLength)) &&
-          (ou32_Address >= pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset))
+      for (const C_HexDataDumpBlock & rc_Block : pc_HexFileData->at_Blocks)
       {
-         //it's in this block !
-         //it must be completely in this block, as we do not want to read undefined data from any gaps !
-         u32_Offset = ou32_Address - pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset; //offset within the block
-
-         if ((u32_BlockLength - u32_Offset) < static_cast<uint32_t>(oru16_NumBytes))
+         const uint32_t u32_BlockLength = static_cast<uint32_t>(rc_Block.au8_Data.size());
+         if ((ou32_Address >= rc_Block.u32_AddressOffset) &&
+             (ou32_Address < (rc_Block.u32_AddressOffset + u32_BlockLength)))
          {
-            s32_Return = -2; //not enough bytes !
-            u16_NumBytes = static_cast<uint16_t>(u32_BlockLength - u32_Offset);
-            oru16_NumBytes = u16_NumBytes;
+            //it's in this block; hand out what the block holds from here, and no more
+            const uint32_t u32_Offset = ou32_Address - rc_Block.u32_AddressOffset;
+            const uint32_t u32_Available = std::min(ou32_NumBytes, u32_BlockLength - u32_Offset);
+            return std::span<const uint8_t>(rc_Block.au8_Data).subspan(u32_Offset, u32_Available);
          }
-         else
-         {
-            s32_Return = 0; //not enough bytes !
-            u16_NumBytes = oru16_NumBytes;
-         }
-         (void)std::memcpy(opu8_Data, &pc_HexFileData->at_Blocks[s32_Block].au8_Data[u32_Offset], u16_NumBytes);
-         return s32_Return;
       }
    }
-   return -1;
+   return {};
 }
 
 //-----------------------------------------------------------------------------
 /*!
-   \brief   find a pattern in memory
+   \brief   find a pattern in a buffer
 
-   Finds a specified data pattern in memory and returns the offset in the searched buffer.
-
-   \param[in]     opu8_Buffer        buffer to search
-   \param[in]     opu8_Pattern       pattern to find
-   \param[in]     ou32_BufSize       size of opu8_Buffer
-   \param[in]     ou16_PatternLength length of pattern to match
+   \param[in]     oc_Buffer   buffer to search
+   \param[in]     oc_Pattern  pattern to find
 
    \return
-   >= 0     pattern found (index within opu8_Buffer)
-   -1       error (pattern not found)
+   index of the first match within oc_Buffer; empty if not found or the pattern is empty
 */
 //-----------------------------------------------------------------------------
-int32_t C_HexFile::mh_FindPattern(const uint8_t * const opu8_Buffer, const uint8_t * const opu8_Pattern,
-                                  const uint32_t ou32_BufSize, const uint16_t ou16_PatternLength)
+std::optional<uint32_t> C_HexFile::mh_FindPattern(const std::span<const uint8_t> oc_Buffer,
+                                                  const std::span<const uint8_t> oc_Pattern)
 {
-   uint32_t u32_Index;
-   uint32_t u32_LastPossiblePosition;
-   int32_t s32_Return;
-
-   if (ou32_BufSize > 0x7FFFFFFFUL) //as we return an sint32 we can't handle block bigger than 2GB
+   if ((oc_Pattern.empty() == false) && (oc_Pattern.size() <= oc_Buffer.size()))
    {
-      return -1;
-   }
-
-   if (ou32_BufSize < static_cast<uint32_t>(ou16_PatternLength))
-   {
-      return -1;
-   }
-
-   u32_LastPossiblePosition = ou32_BufSize - ou16_PatternLength;
-
-   for (u32_Index = 0U; u32_Index <= u32_LastPossiblePosition; u32_Index++)
-   {
-      if (opu8_Buffer[u32_Index] == opu8_Pattern[0])
+      const auto c_Hit = std::search(oc_Buffer.begin(), oc_Buffer.end(), oc_Pattern.begin(), oc_Pattern.end());
+      if (c_Hit != oc_Buffer.end())
       {
-         //check rest:
-         s32_Return = std::memcmp(&opu8_Buffer[u32_Index + 1U], &opu8_Pattern[1],
-                                  ou16_PatternLength - 1);
-         if (s32_Return == 0)
-         {
-            return static_cast<int32_t>(u32_Index);
-         }
+         return static_cast<uint32_t>(c_Hit - oc_Buffer.begin());
       }
    }
-   return -1;
+   return std::nullopt;
 }
 
 //-----------------------------------------------------------------------------
 /*!
    \brief   find a memory pattern
 
-   Finds a specified data pattern in memory and returns the address offset.
+   Searches the dump blocks in address order, starting at ou32_StartAddress (or at the beginning
+   of the first block after it). A match lies within one block; it never spans a gap.
 
-   \param[in,out] oru32_Address      in:  start address to search from
-                                     out: address of pattern
-   \param[in]     ou8_PatternLength  length of the pattern in bytes
-   \param[in]     opu8_Pattern       pattern to find
+   \param[in]     ou32_StartAddress  address to start the search at
+   \param[in]     oc_Pattern         pattern to find
 
    \return
-   0        pattern found (address in opu32_Address)
-   -1       error (pattern not found)
+   address of the first match; empty if not found
 */
 //-----------------------------------------------------------------------------
-int32_t C_HexFile::FindPattern(uint32_t & oru32_Address, const uint8_t ou8_PatternLength,
-                               const uint8_t * const opu8_Pattern)
+std::optional<uint32_t> C_HexFile::FindPattern(const uint32_t ou32_StartAddress,
+                                               const std::span<const uint8_t> oc_Pattern)
 {
-   int32_t s32_Return;
-   int32_t s32_Block;
-   uint32_t u32_Offset;
-   uint32_t u32_BlockLength;
-   uint32_t u32_Return;
-
-   const C_HexDataDump * pc_HexFileData;
-
    std::error_code c_DumpError;
-   pc_HexFileData = this->GetDataDump(c_DumpError);
-   u32_Return = c_DumpError ? ERR_NO_DATA : NO_ERR;
-   if (u32_Return != NO_ERR)
-   {
-      return -1;
-   }
+   const C_HexDataDump * const pc_HexFileData = this->GetDataDump(c_DumpError);
 
-   for (s32_Block = 0; s32_Block < static_cast<int32_t>(pc_HexFileData->at_Blocks.size()); s32_Block++)
+   if (!c_DumpError)
    {
-      u32_BlockLength = pc_HexFileData->at_Blocks[s32_Block].au8_Data.size();
-      if (oru32_Address < (pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset + u32_BlockLength))
+      for (const C_HexDataDumpBlock & rc_Block : pc_HexFileData->at_Blocks)
       {
-         //is the start address exactly in this block ?
-         if (oru32_Address >= pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset)
+         const uint32_t u32_BlockLength = static_cast<uint32_t>(rc_Block.au8_Data.size());
+         if (ou32_StartAddress < (rc_Block.u32_AddressOffset + u32_BlockLength))
          {
-            //start address is in this block !
-            //set offset within the block
-            u32_Offset = oru32_Address - pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset;
-         }
-         else
-         {
-            //start at the beginning of this block
-            u32_Offset = 0U;
-         }
-
-         s32_Return = mh_FindPattern(&pc_HexFileData->at_Blocks[s32_Block].au8_Data[u32_Offset], opu8_Pattern,
-                                     u32_BlockLength - u32_Offset, ou8_PatternLength);
-         if (s32_Return >= 0) //found in this block !
-         {
-            oru32_Address = (pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset + u32_Offset +
-                             static_cast<uint32_t>(s32_Return));
-            return 0;
+            //start within this block if the start address is in it, else at its beginning
+            const uint32_t u32_Offset =
+               (ou32_StartAddress >= rc_Block.u32_AddressOffset) ? (ou32_StartAddress - rc_Block.u32_AddressOffset) :
+               0U;
+            const std::optional<uint32_t> c_Index =
+               mh_FindPattern(std::span<const uint8_t>(rc_Block.au8_Data).subspan(u32_Offset), oc_Pattern);
+            if (c_Index.has_value())
+            {
+               return rc_Block.u32_AddressOffset + u32_Offset + *c_Index;
+            }
          }
       }
    }
-   return -1;
+   return std::nullopt;
 }
 
 //-----------------------------------------------------------------------------

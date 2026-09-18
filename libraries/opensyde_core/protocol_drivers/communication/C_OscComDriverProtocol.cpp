@@ -16,6 +16,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_OscEndian.hpp"
 #include "C_SclStringUtil.hpp"
 
 #include <limits>
@@ -1622,14 +1623,7 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDri
                         c_AuthenticationSignature.resize(128, 0U);
                         c_RandomValue.resize(8, 0U);
 
-                        c_RandomValue[0] = static_cast<uint8_t>(u64_Seed >> 56U);
-                        c_RandomValue[1] = static_cast<uint8_t>(u64_Seed >> 48U);
-                        c_RandomValue[2] = static_cast<uint8_t>(u64_Seed >> 40U);
-                        c_RandomValue[3] = static_cast<uint8_t>(u64_Seed >> 32U);
-                        c_RandomValue[4] = static_cast<uint8_t>(u64_Seed >> 24U);
-                        c_RandomValue[5] = static_cast<uint8_t>(u64_Seed >> 16U);
-                        c_RandomValue[6] = static_cast<uint8_t>(u64_Seed >> 8U);
-                        c_RandomValue[7] = static_cast<uint8_t>(u64_Seed);
+                        C_OscEndian::h_SetU64Big(u64_Seed, c_RandomValue.data());
 
                         //get private authentication key from PEM file:
                         c_PrivKey = pc_PemKeyInfo->GetPrivateKey();

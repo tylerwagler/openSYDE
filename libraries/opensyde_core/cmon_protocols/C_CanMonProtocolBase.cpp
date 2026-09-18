@@ -9,6 +9,7 @@
 */
 //----------------------------------------------------------------------------------------------------------------------
 #include "precomp_headers.hpp" //pre-compiled headers
+#include "C_OscEndian.hpp"
 
 #include <system_error>
 
@@ -82,7 +83,7 @@ std::error_code C_CanMonProtocolBase::LoadParamsFromIni(C_SclIniFile & orc_IniFi
 //-----------------------------------------------------------------------------
 uint16_t C_CanMonProtocolBase::mh_BytesToWordLowHigh(const uint8_t oau8_Bytes[2])
 {
-   return (oau8_Bytes[0] + (static_cast<uint16_t>((static_cast<uint16_t>(oau8_Bytes[1])) << 8U)));
+   return stw::opensyde_core::C_OscEndian::h_GetU16Little(oau8_Bytes);
 }
 
 //-----------------------------------------------------------------------------
@@ -97,7 +98,7 @@ uint16_t C_CanMonProtocolBase::mh_BytesToWordLowHigh(const uint8_t oau8_Bytes[2]
 //-----------------------------------------------------------------------------
 uint16_t C_CanMonProtocolBase::mh_BytesToWordHighLow(const uint8_t oau8_Bytes[2])
 {
-   return (oau8_Bytes[1] + (static_cast<uint16_t>(static_cast<uint16_t>(oau8_Bytes[0]) << 8U)));
+   return stw::opensyde_core::C_OscEndian::h_GetU16Big(oau8_Bytes);
 }
 
 //-----------------------------------------------------------------------------
@@ -112,10 +113,7 @@ uint16_t C_CanMonProtocolBase::mh_BytesToWordHighLow(const uint8_t oau8_Bytes[2]
 //-----------------------------------------------------------------------------
 uint32_t C_CanMonProtocolBase::mh_BytesToDwordLowHigh(const uint8_t oau8_Bytes[4])
 {
-   return static_cast<uint32_t>(oau8_Bytes[0] +
-                                ((static_cast<uint32_t>(oau8_Bytes[1])) << 8U) +
-                                ((static_cast<uint32_t>(oau8_Bytes[2])) << 16U) +
-                                ((static_cast<uint32_t>(oau8_Bytes[3])) << 24U));
+   return stw::opensyde_core::C_OscEndian::h_GetU32Little(oau8_Bytes);
 }
 
 //-----------------------------------------------------------------------------
@@ -130,10 +128,7 @@ uint32_t C_CanMonProtocolBase::mh_BytesToDwordLowHigh(const uint8_t oau8_Bytes[4
 //-----------------------------------------------------------------------------
 uint32_t C_CanMonProtocolBase::mh_BytesToDwordHighLow(const uint8_t oau8_Bytes[4])
 {
-   return static_cast<uint32_t>(oau8_Bytes[3] +
-                                ((static_cast<uint32_t>(oau8_Bytes[2])) << 8U) +
-                                ((static_cast<uint32_t>(oau8_Bytes[1])) << 16U) +
-                                ((static_cast<uint32_t>(oau8_Bytes[0])) << 24U));
+   return stw::opensyde_core::C_OscEndian::h_GetU32Big(oau8_Bytes);
 }
 
 //-----------------------------------------------------------------------------

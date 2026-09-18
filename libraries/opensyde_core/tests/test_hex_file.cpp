@@ -27,6 +27,8 @@
 
 #include <cstdio>
 #include <fstream>
+#include <optional>
+#include <span>
 #include <string>
 
 #include <cstdint>
@@ -375,11 +377,10 @@ TEST(HexFileError, MessagesAreDescriptive)
 }
 
 /* -- Address lookup and pattern search ------------------------------------------------------------------------------ */
-/* GetDataByAddress and FindPattern deliberately stay on int32_t: they use a FOREIGN
-   convention -- plain 0 / -1 / -2, not STW error codes.
-   Nothing pinned that convention, which is exactly the thing a future
-   error-code migration could silently get wrong by bridging them with
-   make_error_code_from_stw. These tests are that pin. */
+/* GetDataByAddress hands out a view into the dump: empty when nothing is defined at the
+   address, shorter than asked for when the block ends first, never crossing a gap.
+   FindPattern reports the address as an optional. Before 2026-09-18 both used a foreign
+   0 / -1 / -2 convention that was neither the STW codes nor the hex_file category. */
 
 TEST(HexFile, GetDataByAddress_ReadsAllRequestedBytes)
 {
@@ -388,16 +389,12 @@ TEST(HexFile, GetDataByAddress_ReadsAllRequestedBytes)
 
    ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
-   uint8_t au8_Data[4] = {0U, 0U, 0U, 0U};
-   uint16_t u16_NumBytes = 4U;
-
-   //0 means every requested byte was available
-   EXPECT_EQ(0, c_File.GetDataByAddress(0x0000U, u16_NumBytes, au8_Data));
-   EXPECT_EQ(4U, u16_NumBytes);
-   EXPECT_EQ(1U, au8_Data[0]);
-   EXPECT_EQ(2U, au8_Data[1]);
-   EXPECT_EQ(3U, au8_Data[2]);
-   EXPECT_EQ(4U, au8_Data[3]);
+   const std::span<const uint8_t> c_Data = c_File.GetDataByAddress(0x0000U, 4U);
+   ASSERT_EQ(4U, c_Data.size());
+   EXPECT_EQ(1U, c_Data[0]);
+   EXPECT_EQ(2U, c_Data[1]);
+   EXPECT_EQ(3U, c_Data[2]);
+   EXPECT_EQ(4U, c_Data[3]);
 }
 
 TEST(HexFile, GetDataByAddress_ReadsFromAnOffsetWithinTheBlock)
@@ -407,44 +404,37 @@ TEST(HexFile, GetDataByAddress_ReadsFromAnOffsetWithinTheBlock)
 
    ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
-   uint8_t au8_Data[2] = {0U, 0U};
-   uint16_t u16_NumBytes = 2U;
-
-   EXPECT_EQ(0, c_File.GetDataByAddress(0x0001U, u16_NumBytes, au8_Data));
-   EXPECT_EQ(2U, au8_Data[0]);
-   EXPECT_EQ(3U, au8_Data[1]);
+   const std::span<const uint8_t> c_Data = c_File.GetDataByAddress(0x0001U, 2U);
+   ASSERT_EQ(2U, c_Data.size());
+   EXPECT_EQ(2U, c_Data[0]);
+   EXPECT_EQ(3U, c_Data[1]);
 }
 
-TEST(HexFile, GetDataByAddress_PartialReadReturnsMinusTwoAndShortensTheCount)
+TEST(HexFile, GetDataByAddress_StopsAtTheEndOfTheBlock)
 {
-   //Asking for more than the block holds is -2, not -1, and oru16_NumBytes is rewritten to
-   //what was actually copied. A caller that ignores the return value silently gets fewer bytes.
+   //Asking for more than the block holds yields what is there and no more: the bytes past the
+   //block are a gap, and a gap is undefined data. A caller has to look at size().
    const std::string c_Path = mh_WriteHex("hf_gdba_part.hex", mpcn_SIMPLE);
    C_HexFile c_File;
 
    ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
-   uint8_t au8_Data[8] = {0U};
-   uint16_t u16_NumBytes = 8U;
-
-   EXPECT_EQ(-2, c_File.GetDataByAddress(0x0002U, u16_NumBytes, au8_Data));
-   EXPECT_EQ(2U, u16_NumBytes); //only 2 of the 4 bytes sit at or after 0x0002
-   EXPECT_EQ(3U, au8_Data[0]);
-   EXPECT_EQ(4U, au8_Data[1]);
+   const std::span<const uint8_t> c_Data = c_File.GetDataByAddress(0x0002U, 8U);
+   ASSERT_EQ(2U, c_Data.size()); //only 2 of the 4 bytes sit at or after 0x0002
+   EXPECT_EQ(3U, c_Data[0]);
+   EXPECT_EQ(4U, c_Data[1]);
 }
 
-TEST(HexFile, GetDataByAddress_UnknownAddressReturnsMinusOne)
+TEST(HexFile, GetDataByAddress_UnknownAddressIsEmpty)
 {
    const std::string c_Path = mh_WriteHex("hf_gdba_miss.hex", mpcn_SIMPLE);
    C_HexFile c_File;
 
    ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
-   uint8_t au8_Data[4] = {0U};
-   uint16_t u16_NumBytes = 4U;
-
-   //Far outside any block. -1 is "not found", and is NOT an STW error code.
-   EXPECT_EQ(-1, c_File.GetDataByAddress(0xF000U, u16_NumBytes, au8_Data));
+   //Far outside any block, and exactly one past the end of the only block: both undefined.
+   EXPECT_TRUE(c_File.GetDataByAddress(0xF000U, 4U).empty());
+   EXPECT_TRUE(c_File.GetDataByAddress(0x0004U, 1U).empty());
 }
 
 TEST(HexFile, FindPattern_FindsAPatternAndReportsItsAddress)
@@ -455,13 +445,44 @@ TEST(HexFile, FindPattern_FindsAPatternAndReportsItsAddress)
    ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
    const uint8_t au8_Pattern[2] = {0x06U, 0x07U};
-   uint32_t u32_Address = 0x0000U;
 
-   EXPECT_EQ(0, c_File.FindPattern(u32_Address, 2U, au8_Pattern));
-   EXPECT_EQ(0x0011U, u32_Address); //second record starts at 0x0010, 06 is its second byte
+   const std::optional<uint32_t> c_Address = c_File.FindPattern(0x0000U, au8_Pattern);
+   ASSERT_TRUE(c_Address.has_value());
+   EXPECT_EQ(0x0011U, *c_Address); //second record starts at 0x0010, 06 is its second byte
 }
 
-TEST(HexFile, FindPattern_MissingPatternReturnsMinusOne)
+TEST(HexFile, FindPattern_StartsAtTheGivenAddress)
+{
+   //The first record holds 01 02 03 04 and the second 05 06 07 08. Searching for 05 from past
+   //the first record finds it in the second; searching for 01 from there does not go back.
+   const std::string c_Path = mh_WriteHex("hf_find_from.hex", mpcn_TWO_RECORDS);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+
+   const uint8_t au8_Second[1] = {0x05U};
+   const uint8_t au8_First[1] = {0x01U};
+
+   EXPECT_EQ(0x0010U, c_File.FindPattern(0x0004U, au8_Second).value_or(0xFFFFFFFFU));
+   EXPECT_FALSE(c_File.FindPattern(0x0004U, au8_First).has_value());
+   EXPECT_EQ(0x0000U, c_File.FindPattern(0x0000U, au8_First).value_or(0xFFFFFFFFU));
+}
+
+TEST(HexFile, FindPattern_DoesNotMatchAcrossAGap)
+{
+   //04 ends the first record at 0x0003 and 05 starts the second at 0x0010. Twelve undefined
+   //bytes lie between them, so "04 05" is not in the file even though both bytes are.
+   const std::string c_Path = mh_WriteHex("hf_find_gap.hex", mpcn_TWO_RECORDS);
+   C_HexFile c_File;
+
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+
+   const uint8_t au8_Pattern[2] = {0x04U, 0x05U};
+
+   EXPECT_FALSE(c_File.FindPattern(0x0000U, au8_Pattern).has_value());
+}
+
+TEST(HexFile, FindPattern_MissingOrEmptyPatternIsNotFound)
 {
    const std::string c_Path = mh_WriteHex("hf_find_miss.hex", mpcn_TWO_RECORDS);
    C_HexFile c_File;
@@ -469,9 +490,9 @@ TEST(HexFile, FindPattern_MissingPatternReturnsMinusOne)
    ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
    const uint8_t au8_Pattern[3] = {0xDEU, 0xADU, 0xBEU};
-   uint32_t u32_Address = 0x0000U;
 
-   EXPECT_EQ(-1, c_File.FindPattern(u32_Address, 3U, au8_Pattern));
+   EXPECT_FALSE(c_File.FindPattern(0x0000U, au8_Pattern).has_value());
+   EXPECT_FALSE(c_File.FindPattern(0x0000U, std::span<const uint8_t>()).has_value());
 }
 
 /* -- Record reformatting -------------------------------------------------------------------------------------------- */
@@ -496,11 +517,10 @@ TEST(HexFile, Optimize_RewritesRecordsAndPreservesContent)
    EXPECT_EQ(u32_MinBefore, c_File.MinAdr());
    EXPECT_EQ(u32_MaxBefore, c_File.MaxAdr());
 
-   uint8_t au8_Data[4] = {0U};
-   uint16_t u16_NumBytes = 4U;
-   EXPECT_EQ(0, c_File.GetDataByAddress(0x0010U, u16_NumBytes, au8_Data));
-   EXPECT_EQ(5U, au8_Data[0]);
-   EXPECT_EQ(8U, au8_Data[3]);
+   const std::span<const uint8_t> c_Data = c_File.GetDataByAddress(0x0010U, 4U);
+   ASSERT_EQ(4U, c_Data.size());
+   EXPECT_EQ(5U, c_Data[0]);
+   EXPECT_EQ(8U, c_Data[3]);
 }
 
 TEST(HexFile, OptimizeLinear_FillsTheGapBetweenRecords)
@@ -520,10 +540,9 @@ TEST(HexFile, OptimizeLinear_FillsTheGapBetweenRecords)
    EXPECT_EQ(0x0000U, c_File.MinAdr());
 
    //An address inside the former gap now reads back as the fill pattern
-   uint8_t au8_Data[1] = {0U};
-   uint16_t u16_NumBytes = 1U;
-   EXPECT_EQ(0, c_File.GetDataByAddress(0x0008U, u16_NumBytes, au8_Data));
-   EXPECT_EQ(0xEEU, au8_Data[0]);
+   const std::span<const uint8_t> c_Data = c_File.GetDataByAddress(0x0008U, 1U);
+   ASSERT_EQ(1U, c_Data.size());
+   EXPECT_EQ(0xEEU, c_Data[0]);
 }
 
 /* -- Line string access --------------------------------------------------------------------------------------------- */

@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_OscEndian.hpp"
 
 #include <iostream>
 #include <cstring>
@@ -946,10 +947,7 @@ std::error_code C_OscProtocolDriverOsy::OsyReadHardwareNumber(uint32_t & oru32_H
    c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SYS_SUPPLIER_ECU_HW_NUMBER, 4U, true, c_Data, u8_NrErrorCode);
    if (c_Return == Errc::success)
    {
-      oru32_HardwareNumber = ((static_cast<uint32_t>(c_Data[0])) << 24U) +
-                             ((static_cast<uint32_t>(c_Data[1])) << 16U) +
-                             ((static_cast<uint32_t>(c_Data[2])) << 8U) +
-                             (static_cast<uint32_t>(c_Data[3]));
+      oru32_HardwareNumber = C_OscEndian::h_GetU32Big(&c_Data[0]);
    }
    if (opu8_NrCode != nullptr)
    {
@@ -2248,10 +2246,7 @@ std::error_code C_OscProtocolDriverOsy::OsyReadFlashCount(uint32_t & oru32_Flash
    c_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_FLASH_COUNT, 4U, true, c_Data, u8_NrErrorCode);
    if (c_Return == Errc::success)
    {
-      oru32_FlashCount = ((static_cast<uint32_t>(c_Data[0])) << 24U) +
-                         ((static_cast<uint32_t>(c_Data[1])) << 16U) +
-                         ((static_cast<uint32_t>(c_Data[2])) << 8U) +
-                         (static_cast<uint32_t>(c_Data[3]));
+      oru32_FlashCount = C_OscEndian::h_GetU32Big(&c_Data[0]);
    }
    if (opu8_NrCode != nullptr)
    {
@@ -2810,10 +2805,7 @@ std::error_code C_OscProtocolDriverOsy::OsyReadDataPoolDataChangeDriven(const ui
          c_Request.c_Data[2] = au8_Identifier[0];
          c_Request.c_Data[3] = au8_Identifier[1];
          c_Request.c_Data[4] = au8_Identifier[2];
-         c_Request.c_Data[5] = static_cast<uint8_t>(ou32_Hysteresis >> 24U);
-         c_Request.c_Data[6] = static_cast<uint8_t>(ou32_Hysteresis >> 16U);
-         c_Request.c_Data[7] = static_cast<uint8_t>(ou32_Hysteresis >> 8U);
-         c_Request.c_Data[8] = static_cast<uint8_t>(ou32_Hysteresis & 0xFFU);
+         C_OscEndian::h_SetU32Big(ou32_Hysteresis, &c_Request.c_Data[5]);
 
          c_Return = m_SendRequest(c_Request);
          if (c_Return != Errc::success)
@@ -3073,10 +3065,7 @@ std::error_code C_OscProtocolDriverOsy::OsyVerifyDataPool(const uint8_t ou8_Data
    std::vector<uint8_t> c_ReceiveData;
    c_SendData.resize(5);
    c_SendData[0] = ou8_ServerDpIndex;
-   c_SendData[1] = static_cast<uint8_t>(ou32_DataPoolChecksum >> 24U);
-   c_SendData[2] = static_cast<uint8_t>(ou32_DataPoolChecksum >> 16U);
-   c_SendData[3] = static_cast<uint8_t>(ou32_DataPoolChecksum >> 8U);
-   c_SendData[4] = static_cast<uint8_t>(ou32_DataPoolChecksum & 0xFFU);
+   C_OscEndian::h_SetU32Big(ou32_DataPoolChecksum, &c_SendData[1]);
    c_Return = m_RoutineControl(mhu16_OSY_RC_SID_VERIFY_DATAPOOL, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
                                c_SendData, 2, true, c_ReceiveData, u8_NrErrorCode);
    if (c_Return == Errc::success)
@@ -3412,10 +3401,7 @@ std::error_code C_OscProtocolDriverOsy::OsySendCanMessage(const uint8_t ou8_Chan
          u32_Id |= 0x80000000U; //set 29bit flag
       }
 
-      c_SendData[0] = static_cast<uint8_t>(u32_Id >> 24U);
-      c_SendData[1] = static_cast<uint8_t>(u32_Id >> 16U);
-      c_SendData[2] = static_cast<uint8_t>(u32_Id >> 8U);
-      c_SendData[3] = static_cast<uint8_t>(u32_Id);
+      C_OscEndian::h_SetU32Big(u32_Id, &c_SendData[0]);
       c_SendData[4] = orc_CanMessage.u8_DLC;
       (void)std::memcpy(&c_SendData[5], &orc_CanMessage.au8_Data[0], orc_CanMessage.u8_DLC);
       //keep a clean (reproducible) message; set empty bytes to zero
@@ -3481,14 +3467,8 @@ std::error_code C_OscProtocolDriverOsy::OsySetTunnelCanMessages(const uint8_t ou
 
    c_SendData.resize(9);
    c_SendData[0] = ou8_CanChannelIndex;
-   c_SendData[1] = static_cast<uint8_t>(ou32_FilterId >> 24U);
-   c_SendData[2] = static_cast<uint8_t>(ou32_FilterId >> 16U);
-   c_SendData[3] = static_cast<uint8_t>(ou32_FilterId >> 8U);
-   c_SendData[4] = static_cast<uint8_t>(ou32_FilterId);
-   c_SendData[5] = static_cast<uint8_t>(ou32_FilterMask >> 24U);
-   c_SendData[6] = static_cast<uint8_t>(ou32_FilterMask >> 16U);
-   c_SendData[7] = static_cast<uint8_t>(ou32_FilterMask >> 8U);
-   c_SendData[8] = static_cast<uint8_t>(ou32_FilterMask);
+   C_OscEndian::h_SetU32Big(ou32_FilterId, &c_SendData[1]);
+   C_OscEndian::h_SetU32Big(ou32_FilterMask, &c_SendData[5]);
 
    c_Return = m_RoutineControl(mhu16_OSY_RC_SID_TUNNEL_CAN_MESSAGE,
                                mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
@@ -3834,14 +3814,8 @@ std::error_code C_OscProtocolDriverOsy::OsyCheckFlashMemoryAvailable(const uint3
    uint8_t u8_NrErrorCode = 0U;
 
    c_SendData.resize(8);
-   c_SendData[0] = static_cast<uint8_t>(ou32_StartAddress >> 24U);
-   c_SendData[1] = static_cast<uint8_t>(ou32_StartAddress >> 16U);
-   c_SendData[2] = static_cast<uint8_t>(ou32_StartAddress >> 8U);
-   c_SendData[3] = static_cast<uint8_t>(ou32_StartAddress & 0xFFU);
-   c_SendData[4] = static_cast<uint8_t>(ou32_Size >> 24U);
-   c_SendData[5] = static_cast<uint8_t>(ou32_Size >> 16U);
-   c_SendData[6] = static_cast<uint8_t>(ou32_Size >> 8U);
-   c_SendData[7] = static_cast<uint8_t>(ou32_Size & 0xFFU);
+   C_OscEndian::h_SetU32Big(ou32_StartAddress, &c_SendData[0]);
+   C_OscEndian::h_SetU32Big(ou32_Size, &c_SendData[4]);
    c_Return = m_RoutineControl(mhu16_OSY_RC_SID_CHECK_FLASH_MEMORY_AVAILABILITY,
                                mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE, c_SendData,  0U, true, c_ReceiveData,
                                u8_NrErrorCode);
@@ -4025,10 +3999,7 @@ std::error_code C_OscProtocolDriverOsy::OsySecurityAccessRequestSeed(const uint8
          orq_SecureMode = false;
          orq_AuthenticationActive = false;
          orq_TrafficEncryptionActive = false;
-         oru64_Seed = ((static_cast<uint64_t>(c_ReceiveData[0])) << 24U) +
-                      ((static_cast<uint64_t>(c_ReceiveData[1])) << 16U) +
-                      ((static_cast<uint64_t>(c_ReceiveData[2])) << 8U) +
-                      (static_cast<uint64_t>(c_ReceiveData[3]));
+         oru64_Seed = C_OscEndian::h_GetU32Big(&c_ReceiveData[0]);
       }
       else
       {
@@ -4080,21 +4051,11 @@ std::error_code C_OscProtocolDriverOsy::OsySecurityAccessRequestSeed(const uint8
                // Authentication part
                if (orq_AuthenticationActive == true)
                {
-                  oru64_Seed = ((static_cast<uint64_t>(c_ReceiveData[2])) << 56U) +
-                               ((static_cast<uint64_t>(c_ReceiveData[3])) << 48U) +
-                               ((static_cast<uint64_t>(c_ReceiveData[4])) << 40U) +
-                               ((static_cast<uint64_t>(c_ReceiveData[5])) << 32U) +
-                               ((static_cast<uint64_t>(c_ReceiveData[6])) << 24U) +
-                               ((static_cast<uint64_t>(c_ReceiveData[7])) << 16U) +
-                               ((static_cast<uint64_t>(c_ReceiveData[8])) << 8U) +
-                               (static_cast<uint64_t>(c_ReceiveData[9]));
+                  oru64_Seed = C_OscEndian::h_GetU64Big(&c_ReceiveData[2]);
                }
                else
                {
-                  oru64_Seed = ((static_cast<uint64_t>(c_ReceiveData[2])) << 24U) +
-                               ((static_cast<uint64_t>(c_ReceiveData[3])) << 16U) +
-                               ((static_cast<uint64_t>(c_ReceiveData[4])) << 8U) +
-                               (static_cast<uint64_t>(c_ReceiveData[5]));
+                  oru64_Seed = C_OscEndian::h_GetU32Big(&c_ReceiveData[2]);
                }
 
                // Traffic encryption part
@@ -4174,10 +4135,7 @@ std::error_code C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t o
    uint8_t u8_NrErrorCode = 0U;
 
    c_SendData.resize(4);
-   c_SendData[0] = static_cast<uint8_t>(ou32_SecurityKey >> 24U);
-   c_SendData[1] = static_cast<uint8_t>(ou32_SecurityKey >> 16U);
-   c_SendData[2] = static_cast<uint8_t>(ou32_SecurityKey >> 8U);
-   c_SendData[3] = static_cast<uint8_t>(ou32_SecurityKey & 0xFFU);
+   C_OscEndian::h_SetU32Big(ou32_SecurityKey, &c_SendData[0]);
    c_ReceiveData.resize(0);
 
    c_Return = m_SecurityAccess(ou8_SecurityLevel + 1U, c_SendData, 4U, 0U, c_ReceiveData, u8_NrErrorCode);
@@ -4267,10 +4225,7 @@ std::error_code C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t o
          c_SendData.resize(u16_ExpectedSizeToSend);
 
          // Security key is at the beginning
-         c_SendData[0] = static_cast<uint8_t>(ou32_SecurityKey >> 24U);
-         c_SendData[1] = static_cast<uint8_t>(ou32_SecurityKey >> 16U);
-         c_SendData[2] = static_cast<uint8_t>(ou32_SecurityKey >> 8U);
-         c_SendData[3] = static_cast<uint8_t>(ou32_SecurityKey & 0xFFU);
+         C_OscEndian::h_SetU32Big(ou32_SecurityKey, &c_SendData[0]);
       }
       else
       {
@@ -4624,10 +4579,7 @@ std::error_code C_OscProtocolDriverOsy::m_HandleAsyncOsyTunnelCanMessagesEvent(
       // Bit 31 of CAN id is the flag for 29 bit or 11 bit decision
       c_CanMessage.u8_XTD = ((orc_ReceivedService.c_Data[1] & 0x80U) == 0x80U) ? 1U : 0U;
       // Bits 30 and 29 are reserved
-      c_CanMessage.u32_ID = ((static_cast<uint32_t>(orc_ReceivedService.c_Data[1]) & 0x1FU) << 24U) +
-                            (static_cast<uint32_t>(orc_ReceivedService.c_Data[2]) << 16U) +
-                            (static_cast<uint32_t>(orc_ReceivedService.c_Data[3]) << 8U) +
-                            static_cast<uint32_t>(orc_ReceivedService.c_Data[4]);
+      c_CanMessage.u32_ID = C_OscEndian::h_GetU32Big(&orc_ReceivedService.c_Data[1]) & 0x1FFFFFFFU;
 
       // 11 bit identifier range check
       if ((c_CanMessage.u8_XTD == 1U) || (c_CanMessage.u32_ID <= 0x7FFU))
@@ -4761,10 +4713,7 @@ void C_OscProtocolDriverOsy::mh_ConvertVariableToNecessaryBytes(const uint32_t o
    else
    {
       orc_Bytes.resize(4);
-      orc_Bytes[0] = static_cast<uint8_t>(ou32_Variable >> 24U);
-      orc_Bytes[1] = static_cast<uint8_t>(ou32_Variable >> 16U);
-      orc_Bytes[2] = static_cast<uint8_t>(ou32_Variable >> 8U);
-      orc_Bytes[3] = static_cast<uint8_t>(ou32_Variable & 0xFFU);
+      C_OscEndian::h_SetU32Big(ou32_Variable, &orc_Bytes[0]);
    }
 }
 
@@ -4960,14 +4909,8 @@ std::error_code C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_S
       c_Request.c_Data[0] = mhu8_OSY_SI_REQUEST_DOWNLOAD;
       c_Request.c_Data[1] = 0x00U;
       c_Request.c_Data[2] = 0x44U; // length of 4bytes for address and size
-      c_Request.c_Data[3] = static_cast<uint8_t>(ou32_StartAddress >> 24U);
-      c_Request.c_Data[4] = static_cast<uint8_t>(ou32_StartAddress >> 16U);
-      c_Request.c_Data[5] = static_cast<uint8_t>(ou32_StartAddress >> 8U);
-      c_Request.c_Data[6] = static_cast<uint8_t>(ou32_StartAddress & 0xFFU);
-      c_Request.c_Data[7] = static_cast<uint8_t>(ou32_Size >> 24U);
-      c_Request.c_Data[8] = static_cast<uint8_t>(ou32_Size >> 16U);
-      c_Request.c_Data[9] = static_cast<uint8_t>(ou32_Size >> 8U);
-      c_Request.c_Data[10] = static_cast<uint8_t>(ou32_Size & 0xFFU);
+      C_OscEndian::h_SetU32Big(ou32_StartAddress, &c_Request.c_Data[3]);
+      C_OscEndian::h_SetU32Big(ou32_Size, &c_Request.c_Data[7]);
 
       c_Return = m_SendRequest(c_Request);
       if (c_Return != Errc::success)
@@ -5103,10 +5046,7 @@ std::error_code C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string
       (void)std::memcpy(&c_Request.c_Data[4], orc_FilePath.c_str(), u16_PathLength);
       c_Request.c_Data[4 + static_cast<size_t>(u16_PathLength)] = 0x00U; //no compression; no encryption
       c_Request.c_Data[5 + static_cast<size_t>(u16_PathLength)] = 0x04U; //4 bytes with address information
-      c_Request.c_Data[6 + static_cast<size_t>(u16_PathLength)] = static_cast<uint8_t>(ou32_FileSize >> 24U);
-      c_Request.c_Data[7 + static_cast<size_t>(u16_PathLength)] = static_cast<uint8_t>(ou32_FileSize >> 16U);
-      c_Request.c_Data[8 + static_cast<size_t>(u16_PathLength)] = static_cast<uint8_t>(ou32_FileSize >> 8U);
-      c_Request.c_Data[9 + static_cast<size_t>(u16_PathLength)] = static_cast<uint8_t>(ou32_FileSize);
+      C_OscEndian::h_SetU32Big(ou32_FileSize, &c_Request.c_Data[6 + static_cast<size_t>(u16_PathLength)]);
 
       c_Return = m_SendRequest(c_Request);
       if (c_Return != Errc::success)
@@ -5310,10 +5250,7 @@ std::error_code C_OscProtocolDriverOsy::OsyRequestTransferExitAddressBased(const
       {
          c_Request.c_Data.resize(5);
          c_Request.c_Data[0] = mhu8_OSY_SI_REQUEST_TRANSFER_EXIT;
-         c_Request.c_Data[1] = static_cast<uint8_t>(ou32_SignatureBlockAddress >> 24U);
-         c_Request.c_Data[2] = static_cast<uint8_t>(ou32_SignatureBlockAddress >> 16U);
-         c_Request.c_Data[3] = static_cast<uint8_t>(ou32_SignatureBlockAddress >> 8U);
-         c_Request.c_Data[4] = static_cast<uint8_t>(ou32_SignatureBlockAddress & 0xFFU);
+         C_OscEndian::h_SetU32Big(ou32_SignatureBlockAddress, &c_Request.c_Data[1]);
       }
       else
       {
@@ -6034,10 +5971,7 @@ std::error_code C_OscProtocolDriverOsy::OsySetBitrate(const uint8_t ou8_ChannelT
    c_SendData.resize(6);
    c_SendData[0] = ou8_ChannelType;
    c_SendData[1] = ou8_ChannelIndex;
-   c_SendData[2] = static_cast<uint8_t>(ou32_Bitrate >> 24U);
-   c_SendData[3] = static_cast<uint8_t>(ou32_Bitrate >> 16U);
-   c_SendData[4] = static_cast<uint8_t>(ou32_Bitrate >> 8U);
-   c_SendData[5] = static_cast<uint8_t>(ou32_Bitrate & 0xFFU);
+   C_OscEndian::h_SetU32Big(ou32_Bitrate, &c_SendData[2]);
 
    c_Return = m_RoutineControl(mhu16_OSY_RC_RC_SID_SET_BITRATE, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
                                c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
@@ -6127,14 +6061,8 @@ std::error_code C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_
       {
          const size_t x_Offset = static_cast<size_t>(u32_Counter); //lint !e8080 //using correct type for vector index
 
-         orc_BlockInfo.u32_BlockStartAddress = ((static_cast<uint32_t>(c_ReceiveData[x_Offset + 1U])) << 24U) +
-                                               ((static_cast<uint32_t>(c_ReceiveData[x_Offset + 2U])) << 16U) +
-                                               ((static_cast<uint32_t>(c_ReceiveData[x_Offset + 3U])) << 8U) +
-                                               (static_cast<uint32_t>(c_ReceiveData[x_Offset + 4U]));
-         orc_BlockInfo.u32_BlockEndAddress = ((static_cast<uint32_t>(c_ReceiveData[x_Offset + 5U])) << 24U) +
-                                             ((static_cast<uint32_t>(c_ReceiveData[x_Offset + 6U])) << 16U) +
-                                             ((static_cast<uint32_t>(c_ReceiveData[x_Offset + 7U])) << 8U) +
-                                             (static_cast<uint32_t>(c_ReceiveData[x_Offset + 8U]));
+         orc_BlockInfo.u32_BlockStartAddress = C_OscEndian::h_GetU32Big(&c_ReceiveData[x_Offset + 1U]);
+         orc_BlockInfo.u32_BlockEndAddress = C_OscEndian::h_GetU32Big(&c_ReceiveData[x_Offset + 5U]);
          u32_Counter += 9U;
       }
       if (c_ReceiveData[u32_Counter] == C_FlashBlockInfo::hu8_ID_RESULT_SIGNATURE)

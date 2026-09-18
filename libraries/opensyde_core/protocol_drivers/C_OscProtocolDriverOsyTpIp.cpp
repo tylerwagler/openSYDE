@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_OscEndian.hpp"
 #include "C_SclStringUtil.hpp"
 
 #include <iostream>
@@ -104,12 +105,8 @@ std::error_code C_OscProtocolDriverOsyTpIp::C_DoIpHeader::DecodeHeader(const std
    else
    {
       //this is the one we know how to handle ...
-      u16_PayloadType = static_cast<uint16_t>(static_cast<uint16_t>(orc_Header[2]) << 8U) +
-                        static_cast<uint16_t>(orc_Header[3]);
-      u32_PayloadSize = (static_cast<uint32_t>(orc_Header[4]) << 24U) +
-                        (static_cast<uint32_t>(orc_Header[5]) << 16U) +
-                        (static_cast<uint32_t>(orc_Header[6]) << 8U) +
-                        orc_Header[7];
+      u16_PayloadType = C_OscEndian::h_GetU16Big(&orc_Header[2]);
+      u32_PayloadSize = C_OscEndian::h_GetU32Big(&orc_Header[4]);
       c_Return = Errc::success;
    }
    return c_Return;
@@ -129,12 +126,8 @@ void C_OscProtocolDriverOsyTpIp::C_DoIpHeader::ComposeHeader(std::vector<uint8_t
    orc_Header.resize(static_cast<uint32_t>(hu8_DOIP_HEADER_SIZE + u32_PayloadSize));
    orc_Header[0] = 0x02U;         //protocol version DoIP ISO 13400-2:2012
    orc_Header[1] = 0x02U ^ 0xFFU; //inverted protocol version
-   orc_Header[2] = static_cast<uint8_t>(u16_PayloadType >> 8U);
-   orc_Header[3] = static_cast<uint8_t>(u16_PayloadType & 0xFFU);
-   orc_Header[4] = static_cast<uint8_t>(u32_PayloadSize >> 24U);
-   orc_Header[5] = static_cast<uint8_t>(u32_PayloadSize >> 16U);
-   orc_Header[6] = static_cast<uint8_t>(u32_PayloadSize >> 8U);
-   orc_Header[7] = static_cast<uint8_t>(u32_PayloadSize);
+   C_OscEndian::h_SetU16Big(u16_PayloadType, &orc_Header[2]);
+   C_OscEndian::h_SetU32Big(u32_PayloadSize, &orc_Header[4]);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -26,6 +26,7 @@
 
 #include <cstdint>
 #include "stwerrors.hpp"
+#include "C_OscEndian.hpp"
 #include "C_OscErrorCategory.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscIpDispatcherLinuxSock.hpp"
@@ -327,10 +328,7 @@ std::error_code C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_C
       uint32_t u32_IpAddr;
 
       c_RemoteAddr.sin_family = AF_INET;
-      u32_IpAddr = (static_cast<uint32_t>(orc_Connection.au8_IpAddress[0]) << 24U) +
-                   (static_cast<uint32_t>(orc_Connection.au8_IpAddress[1]) << 16U) +
-                   (static_cast<uint32_t>(orc_Connection.au8_IpAddress[2]) << 8U) +
-                   orc_Connection.au8_IpAddress[3];
+      u32_IpAddr = C_OscEndian::h_GetU32Big(&orc_Connection.au8_IpAddress[0]);
       c_RemoteAddr.sin_addr.s_addr = htonl(u32_IpAddr);
       c_RemoteAddr.sin_port = htons(mhu16_UDP_TCP_PORT); //server port
 
@@ -1194,10 +1192,7 @@ std::error_code C_OscIpDispatcherLinuxSock::ReadUdp(std::vector<uint8_t> & orc_D
          {
             //extract sender address
             const uint32_t u32_IpAddr = ntohl(c_Sender.sin_addr.s_addr);
-            orau8_Ip[0] = static_cast<uint8_t>(u32_IpAddr >> 24U);
-            orau8_Ip[1] = static_cast<uint8_t>(u32_IpAddr >> 16U);
-            orau8_Ip[2] = static_cast<uint8_t>(u32_IpAddr >> 8U);
-            orau8_Ip[3] = static_cast<uint8_t>(u32_IpAddr);
+            C_OscEndian::h_SetU32Big(u32_IpAddr, &orau8_Ip[0]);
 
             if (x_Return != static_cast<int>(orc_Data.size())) //lint !e970 //using type to match library interface
             {
