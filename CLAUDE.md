@@ -201,7 +201,7 @@ Per-tool build directories under `build/`; deploy target defaults to
 Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `-DOPENSYDE_CORE_BUILD_TESTS=ON`, run with `ctest`.
 
-44 suites, 385 tests: `test_application_info_block`, `test_build_info`, `test_can_protocol`,
+46 suites, 434 tests: `test_application_info_block`, `test_build_info`, `test_can_protocol`,
 `test_canopen_eds`, `test_checksummed_xml`, `test_checksums`, `test_code_export`,
 `test_com_message_logger`, `test_cstdint`, `test_data_dealer`,
 `test_data_logger_trigger_parser`, `test_datapool_content_util`,
@@ -209,10 +209,11 @@ Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `test_filer_roundtrip`, `test_halc_magician`, `test_hex_file`,
 `test_hex_string_parsing`, `test_logging`, `test_md5`, `test_node_datapool_content`,
 `test_osc_error_category`, `test_osc_utils_niceify`, `test_project_metadata`,
-`test_protocol_driver_base`, `test_protocol_serial_number`, `test_routing_calculation`,
+`test_protocol_driver_base`, `test_protocol_driver_osy`, `test_protocol_serial_number`,
+`test_routing_calculation`,
 `test_scl_ini_file`, `test_scl_string`, `test_security_aes_file`,
 `test_security_signatures`, `test_string_prefix_parsing`, `test_stwerrors`,
-`test_sup_package`, `test_tgl_file`, `test_tgl_time`, `test_tsp_filer`,
+`test_su_sequences_virtual_ecu`, `test_sup_package`, `test_tgl_file`, `test_tgl_time`, `test_tsp_filer`,
 `test_view_security_options`, `test_x_packages`, `test_xco_create`,
 `test_xml_float_locale`, `test_xml_parser`.
 
