@@ -5552,7 +5552,7 @@ std::error_code C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t o
       //1 byte FormatIdentifier
       //1..4 bytes address
       //1..4 bytes size
-      const uint32_t u32_BlockSize = static_cast<uint32_t>(mu16_MaxServiceSize) - 10U;
+      uint32_t u32_BlockSize = static_cast<uint32_t>(mu16_MaxServiceSize) - 10U;
 
       //if traffic encryption is active we need to consider that the service size that can effectively
       // be transferred is reduced by the protocol overhead needed for encryption
@@ -5560,7 +5560,9 @@ std::error_code C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t o
       if (this->mc_SecuritySubLayer.GetEncryptionIsActive() == true)
       {
          const uint16_t u16_EncryptionOverhead = static_cast<uint16_t>(4U + ((u32_BlockSize) % 16U));
-         mu16_MaxServiceSize -= u16_EncryptionOverhead;
+         //the read path does the same. This used to shrink mu16_MaxServiceSize itself: every encrypted
+         //write made the driver's limit smaller for good, and the block size used here never got smaller.
+         u32_BlockSize -= u16_EncryptionOverhead;
       }
 
       //split up into smaller blocks:

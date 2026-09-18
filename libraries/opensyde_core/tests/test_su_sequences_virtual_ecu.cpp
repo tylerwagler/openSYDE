@@ -26,6 +26,7 @@
 #include <cstdio>
 #include <cstring>
 #include <filesystem>
+#include <fstream>
 #include <map>
 #include <optional>
 #include <string>
@@ -42,6 +43,9 @@
 #include "C_OscSecurityPemDatabase.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscSystemBus.hpp"
+#include "C_OscParamSetHandler.hpp"
+#include "C_OscParamSetInterpretedNode.hpp"
+#include "C_OscParamSetRawNode.hpp"
 #include "C_OscSystemDefinition.hpp"
 #include "osy_virtual_ecu.hpp"
 
@@ -607,4 +611,256 @@ TEST_F(SuSequencesVirtualEcu, WholeUpdate_ActivateReadFlashReset)
              mc_Ecu.c_ResetTypes);
 
    (void)std::remove(c_HexPath.c_str());
+}
+
+/* -- The other flashloader paths: file based, and parameter set images into NVM ------------------------------------- */
+
+namespace
+{
+std::string mh_WriteBinaryFile(const std::string & orc_Name, const std::vector<uint8_t> & orc_Bytes)
+{
+   const std::string c_Path = (std::filesystem::temp_directory_path() / orc_Name).string();
+   std::ofstream c_Stream(c_Path, std::ofstream::binary | std::ofstream::trunc);
+   c_Stream.write(reinterpret_cast<const char *>(orc_Bytes.data()), static_cast<std::streamsize>(orc_Bytes.size()));
+   return c_Path;
+}
+
+std::vector<uint8_t> mh_Pattern(const uint32_t ou32_Count, const uint32_t ou32_Seed)
+{
+   std::vector<uint8_t> c_Bytes(ou32_Count);
+   for (uint32_t u32_Index = 0U; u32_Index < ou32_Count; ++u32_Index)
+   {
+      c_Bytes[u32_Index] = static_cast<uint8_t>((u32_Index * 31U + ou32_Seed) & 0xFFU);
+   }
+   return c_Bytes;
+}
+
+///A parameter set image for the node: two raw entries at 0x2000 and 0x2100, and the interpreted twin the
+///format requires. Written without CRC and then stamped, the way the GUI's "create image" ends.
+std::string mh_WriteParameterSetImage(const std::string & orc_Name, const std::vector<uint8_t> & orc_Small,
+                                      const std::vector<uint8_t> & orc_Large)
+{
+   const std::string c_Path = (std::filesystem::temp_directory_path() / orc_Name).string();
+   (void)std::remove(c_Path.c_str());
+
+   C_OscParamSetDataPoolInfo c_Info;
+   c_Info.c_Name = "NvmPool";
+   c_Info.u32_DataPoolCrc = 0x1234U;
+   c_Info.u32_NvmStartAddress = 0x2000U;
+   c_Info.u32_NvmSize = 0x200U;
+   c_Info.au8_Version[0] = 1U;
+   c_Info.au8_Version[1] = 0U;
+   c_Info.au8_Version[2] = 0U;
+
+   C_OscParamSetRawNode c_Raw;
+   c_Raw.c_Name = "Node1";
+   c_Raw.c_DataPools.push_back(c_Info);
+   C_OscParamSetRawEntry c_Entry;
+   c_Entry.u32_StartAddress = 0x2000U;
+   c_Entry.c_Bytes = orc_Small;
+   c_Raw.c_Entries.push_back(c_Entry);
+   c_Entry.u32_StartAddress = 0x2100U;
+   c_Entry.c_Bytes = orc_Large;
+   c_Raw.c_Entries.push_back(c_Entry);
+
+   C_OscParamSetInterpretedNode c_Interpreted;
+   c_Interpreted.c_Name = "Node1";
+   C_OscParamSetInterpretedDataPool c_Pool;
+   c_Pool.c_DataPoolInfo = c_Info;
+   C_OscParamSetInterpretedList c_List;
+   c_List.c_Name = "Persisted";
+   C_OscParamSetInterpretedElement c_Element;
+   c_Element.c_Name = "Speed";
+   c_Element.c_NvmValue.SetType(C_OscNodeDataPoolContent::eUINT16);
+   c_Element.c_NvmValue.SetValueU16(1200U);
+   c_List.c_Elements.push_back(c_Element);
+   c_Pool.c_Lists.push_back(c_List);
+   c_Interpreted.c_DataPools.push_back(c_Pool);
+
+   C_OscParamSetHandler c_Handler;
+   EXPECT_FALSE(static_cast<bool>(c_Handler.AddRawDataForNode(c_Raw)));
+   EXPECT_FALSE(static_cast<bool>(c_Handler.AddInterpretedDataForNode(c_Interpreted)));
+   EXPECT_FALSE(static_cast<bool>(c_Handler.CreateCleanFileWithoutCrc(c_Path)));
+   EXPECT_FALSE(static_cast<bool>(C_OscParamSetHandler::h_UpdateCrcForFile(c_Path)));
+   return c_Path;
+}
+}
+
+TEST_F(SuSequencesVirtualEcu, UpdateSystem_FileBasedFlashloader_TransfersTheFileAndItsCrc)
+{
+   mc_DeviceDefinition.c_SubDevices[0].q_FlashloaderOpenSydeIsFileBased = true;
+   mc_Ecu.u8_FeatureByte7 = 0x02U | 0x08U; //max block length readable, transfer exit result readable
+   ASSERT_EQ(Errc::success, m_Init());
+   const std::vector<uint8_t> c_Bytes = mh_Pattern(700U, 3U);
+   const std::string c_Path = mh_WriteBinaryFile("osy_vecu_app.bin", c_Bytes);
+
+   std::vector<C_OscSuSequences::C_DoFlash> c_ToFlash(1U);
+   c_ToFlash[0].c_FilesToFlash.push_back(c_Path);
+   const std::vector<uint32_t> c_Order(1U, 0U);
+
+   EXPECT_EQ(Errc::success, mc_Sequences.UpdateSystem(c_ToFlash, c_Order));
+   EXPECT_TRUE(mc_Sequences.c_Errors.empty()) << mc_Sequences.ErrorsAsText();
+
+   //the device was told the file's name and size, got every byte, and the CRC the client sent matches
+   ASSERT_EQ(1U, mc_Ecu.c_FileRequests.size());
+   EXPECT_EQ("osy_vecu_app.bin", mc_Ecu.c_FileRequests[0].first);
+   EXPECT_EQ(700U, mc_Ecu.c_FileRequests[0].second);
+   ASSERT_EQ(1U, mc_Ecu.c_Files.count("osy_vecu_app.bin"));
+   EXPECT_EQ(c_Bytes, mc_Ecu.c_Files["osy_vecu_app.bin"]);
+   ASSERT_EQ(1U, mc_Ecu.c_FileCrcsReceived.size());
+   EXPECT_EQ(mc_Ecu.c_FileCrcsComputed[0], mc_Ecu.c_FileCrcsReceived[0]);
+   EXPECT_TRUE(mc_Ecu.c_Flash.empty()); //nothing address based happened
+
+   //and the device's verdict on the transfer was read back and reported
+   EXPECT_TRUE(mc_Sequences.Saw(C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_RESULT_STRING));
+   EXPECT_TRUE(mc_Sequences.Saw(C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_FINISHED));
+   std::vector<C_OscSuSequencesNodeUpdateStates> c_States;
+   ASSERT_EQ(Errc::success, mc_Sequences.GetUpdateStates(c_States));
+   ASSERT_EQ(1U, c_States[0].c_StateOtherFiles.size());
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StateOtherFiles[0].e_RequestFileTransferSent);
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StateOtherFiles[0].e_AllTransferDataSent);
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StateOtherFiles[0].e_RequestTransferFileExitSent);
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StateOtherFiles[0].e_RequestTransferFileExitResultSent);
+
+   (void)std::remove(c_Path.c_str());
+}
+
+TEST_F(SuSequencesVirtualEcu, UpdateSystem_FileBased_DeviceRejectsTheTransfer_ResultStringIsStillRead)
+{
+   mc_DeviceDefinition.c_SubDevices[0].q_FlashloaderOpenSydeIsFileBased = true;
+   mc_Ecu.u8_FeatureByte7 = 0x02U | 0x08U;
+   mc_Ecu.q_RejectFileCrc = true;
+   ASSERT_EQ(Errc::success, m_Init());
+   const std::string c_Path = mh_WriteBinaryFile("osy_vecu_bad.bin", mh_Pattern(100U, 9U));
+
+   std::vector<C_OscSuSequences::C_DoFlash> c_ToFlash(1U);
+   c_ToFlash[0].c_FilesToFlash.push_back(c_Path);
+   const std::vector<uint32_t> c_Order(1U, 0U);
+
+   EXPECT_EQ(Errc::com, mc_Sequences.UpdateSystem(c_ToFlash, c_Order));
+   EXPECT_TRUE(mc_Sequences.Saw(C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_EXIT_ERROR));
+   //"general programming failure" means the target layer had an opinion, and the sequence asks for it
+   EXPECT_TRUE(mc_Sequences.Saw(C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_RESULT_STRING));
+   EXPECT_FALSE(mc_Sequences.Saw(C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_FINISHED));
+
+   (void)std::remove(c_Path.c_str());
+}
+
+TEST_F(SuSequencesVirtualEcu, UpdateSystem_WritesAParameterSetImageIntoNvmEntryByEntry)
+{
+   mc_Ecu.u8_FeatureByte7 = 0x01U | 0x02U; //flashloader can write NVM, max block length readable
+   ASSERT_EQ(Errc::success, m_Init());
+   const std::vector<uint8_t> c_Small = mh_Pattern(8U, 1U);
+   const std::vector<uint8_t> c_Large = mh_Pattern(300U, 2U); //more than one WriteMemoryByAddress at 256 - 10
+   const std::string c_Path = mh_WriteParameterSetImage("osy_vecu_params.syde_psi", c_Small, c_Large);
+
+   std::vector<C_OscSuSequences::C_DoFlash> c_ToFlash(1U);
+   c_ToFlash[0].c_FilesToWriteToNvm.push_back(c_Path);
+   const std::vector<uint32_t> c_Order(1U, 0U);
+
+   EXPECT_EQ(Errc::success, mc_Sequences.UpdateSystem(c_ToFlash, c_Order));
+   EXPECT_TRUE(mc_Sequences.c_Errors.empty()) << mc_Sequences.ErrorsAsText();
+
+   //both entries landed where the image said, in three writes: 8, then 246 + 54
+   ASSERT_EQ(3U, mc_Ecu.c_NvmWrites.size());
+   EXPECT_EQ(std::make_pair(0x2000U, 8U), mc_Ecu.c_NvmWrites[0]);
+   EXPECT_EQ(std::make_pair(0x2100U, 246U), mc_Ecu.c_NvmWrites[1]);
+   EXPECT_EQ(std::make_pair(0x2100U + 246U, 54U), mc_Ecu.c_NvmWrites[2]);
+   for (uint32_t u32_Index = 0U; u32_Index < c_Small.size(); ++u32_Index)
+   {
+      EXPECT_EQ(c_Small[u32_Index], mc_Ecu.c_Nvm[0x2000U + u32_Index]) << u32_Index;
+   }
+   for (uint32_t u32_Index = 0U; u32_Index < c_Large.size(); ++u32_Index)
+   {
+      EXPECT_EQ(c_Large[u32_Index], mc_Ecu.c_Nvm[0x2100U + u32_Index]) << u32_Index;
+   }
+   EXPECT_TRUE(mc_Sequences.Saw(C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_FINISHED));
+   std::vector<C_OscSuSequencesNodeUpdateStates> c_States;
+   ASSERT_EQ(Errc::success, mc_Sequences.GetUpdateStates(c_States));
+   ASSERT_EQ(1U, c_States[0].c_StatePsiFiles.size());
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StatePsiFiles[0].e_FileLoaded);
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StatePsiFiles[0].e_PsiFileWrote);
+
+   (void)std::remove(c_Path.c_str());
+}
+
+TEST_F(SuSequencesVirtualEcu, UpdateSystem_NvmWriteNeedsTheFlashloaderFeature)
+{
+   mc_Ecu.u8_FeatureByte7 = 0x02U; //no "can write NVM"
+   ASSERT_EQ(Errc::success, m_Init());
+   const std::string c_Path = mh_WriteParameterSetImage("osy_vecu_params2.syde_psi", mh_Pattern(8U, 1U),
+                                                        mh_Pattern(16U, 2U));
+
+   std::vector<C_OscSuSequences::C_DoFlash> c_ToFlash(1U);
+   c_ToFlash[0].c_FilesToWriteToNvm.push_back(c_Path);
+   const std::vector<uint32_t> c_Order(1U, 0U);
+
+   EXPECT_EQ(Errc::range, mc_Sequences.UpdateSystem(c_ToFlash, c_Order));
+   EXPECT_TRUE(mc_Sequences.Saw(C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_AVAILABLE_FEATURE_ERROR));
+   EXPECT_TRUE(mc_Ecu.c_NvmWrites.empty());
+
+   (void)std::remove(c_Path.c_str());
+}
+
+/* -- The node state flags: secure authentication, traffic encryption, debugger ------------------------------------- */
+
+TEST_F(SuSequencesVirtualEcu, UpdateSystem_WritesTheSecurityAndDebuggerFlagsTheDeviceSupports)
+{
+   mc_Ecu.u8_FeatureByte7 = 0x02U | 0x20U | 0x40U | 0x80U; //authentication, debugger off and on
+   mc_Ecu.u8_FeatureByte6 = 0x01U;                          //traffic encryption
+   ASSERT_EQ(Errc::success, m_Init());
+
+   std::vector<C_OscSuSequences::C_DoFlash> c_ToFlash(1U);
+   c_ToFlash[0].q_SendSecureAuthenticationEnabledState = true;
+   c_ToFlash[0].q_SecureAuthenticationEnabled = true;
+   c_ToFlash[0].q_SendTrafficEncryptionEnabledState = true;
+   c_ToFlash[0].q_TrafficEncryptionEnabled = false;
+   c_ToFlash[0].q_SendDebuggerEnabledState = true;
+   c_ToFlash[0].q_DebuggerEnabled = false;
+   const std::vector<uint32_t> c_Order(1U, 0U);
+
+   EXPECT_EQ(Errc::success, mc_Sequences.UpdateSystem(c_ToFlash, c_Order));
+   EXPECT_TRUE(mc_Sequences.c_Errors.empty()) << mc_Sequences.ErrorsAsText();
+
+   ASSERT_EQ(1U, mc_Ecu.c_AuthenticationActivations.size());
+   EXPECT_TRUE(mc_Ecu.c_AuthenticationActivations[0].first);
+   EXPECT_EQ(0U, mc_Ecu.c_AuthenticationActivations[0].second);
+   ASSERT_EQ(1U, mc_Ecu.c_EncryptionActivations.size());
+   EXPECT_FALSE(mc_Ecu.c_EncryptionActivations[0].first);
+   ASSERT_EQ(1U, mc_Ecu.c_DebuggerActivations.size());
+   EXPECT_FALSE(mc_Ecu.c_DebuggerActivations[0]);
+
+   //the flags are written in the programming session at security level 1
+   EXPECT_NE(mc_Ecu.c_Sessions.end(), std::find(mc_Ecu.c_Sessions.begin(), mc_Ecu.c_Sessions.end(), 0x02U));
+   EXPECT_NE(mc_Ecu.c_SecurityLevelsUnlocked.end(),
+             std::find(mc_Ecu.c_SecurityLevelsUnlocked.begin(), mc_Ecu.c_SecurityLevelsUnlocked.end(), 1U));
+
+   std::vector<C_OscSuSequencesNodeUpdateStates> c_States;
+   ASSERT_EQ(Errc::success, mc_Sequences.GetUpdateStates(c_States));
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StateSecuritySettings.e_SecureAuthenticationFlagSent);
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StateSecuritySettings.e_TrafficEncryptionFlagSent);
+   EXPECT_EQ(eSUSEQ_STATE_NO_ERR, c_States[0].c_StateSecuritySettings.e_DebuggerFlagSent);
+   EXPECT_EQ(eSUSEQ_STATE_NOT_NEEDED, c_States[0].c_StateSecuritySettings.e_SecureAuthenticationKeySent);
+}
+
+TEST_F(SuSequencesVirtualEcu, UpdateSystem_DebuggerFlagNeedsTheMatchingFeature)
+{
+   //the device can switch its debugger off but not on
+   mc_Ecu.u8_FeatureByte7 = 0x02U | 0x40U;
+   ASSERT_EQ(Errc::success, m_Init());
+
+   std::vector<C_OscSuSequences::C_DoFlash> c_ToFlash(1U);
+   c_ToFlash[0].q_SendDebuggerEnabledState = true;
+   c_ToFlash[0].q_DebuggerEnabled = true;
+   const std::vector<uint32_t> c_Order(1U, 0U);
+
+   EXPECT_EQ(Errc::range, mc_Sequences.UpdateSystem(c_ToFlash, c_Order));
+   EXPECT_TRUE(mc_Sequences.Saw(C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_STATE_DEBUGGER_WRITE_AVAILABLE_FEATURE_ERROR));
+   EXPECT_TRUE(mc_Ecu.c_DebuggerActivations.empty());
+
+   //off is supported
+   c_ToFlash[0].q_DebuggerEnabled = false;
+   EXPECT_EQ(Errc::success, mc_Sequences.UpdateSystem(c_ToFlash, c_Order));
+   ASSERT_EQ(1U, mc_Ecu.c_DebuggerActivations.size());
+   EXPECT_FALSE(mc_Ecu.c_DebuggerActivations[0]);
 }
