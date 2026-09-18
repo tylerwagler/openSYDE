@@ -1649,3 +1649,15 @@ do little of.
 
 One requirement to know: the routing calculation reads the target's flashloader
 and diagnostic capabilities from `pc_DeviceDefinition` and asserts it is set.
+
+### The device-facing layer, reached with a mock (2026-09-17)
+
+`test_data_dealer` (#44) carries a `C_OscDiagProtocolBase` mock that answers from
+a byte map (NVM) and a keyed store (datapool elements); it is the first test of
+anything below the data dealer without hardware. Datapool element write/read in
+both endiannesses, wrong-sized answers, negative response codes, the NVM list
+read with its CRC (good, flipped bit, unknown list), per-element NVM access at the
+element's own address and change notification all behave. No defect. The mock is
+the template for reaching `C_OscComDriverProtocol` and the update sequences: those
+sit on a CAN dispatcher rather than a diagnostic protocol, so the next mock is one
+level lower.
