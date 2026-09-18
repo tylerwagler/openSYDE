@@ -1608,9 +1608,15 @@ fall-through alike. A double free on **every successful key generation**: abort 
 macOS, segfault on Linux, confirmed under AddressSanitizer. The only production
 caller is `C_OscProtocolSecuritySubLayer`, the ECDH key exchange that opens an
 encrypted session with an ECU, so every attempt at encrypted traffic took the PC
-tool down at the handshake. The code arrived with the Release 37 port
-(2026-05-04); whether upstream carries the same double free is worth a look
-before the next merge.
+tool down at the handshake.
+
+**Not upstream's.** #41's commit message guessed "arrived with the Release 37
+port"; `git log -S` says otherwise. The port brought the file with *one* free,
+exactly as upstream Release 38 still has it. Phase 3b (2026-08-24, the
+`C_SclString` retirement) restructured the function's returns and added the two
+extra frees -- the same commit as the `[i + 1]`, `[length()]` and
+`[length() - 1]` residue. So the fork's one crash-on-every-call defect is a
+side effect of the mass rewrite too, just not a string one.
 
 Two facts the tests had to learn: the PEM loader stores a certificate serial as
 the ASN.1 INTEGER's *content* bytes (tag, length and a leading zero pad stripped),
