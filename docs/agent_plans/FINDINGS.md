@@ -1776,3 +1776,32 @@ declaring a layer untestable, look for the abstract class it talks through. And 
 is the reason the Ubuntu runner is worth more than it looks: its standard library
 asserts on the reads the others let through, so a test that passes on the host and
 fails there is a real out-of-bounds access, not a flaky runner.
+
+## The virtual ECU on CAN: the transport is clean (2026-09-18)
+
+The second bus. `C_CanDispatcher` is abstract in the same way `C_OscIpDispatcher` is
+(`CAN_Send_Msg` in, `m_CAN_Read_Msg` out), so `test_can_transport_virtual_ecu.cpp` puts
+a bus double behind it: each attached virtual ECU reassembles the client's frames
+(single, first + consecutive after a flow control it sends back, openSYDE's multi frame
+without flow control), hands the payload to the shared UDS server, and segments the
+answer the same way. The transport-level tests pin the frames themselves -- the physical
+ids `0x18DA<target><source>`, the functional `0x18DB7F<source>`, the length nibble, the
+sequence numbers wrapping 15 -> 0 over a 200-byte transfer, flow control with no block
+size and no separation time -- and the failure paths: a consecutive frame out of
+sequence drops the transfer, a device that withholds flow control leaves the request at
+its first frame, a frame from another node never reaches the driver, an event-driven
+single frame arrives as a datapool event. The whole update then runs on a CAN system
+definition.
+
+**Nothing was found.** `C_OscProtocolDriverOsyTpCan` behaved to the letter in every case,
+including the ones the 1-based and endian sweeps had touched. That is worth writing
+down next to the Ethernet result: the defects in this layer were in the sequence
+(the null vector, the timeout flag) and in the UDS driver's response parsing (the
+flash block fields), not in the transports. The transport code is the oldest and the
+least changed by the migrations, and it shows.
+
+The cost is one five-second test: `ActivateFlashloader` on CAN broadcasts "enter
+pre-programming" for a fixed `u32_SCAN_TIME_MS = 5000` window whatever the device
+definition says, so the CAN update test cannot be faster than that without changing
+the sequence. Left as is; it is one test, and the window is a real property of the
+protocol (devices reset into the flashloader at different speeds).
