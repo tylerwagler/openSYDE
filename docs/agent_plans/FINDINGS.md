@@ -1624,3 +1624,22 @@ the next `ninja` in that build directory went into uninterruptible sleep (`U`),
 where no signal reaches it; every later `ninja` there followed. The fix was to
 build in a fresh directory. If `ninja` produces no output at all and `ps` shows
 `U`, that is what happened; do not spend time on the build itself.
+
+## Four more never-tested surfaces, no defects (2026-09-17)
+
+After the security pass: the X-config and X-certificates packages
+(`test_x_packages`, create -> process, including loading the unpacked system
+definition against the package's own device root), the routing calculation
+(`test_routing_calculation`: a gateway hop between two CAN buses, and the four
+ways it can say no -- inactive gateway, routing disabled, target function
+disabled, unknown target) and the CAN message logger (`test_com_message_logger`:
+a J1939 frame with a multiplexer decoded against a saved system definition, the
+Motorola 16-bit value checked bit by bit, a non-selecting multiplexer value, an
+unknown id). All four passed on the first complete run. Worth writing down
+because it is the first pass since #37 that found nothing: the package and
+protocol layers above the filers were built on code the earlier waves had
+already exercised, and the residue class lives in string handling, which these
+do little of.
+
+One requirement to know: the routing calculation reads the target's flashloader
+and diagnostic capabilities from `pc_DeviceDefinition` and asserts it is set.
