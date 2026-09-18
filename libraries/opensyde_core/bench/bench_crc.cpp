@@ -54,7 +54,7 @@ static void BM_CRC32_Software(benchmark::State & orc_State)
 }
 BENCHMARK(BM_CRC32_Software)
    ->RangeMultiplier(4)
-   ->Range(1 << 10, 1 << 20);
+   ->Range(16, 1 << 20);
 
 static void BM_CRC32C_Auto(benchmark::State & orc_State)
 {
@@ -70,4 +70,4 @@ static void BM_CRC32C_Auto(benchmark::State & orc_State)
 }
 BENCHMARK(BM_CRC32C_Auto)
    ->RangeMultiplier(4)
-   ->Range(1 << 10, 1 << 20);
+   ->Range(16, 1 << 20);

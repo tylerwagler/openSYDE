@@ -66,8 +66,8 @@ static const uint16_t mau16_CRC_TABLE[] =
 
 //----------------------------------------------------------------------------------------------------------------------
 
-//32bit CRC lookup table
-static const uint32_t mau32_CRC_TABLE[] =
+//32bit CRC lookup table (constexpr so the slicing tables below can be derived from it at compile time)
+static constexpr uint32_t mau32_CRC_TABLE[256] =
 {
    /* CRC polynomial 0xedb88320 */
    0x00000000U, 0x77073096U, 0xee0e612cU, 0x990951baU, 0x076dc419U, 0x706af48fU, 0xe963a535U, 0x9e6495a3U,
@@ -250,16 +250,65 @@ void C_SclChecksums::CalcCRC32C(const void * const opv_Start, const uint32_t ou3
       oru32_Crc = (hc_CRC32C_TABLE[((oru32_Crc) ^ (pu8_Data[u32_Index])) & 0xFFU] ^ ((oru32_Crc) >> 8U));
    }
 }
+namespace
+{
+//Slicing-by-8 tables for CalcCRC32, derived from mau32_CRC_TABLE at compile time. Table 0 is the
+//byte table itself; table k holds the CRC of a byte followed by k zero bytes, which is what lets
+//eight input bytes be folded in with eight independent lookups instead of eight dependent ones.
+//The result is bit for bit the same as the byte-at-a-time loop; test_checksums checks that
+//against a bitwise reference for every length and alignment up to 64 bytes.
+constexpr std::array<std::array<uint32_t, 256>, 8> hc_CRC32_SLICE = []()
+{
+   std::array<std::array<uint32_t, 256>, 8> c_Tables = {};
+   for (uint32_t u32_Index = 0U; u32_Index < 256U; u32_Index++)
+   {
+      c_Tables[0][u32_Index] = mau32_CRC_TABLE[u32_Index];
+   }
+   for (uint32_t u32_Slice = 1U; u32_Slice < 8U; u32_Slice++)
+   {
+      for (uint32_t u32_Index = 0U; u32_Index < 256U; u32_Index++)
+      {
+         const uint32_t u32_Previous = c_Tables[u32_Slice - 1U][u32_Index];
+         c_Tables[u32_Slice][u32_Index] = (u32_Previous >> 8U) ^ mau32_CRC_TABLE[u32_Previous & 0xFFU];
+      }
+   }
+   return c_Tables;
+}();
+}
+
 void C_SclChecksums::CalcCRC32(const void * const opv_Start, const uint32_t ou32_NumBytes, uint32_t & oru32_Crc)
 {
-   const uint8_t * const pu8_Data = reinterpret_cast<const uint8_t *>(opv_Start); //lint !e925 we need to parse
+   const uint8_t * pu8_Data = reinterpret_cast<const uint8_t *>(opv_Start); //lint !e925 we need to parse
+   uint32_t u32_Remaining = ou32_NumBytes;
+   uint32_t u32_Crc = oru32_Crc;
 
-   // byte-by-byte
-
-   for (uint32_t u32_Index = 0U; u32_Index < ou32_NumBytes; u32_Index++)
+   //eight bytes per step. The two words are assembled little endian by hand so the result does not
+   //depend on the host byte order; on a little endian target the compiler folds this into plain loads.
+   while (u32_Remaining >= 8U)
    {
-      oru32_Crc = (mau32_CRC_TABLE[((oru32_Crc) ^ (pu8_Data[u32_Index])) & 0xFFU] ^ ((oru32_Crc) >> 8U));
+      const uint32_t u32_One = u32_Crc ^
+                               (static_cast<uint32_t>(pu8_Data[0]) | (static_cast<uint32_t>(pu8_Data[1]) << 8U) |
+                                (static_cast<uint32_t>(pu8_Data[2]) << 16U) |
+                                (static_cast<uint32_t>(pu8_Data[3]) << 24U));
+      const uint32_t u32_Two = static_cast<uint32_t>(pu8_Data[4]) | (static_cast<uint32_t>(pu8_Data[5]) << 8U) |
+                               (static_cast<uint32_t>(pu8_Data[6]) << 16U) |
+                               (static_cast<uint32_t>(pu8_Data[7]) << 24U);
+      u32_Crc = hc_CRC32_SLICE[7][u32_One & 0xFFU] ^ hc_CRC32_SLICE[6][(u32_One >> 8U) & 0xFFU] ^
+                hc_CRC32_SLICE[5][(u32_One >> 16U) & 0xFFU] ^ hc_CRC32_SLICE[4][u32_One >> 24U] ^
+                hc_CRC32_SLICE[3][u32_Two & 0xFFU] ^ hc_CRC32_SLICE[2][(u32_Two >> 8U) & 0xFFU] ^
+                hc_CRC32_SLICE[1][(u32_Two >> 16U) & 0xFFU] ^ hc_CRC32_SLICE[0][u32_Two >> 24U];
+      pu8_Data += 8U;
+      u32_Remaining -= 8U;
    }
+
+   //tail, byte by byte
+   while (u32_Remaining > 0U)
+   {
+      u32_Crc = mau32_CRC_TABLE[(u32_Crc ^ *pu8_Data) & 0xFFU] ^ (u32_Crc >> 8U);
+      pu8_Data++;
+      u32_Remaining--;
+   }
+   oru32_Crc = u32_Crc;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

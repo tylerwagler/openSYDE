@@ -103,36 +103,26 @@ let the NVM read/write/list-CRC logic be exercised without a device. The rest ne
 a loopback CAN or hardware. Given what the round-trips found in every other layer,
 assume this one is not clean either.
 
-### 3. Phase 7.2 — hardware CRC32
-
-Add an `#ifdef __SSE4_2__` path using `_mm_crc32_u32` / `_mm_crc32_u8`, keep the
-software CRC as fallback, and benchmark to confirm the improvement is real.
-
-Well specified, self-contained, and the Google Benchmark harness already exists
-(`libraries/opensyde_core/bench/`, `-DOPENSYDE_CORE_BUILD_BENCHMARKS=ON`).
-**Measure in Release** — see the benchmark note in `CLAUDE.md`; a Debug number here
-is a measurement of a different program.
-
-### 4. Filer error-API migration
+### 3. Filer error-API migration
 
 ~130 remaining call sites, roughly 270 lines. Mechanical, and the shape is settled
 by the `std::expected` pilot recorded in `FINDINGS.md`: **start from the
 value-or-default callers and leave the bridge sites alone** until the conventions
 are unified. Converting a bridge site costs about four lines and buys nothing.
 
-### 5. 135 range-for conversions
+### 4. 135 range-for conversions
 
 Blocked on naming judgement rather than on safety. Mechanical singularisation
 produces `Entrie` and `SubNodeIndexe`, so each needs a human to pick the name.
 
-### 6. Phase 7.3 — move semantics
+### 5. Phase 7.3 — move semantics
 
 Move constructors and assignment on large classes, `std::move` in hot paths. Worth
 doing only where a benchmark shows it matters — 7.1 is the cautionary tale: the
 plan's prescribed fix was 1.4x and the actual win came from somewhere the plan had
 not looked.
 
-### 7. Standalone GUI-tool configure on macOS
+### 6. Standalone GUI-tool configure on macOS
 
 `cmake -S opensyde_can_monitor/pjt` (or `opensyde_tool/pjt`) on a Mac fails with
 `Failed to find required Qt component "Svg"`. Homebrew ships `qtbase` and `qtsvg` as
@@ -146,7 +136,7 @@ add the `qtsvg` keg to `QT_ADDITIONAL_PACKAGES_PREFIX_PATH` in `toolchain_macos.
 or make the standalone configure go through whatever `build.sh` does. Small, but it
 needs a Mac to verify.
 
-### 8. Low / cosmetic bucket
+### 7. Low / cosmetic bucket
 
 `std::endl` → `"\n"` in console logging; ~208 `#define` wire-constants →
 `constexpr`; god-functions with 16–18 parameter signatures; `== true` / `== false`;
@@ -206,6 +196,7 @@ These are not blocked on effort. Each needs a product call.
 | **`C_SyvDaDashboardsWidget::m_InitOsyDriver`** | Discards `StartLogging`. On failure, CAN signal interpretation silently does not start on the dashboard. It sits inside a `switch (s32_Retval)`, so propagating is a restructure |
 | **UDS wording** | See open item 1 — consolidating the two NRC tables changes displayed text for one of them |
 | **CAN interfaces hash an IP the filer never persists** | `C_IpAddress()` seeds a default, the node filer writes it only for Ethernet, the loader zeros it for the rest, `CalcHash` covers it on every type. Tidy fix is for the loader to keep the constructor default; that changes what a loaded Ethernet interface without an `ip-address` node looks like, so it needs a look at the GUI first (FINDINGS, filer wave 2) |
+| **`CalcCRC32C` has no caller** | Phase 7.2 added a hardware CRC-32C (`C_SclChecksums::CalcCRC32C`, SSE4.2 at runtime, 4 GiB/s) before noticing that every persisted checksum uses the IEEE polynomial, which the instruction cannot compute. It stays tested and benchmarked but nothing calls it. Keep it for a future format, or delete it: a product call. The IEEE `CalcCRC32` got slicing-by-8 instead (4.2x, bit-identical; FINDINGS) |
 | **Report the fork's findings upstream?** | The ECDH double free is the fork's own (upstream frees once), but `h_ListIsComTx`'s second-to-last-letter check and the `[i + 1]` availability parsing are correct upstream only because their string class is 1-based — anyone else porting to `std::string` will hit the same six shapes. Whether to write that up for the openSYDE project is a call for a person |
 
 ---
