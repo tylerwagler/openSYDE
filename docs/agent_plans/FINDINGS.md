@@ -1683,3 +1683,37 @@ CAN-monitor-facing API and now delegate.
 Two things the sweep did change while it was there: `C_OscNodeDataPoolContent` carried
 its own private copies of all eight conversions (deleted, callers use the shared helper),
 and `C_OscExportCanOpenConfig` built a 4-byte payload with four `push_back` calls.
+
+## Phase 7.2, resolved sideways: slicing-by-8 for the IEEE CRC32 (2026-09-18)
+
+The plan for 7.2 was an SSE4.2 `_mm_crc32` path for `C_SclChecksums::CalcCRC32`. That
+instruction computes CRC-32C (Castagnoli, 0x1EDC6F41). `CalcCRC32` is CRC-32/ISO-HDLC
+(0xEDB88320), and its value is persisted everywhere: every `CalcHash` in the system
+definition, the service-update-package signatures, the hex-file checksum. Changing the
+polynomial changes every stored hash, so the hardware path cannot serve the function
+that has the 497 callers. An earlier pass had already added a separate `CalcCRC32C` with
+the hardware path and a benchmark, then stopped at that decision; it has no caller (see
+the parked decisions in the roadmap).
+
+What could be done without changing a single output was **slicing-by-8**: fold eight
+input bytes per step through eight tables derived from the byte table at compile time.
+Measured in Release on the 48-core host, `bench_opensyde --benchmark_filter=CRC32_Software`,
+two alternating runs of each binary:
+
+| Buffer | Byte-at-a-time | Slicing-by-8 | Ratio |
+|---|---|---|---|
+| 16 B | (not in the old range) | 1.41 GiB/s | |
+| 64 B | | 1.53 GiB/s | |
+| 1 KiB | 378 MiB/s | 1.58 GiB/s | 4.2x |
+| 1 MiB | 377 MiB/s | 1.57 GiB/s | 4.2x |
+
+For scale, the unused CRC-32C hardware path does 4.0 GiB/s on the same machine. The
+result is bit-identical by construction; `test_checksums` now compares against a bitwise
+reference for every length and start alignment up to 64 bytes, over odd chunkings, and
+from a non-default start value. Where it matters in practice: the hex-file checksum and
+package signature over megabytes, and the system-definition hash, which is thousands of
+small calls -- the 16-byte number says those get most of the gain too.
+
+The trap to note for anyone reading the archived plan: "hardware CRC32" and "the CRC32
+we use" are different polynomials, and the archive's 17-20x figure compares the two, not
+a faster implementation of ours.

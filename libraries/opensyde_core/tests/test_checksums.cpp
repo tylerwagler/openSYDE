@@ -179,3 +179,84 @@ TEST(Checksums, CalcCRC32C_MatchesReference)
    }
 }
 
+
+/* -- CalcCRC32 slicing-by-8 -------------------------------------------------------------------------------------- */
+/* CalcCRC32 folds eight bytes per step from derived tables (2026-09-18). The value it produces
+   is persisted in every project hash, package signature and hex checksum, so "faster" is only
+   acceptable if it is bit for bit the old value. A bitwise reference of the same polynomial,
+   run over every length and start alignment up to 64 bytes and over odd chunkings, is the pin. */
+
+namespace
+{
+uint32_t mh_ReferenceCrc32(const uint8_t * const opu8_Data, const uint32_t ou32_NumBytes, uint32_t ou32_Crc)
+{
+   for (uint32_t u32_Index = 0U; u32_Index < ou32_NumBytes; u32_Index++)
+   {
+      ou32_Crc ^= opu8_Data[u32_Index];
+      for (uint32_t u32_Bit = 0U; u32_Bit < 8U; u32_Bit++)
+      {
+         ou32_Crc = ((ou32_Crc & 1U) != 0U) ? ((ou32_Crc >> 1U) ^ 0xEDB88320U) : (ou32_Crc >> 1U);
+      }
+   }
+   return ou32_Crc;
+}
+
+std::vector<uint8_t> mh_PseudoRandomBytes(const uint32_t ou32_Count)
+{
+   std::vector<uint8_t> c_Data(ou32_Count);
+   uint32_t u32_State = 0x12345678U;
+   for (uint8_t & ru8_Byte : c_Data)
+   {
+      u32_State = (u32_State * 1103515245U) + 12345U;
+      ru8_Byte = static_cast<uint8_t>(u32_State >> 16U);
+   }
+   return c_Data;
+}
+}
+
+TEST(Checksums, CalcCRC32_MatchesBitwiseReferenceForEveryLengthAndAlignment)
+{
+   const std::vector<uint8_t> c_Data = mh_PseudoRandomBytes(64U + 8U);
+
+   for (uint32_t u32_Offset = 0U; u32_Offset < 8U; u32_Offset++)
+   {
+      for (uint32_t u32_Length = 0U; u32_Length <= 64U; u32_Length++)
+      {
+         uint32_t u32_Crc = 0xFFFFFFFFU;
+         stw::scl::C_SclChecksums::CalcCRC32(&c_Data[u32_Offset], u32_Length, u32_Crc);
+         EXPECT_EQ(mh_ReferenceCrc32(&c_Data[u32_Offset], u32_Length, 0xFFFFFFFFU), u32_Crc)
+            << "offset " << u32_Offset << " length " << u32_Length;
+      }
+   }
+}
+
+TEST(Checksums, CalcCRC32_OddChunkingEqualsOneCall)
+{
+   //chunk boundaries that fall inside, exactly on, and across the eight byte steps
+   const std::vector<uint8_t> c_Data = mh_PseudoRandomBytes(101U);
+   const uint32_t au32_Chunks[] = {3U, 13U, 8U, 1U, 16U, 7U, 24U, 29U};
+
+   uint32_t u32_Whole = 0xFFFFFFFFU;
+   stw::scl::C_SclChecksums::CalcCRC32(c_Data.data(), static_cast<uint32_t>(c_Data.size()), u32_Whole);
+
+   uint32_t u32_Chunked = 0xFFFFFFFFU;
+   uint32_t u32_Position = 0U;
+   for (const uint32_t u32_Chunk : au32_Chunks)
+   {
+      stw::scl::C_SclChecksums::CalcCRC32(&c_Data[u32_Position], u32_Chunk, u32_Chunked);
+      u32_Position += u32_Chunk;
+   }
+   ASSERT_EQ(101U, u32_Position);
+
+   EXPECT_EQ(u32_Whole, u32_Chunked);
+   EXPECT_EQ(mh_ReferenceCrc32(c_Data.data(), 101U, 0xFFFFFFFFU), u32_Whole);
+}
+
+TEST(Checksums, CalcCRC32_NonDefaultStartValueIsCarried)
+{
+   //callers chain hashes through a running value that is rarely 0xFFFFFFFF at entry
+   const std::vector<uint8_t> c_Data = mh_PseudoRandomBytes(40U);
+   uint32_t u32_Crc = 0x1234ABCDU;
+   stw::scl::C_SclChecksums::CalcCRC32(c_Data.data(), 40U, u32_Crc);
+   EXPECT_EQ(mh_ReferenceCrc32(c_Data.data(), 40U, 0x1234ABCDU), u32_Crc);
+}
