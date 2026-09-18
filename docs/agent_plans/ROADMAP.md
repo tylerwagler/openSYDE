@@ -24,7 +24,7 @@ machinery at all.
 | Artifacts | one archive per platform with a `.sha256`, attached to the GitHub Release; workflow artifacts on PRs |
 | Packaging | Windows zip runs as is (import walk deploys Qt, OpenSSL and the runtime); Linux/macOS tarballs need the platform's Qt 6 -- AppImage and `.app` bundles still open |
 | Release workflow | tag `v<date>` -> build, package, GitHub Release with generated notes (`docs/releasing.md`) |
-| Versioning | Seven hand-edited `version_config.hpp` files with unrelated numbers (tool `1.90.1`, CAN Monitor `1.86.0`, SYDEsup `1.15.0`, flash tool `1.0.1`). Root `project()` has no `VERSION`. Nothing ties a release to a tag |
+| Versioning | Seven hand-edited `version_config.hpp` files with unrelated numbers (tool `1.90.1`, CAN Monitor `1.86.0`, SYDEsup `1.15.0`, flash tool `1.0.1`). Root `project()` has no `VERSION`. Every binary now carries `git describe` + commit date (`C_OscBuildInfo`, shown in banners, logs and About) -- that is what ties a build to a tag; the seven hand-edited numbers are still unrelated to it |
 
 Release **was** built manually on 2026-09-16: all eight tools clean, and the core
 suite passes in Release (one locale test skips where the host has no comma locale).

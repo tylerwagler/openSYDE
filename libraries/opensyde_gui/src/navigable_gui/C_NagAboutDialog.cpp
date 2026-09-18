@@ -19,6 +19,7 @@
 #include "ui_C_NagAboutDialog.h"
 #include "C_HeHandler.hpp"
 #include "C_Uti.hpp"
+#include "C_OscBuildInfo.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -142,7 +143,9 @@ void C_NagAboutDialog::InitDynamicNames(void) const
    const QString c_BinaryHash = stw::opensyde_gui_logic::C_Uti::h_GetHashValueAsQtString();
 
    mpc_Ui->pc_LabelValOpenSYDEVersion->setText(C_Uti::h_GetApplicationVersion());
-   mpc_Ui->pc_LabelValOpenSYDEHash->setText("MD5-Checksum: " + c_BinaryHash);
+   mpc_Ui->pc_LabelValOpenSYDEHash->setText(
+      "MD5-Checksum: " + c_BinaryHash + "\nBuild: " +
+      QString::fromStdString(stw::opensyde_core::C_OscBuildInfo::h_GetSummary()));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

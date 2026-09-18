@@ -201,7 +201,7 @@ Per-tool build directories under `build/`; deploy target defaults to
 Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `-DOPENSYDE_CORE_BUILD_TESTS=ON`, run with `ctest`.
 
-42 suites, 367 tests: `test_application_info_block`, `test_can_protocol`,
+43 suites, 371 tests: `test_application_info_block`, `test_build_info`, `test_can_protocol`,
 `test_canopen_eds`, `test_checksummed_xml`, `test_checksums`, `test_code_export`,
 `test_com_message_logger`, `test_cstdint`, `test_data_dealer`,
 `test_data_logger_trigger_parser`, `test_datapool_content_util`,

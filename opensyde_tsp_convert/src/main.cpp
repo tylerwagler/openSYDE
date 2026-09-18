@@ -42,6 +42,7 @@
 #include "C_OscTargetSupportPackageV2Filer.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscZipFile.hpp"
+#include "C_OscBuildInfo.hpp"
 #include "C_SclStringUtil.hpp"
 #include "version_config.hpp"
 
@@ -70,6 +71,7 @@ static void mh_PrintUsage(void)
 {
    std::cout << mhc_TOOL_NAME.c_str() << " V" << PROJECT_VERSION_MAJOR << "." << PROJECT_VERSION_MINOR << "."
              << PROJECT_VERSION_RELEASE << "\n"
+             << "Build: " << stw::opensyde_core::C_OscBuildInfo::h_GetSummary() << "\n"
              << "Usage: " << mhc_TOOL_NAME.c_str()
              << " [--device-library <dir>] <input-v2.syde_tsp> <output-v3.syde_tsp>\n"
              << "\n"

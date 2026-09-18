@@ -1,0 +1,19 @@
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \file
+   \brief       Build identification, stamped from the git checkout (generated -- do not edit, do not commit)
+
+   Written by osy_build_info.cmake into the build directory. The only consumer is C_OscBuildInfo.cpp;
+   everything else reads the values through C_OscBuildInfo.
+
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Defense. All rights reserved.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+#ifndef OSY_BUILD_INFO_HPP
+#define OSY_BUILD_INFO_HPP
+
+#define OSY_BUILD_GIT_DESCRIBE "@OSY_BUILD_GIT_DESCRIBE@"
+#define OSY_BUILD_SOURCE_DATE "@OSY_BUILD_SOURCE_DATE@"
+
+#endif

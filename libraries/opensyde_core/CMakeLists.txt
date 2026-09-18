@@ -126,6 +126,7 @@ endif()
 #basic infrastructure (also requires Windows target layer, or a corresponding implementation for e.g. Linux)
 set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers/precomp_headers.hpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscBuildInfo.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilBinaryHash.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtils.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stw_compid/stwcompid.c
@@ -965,6 +966,32 @@ endif()
 
 # define library target including all sources
 add_library(opensyde_core ${OPENSYDE_CORE_SOURCES})
+
+# Build identification. osy_build_info.cmake stamps generated/osy_build_info.hpp from the git
+# checkout (git describe + committer date; see the script for why not a build date). It runs
+# once here so the header exists for the first compile and for IDE indexing, and again as a
+# custom target ahead of every build of opensyde_core so the stamp follows the checkout, not
+# the last configure. configure_file() leaves the file untouched when nothing changed, so
+# the target costs one cmake -P per build and never causes a rebuild by itself. The header
+# is private: C_OscBuildInfo.cpp is its only reader, the tools use C_OscBuildInfo.
+find_package(Git QUIET)
+set(OSY_BUILD_INFO_DIR ${CMAKE_CURRENT_BINARY_DIR}/generated)
+set(OSY_BUILD_INFO_ARGS
+   -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+   -DTEMPLATE=${CMAKE_CURRENT_SOURCE_DIR}/util/osy_build_info.hpp.in
+   -DOUTPUT=${OSY_BUILD_INFO_DIR}/osy_build_info.hpp
+   -DGIT_EXECUTABLE=${GIT_EXECUTABLE}
+   -P ${CMAKE_CURRENT_SOURCE_DIR}/util/osy_build_info.cmake
+)
+execute_process(COMMAND ${CMAKE_COMMAND} ${OSY_BUILD_INFO_ARGS} COMMAND_ERROR_IS_FATAL ANY)
+add_custom_target(osy_build_info
+   COMMAND ${CMAKE_COMMAND} ${OSY_BUILD_INFO_ARGS}
+   BYPRODUCTS ${OSY_BUILD_INFO_DIR}/osy_build_info.hpp
+   COMMENT "Stamping osy_build_info.hpp from the git checkout"
+   VERBATIM
+)
+add_dependencies(opensyde_core osy_build_info)
+target_include_directories(opensyde_core PRIVATE ${OSY_BUILD_INFO_DIR})
 
 # Warnings. The eight tool trees have built with -Wall -Wextra -Wpedantic all
 # along; opensyde_core set no warning flags at all, so the most safety-critical
