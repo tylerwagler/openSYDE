@@ -126,8 +126,11 @@ this order:
   sends the certificate's modulus, exponent and serial as the authentication key (an
   RSA-1024 identity, since the service takes a 128-byte modulus). With these, every
   branch of `UpdateSystem` runs against the virtual ECU.
-- **Device configuration.** `C_OscDcDeviceInformation` and the `C_OscDc*` sequences:
-  the UDP broadcasts (`GetDeviceInfo`, `SetIpAddress`) the double currently swallows.
+- **Device configuration on CAN: done** (`C_OscDcBasicSequences` over the CAN double,
+  2026-09-18): scan, read serial numbers and names of two devices, assign a node id and
+  bitrate to one, reset all. 8 s, the two fixed scan windows. The Ethernet side
+  (`SetIpAddress` / `GetDeviceInfo` UDP broadcasts, used by the GUI's device
+  configuration) is still swallowed by the Ethernet double.
 
 `C_OscDataDealerNvm` is done (#42). The routing *calculation* is tested; its execution
 is not.

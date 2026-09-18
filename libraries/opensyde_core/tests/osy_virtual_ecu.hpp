@@ -91,6 +91,8 @@ public:
    std::vector<std::pair<bool, uint8_t> > c_EncryptionActivations;     ///< (on, algorithm) written to 0xA825
    std::vector<bool> c_DebuggerActivations;                            ///< written to 0xA822
    std::vector<T_Bytes> c_AuthenticationKeysWritten;                   ///< modulus + exponent + serial, as sent to 0xA823
+   std::vector<T_Bytes> c_NodeIdsSetForChannel;                        ///< (type, index, bus id, node id) from routine 0x0214
+   std::vector<T_Bytes> c_BitratesSetForChannel;                       ///< (type, index, bitrate big endian) from routine 0x0207
 
    C_VirtualEcu(void) :
       c_DeviceName("VIRTUAL-ECU"),
@@ -419,6 +421,12 @@ private:
       switch (u16_Routine)
       {
       case 0x0206U: //RequestProgramming
+         return c_Response;
+      case 0x0214U: //SetNodeIdForChannel: type, index, bus id, node id
+         c_NodeIdsSetForChannel.emplace_back(orc_Request.begin() + 4, orc_Request.end());
+         return c_Response;
+      case 0x0207U: //SetBitrate: type, index, four bytes of bit/s
+         c_BitratesSetForChannel.emplace_back(orc_Request.begin() + 4, orc_Request.end());
          return c_Response;
       case 0x0208U: //CheckFlashMemoryAvailable
          c_MemoryChecks.emplace_back(stw::opensyde_core::C_OscEndian::h_GetU32Big(&orc_Request[4]),
