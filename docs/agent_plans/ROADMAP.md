@@ -48,9 +48,29 @@ survived means those paths had not been exercised in this fork since the
 migrations. The unit suite is good (320 tests, three platforms) but every one of
 those bugs lived in an **integration path** the unit tests do not reach.
 
-A manual functional pass over what the migrations touched — create/save/load a
-project, import an EDS, save/load a parameter set, run a system update, CAN Monitor
-against a DBC — is the highest-value pre-release activity, and it needs hardware.
+**Update, 2026-09-17.** The round-trip technique was then run over every file
+format, package, generator and security class in the core (#37–#42; 41 suites,
+363 tests). It found five more features that had never worked on this branch since
+the migrations, each "the feature does not work" rather than an edge case:
+
+| Never worked | Since | Fixed in |
+|---|---|---|
+| loading **any** HALC definition with a use-case | phase 3 | #37 |
+| CANopen EDS import numbers (`254` read as `54`, hex limits as `0`) | phase 3 | #37 |
+| **creating** a service update package, and loading one | phase 3b | #39 |
+| telling a COM datapool's Tx list from its Rx list — every message↔element mapping | phase 3 | #40 |
+| opening an encrypted session with an ECU (double free at ECDH key creation) | phase 3b | #41 |
+
+Plus the X-config missing-node check reading past the end (#38), the HALC magician
+mislaying channel values when a domain has both domain and channel parameters (#40),
+and hex INI values read as 0 (#39). `FINDINGS.md` carries the six shapes of the
+1-based residue with the scanner that finds five of them.
+
+What the suite still cannot reach is everything that talks to hardware: the
+protocol drivers, the data dealer, device configuration and the update sequences.
+A manual functional pass over those — run a system update through a gateway, CAN
+Monitor against a real bus, a secure session with an ECU — remains the highest-value
+pre-release activity, and it needs hardware.
 
 ---
 
@@ -69,16 +89,19 @@ further divergence is a user-visible inconsistency nobody will notice until a
 support call. Consolidating changes the displayed text for one of the two, so it
 needs a wording decision first.
 
-### 2. Round-trip tests for the remaining filers
+### 2. Tests for the hardware-facing classes, with a mocked protocol
 
-`tests/test_filer_roundtrip.cpp` covers the bus, project and data logger filers;
-all three are clean. **Twenty more filers have save/load pairs and no round-trip
-test.** This is the technique that found the locale bug and the paramset CRC bug,
-and it is the cheapest per-bug method in the sweep so far.
+Every file format, package, generator and security class in `opensyde_core` has a
+test now (#30, #37–#42). What has none is the layer that talks to devices:
+`C_OscDataDealer` / `C_OscDataDealerNvm` (datapool read/write over a protocol),
+`C_OscComDriverProtocol`, `C_OscSuSequences` (the update sequences),
+`C_OscDcDeviceInformation`, the routing execution (the calculation is tested).
 
-Highest-churn targets first: `C_OscNodeDataPoolFiler`, `C_OscNodeCommFiler`,
-`C_OscViewFiler`, `C_OscHalcConfigFiler`, `C_OscCanOpenManagerFiler`. Use `CalcHash`
-as a deep-equality oracle — 53 classes provide it.
+`C_OscDataDealerNvm` is the tractable one: it drives an abstract
+`C_OscDiagProtocolBase`, so a mock protocol that answers from a byte array would
+let the NVM read/write/list-CRC logic be exercised without a device. The rest need
+a loopback CAN or hardware. Given what the round-trips found in every other layer,
+assume this one is not clean either.
 
 ### 3. Phase 7.2 — hardware CRC32
 
@@ -203,6 +226,8 @@ These are not blocked on effort. Each needs a product call.
 | **5 deferred `[[nodiscard]]` callees** | `SetNodeIdentifiers`, `SendCanMessageDirect`, `HandleCanMessage`, `Cycle`, `m_HandleAsyncResponse` (12 declarations in `protocol_drivers`). Whether a caller should abort on one failed send is a protocol decision. Reasons are recorded at each declaration; one line each once decided |
 | **`C_SyvDaDashboardsWidget::m_InitOsyDriver`** | Discards `StartLogging`. On failure, CAN signal interpretation silently does not start on the dashboard. It sits inside a `switch (s32_Retval)`, so propagating is a restructure |
 | **UDS wording** | See open item 1 — consolidating the two NRC tables changes displayed text for one of them |
+| **CAN interfaces hash an IP the filer never persists** | `C_IpAddress()` seeds a default, the node filer writes it only for Ethernet, the loader zeros it for the rest, `CalcHash` covers it on every type. Tidy fix is for the loader to keep the constructor default; that changes what a loaded Ethernet interface without an `ip-address` node looks like, so it needs a look at the GUI first (FINDINGS, filer wave 2) |
+| **Report the fork's findings upstream?** | The ECDH double free is the fork's own (upstream frees once), but `h_ListIsComTx`'s second-to-last-letter check and the `[i + 1]` availability parsing are correct upstream only because their string class is 1-based — anyone else porting to `std::string` will hit the same six shapes. Whether to write that up for the openSYDE project is a call for a person |
 
 ---
 
