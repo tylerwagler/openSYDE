@@ -131,14 +131,17 @@ std::error_code C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<ui
          BIGNUM * pc_PrivBigNum = nullptr;
          if (EVP_PKEY_get_bn_param(pc_PrivKey, OSSL_PKEY_PARAM_PRIV_KEY, &pc_PrivBigNum) == 1)
          {
-            const int x_Size = BN_num_bytes(pc_PrivBigNum); //lint !e970 !e8080 //use type expected by API
-            std::vector<uint8_t> c_PrivKey(x_Size);
+            //The private scalar is a number: about one key in 256 is below 2^248 and takes 31 bytes.
+            //The consumers want the curve's fixed width (32 for P-256), so pad to the key size rather
+            //than to the number's size. (BN_num_bytes sized this before; the package creator then
+            //refused the PEM as "incorrect length".)
+            const int x_Size = (EVP_PKEY_get_bits(pc_PrivKey) + 7) / 8; //lint !e970 !e8080 //use API type
+            std::vector<uint8_t> c_PrivKey(static_cast<size_t>(x_Size));
 
-            //convert BIGNUM to byte array
-            BN_bn2bin(pc_PrivBigNum, &c_PrivKey[0]);
-
-            //write private key to our internal structure
-            this->mc_KeyInfo.SetPrivateKey(c_PrivKey);
+            if (BN_bn2binpad(pc_PrivBigNum, &c_PrivKey[0], x_Size) == x_Size)
+            {
+               this->mc_KeyInfo.SetPrivateKey(c_PrivKey);
+            }
 
             BN_clear_free(pc_PrivBigNum);
          }
