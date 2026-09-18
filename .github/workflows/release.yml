@@ -148,9 +148,16 @@ jobs:
             windows-*)
               # Qt libraries and plugins next to each GUI executable, then the OpenSSL DLLs and the
               # llvm-mingw runtime (libc++, libunwind) into every tool folder that has an executable.
+              #
+              # A Qt from install-qt-action has no bin/qt.conf, so qtpaths reports the prefix of the
+              # machine that built Qt and windeployqt cannot find the platform plugin. One line fixes it.
+              QT_BIN="${QT_ROOT_DIR}/bin"
+              if [ ! -f "${QT_BIN}/qt.conf" ]; then printf '[Paths]\nPrefix=..\n' > "${QT_BIN}/qt.conf"; fi
+              echo "windeployqt: ${QT_BIN}/windeployqt.exe"; "${QT_BIN}/qtpaths.exe" --query QT_INSTALL_PLUGINS || true
+              ls "${QT_ROOT_DIR}/plugins/platforms" || true
               for exe in "${STAGE}"/openSYDE/openSYDE.exe "${STAGE}"/openSYDE_CAN_Monitor/openSYDE_CAN_Monitor.exe "${STAGE}"/SYDEflash/SYDEflash.exe; do
                 if [ -f "${exe}" ]; then
-                  windeployqt --release --no-translations --no-opengl-sw --no-system-d3d-compiler --no-compiler-runtime "${exe}"
+                  "${QT_BIN}/windeployqt.exe" --release --no-translations --no-opengl-sw --no-system-d3d-compiler --no-compiler-runtime "${exe}"
                 fi
               done
               RUNTIME_DIR="$(dirname "$(command -v clang++)")"
