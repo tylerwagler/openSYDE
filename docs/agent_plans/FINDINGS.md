@@ -1805,3 +1805,31 @@ pre-programming" for a fixed `u32_SCAN_TIME_MS = 5000` window whatever the devic
 definition says, so the CAN update test cannot be faster than that without changing
 the sequence. Left as is; it is one test, and the window is a real property of the
 protocol (devices reset into the flashloader at different speeds).
+
+## A flaky test was a real defect: elliptic-curve scalars with a leading zero byte (2026-09-18)
+
+`SecuritySignatures.EcdsaSignsVerifiesAndRoundTripsThroughDer` generates a fresh P-256 key
+every run and failed once in a full-suite run on the host, at
+`h_ExtractPublicKeyFromX509Certificate`. Repeating it 400 times gave 3 failures. That rate,
+about 1 in 128, is the signature of a leading-zero problem: a 256-bit coordinate is below
+2^248 one time in 256, and then its big-endian form is 31 bytes, not 32. The reader
+required `BN_num_bytes(x) == 32 && BN_num_bytes(y) == 32`, so about one certificate in 128
+was rejected outright -- a valid device certificate that the client would not authenticate
+against, on no schedule anyone could reproduce.
+
+The same class, a second time: `C_OscSecurityPemSecUpdate` sized the private scalar with
+`BN_num_bytes`, so one key in 256 came out 31 bytes long, and
+`C_OscSupServiceUpdatePackageCreate` then refused the PEM as "provided with incorrect
+length". Both readers now use `BN_bn2binpad` to the curve's width. The signature R and S
+parts were already handled correctly: they carry explicit lengths.
+
+Two tests now generate keys with the short scalar on purpose (`h_MakeP256KeyWithLeadingZero`
+tries until it gets one, ~256 keygens) and check extraction, verification and the PEM's
+32 bytes. The round-trip test passes 600 runs in a row.
+
+**Method note.** A test that fails once in a hundred runs on random input is not "flaky";
+it is a defect with a probability. Before adding a retry or a fixed seed, work out what the
+rate says about the input. 1/256 per scalar is a leading byte; 1/2 is a sign bit; 1/65536
+is a leading word. This is the second time in this tree a fixed-width assumption about a
+variable-width number has bitten (the first was the 1-based indexing residue, a different
+shape of the same "the representation is not the value" mistake).

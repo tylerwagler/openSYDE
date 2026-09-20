@@ -31,10 +31,10 @@ private:
    EVP_MD_CTX * mpc_MdContext; //OpenSSL context for SHA digest
 
 public:
-   static const uint32_t hu32_SHA256_FINAL_LENGTH = 32U;
-   static const uint32_t hu32_SECP256R1_PRIVATE_KEY_LENGTH = 32U;
-   static const uint32_t hu32_SECP256R1_PUBLIC_KEY_LENGTH = 64U;         //concatenated x and y parts; each 32 bytes
-   static const uint32_t hu32_SECP256R1_SIGNATURE_PART_LENGTH_MAX = 32U; //maximum number of bytes for r and s parts
+   static constexpr uint32_t hu32_SHA256_FINAL_LENGTH = 32U;
+   static constexpr uint32_t hu32_SECP256R1_PRIVATE_KEY_LENGTH = 32U;
+   static constexpr uint32_t hu32_SECP256R1_PUBLIC_KEY_LENGTH = 64U;         //concatenated x and y parts; each 32 bytes
+   static constexpr uint32_t hu32_SECP256R1_SIGNATURE_PART_LENGTH_MAX = 32U; //maximum number of bytes for r and s parts
 
    //We wrap up the signature in our own class.
    //Using this approach we allow the application to be flexible about how to serialize/store a signature.
