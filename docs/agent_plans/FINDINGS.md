@@ -1857,8 +1857,12 @@ not reachable by the harness without the security sub-layer, which is the next
 extension.
 
 The node-state flags (`m_WriteOpenSydeNodeStates`: authentication and encryption
-activation, debugger on/off, each gated on a feature bit) went in the same round and
-behaved.
+activation, debugger on/off, each gated on a feature bit) and the PEM write
+(`m_WritePemOpenSydeFile`: a self-signed RSA-1024 certificate's modulus, exponent and
+serial go out as the authentication key) went in the same round and behaved. That is
+every branch of `UpdateSystem`. `C_OscDcBasicSequences`, the CAN device configuration
+(scan for devices, read their serial numbers and names, assign a node id and a bitrate,
+reset), runs on the CAN double too, with two devices on the bus; also clean.
 
 Running tally for the hardware-facing layer: the virtual ECU found three defects in
 the sequence and the UDS parser, none in either transport, none in these paths.

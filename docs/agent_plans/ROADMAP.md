@@ -120,13 +120,17 @@ this order:
   tests drive `m_FlashNodeOpenSydeFile` (accept and reject) and `m_WriteNvmOpenSyde`
   with an image built by `C_OscParamSetHandler`. Nothing found in those paths; one
   slip found by reading next to them (`OsyWriteMemoryByAddress` under encryption).
-- **The security and debugger flags: done** (`m_WriteOpenSydeNodeStates`, 2026-09-18):
-  authentication and encryption activation and the debugger state, each gated on the
-  device's feature bits. **PEM write** (`m_WritePemOpenSydeFile`) remains: it needs an
-  RSA-1024 identity (the service takes a 128-byte modulus), best shared from
-  `test_security_signatures`' builder once #51 has landed.
-- **Device configuration.** `C_OscDcDeviceInformation` and the `C_OscDc*` sequences:
-  the UDP broadcasts (`GetDeviceInfo`, `SetIpAddress`) the double currently swallows.
+- **The security and debugger flags and the PEM write: done** (2026-09-18).
+  `m_WriteOpenSydeNodeStates` writes authentication and encryption activation and the
+  debugger state, each gated on the device's feature bits; `m_WritePemOpenSydeFile`
+  sends the certificate's modulus, exponent and serial as the authentication key (an
+  RSA-1024 identity, since the service takes a 128-byte modulus). With these, every
+  branch of `UpdateSystem` runs against the virtual ECU.
+- **Device configuration on CAN: done** (`C_OscDcBasicSequences` over the CAN double,
+  2026-09-18): scan, read serial numbers and names of two devices, assign a node id and
+  bitrate to one, reset all. 8 s, the two fixed scan windows. The Ethernet side
+  (`SetIpAddress` / `GetDeviceInfo` UDP broadcasts, used by the GUI's device
+  configuration) is still swallowed by the Ethernet double.
 
 `C_OscDataDealerNvm` is done (#42). The routing *calculation* is tested; its execution
 is not.

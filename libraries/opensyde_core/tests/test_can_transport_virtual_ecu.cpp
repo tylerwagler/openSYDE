@@ -29,6 +29,8 @@
 
 #include "C_CanDispatcher.hpp"
 #include "C_OscApplicationInfoBlock.hpp"
+#include "C_OscDcBasicSequences.hpp"
+#include "C_OscDcDeviceInformation.hpp"
 #include "C_OscDeviceDefinition.hpp"
 #include "C_OscEndian.hpp"
 #include "C_OscErrorCategory.hpp"
@@ -733,4 +735,86 @@ TEST_F(SuSequencesVirtualEcuCan, WholeUpdate_ActivateReadFlashReset)
    EXPECT_EQ(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON, mc_Ecu.c_ResetTypes.back());
 
    (void)std::remove(c_HexPath.c_str());
+}
+
+/* -- Device configuration: the scan-and-assign-node-ids sequences on a CAN bus ------------------------------------- */
+
+namespace
+{
+class C_RecordingDcSequences :
+   public C_OscDcBasicSequences
+{
+public:
+   std::vector<C_OscDcDeviceInformation> c_Devices;
+   bool q_SecurityFeatureUsed = false;
+   std::vector<std::string> c_Errors;
+
+protected:
+   void m_ReportProgress(const int32_t os32_Result, const std::string & orc_Information) override
+   {
+      if (os32_Result != 0)
+      {
+         c_Errors.push_back(orc_Information);
+      }
+   }
+
+   void m_ReportDevicesInfoRead(const std::vector<C_OscDcDeviceInformation> & orc_DeviceInfoResult,
+                                const bool oq_SecurityFeatureUsed) override
+   {
+      c_Devices = orc_DeviceInfoResult;
+      q_SecurityFeatureUsed = oq_SecurityFeatureUsed;
+   }
+};
+}
+
+TEST(DcBasicSequencesVirtualEcu, ScanConfigureAndResetTwoDevicesOnTheBus)
+{
+   //two devices, no system definition: this is how a fresh bus is brought up
+   C_VirtualEcu c_First;
+   C_VirtualEcu c_Second;
+   c_Second.c_DeviceName = "OTHER-BOX";
+   c_Second.au8_SerialNumber[0] = 0x77U;
+   C_VirtualCanBus c_Bus;
+   c_Bus.Attach(5U, c_First);
+   c_Bus.Attach(6U, c_Second);
+   C_RecordingDcSequences c_Sequences;
+
+   ASSERT_EQ(Errc::success, c_Sequences.Init(&c_Bus));
+
+   //activation: request programming answered by both, reset to flashloader, five seconds of "enter pre-programming"
+   EXPECT_EQ(Errc::success, c_Sequences.ScanEnterFlashloader(10U));
+   EXPECT_EQ(std::vector<uint8_t>({C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER}),
+             c_First.c_ResetTypes);
+   EXPECT_EQ(std::vector<uint8_t>({C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER}),
+             c_Second.c_ResetTypes);
+   EXPECT_GT(c_Bus.SentTo(0x18DB7F00U | mhu8_CLIENT_NODE_ID).size(), 50U);
+
+   //the scan hears both serial numbers and reads both names
+   EXPECT_EQ(Errc::success, c_Sequences.ScanGetInfo());
+   ASSERT_EQ(2U, c_Sequences.c_Devices.size());
+   EXPECT_EQ(5U, c_Sequences.c_Devices[0].u8_NodeId);
+   EXPECT_EQ("VIRTUAL-ECU", c_Sequences.c_Devices[0].c_DeviceName);
+   EXPECT_EQ(6U, c_Sequences.c_Devices[1].u8_NodeId);
+   EXPECT_EQ("OTHER-BOX", c_Sequences.c_Devices[1].c_DeviceName);
+   EXPECT_EQ(0x77U, c_Sequences.c_Devices[1].c_SerialNumber.au8_SerialNumber[0]);
+   EXPECT_FALSE(c_Sequences.q_SecurityFeatureUsed);
+
+   //the second device gets node id 9 and 250 kbit/s on its first CAN interface
+   EXPECT_EQ(Errc::success, c_Sequences.ConfigureDevice(6U, 9U, 250U, 0U));
+   ASSERT_EQ(1U, c_Second.c_NodeIdsSetForChannel.size());
+   EXPECT_EQ(std::vector<uint8_t>({0U, 0U, mhu8_BUS_ID, 9U}), c_Second.c_NodeIdsSetForChannel[0]);
+   ASSERT_EQ(1U, c_Second.c_BitratesSetForChannel.size());
+   EXPECT_EQ(std::vector<uint8_t>({0U, 0U, 0x00U, 0x03U, 0xD0U, 0x90U}), c_Second.c_BitratesSetForChannel[0]);
+   EXPECT_TRUE(c_First.c_NodeIdsSetForChannel.empty());
+   //in the programming session, unlocked at level 1 with the fixed non-secure key
+   EXPECT_NE(c_Second.c_Sessions.end(), std::find(c_Second.c_Sessions.begin(), c_Second.c_Sessions.end(), 0x02U));
+   const std::vector<std::vector<uint8_t> > c_Keys = c_Second.RequestsFor(0x27U);
+   ASSERT_EQ(2U, c_Keys.size());
+   EXPECT_EQ(std::vector<uint8_t>({0x27U, 0x02U, 0U, 0U, 0U, 23U}), c_Keys[1]);
+
+   //and everybody is reset for the new configuration to take effect
+   EXPECT_EQ(Errc::success, c_Sequences.ResetSystem());
+   EXPECT_EQ(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON, c_First.c_ResetTypes.back());
+   EXPECT_EQ(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON, c_Second.c_ResetTypes.back());
+   EXPECT_TRUE(c_Sequences.c_Errors.empty());
 }
