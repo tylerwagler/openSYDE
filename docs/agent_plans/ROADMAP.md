@@ -114,11 +114,17 @@ this order:
   scan window for CAN activation.
 - **Routing.** A second node behind the first, so `StartRouting`, the routing routines
   (`0x0202`, `0x0205`) and `C_OscSuSequences::m_ReconnectToTargetServer` run.
-- **File-based flashloader, NVM (`.psi`) writes, PEM and the security flags.** All
-  branches of `UpdateSystem` the address-based test skips
-  (`m_FlashNodeOpenSydeFile`, `m_WriteNvmOpenSyde`, `m_WritePemOpenSydeFile`,
-  `m_WriteOpenSydeNodeStates`). The virtual ECU needs `RequestFileTransfer` and the
-  security services; the data dealer test has a mock NVM already.
+- **File-based flashloader and NVM (`.syde_psi`) writes: done** (2026-09-18). The
+  virtual ECU speaks `RequestFileTransfer`, the file-based transfer exit with its CRC,
+  the exit-result identifier, and `Read`/`WriteMemoryByAddress` over a byte map; the
+  tests drive `m_FlashNodeOpenSydeFile` (accept and reject) and `m_WriteNvmOpenSyde`
+  with an image built by `C_OscParamSetHandler`. Nothing found in those paths; one
+  slip found by reading next to them (`OsyWriteMemoryByAddress` under encryption).
+- **The security and debugger flags: done** (`m_WriteOpenSydeNodeStates`, 2026-09-18):
+  authentication and encryption activation and the debugger state, each gated on the
+  device's feature bits. **PEM write** (`m_WritePemOpenSydeFile`) remains: it needs an
+  RSA-1024 identity (the service takes a 128-byte modulus), best shared from
+  `test_security_signatures`' builder once #51 has landed.
 - **Device configuration.** `C_OscDcDeviceInformation` and the `C_OscDc*` sequences:
   the UDP broadcasts (`GetDeviceInfo`, `SetIpAddress`) the double currently swallows.
 
