@@ -431,7 +431,9 @@ std::error_code C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Con
             int x_SoError = 0; //lint !e8080 !e970 //using type to match library interface
             int x_OptLen = sizeof(x_SoError); //lint !e8080 !e970 //matching used API
             const int x_GetSockOptRet = //lint !e8080 !e970 //using type to match library interface
-                                        getsockopt(orc_Connection.x_Socket, SOL_SOCKET, SO_ERROR, &x_SoError, &x_OptLen);
+                                        //winsock declares optval as char * (unlike POSIX void *), so the int must be cast
+                                        getsockopt(orc_Connection.x_Socket, SOL_SOCKET, SO_ERROR,
+                                                   reinterpret_cast<char *>(&x_SoError), &x_OptLen);
             if (x_GetSockOptRet != 0)
             {
                osc_write_log_error("openSYDE IP-TP",
