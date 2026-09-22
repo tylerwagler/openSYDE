@@ -135,6 +135,21 @@ node-ID-only broadcast overloads, `C_OscBuSequences`/`C_OscDcBasicSequences` IP
 protocol drivers and should be ported as one unit, carefully, against the existing
 virtual-ECU tests.
 
+**Updated 2026-09-22:** #5 (dispatcher port) is **done and committed**
+(`C_OscIpDispatcher` port member + 3-arg `InitTcp` overload; both impls use the
+member; default 13400 unchanged; 460 tests pass).
+
+#7 (DoIP-over-IP) is still large and notably divergent from upstream. Upstream's
+diff is ~1,400 lines across `C_OscProtocolDriverOsyTpIp`, `C_OscBuSequences` and
+`C_OscDcBasicSequences`. It cannot be applied mechanically: the fork's protocol
+drivers return `std::error_code` (not int32 STW codes), use direct `mc_TpCan`
+value members that must become `mpc_TpCan`/`mpc_TpIp`/`mpc_IpDispatcher`, and
+require every `mc_TpCan.Broadcast*` call to be re-expressed through new
+`m_Broadcast*` dispatchers that select CAN vs IP. Recommended as its own focused
+effort/PR validated against the virtual-ECU tests (`test_su_sequences_virtual_ecu`,
+`test_can_transport_virtual_ecu`, and the CAN `C_OscDcBasicSequences` device-config
+test) rather than a rushed in-session port.
+
 1. **miniz 2.0.7 → 3.1.0** (drop in new `miniz.c/h`, `ChangeLog.md`, `readme.md`;
    remove the now-unused `#define MINIZ_NO_ZLIB_COMPATIBLE_NAMES` from
    `zip/C_OscZip{Data,File}.cpp`).
