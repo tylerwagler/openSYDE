@@ -77,7 +77,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(const QString & orc_File,
 {
    bool q_FileIsOk = false;
 
-   if (orc_File == mhc_REMOVE_PATH_TEXT.toStdString())
+   if (orc_File == mhc_REMOVE_PATH_TEXT)
    {
       // Special case. Removing file. No check necessary
       if (this->me_Type == C_OscNodeApplication::ePARAMETER_SET_HALC)
