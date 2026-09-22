@@ -403,6 +403,41 @@ const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set node ID of one node
+
+   Send broadcast to change the node ID of one specific node.
+   Only the node with a specified serial number is expected to send a response and change its node ID.
+   The function will return as soon as it has received one response.
+
+   Incoming UDP responses to other services will be dumped: we are strictly handshaking here ...
+
+   \param[in]    orc_SerialNumber      serial number of server to change IP on
+   \param[in]    orc_NewNodeId         New bus id and node id for the interface
+   \param[out]   orau8_ResponseIp      IP address the response was received from
+   \param[out]   opu8_ErrorResult      if not NULL: code of error response (if Errc::warn is returned)
+
+   \return
+   Errc::success   no problems
+   Errc::warn      error response
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
+   Errc::range     serial number is invalid or wrong format of serial number is configured
+   Errc::timeout   no response within timeout
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSerialNumber & orc_SerialNumber,
+                                                                  const C_OscProtocolDriverOsyNode & orc_NewNodeId,
+                                                                  uint8_t (&orau8_ResponseIp)[4],
+                                                                  uint8_t * const opu8_ErrorResult) const
+{
+   const uint8_t au8_ZERO_IP[4] = {0U, 0U, 0U, 0U};
+
+   // Mode flag. Bit 1 is IP address, bit 2 is node identifier
+   return m_BroadcastSetIpAddress(orc_SerialNumber, au8_ZERO_IP, au8_ZERO_IP, au8_ZERO_IP, orc_NewNodeId,
+                                  0x02U, orau8_ResponseIp, opu8_ErrorResult);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set IP address of one node
 
    Send broadcast to change the IP address of one specific node.
@@ -429,12 +464,53 @@ const
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSerialNumber & orc_SerialNumber,
-                                                          const uint8_t (&orau8_NewIpAddress)[4],
-                                                          const uint8_t (&orau8_NetMask)[4],
-                                                          const uint8_t (&orau8_DefaultGateway)[4],
-                                                          const C_OscProtocolDriverOsyNode & orc_NewNodeId,
-                                                          uint8_t (&orau8_ResponseIp)[4],
-                                                          uint8_t * const opu8_ErrorResult) const
+                                                                  const uint8_t (&orau8_NewIpAddress)[4],
+                                                                  const uint8_t (&orau8_NetMask)[4],
+                                                                  const uint8_t (&orau8_DefaultGateway)[4],
+                                                                  const C_OscProtocolDriverOsyNode & orc_NewNodeId,
+                                                                  uint8_t (&orau8_ResponseIp)[4],
+                                                                  uint8_t * const opu8_ErrorResult) const
+{
+   // Mode flag. Bit 1 is IP address, bit 2 is node identifier
+   return m_BroadcastSetIpAddress(orc_SerialNumber, orau8_NewIpAddress, orau8_NetMask, orau8_DefaultGateway,
+                                  orc_NewNodeId, 0x03U, orau8_ResponseIp, opu8_ErrorResult);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set IP address of one node
+
+   Send broadcast to change the IP address of one specific node.
+   Only the node with a specified serial number is expected to send a response and change its IP address.
+   The function will return as soon as it has received one response.
+
+   Incoming UDP responses to other services will be dumped: we are strictly handshaking here ...
+
+   \param[in]    orc_SerialNumber      serial number of server to change IP on
+   \param[in]    orau8_NewIpAddress    IP address to set
+   \param[in]    orau8_NetMask         Net mask to set
+   \param[in]    orau8_DefaultGateway  Default gateway to set
+   \param[in]    orc_NewNodeId         New bus id and node id for the interface
+   \param[in]    ou8_Mode              Mode flag. Bit 1 is IP address, bit 2 is node identifier
+   \param[out]   orau8_ResponseIp      IP address the response was received from
+   \param[out]   opu8_ErrorResult      if not NULL: code of error response (if Errc::warn is returned)
+
+   \return
+   Errc::success   no problems
+   Errc::warn      error response
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
+   Errc::range     serial number is invalid or wrong format of serial number is configured
+   Errc::timeout   no response within timeout
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscProtocolDriverOsyTpIp::m_BroadcastSetIpAddress(const C_OscProtocolSerialNumber & orc_SerialNumber,
+                                                             const uint8_t (&orau8_NewIpAddress)[4],
+                                                             const uint8_t (&orau8_NetMask)[4],
+                                                             const uint8_t (&orau8_DefaultGateway)[4],
+                                                             const C_OscProtocolDriverOsyNode & orc_NewNodeId,
+                                                             const uint8_t ou8_Mode,
+                                                             uint8_t (&orau8_ResponseIp)[4],
+                                                             uint8_t * const opu8_ErrorResult) const
 {
    std::error_code c_Return = Errc::timeout;
 
@@ -455,7 +531,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscPro
       c_Header.ComposeHeader(c_Request);
       (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE], &orc_SerialNumber.au8_SerialNumber[0], 6);
       // Mode flag. Bit 1 is IP address, bit 2 is node identifier
-      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6] = 0x03;
+      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6] = ou8_Mode;
       (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 7], &orau8_NewIpAddress[0], 4);
       (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 11], &orau8_NetMask[0], 4);
       (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 15], &orau8_DefaultGateway[0], 4);
@@ -561,6 +637,42 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscPro
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set node ID extended of one node
+
+   Send broadcast to change the node ID of one specific node.
+   Only the node with a specified serial number is expected to send a response and change its node ID.
+   The function will return as soon as it has received one response.
+
+   Incoming UDP responses to other services will be dumped: we are strictly handshaking here ...
+
+   \param[in]    orc_SerialNumber      serial number of server to change IP on
+   \param[in]    orc_NewNodeId         New bus id and node id for the interface
+   \param[in]    ou8_SubNodeId         Sub node id of node for identification in case of a multi CPU node
+   \param[out]   orau8_ResponseIp      IP address the response was received from
+   \param[out]   opu8_ErrorResult      if not NULL: code of error response (if Errc::warn is returned)
+
+   \return
+   Errc::success   no problems
+   Errc::warn      error response
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
+   Errc::timeout   no response within timeout
+   Errc::range     serial number (orc_SerialNumber) is to long (maximum is 29 byte) or empty
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(
+   const C_OscProtocolSerialNumber & orc_SerialNumber, const C_OscProtocolDriverOsyNode & orc_NewNodeId,
+   const uint8_t ou8_SubNodeId, uint8_t (&orau8_ResponseIp)[4], uint8_t * const opu8_ErrorResult) const
+{
+   const uint8_t au8_ZERO_IP[4] = {0U, 0U, 0U, 0U};
+
+   // Mode flag. Bit 1 is IP address, bit 2 is node identifier
+   return m_BroadcastSetIpAddressExtended(orc_SerialNumber, au8_ZERO_IP, au8_ZERO_IP, au8_ZERO_IP,
+                                          orc_NewNodeId, ou8_SubNodeId, 0x02U, orau8_ResponseIp,
+                                          opu8_ErrorResult);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set IP address extended of one node
 
    Send broadcast to change the IP address of one specific node.
@@ -587,14 +699,51 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscPro
    Errc::range     serial number (orc_SerialNumber) is to long (maximum is 29 byte) or empty
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscProtocolSerialNumber & orc_SerialNumber,
-                                                                  const uint8_t(&orau8_NewIpAddress)[4],
-                                                                  const uint8_t(&orau8_NetMask)[4],
-                                                                  const uint8_t(&orau8_DefaultGateway)[4],
-                                                                  const C_OscProtocolDriverOsyNode & orc_NewNodeId,
-                                                                  const uint8_t ou8_SubNodeId,
-                                                                  uint8_t(&orau8_ResponseIp)[4],
-                                                                  uint8_t * const opu8_ErrorResult) const
+std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(
+   const C_OscProtocolSerialNumber & orc_SerialNumber, const uint8_t(&orau8_NewIpAddress)[4],
+   const uint8_t(&orau8_NetMask)[4], const uint8_t(&orau8_DefaultGateway)[4],
+   const C_OscProtocolDriverOsyNode & orc_NewNodeId, const uint8_t ou8_SubNodeId,
+   uint8_t(&orau8_ResponseIp)[4], uint8_t * const opu8_ErrorResult) const
+{
+   // Mode flag. Bit 1 is IP address, bit 2 is node identifier
+   return m_BroadcastSetIpAddressExtended(orc_SerialNumber, orau8_NewIpAddress, orau8_NetMask,
+                                          orau8_DefaultGateway, orc_NewNodeId, ou8_SubNodeId, 0x03U,
+                                          orau8_ResponseIp, opu8_ErrorResult);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set IP address extended of one node
+
+   Send broadcast to change the IP address of one specific node.
+   Only the node with a specified serial number is expected to send a response and change its IP address.
+   The function will return as soon as it has received one response.
+
+   Incoming UDP responses to other services will be dumped: we are strictly handshaking here ...
+
+   \param[in]    orc_SerialNumber                   serial number of server to change IP on
+   \param[in]    orau8_NewIpAddress                 IP address to set
+   \param[in]    orau8_NetMask                      Net mask to set
+   \param[in]    orau8_DefaultGateway               Default gateway to set
+   \param[in]    orc_NewNodeId                      New bus id and node id for the interface
+   \param[in]    ou8_SubNodeId                      Sub node id of node for identification in case of a multi CPU node
+   \param[in]    ou8_Mode                           Mode flag. Bit 1 is IP address, bit 2 is node identifier
+   \param[out]   orau8_ResponseIp                   IP address the response was received from
+   \param[out]   opu8_ErrorResult                   if not NULL: code of error response (if Errc::warn is returned)
+
+   \return
+   Errc::success   no problems
+   Errc::warn      error response
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
+   Errc::timeout   no response within timeout
+   Errc::range     serial number (orc_SerialNumber) is to long (maximum is 29 byte) or empty
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscProtocolDriverOsyTpIp::m_BroadcastSetIpAddressExtended(
+   const C_OscProtocolSerialNumber & orc_SerialNumber, const uint8_t(&orau8_NewIpAddress)[4],
+   const uint8_t(&orau8_NetMask)[4], const uint8_t(&orau8_DefaultGateway)[4],
+   const C_OscProtocolDriverOsyNode & orc_NewNodeId, const uint8_t ou8_SubNodeId, const uint8_t ou8_Mode,
+   uint8_t(&orau8_ResponseIp)[4], uint8_t * const opu8_ErrorResult) const
 {
    std::error_code c_Return = Errc::timeout;
 
@@ -618,7 +767,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const 
 
       c_Header.ComposeHeader(c_Request);
       // Mode flag. Bit 1 is IP address, bit 2 is node identifier
-      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE] = 0x03;
+      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE] = ou8_Mode;
       (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 1], &orau8_NewIpAddress[0], 4);
       (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 5], &orau8_NetMask[0], 4);
       (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 9], &orau8_DefaultGateway[0], 4);
