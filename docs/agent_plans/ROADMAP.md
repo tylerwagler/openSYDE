@@ -174,6 +174,28 @@ needs a Mac to verify.
 `constexpr`; god-functions with 16–18 parameter signatures; `== true` / `== false`;
 `osc_write_log_*` macros → `std::source_location`.
 
+### 8. Bring in upstream R38 (26-0C) changes
+
+`upstream/master` moved to Release 38 (2026-07-30) while this fork branched at
+exactly R37 (`1d3ac3395`), so the whole R37→R38 delta is new to `develop`. It is one
+squashed upstream commit and is a **tool-level** release — no core/gui dir changes
+upstream (core is vendored per tool), but it brings a real core delta plus, as its
+headline, a **Crypto Agent** that moves RSA-1024 challenge-response auth out of the
+client tools and into an external `osy_crypto_agent` daemon.
+
+Audited 2026-09-22 — findings and full plan in `r38_bringin/` (`AUDIT.md` +
+`PLAN.md`). Recommended scope: Tier 1 core bugfixes, Tier 2 independent features
+(miniz 3.1.0, DoIP/IP, logging knob, `user_devices.ini`), the self-contained GUI
+fixes, and SYDEsup config-file support. **The Crypto Agent is gated as its own
+decision** — it is a coupled port with several fork-specific bridges (missing
+`C_OscConfFileHandler`, tgl functions, `C_OscIpDispatcher` port/error-model drift)
+and a new daemon executable; see `r38_bringin/PLAN.md` phases 4–6. Most of the GUI
+delta (~half the diff) is cast-cleanup/reflow and `.rc` bumps — excluded.
+
+The R37→R38 delta is not `git cherry-pick`-able directly because of the fork's
+divergence (consolidated single core, `std::string`, `std::error_code`, i18n
+stripped); each subsystem is applied by diff + manual adaptation.
+
 ---
 
 ## Larger features
