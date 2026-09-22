@@ -114,6 +114,27 @@ Verify after each: incremental core build + `ctest`; then one full
 
 ## Phase 2 — Tier 2 independent core features
 
+**Status: partially done on 2026-09-22.** Done and committed (each verified in the
+core suite on clang):
+- miniz 2.0.7 → 3.1.0 (vendored; wrapper unchanged except removing the obsolete
+  `MINIZ_NO_ZLIB_COMPATIBLE_NAMES` define)
+- `C_TglFileSearchRecord::u64_LastWriteTimeUtcSeconds` (Linux via `stat`, Windows via
+  FILETIME conversion)
+- `C_OscLoggingHandler::h_SetConsoleMinLogType` + `E_LogType`
+- `C_OscUtils::h_StringToIp4` / `h_Ip4ToString`
+
+**Not applicable to the fork:** the optional `user_devices.ini` load in the system
+definition filer (#6) — it depends on an ini-based `C_OscDeviceManager::LoadFromFile`
+that the fork no longer has (its device manager is a rewritten `std::filesystem`
+scanner over `device.syd` manifests).
+
+**Remaining (substantial, entangled):** C_OscIpDispatcher port configurability (#5,
+port member + `InitTcp` overload) and DoIP-over-IP (#7: `C_OscProtocolDriverOsyTpIp`
+node-ID-only broadcast overloads, `C_OscBuSequences`/`C_OscDcBasicSequences` IP
+`Init` + `ConfigureDeviceBySerialNumber`). These are the fork's error_code-migrated
+protocol drivers and should be ported as one unit, carefully, against the existing
+virtual-ECU tests.
+
 1. **miniz 2.0.7 → 3.1.0** (drop in new `miniz.c/h`, `ChangeLog.md`, `readme.md`;
    remove the now-unused `#define MINIZ_NO_ZLIB_COMPATIBLE_NAMES` from
    `zip/C_OscZip{Data,File}.cpp`).
