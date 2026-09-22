@@ -21,6 +21,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <string>
+#include <vector>
 #include <cstdint>
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
@@ -1129,4 +1130,86 @@ void C_OscUtils::mh_GetBaseNameAndCurrentConflictNumberFromString(const std::str
       //Add skipped part to base string again
       orc_CutString = c_SkippedPart + orc_CutString;
    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Convert string to IP address
+
+   \param[in]       orc_IpString    IP address as string
+   \param[out]      orau8_Ip        IP address as 4-byte array
+
+   \retval   Errc::success   IP address conversion successful
+   \retval   Errc::config    IP address conversion failed
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscUtils::h_StringToIp4(const std::string & orc_IpString, uint8_t (&orau8_Ip)[4])
+{
+   std::error_code c_Result = Errc::success;
+   const std::string c_Trimmed = TrimCompat(orc_IpString);
+
+   if (c_Trimmed.empty())
+   {
+      c_Result = Errc::config;
+   }
+   else
+   {
+      //expect exactly four dot-separated octets
+      std::vector<std::string> c_Bytes;
+      std::string c_Current;
+      for (const char cn_Char : c_Trimmed)
+      {
+         if (cn_Char == '.')
+         {
+            c_Bytes.push_back(c_Current);
+            c_Current.clear();
+         }
+         else
+         {
+            c_Current.push_back(cn_Char);
+         }
+      }
+      c_Bytes.push_back(c_Current);
+
+      if (c_Bytes.size() != 4U)
+      {
+         c_Result = Errc::config;
+      }
+      else
+      {
+         int32_t as32_ByteValues[4];
+         for (uint32_t u32_Byte = 0U; u32_Byte < 4U; ++u32_Byte)
+         {
+            as32_ByteValues[u32_Byte] = ToIntDefCompat(c_Bytes[u32_Byte], -1);
+            if ((as32_ByteValues[u32_Byte] < 0) || (as32_ByteValues[u32_Byte] > 255))
+            {
+               c_Result = Errc::config;
+               break;
+            }
+         }
+         if (c_Result == Errc::success)
+         {
+            for (uint32_t u32_Byte = 0U; u32_Byte < 4U; ++u32_Byte)
+            {
+               orau8_Ip[u32_Byte] = static_cast<uint8_t>(as32_ByteValues[u32_Byte]);
+            }
+         }
+      }
+   }
+
+   return c_Result;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Convert Ip4 address to string
+
+   \param[in]       orau8_Ip     IP address as 4-byte array
+
+   \return
+   IP address as string
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::string C_OscUtils::h_Ip4ToString(const uint8_t (&orau8_Ip)[4])
+{
+   return IntToStrCompat(orau8_Ip[0]) + "." + IntToStrCompat(orau8_Ip[1]) + "." +
+          IntToStrCompat(orau8_Ip[2]) + "." + IntToStrCompat(orau8_Ip[3]);
 }

@@ -76,6 +76,10 @@ public:
    static void h_GetNumberAtStringEnd(const std::string & orc_ProposedName,
                                       std::string & orc_CutString, int32_t & ors32_Number);
 
+   // IP address utilities
+   [[nodiscard]] static std::error_code h_StringToIp4(const std::string & orc_IpString, uint8_t(&orau8_Ip)[4]);
+   static std::string h_Ip4ToString(const uint8_t(&orau8_Ip)[4]);
+
    // Path variables
    static const std::string hc_PATH_VARIABLE_OPENSYDE_BIN;
    static const std::string hc_PATH_VARIABLE_OPENSYDE_PROJ;

@@ -198,6 +198,34 @@ bool stw::tgl::TglFileExists(const std::string & orc_FileName)
    C_NOACT      no files found
 */
 //----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Convert a Windows FILETIME to Unix epoch seconds
+
+   FILETIME is 100ns ticks since 1601-01-01; Unix epoch starts 1970-01-01.
+   Returns 0 for pre-epoch times or if the value cannot be represented.
+
+   \param[in]  orc_FileTime  Windows FILETIME
+
+   \return
+   seconds since Unix epoch (UTC); 0 if unavailable / pre-epoch
+*/
+//----------------------------------------------------------------------------------------------------------------------
+static uint64_t m_FileTimeToUnixSeconds(const FILETIME & orc_FileTime)
+{
+   ULARGE_INTEGER u64;
+   u64.LowPart = orc_FileTime.dwLowDateTime;
+   u64.HighPart = orc_FileTime.dwHighDateTime;
+
+   const uint64_t u64_Seconds = u64.QuadPart / 10000000ULL; //100ns -> seconds
+   const uint64_t u64_EpochDelta = 11644473600ULL;          //seconds between 1601 and 1970
+   if (u64_Seconds < u64_EpochDelta)
+   {
+      return 0ULL;
+   }
+   return (u64_Seconds - u64_EpochDelta);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 static int32_t m_FileFind(const std::string & orc_SearchPattern,
                           std::vector<C_TglFileSearchRecord> & orc_FoundFiles, const bool oq_IncludeDirectories,
                           std::vector<uint8_t> * const opc_IsDirectory)
@@ -221,6 +249,7 @@ static int32_t m_FileFind(const std::string & orc_SearchPattern,
    {
       orc_FoundFiles.emplace_back();
       orc_FoundFiles.back().c_FileName = t_FindFileData.cFileName;
+      orc_FoundFiles.back().u64_LastWriteTimeUtcSeconds = m_FileTimeToUnixSeconds(t_FindFileData.ftLastWriteTime);
       if (opc_IsDirectory != nullptr)
       {
          opc_IsDirectory->emplace_back();
@@ -236,6 +265,7 @@ static int32_t m_FileFind(const std::string & orc_SearchPattern,
       {
          orc_FoundFiles.emplace_back();
          orc_FoundFiles.back().c_FileName = t_FindFileData.cFileName;
+         orc_FoundFiles.back().u64_LastWriteTimeUtcSeconds = m_FileTimeToUnixSeconds(t_FindFileData.ftLastWriteTime);
          if (opc_IsDirectory != nullptr)
          {
             opc_IsDirectory->emplace_back();

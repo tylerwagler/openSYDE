@@ -15,7 +15,6 @@
 #include <fstream>
 
 #include "TglFile.hpp"
-#define MINIZ_NO_ZLIB_COMPATIBLE_NAMES //prevent namespace pollution
 #include "miniz.h"
 #include <system_error>
 

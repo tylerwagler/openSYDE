@@ -169,8 +169,21 @@ int32_t stw::tgl::TglFileFind(const std::string & orc_SearchPattern,
             //lint -e{9130} //API defined by library
             if (fnmatch(c_Pattern.c_str(), pc_Entry->d_name, FNM_PATHNAME | FNM_NOESCAPE) == 0)
             {
+               const std::string c_FullPath = TglFileIncludeTrailingDelimiter(c_Path) + pc_Entry->d_name;
+               struct stat c_FileStat;
+
                orc_FoundFiles.emplace_back();
                orc_FoundFiles.back().c_FileName = pc_Entry->d_name;
+               //preset to zero in case we cannot get the file time for some reason
+               orc_FoundFiles.back().u64_LastWriteTimeUtcSeconds = 0ULL;
+               if (stat(c_FullPath.c_str(), &c_FileStat) == 0)
+               {
+                  if (c_FileStat.st_mtime >= 0)
+                  {
+                     orc_FoundFiles.back().u64_LastWriteTimeUtcSeconds =
+                        static_cast<uint64_t>(c_FileStat.st_mtime);
+                  }
+               }
                s32_Error = C_NO_ERR;
             }
          }

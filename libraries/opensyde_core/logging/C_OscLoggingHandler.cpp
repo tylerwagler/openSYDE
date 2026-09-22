@@ -40,6 +40,7 @@ bool C_OscLoggingHandler::mhq_WriteToFile = false;
 bool C_OscLoggingHandler::mhq_AutoFlushAllFile = false;
 bool C_OscLoggingHandler::mhq_AutoFlushWarningsAndErrorsFile = false;
 bool C_OscLoggingHandler::mhq_WriteToConsole = true;
+C_OscLoggingHandler::E_LogType C_OscLoggingHandler::mhe_ConsoleMinLogType = C_OscLoggingHandler::eLOG_TYPE_INFO;
 bool C_OscLoggingHandler::mhq_MeasureTime = false;
 bool C_OscLoggingHandler::mhq_LogInitErrorsToConsole = false;
 std::map<uint16_t, uint32_t> C_OscLoggingHandler::mhc_StartTimes = std::map<uint16_t, uint32_t> ();
@@ -184,6 +185,19 @@ void C_OscLoggingHandler::h_SetWriteToConsoleActive(const bool oq_Active)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set minimum log type written to console
+
+   log types below this threshold are suppressed on the console (file output is unaffected)
+
+   \param[in] oe_MinLogType Minimum log type that should be printed to console
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscLoggingHandler::h_SetConsoleMinLogType(const E_LogType oe_MinLogType)
+{
+   C_OscLoggingHandler::mhe_ConsoleMinLogType = oe_MinLogType;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set measure time active flag
 
    \param[in] oq_Active New measure time active flag
@@ -234,7 +248,7 @@ const std::string & C_OscLoggingHandler::h_GetCompleteLogFileLocation(void)
 void C_OscLoggingHandler::h_WriteLogInfo(const std::string & orc_Activity, const std::string & orc_Message,
                                            const char * const opcn_Class, const char * const opcn_Function)
 {
-   C_OscLoggingHandler::mh_WriteLog("INFO", orc_Activity, orc_Message, opcn_Class, opcn_Function);
+   C_OscLoggingHandler::mh_WriteLog(eLOG_TYPE_INFO, orc_Activity, orc_Message, opcn_Class, opcn_Function);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -249,7 +263,7 @@ void C_OscLoggingHandler::h_WriteLogInfo(const std::string & orc_Activity, const
 void C_OscLoggingHandler::h_WriteLogWarning(const std::string & orc_Activity, const std::string & orc_Message,
                                               const char * const opcn_Class, const char * const opcn_Function)
 {
-   C_OscLoggingHandler::mh_WriteLog("WARNING", orc_Activity, orc_Message, opcn_Class, opcn_Function);
+   C_OscLoggingHandler::mh_WriteLog(eLOG_TYPE_WARNING, orc_Activity, orc_Message, opcn_Class, opcn_Function);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -264,7 +278,7 @@ void C_OscLoggingHandler::h_WriteLogWarning(const std::string & orc_Activity, co
 void C_OscLoggingHandler::h_WriteLogError(const std::string & orc_Activity, const std::string & orc_Message,
                                             const char * const opcn_Class, const char * const opcn_Function)
 {
-   C_OscLoggingHandler::mh_WriteLog("ERROR", orc_Activity, orc_Message, opcn_Class, opcn_Function);
+   C_OscLoggingHandler::mh_WriteLog(eLOG_TYPE_ERROR, orc_Activity, orc_Message, opcn_Class, opcn_Function);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -287,7 +301,7 @@ void C_OscLoggingHandler::h_WriteLogPerformance(const uint16_t ou16_TimerId, con
       if (c_StartTime != mhc_StartTimes.end())
       {
          C_OscLoggingHandler::mh_WriteLog(
-            "INFO", "Performance measurement",
+            eLOG_TYPE_INFO, "Performance measurement",
             orc_Message + " time: " + std::to_string(stw::tgl::TglGetTickCount() - c_StartTime->second) + " ms",
             opcn_Class, opcn_Function);
 
@@ -393,11 +407,28 @@ std::string C_OscLoggingHandler::h_UtilConvertDateTimeToString(const C_TglDateTi
    \param[in] opcn_Function Current function (combined with function: maximum 50 characters)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscLoggingHandler::mh_WriteLog(const std::string & orc_Type, const std::string & orc_Activity,
+void C_OscLoggingHandler::mh_WriteLog(const E_LogType oe_LogType, const std::string & orc_Activity,
                                         const std::string & orc_Message, const char * const opcn_Class,
                                         const char * const opcn_Function)
 {
    C_TglDateTime c_DateTime;
+   std::string_view c_Type;
+
+   switch (oe_LogType)
+   {
+   case eLOG_TYPE_INFO:
+      c_Type = "INFO";
+      break;
+   case eLOG_TYPE_WARNING:
+      c_Type = "WARNING";
+      break;
+   case eLOG_TYPE_ERROR:
+      c_Type = "ERROR";
+      break;
+   default:
+      c_Type = "UNKNOWN_LOG_TYPE";
+      break;
+   }
 
    //Phase 7.1: __FILE__ and __func__ are compile time literals, so this text is identical on
    //every call from a given site. Derive it through string views and assemble it in per-thread
@@ -445,11 +476,12 @@ void C_OscLoggingHandler::mh_WriteLog(const std::string & orc_Type, const std::s
    hc_LogEntry.append(acn_TimeStamp, u8_TimeStampLength);
    hc_LogEntry.append(static_cast<std::string::size_type>(25U - u8_TimeStampLength), ' ');
    std::format_to(std::back_inserter(hc_LogEntry), "{:<7}  {:<26}  {:<52}  {}\n",
-                  orc_Type, orc_Activity, hc_CombinedClassAndFunction, orc_Message);
+                  c_Type, orc_Activity, hc_CombinedClassAndFunction, orc_Message);
    const std::string & c_LogEntry = hc_LogEntry;
 
    //Console
-   if (C_OscLoggingHandler::mhq_WriteToConsole == true)
+   if ((C_OscLoggingHandler::mhq_WriteToConsole == true) &&
+       (oe_LogType >= C_OscLoggingHandler::mhe_ConsoleMinLogType))
    {
       //Critical section
       C_OscLoggingHandler::mhc_ConsoleCriticalSection.lock();
@@ -468,7 +500,7 @@ void C_OscLoggingHandler::mh_WriteLog(const std::string & orc_Type, const std::s
       C_OscLoggingHandler::mhc_File.write(c_LogEntry.c_str(), c_LogEntry.size());
       if ((mhq_AutoFlushAllFile == true) ||
           ((C_OscLoggingHandler::mhq_AutoFlushWarningsAndErrorsFile == true) &&
-           ((orc_Type == "WARNING") || (orc_Type == "ERROR"))))
+           ((oe_LogType == eLOG_TYPE_WARNING) || (oe_LogType == eLOG_TYPE_ERROR))))
       {
          C_OscLoggingHandler::mhc_File.flush();
       }

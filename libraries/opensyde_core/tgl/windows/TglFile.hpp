@@ -32,8 +32,8 @@ namespace tgl
 class C_TglFileSearchRecord
 {
 public:
-   std::string c_FileName; ///< name of found file (with full path)
-   //for now we only need the name ...
+   std::string c_FileName;                 ///< name of found file (with full path)
+   uint64_t u64_LastWriteTimeUtcSeconds;   ///< last write time in UTC seconds since Unix epoch; 0 if unavailable
 };
 
 int32_t TglFileSize(const std::string & orc_FileName);
