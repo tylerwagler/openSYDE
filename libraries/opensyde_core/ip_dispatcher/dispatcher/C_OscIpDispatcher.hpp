@@ -45,7 +45,7 @@ private:
    C_OscIpDispatcher & operator = (const C_OscIpDispatcher & orc_Source);
 
 protected:
-   static const uint16_t mhu16_UDP_TCP_PORT = 13400U;
+   uint16_t mu16_UdpTcpPort;
 
    uint32_t mu32_ConnectionTimeoutSeconds;
 
@@ -67,11 +67,13 @@ protected:
    }
 
 public:
-   explicit C_OscIpDispatcher(const uint16_t ou16_ConnectionTimeoutSeconds)
+   explicit C_OscIpDispatcher(const uint16_t ou16_ConnectionTimeoutSeconds) :
+      mu16_UdpTcpPort(13400U)
    {
       mu32_ConnectionTimeoutSeconds = ou16_ConnectionTimeoutSeconds;
    }
-   C_OscIpDispatcher(void)
+   C_OscIpDispatcher(void) :
+      mu16_UdpTcpPort(13400U)
    {
       mu32_ConnectionTimeoutSeconds = 2U;
    }
@@ -97,6 +99,29 @@ public:
    */
    //-----------------------------------------------------------------------------
    [[nodiscard]] virtual std::error_code InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle) = 0;
+
+   //-----------------------------------------------------------------------------
+   /*!
+      \brief   Initialize TCP communication on a configurable port
+
+      Sets the UDP/TCP port used by the dispatcher, then connects to the specified
+      server on that port (rather than the default 13400).
+
+      \param[in]     orau8_Ip      IP address of server to connect to
+      \param[out]    oru32_Handle  handle to new TCP connection (to be used in subsequent calls of TCP functions)
+      \param[in]     ou16_Port     Port to use (default 13400U)
+
+      \return
+      Errc::success   connected ...
+      Errc::noact     connection failed
+   */
+   //-----------------------------------------------------------------------------
+   [[nodiscard]] virtual std::error_code InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle,
+                                                const uint16_t ou16_Port)
+   {
+      this->mu16_UdpTcpPort = ou16_Port;
+      return InitTcp(orau8_Ip, oru32_Handle);
+   }
 
    //-----------------------------------------------------------------------------
    /*!

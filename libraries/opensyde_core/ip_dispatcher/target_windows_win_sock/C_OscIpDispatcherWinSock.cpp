@@ -383,7 +383,7 @@ std::error_code C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Con
       c_TcpService.sin_addr.S_un.S_un_b.s_b2  = orc_Connection.au8_IpAddress[1];
       c_TcpService.sin_addr.S_un.S_un_b.s_b3  = orc_Connection.au8_IpAddress[2];
       c_TcpService.sin_addr.S_un.S_un_b.s_b4  = orc_Connection.au8_IpAddress[3];
-      c_TcpService.sin_port = htons(mhu16_UDP_TCP_PORT); //server port
+      c_TcpService.sin_port = htons(mu16_UdpTcpPort); //server port
 
       //lint -e{929,740,9176}  Side-effect of the POSIX-style API. Match is guaranteed by the API.
       x_Return =
@@ -545,7 +545,7 @@ std::error_code C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_Ser
       c_UdpService.sin_addr.s_addr = htonl(ou32_IpToBindTo);
       if (oq_ServerPort == true)
       {
-         c_UdpService.sin_port = htons(mhu16_UDP_TCP_PORT); //provide port
+         c_UdpService.sin_port = htons(mu16_UdpTcpPort); //provide port
       }
       else
       {
@@ -1200,7 +1200,7 @@ std::error_code C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & o
          {
             sockaddr_in c_TargetAddress;
             c_TargetAddress.sin_family = AF_INET;
-            c_TargetAddress.sin_port = htons(mhu16_UDP_TCP_PORT);      //target port [REQ DoIp-011]
+            c_TargetAddress.sin_port = htons(mu16_UdpTcpPort);      //target port [REQ DoIp-011]
             c_TargetAddress.sin_addr.s_addr = htonl(INADDR_BROADCAST); //lint !e9105 //constant defined by API;
             //no problem
             const int x_NumToSend = static_cast<int>(orc_Data.size()); //lint !e8080 !e970 //using type to match library

@@ -330,7 +330,7 @@ std::error_code C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_C
       c_RemoteAddr.sin_family = AF_INET;
       u32_IpAddr = C_OscEndian::h_GetU32Big(&orc_Connection.au8_IpAddress[0]);
       c_RemoteAddr.sin_addr.s_addr = htonl(u32_IpAddr);
-      c_RemoteAddr.sin_port = htons(mhu16_UDP_TCP_PORT); //server port
+      c_RemoteAddr.sin_port = htons(mu16_UdpTcpPort); //server port
 
       //lint -e{9176}  Side-effect of the POSIX-style API. Match is guaranteed by the API.
       x_Return =
@@ -491,7 +491,7 @@ std::error_code C_OscIpDispatcherLinuxSock::m_ConfigureUdpSocket(const bool oq_S
          const int x_ENABLED = 1; //lint !e8080 !e970 //using type to match library interface
          setsockopt(ors32_Socket, SOL_SOCKET, SO_REUSEADDR, &x_ENABLED, sizeof(x_ENABLED));
 
-         c_LocalAddr.sin_port = htons(mhu16_UDP_TCP_PORT); //provide port
+         c_LocalAddr.sin_port = htons(mu16_UdpTcpPort); //provide port
       }
       else
       {
@@ -1137,7 +1137,7 @@ std::error_code C_OscIpDispatcherLinuxSock::SendUdp(const std::vector<uint8_t> &
          {
             sockaddr_in c_TargetAddress;
             c_TargetAddress.sin_family = AF_INET;
-            c_TargetAddress.sin_port = htons(mhu16_UDP_TCP_PORT); //target port [REQ DoIp-011]
+            c_TargetAddress.sin_port = htons(mu16_UdpTcpPort); //target port [REQ DoIp-011]
             c_TargetAddress.sin_addr.s_addr = htonl(INADDR_BROADCAST);
             //lint -e{9176}  Side-effect of the POSIX-style API. Match is guaranteed by the API.
             const ssize_t x_Retval = //lint !e8080 !e970 //using type to match library interface
