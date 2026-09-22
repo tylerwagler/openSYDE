@@ -18,6 +18,7 @@
 #include "gtest/gtest.h"
 #include "C_OscProtocolDriverOsyTpIp.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
+#include "C_OscDcBasicSequences.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -237,4 +238,31 @@ TEST(ProtocolDriverOsyTp, SetIpAddressExtendedFull_SetsModeThreeAndTheGivenIp)
       EXPECT_EQ(au8_NetMask[u32_Index], rc_Request[mhu_HEADER_SIZE + 5U + u32_Index]) << "netmask byte " << u32_Index;
       EXPECT_EQ(au8_Gateway[u32_Index], rc_Request[mhu_HEADER_SIZE + 9U + u32_Index]) << "gateway byte " << u32_Index;
    }
+}
+
+/// ConfigureDeviceBySerialNumber over an IP dispatcher must route the node-ID-only
+/// SetIpAddress broadcast (mode 0x02, zero IP fields) through the IP transport.
+TEST(DcBasicSequencesIp, ConfigureDeviceBySerialNumber_SendsNodeIdOnlyBroadcast)
+{
+   C_OscDcBasicSequences c_Sequences;
+   C_BroadcastRecorder c_Recorder;
+
+   ASSERT_EQ(Errc::success, c_Sequences.Init(nullptr, &c_Recorder));
+
+   C_OscProtocolSerialNumber c_Serial;
+   const uint8_t au8_Sn[6] = {0x01U, 0x23U, 0x45U, 0x67U, 0x89U, 0x12U};
+   c_Serial.SetPosSerialNumber(au8_Sn);
+   ASSERT_TRUE(c_Serial.q_IsValid);
+
+   // the recorder never answers; the broadcast times out but the frame must still go out
+   EXPECT_EQ(Errc::timeout, c_Sequences.ConfigureDeviceBySerialNumber(c_Serial, 7U));
+
+   // For IP the "enter default session" step is a no-op, so the only broadcast sent
+   // is the node-ID SetIpAddress request.
+   ASSERT_FALSE(c_Recorder.c_Broadcasts.empty());
+   const std::vector<uint8_t> & rc_Request = c_Recorder.c_Broadcasts.back();
+   ASSERT_EQ(mhu_HEADER_SIZE + 21U, rc_Request.size());
+   EXPECT_EQ(0x02U, rc_Request[mhu_HEADER_SIZE + 6U]);  // mode: node identifier only
+   EXPECT_TRUE(mh_AllZero(rc_Request, mhu_HEADER_SIZE + 7U, 12U)); // IP, netmask, gateway all zero
+   EXPECT_EQ(7U, rc_Request[mhu_HEADER_SIZE + 20U]); // new node identifier
 }

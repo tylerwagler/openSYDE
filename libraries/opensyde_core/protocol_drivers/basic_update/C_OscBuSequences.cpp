@@ -51,6 +51,8 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_OscBuSequences::C_OscBuSequences(void) :
    mpc_CanDispatcher(nullptr),
+   mpc_IpDispatcher(nullptr),
+   mpc_TpIp(nullptr),
    ms32_CanBitrate(125)
 {
 }
@@ -62,10 +64,19 @@ C_OscBuSequences::C_OscBuSequences(void) :
 C_OscBuSequences::~C_OscBuSequences()
 {
    this->mpc_CanDispatcher = nullptr; //do not delete ! not owned by us
+   this->mpc_IpDispatcher = nullptr;  //do not delete ! not owned by us
+
+   if (this->mpc_TpIp != nullptr)
+   {
+      delete this->mpc_TpIp;
+      this->mpc_TpIp = nullptr;
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Initialize transport protocol and openSYDE protocol driver.
+
+   CAN only variant
 
    \param[in]  opc_CanDispatcher Pointer to concrete CAN dispatcher
    \param[in]  os32_CanBitrate   CAN Bitrate in kBit/s
@@ -79,6 +90,33 @@ C_OscBuSequences::~C_OscBuSequences()
 std::error_code C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatcher,
                                        const int32_t os32_CanBitrate, const uint8_t ou8_NodeId)
 {
+   const uint8_t au8_ZERO_IP[4] = {0U, 0U, 0U, 0U};
+
+   return this->Init(opc_CanDispatcher, nullptr, os32_CanBitrate, au8_ZERO_IP, ou8_NodeId, 0U);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Initialize transport protocol and openSYDE protocol driver.
+
+   CAN and Ethernet variant. Only one of the dispatchers can be used, not both at the same time.
+
+   \param[in]  opc_CanDispatcher Pointer to concrete CAN dispatcher
+   \param[in]  opc_IpDispatcher  Pointer to concrete IP dispatcher
+   \param[in]  os32_CanBitrate   CAN Bitrate in kBit/s (only relevant if CAN dispatcher is used)
+   \param[in]  orau8_IpAddress   IP address of the server node (only relevant if IP dispatcher is used)
+   \param[in]  ou8_NodeId        Server node ID
+   \param[in]  ou8_BusId         Server bus ID (only relevant if IP dispatcher is used)
+
+   \return
+   Errc::success    everything ok
+   else             error occured, see log file for details
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatcher,
+                                       C_OscIpDispatcher * const opc_IpDispatcher, const int32_t os32_CanBitrate,
+                                       const uint8_t (&orau8_IpAddress)[4], const uint8_t ou8_NodeId,
+                                       const uint8_t ou8_BusId)
+{
    std::error_code c_Return = Errc::success;
    const std::string c_LogActivity = "Initialization";
 
@@ -91,28 +129,79 @@ std::error_code C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_Can
    ms32_CanBitrate = os32_CanBitrate;
 
    this->mpc_CanDispatcher = opc_CanDispatcher;
+   this->mpc_IpDispatcher = opc_IpDispatcher;
 
-   if (this->mpc_CanDispatcher == nullptr)
+   if ((this->mpc_CanDispatcher == nullptr) && (this->mpc_IpDispatcher == nullptr))
    {
       c_Return = Errc::com;
-      osc_write_log_error(c_LogActivity, "Could not used CAN! CAN Dispatcher is invalid.");
+      osc_write_log_error(c_LogActivity, "Could not use CAN or IP! Both dispatchers are invalid.");
+   }
+   else if ((this->mpc_CanDispatcher != nullptr) && (this->mpc_IpDispatcher != nullptr))
+   {
+      c_Return = Errc::com;
+      osc_write_log_error(c_LogActivity, "Can only use CAN or IP! Both dispatchers are valid.");
+   }
+   else
+   {
+      // Nothing to do
    }
 
    if (c_Return == Errc::success)
    {
-      c_Return = mc_TpCan.SetDispatcher(this->mpc_CanDispatcher);
-      if (c_Return != Errc::success)
+      // CAN usage
+      if (this->mpc_CanDispatcher != nullptr)
       {
-         osc_write_log_error(c_LogActivity, "Setting CAN dispatcher for CAN transport protocol failed!");
+         c_Return = mc_TpCan.SetDispatcher(this->mpc_CanDispatcher);
+         if (c_Return != Errc::success)
+         {
+            osc_write_log_error(c_LogActivity, "Setting CAN dispatcher for CAN transport protocol failed!");
+         }
+         else
+         {
+            c_Return = mc_OsyProtocol.SetTransportProtocol(&mc_TpCan);
+            if (c_Return != Errc::success)
+            {
+               osc_write_log_error(c_LogActivity,
+                                   "Setting CAN transport protocol to the openSYDE protocol driver failed!");
+            }
+         }
+      }
+      else if (this->mpc_IpDispatcher != nullptr)
+      {
+         // IP usage
+         uint32_t u32_IpDispatcherHandle;
+
+         this->mpc_TpIp = new C_OscProtocolDriverOsyTpIp();
+
+         // TCP preparation
+         c_Return = mpc_IpDispatcher->InitTcp(orau8_IpAddress, u32_IpDispatcherHandle);
+         if (c_Return != Errc::success)
+         {
+            osc_write_log_error(c_LogActivity, "Could not set up TCP connection.");
+         }
+         else
+         {
+            osc_write_log_info(c_LogActivity, "TCP connection to target device established.");
+
+            c_Return = this->mpc_TpIp->SetDispatcher(this->mpc_IpDispatcher, u32_IpDispatcherHandle);
+            if (c_Return != Errc::success)
+            {
+               osc_write_log_error(c_LogActivity, "Setting IP dispatcher for IP transport protocol failed!");
+            }
+            else
+            {
+               c_Return = mc_OsyProtocol.SetTransportProtocol(this->mpc_TpIp);
+               if (c_Return != Errc::success)
+               {
+                  osc_write_log_error(c_LogActivity,
+                                      "Setting IP transport protocol to the openSYDE protocol driver failed!");
+               }
+            }
+         }
       }
       else
       {
-         c_Return = mc_OsyProtocol.SetTransportProtocol(&mc_TpCan);
-         if (c_Return != Errc::success)
-         {
-            osc_write_log_error(c_LogActivity,
-                                "Setting CAN transport protocol to the openSYDE protocol driver failed!");
-         }
+         // Nothing to do
       }
    }
 
@@ -123,7 +212,7 @@ std::error_code C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_Can
       c_Client.u8_NodeIdentifier = 126;
       c_Client.u8_BusIdentifier = 0U;
       c_Server.u8_NodeIdentifier = ou8_NodeId;
-      c_Server.u8_BusIdentifier = 0U;
+      c_Server.u8_BusIdentifier = ou8_BusId;
 
       c_Return = mc_OsyProtocol.SetNodeIdentifiers(c_Client, c_Server);
       if (c_Return != Errc::success)
@@ -166,6 +255,16 @@ std::error_code C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_Flashl
       u32_WaitTime = u32_SCAN_TIME_MS;
    }
 
+   // The IP transport carries a directed TCP connection; establish it up front.
+   if (this->mpc_TpIp != nullptr)
+   {
+      c_Return = mc_OsyProtocol.ReConnect();
+      if (c_Return != Errc::success)
+      {
+         osc_write_log_error(c_LogActivity, "Could not connect to the target device!");
+      }
+   }
+
    c_Return = mc_OsyProtocol.OsyRequestProgramming(&u8_NumberCode);
    if (c_Return != Errc::success)
    {
@@ -197,38 +296,70 @@ std::error_code C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_Flashl
       osc_write_log_info(c_LogActivity, "ECU reset successful.");
    }
 
-   // Always continue with broadcast. If previous steps did not work, user can do the manual reset while we broadcast.
-   const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
-
-   do
-   {
-      // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast
-      c_Return = mc_TpCan.BroadcastSendEnterPreProgrammingSession();
-      if (c_Return != Errc::success)
-      {
-         osc_write_log_error(c_LogActivity,
-                             "Sending broadcast to enter preprogramming session failed with result " +
-                             std::to_string(c_Return.value()));
-
-         c_Return = Errc::com;
-      }
-
-      if (c_Return != Errc::success)
-      {
-         break;
-      }
-
-      TglSleep(5);
-   }
-   while (TglGetTickCount() < (u32_WaitTime + u32_StartTime));
-
    if (this->mpc_CanDispatcher != nullptr)
    {
+      // In case of CAN: Always continue with broadcast. If previous steps did not work, user can do the manual reset
+      // while we broadcast.
+      const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
+
+      do
+      {
+         // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast
+         c_Return = mc_TpCan.BroadcastSendEnterPreProgrammingSession();
+         if (c_Return != Errc::success)
+         {
+            osc_write_log_error(c_LogActivity,
+                                "Sending broadcast to enter preprogramming session failed with result " +
+                                std::to_string(c_Return.value()));
+
+            c_Return = Errc::com;
+         }
+
+         if (c_Return != Errc::success)
+         {
+            break;
+         }
+
+         TglSleep(5);
+      }
+      while (TglGetTickCount() < (u32_WaitTime + u32_StartTime));
+
       //Previous broadcasts might have caused responses placed in the receive queues of the device
       // specific driver instances. Dump them.
       (void)this->mpc_CanDispatcher->DispatchIncoming();
+      mc_TpCan.ClearDispatcherQueue();
    }
-   mc_TpCan.ClearDispatcherQueue();
+   else if (this->mpc_TpIp != nullptr)
+   {
+      // In case of IP: Just wait for the specified time, then try to connect and bring node to preprogramming
+      // session.
+      TglSleep(ou32_FlashloaderResetWaitTime);
+
+      c_Return = mc_OsyProtocol.ReConnect();
+      if (c_Return != Errc::success)
+      {
+         osc_write_log_error(c_LogActivity, "Could not connect to the target device!");
+      }
+      else
+      {
+         osc_write_log_info(c_LogActivity, "Connection to target device established.");
+
+         //try to enter preprogramming session
+         c_Return =
+            mc_OsyProtocol.OsyDiagnosticSessionControl(C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PREPROGRAMMING,
+                                                       &u8_NumberCode);
+         if (c_Return != Errc::success)
+         {
+            osc_write_log_error(c_LogActivity, "Could not activate the preprogramming session! Details: " +
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
+         }
+      }
+      (void)mc_OsyProtocol.Disconnect();
+   }
+   else
+   {
+      // Nothing to do. Should not happen.
+   }
 
    if (c_Return != Errc::success)
    {
@@ -850,7 +981,14 @@ void C_OscBuSequences::PrepareForDestruction(void)
 {
    //Teardown: the enclosing function returns void and SetDispatcher itself documents that it
    //ignores its own unregister result, so there is nothing to act on here.
-   (void)mc_TpCan.SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
+   if (this->mpc_CanDispatcher != nullptr)
+   {
+      (void)mc_TpCan.SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
+   }
+   if (this->mpc_TpIp != nullptr)
+   {
+      (void)mpc_TpIp->SetDispatcher(nullptr, 0U);
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

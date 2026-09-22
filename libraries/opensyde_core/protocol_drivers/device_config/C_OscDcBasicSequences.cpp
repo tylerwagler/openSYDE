@@ -46,7 +46,9 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscDcBasicSequences::C_OscDcBasicSequences(void) :
-   mpc_CanDispatcher(nullptr)
+   mpc_CanDispatcher(nullptr),
+   mpc_IpDispatcher(nullptr),
+   mpc_TpIp(nullptr)
 {
 }
 
@@ -57,19 +59,30 @@ C_OscDcBasicSequences::C_OscDcBasicSequences(void) :
 C_OscDcBasicSequences::~C_OscDcBasicSequences()
 {
    this->mpc_CanDispatcher = nullptr; //do not delete ! not owned by us
+   this->mpc_IpDispatcher = nullptr;  //do not delete ! not owned by us
+
+   if (this->mpc_TpIp != nullptr)
+   {
+      delete this->mpc_TpIp;
+      this->mpc_TpIp = nullptr;
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Initialize transport protocol and openSYDE protocol driver.
 
+   CAN and Ethernet variant. Only one of the dispatchers can be used, not both at the same time.
+
    \param[in]  opc_CanDispatcher Pointer to concrete CAN dispatcher
+   \param[in]  opc_IpDispatcher  Pointer to concrete IP dispatcher
 
    \return
    Errc::success    everything ok
    else             error occurred, see log file for details
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::error_code C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatcher)
+std::error_code C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatcher,
+                                            C_OscIpDispatcher * const opc_IpDispatcher)
 {
    std::error_code c_Return = Errc::success;
 
@@ -78,27 +91,73 @@ std::error_code C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const op
    m_ReportProgress(c_Return.value(), "Starting the initialization of CAN driver and protocol ... ");
 
    this->mpc_CanDispatcher = opc_CanDispatcher;
+   this->mpc_IpDispatcher = opc_IpDispatcher;
 
-   if (this->mpc_CanDispatcher == nullptr)
+   if ((this->mpc_CanDispatcher == nullptr) && (this->mpc_IpDispatcher == nullptr))
    {
       c_Return = Errc::com;
-      osc_write_log_error(c_LogActivity, "Could not used CAN! CAN Dispatcher is invalid.");
+      osc_write_log_error(c_LogActivity, "Could not use CAN or IP! Both dispatchers are invalid.");
+   }
+   else if ((this->mpc_CanDispatcher != nullptr) && (this->mpc_IpDispatcher != nullptr))
+   {
+      c_Return = Errc::com;
+      osc_write_log_error(c_LogActivity, "Can only use CAN or IP! Both dispatchers are valid.");
+   }
+   else
+   {
+      // Nothing to do
    }
 
    if (c_Return == Errc::success)
    {
-      c_Return = mc_TpCan.SetDispatcher(this->mpc_CanDispatcher);
-      if (c_Return != Errc::success)
+      // CAN usage
+      if (this->mpc_CanDispatcher != nullptr)
       {
-         osc_write_log_error(c_LogActivity, "Setting CAN dispatcher for CAN transport protocol failed!");
+         c_Return = mc_TpCan.SetDispatcher(this->mpc_CanDispatcher);
+         if (c_Return != Errc::success)
+         {
+            osc_write_log_error(c_LogActivity, "Setting CAN dispatcher for CAN transport protocol failed!");
+         }
+         else
+         {
+            c_Return = mc_OsyProtocol.SetTransportProtocol(&mc_TpCan);
+            if (c_Return != Errc::success)
+            {
+               osc_write_log_error(c_LogActivity,
+                                   "Setting CAN transport protocol to the openSYDE protocol driver failed!");
+            }
+         }
       }
       else
       {
-         c_Return = mc_OsyProtocol.SetTransportProtocol(&mc_TpCan);
-         if (c_Return != Errc::success)
+         // IP usage
+         //Broadcast
+         c_Return = mpc_IpDispatcher->InitUdp();
+
+         if (c_Return == Errc::success)
          {
-            osc_write_log_error(c_LogActivity,
-                                "Setting CAN transport protocol to the openSYDE protocol driver failed!");
+            mpc_TpIp = new C_OscProtocolDriverOsyTpIp();
+
+            c_Return = mpc_TpIp->SetDispatcher(this->mpc_IpDispatcher, 0U);
+            if (c_Return != Errc::success)
+            {
+               osc_write_log_error(c_LogActivity, "Setting IP dispatcher for IP transport protocol failed!");
+            }
+            else
+            {
+               c_Return = mc_OsyProtocol.SetTransportProtocol(mpc_TpIp);
+               if (c_Return != Errc::success)
+               {
+                  osc_write_log_error(c_LogActivity,
+                                      "Setting IP transport protocol to the openSYDE protocol driver failed!");
+               }
+            }
+         }
+         else
+         {
+            osc_write_log_error(c_LogActivity, "Could not initialize UDP. Error Code: " +
+                                std::to_string(c_Return.value()));
+            c_Return = Errc::com;
          }
       }
    }
@@ -109,7 +168,10 @@ std::error_code C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const op
       c_Client.u8_NodeIdentifier = 126;
       c_Client.u8_BusIdentifier = 0U;
 
-      c_Return = mc_TpCan.SetNodeIdentifiersForBroadcasts(c_Client);
+      if (this->mpc_CanDispatcher != nullptr)
+      {
+         c_Return = mc_TpCan.SetNodeIdentifiersForBroadcasts(c_Client);
+      }
 
       if (c_Return != Errc::success)
       {
@@ -156,7 +218,7 @@ std::error_code C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_
       u32_WaitTime = u32_SCAN_TIME_MS;
    }
 
-   c_Return = this->mc_TpCan.BroadcastRequestProgramming(c_Results);
+   c_Return = m_BroadcastRequestProgramming(c_Results);
 
    m_ReportProgress(C_NO_ERR, "Broadcasting \"request programming\" flag: " +
                     std::to_string(c_Results.size()) + " device(s) answered. ");
@@ -187,7 +249,7 @@ std::error_code C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_
    else
    {
       //broadcast "ResetToFlashloader"
-      c_Return = mc_TpCan.BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
+      c_Return = m_BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
 
       if (c_Return != Errc::success)
       {
@@ -199,44 +261,55 @@ std::error_code C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_
    // Always continue with broadcast. If previous steps did not work, user can do the manual reset while we broadcast.
    const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
 
-   // If no devices answered, give hint about "reset your device NOW"
-   if (c_Results.size() == 0)
-   {
-      std::string c_Text;
-      c_Text = PrintFormattedCompat("You now have %u seconds time to turn on your target device ...",
-                            u32_SCAN_TIME_MS / 1000);
-      m_ReportProgress(C_WARN, c_Text);
-   }
-
-   do
-   {
-      // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast
-      c_Return = mc_TpCan.BroadcastSendEnterPreProgrammingSession();
-      if (c_Return != Errc::success)
-      {
-         osc_write_log_error(c_LogActivity,
-                             "Sending broadcast to enter preprogramming session failed with result " +
-                             std::to_string(c_Return.value()));
-
-         c_Return = Errc::com;
-      }
-
-      if (c_Return != Errc::success)
-      {
-         break;
-      }
-
-      TglSleep(5);
-   }
-   while (TglGetTickCount() < (u32_WaitTime + u32_StartTime));
-
    if (this->mpc_CanDispatcher != nullptr)
    {
+      // If no devices answered, give hint about "reset your device NOW"
+      if (c_Results.size() == 0)
+      {
+         std::string c_Text;
+         c_Text = PrintFormattedCompat("You now have %u seconds time to turn on your target device ...",
+                                       u32_SCAN_TIME_MS / 1000);
+         m_ReportProgress(C_WARN, c_Text);
+      }
+
+      do
+      {
+         // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast
+         c_Return = m_BroadcastSendEnterPreProgrammingSession();
+         if (c_Return != Errc::success)
+         {
+            osc_write_log_error(c_LogActivity,
+                                "Sending broadcast to enter preprogramming session failed with result " +
+                                std::to_string(c_Return.value()));
+
+            c_Return = Errc::com;
+         }
+
+         if (c_Return != Errc::success)
+         {
+            break;
+         }
+
+         TglSleep(5);
+      }
+      while (TglGetTickCount() < (u32_WaitTime + u32_StartTime));
+
       //Previous broadcasts might have caused responses placed in the receive queues of the device
       // specific driver instances. Dump them.
       (void)this->mpc_CanDispatcher->DispatchIncoming();
    }
-   mc_TpCan.ClearDispatcherQueue();
+   else if (this->mpc_IpDispatcher != nullptr)
+   {
+      // In case of IP: Just wait for the specified time, then try to connect and bring node to preprogramming
+      // session.
+      TglSleep(u32_WaitTime);
+   }
+   else
+   {
+      // Nothing to do. Should not happen.
+   }
+
+   m_ClearTpDispatcherQueue();
 
    m_ReportProgress(c_Return.value(), "Scan for flashloader activation finished. ");
 
@@ -266,11 +339,12 @@ std::error_code C_OscDcBasicSequences::ScanGetInfo(void)
 
    std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults> c_ReadSnResult;
    std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberExtendedResults> c_ReadSnResultExt;
+   std::vector<std::string> c_DeviceNames;
 
    m_ReportProgress(c_Return.value(), "Starting the scan for getting devices information ... ");
 
    // broadcast: "ReadSerialNumber"
-   c_Return = this->mc_TpCan.BroadcastReadSerialNumber(c_ReadSnResult, c_ReadSnResultExt);
+   c_Return = m_BroadcastReadSerialNumber(c_ReadSnResult, c_ReadSnResultExt, c_DeviceNames);
 
    if (c_Return != Errc::success)
    {
@@ -286,6 +360,13 @@ std::error_code C_OscDcBasicSequences::ScanGetInfo(void)
       std::vector<C_OscDcDeviceInformation> c_DeviceInfoResult;
       bool q_SecurityFeatureUsed = false;
 
+      if (this->mpc_IpDispatcher != nullptr)
+      {
+         // In case of IP we expect the device names to be available from the broadcast results. Check if we have as
+         // many device names as results
+         tgl_assert(c_DeviceNames.size() == (c_ReadSnResult.size() + c_ReadSnResultExt.size()));
+      }
+
       osc_write_log_info("Scan CAN for openSYDE devices",
                          "Sequence finished. Standard nodes found: " + std::to_string(c_ReadSnResult.size()));
       osc_write_log_info("Scan CAN for openSYDE devices",
@@ -297,6 +378,10 @@ std::error_code C_OscDcBasicSequences::ScanGetInfo(void)
          C_OscDcDeviceInformation c_DeviceInfo;
          c_DeviceInfo.SetSerialNumber(c_ReadSnResult[u32_ResultCounter].c_SerialNumber);
          c_DeviceInfo.SetNodeId(c_ReadSnResult[u32_ResultCounter].c_SenderId.u8_NodeIdentifier);
+         if (this->mpc_IpDispatcher != nullptr)
+         {
+            c_DeviceInfo.SetDeviceName(c_DeviceNames.at(u32_ResultCounter));
+         }
          c_DeviceInfoResult.push_back(c_DeviceInfo);
       }
 
@@ -311,6 +396,10 @@ std::error_code C_OscDcBasicSequences::ScanGetInfo(void)
                                       c_ReadSnResultExt[u32_ResultCounter].q_SecurityActivated);
          //lint -e{514}  Using operator with a bool value was intended and is no accident
          q_SecurityFeatureUsed |= c_ReadSnResultExt[u32_ResultCounter].q_SecurityActivated;
+         if (this->mpc_IpDispatcher != nullptr)
+         {
+            c_DeviceInfo.SetDeviceName(c_DeviceNames.at(c_ReadSnResult.size() + u32_ResultCounter));
+         }
          c_DeviceInfoResult.push_back(c_DeviceInfo);
       }
 
@@ -351,7 +440,9 @@ std::error_code C_OscDcBasicSequences::ScanGetInfo(void)
 
       tgl_assert((c_ReadSnResult.size() + c_ReadSnResultExt.size()) == c_DeviceInfoResult.size());
 
-      if (c_Return == Errc::success)
+      if ((c_Return == Errc::success) &&
+          (this->mpc_CanDispatcher != nullptr)) // Only try to read the device name if we do not have them already from
+                                                // the IP dispatcher results and if we have a CAN dispatcher to read with
       {
          C_OscProtocolDriverOsyNode c_CurSenderId;
          std::string c_Result;
@@ -394,17 +485,16 @@ std::error_code C_OscDcBasicSequences::ScanGetInfo(void)
             else
             {
                c_Return = mc_OsyProtocol.OsyReadDeviceName(c_Result, &u8_NumberCode);
-            }
-
-            if (c_Return != Errc::success)
-            {
-               osc_write_log_error(c_LogActivity, "Could not read the device's device name! Details: " +
-                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
-                                                                                            u8_NumberCode));
-            }
-            else
-            {
-               c_DeviceInfoResult[u32_DeviceInfoIndex].SetDeviceName(c_Result);
+               if (c_Return != Errc::success)
+               {
+                  osc_write_log_error(c_LogActivity, "Could not read the device's device name! Details: " +
+                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
+                                                                                               u8_NumberCode));
+               }
+               else
+               {
+                  c_DeviceInfoResult[u32_DeviceInfoIndex].SetDeviceName(c_Result);
+               }
             }
          }
       }
@@ -434,7 +524,7 @@ std::error_code C_OscDcBasicSequences::ResetSystem(void)
 
    m_ReportProgress(c_Return.value(), "Starting system reset broadcast...");
 
-   c_Return = mc_TpCan.BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON);
+   c_Return = m_BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON);
 
    m_ReportProgress(c_Return.value(), "System reset broadcast finished.");
 
@@ -566,17 +656,89 @@ std::error_code C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_Current
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Configure device by serialnumber
+
+  \param[in]   orc_SerialNumber    Serialnumber of node which should be configured
+  \param[in]   ou8_NewNodeId       Node ID we want to configure the current used interface of Node with
+                                   the orc_SerialNumber
+
+   \return
+   Errc::success    everything ok
+   else             error occurred, see log file for details
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscDcBasicSequences::ConfigureDeviceBySerialNumber(
+   const C_OscProtocolSerialNumber & orc_SerialNumber, const uint8_t ou8_NewNodeId)
+{
+   std::error_code c_Return = Errc::success;
+   const std::string c_LogActivity = "Configure Device by Serialnumber";
+
+   m_ReportProgress(c_Return.value(), "Starting device configuration...");
+
+   // All openSYDE nodes must be in default session.
+   // The broadcast SetNodeIdBySerialNumber works only in this session.
+   c_Return = m_BroadcastSendEnterDefaultSession();
+
+   if (c_Return != Errc::success)
+   {
+      osc_write_log_error(c_LogActivity,
+                          "Sending broadcast to enter default session failed with result " +
+                          std::to_string(c_Return.value()));
+   }
+   else
+   {
+      C_OscProtocolDriverOsyNode c_ServerIdOfCurBus;
+      std::string c_ProgressLogMsg = "";
+
+      c_ServerIdOfCurBus.u8_NodeIdentifier = ou8_NewNodeId;
+      c_ServerIdOfCurBus.u8_BusIdentifier = 0U; // bus id not supported here to be set concretely. Default: 0
+
+      c_ProgressLogMsg = PrintFormattedCompat(
+         "Configuring Node ID \"%d\" to Node with Serialnumber \"%s\".",
+         ou8_NewNodeId, orc_SerialNumber.GetSerialNumberAsFormattedString().c_str());
+
+      m_ReportProgress(c_Return.value(), c_ProgressLogMsg);
+
+      // Sending the broadcasts to configure the node id depending of the serialnumber
+      // Two different broadcast services depending of the extended format
+      if (orc_SerialNumber.q_ExtFormatUsed == false)
+      {
+         c_Return = m_BroadcastSetNodeIdBySerialNumber(orc_SerialNumber, c_ServerIdOfCurBus);
+      }
+      else
+      {
+         c_Return = m_BroadcastSetNodeIdBySerialNumberExtended(
+            orc_SerialNumber, 0U, // sub node id not supported here. Default: 0
+            c_ServerIdOfCurBus);
+      }
+
+      if (c_Return != Errc::success)
+      {
+         osc_write_log_error(c_LogActivity,
+                             "Sending broadcasts to configure Node ID failed with result " +
+                             std::to_string(c_Return.value()));
+      }
+   }
+
+   m_ReportProgress(c_Return.value(), "Device configuration finished.");
+
+   return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Utility function to convert device information of found devices to string
 
    \param[in]  orc_DeviceInfoResult    Device information results
    \param[in]  oq_SecurityFeatureUsed  Security feature used for at least one node
+   \param[in]  oq_PrintDetailedSnInfo  Optional flag for printing more details about the found Serialnumbers
 
    \return
    String with information
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::string C_OscDcBasicSequences::h_DevicesInfoToString(
-   const std::vector<C_OscDcDeviceInformation> & orc_DeviceInfoResult, const bool oq_SecurityFeatureUsed)
+   const std::vector<C_OscDcDeviceInformation> & orc_DeviceInfoResult, const bool oq_SecurityFeatureUsed,
+   const bool oq_PrintDetailedSnInfo)
 {
    std::string c_Information;
 
@@ -605,6 +767,15 @@ std::string C_OscDcBasicSequences::h_DevicesInfoToString(
       if (rc_CurDevice.c_SerialNumber.q_IsValid == true)
       {
          c_Information += "   Serial number: " + rc_CurDevice.c_SerialNumber.GetSerialNumberAsFormattedString() + "\n";
+
+         if (oq_PrintDetailedSnInfo == true)
+         {
+            const std::string c_SnExtFormat =
+               ((rc_CurDevice.c_SerialNumber.q_ExtFormatUsed == true) ? "Yes" : "No");
+            c_Information += "   Serial number extended format: " + c_SnExtFormat + "\n";
+            c_Information += "   Serial number manufacturer format: " +
+                             std::to_string(rc_CurDevice.c_SerialNumber.u8_SerialNumberManufacturerFormat) + "\n";
+         }
       }
       if (rc_CurDevice.q_ExtendedInfoValid == true)
       {
@@ -635,7 +806,14 @@ void C_OscDcBasicSequences::PrepareForDestruction(void)
 {
    //Teardown: the enclosing function returns void and SetDispatcher itself documents that it
    //ignores its own unregister result, so there is nothing to act on here.
-   (void)mc_TpCan.SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
+   if (this->mpc_CanDispatcher != nullptr)
+   {
+      (void)mc_TpCan.SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
+   }
+   if (this->mpc_TpIp != nullptr)
+   {
+      (void)mpc_TpIp->SetDispatcher(nullptr, 0U);
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -680,4 +858,299 @@ void C_OscDcBasicSequences::m_ReportDevicesInfoRead(const std::vector<C_OscDcDev
                                                     const bool oq_SecurityFeatureUsed)
 {
    std::cout << h_DevicesInfoToString(orc_DeviceInfoResult, oq_SecurityFeatureUsed) << std::endl;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Broadcast "RequestProgramming" via the active transport protocol (CAN or IP)
+
+   Maps the IP result type to the CAN result type for a unified interface.
+
+   \param[out]  orc_Results   Result list with one entry per responding device
+
+   \return
+   Errc::success   request sent; zero or more responses collected
+   Errc::com       send error
+   Errc::config    no transport protocol available
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscDcBasicSequences::m_BroadcastRequestProgramming(
+   std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastRequestProgrammingResults> & orc_Results) const
+{
+   std::error_code c_Return;
+
+   if (this->mpc_CanDispatcher != nullptr)
+   {
+      c_Return = mc_TpCan.BroadcastRequestProgramming(orc_Results);
+   }
+   else if (this->mpc_TpIp != nullptr)
+   {
+      std::vector<C_OscProtocolDriverOsyTpIp::C_BroadcastRequestProgrammingResults> c_IpResults;
+      c_Return = mpc_TpIp->BroadcastRequestProgramming(c_IpResults);
+
+      // Map IP results to the CAN result format (IP address is not forwarded)
+      orc_Results.clear();
+      for (uint32_t u32_Idx = 0U; u32_Idx < c_IpResults.size(); ++u32_Idx)
+      {
+         C_OscProtocolDriverOsyTpCan::C_BroadcastRequestProgrammingResults c_Result;
+         c_Result.c_SenderId = c_IpResults[u32_Idx].c_NodeId;
+         c_Result.q_RequestAccepted = c_IpResults[u32_Idx].q_RequestAccepted;
+         orc_Results.push_back(c_Result);
+      }
+   }
+   else
+   {
+      c_Return = Errc::config;
+   }
+
+   return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Broadcast "EcuReset" via the active transport protocol (CAN or IP)
+
+   CAN uses BroadcastEcuReset; IP uses BroadcastNetReset with the same reset type constant.
+
+   \param[in]  ou8_ResetType  Reset type (use constants from C_OscProtocolDriverOsyTpBase)
+
+   \return
+   Errc::success   broadcast sent
+   Errc::com       send error
+   Errc::config    no transport protocol available
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscDcBasicSequences::m_BroadcastEcuReset(const uint8_t ou8_ResetType) const
+{
+   std::error_code c_Return;
+
+   if (this->mpc_CanDispatcher != nullptr)
+   {
+      c_Return = mc_TpCan.BroadcastEcuReset(ou8_ResetType);
+   }
+   else if (this->mpc_TpIp != nullptr)
+   {
+      c_Return = mpc_TpIp->BroadcastNetReset(ou8_ResetType);
+   }
+   else
+   {
+      c_Return = Errc::config;
+   }
+
+   return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Broadcast "EnterDefaultSession" via the active transport protocol (CAN or IP)
+
+   IP transport protocol does not support this broadcast; the call is treated as a no-op for IP.
+
+   \return
+   Errc::success   broadcast sent (CAN) or no-op (IP)
+   Errc::com       send error (CAN only)
+   Errc::config    no transport protocol available
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscDcBasicSequences::m_BroadcastSendEnterDefaultSession(void) const
+{
+   std::error_code c_Return;
+
+   if (this->mpc_CanDispatcher != nullptr)
+   {
+      c_Return = mc_TpCan.BroadcastSendEnterDefaultSession();
+   }
+   else if (this->mpc_TpIp != nullptr)
+   {
+      // IP transport protocol does not support this broadcast
+      c_Return = Errc::success;
+   }
+   else
+   {
+      c_Return = Errc::config;
+   }
+
+   return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Broadcast "EnterPreProgrammingSession" via the active transport protocol (CAN or IP)
+
+   IP transport protocol does not support this broadcast; the call is treated as a no-op for IP.
+
+   \return
+   Errc::success   broadcast sent (CAN) or no-op (IP)
+   Errc::com       send error (CAN only)
+   Errc::config    no transport protocol available
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscDcBasicSequences::m_BroadcastSendEnterPreProgrammingSession(void) const
+{
+   std::error_code c_Return;
+
+   if (this->mpc_CanDispatcher != nullptr)
+   {
+      c_Return = mc_TpCan.BroadcastSendEnterPreProgrammingSession();
+   }
+   else if (this->mpc_TpIp != nullptr)
+   {
+      // IP transport protocol does not support this broadcast
+      c_Return = Errc::success;
+   }
+   else
+   {
+      c_Return = Errc::config;
+   }
+
+   return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Clear the transport protocol dispatcher queue
+
+   For CAN: clears the CAN dispatcher's receive queue.
+   For IP: no dispatcher queue to clear.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscDcBasicSequences::m_ClearTpDispatcherQueue(void)
+{
+   if (this->mpc_CanDispatcher != nullptr)
+   {
+      mc_TpCan.ClearDispatcherQueue();
+   }
+   // IP transport protocol does not have a dispatcher queue
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Broadcast "ReadSerialNumber" via the active transport protocol (CAN or IP)
+
+   For IP, BroadcastGetDeviceInfo is used and the results are mapped to the CAN result types.
+   The device name contained in the IP result is forwarded in orc_DeviceNames.
+
+   \param[out]  orc_Responses          Standard serial number responses
+   \param[out]  orc_ExtendedResponses  Extended serial number responses
+   \param[out]  orc_DeviceNames        Device names of responding devices (only for IP transport; empty for CAN)
+
+   \return
+   Errc::success   broadcast sent; zero or more responses collected
+   Errc::com       send error
+   Errc::config    no transport protocol available
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscDcBasicSequences::m_BroadcastReadSerialNumber(
+   std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults> & orc_Responses,
+   std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberExtendedResults> & orc_ExtendedResponses,
+   std::vector<std::string> & orc_DeviceNames) const
+{
+   std::error_code c_Return;
+
+   orc_DeviceNames.clear();
+
+   if (this->mpc_CanDispatcher != nullptr)
+   {
+      c_Return = mc_TpCan.BroadcastReadSerialNumber(orc_Responses, orc_ExtendedResponses);
+   }
+   else if (this->mpc_TpIp != nullptr)
+   {
+      std::vector<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults> c_DeviceInfos;
+      std::vector<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults> c_DeviceExtendedInfos;
+      c_Return = mpc_TpIp->BroadcastGetDeviceInfo(c_DeviceInfos, c_DeviceExtendedInfos);
+
+      // Map standard IP results to CAN serial number result format
+      orc_Responses.clear();
+      for (uint32_t u32_Idx = 0U; u32_Idx < c_DeviceInfos.size(); ++u32_Idx)
+      {
+         C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults c_Result;
+         c_Result.c_SenderId = c_DeviceInfos[u32_Idx].c_NodeId;
+         c_Result.c_SerialNumber = c_DeviceInfos[u32_Idx].c_SerialNumber;
+         orc_Responses.push_back(c_Result);
+         orc_DeviceNames.push_back(c_DeviceInfos[u32_Idx].c_DeviceName);
+      }
+
+      // Map extended IP results to CAN extended serial number result format
+      orc_ExtendedResponses.clear();
+      for (uint32_t u32_Idx = 0U; u32_Idx < c_DeviceExtendedInfos.size(); ++u32_Idx)
+      {
+         C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberExtendedResults c_ResultExt;
+         c_ResultExt.c_SenderId = c_DeviceExtendedInfos[u32_Idx].c_NodeId;
+         c_ResultExt.c_SerialNumber = c_DeviceExtendedInfos[u32_Idx].c_SerialNumber;
+         c_ResultExt.u8_SubNodeId = c_DeviceExtendedInfos[u32_Idx].u8_SubNodeId;
+         c_ResultExt.q_SecurityActivated = c_DeviceExtendedInfos[u32_Idx].q_SecurityActivated;
+         orc_ExtendedResponses.push_back(c_ResultExt);
+         orc_DeviceNames.push_back(c_DeviceExtendedInfos[u32_Idx].c_DeviceName);
+      }
+   }
+   else
+   {
+      c_Return = Errc::config;
+   }
+
+   return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Broadcast "SetNodeIdBySerialNumber" (standard format) via the active transport protocol
+
+   For IP the node-ID-only SetIpAddress broadcast is used; the target is identified by serial number.
+
+   \param[in]  orc_SerialNumber   Serial number of the target device
+   \param[in]  orc_NewNodeId      New node ID to assign
+
+   \return
+   Errc::success   broadcast sent
+   Errc::com       send error
+   Errc::config    no transport protocol available
+   Errc::noact     not supported for the active transport protocol (IP)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscDcBasicSequences::m_BroadcastSetNodeIdBySerialNumber(const C_OscProtocolSerialNumber & orc_SerialNumber,
+                                                                          const C_OscProtocolDriverOsyNode & orc_NewNodeId)
+const
+{
+   std::error_code c_Return;
+
+   if (this->mpc_CanDispatcher != nullptr)
+   {
+      c_Return = mc_TpCan.BroadcastSetNodeIdBySerialNumber(orc_SerialNumber, orc_NewNodeId);
+   }
+   else
+   {
+      uint8_t au8_ResponseIpAddress[4] = {0U, 0U, 0U, 0U};
+      c_Return = mpc_TpIp->BroadcastSetIpAddress(orc_SerialNumber, orc_NewNodeId, au8_ResponseIpAddress);
+   }
+
+   return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Broadcast "SetNodeIdBySerialNumber" (extended format) via the active transport protocol
+
+   For IP the node-ID-only extended SetIpAddress broadcast is used; the target is identified by serial number.
+
+   \param[in]  orc_SerialNumber   Serial number of the target device
+   \param[in]  ou8_SubNodeId      Sub node ID of the target device
+   \param[in]  orc_NewNodeId      New node ID to assign
+
+   \return
+   Errc::success   broadcast sent
+   Errc::com       send error
+   Errc::config    no transport protocol available
+   Errc::noact     not supported for the active transport protocol (IP)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscDcBasicSequences::m_BroadcastSetNodeIdBySerialNumberExtended(
+   const C_OscProtocolSerialNumber & orc_SerialNumber, const uint8_t ou8_SubNodeId,
+   const C_OscProtocolDriverOsyNode & orc_NewNodeId) const
+{
+   std::error_code c_Return;
+
+   if (this->mpc_CanDispatcher != nullptr)
+   {
+      c_Return = mc_TpCan.BroadcastSetNodeIdBySerialNumberExtended(orc_SerialNumber, ou8_SubNodeId, orc_NewNodeId);
+   }
+   else
+   {
+      uint8_t au8_ResponseIpAddress[4] = {0U, 0U, 0U, 0U};
+      c_Return = mpc_TpIp->BroadcastSetIpAddressExtended(orc_SerialNumber, orc_NewNodeId, ou8_SubNodeId,
+                                                         au8_ResponseIpAddress);
+   }
+
+   return c_Return;
 }
