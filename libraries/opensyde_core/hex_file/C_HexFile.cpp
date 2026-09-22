@@ -96,7 +96,7 @@ static const uint32_t mu32_MIN_DWORD    =   0x00000000U;
    true if this instance's address offset is lower than the other's.
 */
 //------------------------------------------------------------------------
-bool C_HexDataDumpBlock::operator <(const C_HexDataDumpBlock & orc_Other)
+bool C_HexDataDumpBlock::operator <(const C_HexDataDumpBlock & orc_Other) const
 {
    return (this->u32_AddressOffset < orc_Other.u32_AddressOffset);
 }
