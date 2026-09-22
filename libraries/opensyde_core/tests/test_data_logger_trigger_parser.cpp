@@ -17,6 +17,7 @@
 
 #include "gtest/gtest.h"
 #include "C_OscDataLoggerTriggerParser.hpp"
+#include "C_OscDataLoggerJobAdditionalTriggerProperties.hpp"
 
 using namespace stw::opensyde_core;
 
@@ -222,4 +223,12 @@ TEST(DataLoggerTriggerParser, ReportsParenthesisMessages)
    ASSERT_TRUE(C_Parser::h_Tokenize("a.b.c.d > 5)", c_Tokens, NULL));
    EXPECT_FALSE(C_Parser::h_CheckSyntax(c_Tokens, &c_Error));
    EXPECT_EQ("Missing/Unexpected opening parenthesis", c_Error);
+}
+
+// The additional-trigger operation used to default to an empty string, so a fresh
+// job had an undefined comparison. It must default to "==".
+TEST(DataLoggerTriggerParser, AdditionalTriggerOperationDefaultsToEqual)
+{
+   const C_OscDataLoggerJobAdditionalTriggerProperties c_Config;
+   EXPECT_EQ("==", c_Config.c_Operation);
 }

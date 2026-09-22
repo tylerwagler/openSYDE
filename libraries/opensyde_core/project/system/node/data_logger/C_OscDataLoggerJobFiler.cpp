@@ -553,6 +553,11 @@ std::error_code C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerProperties(
          if (!c_Retval)
          {
             orc_Config.c_Operation = orc_XmlParser.GetNodeContent();
+            //Default
+            if (orc_Config.c_Operation.empty())
+            {
+               orc_Config.c_Operation = "==";
+            }
             tgl_assert(orc_XmlParser.SelectNodeParent() == "additional-trigger-properties");
          }
       }

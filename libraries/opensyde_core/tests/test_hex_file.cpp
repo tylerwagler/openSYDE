@@ -592,3 +592,33 @@ TEST(HexFile, NextBinData_WalksEveryDataRecordAfterOptimize)
    }
    EXPECT_GT(u32_Seen, 0U);
 }
+
+// A dump whose blocks are not in ascending address order used to produce malformed
+// output (records out of order / WRN_RECORD_OVERLAY). CreateHexFile must sort the
+// blocks by address before emitting.
+TEST(HexFile, CreateHexFile_SortsOutOfOrderBlocksByAddress)
+{
+   C_HexDataDump c_Dump;
+
+   // Deliberately wrong order: a higher address first.
+   C_HexDataDumpBlock c_High;
+   c_High.u32_AddressOffset = 0x1000U;
+   c_High.au8_Data = {0xAAU, 0xBBU};
+   C_HexDataDumpBlock c_Low;
+   c_Low.u32_AddressOffset = 0x0000U;
+   c_Low.au8_Data = {0x01U, 0x02U};
+   c_Dump.at_Blocks.push_back(c_High);
+   c_Dump.at_Blocks.push_back(c_Low);
+
+   C_HexFile c_File;
+   ASSERT_FALSE(static_cast<bool>(c_File.CreateHexFile(c_Dump, 16U)));
+
+   // GetDataDump re-parses the generated records, reflecting the emitted order.
+   std::error_code c_Error;
+   const C_HexDataDump * const pc_Result = c_File.GetDataDump(c_Error);
+   ASSERT_NE(nullptr, pc_Result);
+   EXPECT_FALSE(static_cast<bool>(c_Error));
+   ASSERT_EQ(2U, pc_Result->at_Blocks.size());
+   EXPECT_EQ(0x0000U, pc_Result->at_Blocks[0].u32_AddressOffset);
+   EXPECT_EQ(0x1000U, pc_Result->at_Blocks[1].u32_AddressOffset);
+}

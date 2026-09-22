@@ -27,6 +27,7 @@
 #include <cstdint>
 #include "C_OscErrorCategory.hpp"
 #include "C_OscSecurityAesFile.hpp"
+#include "C_OscSecurityAesCbc.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -320,4 +321,17 @@ TEST(SecurityAesFile, IterationCountIsTakenFromTheHeader)
    (void)std::remove(c_In.c_str());
    (void)std::remove(c_Enc.c_str());
    (void)std::remove(c_Out.c_str());
+}
+
+// h_Decrypt used to accept a zero-length input (it only checked the %16 pad). With
+// no data there is nothing to decrypt, so it must be refused as config.
+TEST(SecurityAesFile, AesCbcRejectsEmptyInput)
+{
+   const uint8_t acn_Key[C_OscSecurityAesCbc::hu32_KEY_LENGTH] = {0U};
+   const uint8_t acn_Iv[C_OscSecurityAesCbc::hu32_IV_LENGTH] = {0U};
+   std::vector<uint8_t> c_Empty;
+   std::vector<uint8_t> c_Out;
+
+   EXPECT_EQ(std::error_code(Errc::config),
+             C_OscSecurityAesCbc::h_Decrypt(acn_Key, acn_Iv, c_Empty, c_Out));
 }

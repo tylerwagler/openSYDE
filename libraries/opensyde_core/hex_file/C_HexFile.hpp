@@ -61,6 +61,8 @@ struct T_HexLine
 class C_HexDataDumpBlock
 {
 public:
+   bool operator < (const C_HexDataDumpBlock & orc_Other);
+
    uint32_t u32_AddressOffset;
    std::vector<uint8_t> au8_Data;
 };
@@ -69,6 +71,8 @@ public:
 class C_HexDataDump
 {
 public:
+   void SortBlocksByAddressOffset(void);
+
    std::vector<C_HexDataDumpBlock> at_Blocks;
 };
 

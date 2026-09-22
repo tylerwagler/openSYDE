@@ -369,11 +369,34 @@ std::error_code C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_C
             osc_write_log_warning("openSYDE IP-TP",
                                   "TCP connect select() failed. IP-Address: " + mh_IpToText(
                                      orc_Connection.au8_IpAddress) + " No connection within timeout");
-            // No error. The connection to the concrete target can be established later
-            q_Error = false;
+            q_Error = true;
             break;
          case 1:
-            if (FD_ISSET(orc_Connection.s32_Socket, &c_SocketWriteSet))
+         {
+            // A non-blocking connect can signal the socket writable on both success and failure.
+            // SO_ERROR is the authoritative result.
+            int x_SoError = 0; //lint !e8080 !e970 //using type to match library interface
+            socklen_t x_OptLen = sizeof(x_SoError); //lint !e8080 //matching used API
+            const int x_GetSockOptRet = //lint !e8080 !e970 //using type to match library interface
+                                        getsockopt(orc_Connection.s32_Socket, SOL_SOCKET, SO_ERROR, &x_SoError,
+                                                   &x_OptLen);
+            if (x_GetSockOptRet != 0)
+            {
+               c_ErrnoStr = strerror(errno);
+               osc_write_log_error("openSYDE IP-TP",
+                                   "TCP connect getsockopt(SO_ERROR) failed. IP-Address: " +
+                                   mh_IpToText(orc_Connection.au8_IpAddress) + " Error: " + c_ErrnoStr);
+               q_Error = true;
+            }
+            else if (x_SoError != 0)
+            {
+               c_ErrnoStr = strerror(x_SoError);
+               osc_write_log_error("openSYDE IP-TP",
+                                   "TCP connect failed. IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress) +
+                                   " SO_ERROR: " + std::to_string(x_SoError) + " (" + c_ErrnoStr + ")");
+               q_Error = true;
+            }
+            else if (FD_ISSET(orc_Connection.s32_Socket, &c_SocketWriteSet))
             {
                // Get port of client for logging (the byte order must be changed of the read port by ntohs)
                sockaddr_in c_SocketAddr;
@@ -382,7 +405,7 @@ std::error_code C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_C
                //lint -e{9176}  Side-effect of the POSIX-style API. Match is guaranteed by the API.
                getsockname(orc_Connection.s32_Socket, reinterpret_cast<sockaddr *>(&c_SocketAddr), &x_Size);
 
-               //event caused by write (= connect finished)
+               //event caused by write (= connect finished successfully)
                osc_write_log_info("openSYDE IP-TP",
                                   "TCP connect select() OK. IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress) +
                                   " on client port: " + std::to_string(ntohs(c_SocketAddr.sin_port)));
@@ -396,6 +419,7 @@ std::error_code C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_C
                q_Error = true;
             }
             break;
+         }
          default:
             osc_write_log_error("openSYDE IP-TP",
                                 "TCP connect select() failed. Unknown problem: " + std::to_string(

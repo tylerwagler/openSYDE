@@ -137,8 +137,8 @@ std::error_code C_OscSecurityAesCbc::h_Decrypt(const uint8_t (&orau8_Key)[hu32_K
 {
    const size_t u32_InputSize = orc_Input.size();
 
-   // check inputs: input text correctly padded to 16 bytes?
-   if ((u32_InputSize % 16U) != 0U)
+   // check inputs: input text correctly padded to 16 bytes (and non-empty)
+   if ((u32_InputSize == 0U) || ((u32_InputSize % 16U) != 0U))
    {
       return Errc::config;
    }

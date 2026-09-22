@@ -85,6 +85,35 @@ static const uint32_t mu32_MAX_DWORD    =   0xFFFFFFFFU;
 static const uint32_t mu32_MIN_DWORD    =   0x00000000U;
 
 //------------------------------------------------------------------------
+/*!
+   \brief   Less than comparison operator
+
+   Compare address field and returns result.
+
+   \param[in]    orc_Other    other instance to compare against
+
+   \return
+   true if this instance's address offset is lower than the other's.
+*/
+//------------------------------------------------------------------------
+bool C_HexDataDumpBlock::operator <(const C_HexDataDumpBlock & orc_Other)
+{
+   return (this->u32_AddressOffset < orc_Other.u32_AddressOffset);
+}
+
+//------------------------------------------------------------------------
+/*!
+   \brief   Sort blocks
+
+   Sort owned blocks ascendingly by their address offset.
+*/
+//------------------------------------------------------------------------
+void C_HexDataDump::SortBlocksByAddressOffset(void)
+{
+   std::sort(this->at_Blocks.begin(), this->at_Blocks.end());
+}
+
+//------------------------------------------------------------------------
 
 C_HexFile::C_HexFile(void) :
    mu32_LastOverlayErrorAddress(0U)
@@ -998,6 +1027,7 @@ std::error_code C_HexFile::CreateHexFile(const C_HexDataDump & orc_Dump, const u
    uint32_t u32_OffsetInBlock;
    bool q_RecordOpen = false;
    const C_HexDataDumpBlock * pc_Block;
+   C_HexDataDump c_TheData;
 
    mq_DumpIsDirty = true;
 
@@ -1011,16 +1041,20 @@ std::error_code C_HexFile::CreateHexFile(const C_HexDataDump & orc_Dump, const u
       u32_RecSize = mu8_MAX_RECSIZE;
    }
 
+   //copy and sort input data to make sure resulting data has all needed address offsets:
+   c_TheData = orc_Dump;
+   c_TheData.SortBlocksByAddressOffset();
+
    this->Clear(); // clear existing hex file data
 
    u32_Error = m_AddHexLine(":020000040000FA\n"); // init data with zero offset
 
    if (u32_Error == NO_ERR)
    {
-      for (s32_Block = 0U; s32_Block < static_cast<int32_t>(orc_Dump.at_Blocks.size()); s32_Block++)
+      for (s32_Block = 0U; s32_Block < static_cast<int32_t>(c_TheData.at_Blocks.size()); s32_Block++)
       {
          s32_Length = 0;
-         pc_Block = &orc_Dump.at_Blocks[s32_Block];
+         pc_Block = &c_TheData.at_Blocks[s32_Block];
 
          mu32_NumRawBytes += static_cast<uint32_t>(pc_Block->au8_Data.size());
          for (u32_OffsetInBlock = 0U;
