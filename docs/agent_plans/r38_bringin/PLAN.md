@@ -139,16 +139,25 @@ virtual-ECU tests.
 (`C_OscIpDispatcher` port member + 3-arg `InitTcp` overload; both impls use the
 member; default 13400 unchanged; 460 tests pass).
 
-#7 (DoIP-over-IP) is still large and notably divergent from upstream. Upstream's
-diff is ~1,400 lines across `C_OscProtocolDriverOsyTpIp`, `C_OscBuSequences` and
-`C_OscDcBasicSequences`. It cannot be applied mechanically: the fork's protocol
-drivers return `std::error_code` (not int32 STW codes), use direct `mc_TpCan`
-value members that must become `mpc_TpCan`/`mpc_TpIp`/`mpc_IpDispatcher`, and
-require every `mc_TpCan.Broadcast*` call to be re-expressed through new
-`m_Broadcast*` dispatchers that select CAN vs IP. Recommended as its own focused
-effort/PR validated against the virtual-ECU tests (`test_su_sequences_virtual_ecu`,
-`test_can_transport_virtual_ecu`, and the CAN `C_OscDcBasicSequences` device-config
-test) rather than a rushed in-session port.
+#7 (DoIP-over-IP) is **done and committed on 2026-09-22.** Landed in two commits:
+- `1ad3be29e` — `C_OscProtocolDriverOsyTpIp` node-ID-only broadcast overloads; the
+  full `BroadcastSetIpAddress`/`BroadcastSetIpAddressExtended` bodies now live in
+  private `m_Broadcast*` helpers taking an explicit mode flag (0x02 node-ID-only,
+  0x03 IP + node). Full public signatures unchanged (in-tree callers unaffected).
+- `d4d7d45e7` — DoIP-over-IP in `C_OscDcBasicSequences` and `C_OscBuSequences`:
+  IP `Init` overloads, `ConfigureDeviceBySerialNumber`, and `m_Broadcast*` wrappers
+  selecting CAN vs IP.
+
+Adaptations from upstream: the fork keeps `mc_TpCan` as a value member and only
+allocates `mpc_TpIp` when an IP dispatcher is given (per-class, selected by which
+dispatcher `Init` received) rather than upstream's always-pointer `mpc_TpCan`; all
+returns are `std::error_code`, strings `std::string`. The CAN-path virtual-ECU
+sequence test (`DcBasicSequencesVirtualEcu.ScanConfigureAndResetTwoDevicesOnTheBus`)
+still passes; an IP-path test covers `ConfigureDeviceBySerialNumber`'s node-ID-only
+broadcast. 465 core tests green. The `opensyde` GUI tool does **not** build on
+`develop` at present — a pre-existing `QString == std::string` break in
+`C_SyvUpPacSectionNodeDatablockWidget` (from `d56bac7b5`), unrelated to this port;
+all seven other tools build.
 
 1. **miniz 2.0.7 → 3.1.0** (drop in new `miniz.c/h`, `ChangeLog.md`, `readme.md`;
    remove the now-unused `#define MINIZ_NO_ZLIB_COMPATIBLE_NAMES` from
