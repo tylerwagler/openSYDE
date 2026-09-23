@@ -29,7 +29,6 @@
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_CieImportReportWidget.hpp"
-#include "C_PuiSdNodeCanMessageSyncManager.hpp"
 #include "C_CieDbcImportNodeAssignmentWidget.hpp"
 #include "C_CieDcfEdsImportNodeSelectWidget.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -1135,7 +1134,8 @@ int32_t C_CieUtil::mh_InsertMessages(const uint32_t ou32_NodeIndex, const C_OscC
          c_CurOscSignalCommons.reserve(rc_CurMessage.c_Signals.size());
          c_CurUiSignalCommons.reserve(rc_CurMessage.c_Signals.size());
          //Copy all relevant signals
-         for (uint32_t u32_ItSignal = 0; u32_ItSignal < rc_CurMessage.c_Signals.size(); ++u32_ItSignal)
+         for (uint32_t u32_ItSignal = 0; (u32_ItSignal < rc_CurMessage.c_Signals.size()) && (s32_Retval == C_NO_ERR);
+              ++u32_ItSignal)
          {
             const C_OscCanSignal & rc_CurSignal = rc_CurMessage.c_Signals[u32_ItSignal];
             if (rc_CurSignal.u32_ComDataElementIndex < orc_OscSignalData.size())
@@ -1186,67 +1186,153 @@ int32_t C_CieUtil::mh_InsertMessages(const uint32_t ou32_NodeIndex, const C_OscC
                      static_cast<uint32_t>(orc_MessageOverrideIndices[u32_ItMessage].second));
                   const C_OscNodeComInterfaceSettings & rc_Interface =
                      pc_Node->c_Properties.c_ComInterfaces[ou32_InterfaceIndex];
-                  if ((rc_Interface.GetBusConnected() == true) &&
-                      (pc_Container->q_IsComProtocolUsedByInterface == true))
+                  const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(c_Id);
+                  if (pc_Message != nullptr)
                   {
-                     const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(c_Id);
-                     if (pc_Message != nullptr)
+                     C_PuiSdNodeCanMessageSyncManager c_SyncManager;
+                     if ((rc_Interface.GetBusConnected() == true) &&
+                         (pc_Container->q_IsComProtocolUsedByInterface == true))
                      {
-                        C_PuiSdNodeCanMessageSyncManager c_SyncManager;
                         c_SyncManager.Init(rc_Interface.u32_BusIndex, oe_Type);
-                        //Delete previous signals
-                        for (uint32_t u32_ItSignal = pc_Message->c_Signals.size(); u32_ItSignal > 0UL; --u32_ItSignal)
-                        {
-                           if (c_SyncManager.DeleteCanSignal(c_Id, u32_ItSignal - 1UL) != C_NO_ERR)
-                           {
-                              s32_Retval = C_RANGE;
-                           }
-                        }
-                        //Add signals (BEFORE replacing the message)
-                        for (uint32_t u32_ItSignal = 0; u32_ItSignal < rc_CurMessage.c_Signals.size(); ++u32_ItSignal)
-                        {
-                           if (c_SyncManager.AddCanSignal(c_Id, rc_CurMessage.c_Signals[u32_ItSignal],
-                                                          c_CurOscSignalCommons[u32_ItSignal],
-                                                          c_CurUiSignalCommons[u32_ItSignal],
-                                                          rc_UiMessage.c_Signals[u32_ItSignal]) != C_NO_ERR)
-                           {
-                              s32_Retval = C_RANGE;
-                           }
-                        }
-                        //Replace message (LAST)
-                        if (c_SyncManager.SetCanMessagePropertiesWithoutDirectionChangeAndWithoutTimeoutChange(
-                               c_Id, rc_CurMessage) != C_NO_ERR)
-                        {
-                           s32_Retval = C_RANGE;
-                        }
                      }
                      else
+                     {
+                        c_SyncManager.Init(ou32_NodeIndex, ou32_InterfaceIndex, oe_Type);
+                     }
+                     s32_Retval =
+                        mh_HandleSignalsOfMatchingMessage(c_SyncManager, c_Id, pc_Message->c_Signals,
+                                                          rc_CurMessage.c_Signals,
+                                                          rc_UiMessage.c_Signals,
+                                                          c_CurOscSignalCommons,
+                                                          c_CurUiSignalCommons);
+                     //Replace message (LAST)
+                     if (c_SyncManager.SetCanMessagePropertiesWithoutDirectionChangeAndWithoutTimeoutChange(
+                            c_Id, rc_CurMessage) != C_NO_ERR)
                      {
                         s32_Retval = C_RANGE;
                      }
                   }
                   else
                   {
-                     //Replace message
-                     if (C_PuiSdHandler::h_GetInstance()->DeleteCanMessage(c_Id) != C_NO_ERR)
-                     {
-                        s32_Retval = C_RANGE;
-                     }
-                     else
-                     {
-                        if (C_PuiSdHandler::h_GetInstance()->InsertCanMessage(c_Id, rc_CurMessage,
-                                                                              c_CurOscSignalCommons,
-                                                                              c_CurUiSignalCommons,
-                                                                              rc_UiMessage,
-                                                                              oq_UniqueAddRequested) != C_NO_ERR)
-                        {
-                           s32_Retval = C_RANGE;
-                        }
-                     }
+                     s32_Retval = C_RANGE;
                   }
                }
             }
             else
+            {
+               s32_Retval = C_RANGE;
+            }
+         }
+      }
+   }
+   else
+   {
+      s32_Retval = C_RANGE;
+   }
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Handle signals of matching message
+
+   Replace the previous message's signals by name: existing signals whose name is
+   still present in the new import are updated in place, signals no longer present
+   are deleted, and new signals are added.
+
+   \param[in]  orc_SyncManager            Sync manager
+   \param[in]  orc_MatchingMessageId      Matching message id
+   \param[in]  orc_CorePreviousSignals    Core previous signals
+   \param[in]  orc_CoreNewSignals         Core new signals
+   \param[in]  orc_UiNewSignals           Ui new signals
+   \param[in]  orc_CoreNewSignalData      Core new signal data
+   \param[in]  orc_UiNewSignalData        Ui new signal data
+
+   \return
+   C_NO_ERR Operation success
+   C_RANGE  Operation failure: parameter invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_CieUtil::mh_HandleSignalsOfMatchingMessage(const C_PuiSdNodeCanMessageSyncManager & orc_SyncManager,
+                                                     const C_OscCanMessageIdentificationIndices & orc_MatchingMessageId,
+                                                     const std::vector<C_OscCanSignal> & orc_CorePreviousSignals,
+                                                     const std::vector<C_OscCanSignal> & orc_CoreNewSignals,
+                                                     const std::vector<C_PuiSdNodeCanSignal> & orc_UiNewSignals,
+                                                     const std::vector<C_OscNodeDataPoolListElement> & orc_CoreNewSignalData,
+                                                     const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiNewSignalData)
+{
+   int32_t s32_Retval = C_NO_ERR;
+
+   if (((orc_CoreNewSignals.size() == orc_UiNewSignals.size()) &&
+        (orc_CoreNewSignals.size() == orc_CoreNewSignalData.size())) &&
+       (orc_CoreNewSignals.size() == orc_UiNewSignalData.size()))
+   {
+      std::vector<bool> c_MatchedPreviousSignals;
+      std::vector<bool> c_MatchedNewSignals;
+      c_MatchedPreviousSignals.resize(orc_CorePreviousSignals.size(), false);
+      c_MatchedNewSignals.resize(orc_CoreNewSignals.size(), false);
+      //Replace matching signals
+      for (uint32_t u32_ItNewSignal = 0; u32_ItNewSignal < orc_CoreNewSignals.size(); ++u32_ItNewSignal)
+      {
+         //Only match once
+         if (c_MatchedNewSignals[u32_ItNewSignal] == false)
+         {
+            for (uint32_t u32_ItPreviousSignal = 0; u32_ItPreviousSignal < orc_CorePreviousSignals.size();
+                 ++u32_ItPreviousSignal)
+            {
+               //Only match once
+               if (c_MatchedPreviousSignals[u32_ItPreviousSignal] == false)
+               {
+                  const C_OscNodeDataPoolListElement * const pc_DpElement =
+                     C_PuiSdHandler::h_GetInstance()->GetOscCanDataPoolListElement(orc_MatchingMessageId,
+                                                                                   u32_ItPreviousSignal);
+                  if (pc_DpElement != nullptr)
+                  {
+                     if (orc_CoreNewSignalData[u32_ItNewSignal].c_Name == pc_DpElement->c_Name)
+                     {
+                        if (orc_SyncManager.SetCanSignal(orc_MatchingMessageId, u32_ItPreviousSignal,
+                                                         orc_CoreNewSignals[u32_ItNewSignal],
+                                                         orc_CoreNewSignalData[u32_ItNewSignal],
+                                                         orc_UiNewSignalData[u32_ItNewSignal],
+                                                         orc_UiNewSignals[u32_ItNewSignal]) != C_NO_ERR)
+                        {
+                           s32_Retval = C_RANGE;
+                        }
+                        //Track matching signals
+                        c_MatchedPreviousSignals[u32_ItPreviousSignal] = true;
+                        c_MatchedNewSignals[u32_ItNewSignal] = true;
+                        break;
+                     }
+                  }
+                  else
+                  {
+                     s32_Retval = C_RANGE;
+                  }
+               }
+            }
+         }
+      }
+      //Delete non matching previous signals
+      for (uint32_t u32_ItSignal = static_cast<uint32_t>(orc_CorePreviousSignals.size());
+           u32_ItSignal > 0UL; --u32_ItSignal)
+      {
+         const uint32_t u32_CurIndex = u32_ItSignal - 1UL;
+         if (c_MatchedPreviousSignals[u32_CurIndex] == false)
+         {
+            if (orc_SyncManager.DeleteCanSignal(orc_MatchingMessageId, u32_CurIndex) != C_NO_ERR)
+            {
+               s32_Retval = C_RANGE;
+            }
+         }
+      }
+      //Add non matching new signals
+      for (uint32_t u32_ItSignal = 0; u32_ItSignal < orc_CoreNewSignals.size(); ++u32_ItSignal)
+      {
+         if (c_MatchedNewSignals[u32_ItSignal] == false)
+         {
+            if (orc_SyncManager.AddCanSignal(orc_MatchingMessageId, orc_CoreNewSignals[u32_ItSignal],
+                                             orc_CoreNewSignalData[u32_ItSignal],
+                                             orc_UiNewSignalData[u32_ItSignal],
+                                             orc_UiNewSignals[u32_ItSignal]) != C_NO_ERR)
             {
                s32_Retval = C_RANGE;
             }
