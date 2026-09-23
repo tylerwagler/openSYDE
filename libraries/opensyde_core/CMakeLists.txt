@@ -129,6 +129,7 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscBuildInfo.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilBinaryHash.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtils.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/conf_file_handler/C_OscConfFileHandler.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stw_compid/stwcompid.c
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.cpp
@@ -143,6 +144,7 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilBinaryHash.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscEndian.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtils.hpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/conf_file_handler/C_OscConfFileHandler.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stw_compid/stwcompid.h
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.hpp
@@ -162,6 +164,7 @@ set(OPENSYDE_CORE_COMMON_SOURCES
 
 set(OPENSYDE_CORE_COMMON_INCLUDE_DIRECTORIES
    ${CMAKE_CURRENT_SOURCE_DIR}
+   ${CMAKE_CURRENT_SOURCE_DIR}/conf_file_handler
    ${CMAKE_CURRENT_SOURCE_DIR}/stw_compid
    ${CMAKE_CURRENT_SOURCE_DIR}/logging
    ${CMAKE_CURRENT_SOURCE_DIR}/md5

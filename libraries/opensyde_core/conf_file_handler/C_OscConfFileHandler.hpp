@@ -1,0 +1,50 @@
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \file
+   \brief       openSYDE .conf file handler
+   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+#ifndef C_OSCCONFFILEHANDLER_HPP
+#define C_OSCCONFFILEHANDLER_HPP
+
+/* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <vector>
+#include <string>
+#include <utility>
+#include <system_error>
+
+#include "C_OscErrorCategory.hpp"
+
+/* -- Namespace ----------------------------------------------------------------------------------------------------- */
+namespace stw
+{
+namespace opensyde_core
+{
+/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+
+/* -- Types --------------------------------------------------------------------------------------------------------- */
+
+///Generic config class handler
+class C_OscConfFileHandler
+{
+public:
+   C_OscConfFileHandler();
+   virtual ~C_OscConfFileHandler();
+
+   std::error_code LoadSettings(const std::string & orc_Path);
+
+protected:
+   // Function for loading concrete settings. Must return Errc::config in error case
+   virtual std::error_code m_LoadSettings(const std::vector<std::string> & orc_SettingsWithoutComments) = 0;
+   static std::error_code mh_ReplaceSettings(const std::string & orc_Path,
+                                             const std::vector<std::pair<std::string, std::string> > & orc_Configs);
+
+   std::string mc_ConfigFilePath; //path where the config file was loaded from
+};
+
+/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
+}
+} //end of namespace
+
+#endif
