@@ -165,8 +165,20 @@ de-wrapped of `C_GtGetText`:
   `user_devices.ini`. Added-then-reverted to avoid dead code.
 - `C_Uti::h_GetDevicesIniPath` — no consumer in the fork (kept `h_GetPemDbPath`).
 
-All eight tools build locally. **Remaining Phase 3 work: workstream 3 (SYDEsup
-config-file support), which is now unblocked by the conf_file_handler port.**
+**SYDEsup config-file support (workstream 3) done** (`3136ed90f`): `C_SupConfig`
+(a `C_OscConfFileHandler` subclass), `-c`/`--configfile` repurposed from
+`--certificatesdir`, and two-pass `getopt_long` so the config file is found at any
+position and CLI args override it. Crypto-agent fields stripped (per plan);
+`C_OscSecurityPemDatabase` kept and still passed to the sequence `Init` (no
+sydesuplib/pem-db protocol rewiring). The certificates-dir CLI path is removed to
+match upstream, so the PEM db is no longer populated from the CLI until the
+crypto agent or a config key for it lands. Verified: SYDEsup builds; a config file
+with quiet=true suppresses the banner and its package path is honored; a missing
+config path reports the load error.
+
+**Phase 3 is now complete** (conf_file_handler + self-contained GUI fixes +
+SYDEsup config-file). All eight tools build locally; Phase 1–3 are the full
+non-gated R38 bring-in.
 
 #7 (DoIP-over-IP) is **done and committed on 2026-09-22.** Landed in two commits:
 - `1ad3be29e` — `C_OscProtocolDriverOsyTpIp` node-ID-only broadcast overloads; the
