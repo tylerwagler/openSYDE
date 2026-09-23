@@ -31,6 +31,7 @@
 #include "TglFile.hpp"
 #include "C_SupSuSequences.hpp"
 #include "C_SupCreatePackage.hpp"
+#include "C_SupConfig.hpp"
 #include "C_OscUtilBinaryHash.hpp"
 #include "C_OscBuildInfo.hpp"
 #include "C_OscUtils.hpp"
@@ -65,16 +66,18 @@ C_SydeSup::C_SydeSup(void) :
    mq_Quiet(false),
    mq_OnlyNecessaryFiles(false),
    me_OperationMode(eMODE_UPDATE),
+   mc_ConfigFilePath(""),
    mc_OperationMode(""),
    mc_SupFilePath(""),
    mc_CanDriver(""),
    mc_LogPath(""),
    mc_LogFile(""),
    mc_UnzipPath(""),
-   mc_CertFolderPath(""),
    mc_OsyProjectPath(""),
    mc_ViewName(""),
-   mc_DeviceDefPath("")
+   mc_DeviceDefPath(""),
+   mc_PubKeyPemPath(""),
+   mc_Password("")
 
 {
 }
@@ -198,9 +201,10 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char * 
    bool q_ShowHelp = false;
    bool q_ShowManPage = false;
    bool q_ShowVersionOnly = false;
+   bool q_ConfigFileLoadError = false;
    const std::string c_Version = m_GetApplicationVersion(TglGetExePath());
    const std::string c_BinaryHash = C_OscUtilBinaryHash::h_CreateBinaryHash();
-
+   const std::string c_CmdParameters = "hmvqnp:o:i:z:l:c:s:w:d:k:x:";
    mq_Quiet = false;
 
    const struct option ac_Options[] =
@@ -237,7 +241,7 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char * 
          "logdir",            required_argument,   nullptr,    'l'
       },
       {
-         "certificatesdir",   required_argument,   nullptr,    'c'
+         "configfile",        required_argument,   nullptr,    'c'
       },
       {
          "opensydeproject",   required_argument,   nullptr,    's'
@@ -259,10 +263,31 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char * 
       }
    };
 
+   //First pass: find the config file ('-c') at any position and load it.
    do
    {
       int32_t s32_Index;
-      s32_Result = getopt_long(os32_Argc, oppcn_Argv, "hmvqnp:o:i:z:l:c:s:w:d:k:x:", &ac_Options[0], &s32_Index);
+      s32_Result = getopt_long(os32_Argc, oppcn_Argv, c_CmdParameters.c_str(), &ac_Options[0], &s32_Index);
+      if (s32_Result == static_cast<int32_t>('c'))
+      {
+         mc_ConfigFilePath = optarg;
+         const int32_t s32_ConfigFileResult = this->m_LoadConfigFile();
+         if (s32_ConfigFileResult != C_NO_ERR)
+         {
+            q_ConfigFileLoadError = true;
+         }
+      }
+   }
+   while ((s32_Result != -1) && (e_Return == eOK));
+
+   //Reset getopt state for the second pass.
+   optind = 1;
+
+   //Second pass: process all command line parameters (overwriting config file settings).
+   do
+   {
+      int32_t s32_Index;
+      s32_Result = getopt_long(os32_Argc, oppcn_Argv, c_CmdParameters.c_str(), &ac_Options[0], &s32_Index);
       if (s32_Result != -1)
       {
          switch (s32_Result)
@@ -299,7 +324,7 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char * 
             mc_LogPath = optarg;
             break;
          case 'c':
-            mc_CertFolderPath = optarg;
+            //Config file handled in the first pass above.
             break;
          case 's':
             mc_OsyProjectPath = optarg;
@@ -325,7 +350,7 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char * 
          }
       }
    }
-   while (s32_Result != -1);
+   while ((s32_Result != -1) && (e_Return == eOK));
 
    if ((q_ShowVersionOnly == true) && (q_ShowHelp == false))
    {
@@ -356,10 +381,26 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char * 
          this->m_PrintInformation(q_ShowManPage);
          e_Return = eERR_PARSE_COMMAND_LINE;
       }
-      else if ((mc_SupFilePath == "") || (q_ParseError == true))
+      else if (q_ConfigFileLoadError == true)
       {
          // logging not yet set up -> print directly to console
          this->m_PrintVersion(c_Version, c_BinaryHash, !mq_Quiet);
+         std::cout << "Error: Could not load config file at provided path: " << mc_ConfigFilePath << &std::endl;
+         std::cout << "Error: Invalid or missing command line parameters, try -h." << &std::endl;
+         e_Return = eERR_PARSE_COMMAND_LINE;
+      }
+      else if (q_ParseError == true)
+      {
+         // logging not yet set up -> print directly to console
+         this->m_PrintVersion(c_Version, c_BinaryHash, !mq_Quiet);
+         std::cout << "Error: Invalid or missing command line parameters, try -h." << &std::endl;
+         e_Return = eERR_PARSE_COMMAND_LINE;
+      }
+      else if (mc_SupFilePath == "")
+      {
+         // logging not yet set up -> print directly to console
+         this->m_PrintVersion(c_Version, c_BinaryHash, !mq_Quiet);
+         std::cout << "Error: Empty package file path provided." << &std::endl;
          std::cout << "Error: Invalid or missing command line parameters, try -h." << &std::endl;
          e_Return = eERR_PARSE_COMMAND_LINE;
       }
@@ -652,28 +693,6 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
       }
    }
 
-   // optional step: load pem database if cmd line parameter is not empty
-   if (e_Result == eOK)
-   {
-      if (s32_Return == C_NO_ERR)
-      {
-         //parse pem database if cmd line parameter is not empty
-         if (mc_CertFolderPath != "")
-         {
-            //ParseFolder returns std::error_code; this function threads the legacy int32_t through
-            //a dozen steps, so convert once at the boundary rather than half-migrating it
-            s32_Return = mc_PemDatabase.ParseFolder(mc_CertFolderPath.c_str()).value();
-
-            if (s32_Return != C_NO_ERR)
-            {
-               e_Result = eERR_UPDATE_CERTIFICATE_PATH;
-               s32_Return = C_DEFAULT;
-               h_WriteLog("Load PEM database",
-                          "Could not load certificates (PEM files) at path \"" + this->mc_CertFolderPath + "\"");
-            }
-         }
-      }
-   }
 
    // initialize sequence if previous step (unpacking if Ethernet, CAN initializing if CAN) was successful
    if (e_Result == eOK)
@@ -986,6 +1005,10 @@ void C_SydeSup::m_PrintInformation(const bool oq_Detailed) const
 
    // show parameter help
    std::cout << "\nCommand Line Parameters:\n--------------------------------\n\n"
+      "All command line parameters can be set in a configuration file as well. Just create a file like sydesup.conf and "
+      "hand it over with the parameter -c, e.g. \"-c sydesup.conf\". Command line parameters overwrite config file "
+      "settings, so you can e.g. set default values in configuration file and only overwrite some of them in command "
+      "line if necessary.\n\n"
       "Flag   Alternative         Description                                     Default         Example\n"
       "---------------------------------------------------------------------------------------------------------------\n"
       "General\n"
@@ -1001,6 +1024,8 @@ void C_SydeSup::m_PrintInformation(const bool oq_Detailed) const
                      (this->m_GetDefaultLogLocation().length() < 16) ?
                      (16 - this->m_GetDefaultLogLocation().length()) : 0), ' ') <<
       "-l ." << c_PathDelimiter.c_str() << "MyLogDir\n"
+      "-c     --configfile        Configuration file (see config file help text)    <none>          -c ." <<
+      c_PathDelimiter.c_str() << "sydesup.conf\n"
       "-o     --operationmode     Set mode: \"update\" or \"createpackage\"           update          -o createpackage\n\n"
       "Package Creation\n"
       "---------------------\n"
@@ -1028,11 +1053,6 @@ void C_SydeSup::m_PrintInformation(const bool oq_Detailed) const
       this->m_GetUnzipLocationDefaultExample().c_str() << "\n\n"
       "In update mode the package file parameter \"-p\" is mandatory, all others are optional.\n"
       "If the active bus in the given Service Update Package is of CAN type, a CAN interface must be provided.\n\n"
-      "Secure Authentication\n"
-      "---------------------\n"
-      "-c     --certificatesdir   Directory for certificates (PEM files) for      <none>          -c ." <<
-      c_PathDelimiter.c_str() << "MyCertificatesDir\n"
-      "                           secure authentication with the openSYDE server\n\n"
       "Secure Update\n"
       "---------------------\n"
       "-k     --publickey         Path to PEM file holding the public key for     <none>          -k public_crt.pem\n"
@@ -1283,10 +1303,6 @@ void C_SydeSup::m_PrintStringFromError(const E_Result & ore_Result) const
    case eERR_UPDATE_NO_NVM: // C_RANGE
       c_Activity = "Update System";
       c_Error = "At least one feature of the openSYDE Flashloader is not available for NVM writing.";
-      break;
-   case eERR_UPDATE_CERTIFICATE_PATH:
-      c_Activity = "Load Certificates";
-      c_Error = "Could not load certificates (PEM files) at path \"" + this->mc_CertFolderPath + "\"";
       break;
    case eERR_UPDATE_AUTHENTICATION:
       c_Activity = "Update System";
@@ -1666,4 +1682,51 @@ std::vector<uint8_t> C_SydeSup::m_GetActiveNodeTypes(const C_OscSystemDefinition
    }
 
    return c_ActiveNodeTypes;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Load configuration file
+
+   Loads a SYDEsup config file into the member variables. Command line parameters
+   parsed later overwrite these settings.
+
+   \retval C_NO_ERR   Configuration file loaded successfully
+   \retval C_CONFIG   Failed to load configuration file
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_SydeSup::m_LoadConfigFile(void)
+{
+   int32_t s32_Return = C_NO_ERR;
+
+   if (TglFileExists(mc_ConfigFilePath.c_str()) == false)
+   {
+      s32_Return = C_CONFIG;
+   }
+   else
+   {
+      C_SupConfig c_Config;
+      const std::error_code c_LoadResult = c_Config.LoadSettings(mc_ConfigFilePath);
+
+      if (c_LoadResult != Errc::success)
+      {
+         s32_Return = C_CONFIG;
+      }
+      else
+      {
+         mq_Quiet = c_Config.q_Quiet;
+         mq_OnlyNecessaryFiles = c_Config.q_NecessaryFiles;
+         mc_OperationMode = c_Config.c_OperationMode;
+         mc_SupFilePath = c_Config.c_SupFilePath;
+         mc_CanDriver = c_Config.c_CanDriver;
+         mc_LogPath = c_Config.c_LogPath;
+         mc_UnzipPath = c_Config.c_UnzipPath;
+         mc_OsyProjectPath = c_Config.c_ProjectPath;
+         mc_ViewName = c_Config.c_UpdateViewName;
+         mc_DeviceDefPath = c_Config.c_DeviceDefinitionPath;
+         mc_PubKeyPemPath = c_Config.c_PublicKeyPath;
+         mc_Password = c_Config.c_Password;
+      }
+   }
+
+   return s32_Return;
 }

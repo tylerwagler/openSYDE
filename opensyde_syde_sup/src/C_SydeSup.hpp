@@ -77,7 +77,6 @@ public:
       eERR_UPDATE_SYSDEF               = 65,
       eERR_UPDATE_CHECKSUM             = 66,
       eERR_UPDATE_NO_NVM               = 67,
-      eERR_UPDATE_CERTIFICATE_PATH     = 68,
       eERR_UPDATE_AUTHENTICATION       = 69,
 
       eERR_THREAD_UPDATE_IN_PROGRESS   = 70,
@@ -116,13 +115,13 @@ protected:
    bool mq_Quiet;
    bool mq_OnlyNecessaryFiles;
    E_OperationMode me_OperationMode;
+   std::string mc_ConfigFilePath;
    std::string mc_OperationMode;
    std::string mc_SupFilePath;
    std::string mc_CanDriver;
    std::string mc_LogPath;
    std::string mc_LogFile;
    std::string mc_UnzipPath;
-   std::string mc_CertFolderPath;
    std::string mc_OsyProjectPath;
    std::string mc_ViewName;
    std::string mc_DeviceDefPath;
@@ -155,6 +154,7 @@ private:
                           std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite) const;
    std::vector<uint8_t> m_GetActiveNodeTypes(const stw::opensyde_core::C_OscSystemDefinition & orc_SystemDefinition,
                                              const std::vector<uint8_t> & orc_ActiveNodes) const;
+   int32_t m_LoadConfigFile(void);
 
    // Security PEM database
    stw::opensyde_core::C_OscSecurityPemDatabase mc_PemDatabase;
