@@ -790,6 +790,11 @@ void C_GiSvNodeSyvUpdate::m_SetSvgForTopLeftIcon()
       const QString c_Svg = m_GetSvgForTopLeftIcon();
       this->mpc_IconTopLeft->SetSvg(c_Svg);
    }
+   else
+   {
+      //clear the stale icon when the node is no longer connected
+      this->mpc_IconTopLeft->SetSvg("");
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -859,31 +864,35 @@ void C_GiSvNodeSyvUpdate::m_GetCurrentNodeSecurityState(bool & orq_Authenticatio
             this->mc_NodeData.GetSubNodeByNodeIndex(c_NodeIndices[u32_ItDevice]);
          if (pc_SubDevice != nullptr)
          {
-            const C_OscSuSequencesNodeConnectStates & rc_ConnectStates = pc_SubDevice->GetNodeConnectStates();
-            if (rc_ConnectStates.c_AvailableFeatures.q_SupportsSecurityAuthentication)
+            if ((pc_SubDevice->GetValidStatus()) && (pc_SubDevice->IsNodeConnectStatesSet()))
             {
-               orq_AuthenticationNecessary = orq_AuthenticationNecessary || rc_ConnectStates.q_AuthenticationNecessary;
-               if (opq_AuthenticationSupported != nullptr)
+               const C_OscSuSequencesNodeConnectStates & rc_ConnectStates = pc_SubDevice->GetNodeConnectStates();
+               if (rc_ConnectStates.c_AvailableFeatures.q_SupportsSecurityAuthentication)
                {
-                  *opq_AuthenticationSupported = true;
+                  orq_AuthenticationNecessary =
+                     orq_AuthenticationNecessary || rc_ConnectStates.q_AuthenticationNecessary;
+                  if (opq_AuthenticationSupported != nullptr)
+                  {
+                     *opq_AuthenticationSupported = true;
+                  }
                }
-            }
-            if (rc_ConnectStates.c_AvailableFeatures.q_SupportsSecurityTrafficEncryption)
-            {
-               orq_TrafficEncryptionNecessary = orq_TrafficEncryptionNecessary ||
-                                                rc_ConnectStates.q_TrafficEncryptionNecessary;
-               if (opq_TrafficEncryptionSupported != nullptr)
+               if (rc_ConnectStates.c_AvailableFeatures.q_SupportsSecurityTrafficEncryption)
                {
-                  *opq_TrafficEncryptionSupported = true;
+                  orq_TrafficEncryptionNecessary = orq_TrafficEncryptionNecessary ||
+                                                   rc_ConnectStates.q_TrafficEncryptionNecessary;
+                  if (opq_TrafficEncryptionSupported != nullptr)
+                  {
+                     *opq_TrafficEncryptionSupported = true;
+                  }
                }
-            }
-            if (rc_ConnectStates.c_AvailableFeatures.q_SupportsDebuggerOn &&
-                rc_ConnectStates.c_AvailableFeatures.q_SupportsDebuggerOff)
-            {
-               orq_DebuggerEnabled = orq_DebuggerEnabled && rc_ConnectStates.q_DebuggerEnabled;
-               if (opq_DebuggerChangeSupported != nullptr)
+               if (rc_ConnectStates.c_AvailableFeatures.q_SupportsDebuggerOn &&
+                   rc_ConnectStates.c_AvailableFeatures.q_SupportsDebuggerOff)
                {
-                  *opq_DebuggerChangeSupported = true;
+                  orq_DebuggerEnabled = orq_DebuggerEnabled && rc_ConnectStates.q_DebuggerEnabled;
+                  if (opq_DebuggerChangeSupported != nullptr)
+                  {
+                     *opq_DebuggerChangeSupported = true;
+                  }
                }
             }
          }

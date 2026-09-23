@@ -185,9 +185,13 @@ void C_OgeSpxInt64::SetMaximum(const QVariant & orc_Maximum)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeSpxInt64::SetSuffix(const QString & orc_Value)
 {
+   //Get the value with the previous suffix before changing it, so the value is not
+   //re-interpreted (and possibly truncated) by the new suffix on re-application.
+   const QVariant c_PreviousValue = this->GetValue();
+
    this->mc_Suffix = orc_Value;
    //Apply
-   this->SetValue(this->GetValue(), false);
+   this->SetValue(c_PreviousValue, false);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

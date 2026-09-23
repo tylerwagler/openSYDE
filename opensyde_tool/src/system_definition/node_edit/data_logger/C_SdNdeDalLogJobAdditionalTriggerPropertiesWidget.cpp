@@ -34,6 +34,7 @@ using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
+const int32_t C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::mhs32_OPERATION_INDEX_EQUAL = 2;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -168,31 +169,38 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::SetNodeDataLoggerJob(con
 {
    this->mu32_NodeIndex = ou32_NodeIndex;
    this->mu32_DataLoggerJobIndex = ou32_DataLoggerJobIndex;
-   const auto & rc_Expert =
-      C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(mu32_NodeIndex,
-                                                        mu32_DataLoggerJobIndex)->c_Properties.
-      c_AdditionalTriggerProperties.c_ExpertMode;
-   if (rc_Expert.q_Enable == true)
    {
-      this->me_ConnectState = eCS_CONNECTED;
-      this->mpc_Ui->pc_PbExpertView->SetSvg("://images/ToggleOnMsgTransmission.svg");
-      if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
+      const C_OscDataLoggerJob * const pc_DataLoggerJob = C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(
+         mu32_NodeIndex,
+         mu32_DataLoggerJobIndex);
+
+      if (pc_DataLoggerJob != nullptr)
       {
-         this->mpc_Ui->pc_LabelConditionExp->setText("Empty condition");
+         const C_OscDataLoggerJobAdditionalTriggerExpertMode & rc_Expert =
+            pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.c_ExpertMode;
+         if (rc_Expert.q_Enable == true)
+         {
+            this->me_ConnectState = eCS_CONNECTED;
+            this->mpc_Ui->pc_PbExpertView->SetSvg("://images/ToggleOnMsgTransmission.svg");
+            if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
+            {
+               this->mpc_Ui->pc_LabelConditionExp->setText("Empty condition");
+            }
+            else
+            {
+               m_SetExpertTriggerCondition();
+            }
+            this->mpc_Ui->pc_WidgetCondition->setVisible(true);
+            this->mpc_Ui->pc_DataWidget->setVisible(false);
+         }
+         else
+         {
+            this->me_ConnectState = eCS_DISCONNECTED;
+            this->mpc_Ui->pc_PbExpertView->SetSvg("://images/ToggleOffMsgTransmission.svg");
+            this->mpc_Ui->pc_WidgetCondition->setVisible(false);
+            this->mpc_Ui->pc_DataWidget->setVisible(true);
+         }
       }
-      else
-      {
-         m_SetExpertTriggerCondition();
-      }
-      this->mpc_Ui->pc_WidgetCondition->setVisible(true);
-      this->mpc_Ui->pc_DataWidget->setVisible(false);
-   }
-   else
-   {
-      this->me_ConnectState = eCS_DISCONNECTED;
-      this->mpc_Ui->pc_PbExpertView->SetSvg("://images/ToggleOffMsgTransmission.svg");
-      this->mpc_Ui->pc_WidgetCondition->setVisible(false);
-      this->mpc_Ui->pc_DataWidget->setVisible(true);
    }
    this->mpc_Ui->pc_PbExpertView->update();
    this->Reload();
@@ -236,20 +244,25 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::Reload()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::resizeEvent(QResizeEvent * const opc_Event)
 {
-   const auto & rc_Expert =
-      C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(mu32_NodeIndex,
-                                                        mu32_DataLoggerJobIndex)->c_Properties.
-      c_AdditionalTriggerProperties.c_ExpertMode;
+   const C_OscDataLoggerJob * const pc_DataLoggerJob = C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(
+      mu32_NodeIndex,
+      mu32_DataLoggerJobIndex);
 
-   if (rc_Expert.q_Enable == true)
+   if (pc_DataLoggerJob != nullptr)
    {
-      if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
+      const C_OscDataLoggerJobAdditionalTriggerExpertMode & rc_Expert =
+         pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.c_ExpertMode;
+
+      if (rc_Expert.q_Enable == true)
       {
-         this->mpc_Ui->pc_LabelConditionExp->setText("Empty condition");
-      }
-      else
-      {
-         m_SetExpertTriggerCondition();
+         if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
+         {
+            this->mpc_Ui->pc_LabelConditionExp->setText("Empty condition");
+         }
+         else
+         {
+            m_SetExpertTriggerCondition();
+         }
       }
    }
    QWidget::resizeEvent(opc_Event);
@@ -547,7 +560,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_SetOperation(const QSt
    // No matching operation found. Reset the combobox index.
    if (!q_Found)
    {
-      this->mpc_Ui->pc_ComboBoxOperation->setCurrentIndex(-1);
+      this->mpc_Ui->pc_ComboBoxOperation->setCurrentIndex(mhs32_OPERATION_INDEX_EQUAL);
    }
 }
 
@@ -758,51 +771,55 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_ToggleExpertView()
    // Switch from Expert view to Simple view
    else
    {
-      const auto & rc_Expert =
-         C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(mu32_NodeIndex,
-                                                           mu32_DataLoggerJobIndex)->c_Properties.
-         c_AdditionalTriggerProperties.c_ExpertMode;
+      const C_OscDataLoggerJob * const pc_DataLoggerJob =
+         C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(mu32_NodeIndex, mu32_DataLoggerJobIndex);
 
-      bool q_ToggleView = false;
-
-      // Empty expert condition. Direct switch to simple view
-      if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
+      if (pc_DataLoggerJob != NULL)
       {
-         q_ToggleView = true;
-      }
-      // Ask the user to confirm switching the view. This will delete the previously set simple trigger condition
-      else
-      {
-         C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
-         C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
+         const C_OscDataLoggerJobAdditionalTriggerExpertMode & rc_Expert =
+            pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.c_ExpertMode;
 
-         // Show message
-         c_Message.SetHeading("Trigger Condition");
-         c_Message.SetDescription("Are you sure you want to switch to the simple view? Current condition will be deleted.");
-         c_Message.SetOkButtonText("Continue");
-         c_Message.SetNoButtonText("Cancel");
-         c_Message.SetCustomMinHeight(180, 270);
-         e_ReturnMessageBox = c_Message.Execute();
+         bool q_ToggleView = false;
 
-         // Delete simple condition
-         if (e_ReturnMessageBox == C_OgeWiCustomMessage::eOK)
+         // Empty expert condition. Direct switch to simple view
+         if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
          {
-            // Reset GUI texts and combobox index
-            this->mpc_Ui->pc_LineEditDataElement->setText("");
-            this->mpc_Ui->pc_LineEditThreshold->setText("");
-            this->mpc_Ui->pc_ComboBoxOperation->setCurrentIndex(-1);
-            this->mc_SelectedOptArrayId.MarkInvalid();
-
             q_ToggleView = true;
          }
-      }
+         // Ask the user to confirm switching the view. This will delete the previously set simple trigger condition
+         else
+         {
+            C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
+            C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
 
-      if (q_ToggleView == true)
-      {
-         this->me_ConnectState = eCS_DISCONNECTED;
-         this->mpc_Ui->pc_PbExpertView->SetSvg("://images/ToggleOffMsgTransmission.svg");
-         this->mpc_Ui->pc_WidgetCondition->setVisible(false);
-         this->mpc_Ui->pc_DataWidget->setVisible(true);
+            // Show message
+            c_Message.SetHeading("Trigger Condition");
+            c_Message.SetDescription("Are you sure you want to switch to the simple view? Current condition will be deleted.");
+            c_Message.SetOkButtonText("Continue");
+            c_Message.SetNoButtonText("Cancel");
+            c_Message.SetCustomMinHeight(180, 270);
+            e_ReturnMessageBox = c_Message.Execute();
+
+            // Delete simple condition
+            if (e_ReturnMessageBox == C_OgeWiCustomMessage::eOK)
+            {
+               // Reset GUI texts and combobox index
+               this->mpc_Ui->pc_LineEditDataElement->setText("");
+               this->mpc_Ui->pc_LineEditThreshold->setText("");
+               this->mpc_Ui->pc_ComboBoxOperation->setCurrentIndex(mhs32_OPERATION_INDEX_EQUAL);
+               this->mc_SelectedOptArrayId.MarkInvalid();
+
+               q_ToggleView = true;
+            }
+         }
+
+         if (q_ToggleView == true)
+         {
+            this->me_ConnectState = eCS_DISCONNECTED;
+            this->mpc_Ui->pc_PbExpertView->SetSvg("://images/ToggleOffMsgTransmission.svg");
+            this->mpc_Ui->pc_WidgetCondition->setVisible(false);
+            this->mpc_Ui->pc_DataWidget->setVisible(true);
+         }
       }
    }
    this->mpc_Ui->pc_PbExpertView->update();
@@ -973,32 +990,37 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_ApplyTriggerConditionT
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_SetExpertTriggerCondition() const
 {
-   const auto & rc_Expert =
-      C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(mu32_NodeIndex,
-                                                        mu32_DataLoggerJobIndex)->c_Properties.
-      c_AdditionalTriggerProperties.c_ExpertMode;
+   const C_OscDataLoggerJob * const pc_DataLoggerJob = C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(
+      mu32_NodeIndex,
+      mu32_DataLoggerJobIndex);
 
-   // Empty expert condition
-   if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
+   if (pc_DataLoggerJob != nullptr)
    {
-      this->mpc_Ui->pc_LabelConditionExp->setText("Empty condition");
-   }
-   // Handle long strings (adding  ellipses (...) at the end)
-   else
-   {
-      const QString c_OriginalText = rc_Expert.c_TriggerConfiguration.c_str();
-      const QFontMetrics c_FontMetrics(this->mpc_Ui->pc_LabelConditionExp->font());
-      const QString c_ElidedText = c_FontMetrics.elidedText(c_OriginalText, Qt::ElideRight,
-                                                            this->mpc_Ui->pc_LabelConditionExp->width());
-      this->mpc_Ui->pc_LabelConditionExp->setText(c_ElidedText);
+      const C_OscDataLoggerJobAdditionalTriggerExpertMode & rc_Expert =
+         pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.c_ExpertMode;
 
-      if (c_ElidedText != c_OriginalText)
+      // Empty expert condition
+      if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
       {
-         this->mpc_Ui->pc_LabelConditionExp->SetToolTipInformation("", c_OriginalText);
+         this->mpc_Ui->pc_LabelConditionExp->setText("Empty condition");
       }
+      // Handle long strings (adding  ellipses (...) at the end)
       else
       {
-         this->mpc_Ui->pc_LabelConditionExp->SetToolTipInformation("", "");
+         const QString c_OriginalText = rc_Expert.c_TriggerConfiguration.c_str();
+         const QFontMetrics c_FontMetrics(this->mpc_Ui->pc_LabelConditionExp->font());
+         const QString c_ElidedText = c_FontMetrics.elidedText(c_OriginalText, Qt::ElideRight,
+                                                               this->mpc_Ui->pc_LabelConditionExp->width());
+         this->mpc_Ui->pc_LabelConditionExp->setText(c_ElidedText);
+
+         if (c_ElidedText != c_OriginalText)
+         {
+            this->mpc_Ui->pc_LabelConditionExp->SetToolTipInformation("", c_OriginalText);
+         }
+         else
+         {
+            this->mpc_Ui->pc_LabelConditionExp->SetToolTipInformation("", "");
+         }
       }
    }
 }
