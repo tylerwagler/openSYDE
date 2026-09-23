@@ -139,6 +139,35 @@ virtual-ECU tests.
 (`C_OscIpDispatcher` port member + 3-arg `InitTcp` overload; both impls use the
 member; default 13400 unchanged; 460 tests pass).
 
+## Phase 3 update (2026-09-22)
+
+**conf_file_handler prerequisite (workstream 1) done** (`7e830e80b`):
+`C_OscConfFileHandler` ported into `libraries/opensyde_core/conf_file_handler/`
+(COMMON group), adapted to `std::string`/`std::error_code` and the surviving
+`C_SclStringUtil` list helpers. Tested by `test_conf_file_handler.cpp`.
+
+**GUI self-contained fixes (workstream 2) done**, committed as two PRs, all
+de-wrapped of `C_GtGetText`:
+- `d4fd3302d` — `C_OgeSpxInt64::SetSuffix` (capture value before changing suffix);
+  `C_GiSvNodeSyvUpdate` security-state guards + stale top-left icon clear;
+  `C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget` null-safety in
+  `SetNodeDataLoggerJob`/`resizeEvent`/`m_ToggleExpertView`/`m_SetExpertTriggerCondition`
+  + `"=="` combobox default.
+- `71289fae6` — `C_CieUtil` DBC re-import signal matching by name
+  (`mh_HandleSignalsOfMatchingMessage`), which keeps the int32_t STW convention.
+
+**Not applicable to the fork (recorded so nobody retries):**
+- `C_SdTopologyToolbox` call-site change (`h_GetExePath` → `h_GetDevicesIniPath`) —
+  the fork's topology toolbox has no user-devices-ini drag/drop code (it was rewritten).
+- `C_PuiUtil::h_ChangeRelativePathsInUserDevicesIniToDevicesFolder` + the
+  `C_NagMainWindow` ctor call — the fork device manager is a `std::filesystem`
+  scanner (`LoadFromPaths` over `device.syd` manifests); nothing reads
+  `user_devices.ini`. Added-then-reverted to avoid dead code.
+- `C_Uti::h_GetDevicesIniPath` — no consumer in the fork (kept `h_GetPemDbPath`).
+
+All eight tools build locally. **Remaining Phase 3 work: workstream 3 (SYDEsup
+config-file support), which is now unblocked by the conf_file_handler port.**
+
 #7 (DoIP-over-IP) is **done and committed on 2026-09-22.** Landed in two commits:
 - `1ad3be29e` — `C_OscProtocolDriverOsyTpIp` node-ID-only broadcast overloads; the
   full `BroadcastSetIpAddress`/`BroadcastSetIpAddressExtended` bodies now live in
