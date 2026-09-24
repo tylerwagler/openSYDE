@@ -23,4 +23,15 @@ typedef C_OscIpDispatcherLinuxSock C_OscIpDispatcherWinSock;
 }
 #endif
 
+namespace stw
+{
+namespace opensyde_core
+{
+/// Platform-agnostic concrete dispatcher used to instantiate a socket-based client
+/// (upstream name C_OscIpDispatcherImpl; the fork exposes the same class as
+/// C_OscIpDispatcherWinSock on every platform).
+typedef C_OscIpDispatcherWinSock C_OscIpDispatcherImpl;
+}
+}
+
 #endif

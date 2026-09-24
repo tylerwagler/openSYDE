@@ -247,14 +247,20 @@ These are a coupled set and should be treated as one effort, not cherry-picked
 piecemeal. Do them after phases 1–3 land. The fork-specific bridges in `AUDIT.md`
 ("Fork-specific bridges") must all be resolved first.
 
-### Phase 4 — core prerequisites for the agent
-- Port `conf_file_handler/` into `libraries/opensyde_core` (add the COMMON group).
-- Add the tgl functions the feature needs (`TglTasks` with `TglStartProcessDetached`,
-  and `TglFileExists`/`TglExtractFileName`/`TglFileIncludeTrailingDelimiter`/
-  `TglChangeFileExtension` if absent).
-- Port `C_OscIpDispatcher` port mechanism (3-arg `InitTcp`, `mu16_UdpTcpPort`) onto
-  the fork's `std::error_code` API.
-- Port `security/crypto_agent/{C_OscCryptoAgentSettings,C_OscCryptoAgentAccessUtil}`.
+### Phase 4 — core prerequisites for the agent — **done (2026-09-24)**
+- `conf_file_handler/` — already landed in Phase 3.
+- tgl: the file helpers were already present; added `TglTasks` (Linux + Windows) with
+  `C_TglCriticalSection` and `TglStartProcessDetached`, `std::string` signatures.
+- `C_OscIpDispatcher` port mechanism — already present (3-arg `InitTcp`,
+  `mu16_UdpTcpPort`). Added `C_OscIpDispatcherImpl` as a typedef in
+  `C_OscIpDispatcherPlatform.hpp` rather than a new header.
+- Ported `security/crypto_agent/{C_OscCryptoAgentSettings,C_OscCryptoAgentAccessUtil}`
+  to `std::string` / `std::error_code`, behind a new
+  `OPENSYDE_CORE_SKIP_SECURITY_CRYPTO_AGENT_UTILS` group. Default executable path is
+  Linux-shaped (`./osy_crypto_agent`), not upstream's `.exe`.
+- `test_crypto_agent_access`: loopback mock agent pins the request wire format and the
+  success / agent-failure / no-agent paths (POSIX only; skipped on Windows).
+- Nothing calls the util yet — that is Phase 5.
 
 ### Phase 5 — protocol-driver refactor (breaks existing callers)
 - `C_OscComDriverProtocol`/`C_OscComDriverFlash`/`C_OscComSequencesBase::Init`

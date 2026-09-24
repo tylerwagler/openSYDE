@@ -822,9 +822,11 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglFile.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTime.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglUtils.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTasks.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglFile.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTime.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglUtils.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTasks.hpp
    )
 
    set(OPENSYDE_CORE_WINDOWS_TARGET_INCLUDE_DIRECTORIES
@@ -860,9 +862,11 @@ if(NOT WIN32)
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglFile.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTime.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglUtils.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTasks.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglFile.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTime.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglUtils.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTasks.hpp
    )
 
    set(OPENSYDE_CORE_LINUX_TARGET_INCLUDE_DIRECTORIES
@@ -905,6 +909,24 @@ else()
    )
 endif()
 
+# security crypto agent utility feature (client side over C_OscIpDispatcher)
+if(OPENSYDE_CORE_SKIP_SECURITY_CRYPTO_AGENT_UTILS)
+   message("OPENSYDE_CORE_SKIP_SECURITY_CRYPTO_AGENT_UTILS detected ... skipping package")
+else()
+   message("OPENSYDE_CORE_SKIP_SECURITY_CRYPTO_AGENT_UTILS not detected ... dragging in package")
+
+   set(OPENSYDE_CORE_SECURITY_CRYPTO_AGENT_UTILS_SOURCES
+      ${CMAKE_CURRENT_SOURCE_DIR}/security/crypto_agent/C_OscCryptoAgentAccessUtil.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/security/crypto_agent/C_OscCryptoAgentSettings.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/security/crypto_agent/C_OscCryptoAgentAccessUtil.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/security/crypto_agent/C_OscCryptoAgentSettings.hpp
+   )
+
+   set(OPENSYDE_CORE_SECURITY_CRYPTO_AGENT_UTILS_INCLUDE_DIRECTORIES
+      ${CMAKE_CURRENT_SOURCE_DIR}/security/crypto_agent
+   )
+endif()
+
 # all sources
 set(OPENSYDE_CORE_SOURCES
    ${OPENSYDE_CORE_COMMON_SOURCES}
@@ -926,6 +948,7 @@ set(OPENSYDE_CORE_SOURCES
    ${OPENSYDE_CORE_LINUX_TARGET_SOURCES}
    ${OPENSYDE_CORE_PROTOCOL_LOGGING_SOURCES}
    ${OPENSYDE_CORE_SECURITY_SOURCES}
+   ${OPENSYDE_CORE_SECURITY_CRYPTO_AGENT_UTILS_SOURCES}
 )
 
 # all include directories
@@ -949,6 +972,7 @@ set(OPENSYDE_CORE_INCLUDE_DIRECTORIES
    ${OPENSYDE_CORE_LINUX_TARGET_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_PROTOCOL_LOGGING_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_SECURITY_INCLUDE_DIRECTORIES}
+   ${OPENSYDE_CORE_SECURITY_CRYPTO_AGENT_UTILS_INCLUDE_DIRECTORIES}
 )
 
 # Vendored third-party sources are not held to our warning bar; we do not patch them,
