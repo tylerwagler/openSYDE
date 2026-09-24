@@ -44,7 +44,12 @@ C_OscCryptoAgentSettings::C_OscCryptoAgentSettings()
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCryptoAgentSettings::SetDefault()
 {
-   this->c_CryptoAgentExecutablePath = "./osy_crypto_agent";
+   //same layout as upstream: the agent ships next to the tools in a connectors folder
+#ifdef _WIN32
+   this->c_CryptoAgentExecutablePath = "../connectors/crypto_agent/osy_crypto_agent.exe";
+#else
+   this->c_CryptoAgentExecutablePath = "../connectors/crypto_agent/osy_crypto_agent";
+#endif
    this->c_CryptoAgentConfigFilePath = "./osy_crypto_agent.conf";
    this->au8_CryptoAgentIp[0UL] = 127U;
    this->au8_CryptoAgentIp[1UL] = 0U;
