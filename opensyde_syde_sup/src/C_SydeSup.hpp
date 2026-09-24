@@ -18,6 +18,7 @@
 #include "C_CanDispatcher.hpp"
 #include "C_OscIpDispatcher.hpp"
 #include "C_OscSuSequences.hpp"
+#include "C_OscCryptoAgentSettings.hpp"
 #include "C_OscViewData.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -126,6 +127,7 @@ protected:
    std::string mc_DeviceDefPath;
    std::string mc_PubKeyPemPath; //path to pem file with public key in case of secure update package
    std::string mc_Password; //optional password if the secure update package is also encrypted
+   stw::opensyde_core::C_OscCryptoAgentSettings mc_CryptoAgentSettings; //crypto agent access, from the config file
 
    C_SydeSup::E_Result m_InitOptionalParameters(void);
 

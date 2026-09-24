@@ -16,6 +16,9 @@
 
 #include "C_SclStringUtil.hpp"
 #include "C_SupConfig.hpp"
+#include "C_OscUtils.hpp"
+
+#include <charconv>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;
@@ -83,7 +86,8 @@ C_SupConfig::C_SupConfig(void) :
    c_CanDriver(""),
    c_UnzipPath(""),
    c_PublicKeyPath(""),
-   c_Password("")
+   c_Password(""),
+   c_CryptoAgentSettings()
 {
 }
 
@@ -92,11 +96,13 @@ C_SupConfig::C_SupConfig(void) :
 
    Parses all SYDEsup settings from the provided string list (comments and blank lines already removed).
    Boolean values are read as "true"/"false" strings (case insensitive).
+   Crypto agent IP and port keep their defaults (127.0.0.1:50963) when the key is absent.
 
    \param[in]  orc_SettingsWithoutComments   string list containing only key=value lines (no comments, no blank lines)
 
    \return
    Errc::success   all settings parsed successfully
+   Errc::config    crypto agent IP or port present but invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_SupConfig::m_LoadSettings(const std::vector<std::string> & orc_SettingsWithoutComments)
@@ -121,5 +127,42 @@ std::error_code C_SupConfig::m_LoadSettings(const std::vector<std::string> & orc
    c_PublicKeyPath = mh_GetValue(orc_SettingsWithoutComments, "OSY_SYDESUP_PATH_PUBLIC_KEY");
    c_Password      = mh_GetValue(orc_SettingsWithoutComments, "OSY_SYDESUP_PASSWORD");
 
-   return stw::errors::make_error_code(Errc::success);
+   // Crypto Agent
+   std::error_code c_Result = Errc::success;
+   c_CryptoAgentSettings.SetDefault();
+   c_CryptoAgentSettings.c_CryptoAgentExecutablePath =
+      mh_GetValue(orc_SettingsWithoutComments, "OSY_SYDESUP_PATH_CRYPTO_AGENT_EXECUTABLE");
+   c_CryptoAgentSettings.c_CryptoAgentConfigFilePath =
+      mh_GetValue(orc_SettingsWithoutComments, "OSY_SYDESUP_PATH_CRYPTO_AGENT_CONFIG_FILE");
+   c_CryptoAgentSettings.q_CryptoAgentAutoStart =
+      (mh_ToLower(mh_GetValue(orc_SettingsWithoutComments, "OSY_SYDESUP_SETTING_CRYPTO_AGENT_AUTO_START")) == "true");
+   c_CryptoAgentSettings.q_CryptoAgentAutoStop =
+      (mh_ToLower(mh_GetValue(orc_SettingsWithoutComments, "OSY_SYDESUP_SETTING_CRYPTO_AGENT_AUTO_STOP")) == "true");
+
+   const std::string c_Ip = mh_GetValue(orc_SettingsWithoutComments, "OSY_SYDESUP_SETTING_CRYPTO_AGENT_IP");
+   if (c_Ip.empty() == false)
+   {
+      if (C_OscUtils::h_StringToIp4(c_Ip, c_CryptoAgentSettings.au8_CryptoAgentIp) != Errc::success)
+      {
+         c_Result = Errc::config;
+      }
+   }
+
+   const std::string c_Port = mh_GetValue(orc_SettingsWithoutComments, "OSY_SYDESUP_SETTING_CRYPTO_AGENT_PORT");
+   if (c_Port.empty() == false)
+   {
+      uint32_t u32_Port = 0U;
+      const std::from_chars_result c_Parse = std::from_chars(c_Port.data(), c_Port.data() + c_Port.size(), u32_Port);
+      if ((c_Parse.ec == std::errc()) && (c_Parse.ptr == (c_Port.data() + c_Port.size())) && (u32_Port >= 1U) &&
+          (u32_Port <= 65535U))
+      {
+         c_CryptoAgentSettings.u16_CryptoAgentPort = static_cast<uint16_t>(u32_Port);
+      }
+      else
+      {
+         c_Result = Errc::config;
+      }
+   }
+
+   return c_Result;
 }
