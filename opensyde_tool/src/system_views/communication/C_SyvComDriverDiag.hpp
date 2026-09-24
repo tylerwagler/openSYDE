@@ -25,7 +25,6 @@
 #include "C_CanDispatcher.hpp"
 #include "C_OscIpDispatcherPlatform.hpp"
 #include "C_OscCanSignal.hpp"
-#include "C_OscSecurityPemDatabase.hpp"
 #include "C_OscDiagProtocolOsy.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -175,8 +174,6 @@ private:
    // Mapping from CAN-ID to registered widget and its used CAN message signal
    QMap<stw::opensyde_core::C_OscCanMessageUniqueId, QList<C_SyvComDriverDiagWidgetRegistration> > mc_AllWidgets;
 
-   // Security PEM database
-   stw::opensyde_core::C_OscSecurityPemDatabase mc_PemDatabase;
 
    int32_t m_InitDiagNodes(void);
    int32_t m_InitDiagProtocol(void);

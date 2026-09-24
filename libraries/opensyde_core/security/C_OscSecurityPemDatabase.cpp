@@ -44,8 +44,7 @@ using namespace stw::opensyde_core;
 /*! \brief  Default constructor
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscSecurityPemDatabase::C_OscSecurityPemDatabase() :
-   mq_StoredLevel7PemInformationValid(false)
+C_OscSecurityPemDatabase::C_OscSecurityPemDatabase()
 {
 }
 
@@ -100,50 +99,6 @@ const C_OscSecurityPemKeyInfo * C_OscSecurityPemDatabase::GetPemFileBySerialNumb
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get level 7 pem information
-
-   \return
-   Level 7 pem information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const C_OscSecurityPemKeyInfo * C_OscSecurityPemDatabase::GetLevel7PemInformation() const
-{
-   const C_OscSecurityPemKeyInfo * pc_Retval = nullptr;
-
-   if (this->mq_StoredLevel7PemInformationValid)
-   {
-      pc_Retval = &this->mc_StoredLevel7PemInformation;
-   }
-   return pc_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Add level 7 pem file
-
-   \param[in]  orc_Path    Path
-
-   \return
-   std::error_code with Errc::success if the information was extracted,
-   Errc::range if the file was not found,
-   Errc::config on invalid file content
-*/
-//----------------------------------------------------------------------------------------------------------------------
-std::error_code C_OscSecurityPemDatabase::AddLevel7PemFile(const std::string & orc_Path)
-{
-   std::error_code c_Retval = Errc::success;
-
-   if (TglFileExists(orc_Path))
-   {
-      c_Retval = C_OscSecurityPemDatabase::m_TryAddKeyFromPath(orc_Path, false);
-   }
-   else
-   {
-      c_Retval = Errc::range;
-   }
-   return c_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Parse folder
 
    \param[in]  orc_FolderPath    Folder path
@@ -169,7 +124,7 @@ std::error_code C_OscSecurityPemDatabase::ParseFolder(const std::string & orc_Fo
       for (uint32_t u32_It = 0UL; u32_It < c_Files.size(); ++u32_It)
       {
          const std::string c_CurFolderPath = c_Files[u32_It];
-         (void)C_OscSecurityPemDatabase::m_TryAddKeyFromPath(c_CurFolderPath, true);
+         (void)C_OscSecurityPemDatabase::m_TryAddKeyFromPath(c_CurFolderPath);
       }
       osc_write_log_info("Read PEM database",
                          "Imported " + std::to_string(
@@ -188,7 +143,6 @@ std::error_code C_OscSecurityPemDatabase::ParseFolder(const std::string & orc_Fo
 /*! \brief  Try add key from path
 
    \param[in]  orc_Path       Path
-   \param[in]  oq_AddToList   Add to list (or alternative level 7 file)
 
    \return
    std::error_code with Errc::success if the information was extracted,
@@ -196,7 +150,7 @@ std::error_code C_OscSecurityPemDatabase::ParseFolder(const std::string & orc_Fo
    Errc::config on invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::error_code C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const std::string & orc_Path, const bool oq_AddToList)
+std::error_code C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const std::string & orc_Path)
 {
    C_OscSecurityPem c_NewFile;
 
@@ -204,20 +158,11 @@ std::error_code C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const std::string 
    std::error_code c_Retval = c_NewFile.LoadFromFile(orc_Path, c_ErrorMessage);
    if (!c_Retval)
    {
-      c_Retval = m_TryAddKey(c_NewFile.GetKeyInfo(), c_ErrorMessage, oq_AddToList);
+      c_Retval = m_TryAddKey(c_NewFile.GetKeyInfo(), c_ErrorMessage);
    }
    if (c_ErrorMessage.size() > 0UL)
    {
-      std::string c_Heading;
-      if (oq_AddToList)
-      {
-         c_Heading = "Read PEM database";
-      }
-      else
-      {
-         c_Heading = "Read PEM level 7 key";
-      }
-      osc_write_log_warning(c_Heading,
+      osc_write_log_warning("Read PEM database",
                             "Error reading file \"" + orc_Path + "\": " + c_ErrorMessage);
    }
    return c_Retval;
@@ -228,35 +173,26 @@ std::error_code C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const std::string 
 
    \param[in]      orc_NewKey          New key
    \param[in,out]  orc_ErrorMessage    Error message
-   \param[in]      oq_AddToList        Add to list (or alternative level 7 file)
 
    \return
    std::error_code with Errc::success if the information was extracted, Errc::config on invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscSecurityPemDatabase::m_TryAddKey(const C_OscSecurityPemKeyInfo & orc_NewKey,
-                                                      std::string & orc_ErrorMessage, const bool oq_AddToList)
+                                                      std::string & orc_ErrorMessage)
 {
    std::error_code c_Retval = Errc::success;
 
-   if (orc_NewKey.AreKeysAvailable(orc_ErrorMessage, oq_AddToList))
+   if (orc_NewKey.AreKeysAvailable(orc_ErrorMessage, true))
    {
-      if (oq_AddToList)
+      if (this->GetPemFileBySerialNumber(orc_NewKey.GetCertificateSerialNumber()) == nullptr)
       {
-         if (this->GetPemFileBySerialNumber(orc_NewKey.GetCertificateSerialNumber()) == nullptr)
-         {
-            this->mc_StoredPemFiles.push_back(orc_NewKey);
-         }
-         else
-         {
-            c_Retval = Errc::config;
-            orc_ErrorMessage = "ignored because serial number already exists";
-         }
+         this->mc_StoredPemFiles.push_back(orc_NewKey);
       }
       else
       {
-         this->mq_StoredLevel7PemInformationValid = true;
-         this->mc_StoredLevel7PemInformation = orc_NewKey;
+         c_Retval = Errc::config;
+         orc_ErrorMessage = "ignored because serial number already exists";
       }
    }
    else

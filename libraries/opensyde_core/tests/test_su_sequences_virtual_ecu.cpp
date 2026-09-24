@@ -40,7 +40,6 @@
 #include "C_OscIpDispatcher.hpp"
 #include "C_OscNode.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
-#include "C_OscSecurityPemDatabase.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_OscParamSetHandler.hpp"
@@ -374,13 +373,12 @@ protected:
    {
       const std::vector<uint8_t> c_ActiveNodes(1U, 1U);
       const std::error_code c_Result =
-         mc_Sequences.Init(mc_SystemDefinition, 0U, c_ActiveNodes, nullptr, &mc_Ethernet, &mc_PemDatabase);
+         mc_Sequences.Init(mc_SystemDefinition, 0U, c_ActiveNodes, nullptr, &mc_Ethernet);
       return c_Result;
    }
 
    C_OscSystemDefinition mc_SystemDefinition;
    C_OscDeviceDefinition mc_DeviceDefinition;
-   C_OscSecurityPemDatabase mc_PemDatabase;
    C_VirtualEcu mc_Ecu;
    C_VirtualEthernet mc_Ethernet;
    C_RecordingSequences mc_Sequences;

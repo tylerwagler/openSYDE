@@ -17,7 +17,6 @@
 #include "C_SupSuSequences.hpp"
 #include "C_CanDispatcher.hpp"
 #include "C_OscIpDispatcher.hpp"
-#include "C_OscSecurityPemDatabase.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscViewData.hpp"
 
@@ -156,8 +155,6 @@ private:
                                              const std::vector<uint8_t> & orc_ActiveNodes) const;
    int32_t m_LoadConfigFile(void);
 
-   // Security PEM database
-   stw::opensyde_core::C_OscSecurityPemDatabase mc_PemDatabase;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

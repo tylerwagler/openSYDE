@@ -702,7 +702,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
          // initialize sequence
          //boundary: the callee now reports std::error_code
          s32_Return = c_Sequence.Init(c_SystemDefinition, u32_ActiveBusIndex, c_ActiveNodes, mpc_CanDispatcher,
-                                      mpc_EthDispatcher, &this->mc_PemDatabase).value();
+                                      mpc_EthDispatcher).value();
          // tell report methods to not print to console
          c_Sequence.SetQuiet(mq_Quiet);
       }

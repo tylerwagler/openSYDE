@@ -40,8 +40,7 @@ public:
    [[nodiscard]] virtual std::error_code Init(C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex,
                                 const std::vector<uint8_t> & orc_ActiveNodes,
                                 stw::can::C_CanDispatcher * const opc_CanDispatcher,
-                                C_OscIpDispatcher * const opc_IpDispatcher,
-                                C_OscSecurityPemDatabase * const opc_SecurityPemDb);
+                                C_OscIpDispatcher * const opc_IpDispatcher);
 
    bool IsInitialized(void) const;
 
