@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <cstdint>
 #include "C_OgePopUpContentBase.hpp"
+#include "C_OgeLeFilePath.hpp"
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -46,6 +47,13 @@ private:
    void m_CancelClicked(void);
    void m_InitEnvironmentSection(void);
    void m_InitDeviceRootsSection(void);
+   void m_InitCryptoAgentSection(void);
+   void m_OnClickPathExecutable(void);
+   void m_OnClickPathConfigFile(void);
+   QString m_GetCryptoAgentFolder(void) const;
+   void m_SelectFile(stw::opensyde_gui_elements::C_OgeLeFilePath & orc_LineEdit, const QString & orc_Heading,
+                     const QString & orc_Filter, const QString & orc_DefaultSuffix,
+                     const QString & orc_ReferenceFolder);
    void m_AddDeviceRoot(void);
    void m_RemoveDeviceRoot(void);
    void m_MoveDeviceRootUp(void);
