@@ -121,8 +121,14 @@ jobs:
       # (Svg included) and sets Qt6_DIR, which build.sh forwards.
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
+        env:
+          # No explicit `brew update`: the macos runner image already ships a current
+          # Homebrew catalog, and the update is the step that stalls (slow network fetch
+          # of the full formula catalog). Disable the implicit auto-update that
+          # `brew install` triggers for the same reason.
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+          HOMEBREW_NO_INSTALL_CLEANUP: "1"
         run: |
-          brew update -q
           brew install -q ninja bison flex openssl@3 ccache
 
       - name: Install Qt (macOS)
