@@ -27,6 +27,13 @@ function(add_osc_test TEST_NAME TEST_SOURCE)
    if(TARGET OpenSSL::Crypto)
       target_link_libraries(${TEST_NAME} PRIVATE OpenSSL::SSL OpenSSL::Crypto)
    endif()
+   # Same principle for the WinSock/IP helpers: core uses the WinSock IP dispatcher
+   # on Windows (e.g. through the crypto-agent client util), but as a static library
+   # it never links system libs — the application does. Test executables are the
+   # application here, so link them on Windows.
+   if(WIN32)
+      target_link_libraries(${TEST_NAME} PRIVATE ws2_32 Iphlpapi)
+   endif()
    # Tests are code too, and were the one place in the tree building without -Werror.
    # They sat at a single warning -- a discarded [[nodiscard]] return -- which is
    # exactly the class the attribute exists to surface. Fixed, and held at zero here.
