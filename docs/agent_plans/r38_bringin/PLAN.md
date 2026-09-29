@@ -273,6 +273,12 @@ piecemeal. Do them after phases 1–3 land. The fork-specific bridges in `AUDIT.
   assignments: `grep -rn "SecurityPemDatabase" --include=*.cpp --include=*.hpp`.
 
 ### Phase 6 — the daemon tool
+**Status: done on 2026-09-29.** Both Linux and Windows `C_CaServerPlatform` impls were
+ported (not Linux-only as originally scoped), the `pjt` CMake links the single
+consolidated core, the tool is registered in the root CMakeLists and `build.sh`, and the
+pytest harness was adapted to the fork's `result/<build-type>/crypto_agent` layout
+(16/16 pass on the host). The `OPENSYDE_CORE_SKIP_SECURITY_CRYPTO_AGENT_UTILS` group
+already existed from Phase 4. The three-platform CI matrix is the remaining gate.
 - Port `opensyde_crypto_agent/src/**` (Linux impl first; keep the
   `C_CaServer`/`C_CaServerLogic` split so Windows can be added later), its `pjt`
   CMake adapting to link the **single** consolidated core (do not copy the vendored

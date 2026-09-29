@@ -120,3 +120,4 @@ add_subdirectory(opensyde_syde_x_gen/pjt              ${CMAKE_BINARY_DIR}/syde_x
 add_subdirectory(opensyde_syde_coder_c/pjt            ${CMAKE_BINARY_DIR}/syde_coder_c)
 add_subdirectory(opensyde_cmd_line_flash_tool/pjt     ${CMAKE_BINARY_DIR}/flash_tool)
 add_subdirectory(opensyde_tsp_convert/pjt             ${CMAKE_BINARY_DIR}/tsp_convert)
+add_subdirectory(opensyde_crypto_agent/pjt            ${CMAKE_BINARY_DIR}/crypto_agent)
