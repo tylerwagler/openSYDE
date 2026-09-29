@@ -45,7 +45,7 @@
 cmake_minimum_required(VERSION 3.25)
 project("opensyde_core")
 
-# This library ships as part of the eight tools and is also configured standalone
+# This library ships as part of the nine tools and is also configured standalone
 # (the CI core job); pin the C++23 standard like the consuming toolchains do so
 # every build lane compiles the same language mode.
 set(CMAKE_CXX_STANDARD 23)
@@ -1021,7 +1021,7 @@ add_custom_target(osy_build_info
 add_dependencies(opensyde_core osy_build_info)
 target_include_directories(opensyde_core PRIVATE ${OSY_BUILD_INFO_DIR})
 
-# Warnings. The eight tool trees have built with -Wall -Wextra -Wpedantic all
+# Warnings. The nine tool trees have built with -Wall -Wextra -Wpedantic all
 # along; opensyde_core set no warning flags at all, so the most safety-critical
 # code in the repository was the only part compiled without them.
 #
@@ -1037,7 +1037,7 @@ target_include_directories(opensyde_core PRIVATE ${OSY_BUILD_INFO_DIR})
 # with a comment explaining why, rather than dropping the flag.
 if(NOT MSVC)
    # -Wnon-virtual-dtor, -Wimplicit-fallthrough and -Wcast-qual are each zero-finding
-   # across all eight tools today, measured on both clang 19 and GCC 14. They are here
+   # across all nine tools today, measured on both clang 19 and GCC 14. They are here
    # to keep it that way: each covers a class that is silent at runtime -- deleting
    # through a base pointer without a virtual destructor, a missing break, and casting
    # away const -- and that nothing else in the build would report.

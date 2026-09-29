@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------------------------------------------------
-# Whole-repository build: one opensyde_core, all eight tools.
+# Whole-repository build: one opensyde_core, all nine tools.
 #
 # Historically each tool configured and compiled its own copy of opensyde_core with
 # its own set of OPENSYDE_CORE_SKIP_* options. A clean eight-tool build produced
@@ -8,7 +8,7 @@
 # of roughly three minutes on a 48-core host.
 #
 # (Three tools name their core build directory osy_core rather than opensyde_core,
-# which is why a directory-name count suggests five copies. There are eight.)
+# which is why a directory-name count suggests five copies. There are nine.)
 #
 # WHY THIS IS SAFE
 #
