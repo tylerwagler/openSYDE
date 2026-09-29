@@ -19,6 +19,9 @@
 #include <chrono>
 #include <fstream>
 #include <filesystem>
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 #include "gtest/gtest.h"
 #include "stwerrors.hpp"
 #include "TglTasks.hpp"
@@ -69,7 +72,11 @@ protected:
    void SetUp() override
    {
       mc_PreviousCwd = std::filesystem::current_path();
-      mc_Root = std::filesystem::canonical(std::filesystem::temp_directory_path()) / "osy_tgl_tasks";
+      // ctest -j runs each discovered TEST() as its own process, in parallel. A fixed temp
+      // path would collide across those processes: one process's remove_all deletes another's
+      // report.sh/report.txt mid-test. Make it process-unique.
+      mc_Root = std::filesystem::canonical(std::filesystem::temp_directory_path()) /
+                ("osy_tgl_tasks_" + std::to_string(static_cast<long>(getpid())));
       (void)std::filesystem::remove_all(mc_Root);
       ASSERT_TRUE(std::filesystem::create_directories(mc_Root / "bin"));
       {
