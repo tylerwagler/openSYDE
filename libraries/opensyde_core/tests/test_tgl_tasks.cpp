@@ -32,12 +32,15 @@ using namespace stw::tgl;
 namespace
 {
 #ifndef _WIN32
-/// Waits up to five seconds for the helper to write its complete report (terminated by an "end" line).
+/// Waits up to fifteen seconds for the helper to write its complete report (terminated by an "end" line).
+/// The child is forked and detached, so on a saturated CI runner (hundreds of parallel test
+/// binaries) it can sit in the run queue for several seconds before the shell script runs; a
+/// five-second cap flakes there.
 std::vector<std::string> h_WaitForReport(const std::filesystem::path & orc_Path)
 {
    std::vector<std::string> c_Lines;
 
-   for (uint32_t u32_Try = 0U; u32_Try < 100U; ++u32_Try)
+   for (uint32_t u32_Try = 0U; u32_Try < 300U; ++u32_Try)
    {
       std::ifstream c_File(orc_Path);
       std::string c_Line;
