@@ -58,7 +58,6 @@ public:
    static QString h_GetExeBasename(const QString & orc_Stem);
    static bool h_RevealInFileManager(const QString & orc_Path);
    static void h_SetCurrentDirectoryToExeDirectory(void);
-   static QString h_GetPemDbPath(void);
    static QString h_GetApplicationVersion(const bool oq_UseStwFormat = true);
    static QString h_CheckAndReplaceWithExePathIfNecessary(const QString & orc_Path);
    static QString h_GetLink(const QString & orc_DisplayedText,

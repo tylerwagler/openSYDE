@@ -27,6 +27,13 @@ function(add_osc_test TEST_NAME TEST_SOURCE)
    if(TARGET OpenSSL::Crypto)
       target_link_libraries(${TEST_NAME} PRIVATE OpenSSL::SSL OpenSSL::Crypto)
    endif()
+   # Same principle for the WinSock/IP helpers: core uses the WinSock IP dispatcher
+   # on Windows (e.g. through the crypto-agent client util), but as a static library
+   # it never links system libs — the application does. Test executables are the
+   # application here, so link them on Windows.
+   if(WIN32)
+      target_link_libraries(${TEST_NAME} PRIVATE ws2_32 Iphlpapi)
+   endif()
    # Tests are code too, and were the one place in the tree building without -Werror.
    # They sat at a single warning -- a discarded [[nodiscard]] return -- which is
    # exactly the class the attribute exists to surface. Fixed, and held at zero here.
@@ -99,3 +106,4 @@ add_osc_test(test_opensyde_core_scl_ini_file test_scl_ini_file.cpp)
 add_osc_test(test_opensyde_core_str_prefix   test_string_prefix_parsing.cpp)
 add_osc_test(test_opensyde_core_conf_file    test_conf_file_handler.cpp)
 add_osc_test(test_opensyde_core_crypto_agent test_crypto_agent_access.cpp)
+add_osc_test(test_opensyde_core_tgl_tasks  test_tgl_tasks.cpp)

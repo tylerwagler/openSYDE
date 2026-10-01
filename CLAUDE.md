@@ -53,7 +53,7 @@ match across them, and that is deliberate rather than an oversight:
 | Windows | LLVM-MinGW clang 17 | libc++ |
 
 Linux stays on libstdc++ because the system Qt6 is built against it. `opensyde_core`
-is one static archive shared by all eight tools, so it has to match whatever Qt the
+is one static archive shared by all nine tools, so it has to match whatever Qt the
 GUI tools link — mixing libc++ core with libstdc++ Qt is an ABI mismatch at every
 `std::string` that crosses the boundary. "libc++ for the CLI tools, libstdc++ for the
 GUI" is not available for the same reason: there is only one core.
@@ -154,7 +154,7 @@ Notes that have bitten builds before:
 
 `opensyde_core` builds on its own and does **not** compile the seven sibling tool
 trees, so a clean core build proves nothing about them. Any change to a signature
-in core must be checked with a full eight-tool build. Grep is not a substitute:
+in core must be checked with a full nine-tool build. Grep is not a substitute:
 callers reach migrated classes through base-class pointers, share method names
 with unmigrated classes, and compare rather than assign.
 
@@ -165,7 +165,7 @@ on Windows and macOS, so anything touching platform-conditional code or a core
 signature goes through a PR rather than a local build. Push and read the result.
 
 **The 48-core build host** is for a fast single-platform answer while iterating —
-~3 minutes for all eight tools against ~18 on a laptop. See `docs/remote-build.md`.
+~3 minutes for all nine tools against ~18 on a laptop. See `docs/remote-build.md`.
 
 **Check which compiler a build directory is actually using before drawing a
 conclusion from it.** CMake records the compiler in `CMakeCache.txt` on the first
@@ -248,8 +248,8 @@ three target platforms build on every push:**
 | Job | Runners | What it does | Wall clock |
 |-----|---------|--------------|------------|
 | **Core Library** | `ubuntu-26.04`, `macos-14` | Full subsystem coverage, builds, `ctest` | ~1.5 min |
-| **GUI Tools** | `ubuntu-26.04`, `macos-14` | Smoke-builds all eight tools (`./build.sh -b Debug all`), then checks one tool still configures standalone | 12–20 min |
-| **Tools + Core Tests** | `windows-2022` | All eight tools under LLVM-MinGW clang, plus the core unit tests | ~35 min |
+| **GUI Tools** | `ubuntu-26.04`, `macos-14` | Smoke-builds all nine tools (`./build.sh -b Debug all`), then checks one tool still configures standalone | 12–20 min |
+| **Tools + Core Tests** | `windows-2022` | All nine tools under LLVM-MinGW clang, plus the core unit tests | ~35 min |
 
 | **Static Analysis** | `ubuntu-26.04` | clang analyser over `opensyde_core`, findings in the job summary | ~5 min |
 
@@ -264,7 +264,7 @@ macOS Qt comes from `install-qt-action`, not Homebrew. `brew install qt` drags
 `find_package`. Windows likewise installs Qt (`win64_llvm_mingw`), the toolchain
 (`tools_llvm_mingw1706`), Ninja and OpenSSL through the same action.
 
-`.github/workflows/release.yml` builds all eight tools in **Release** on the three
+`.github/workflows/release.yml` builds all nine tools in **Release** on the three
 platforms, packages them (Windows with an `llvm-objdump` import walk for Qt, OpenSSL and the llvm-mingw
 runtime next to the executables; Linux/macOS as bare binaries with a `RUNTIME.md`) and,
 on a `v*` tag, publishes a GitHub Release with the archives. It also runs, without

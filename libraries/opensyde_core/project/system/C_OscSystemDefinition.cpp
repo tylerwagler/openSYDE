@@ -1855,6 +1855,29 @@ std::error_code C_OscSystemDefinition::GetNodeSquadIndexWithNodeIndex(const uint
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Set last loaded file path
+
+   \param[in]  orc_Value   Path of the file the system definition was loaded from
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscSystemDefinition::SetLastLoadedFilePath(const std::string & orc_Value)
+{
+   this->mc_LastLoadedFilePath = orc_Value;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get last loaded file path
+
+   \return
+   Path of the file the system definition was last loaded from ("" if not loaded from a file)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::string C_OscSystemDefinition::GetLastLoadedFilePath(void) const
+{
+   return this->mc_LastLoadedFilePath;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get hash for datapool
 
    \param[in]  ou32_NodeIndex       Node index

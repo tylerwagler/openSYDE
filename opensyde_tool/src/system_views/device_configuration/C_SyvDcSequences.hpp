@@ -26,7 +26,6 @@
 #include "C_SyvComDriverThread.hpp"
 #include "C_OscNodeComInterfaceSettings.hpp"
 #include "C_OscIpDispatcherPlatform.hpp"
-#include "C_OscSecurityPemDatabase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -213,8 +212,6 @@ private:
    // Service execution result
    int32_t ms32_Result;
 
-   // Security PEM database
-   stw::opensyde_core::C_OscSecurityPemDatabase mc_PemDatabase;
 
    static const uint32_t mhu32_DEFAULT_SCAN_TIME_MS = 5000U;
 };

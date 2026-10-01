@@ -25,6 +25,7 @@
 #include "C_UsCommunication.hpp"
 #include "C_UsNode.hpp"
 #include "C_UsSystemView.hpp"
+#include "C_OscCryptoAgentSettings.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -75,6 +76,8 @@ public:
    int32_t GetScreenshotGifSucessTimeout(void) const;
    QString GetPathHandlingSelection(void) const;
    QString GetSkipTspSelection(void) const;
+   stw::opensyde_core::C_OscCryptoAgentSettings GetCryptoAgentSettings(void) const;
+   stw::opensyde_core::C_OscCryptoAgentSettings GetCryptoAgentSettingsForAccess(void) const;
 
    void GetMostRecentFolder(QString & orc_Str) const;
    void GetRecentFolders(QStringList & orc_Folders) const;
@@ -146,6 +149,7 @@ public:
    void SetNextRecentColorButtonNumber(const int32_t os32_NextRecentColorButtonNumber);
    void SetSkipTspSelection(const QString & orc_Selection);
    void SetPathHandlingSelection(const QString & orc_Selection);
+   void SetCryptoAgentSettings(const stw::opensyde_core::C_OscCryptoAgentSettings & orc_Settings);
 
    void AddToRecentProjects(const QString & orc_Str);
    void RemoveOfRecentProjects(const QString & orc_Str);
@@ -298,6 +302,7 @@ private:
    //Environment Section
    QString mc_PathHandlingSelection;  ///< Currently chosen option (Relative or Absolute)
    QString mc_SkipTspImportSelection; ///< Flag if TSP Import on Node Adding shall always be skipped
+   stw::opensyde_core::C_OscCryptoAgentSettings mc_CryptoAgentSettings; ///< Crypto agent access, paths as entered
 
    QString mc_CurrentSaveAsPath;              ///< Current save as base path
    QList<QColor> mc_RecentColors;           ///< Recent colors from color picker

@@ -1,6 +1,6 @@
 # Remote build machine
 
-A full eight-tool build takes **~2m23s** on the build machine (48 cores) since the
+A full nine-tool build takes **~2m23s** on the build machine (48 cores) since the
 root CMakeLists made `opensyde_core` build once rather than once per tool. It was
 ~3 minutes before that, and ~18 minutes on the dev laptop (8 cores). That
 difference is what makes it practical to verify every tool before pushing,
@@ -17,11 +17,11 @@ repo    ~/Projects/openSYDE
 ## Why this matters
 
 `opensyde_core` is built by `libraries/opensyde_core/CMakeLists.txt`, which does
-**not** compile the seven sibling tool trees. Any change to a signature in core
+**not** compile the eight sibling tool trees. Any change to a signature in core
 ripples into `opensyde_tool`, `opensyde_can_monitor`, `opensyde_syde_flash`,
 `opensyde_syde_sup`, `opensyde_syde_x_gen`, `opensyde_syde_coder_c`,
-`opensyde_cmd_line_flash_tool` and `opensyde_tsp_convert` — and a core-only build
-proves nothing about them.
+`opensyde_cmd_line_flash_tool`, `opensyde_tsp_convert` and `opensyde_crypto_agent` —
+and a core-only build proves nothing about them.
 
 Grep is not a substitute. During the std::error_code migration, callers were
 missed repeatedly because they:
@@ -33,7 +33,7 @@ missed repeatedly because they:
 - **compare** rather than assign — `if (call(...) == C_NO_ERR)` matches no
   assignment-shaped search
 
-Build all eight tools. It is three minutes.
+Build all nine tools. It is three minutes.
 
 ## Setup
 

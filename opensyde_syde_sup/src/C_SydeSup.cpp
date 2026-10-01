@@ -36,6 +36,7 @@
 #include "C_OscBuildInfo.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscHexFile.hpp"
+#include "C_OscCryptoAgentAccessUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -438,6 +439,24 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char * 
                           "Missing command line parameter for creating a Service Update Package, try -h. ", true);
             }
          }
+
+         // crypto agent settings only come from a config file; without one the defaults apply
+         if ((e_Return == eOK) && (mc_ConfigFilePath != ""))
+         {
+            if ((mc_CryptoAgentSettings.q_CryptoAgentAutoStart == true) &&
+                (TglFileExists(mc_CryptoAgentSettings.c_CryptoAgentExecutablePath) == false))
+            {
+               e_Return = eERR_PARSE_COMMAND_LINE;
+               h_WriteLog("Initialize Parameters",
+                          "Crypto agent auto start is enabled but executable \"" +
+                          mc_CryptoAgentSettings.c_CryptoAgentExecutablePath + "\" is not found, "
+                          "check your config file \"" + mc_ConfigFilePath + "\"!", true);
+            }
+            else
+            {
+               C_OscCryptoAgentAccessUtil::h_SetCryptoAgentSettings(mc_CryptoAgentSettings);
+            }
+         }
       }
    }
 
@@ -557,6 +576,9 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
    std::vector<uint8_t> c_ActiveNodes;
    std::vector<uint32_t> c_NodesUpdateOrder;
    std::vector<C_OscSuSequences::C_DoFlash> c_ApplicationsToWrite;
+
+   // start the crypto agent if configured and not already running; it answers authentication challenges
+   C_OscCryptoAgentAccessUtil::h_HandleCryptoAgentAutostart();
 
    //if file extension is not empty we can assume it's a file and we further need to check whether the extension
    //matches, otherwise mc_SUPFilePath is a directory
@@ -702,7 +724,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
          // initialize sequence
          //boundary: the callee now reports std::error_code
          s32_Return = c_Sequence.Init(c_SystemDefinition, u32_ActiveBusIndex, c_ActiveNodes, mpc_CanDispatcher,
-                                      mpc_EthDispatcher, &this->mc_PemDatabase).value();
+                                      mpc_EthDispatcher).value();
          // tell report methods to not print to console
          c_Sequence.SetQuiet(mq_Quiet);
       }
@@ -1410,6 +1432,9 @@ void C_SydeSup::m_Conclude(C_SupSuSequences & orc_Sequence, const bool & orq_Res
 
    // close CAN
    this->m_CloseCan();
+
+   // stop the crypto agent if configured
+   C_OscCryptoAgentAccessUtil::h_HandleCryptoAgentAutostop();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1725,6 +1750,7 @@ int32_t C_SydeSup::m_LoadConfigFile(void)
          mc_DeviceDefPath = c_Config.c_DeviceDefinitionPath;
          mc_PubKeyPemPath = c_Config.c_PublicKeyPath;
          mc_Password = c_Config.c_Password;
+         mc_CryptoAgentSettings = c_Config.c_CryptoAgentSettings;
       }
    }
 

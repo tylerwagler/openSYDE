@@ -56,7 +56,7 @@ failure is attributable to the port, not pre-existing drift:
 
 ```bash
 git submodule update --init --recursive
-./build.sh -b Debug all        # all eight tools; ~3 min on the 48-core host
+./build.sh -b Debug all        # all nine tools; ~3 min on the 48-core host
 cmake -S libraries/opensyde_core -B build/core -G Ninja \
   -DCMAKE_BUILD_TYPE=Debug -DOPENSYDE_CORE_BUILD_TESTS=ON \
   -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
@@ -215,7 +215,7 @@ all seven other tools build.
    `C_OscBuSequences` IP `Init`, `C_OscDcBasicSequences` IP `Init` +
    `ConfigureDeviceBySerialNumber`.
 
-These are additive; verify each with the core suite, then a full eight-tool build.
+These are additive; verify each with the core suite, then a full nine-tool build.
 
 ## Phase 3 — GUI self-contained fixes + SYDEsup config file
 
@@ -273,6 +273,12 @@ piecemeal. Do them after phases 1–3 land. The fork-specific bridges in `AUDIT.
   assignments: `grep -rn "SecurityPemDatabase" --include=*.cpp --include=*.hpp`.
 
 ### Phase 6 — the daemon tool
+**Status: done on 2026-09-29.** Both Linux and Windows `C_CaServerPlatform` impls were
+ported (not Linux-only as originally scoped), the `pjt` CMake links the single
+consolidated core, the tool is registered in the root CMakeLists and `build.sh`, and the
+pytest harness was adapted to the fork's `result/<build-type>/crypto_agent` layout
+(16/16 pass on the host). The `OPENSYDE_CORE_SKIP_SECURITY_CRYPTO_AGENT_UTILS` group
+already existed from Phase 4. The three-platform CI matrix is the remaining gate.
 - Port `opensyde_crypto_agent/src/**` (Linux impl first; keep the
   `C_CaServer`/`C_CaServerLogic` split so Windows can be added later), its `pjt`
   CMake adapting to link the **single** consolidated core (do not copy the vendored
@@ -298,7 +304,7 @@ piecemeal. Do them after phases 1–3 land. The fork-specific bridges in `AUDIT.
 - **miniz 3.1.0** is a vendored-library replacement; re-run the zip/filer round-trip
   tests.
 - **Core signatures are shared.** Any signature change in core requires a full
-  eight-tool verification, not just the core build. Grep is not a substitute for a
+  nine-tool verification, not just the core build. Grep is not a substitute for a
   build (CLAIM: callers reach migrated classes via base pointers and share method
   names).
 - **CI is the only platform-proof.** Touch platform-conditional code or a core

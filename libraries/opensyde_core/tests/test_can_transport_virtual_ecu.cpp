@@ -38,7 +38,6 @@
 #include "C_OscNode.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
 #include "C_OscProtocolDriverOsyTpCan.hpp"
-#include "C_OscSecurityPemDatabase.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_OscSystemDefinition.hpp"
@@ -684,7 +683,6 @@ protected:
 
    C_OscSystemDefinition mc_SystemDefinition;
    C_OscDeviceDefinition mc_DeviceDefinition;
-   C_OscSecurityPemDatabase mc_PemDatabase;
    C_VirtualEcu mc_Ecu;
    C_VirtualCanBus mc_Bus;
    C_RecordingSequences mc_Sequences;
@@ -694,7 +692,7 @@ protected:
 TEST_F(SuSequencesVirtualEcuCan, WholeUpdate_ActivateReadFlashReset)
 {
    const std::vector<uint8_t> c_ActiveNodes(1U, 1U);
-   ASSERT_EQ(Errc::success, mc_Sequences.Init(mc_SystemDefinition, 0U, c_ActiveNodes, &mc_Bus, nullptr, &mc_PemDatabase));
+   ASSERT_EQ(Errc::success, mc_Sequences.Init(mc_SystemDefinition, 0U, c_ActiveNodes, &mc_Bus, nullptr));
 
    uint32_t u32_SignatureOffset = 0U;
    const std::vector<uint8_t> c_Image = mh_MakeImage("VIRTUAL-ECU", u32_SignatureOffset);

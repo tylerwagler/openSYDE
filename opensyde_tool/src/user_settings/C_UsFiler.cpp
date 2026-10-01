@@ -22,6 +22,7 @@
 #include "C_Uti.hpp"
 #include "C_UsFiler.hpp"
 #include "C_UsFilerHelpers.hpp"
+#include "C_OscUtils.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -483,6 +484,17 @@ void C_UsFiler::mh_SaveEnvironment(QSettings & orc_Ini, const C_UsHandler & orc_
    orc_Ini.beginGroup("Environment");
    orc_Ini.setValue("PathHandlingSelection", orc_UserSettings.GetPathHandlingSelection());
    orc_Ini.setValue("SkipTspImportSelection", orc_UserSettings.GetSkipTspSelection());
+   {
+      const stw::opensyde_core::C_OscCryptoAgentSettings c_CryptoAgent = orc_UserSettings.GetCryptoAgentSettings();
+      const uint8_t (&rau8_Ip)[4] = c_CryptoAgent.au8_CryptoAgentIp;
+      orc_Ini.setValue("CryptoAgentExecutablePath", QString::fromStdString(c_CryptoAgent.c_CryptoAgentExecutablePath));
+      orc_Ini.setValue("CryptoAgentConfigFilePath", QString::fromStdString(c_CryptoAgent.c_CryptoAgentConfigFilePath));
+      orc_Ini.setValue("CryptoAgentIp", QString("%1.%2.%3.%4").arg(rau8_Ip[0]).arg(rau8_Ip[1]).arg(rau8_Ip[2]).arg(
+                          rau8_Ip[3]));
+      orc_Ini.setValue("CryptoAgentPort", c_CryptoAgent.u16_CryptoAgentPort);
+      orc_Ini.setValue("CryptoAgentAutoStart", c_CryptoAgent.q_CryptoAgentAutoStart);
+      orc_Ini.setValue("CryptoAgentAutoStop", c_CryptoAgent.q_CryptoAgentAutoStop);
+   }
    orc_Ini.endGroup();
 }
 
@@ -1284,6 +1296,29 @@ void C_UsFiler::mh_LoadEnvironment(C_UsHandler & orc_UserSettings, QSettings & o
    orc_Ini.beginGroup("Environment");
    orc_UserSettings.SetPathHandlingSelection(orc_Ini.value("PathHandlingSelection", "").toString());
    orc_UserSettings.SetSkipTspSelection(orc_Ini.value("SkipTspImportSelection", "").toString());
+   {
+      //absent or invalid keys keep the defaults
+      stw::opensyde_core::C_OscCryptoAgentSettings c_CryptoAgent;
+      bool q_Ok = false;
+      c_CryptoAgent.c_CryptoAgentExecutablePath =
+         orc_Ini.value("CryptoAgentExecutablePath",
+                       QString::fromStdString(c_CryptoAgent.c_CryptoAgentExecutablePath)).toString().toStdString();
+      c_CryptoAgent.c_CryptoAgentConfigFilePath =
+         orc_Ini.value("CryptoAgentConfigFilePath",
+                       QString::fromStdString(c_CryptoAgent.c_CryptoAgentConfigFilePath)).toString().toStdString();
+      (void)stw::opensyde_core::C_OscUtils::h_StringToIp4(
+         orc_Ini.value("CryptoAgentIp", "127.0.0.1").toString().toStdString(), c_CryptoAgent.au8_CryptoAgentIp);
+      const uint32_t u32_Port = orc_Ini.value("CryptoAgentPort", c_CryptoAgent.u16_CryptoAgentPort).toUInt(&q_Ok);
+      if ((q_Ok == true) && (u32_Port >= 1U) && (u32_Port <= 65535U))
+      {
+         c_CryptoAgent.u16_CryptoAgentPort = static_cast<uint16_t>(u32_Port);
+      }
+      c_CryptoAgent.q_CryptoAgentAutoStart =
+         orc_Ini.value("CryptoAgentAutoStart", c_CryptoAgent.q_CryptoAgentAutoStart).toBool();
+      c_CryptoAgent.q_CryptoAgentAutoStop =
+         orc_Ini.value("CryptoAgentAutoStop", c_CryptoAgent.q_CryptoAgentAutoStop).toBool();
+      orc_UserSettings.SetCryptoAgentSettings(c_CryptoAgent);
+   }
    orc_Ini.endGroup();
 }
 

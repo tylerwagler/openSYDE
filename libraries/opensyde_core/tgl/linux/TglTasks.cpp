@@ -19,6 +19,8 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <vector>
+#include <filesystem>
+#include <system_error>
 
 #include <cstdint>
 #include "stwerrors.hpp"
@@ -143,8 +145,9 @@ static void m_SplitCommandLineParameters(const std::string & orc_Parameters, std
 
    Function shall set execution folder to the folder containing the binary.
    This ensures that relative paths in the executable and its dependencies work as expected.
+   A relative binary path is resolved against the caller's working directory before that change.
 
-   \param[in]  orc_BinaryPath     Path to binary to start
+   \param[in]  orc_BinaryPath     Path to binary to start (absolute or relative to the working directory)
    \param[in]  orc_Parameters     Command line parameters to pass to the binary ("" for no parameters)
 
    \return
@@ -160,15 +163,23 @@ int32_t stw::tgl::TglStartProcessDetached(const std::string & orc_BinaryPath, co
    int32_t as32_Pipes[2] = {-1, -1}; //initialize to invalid file descriptors
    int32_t s32_Retval = C_NOACT;
    bool q_Continue = true;
+   std::error_code c_PathError;
+   // The child changes into the binary's folder before exec, so a relative path would no longer resolve there.
+   const std::string c_BinaryPath = std::filesystem::absolute(orc_BinaryPath, c_PathError).string();
+
+   if (c_PathError)
+   {
+      q_Continue = false;
+   }
 
    // Set up argument vector for execv
    // Path to binary is first argument by convention:
-   c_ArgumentStorage.push_back(orc_BinaryPath);
+   c_ArgumentStorage.push_back(c_BinaryPath);
    // Parse and add additional parameters:
    m_SplitCommandLineParameters(orc_Parameters, c_ArgumentStorage);
 
    // Create a parent/child status channel used to detect exec success.
-   if (pipe(&as32_Pipes[0]) != 0)
+   if ((q_Continue == true) && (pipe(&as32_Pipes[0]) != 0))
    {
       q_Continue = false;
    }
@@ -198,7 +209,7 @@ int32_t stw::tgl::TglStartProcessDetached(const std::string & orc_BinaryPath, co
 
          // Run the executable in its own directory. So relative paths in the executable and its dependencies work as
          // expected.
-         c_BinaryDir = TglExtractFilePath(orc_BinaryPath);
+         c_BinaryDir = TglExtractFilePath(c_BinaryPath);
          if (chdir(c_BinaryDir.c_str()) != 0)
          {
             s32_ExecErrno = errno;
@@ -220,7 +231,7 @@ int32_t stw::tgl::TglStartProcessDetached(const std::string & orc_BinaryPath, co
          c_Argv.push_back(NULL);
 
          // Replace child image with target executable and arguments.
-         (void)execv(orc_BinaryPath.c_str(), &c_Argv[0]);
+         (void)execv(c_BinaryPath.c_str(), &c_Argv[0]);
          s32_ExecErrno = errno;
          // If exec returns, it failed; communicate the error to parent.
          // assign and then ignore the result; nothing serious can happen

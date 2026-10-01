@@ -18,6 +18,8 @@
 #include <QWidget>
 #include <QMimeData>
 #include <vector>
+#include <memory>
+#include <QThread>
 
 #include <cstdint>
 #include "C_SyvManager.hpp"
@@ -115,6 +117,7 @@ private:
    C_NagUseCaseViewWidget * mpc_UseCaseWidget;
    C_NagUseCaseWidget * mpc_ActiveWidget;
    stw::opensyde_gui_logic::C_SyvManager mc_SystemViewManager;
+   std::unique_ptr<QThread> mpc_CryptoAgentStarterThread; ///< autostarts the crypto agent without blocking startup
 
    bool mq_InitialProjectLoaded;
    //Result of the device definition scan done in the constructor, reported once the window is up

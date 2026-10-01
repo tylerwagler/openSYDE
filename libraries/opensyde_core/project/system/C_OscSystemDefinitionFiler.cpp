@@ -103,6 +103,10 @@ std::error_code C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
                                            orc_PathSystemDefinition, oq_UseDeviceDefinitions, opu16_ReadFileVersion,
                                            opc_NodesToLoad, oq_SkipContent, opc_ExpectedNodeName,
                                            opc_ErrorDetailsMissingDevices);
+         if (!c_Retval)
+         {
+            orc_SystemDefinition.SetLastLoadedFilePath(orc_PathSystemDefinition);
+         }
       }
       else
       {

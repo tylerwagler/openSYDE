@@ -149,6 +149,7 @@ void C_UsHandler::SetDefault(void)
    mc_SkipTspImportSelection = "";
 
    this->mc_DeviceRootPaths = QStringList{C_Uti::h_GetAbsolutePathFromExe("../devices")};
+   this->mc_CryptoAgentSettings.SetDefault();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1095,6 +1096,52 @@ void C_UsHandler::SetRecentProjects(const QStringList & orc_New)
 void C_UsHandler::SetDeviceRootPaths(const QStringList & orc_New)
 {
    this->mc_DeviceRootPaths = orc_New;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get crypto agent settings as entered by the user
+
+   \return
+   Crypto agent settings; the executable path may be relative to the openSYDE executable
+*/
+//----------------------------------------------------------------------------------------------------------------------
+stw::opensyde_core::C_OscCryptoAgentSettings C_UsHandler::GetCryptoAgentSettings(void) const
+{
+   return this->mc_CryptoAgentSettings;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get crypto agent settings ready to hand to the crypto agent access
+
+   The executable path is resolved against the folder of the openSYDE executable. The config file path is left as is:
+   the agent runs in its own folder, so a relative config file path is relative to the agent.
+
+   \return
+   Crypto agent settings with an absolute executable path
+*/
+//----------------------------------------------------------------------------------------------------------------------
+stw::opensyde_core::C_OscCryptoAgentSettings C_UsHandler::GetCryptoAgentSettingsForAccess(void) const
+{
+   stw::opensyde_core::C_OscCryptoAgentSettings c_Settings = this->mc_CryptoAgentSettings;
+
+   if (c_Settings.c_CryptoAgentExecutablePath.empty() == false)
+   {
+      c_Settings.c_CryptoAgentExecutablePath =
+         C_Uti::h_ConcatPathIfNecessary(C_Uti::h_GetExePath(),
+                                        QString::fromStdString(c_Settings.c_CryptoAgentExecutablePath)).toStdString();
+   }
+   return c_Settings;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set crypto agent settings
+
+   \param[in]  orc_Settings  New settings, paths as entered by the user
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_UsHandler::SetCryptoAgentSettings(const stw::opensyde_core::C_OscCryptoAgentSettings & orc_Settings)
+{
+   this->mc_CryptoAgentSettings = orc_Settings;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

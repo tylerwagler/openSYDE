@@ -19,7 +19,6 @@
 #include "C_OscSuSequences.hpp"
 #include "C_SyvComDriverThread.hpp"
 #include "C_OscIpDispatcherPlatform.hpp"
-#include "C_OscSecurityPemDatabase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -126,8 +125,6 @@ private:
    std::vector<uint32_t> mc_ReportOsyDeviceInformationNodeIndex;
    std::vector<C_OsyDeviceInformation> mc_ReportOsyDeviceInformation;
 
-   // Security PEM database
-   stw::opensyde_core::C_OscSecurityPemDatabase mc_PemDatabase;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

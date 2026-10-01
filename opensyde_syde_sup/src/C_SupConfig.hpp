@@ -17,6 +17,7 @@
 #include <system_error>
 #include "C_OscConfFileHandler.hpp"
 #include "C_OscErrorCategory.hpp"
+#include "C_OscCryptoAgentSettings.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -49,6 +50,9 @@ public:
    // Secure Update
    std::string c_PublicKeyPath;           ///< path to PEM file with public key
    std::string c_Password;                ///< password for encrypted update package
+
+   // Crypto Agent
+   stw::opensyde_core::C_OscCryptoAgentSettings c_CryptoAgentSettings; ///< crypto agent access settings
 
 protected:
    std::error_code m_LoadSettings(const std::vector<std::string> & orc_SettingsWithoutComments) override;

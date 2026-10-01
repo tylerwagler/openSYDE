@@ -258,10 +258,7 @@ TEST(SecuritySignatures, PemDatabaseIndexesFolderBySerialNumber)
    ASSERT_NE(nullptr, pc_A);
    EXPECT_EQ(c_A.c_Pkcs8Der, pc_A->GetPrivateKey());
    EXPECT_EQ(nullptr, c_Db.GetPemFileBySerialNumber(std::vector<uint8_t>{0x63U})) << "serial 99";
-   EXPECT_EQ(nullptr, c_Db.GetLevel7PemInformation());
-   ASSERT_FALSE(static_cast<bool>(c_Db.AddLevel7PemFile((c_Dir / "b.pem").string())));
-   ASSERT_NE(nullptr, c_Db.GetLevel7PemInformation());
-   EXPECT_EQ(c_B.c_Serial, c_Db.GetLevel7PemInformation()->GetCertificateSerialNumber());
+   ASSERT_NE(nullptr, c_Db.GetPemFileBySerialNumber(c_B.c_Serial));
    EXPECT_EQ(Errc::range, c_Db.ParseFolder((c_Dir / "absent").string()));
    (void)std::filesystem::remove_all(c_Dir);
 }

@@ -12,6 +12,7 @@
 #   syde_coder_c    C code generator
 #   flash_tool      Command-line flash tool
 #   tsp_convert     V2-to-V3 Target Support Package converter
+#   crypto_agent    Crypto agent daemon (RSA-1024 challenge-response service)
 #   all             Build all tools (default)
 #
 # Options:
@@ -100,6 +101,7 @@ TOOL_DEFS=(
     "syde_coder_c|osy_syde_coder_c|no|syde_coder_c/osy_syde_coder_c|connectors/syde_coder_c/osy_syde_coder_c"
     "flash_tool|osy_cmd_line_flash_tool|no|cmd_line_flash_tool/osy_cmd_line_flash_tool|utilities/cmd_line_flash_tool/osy_cmd_line_flash_tool"
     "tsp_convert|osy_tsp_convert|no|tsp_convert/osy_tsp_convert|utilities/tsp_convert/osy_tsp_convert"
+    "crypto_agent|osy_crypto_agent|no|crypto_agent/osy_crypto_agent|connectors/crypto_agent/osy_crypto_agent"
 )
 
 ALL_TOOL_NAMES=()

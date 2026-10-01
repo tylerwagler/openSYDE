@@ -1,5 +1,5 @@
 # Shared scaffolding for every openSYDE tool. Included by each <tool>/pjt/CMakeLists.txt
-# right after project(). Holds only what is genuinely identical across the eight tools;
+# right after project(). Holds only what is genuinely identical across the nine tools;
 # source lists, include directories and OPENSYDE_CORE_SKIP_* selection stay per tool,
 # because those are what make each tool a different tool.
 #

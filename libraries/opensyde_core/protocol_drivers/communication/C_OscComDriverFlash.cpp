@@ -70,8 +70,6 @@ C_OscComDriverFlash::~C_OscComDriverFlash(void)
    \param[in]  orc_ActiveNodes         Flags for all available nodes in the system
    \param[in]  opc_CanDispatcher       Pointer to concrete CAN dispatcher
    \param[in]  opc_IpDispatcher        Pointer to concrete IP dispatcher
-   \param[in]  opc_SecurityPemDb       Pointer to PEM database (optional)
-                                       Needed if nodes with enabled security are used in the system
 
    \return
    Errc::success     Operation success
@@ -89,11 +87,10 @@ std::error_code C_OscComDriverFlash::Init(const C_OscSystemDefinition & orc_Syst
                                           const uint32_t ou32_ActiveBusIndex,
                                           const std::vector<uint8_t> & orc_ActiveNodes,
                                           C_CanDispatcher * const opc_CanDispatcher,
-                                          C_OscIpDispatcher * const opc_IpDispatcher,
-                                          C_OscSecurityPemDatabase * const opc_SecurityPemDb)
+                                          C_OscIpDispatcher * const opc_IpDispatcher)
 {
    std::error_code c_Return = C_OscComDriverProtocol::Init(orc_SystemDefinition, ou32_ActiveBusIndex, orc_ActiveNodes,
-                                                     opc_CanDispatcher, opc_IpDispatcher, opc_SecurityPemDb);
+                                                     opc_CanDispatcher, opc_IpDispatcher);
 
    if (c_Return == Errc::success)
    {
@@ -1429,8 +1426,7 @@ std::error_code C_OscComDriverFlash::SendOsyEcuReset(const C_OscProtocolDriverOs
 
    \return
    Errc::success     Session and security access set successfully
-   Errc::config      Init function was not called or not successful or protocol was not initialized properly or
-               PEM database was needed but not set.
+   Errc::config      Init function was not called or not successful or protocol was not initialized properly
    Errc::noact       Nodes has no openSYDE protocol
    Errc::warn        Error response received
    Errc::timeout     Expected response not received within timeout
@@ -1465,8 +1461,7 @@ std::error_code C_OscComDriverFlash::SendOsySetPreProgrammingMode(C_OscProtocolD
    \return
    Errc::success     Session and security access set successfully
    Errc::range       openSYDE protocol not found
-   Errc::config      Init function was not called or not successful or protocol was not initialized properly or
-               PEM database was needed but not set.
+   Errc::config      Init function was not called or not successful or protocol was not initialized properly
    Errc::noact       Nodes has no openSYDE protocol
    Errc::warn        Error response received
    Errc::timeout     Expected response not received within timeout
@@ -1531,8 +1526,7 @@ std::error_code C_OscComDriverFlash::SendOsySetPreProgrammingMode(
    \return
    Errc::success     Session and security access set successfully
    Errc::range       openSYDE protocol not found
-   Errc::config      Init function was not called or not successful or protocol was not initialized properly or
-               PEM database was needed but not set.
+   Errc::config      Init function was not called or not successful or protocol was not initialized properly
    Errc::noact       Nodes has no openSYDE protocol
    Errc::warn        Error response received
    Errc::timeout     Expected response not received within timeout
@@ -1580,8 +1574,7 @@ std::error_code C_OscComDriverFlash::SendOsySetProgrammingMode(const C_OscProtoc
    \return
    Errc::success     Session and security access set successfully
    Errc::range       openSYDE protocol not found
-   Errc::config      Init function was not called or not successful or protocol was not initialized properly or
-               PEM database was needed but not set.
+   Errc::config      Init function was not called or not successful or protocol was not initialized properly
    Errc::noact       Nodes has no openSYDE protocol
    Errc::warn        Error response received
    Errc::timeout     Expected response not received within timeout

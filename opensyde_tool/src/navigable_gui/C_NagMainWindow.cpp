@@ -42,6 +42,7 @@
 #include "C_Uti.hpp"
 #include "C_NagToolTip.hpp"
 #include "C_PopUtil.hpp"
+#include "C_OscCryptoAgentAccessUtil.hpp"
 #include "C_TblTreDataElementModel.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -182,6 +183,11 @@ C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
    // Performance time measurement
    C_OscLoggingHandler::h_SetMeasurePerformanceActive(C_UsHandler::h_GetInstance()->GetPerformanceActive());
 
+   // Crypto agent: pinging it and possibly starting it takes seconds, so do it in the background
+   C_OscCryptoAgentAccessUtil::h_SetCryptoAgentSettings(C_UsHandler::h_GetInstance()->GetCryptoAgentSettingsForAccess());
+   this->mpc_CryptoAgentStarterThread.reset(QThread::create(&C_OscCryptoAgentAccessUtil::h_HandleCryptoAgentAutostart));
+   this->mpc_CryptoAgentStarterThread->start();
+
    //Drag & drop of *.syde files
    this->setAcceptDrops(true);
 
@@ -221,6 +227,9 @@ C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
 //lint -e{1579}  no memory leak because of the parent all elements and the Qt memory management
 C_NagMainWindow::~C_NagMainWindow()
 {
+   // a QThread must not be destroyed while running
+   (void)this->mpc_CryptoAgentStarterThread->wait();
+
    this->m_SaveUserSettings();
 
    // deactivate use case view widget
@@ -536,6 +545,9 @@ void C_NagMainWindow::closeEvent(QCloseEvent * const opc_Event)
       C_UsHandler::h_GetInstance()->SetProjLastMode(this->ms32_Mode);
       this->m_SaveUserSettings();
       C_UsHandler::h_GetInstance()->Save();
+      // Crypto agent: let a still running autostart finish, so the stop does not race it
+      (void)this->mpc_CryptoAgentStarterThread->wait(QDeadlineTimer(10000));
+      C_OscCryptoAgentAccessUtil::h_HandleCryptoAgentAutostop();
       QMainWindow::closeEvent(opc_Event);
    }
 }

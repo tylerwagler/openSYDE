@@ -27,7 +27,6 @@
 #include "C_OscProtocolDriverOsyTpIp.hpp"
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscComDriverBase.hpp"
-#include "C_OscSecurityPemDatabase.hpp"
 #include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -49,8 +48,7 @@ public:
    [[nodiscard]] virtual std::error_code Init(const C_OscSystemDefinition & orc_SystemDefinition,
                                 const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes,
                                 stw::can::C_CanDispatcher * const opc_CanDispatcher,
-                                C_OscIpDispatcher * const opc_IpDispatcher,
-                                C_OscSecurityPemDatabase * const opc_SecurityPemDb);
+                                C_OscIpDispatcher * const opc_IpDispatcher);
    [[nodiscard]] std::error_code SendTesterPresent(const std::set<uint32_t> * const opc_SkipNodes = nullptr);
    [[nodiscard]] std::error_code SendTesterPresent(const std::vector<uint32_t> & orc_ActiveNodes) const;
    [[nodiscard]] std::error_code SendTesterPresent(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
@@ -73,7 +71,8 @@ public:
    bool IsInitialized(void) const;
    bool IsTrafficEncryptionActive(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
 
-   [[nodiscard]] std::error_code ReConnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
+   [[nodiscard]] std::error_code ReConnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId,
+                                               uint32_t * const opu32_ErrorActiveNodeIndex = nullptr) const;
    [[nodiscard]] std::error_code DisconnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
    void DisconnectNodes(void) const;
 
@@ -141,6 +140,12 @@ protected:
                                            const uint8_t ou8_SecurityLevel, uint8_t * const opu8_NrCode,
                                            bool * const opq_SecureAuthenticationActive = nullptr,
                                            bool * const opq_TrafficEncryptionActive = nullptr) const;
+   [[nodiscard]] virtual std::error_code m_HandleCryptoAgentCommunication(
+      const std::vector<uint8_t> & orc_SerialNumber, const uint8_t ou8_SecurityLevel,
+      const std::vector<uint8_t> & orc_ServerChallengeValue, std::vector<uint8_t> & orc_RsaSignature,
+      const std::string & orc_LastLoadedSystemDefinitionFilePath, const C_OscNode & orc_Node,
+      const uint8_t ou8_NodeIdentifier, const std::string & orc_SerialNumberExtended,
+      const uint8_t ou8_SerialNumberManufacturerFormat) const;
    [[nodiscard]] std::error_code m_SetNodesSecurityAccess(const uint8_t ou8_SecurityLevel,
                                             std::set<uint32_t> & orc_ErrorActiveNodes) const;
    [[nodiscard]] std::error_code m_SetNodesSecurityAccess(const std::vector<uint32_t> & orc_ActiveNodes,
@@ -216,8 +221,6 @@ private:
 
    std::vector<uint8_t> mc_ActiveNodesSystem; ///< List of flags for all nodes which are active in the system
    // definition set by Init call
-
-   C_OscSecurityPemDatabase * mpc_SecurityPemDb;
 
    [[nodiscard]] std::error_code m_InitRoutesAndActiveNodes(void);
    [[nodiscard]] std::error_code m_InitServerIds(void);

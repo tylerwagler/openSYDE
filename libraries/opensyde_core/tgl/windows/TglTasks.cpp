@@ -84,7 +84,10 @@ void C_TglCriticalSection::Release(void)
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Start process and return after start
 
-   \param[in]  orc_BinaryPath    Path to binary to start
+   The process starts in the folder containing the binary, so relative paths in the executable and its
+   dependencies work as expected.
+
+   \param[in]  orc_BinaryPath    Path to binary to start (absolute or relative to the working directory)
    \param[in]  orc_Parameters    Command line parameters to pass to the binary ("" for no parameters)
 
    \return
@@ -119,8 +122,10 @@ int32_t stw::tgl::TglStartProcessDetached(const std::string & orc_BinaryPath, co
          c_Path = ".\\";
       }
 
-      pcn_CommandLine = new char[orc_Parameters.size() + 1U];
-      (void)strncpy(pcn_CommandLine, orc_Parameters.c_str(), orc_Parameters.size() + 1U);
+      // the command line includes the program name: the C runtime of the child takes its first token as argv[0]
+      const std::string c_CommandLine = "\"" + orc_BinaryPath + "\" " + orc_Parameters;
+      pcn_CommandLine = new char[c_CommandLine.size() + 1U];
+      (void)strncpy(pcn_CommandLine, c_CommandLine.c_str(), c_CommandLine.size() + 1U);
       {
          const int32_t s32_Return = CreateProcessA(
             orc_BinaryPath.c_str(), pcn_CommandLine, NULL, NULL, FALSE, x_START_MODE,
@@ -132,6 +137,12 @@ int32_t stw::tgl::TglStartProcessDetached(const std::string & orc_BinaryPath, co
          if (s32_Return == 0)
          {
             s32_Retval = C_NOACT;
+         }
+         else
+         {
+            //detached: we do not track the process
+            (void)CloseHandle(c_ProcessInfo.hProcess);
+            (void)CloseHandle(c_ProcessInfo.hThread);
          }
       }
    }
