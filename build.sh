@@ -120,6 +120,18 @@ DESKTOP_ENTRIES=(
     "sydeflash|SYDEflash|SYDEflash|opensyde_syde_flash/src/syde_flash/images/SYDEflash_logo.png|Firmware flashing tool"
 )
 
+# --- Extra files deployed alongside a tool's binary ---
+# Each: tool_name|source_path|dest_path
+#   source_path: relative to REPO_ROOT
+#   dest_path:   relative to INSTALL_DIR
+# Used for runtime assets a tool needs beyond its binary. The crypto agent ships its
+# default config and the certificates-folder readme; the PEM files themselves are NOT
+# shipped (they are per-deployment secrets the operator drops into <install>/tool/certificates).
+DEPLOY_EXTRA_FILES=(
+    "crypto_agent|opensyde_crypto_agent/config/osy_crypto_agent.conf|connectors/crypto_agent/osy_crypto_agent.conf"
+    "crypto_agent|opensyde_crypto_agent/config/tool_certificates_readme.txt|tool/certificates/readme.txt"
+)
+
 # Expand "all"
 RESOLVED_TOOLS=()
 for t in "${TOOLS[@]}"; do
@@ -294,6 +306,23 @@ build_tool() {
         mkdir -p "$(dirname "$dst")"
         cp "$src" "$dst"
         deploy_desktop_entry "$tool_name" "$dst"
+
+        # Deploy any extra files declared for this tool (e.g. the crypto agent's
+        # default config and the certificates-folder readme).
+        for extra in "${DEPLOY_EXTRA_FILES[@]}"; do
+            IFS='|' read -r extra_tool extra_src extra_dst <<< "$extra"
+            if [[ "$extra_tool" == "$tool_name" ]]; then
+                local extra_src_path="$REPO_ROOT/$extra_src"
+                local extra_dst_path="$INSTALL_DIR/$extra_dst"
+                if [[ ! -f "$extra_src_path" ]]; then
+                    write_error "Extra deploy source not found: $extra_src_path"
+                    return 1
+                fi
+                write_step "Deploying $extra_dst"
+                mkdir -p "$(dirname "$extra_dst_path")"
+                cp "$extra_src_path" "$extra_dst_path"
+            fi
+        done
     fi
 
     write_step "$tool_name built successfully"
