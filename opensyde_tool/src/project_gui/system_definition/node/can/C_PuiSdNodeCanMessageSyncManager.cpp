@@ -2570,10 +2570,9 @@ void C_PuiSdNodeCanMessageSyncManager::mh_Init(const uint32_t & oru32_NodeIndex,
             {
                const C_OscCanMessageContainer & rc_MessageContainer =
                   pc_Protcol->c_ComMessages[oru32_InterfaceIndex];
-               const C_OscNodeComInterfaceSettings & rc_Interface =
-                  pc_Node->c_Properties.c_ComInterfaces[oru32_InterfaceIndex];
-               if ((rc_MessageContainer.q_IsComProtocolUsedByInterface == false) ||
-                   (rc_Interface.GetBusConnected() == false))
+               //Always list the node's messages in the node view, even when the interface is connected
+               //to a bus. The bus view reads the same underlying node data, so the two stay in sync;
+               //the old guard hid them here purely to avoid showing the same messages twice.
                {
                   C_OscCanMessageIdentificationIndices c_MessageId(oru32_NodeIndex, ore_ComProtocol,
                                                                    oru32_InterfaceIndex, pc_Protcol->u32_DataPoolIndex,

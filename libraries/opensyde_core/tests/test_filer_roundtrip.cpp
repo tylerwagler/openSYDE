@@ -492,6 +492,41 @@ TEST(FilerRoundTrip, DeviceDefinition)
    //connected (mh_HandleConnectedInterfaces); saved flags only matter with two or more sub-devices
    c_Sub.c_ConnectedInterfaces = {{"can1", true}, {"can2", true}, {"can3", true}, {"eth1", true}};
    c_Source.c_SubDevices.push_back(c_Sub);
+
+   //Embedded COM messages (device.syd v0x0003): the device ships its CAN messages.
+   {
+      C_OscNodeDataPool c_ComPool;
+      c_ComPool.c_Lists.clear();
+      c_ComPool.e_Type = C_OscNodeDataPool::eCOM;
+      c_ComPool.c_Name = "ComPool";
+      for (const char * const pcn_List : {"CAN1_TX", "CAN1_RX"})
+      {
+         C_OscNodeDataPoolList c_List;
+         c_List.c_Elements.clear();
+         c_List.c_Name = pcn_List;
+         c_ComPool.c_Lists.push_back(c_List);
+      }
+      C_OscNodeDataPoolListElement c_Mux;
+      c_Mux.c_Name = "EngineStatusMux";
+      c_Mux.c_MinValue.SetType(C_OscNodeDataPoolContent::eUINT8);
+      c_Mux.c_MaxValue.SetType(C_OscNodeDataPoolContent::eUINT8);
+      c_Mux.c_MaxValue.SetValueU8(15U);
+      c_Mux.c_Value.SetType(C_OscNodeDataPoolContent::eUINT8);
+      c_ComPool.c_Lists[0].c_Elements.push_back(c_Mux);
+      C_OscNodeDataPoolListElement c_Rpm;
+      c_Rpm.c_Name = "EngineSpeed";
+      c_Rpm.c_Unit = "rpm";
+      c_Rpm.c_MinValue.SetType(C_OscNodeDataPoolContent::eUINT16);
+      c_Rpm.c_MaxValue.SetType(C_OscNodeDataPoolContent::eUINT16);
+      c_Rpm.c_MaxValue.SetValueU16(8000U);
+      c_Rpm.c_Value.SetType(C_OscNodeDataPoolContent::eUINT16);
+      c_ComPool.c_Lists[0].c_Elements.push_back(c_Rpm);
+      c_Source.c_ComDataPools.push_back(c_ComPool);
+
+      C_OscCanProtocol c_Proto = h_MakeProtocol(C_OscCanProtocol::eJ1939);
+      c_Proto.u32_DataPoolIndex = 0U;
+      c_Source.c_ComProtocols.push_back(c_Proto);
+   }
    ASSERT_FALSE(static_cast<bool>(C_OscDeviceDefinitionFiler::h_Save(c_Source, c_Path.string())));
 
    C_OscDeviceDefinition c_Target;
@@ -530,11 +565,116 @@ TEST(FilerRoundTrip, DeviceDefinition)
    EXPECT_EQ(65536U, rc_Sub.u32_UserEepromSizeBytes);
    EXPECT_EQ(c_Sub.c_ConnectedInterfaces, rc_Sub.c_ConnectedInterfaces);
 
+   //embedded COM messages survived the round trip
+   ASSERT_EQ(1U, c_Target.c_ComDataPools.size());
+   ASSERT_EQ(1U, c_Target.c_ComProtocols.size());
+   const C_OscNodeDataPool & rc_Pool = c_Target.c_ComDataPools[0];
+   EXPECT_EQ(C_OscNodeDataPool::eCOM, rc_Pool.e_Type);
+   ASSERT_EQ(2U, rc_Pool.c_Lists.size());
+   ASSERT_EQ(2U, rc_Pool.c_Lists[0].c_Elements.size());
+   EXPECT_EQ("EngineStatusMux", rc_Pool.c_Lists[0].c_Elements[0].c_Name);
+   EXPECT_EQ("EngineSpeed", rc_Pool.c_Lists[0].c_Elements[1].c_Name);
+   const C_OscCanProtocol & rc_Proto = c_Target.c_ComProtocols[0];
+   EXPECT_EQ(C_OscCanProtocol::eJ1939, rc_Proto.e_Type);
+   ASSERT_EQ(1U, rc_Proto.c_ComMessages.size());
+   ASSERT_EQ(1U, rc_Proto.c_ComMessages[0].c_TxMessages.size());
+   EXPECT_EQ("EngineStatus", rc_Proto.c_ComMessages[0].c_TxMessages[0].c_Name);
+   EXPECT_EQ(0x18FEF100U, rc_Proto.c_ComMessages[0].c_TxMessages[0].u32_CanId);
+   ASSERT_EQ(2U, rc_Proto.c_ComMessages[0].c_TxMessages[0].c_Signals.size());
+   EXPECT_EQ(0U, rc_Proto.c_ComMessages[0].c_TxMessages[0].c_Signals[0].u32_ComDataElementIndex);
+   EXPECT_EQ(1U, rc_Proto.c_ComMessages[0].c_TxMessages[0].c_Signals[1].u32_ComDataElementIndex);
+   EXPECT_EQ(190U, rc_Proto.c_ComMessages[0].c_TxMessages[0].c_Signals[1].u32_J1939SuspectParameterNumber);
+
    (void)std::filesystem::remove(c_Path);
    for (const char * const pcn_Name : {"osy_rt_dev_image.png", "osy_rt_dev_icon.svg", "osy_rt_dev_logo.png"})
    {
       (void)std::filesystem::remove(c_Dir / pcn_Name);
    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   A device definition carrying messages seeds a node's COM datapools + protocols
+
+   AddComDataFromDeviceDefinition appends the device's COM datapools and remaps each protocol's
+   u32_DataPoolIndex from the device-relative index to the node-relative one.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(FilerRoundTrip, DeviceDefinitionSeedsNodeCom)
+{
+   const C_OscDeviceDefinition c_Device = h_MakeDeviceDefinition();
+
+   //fresh node: the COM pool is the only datapool, protocol index stays 0
+   C_OscNode c_Node;
+   c_Node.Initialize();
+   c_Node.AddComDataFromDeviceDefinition(c_Device);
+   ASSERT_EQ(1U, c_Node.c_DataPools.size());
+   ASSERT_EQ(1U, c_Node.c_ComProtocols.size());
+   EXPECT_EQ(C_OscNodeDataPool::eCOM, c_Node.c_DataPools[0].e_Type);
+   EXPECT_EQ(C_OscCanProtocol::eJ1939, c_Node.c_ComProtocols[0].e_Type);
+   EXPECT_EQ(0U, c_Node.c_ComProtocols[0].u32_DataPoolIndex);
+   ASSERT_EQ(1U, c_Node.c_ComProtocols[0].c_ComMessages.size());
+   ASSERT_EQ(1U, c_Node.c_ComProtocols[0].c_ComMessages[0].c_TxMessages.size());
+   EXPECT_EQ("EngineStatus", c_Node.c_ComProtocols[0].c_ComMessages[0].c_TxMessages[0].c_Name);
+
+   //node with existing DIAG/NVM pools: COM pool lands after them, protocol index rebased
+   C_OscNode c_Node2;
+   c_Node2.Initialize();
+   c_Node2.c_DataPools.push_back(h_MakeDataPool(C_OscNodeDataPool::eDIAG));
+   c_Node2.c_DataPools.push_back(h_MakeDataPool(C_OscNodeDataPool::eNVM));
+   c_Node2.AddComDataFromDeviceDefinition(c_Device);
+   ASSERT_EQ(3U, c_Node2.c_DataPools.size());
+   EXPECT_EQ(C_OscNodeDataPool::eCOM, c_Node2.c_DataPools[2].e_Type);
+   ASSERT_EQ(1U, c_Node2.c_ComProtocols.size());
+   EXPECT_EQ(2U, c_Node2.c_ComProtocols[0].u32_DataPoolIndex);
+
+   //a device with no messages is a no-op
+   C_OscDeviceDefinition c_NoCom;
+   c_NoCom.c_DeviceName = "NoMsg";
+   C_OscNode c_Node3;
+   c_Node3.Initialize();
+   c_Node3.AddComDataFromDeviceDefinition(c_NoCom);
+   EXPECT_EQ(0U, c_Node3.c_DataPools.size());
+   EXPECT_EQ(0U, c_Node3.c_ComProtocols.size());
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   A v0x0002 device.syd (no embedded messages) still loads
+
+   Backward compatibility: existing device definitions written before the COM-message extension
+   must load unchanged, with empty message vectors.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(FilerRoundTrip, DeviceDefinitionV2LoadsWithoutCom)
+{
+   const std::filesystem::path c_Path = std::filesystem::temp_directory_path() / "osy_rt_device_v2.syde_devdef";
+   {
+      std::ofstream c_Out(c_Path);
+      c_Out << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+               "<opensyde-device-definition>\n"
+               "  <file-version>0x0002</file-version>\n"
+               "  <global>\n"
+               "    <device-name>RT-Device 1</device-name>\n"
+               "    <device-description>d</device-description>\n"
+               "    <image>NoImage</image>\n"
+               "    <bus-systems-available can=\"1\" ethernet=\"0\"/>\n"
+               "    <can-bitrates-support>\n"
+               "      <can-bitrate value=\"500\"/>\n"
+               "    </can-bitrates-support>\n"
+               "  </global>\n"
+               "  <sub-devices>\n"
+               "    <sub-device>\n"
+               "      <sub-device-name>RT-Device 1</sub-device-name>\n"
+               "      <programming-properties is-programmable=\"false\"/>\n"
+               "    </sub-device>\n"
+               "  </sub-devices>\n"
+               "</opensyde-device-definition>\n";
+   }
+   C_OscDeviceDefinition c_Device;
+   ASSERT_FALSE(static_cast<bool>(C_OscDeviceDefinitionFiler::h_Load(c_Device, c_Path.string())));
+   EXPECT_EQ("RT-Device 1", c_Device.c_DeviceName);
+   EXPECT_EQ(0U, c_Device.c_ComDataPools.size());
+   EXPECT_EQ(0U, c_Device.c_ComProtocols.size());
+   (void)std::filesystem::remove(c_Path);
 }
 
 

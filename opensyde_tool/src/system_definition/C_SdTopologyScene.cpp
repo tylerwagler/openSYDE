@@ -3850,6 +3850,8 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode & orc_OscNode, const QString & 
          }
          //---Init COM IF Settings (BEFORE initial datablock)
          this->m_InitNodeComIfSettings(orc_OscNode, orc_NodeType, orc_MainDevice);
+         //---Seed the node with the device's embedded CAN messages (if any)
+         orc_OscNode.AddComDataFromDeviceDefinition(*(orc_OscNode.pc_DeviceDefinition));
       }
    }
 }

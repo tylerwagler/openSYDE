@@ -27,6 +27,7 @@
 #include "C_OscSystemBus.hpp"
 #include "C_OscHalcDef.hpp"
 #include "C_OscHalcConfig.hpp"
+#include "C_OscDeviceDefinition.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -329,6 +330,59 @@ inline C_OscNode h_MakeNode(const std::string & orc_Name, const uint8_t ou8_Node
       c_Node.c_ComProtocols.push_back(c_Proto);
    }
    return c_Node;
+}
+
+inline C_OscDeviceDefinition h_MakeDeviceDefinition(void)
+{
+   C_OscDeviceDefinition c_Device;
+   c_Device.c_DeviceName = "RT-Device 1";
+   c_Device.c_DeviceNameAlias = "rtdev";
+   c_Device.c_DeviceDescription = "a device with <markup> & symbols";
+   c_Device.u8_NumCanBusses = 1U;
+   c_Device.u8_NumEthernetBusses = 0U;
+   c_Device.c_SupportedBitrates = {125U, 250U, 500U, 1000U};
+
+   C_OscSubDeviceDefinition c_Sub;
+   c_Sub.c_SubDeviceName = "RT-Device 1";
+   c_Device.c_SubDevices.push_back(c_Sub);
+
+   // COM datapool + J1939 protocol, mirroring h_MakeNode's eCOM block (the protocol filer
+   // resolves its data-pool index against the datapool list).
+   C_OscNodeDataPool c_ComPool;
+   c_ComPool.c_Lists.clear();
+   c_ComPool.e_Type = C_OscNodeDataPool::eCOM;
+   c_ComPool.c_Name = "ComPool";
+   c_ComPool.c_Comment = "protocol datapool";
+   for (const char * const pcn_List : {"CAN1_TX", "CAN1_RX"})
+   {
+      C_OscNodeDataPoolList c_List;
+      c_List.c_Elements.clear();
+      c_List.c_Name = pcn_List;
+      c_ComPool.c_Lists.push_back(c_List);
+   }
+   {
+      C_OscNodeDataPoolListElement c_Mux;
+      c_Mux.c_Name = "EngineStatusMux";
+      c_Mux.c_MinValue.SetType(C_OscNodeDataPoolContent::eUINT8);
+      c_Mux.c_MaxValue.SetType(C_OscNodeDataPoolContent::eUINT8);
+      c_Mux.c_MaxValue.SetValueU8(15U);
+      c_Mux.c_Value.SetType(C_OscNodeDataPoolContent::eUINT8);
+      c_ComPool.c_Lists[0].c_Elements.push_back(c_Mux);
+      C_OscNodeDataPoolListElement c_Rpm;
+      c_Rpm.c_Name = "EngineSpeed";
+      c_Rpm.c_Unit = "rpm";
+      c_Rpm.c_MinValue.SetType(C_OscNodeDataPoolContent::eUINT16);
+      c_Rpm.c_MaxValue.SetType(C_OscNodeDataPoolContent::eUINT16);
+      c_Rpm.c_MaxValue.SetValueU16(8000U);
+      c_Rpm.c_Value.SetType(C_OscNodeDataPoolContent::eUINT16);
+      c_ComPool.c_Lists[0].c_Elements.push_back(c_Rpm);
+   }
+   c_Device.c_ComDataPools.push_back(c_ComPool);
+
+   C_OscCanProtocol c_Proto = h_MakeProtocol(C_OscCanProtocol::eJ1939);
+   c_Proto.u32_DataPoolIndex = 0U;
+   c_Device.c_ComProtocols.push_back(c_Proto);
+   return c_Device;
 }
 
 inline C_OscHalcDefElement h_MakeHalcU16(const std::string & orc_Id, const uint16_t ou16_Initial, const uint16_t ou16_Min,

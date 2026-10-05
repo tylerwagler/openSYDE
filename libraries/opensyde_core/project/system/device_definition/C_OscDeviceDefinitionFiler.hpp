@@ -31,6 +31,7 @@ class C_OscDeviceDefinitionFiler
 {
 private:
    static const uint16_t mhu16_FILE_VERSION; ///< file version this class can read / write
+   static const uint16_t mhu16_FILE_VERSION_NO_COM; ///< older version without embedded COM messages (still read)
 
    static void mh_ParseOpenSydeAvailability(const C_OscXmlParser & orc_Parser, bool & orq_ProtocolSupportedCan,
                                             bool & orq_ProtocolSupportedEthernet);
@@ -39,7 +40,7 @@ private:
                                                     uint32_t & oru32_TransferDataTimeout, bool & orq_IsFileBased);
 
    [[nodiscard]] static std::error_code mh_Load(C_OscDeviceDefinition & orc_DeviceDefinition, C_OscXmlParser & orc_Parser,
-                                  const std::string & orc_Path);
+                                  const std::string & orc_Path, const bool oq_LoadCom = false);
    [[nodiscard]] static std::error_code mh_LoadSubDevice(C_OscSubDeviceDefinition & orc_SubDeviceDefinition,
                                            C_OscXmlParser & orc_Parser,
                                            const C_OscDeviceDefinition & orc_DeviceDefinition,

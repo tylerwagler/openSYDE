@@ -926,9 +926,11 @@ void C_SdBueComIfDescriptionWidget::m_Reload(void)
    const C_OscCanProtocol::E_Type e_Protocol = this->GetActProtocol();
 
    if ((this->mq_ModeSingleNode == false) ||
-       ((this->mc_ProtocolUsedOnBus[static_cast<uint32_t>(e_Protocol)][this->mu32_InterfaceIndex] == false) &&
-        (e_Protocol != C_OscCanProtocol::eCAN_OPEN)))
+       (e_Protocol != C_OscCanProtocol::eCAN_OPEN))
    {
+      //Bus mode always shows messages; in node mode show the node's messages even when the
+      //interface is connected to a bus (the bus view reads the same node data, so they stay in
+      //sync). CANopen keeps its special handling below (messages are managed by the manager).
       this->mpc_Ui->pc_LinkToBusWidget->setVisible(false);
       this->mpc_Ui->pc_CanOpenNoUsageWidget->setVisible(false);
       this->mpc_Ui->pc_MessageSelectorWidget->setVisible(true);

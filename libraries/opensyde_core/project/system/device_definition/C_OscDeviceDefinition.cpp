@@ -71,6 +71,8 @@ void C_OscDeviceDefinition::Clear(void)
    c_ToolboxIcon = "";
 
    c_SubDevices.clear();
+   c_ComProtocols.clear();
+   c_ComDataPools.clear();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

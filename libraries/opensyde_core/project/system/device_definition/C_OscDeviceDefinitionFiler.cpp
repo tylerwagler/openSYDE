@@ -24,6 +24,8 @@
 #include "C_OscDeviceDefinitionFiler.hpp"
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_OscNodeCommFiler.hpp"
+#include "C_OscNodeDataPoolFiler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -34,7 +36,9 @@ using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
-const uint16_t C_OscDeviceDefinitionFiler::mhu16_FILE_VERSION = 0x0002U;
+const uint16_t C_OscDeviceDefinitionFiler::mhu16_FILE_VERSION = 0x0003U;
+///< File version 0x0002 (no messages) is still read for backward compatibility.
+const uint16_t C_OscDeviceDefinitionFiler::mhu16_FILE_VERSION_NO_COM = 0x0002U;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -121,7 +125,8 @@ void C_OscDeviceDefinitionFiler::mh_ParseOpenSydeFlashloaderParameter(const C_Os
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDefinition,
-                                                    C_OscXmlParser & orc_Parser, const std::string & orc_Path)
+                                                    C_OscXmlParser & orc_Parser, const std::string & orc_Path,
+                                                    const bool oq_LoadCom)
 {
    std::error_code c_Return = Errc::success;
 
@@ -355,6 +360,54 @@ std::error_code C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_
                c_Text = orc_Parser.SelectNodeNext("sub-device");
             }
             while ((c_Text == "sub-device") && (!c_Return));
+         }
+      }
+   }
+
+   //Embedded COM messages (only present in file version 0x0003): load the data pools first,
+   //then the protocols (the protocol loader resolves its data-pool index against them).
+   if ((!c_Return) && (oq_LoadCom == true))
+   {
+      //Climb to the root (the sub-device loop leaves the parser at the last sub-device).
+      c_Text = orc_Parser.SelectRoot();
+      tgl_assert(c_Text == "opensyde-device-definition");
+      if (orc_Parser.SelectNodeChild("data-pools") == "data-pools")
+      {
+         std::string c_Cur;
+         c_Cur = orc_Parser.SelectNodeChild("data-pool");
+         if (c_Cur == "data-pool")
+         {
+            do
+            {
+               C_OscNodeDataPool c_DataPool;
+               c_Return = C_OscNodeDataPoolFiler::h_LoadDataPool(c_DataPool, orc_Parser);
+               orc_DeviceDefinition.c_ComDataPools.push_back(c_DataPool);
+               c_Cur = orc_Parser.SelectNodeNext("data-pool");
+            }
+            while ((c_Cur == "data-pool") && (!c_Return));
+         }
+         (void)orc_Parser.SelectNodeParent();
+      }
+      if (!c_Return)
+      {
+         (void)orc_Parser.SelectRoot(); // data-pools block left the parser at data-pools; com-protocols is a sibling
+         if (orc_Parser.SelectNodeChild("com-protocols") == "com-protocols")
+         {
+            std::string c_Cur;
+            c_Cur = orc_Parser.SelectNodeChild("com-protocol");
+            if (c_Cur == "com-protocol")
+            {
+               do
+               {
+                  C_OscCanProtocol c_Protocol;
+                  c_Return = C_OscNodeCommFiler::h_LoadNodeComProtocol(c_Protocol, orc_Parser,
+                                                                       orc_DeviceDefinition.c_ComDataPools);
+                  orc_DeviceDefinition.c_ComProtocols.push_back(c_Protocol);
+                  c_Cur = orc_Parser.SelectNodeNext("com-protocol");
+               }
+               while ((c_Cur == "com-protocol") && (!c_Return));
+            }
+            (void)orc_Parser.SelectNodeParent();
          }
       }
    }
@@ -1286,9 +1339,10 @@ std::error_code C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_D
                   //Return
                   c_Xml.SelectNodeParent();
                   //Check file version
-                  if (u16_FileVersion == mhu16_FILE_VERSION)
+                  if ((u16_FileVersion == mhu16_FILE_VERSION) || (u16_FileVersion == mhu16_FILE_VERSION_NO_COM))
                   {
-                     c_Return = C_OscDeviceDefinitionFiler::mh_Load(orc_DeviceDefinition, c_Xml, orc_Path);
+                     c_Return = C_OscDeviceDefinitionFiler::mh_Load(orc_DeviceDefinition, c_Xml, orc_Path,
+                                                                    (u16_FileVersion == mhu16_FILE_VERSION));
                   }
                   else
                   {
@@ -1394,6 +1448,38 @@ std::error_code C_OscDeviceDefinitionFiler::h_Save(const C_OscDeviceDefinition &
          C_OscDeviceDefinitionFiler::mh_SaveSubDevice(rc_CurSubDevice, c_Xml);
       }
       c_Xml.SelectNodeParent();
+
+      //Embedded COM messages (file version 0x0003): data pools first, then the protocols
+      //(the protocol's data-pool-name attribute resolves against the data pools).
+      if ((orc_DeviceDefinition.c_ComProtocols.empty() == false) ||
+          (orc_DeviceDefinition.c_ComDataPools.empty() == false))
+      {
+         c_Xml.SelectRoot(); // back to opensyde-device-definition (mh_SaveSubDevice leaves the parser deep inside)
+         c_Xml.CreateAndSelectNodeChild("data-pools");
+         c_Xml.SetAttributeUint32("length", static_cast<uint32_t>(orc_DeviceDefinition.c_ComDataPools.size()));
+         for (const C_OscNodeDataPool & rc_Pool : orc_DeviceDefinition.c_ComDataPools)
+         {
+            c_Xml.CreateAndSelectNodeChild("data-pool");
+            C_OscNodeDataPoolFiler::h_SaveDataPool(rc_Pool, c_Xml);
+            c_Xml.SelectNodeParent();
+         }
+         c_Xml.SelectNodeParent();
+
+         c_Xml.CreateAndSelectNodeChild("com-protocols");
+         c_Xml.SetAttributeUint32("length", static_cast<uint32_t>(orc_DeviceDefinition.c_ComProtocols.size()));
+         for (const C_OscCanProtocol & rc_Protocol : orc_DeviceDefinition.c_ComProtocols)
+         {
+            c_Xml.CreateAndSelectNodeChild("com-protocol");
+            std::string c_DatapoolName;
+            if (rc_Protocol.u32_DataPoolIndex < orc_DeviceDefinition.c_ComDataPools.size())
+            {
+               c_DatapoolName = orc_DeviceDefinition.c_ComDataPools[rc_Protocol.u32_DataPoolIndex].c_Name;
+            }
+            C_OscNodeCommFiler::h_SaveNodeComProtocol(rc_Protocol, c_Xml, c_DatapoolName);
+            c_Xml.SelectNodeParent();
+         }
+         c_Xml.SelectNodeParent();
+      }
 
       c_Return = c_Xml.SaveToFile(orc_Path);
       if (c_Return)

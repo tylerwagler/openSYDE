@@ -21,6 +21,7 @@
 #include "C_OscErrorCategory.hpp"
 
 #include "C_OscNode.hpp"
+#include "C_OscDeviceDefinition.hpp"
 #include "C_SclChecksums.hpp"
 #include "TglUtils.hpp"
 #include "C_OscUtils.hpp"
@@ -2616,4 +2617,41 @@ bool C_OscNode::m_CheckErrorTooFewElements(const uint32_t ou32_DataPoolIndex) co
       }
    }
    return orq_TooFewListsOrElements;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Seed this node's COM datapools + CAN protocols from a device definition
+
+   Copies the device definition's embedded COM data pools into the node's data-pool list and
+   the matching CAN protocols into c_ComProtocols, remapping each protocol's u32_DataPoolIndex
+   from the device-relative index to the node-relative one (the COM pools were appended at the
+   end of the node's data-pool list). No-op if the device carries no messages.
+
+   \param[in]  orc_Device   Device definition (may carry c_ComDataPools / c_ComProtocols)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNode::AddComDataFromDeviceDefinition(const C_OscDeviceDefinition & orc_Device)
+{
+   if ((orc_Device.c_ComProtocols.empty() == true) && (orc_Device.c_ComDataPools.empty() == true))
+   {
+      return;
+   }
+
+   const uint32_t u32_OldDataPoolCount = static_cast<uint32_t>(this->c_DataPools.size());
+
+   for (const C_OscNodeDataPool & rc_Pool : orc_Device.c_ComDataPools)
+   {
+      this->c_DataPools.push_back(rc_Pool);
+   }
+
+   for (C_OscCanProtocol rc_Protocol : orc_Device.c_ComProtocols)
+   {
+      // The stored index is relative to the device's own c_ComDataPools list; the node's COM
+      // pools now sit at [u32_OldDataPoolCount + i]. Rebase the protocol index accordingly.
+      if (rc_Protocol.u32_DataPoolIndex < orc_Device.c_ComDataPools.size())
+      {
+         rc_Protocol.u32_DataPoolIndex = u32_OldDataPoolCount + rc_Protocol.u32_DataPoolIndex;
+      }
+      this->c_ComProtocols.push_back(rc_Protocol);
+   }
 }

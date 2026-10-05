@@ -19,6 +19,8 @@
 
 #include "C_OscSubDeviceDefinition.hpp"
 #include "C_OscSupportedCanInterfaceFeatures.hpp"
+#include "C_OscCanProtocol.hpp"
+#include "C_OscNodeDataPool.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -59,6 +61,12 @@ public:
    std::string c_ToolboxIcon;              ///< link to Toolbox Icon (Eco-Partners)
 
    std::vector<C_OscSubDeviceDefinition> c_SubDevices;
+
+   ///< CAN protocols (messages/signals) shipped with this device. Static per device, so the
+   ///< definition carries them and node creation seeds them (see C_OscNode::h_AddComDataFromDeviceDefinition).
+   std::vector<C_OscCanProtocol> c_ComProtocols;
+   ///< COM datapools (lists/elements) the protocol signals index into. Kept in sync with c_ComProtocols.
+   std::vector<C_OscNodeDataPool> c_ComDataPools;
 
    static const std::string hc_DEFAULT_COMPANY_NAME;
 };
