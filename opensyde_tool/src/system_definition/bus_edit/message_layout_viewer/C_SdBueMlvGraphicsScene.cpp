@@ -254,7 +254,12 @@ void C_SdBueMlvGraphicsScene::SetMessage(const C_OscCanMessageIdentificationIndi
          }
          else
          {
-            this->mu16_MaximumCountBits = static_cast<uint16_t>(pc_Message->u16_Dlc * 8U);
+            // Clamp to the grid size. A CAN frame is at most 8 bytes (64 bits) and the signal
+            // grid arrays (mac_SetGridState, mc_VecEmptyItems) are fixed at mhu8_MAX_NUM_BITS,
+            // so a DLC above 8 (e.g. a J1939 multi-packet diagnostic message) must not overrun them.
+            const uint16_t u16_MaxCountBits = static_cast<uint16_t>(pc_Message->u16_Dlc * 8U);
+            this->mu16_MaximumCountBits = (u16_MaxCountBits <= static_cast<uint16_t>(mhu8_MAX_NUM_BITS)) ?
+                                          u16_MaxCountBits : static_cast<uint16_t>(mhu8_MAX_NUM_BITS);
          }
          this->mapc_EcesHints[0]->setVisible(false);
          this->mapc_EcesHints[1]->setVisible(false);
