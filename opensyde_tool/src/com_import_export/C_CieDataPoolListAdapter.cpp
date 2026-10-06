@@ -221,6 +221,7 @@ void C_CieDataPoolListAdapter::mh_FillUpCoreStructureByDbcValues(
       c_CanMessage.u32_CanId = c_CanMessageIter->c_CanMessage.u32_CanId;
       c_CanMessage.q_IsExtended = c_CanMessageIter->c_CanMessage.q_IsExtended;
       c_CanMessage.u16_Dlc = c_CanMessageIter->c_CanMessage.u16_Dlc;
+      c_CanMessage.q_IsMultipacket = c_CanMessageIter->c_CanMessage.q_IsMultipacket;
       c_CanMessage.e_TxMethod = c_CanMessageIter->c_CanMessage.e_TxMethod;
       c_CanMessage.u32_CycleTimeMs = c_CanMessageIter->c_CanMessage.u32_CycleTimeMs;
 
@@ -489,6 +490,7 @@ int32_t C_CieDataPoolListAdapter::h_ConvertToDbcImportMessage(const uint32_t ou3
    orc_CieNodeMessage.c_CanMessage.e_TxMethod = orc_OscCanMessage.e_TxMethod;
    orc_CieNodeMessage.c_CanMessage.q_IsExtended = orc_OscCanMessage.q_IsExtended;
    orc_CieNodeMessage.c_CanMessage.u16_Dlc = orc_OscCanMessage.u16_Dlc;
+   orc_CieNodeMessage.c_CanMessage.q_IsMultipacket = orc_OscCanMessage.q_IsMultipacket;
    orc_CieNodeMessage.c_CanMessage.u32_CanId = orc_OscCanMessage.u32_CanId;
    orc_CieNodeMessage.c_CanMessage.u32_CycleTimeMs = orc_OscCanMessage.u32_CycleTimeMs;
 

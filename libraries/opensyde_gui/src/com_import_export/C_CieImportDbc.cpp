@@ -417,6 +417,7 @@ int32_t C_CieImportDbc::mh_PrepareMessage(const Vector::DBC::Network & orc_DbcNe
 
    orc_Message.c_CanMessage.u32_CanId = static_cast<uint32_t>(orc_DbcMessage.id) & 0x7FFFFFFFU;
    orc_Message.c_CanMessage.u16_Dlc = static_cast<uint16_t>(orc_DbcMessage.size);
+   orc_Message.c_CanMessage.q_IsMultipacket = (orc_DbcMessage.size > 8U);
 
    if (orc_Message.c_CanMessage.u32_CanId > 0x1FFFFFFFU)
    {

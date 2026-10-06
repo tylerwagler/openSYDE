@@ -90,7 +90,8 @@ public:
       std::string c_Comment; ///< Message comment
       uint32_t u32_CanId;              ///< CAN message identifier
       bool q_IsExtended;               ///< Flag if message id is using extended format
-      uint16_t u16_Dlc;                ///< CAN message data length code
+      uint16_t u16_Dlc;                ///< CAN message data length code (payload byte length for multi-packet)
+      bool q_IsMultipacket;            ///< Flag if message uses J1939 Transport Protocol (multi-packet)
       ///< Reserved for other protocols
       stw::opensyde_core::C_OscCanMessage::E_TxMethodType e_TxMethod; ///< Message transmission trigger type
       uint32_t u32_CycleTimeMs;                                       ///< ONLY used if transmission trigger is
