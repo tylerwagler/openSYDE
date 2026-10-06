@@ -90,6 +90,10 @@ private:
                                   const bool oq_SetSpecificMultiplexerValue, const uint16_t ou16_MultiplexerValue);
    uint16_t m_GetSelectedMultiplexerValues(void) const;
    QString m_GetComboBoxEntryByMultiplexerValue(const uint16_t ou16_Value) const;
+   void m_UpdatePageNavigation(void);
+   void m_OnPrevPage(void);
+   void m_OnNextPage(void);
+   void m_OnPageChanged(const uint32_t ou32_PageStartBit);
 
    Ui::C_SdBueMlvWidget * mpc_Ui;
    C_SdBueMlvGraphicsScene * mpc_Scene;

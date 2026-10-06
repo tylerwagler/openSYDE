@@ -65,12 +65,13 @@ public:
 
    C_SdBueMlvSignalManager(stw::opensyde_gui_logic::C_PuiSdNodeCanMessageSyncManager * const opc_SyncManager,
                            const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-                           const uint16_t ou16_MaximumCountBits, const double of64_Space,
+                           const uint32_t ou32_MaximumCountBits, const double of64_Space,
                            QObject * const opc_Parent = nullptr);
    ~C_SdBueMlvSignalManager() override;
 
    void LoadSignal(const uint32_t ou32_SignalIndex, const C_SignalItemColors & orc_ColorConfiguration,
                    const bool oq_Resizeable);
+   void SetPageStartBit(const uint32_t ou32_PageStartBit);
    void SetColorConfiguration(const C_SignalItemColors & orc_ColorConfiguration);
    void SetName(const QString & orc_Name);
    bool SetStartBit(const uint16_t ou16_Position);
@@ -126,7 +127,8 @@ private:
 
    // identification information about the message
    const stw::opensyde_core::C_OscCanMessageIdentificationIndices mc_MessageId;
-   uint16_t mu16_MaximumCountBits;
+   uint32_t mu32_MaximumCountBits;
+   uint32_t mu32_PageStartBit;
    uint32_t mu32_SignalIndex;
 
    // the shown parts of the signal
@@ -141,7 +143,7 @@ private:
    bool mq_Resizeable;
    bool mq_Hovered;
    const double mf64_Space;
-   const int16_t ms16_MaximumLength;
+   int16_t ms16_MaximumLength;
    const int16_t ms16_MaximumLengthMultiplexer;
 };
 

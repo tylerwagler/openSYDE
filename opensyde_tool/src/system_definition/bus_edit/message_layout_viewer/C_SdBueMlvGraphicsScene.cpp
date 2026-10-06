@@ -140,6 +140,10 @@ C_SdBueMlvGraphicsScene::C_SdBueMlvGraphicsScene(QObject * const opc_Parent) :
    mq_MultiplexedMessage(false),
    mu16_MultiplexerValue(0),
    mu16_MaximumCountBits(64U),
+   mu32_TotalBits(0U),
+   mu32_PageStartBit(0U),
+   mu32_PageCount(1U),
+   mu16_MessageDlc(8U),
    mf64_SingleItemWidth(50.0),
    mf64_SingleItemHeight(50.0),
    mpc_HoveredSignal(nullptr),
@@ -226,7 +230,6 @@ void C_SdBueMlvGraphicsScene::SetMessage(const C_OscCanMessageIdentificationIndi
    {
       uint16_t u16_Counter;
       uint32_t u32_Counter;
-      int32_t s32_Counter;
 
       // save the identification information
       this->mc_MessageId = orc_MessageId;
@@ -237,10 +240,12 @@ void C_SdBueMlvGraphicsScene::SetMessage(const C_OscCanMessageIdentificationIndi
 
       this->mpc_AddMultiplexed->setVisible(this->mq_MultiplexedMessage);
 
+      this->mu16_MessageDlc = pc_Message->u16_Dlc;
       if (this->me_Protocol == C_OscCanProtocol::eECES)
       {
          // special case DLC is always 8, but byte 7 and byte 8 are reserved for message counter and CRC
-         this->mu16_MaximumCountBits = static_cast<uint16_t>(mu32_PROTOCOL_ECES_SIGNALCOUNT_MAX);
+         this->mu32_TotalBits = static_cast<uint32_t>(mu32_PROTOCOL_ECES_SIGNALCOUNT_MAX);
+         this->mu16_MessageDlc = 8U;
          this->mapc_EcesHints[0]->setVisible(true);
          this->mapc_EcesHints[1]->setVisible(true);
       }
@@ -250,60 +255,30 @@ void C_SdBueMlvGraphicsScene::SetMessage(const C_OscCanMessageIdentificationIndi
          {
             // special case CANopen: Auto DLC functionality adapt the DLC depending of the current signal configuration
             // In this case all 8 byte must be available always
-            this->mu16_MaximumCountBits = mhu8_MAX_NUM_BITS;
+            this->mu32_TotalBits = mhu8_MAX_NUM_BITS;
+            this->mu16_MessageDlc = 8U;
          }
          else
          {
-            // Clamp to the grid size. A CAN frame is at most 8 bytes (64 bits) and the signal
-            // grid arrays (mac_SetGridState, mc_VecEmptyItems) are fixed at mhu8_MAX_NUM_BITS,
-            // so a DLC above 8 (e.g. a J1939 multi-packet diagnostic message) must not overrun them.
-            const uint16_t u16_MaxCountBits = static_cast<uint16_t>(pc_Message->u16_Dlc * 8U);
-            this->mu16_MaximumCountBits = (u16_MaxCountBits <= static_cast<uint16_t>(mhu8_MAX_NUM_BITS)) ?
-                                          u16_MaxCountBits : static_cast<uint16_t>(mhu8_MAX_NUM_BITS);
+            // Multi-packet (J1939 TP) messages carry u16_Dlc > 8 (the payload byte size); the grid
+            // paginates the payload in 8-byte pages, so mu16_MaximumCountBits is per-page.
+            this->mu32_TotalBits = static_cast<uint32_t>(pc_Message->u16_Dlc) * 8U;
          }
          this->mapc_EcesHints[0]->setVisible(false);
          this->mapc_EcesHints[1]->setVisible(false);
       }
+      this->mu32_PageCount = (this->mu32_TotalBits == 0U) ? 1U : ((this->mu32_TotalBits + 63U) / 64U);
+      this->mu32_PageStartBit = 0U;
+      const uint32_t u32_RemainingBits = this->mu32_TotalBits - this->mu32_PageStartBit;
+      this->mu16_MaximumCountBits = static_cast<uint16_t>((u32_RemainingBits < mhu8_MAX_NUM_BITS) ?
+                                                         u32_RemainingBits : static_cast<uint32_t>(mhu8_MAX_NUM_BITS));
 
       // remove all previous signals
       this->Clear();
 
-      // adapt the backgrounds to the maximum available bit bounded by the DLC
-      for (s32_Counter = 0U; s32_Counter < this->mc_VecEmptyItems.size(); ++s32_Counter)
-      {
-         if (s32_Counter < this->mu16_MaximumCountBits)
-         {
-            this->mc_VecEmptyItems[s32_Counter]->SetActive(true);
-         }
-         else
-         {
-            this->mc_VecEmptyItems[s32_Counter]->SetActive(false);
-         }
-      }
-      for (s32_Counter = 0U; s32_Counter < mc_VecBorderItemsVertical.size(); ++s32_Counter)
-      {
-         // special case CANopen: Auto DLC functionality adapt the DLC depending of the current signal configuration
-         // In this case all 8 byte must be available always
-         if ((s32_Counter < pc_Message->u16_Dlc) ||
-             (this->me_Protocol == C_OscCanProtocol::eCAN_OPEN))
-         {
-            this->mc_VecBorderItemsVertical[s32_Counter]->SetActive(true);
-         }
-         else
-         {
-            this->mc_VecBorderItemsVertical[s32_Counter]->SetActive(false);
-         }
-      }
-
-      // Deactivate the top header too if DLC is zero and not CANopen
-      {
-         const bool q_Active = (pc_Message->u16_Dlc != 0) || (this->me_Protocol == C_OscCanProtocol::eCAN_OPEN);
-         this->mpc_BorderItemUpperLeft->SetActive(q_Active);
-         for (s32_Counter = 0U; s32_Counter < mc_VecBorderItemsHorizontal.size(); ++s32_Counter)
-         {
-            this->mc_VecBorderItemsHorizontal[s32_Counter]->SetActive(q_Active);
-         }
-      }
+      // activate/label the grid cells and borders for the current (first) page
+      this->m_UpdateBorderItems();
+      this->m_UpdateEmptyItems();
 
       // add the signals
       for (u32_Counter = 0; u32_Counter < pc_Message->c_Signals.size(); ++u32_Counter)
@@ -341,7 +316,125 @@ void C_SdBueMlvGraphicsScene::SetMessage(const C_OscCanMessageIdentificationIndi
             this->m_CheckGridMappingPositionForError(u16_Counter);
          }
       }
+
+      Q_EMIT this->SigPageChanged(this->mu32_PageStartBit);
    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Switch to a page of the payload
+
+   Only multi-packet messages have more than one page; single-frame messages are a no-op.
+
+   \param[in]  ou32_Page   Page index (0-based)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueMlvGraphicsScene::SetPage(const uint32_t ou32_Page)
+{
+   if (this->mu32_PageCount <= 1U)
+   {
+      return;
+   }
+   const uint32_t u32_Page = (ou32_Page < this->mu32_PageCount) ? ou32_Page : (this->mu32_PageCount - 1U);
+   this->mu32_PageStartBit = u32_Page * 64U;
+   this->m_RebuildGridForCurrentPage();
+   Q_EMIT this->SigPageChanged(this->mu32_PageStartBit);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get number of payload pages
+
+   \return
+   Number of pages (>= 1)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+uint32_t C_SdBueMlvGraphicsScene::GetPageCount(void) const
+{
+   return this->mu32_PageCount;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get absolute bit offset of the current page
+
+   \return
+   Absolute bit offset of the current page
+*/
+//----------------------------------------------------------------------------------------------------------------------
+uint32_t C_SdBueMlvGraphicsScene::GetPageStartBit(void) const
+{
+   return this->mu32_PageStartBit;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Check if the shown message is a multi-packet (TP) message
+
+   \return
+   true   Message is multi-packet (more than one page)
+   false  Message is single-frame
+*/
+//----------------------------------------------------------------------------------------------------------------------
+bool C_SdBueMlvGraphicsScene::GetIsMultipacket(void) const
+{
+   return (this->mu32_PageCount > 1U);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Rebuild the grid for the current page (no full SetMessage)
+
+   Clears the grid state and re-maps the signals for the current page.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueMlvGraphicsScene::m_RebuildGridForCurrentPage(void)
+{
+   const uint32_t u32_RemainingBits = this->mu32_TotalBits - this->mu32_PageStartBit;
+   this->mu16_MaximumCountBits = static_cast<uint16_t>((u32_RemainingBits < mhu8_MAX_NUM_BITS) ?
+                                                      u32_RemainingBits : static_cast<uint32_t>(mhu8_MAX_NUM_BITS));
+
+   // clear the grid state and reset the empty items
+   for (uint16_t u16_Index = 0U; u16_Index < mhu8_MAX_NUM_BITS; ++u16_Index)
+   {
+      this->mac_SetGridState[u16_Index].clear();
+      this->mc_VecEmptyItems[u16_Index]->SetDrawRectangle(true);
+      this->mc_VecEmptyItems[u16_Index]->SetError(false);
+   }
+   this->mu16_LastGridPosFilled = 0U;
+
+   // reposition/label cells and borders for the current page
+   this->m_UpdateBorderItems();
+   this->m_UpdateEmptyItems();
+
+   // re-map every signal to its slice on this page
+   for (QList<C_SdBueMlvSignalManager *>::const_iterator pc_It = this->mc_VecSignals.begin();
+        pc_It != this->mc_VecSignals.end(); ++pc_It)
+   {
+      (*pc_It)->SetPageStartBit(this->mu32_PageStartBit);
+      (*pc_It)->Update(this->mf64_SingleItemWidth, this->mf64_SingleItemHeight);
+      this->m_AddSignalToGridMapping(*pc_It);
+   }
+
+   // Special case: CANopen can have errors set on empty grid positions. Make sure no error of an previous
+   // CANopen message is left
+   for (uint16_t u16_Index = 0U; u16_Index < mhu8_MAX_NUM_BITS; ++u16_Index)
+   {
+      if (this->mac_SetGridState[u16_Index].size() == 0)
+      {
+         this->m_CheckGridMappingPositionForError(u16_Index);
+      }
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Map an absolute payload bit position to the page-local grid position
+
+   \param[in]  ou32_AbsBit   Absolute payload bit position
+
+   \return
+   Page-local grid position (0..63)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+uint16_t C_SdBueMlvGraphicsScene::m_GetPageLocalBitPos(const uint32_t ou32_AbsBit) const
+{
+   return static_cast<uint16_t>(ou32_AbsBit - this->mu32_PageStartBit);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -535,6 +628,8 @@ void C_SdBueMlvGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent * const o
 void C_SdBueMlvGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent * const opc_Event)
 {
    const int32_t s32_ActGridIndex = this->m_GetGridIndex(opc_Event->scenePos());
+   // page-local grid index is 0..63; the model stores absolute payload bits, so add the page offset
+   const int32_t s32_AbsGridIndex = s32_ActGridIndex + static_cast<int32_t>(this->mu32_PageStartBit);
 
    if ((s32_ActGridIndex >= 0) &&
        (this->mpc_ActualSignal != nullptr) &&
@@ -571,19 +666,19 @@ void C_SdBueMlvGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent * const op
       else if (this->me_InteractionMode == C_SdBueMlvSignalManager::eIAM_RESIZELEFT_INTEL)
       {
          // item will resized on the "left" side
-         if (s32_ActGridIndex >= static_cast<int32_t>(u16_StartBit))
+         if (s32_AbsGridIndex >= static_cast<int32_t>(u16_StartBit))
          {
             // update the item
-            if (this->mpc_ActualSignal->SetLastBit(static_cast<uint16_t>(s32_ActGridIndex)) == true)
+            if (this->mpc_ActualSignal->SetLastBit(static_cast<uint16_t>(s32_AbsGridIndex)) == true)
             {
                this->m_UpdateConcreteSignalManager(this->mpc_ActualSignal);
             }
          }
-         else if (s32_ActGridIndex <= static_cast<int32_t>(u16_LastBit))
+         else if (s32_AbsGridIndex <= static_cast<int32_t>(u16_LastBit))
          {
             // the resizing changed to the other direction
             // update the item and change the mode
-            if (this->mpc_ActualSignal->SetStartBit(static_cast<uint16_t>(s32_ActGridIndex)) == true)
+            if (this->mpc_ActualSignal->SetStartBit(static_cast<uint16_t>(s32_AbsGridIndex)) == true)
             {
                this->m_UpdateConcreteSignalManager(this->mpc_ActualSignal);
                this->me_InteractionMode = C_SdBueMlvSignalManager::eIAM_RESIZERIGHT_INTEL;
@@ -597,19 +692,19 @@ void C_SdBueMlvGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent * const op
       else if (this->me_InteractionMode == C_SdBueMlvSignalManager::eIAM_RESIZERIGHT_INTEL)
       {
          // item will resized on the "right" side
-         if (s32_ActGridIndex <= static_cast<int32_t>(u16_LastBit))
+         if (s32_AbsGridIndex <= static_cast<int32_t>(u16_LastBit))
          {
             // update the item
-            if (this->mpc_ActualSignal->SetStartBit(static_cast<uint16_t>(s32_ActGridIndex)) == true)
+            if (this->mpc_ActualSignal->SetStartBit(static_cast<uint16_t>(s32_AbsGridIndex)) == true)
             {
                this->m_UpdateConcreteSignalManager(this->mpc_ActualSignal);
             }
          }
-         else if (s32_ActGridIndex >= static_cast<int32_t>(u16_StartBit))
+         else if (s32_AbsGridIndex >= static_cast<int32_t>(u16_StartBit))
          {
             // the resizing changed to the other direction
             // update the item and change the mode
-            if (this->mpc_ActualSignal->SetLastBit(static_cast<uint16_t>(s32_ActGridIndex)) == true)
+            if (this->mpc_ActualSignal->SetLastBit(static_cast<uint16_t>(s32_AbsGridIndex)) == true)
             {
                this->m_UpdateConcreteSignalManager(this->mpc_ActualSignal);
                this->me_InteractionMode = C_SdBueMlvSignalManager::eIAM_RESIZELEFT_INTEL;
@@ -623,28 +718,28 @@ void C_SdBueMlvGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent * const op
       else if (this->me_InteractionMode == C_SdBueMlvSignalManager::eIAM_RESIZELEFT_MOTOROLA)
       {
          // item will resized on the "left" side with Motorola format
-         const uint16_t u16_RowNewStartBit = static_cast<uint16_t>(s32_ActGridIndex) / 8U;
+         const uint16_t u16_RowNewStartBit = static_cast<uint16_t>(s32_AbsGridIndex) / 8U;
          const uint16_t u16_RowLastBit = u16_LastBit / 8U;
 
          if ((u16_RowNewStartBit < u16_RowLastBit) ||
-             ((s32_ActGridIndex >= static_cast<int32_t>(u16_LastBit)) &&
+             ((s32_AbsGridIndex >= static_cast<int32_t>(u16_LastBit)) &&
               (u16_RowNewStartBit == u16_RowLastBit)))
          {
             // the start bit is not in the same row as the last bit or
             // special case: the start bit is in the same row and is with
             // Motorola format on a higher index as the last bit
             // update the item
-            if (this->mpc_ActualSignal->SetStartBit(static_cast<uint16_t>(s32_ActGridIndex)) == true)
+            if (this->mpc_ActualSignal->SetStartBit(static_cast<uint16_t>(s32_AbsGridIndex)) == true)
             {
                this->m_UpdateConcreteSignalManager(this->mpc_ActualSignal);
             }
          }
-         else if ((s32_ActGridIndex <= static_cast<int32_t>(u16_StartBit)) &&
+         else if ((s32_AbsGridIndex <= static_cast<int32_t>(u16_StartBit)) &&
                   (u16_RowNewStartBit == u16_RowLastBit))
          {
             // the resizing changed to the other direction
             // update the item and change the mode
-            if (this->mpc_ActualSignal->SetLastBit(static_cast<uint16_t>(s32_ActGridIndex)) == true)
+            if (this->mpc_ActualSignal->SetLastBit(static_cast<uint16_t>(s32_AbsGridIndex)) == true)
             {
                this->m_UpdateConcreteSignalManager(this->mpc_ActualSignal);
                this->me_InteractionMode = C_SdBueMlvSignalManager::eIAM_RESIZERIGHT_MOTOROLA;
@@ -658,25 +753,25 @@ void C_SdBueMlvGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent * const op
       else if (this->me_InteractionMode == C_SdBueMlvSignalManager::eIAM_RESIZERIGHT_MOTOROLA)
       {
          // item will resized on the "right" side with Motorola format
-         const uint16_t u16_RowNewLastBit = static_cast<uint16_t>(s32_ActGridIndex) / 8U;
+         const uint16_t u16_RowNewLastBit = static_cast<uint16_t>(s32_AbsGridIndex) / 8U;
          const uint16_t u16_RowStartBit = u16_StartBit / 8U;
 
          if ((u16_RowNewLastBit > u16_RowStartBit) ||
-             ((s32_ActGridIndex <= static_cast<int32_t>(u16_StartBit)) &&
+             ((s32_AbsGridIndex <= static_cast<int32_t>(u16_StartBit)) &&
               (u16_RowNewLastBit == u16_RowStartBit)))
          {
             // update the item
-            if (this->mpc_ActualSignal->SetLastBit(static_cast<uint16_t>(s32_ActGridIndex)) == true)
+            if (this->mpc_ActualSignal->SetLastBit(static_cast<uint16_t>(s32_AbsGridIndex)) == true)
             {
                this->m_UpdateConcreteSignalManager(this->mpc_ActualSignal);
             }
          }
-         else if ((s32_ActGridIndex >= static_cast<int32_t>(u16_LastBit)) &&
+         else if ((s32_AbsGridIndex >= static_cast<int32_t>(u16_LastBit)) &&
                   (u16_RowNewLastBit == u16_RowStartBit))
          {
             // the resizing changed to the other direction
             // update the item and change the mode
-            if (this->mpc_ActualSignal->SetStartBit(static_cast<uint16_t>(s32_ActGridIndex)) == true)
+            if (this->mpc_ActualSignal->SetStartBit(static_cast<uint16_t>(s32_AbsGridIndex)) == true)
             {
                this->m_UpdateConcreteSignalManager(this->mpc_ActualSignal);
                this->me_InteractionMode = C_SdBueMlvSignalManager::eIAM_RESIZELEFT_MOTOROLA;
@@ -966,10 +1061,14 @@ void C_SdBueMlvGraphicsScene::m_UpdateBorderItems(void)
 {
    QList<C_SdBueMlvBorderItem *>::const_iterator pc_ItItem;
    int32_t s32_Pos = 8;
+   int32_t s32_Index = 0;
 
    this->mpc_BorderItemUpperLeft->SetSize(QSizeF(this->mf64_SingleItemWidth, this->mf64_SingleItemHeight));
 
-   // update the coordinates of all horizontal items
+   const bool q_Active = (this->mu16_MessageDlc != 0U) || (this->me_Protocol == C_OscCanProtocol::eCAN_OPEN);
+   this->mpc_BorderItemUpperLeft->SetActive(q_Active);
+
+   // update the coordinates of all horizontal items (bit labels 7..0, page-independent)
    for (pc_ItItem = this->mc_VecBorderItemsHorizontal.begin();
         pc_ItItem != this->mc_VecBorderItemsHorizontal.end();
         ++pc_ItItem)
@@ -978,11 +1077,13 @@ void C_SdBueMlvGraphicsScene::m_UpdateBorderItems(void)
       // the first item is at the right side of the scene (Bit 7 - Bit 0)
       (*pc_ItItem)->setPos(static_cast<double>(s32_Pos) *
                            (this->mf64_SingleItemWidth + C_SdBueMlvGraphicsScene::mhf64_SPACE), 0.0);
+      (*pc_ItItem)->SetIndex(static_cast<uint32_t>(s32_Pos - 1));
+      (*pc_ItItem)->SetActive(q_Active);
 
       --s32_Pos;
    }
 
-   // update the coordinates of all vertical items
+   // update the coordinates of all vertical items (byte labels, page-aware)
    // start at one because of border items
    s32_Pos = 1;
 
@@ -994,6 +1095,11 @@ void C_SdBueMlvGraphicsScene::m_UpdateBorderItems(void)
       (*pc_ItItem)->setPos(0.0, static_cast<double>(s32_Pos) *
                            (this->mf64_SingleItemHeight + C_SdBueMlvGraphicsScene::mhf64_SPACE));
 
+      const uint32_t u32_Byte = (this->mu32_PageStartBit / 8U) + static_cast<uint32_t>(s32_Index);
+      (*pc_ItItem)->SetIndex(u32_Byte);
+      (*pc_ItItem)->SetActive((u32_Byte < this->mu16_MessageDlc) ||
+                              (this->me_Protocol == C_OscCanProtocol::eCAN_OPEN));
+      ++s32_Index;
       ++s32_Pos;
    }
 }
@@ -1012,6 +1118,9 @@ void C_SdBueMlvGraphicsScene::m_UpdateEmptyItems(void)
       double f64_PosVertical;
 
       this->mc_VecEmptyItems[s32_BitPosition]->SetSize(QSizeF(this->mf64_SingleItemWidth, this->mf64_SingleItemHeight));
+      this->mc_VecEmptyItems[s32_BitPosition]->SetIndex(
+         this->mu32_PageStartBit + static_cast<uint32_t>(s32_BitPosition));
+      this->mc_VecEmptyItems[s32_BitPosition]->SetActive(s32_BitPosition < this->mu16_MaximumCountBits);
 
       // counting starts at the right side
       s32_PosHorizontal = 8 - (s32_BitPosition % 8);
@@ -1076,14 +1185,21 @@ void C_SdBueMlvGraphicsScene::m_UpdateProtocolItems(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvGraphicsScene::m_AddSignalToGridMapping(C_SdBueMlvSignalManager * const opc_Item)
 {
-   uint16_t u16_Counter;
+   std::set<uint16_t> c_SetGridPositions;
+   const uint32_t u32_PageEndBit = this->mu32_PageStartBit + this->mu16_MaximumCountBits;
 
-   for (u16_Counter = 0; u16_Counter < opc_Item->GetLength(); ++u16_Counter)
+   // get all grid positions for this signal. necessary for motorola byte order
+   opc_Item->GetDataBytesBitPositionsOfSignal(c_SetGridPositions);
+
+   for (std::set<uint16_t>::const_iterator c_It = c_SetGridPositions.begin(); c_It != c_SetGridPositions.end();
+        ++c_It)
    {
-      const uint16_t u16_GridPos = opc_Item->GetDataBytesBitPosOfSignalBit(u16_Counter);
-
-      if (u16_GridPos < this->mu16_MaximumCountBits)
+      const uint32_t u32_AbsBit = *c_It;
+      // only map the slice of the signal that lies on the current page
+      if ((u32_AbsBit >= this->mu32_PageStartBit) && (u32_AbsBit < u32_PageEndBit))
       {
+         const uint16_t u16_GridPos = this->m_GetPageLocalBitPos(u32_AbsBit);
+
          this->mac_SetGridState[u16_GridPos].insert(opc_Item);
 
          if ((this->me_Protocol == C_OscCanProtocol::eCAN_OPEN) &&
@@ -1113,11 +1229,18 @@ void C_SdBueMlvGraphicsScene::m_UpdateSignalInGridMapping(C_SdBueMlvSignalManage
    // get all grid positions for this signal. necessary for motorola byte order
    opc_Item->GetDataBytesBitPositionsOfSignal(c_SetGridPositions);
 
+   if (this->mu16_MaximumCountBits == 0U)
+   {
+      return;
+   }
+
    u16_Counter = this->mu16_MaximumCountBits;
    do
    {
       --u16_Counter;
-      c_ItSetGridPosition = c_SetGridPositions.find(u16_Counter);
+      // search the absolute-position set for the page-local counter's absolute position
+      const uint32_t u32_AbsPos = static_cast<uint32_t>(u16_Counter) + this->mu32_PageStartBit;
+      c_ItSetGridPosition = c_SetGridPositions.find(static_cast<uint16_t>(u32_AbsPos));
 
       // is this position used?
       if (c_ItSetGridPosition != c_SetGridPositions.end())
@@ -1650,7 +1773,8 @@ void C_SdBueMlvGraphicsScene::m_ActionAdd(void)
       s32_Counter = 0;
    }
 
-   Q_EMIT (this->SigAddSignal(this->mc_MessageId, static_cast<uint16_t>(s32_Counter)));
+   Q_EMIT (this->SigAddSignal(this->mc_MessageId,
+                              static_cast<uint16_t>(s32_Counter + static_cast<int32_t>(this->mu32_PageStartBit))));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1663,7 +1787,9 @@ void C_SdBueMlvGraphicsScene::m_ActionAddMultiplexed(void)
       s32_Counter = 0;
    }
 
-   Q_EMIT (this->SigAddSignalMultiplexed(this->mc_MessageId, static_cast<uint16_t>(s32_Counter),
+   Q_EMIT (this->SigAddSignalMultiplexed(this->mc_MessageId,
+                                         static_cast<uint16_t>(s32_Counter +
+                                                                static_cast<int32_t>(this->mu32_PageStartBit)),
                                          this->mu16_MultiplexerValue));
 }
 
@@ -1688,7 +1814,8 @@ void C_SdBueMlvGraphicsScene::m_ActionPaste(void)
 
    if (this->mc_VecSignals.size() < mhu8_MAX_NUM_BITS)
    {
-      Q_EMIT (this->SigPasteSignal(this->mc_MessageId, static_cast<uint16_t>(s32_Counter)));
+      Q_EMIT (this->SigPasteSignal(this->mc_MessageId,
+                                   static_cast<uint16_t>(s32_Counter + static_cast<int32_t>(this->mu32_PageStartBit))));
    }
 }
 

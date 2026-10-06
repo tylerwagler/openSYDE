@@ -418,7 +418,15 @@ void C_SdBueMessagePropertiesWidget::m_LoadFromData(void)
 
          this->m_UpdateJ1939PgInfo();
 
-         //Dlc
+         //Dlc (a multi-packet message carries the payload byte size, e.g. 1785)
+         if (pc_Message->q_IsMultipacket == true)
+         {
+            this->mpc_Ui->pc_SpinBoxDlc->SetMaximumCustom(0xFFFF);
+         }
+         else
+         {
+            this->mpc_Ui->pc_SpinBoxDlc->SetMaximumCustom(8);
+         }
          this->mpc_Ui->pc_SpinBoxDlc->setValue(pc_Message->u16_Dlc);
 
          //Tx method
@@ -2970,7 +2978,13 @@ void C_SdBueMessagePropertiesWidget::SetComProtocol(const C_OscCanProtocol::E_Ty
 
       //Dlc
       this->mpc_Ui->pc_SpinBoxDlc->setEnabled(false);
-      this->mpc_Ui->pc_SpinBoxDlc->setValue(8);
+      // a loaded multi-packet message keeps its payload byte size; only default to 8 for single-frame
+      const C_OscCanMessage * const pc_CurMessage =
+         C_PuiSdHandler::h_GetInstance()->GetCanMessage(this->mc_MessageId);
+      if ((pc_CurMessage == nullptr) || (pc_CurMessage->q_IsMultipacket == false))
+      {
+         this->mpc_Ui->pc_SpinBoxDlc->setValue(8);
+      }
 
       //Tx method
       this->mpc_Ui->pc_ComboBoxTxMethod->setEnabled(true);

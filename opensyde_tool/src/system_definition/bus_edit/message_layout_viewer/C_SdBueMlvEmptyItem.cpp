@@ -71,9 +71,9 @@ C_SdBueMlvEmptyItem::~C_SdBueMlvEmptyItem()
    \param[in]  ou8_Index   Index number
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMlvEmptyItem::SetIndex(const uint8_t ou8_Index)
+void C_SdBueMlvEmptyItem::SetIndex(const uint32_t ou32_Index)
 {
-   this->SetText(QString::number(ou8_Index));
+   this->SetText(QString::number(ou32_Index));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

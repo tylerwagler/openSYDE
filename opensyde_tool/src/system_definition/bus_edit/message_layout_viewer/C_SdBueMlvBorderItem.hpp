@@ -35,7 +35,7 @@ public:
                         QGraphicsItem * const opc_Parent = nullptr);
    ~C_SdBueMlvBorderItem() override;
 
-   void SetIndex(const uint8_t ou8_Index);
+   void SetIndex(const uint32_t ou32_Index);
    void SetActive(const bool oq_Active);
 
 private:

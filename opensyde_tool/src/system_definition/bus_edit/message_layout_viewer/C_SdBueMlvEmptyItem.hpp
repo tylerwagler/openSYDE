@@ -34,7 +34,7 @@ public:
    C_SdBueMlvEmptyItem(const uint8_t ou8_Index = 0, QGraphicsItem * const opc_Parent = nullptr);
    ~C_SdBueMlvEmptyItem() override;
 
-   void SetIndex(const uint8_t ou8_Index);
+   void SetIndex(const uint32_t ou32_Index);
    void SetError(const bool oq_Error);
    void SetActive(const bool oq_Active);
    void SetFontColor(const QColor & orc_Color);

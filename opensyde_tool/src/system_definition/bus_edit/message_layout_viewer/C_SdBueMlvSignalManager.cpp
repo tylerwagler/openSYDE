@@ -50,13 +50,14 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueMlvSignalManager::C_SdBueMlvSignalManager(C_PuiSdNodeCanMessageSyncManager * const opc_SyncManager,
                                                  const C_OscCanMessageIdentificationIndices & orc_MessageId,
-                                                 const uint16_t ou16_MaximumCountBits, const double of64_Space,
+                                                 const uint32_t ou32_MaximumCountBits, const double of64_Space,
                                                  QObject * const opc_Parent) :
    QObject(opc_Parent),
    C_GiBiCustomToolTip(),
    mpc_MessageSyncManager(opc_SyncManager),
    mc_MessageId(orc_MessageId),
-   mu16_MaximumCountBits(ou16_MaximumCountBits),
+   mu32_MaximumCountBits(ou32_MaximumCountBits),
+   mu32_PageStartBit(0U),
    mu32_SignalIndex(0U),
    mc_Name(""),
    mq_MultiplexerSignal(false),
@@ -77,6 +78,18 @@ C_SdBueMlvSignalManager::C_SdBueMlvSignalManager(C_PuiSdNodeCanMessageSyncManage
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueMlvSignalManager::~C_SdBueMlvSignalManager()
 {
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set the absolute bit offset of the current page and rebuild the shown slice
+
+   \param[in]  ou32_PageStartBit   Absolute bit offset of the current page (multiple of 8)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueMlvSignalManager::SetPageStartBit(const uint32_t ou32_PageStartBit)
+{
+   this->mu32_PageStartBit = ou32_PageStartBit;
+   this->m_UpdateItemConfiguration();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -108,6 +121,11 @@ void C_SdBueMlvSignalManager::LoadSignal(const uint32_t ou32_SignalIndex,
       this->mc_Signal = *pc_Signal;
       this->mc_UiSignal.u8_ColorIndex = orc_ColorConfiguration.u8_Index;
    }
+
+   // allow resize up to the total payload (a multi-packet signal can be far longer than 64 bits),
+   // while keeping the previous 64-bit default for single-frame messages
+   const uint32_t u32_Cap = (this->mu32_MaximumCountBits < 0x7FFFU) ? this->mu32_MaximumCountBits : 0x7FFFU;
+   this->ms16_MaximumLength = static_cast<int16_t>((u32_Cap > 64U) ? u32_Cap : 64U);
 
    if (pc_DpListElement != nullptr)
    {
@@ -367,7 +385,7 @@ bool C_SdBueMlvSignalManager::MoveSignal(const int32_t os32_Offset)
    }
 
    if ((s32_NewStartBit >= 0) &&
-       (s32_NewStartBit < this->mu16_MaximumCountBits))
+       (static_cast<uint32_t>(s32_NewStartBit) < this->mu32_MaximumCountBits))
    {
       // new position is in valid range
       // update the item
@@ -638,29 +656,24 @@ void C_SdBueMlvSignalManager::m_UpdateItemConfiguration(void)
 
    std::set<uint16_t> c_SetPositions;
    std::set<uint16_t>::iterator c_ItSetPosition;
-   std::set<uint16_t>::reverse_iterator c_ItReverseSetPosition;
 
    // get the positions of the signal
    this->GetDataBytesBitPositionsOfSignal(c_SetPositions);
 
-   // remove all position which are not in the usable area (because of DLC)
-   while (c_SetPositions.size() > 0)
+   // keep only the slice of the signal on the current page, converted to page-local positions
+   std::set<uint16_t> c_PageLocalPositions;
+   const uint32_t u32_PageEndBit = this->mu32_PageStartBit + 64U;
+   for (std::set<uint16_t>::const_iterator c_It = c_SetPositions.begin(); c_It != c_SetPositions.end(); ++c_It)
    {
-      // start the search at the end with the highest elements
-      c_ItReverseSetPosition = c_SetPositions.rbegin();
-
-      if ((*c_ItReverseSetPosition) >= this->mu16_MaximumCountBits)
+      const uint32_t u32_AbsBit = *c_It;
+      if ((u32_AbsBit >= this->mu32_PageStartBit) && (u32_AbsBit < u32_PageEndBit))
       {
-         // the erase function needs the base iterator, but the base iterator has an offset of -1
-         std::advance(c_ItReverseSetPosition, 1);
-         c_SetPositions.erase(c_ItReverseSetPosition.base());
-         q_AllRowsVisible = false;
-      }
-      else
-      {
-         break;
+         c_PageLocalPositions.insert(static_cast<uint16_t>(u32_AbsBit - this->mu32_PageStartBit));
       }
    }
+   // the whole signal lies on this page only if no bit was cut off
+   q_AllRowsVisible = (c_PageLocalPositions.size() == c_SetPositions.size());
+   c_SetPositions = c_PageLocalPositions;
 
    this->m_SetError(!q_AllRowsVisible);
 

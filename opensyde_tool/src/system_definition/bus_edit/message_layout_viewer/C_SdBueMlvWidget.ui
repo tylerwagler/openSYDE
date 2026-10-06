@@ -89,6 +89,63 @@
     </widget>
    </item>
    <item>
+    <widget class="QWidget" name="pc_WidgetPageNavigation" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayoutPage">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="pc_PushButtonPrevPage">
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Prev</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="pc_LabelPage">
+        <property name="text">
+         <string>Page 1 / 1</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pc_PushButtonNextPage">
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Next</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="stw::opensyde_gui::C_SdBueMlvGraphicsView" name="pc_GraphicsView">
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>

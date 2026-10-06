@@ -90,6 +90,12 @@ C_SdBueMlvWidget::C_SdBueMlvWidget(QWidget * const opc_Parent) :
    connect(this->mpc_Ui->pc_GraphicsView, &C_SdBueMlvGraphicsView::SigShowToolTip, this->mpc_Scene,
            &C_SdBueMlvGraphicsScene::DisplayToolTip);
 
+   // multi-packet (TP) page navigation; hidden for single-frame messages
+   this->mpc_Ui->pc_WidgetPageNavigation->setVisible(false);
+   connect(this->mpc_Ui->pc_PushButtonPrevPage, &QPushButton::clicked, this, &C_SdBueMlvWidget::m_OnPrevPage);
+   connect(this->mpc_Ui->pc_PushButtonNextPage, &QPushButton::clicked, this, &C_SdBueMlvWidget::m_OnNextPage);
+   connect(this->mpc_Scene, &C_SdBueMlvGraphicsScene::SigPageChanged, this, &C_SdBueMlvWidget::m_OnPageChanged);
+
    this->InitStaticNames();
 }
 
@@ -250,6 +256,8 @@ void C_SdBueMlvWidget::m_SelectMessage(const C_OscCanMessageIdentificationIndice
 
       this->mpc_Scene->SetMessage(orc_MessageId, q_MultiplexedMsg, u16_MultiplexerValue);
    }
+
+   this->m_UpdatePageNavigation();
 
    // Save for UpdateMultiplexerValues
    this->mc_PreviousMessageId = orc_MessageId;
@@ -469,4 +477,58 @@ QString C_SdBueMlvWidget::m_GetComboBoxEntryByMultiplexerValue(const uint16_t ou
    }
 
    return c_Entry;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Show/hide the page navigation and set the current page label
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueMlvWidget::m_UpdatePageNavigation(void)
+{
+   const uint32_t u32_PageCount = this->mpc_Scene->GetPageCount();
+
+   this->mpc_Ui->pc_WidgetPageNavigation->setVisible(u32_PageCount > 1U);
+   if (u32_PageCount > 1U)
+   {
+      this->m_OnPageChanged(this->mpc_Scene->GetPageStartBit());
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Go to the previous page
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueMlvWidget::m_OnPrevPage(void)
+{
+   const uint32_t u32_CurPage = this->mpc_Scene->GetPageStartBit() / 64U;
+   if (u32_CurPage > 0U)
+   {
+      this->mpc_Scene->SetPage(u32_CurPage - 1U);
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Go to the next page
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueMlvWidget::m_OnNextPage(void)
+{
+   const uint32_t u32_CurPage = this->mpc_Scene->GetPageStartBit() / 64U;
+   this->mpc_Scene->SetPage(u32_CurPage + 1U);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Update the page label and button enabled state
+
+   \param[in]  ou32_PageStartBit   Absolute bit offset of the current page
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueMlvWidget::m_OnPageChanged(const uint32_t ou32_PageStartBit)
+{
+   const uint32_t u32_Page = (ou32_PageStartBit / 64U) + 1U;
+   const uint32_t u32_PageCount = this->mpc_Scene->GetPageCount();
+
+   this->mpc_Ui->pc_LabelPage->setText(QString("Page %1 / %2").arg(u32_Page).arg(u32_PageCount));
+   this->mpc_Ui->pc_PushButtonPrevPage->setEnabled(u32_Page > 1U);
+   this->mpc_Ui->pc_PushButtonNextPage->setEnabled(u32_Page < u32_PageCount);
 }

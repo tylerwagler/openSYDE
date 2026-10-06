@@ -71,11 +71,11 @@ C_SdBueMlvBorderItem::~C_SdBueMlvBorderItem()
    \param[in]  ou8_Index   Index number
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMlvBorderItem::SetIndex(const uint8_t ou8_Index)
+void C_SdBueMlvBorderItem::SetIndex(const uint32_t ou32_Index)
 {
    if (this->mc_Title != "")
    {
-      this->SetText(this->mc_Title + QString::number(ou8_Index));
+      this->SetText(this->mc_Title + QString::number(ou32_Index));
    }
 }
 

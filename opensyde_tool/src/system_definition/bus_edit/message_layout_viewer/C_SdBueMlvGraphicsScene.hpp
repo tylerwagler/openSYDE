@@ -54,6 +54,10 @@ public:
                    const bool oq_MultiplexedMessage, const uint16_t ou16_MultiplexValue);
    void SetMultiplexValue(const uint16_t ou16_MultiplexValue);
    void SetSignal(const uint32_t ou32_SignalIndex);
+   void SetPage(const uint32_t ou32_Page);
+   uint32_t GetPageCount(void) const;
+   uint32_t GetPageStartBit(void) const;
+   bool GetIsMultipacket(void) const;
    void Clear(void);
    void DisplayToolTip(const QPointF & orc_ScenePos);
    void RefreshColors(void);
@@ -69,6 +73,7 @@ Q_SIGNALS:
    void SigShowToolTip(const QPointF & orc_ScenePos, const QString & orc_Heading, const QString & orc_Content,
                        const bool oq_Error);
    void SigHideToolTip(void);
+   void SigPageChanged(const uint32_t ou32_PageStartBit);
 
    void SigAddSignal(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                      const uint16_t ou16_StartBit);
@@ -113,6 +118,8 @@ private:
    void m_RemoveSignalFromGridMapping(C_SdBueMlvSignalManager * const opc_Item);
    void m_RemoveSignalFromGridMappingPosition(C_SdBueMlvSignalManager * const opc_Item, const uint16_t ou16_Pos);
    void m_CheckGridMappingPositionForError(const uint16_t ou16_Pos);
+   void m_RebuildGridForCurrentPage(void);
+   uint16_t m_GetPageLocalBitPos(const uint32_t ou32_AbsBit) const;
 
    void m_AddItemSlot(C_SdBueMlvSignalItem * const opc_Item);
    void m_RemoveItemSlot(C_SdBueMlvSignalItem * const opc_Item);
@@ -157,6 +164,10 @@ private:
    bool mq_MultiplexedMessage;
    uint16_t mu16_MultiplexerValue;
    uint16_t mu16_MaximumCountBits;
+   uint32_t mu32_TotalBits;
+   uint32_t mu32_PageStartBit;
+   uint32_t mu32_PageCount;
+   uint16_t mu16_MessageDlc;
 
    double mf64_SingleItemWidth;
    double mf64_SingleItemHeight;
