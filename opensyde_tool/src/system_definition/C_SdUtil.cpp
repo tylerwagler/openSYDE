@@ -2220,7 +2220,8 @@ QString C_SdUtil::h_GetToolTipContentSignal(const C_OscCanMessageIdentificationI
 
    if ((pc_Message != nullptr) &&
        (pc_Signal != nullptr) &&
-       (pc_DpListElement != nullptr))
+       (pc_DpListElement != nullptr) &&
+       (pc_DpListElementUi != nullptr))
    {
       QString c_AutoMinMaxInfo;
       c_AutoMinMaxInfo.append(static_cast<QString>("   ") + "Auto min/max: ");
