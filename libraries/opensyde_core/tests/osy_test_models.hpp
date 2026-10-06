@@ -195,6 +195,26 @@ inline C_OscCanProtocol h_MakeProtocol(const C_OscCanProtocol::E_Type oe_Type)
    return c_Proto;
 }
 
+//A J1939 multi-packet (Transport Protocol) message, as the generator produces for TP diagnostics
+inline C_OscCanMessage h_MakeMultipacketMessage(void)
+{
+   C_OscCanMessage c_Msg;
+   c_Msg.c_Name = "ECUIdentificationInformation";
+   c_Msg.c_Comment = "multi-packet TP message";
+   c_Msg.u32_CanId = 0x18FECA00U;
+   c_Msg.q_IsExtended = true;
+   c_Msg.u16_Dlc = 1785U;
+   c_Msg.q_IsMultipacket = true;
+   C_OscCanSignal c_Sig;
+   c_Sig.e_ComByteOrder = C_OscCanSignal::eBYTE_ORDER_INTEL;
+   c_Sig.u16_ComBitStart = 0U;
+   c_Sig.u16_ComBitLength = 14280U;
+   c_Sig.u32_ComDataElementIndex = 0U;
+   c_Sig.u32_J1939SuspectParameterNumber = 0U;
+   c_Msg.c_Signals.push_back(c_Sig);
+   return c_Msg;
+}
+
 //pinpoints which part of a big model lost a field: the whole-model hash only says that something did
 template <typename T>
 inline void h_ExpectSameHash(const T & orc_Source, const T & orc_Target, const std::string & orc_What)

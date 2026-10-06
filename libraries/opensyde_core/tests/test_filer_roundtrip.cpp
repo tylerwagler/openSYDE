@@ -70,6 +70,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <sstream>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -525,6 +526,8 @@ TEST(FilerRoundTrip, DeviceDefinition)
 
       C_OscCanProtocol c_Proto = h_MakeProtocol(C_OscCanProtocol::eJ1939);
       c_Proto.u32_DataPoolIndex = 0U;
+      //a multi-packet (TP) diagnostic message alongside the single-frame EngineStatus
+      c_Proto.c_ComMessages[0].c_TxMessages.push_back(h_MakeMultipacketMessage());
       c_Source.c_ComProtocols.push_back(c_Proto);
    }
    ASSERT_FALSE(static_cast<bool>(C_OscDeviceDefinitionFiler::h_Save(c_Source, c_Path.string())));
@@ -577,13 +580,20 @@ TEST(FilerRoundTrip, DeviceDefinition)
    const C_OscCanProtocol & rc_Proto = c_Target.c_ComProtocols[0];
    EXPECT_EQ(C_OscCanProtocol::eJ1939, rc_Proto.e_Type);
    ASSERT_EQ(1U, rc_Proto.c_ComMessages.size());
-   ASSERT_EQ(1U, rc_Proto.c_ComMessages[0].c_TxMessages.size());
+   ASSERT_EQ(2U, rc_Proto.c_ComMessages[0].c_TxMessages.size());
    EXPECT_EQ("EngineStatus", rc_Proto.c_ComMessages[0].c_TxMessages[0].c_Name);
    EXPECT_EQ(0x18FEF100U, rc_Proto.c_ComMessages[0].c_TxMessages[0].u32_CanId);
    ASSERT_EQ(2U, rc_Proto.c_ComMessages[0].c_TxMessages[0].c_Signals.size());
    EXPECT_EQ(0U, rc_Proto.c_ComMessages[0].c_TxMessages[0].c_Signals[0].u32_ComDataElementIndex);
    EXPECT_EQ(1U, rc_Proto.c_ComMessages[0].c_TxMessages[0].c_Signals[1].u32_ComDataElementIndex);
    EXPECT_EQ(190U, rc_Proto.c_ComMessages[0].c_TxMessages[0].c_Signals[1].u32_J1939SuspectParameterNumber);
+   //the multi-packet message survived
+   const C_OscCanMessage & rc_TP = rc_Proto.c_ComMessages[0].c_TxMessages[1];
+   EXPECT_EQ("ECUIdentificationInformation", rc_TP.c_Name);
+   EXPECT_EQ(1785U, rc_TP.u16_Dlc);
+   EXPECT_TRUE(rc_TP.q_IsMultipacket);
+   ASSERT_EQ(1U, rc_TP.c_Signals.size());
+   EXPECT_EQ(14280U, rc_TP.c_Signals[0].u16_ComBitLength);
 
    (void)std::filesystem::remove(c_Path);
    for (const char * const pcn_Name : {"osy_rt_dev_image.png", "osy_rt_dev_icon.svg", "osy_rt_dev_logo.png"})
@@ -677,6 +687,49 @@ TEST(FilerRoundTrip, DeviceDefinitionV2LoadsWithoutCom)
    (void)std::filesystem::remove(c_Path);
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   A DLC>8 message with no explicit multipacket attribute still loads as multi-packet
+
+   Backward compatibility: pre-multipacket 0x0003 files encode TP messages solely via dlc > 8.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(FilerRoundTrip, MultipacketDlcDefaultOnLoad)
+{
+   C_OscCanProtocol c_Proto = h_MakeProtocol(C_OscCanProtocol::eJ1939);
+   c_Proto.c_ComMessages[0].c_TxMessages.clear();
+   c_Proto.c_ComMessages[0].c_TxMessages.push_back(h_MakeMultipacketMessage());
+
+   const std::filesystem::path c_Path = std::filesystem::temp_directory_path() / "osy_rt_com_multipacket_nofield.xml";
+   (void)std::filesystem::remove(c_Path);
+   ASSERT_FALSE(static_cast<bool>(C_OscNodeCommFiler::h_SaveNodeComProtocolFile(c_Proto, c_Path.string(), "ComPool")));
+
+   //Strip the explicit multipacket attribute to simulate a pre-multipacket 0x0003 file
+   {
+      std::ifstream c_In(c_Path);
+      std::stringstream c_Buf;
+      c_Buf << c_In.rdbuf();
+      std::string c_Xml = c_Buf.str();
+      const std::string c_Attr = " multipacket=\"true\"";
+      const std::size_t u32_Pos = c_Xml.find(c_Attr);
+      ASSERT_NE(std::string::npos, u32_Pos) << "saved XML must carry the multipacket attribute";
+      c_Xml.erase(u32_Pos, c_Attr.length());
+      std::ofstream c_Out(c_Path, std::ios::trunc);
+      c_Out << c_Xml;
+   }
+
+   std::vector<C_OscNodeDataPool> c_Pools(1);
+   c_Pools[0].c_Name = "ComPool";
+   c_Pools[0].e_Type = C_OscNodeDataPool::eCOM;
+   C_OscCanProtocol c_Target;
+   ASSERT_FALSE(static_cast<bool>(C_OscNodeCommFiler::h_LoadNodeComProtocolFile(c_Target, c_Path.string(), c_Pools)));
+
+   ASSERT_EQ(1U, c_Target.c_ComMessages[0].c_TxMessages.size());
+   const C_OscCanMessage & rc_Tx = c_Target.c_ComMessages[0].c_TxMessages[0];
+   EXPECT_EQ(1785U, rc_Tx.u16_Dlc);
+   EXPECT_TRUE(rc_Tx.q_IsMultipacket) << "a DLC>8 message with no explicit multipacket attribute must load as multipacket";
+   (void)std::filesystem::remove(c_Path);
+}
+
 
 /* -- CAN communication protocol ------------------------------------------------------------------------------------ */
 
@@ -756,6 +809,47 @@ void h_RoundTripProtocol(const C_OscCanProtocol & orc_Source, const std::string 
 TEST(FilerRoundTrip, NodeComProtocolJ1939)
 {
    h_RoundTripProtocol(h_MakeProtocol(C_OscCanProtocol::eJ1939), "osy_rt_com_j1939.xml");
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   A J1939 multi-packet (TP) message survives the round trip, with the flag preserved
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(FilerRoundTrip, MultipacketMessage)
+{
+   C_OscCanProtocol c_Proto = h_MakeProtocol(C_OscCanProtocol::eJ1939);
+   c_Proto.c_ComMessages[0].c_TxMessages.clear();
+   c_Proto.c_ComMessages[0].c_TxMessages.push_back(h_MakeMultipacketMessage());
+
+   const std::filesystem::path c_Path = std::filesystem::temp_directory_path() / "osy_rt_com_multipacket.xml";
+   (void)std::filesystem::remove(c_Path);
+   ASSERT_FALSE(static_cast<bool>(C_OscNodeCommFiler::h_SaveNodeComProtocolFile(c_Proto, c_Path.string(), "ComPool")));
+
+   //the loader resolves the saved datapool name against these
+   std::vector<C_OscNodeDataPool> c_Pools(1);
+   c_Pools[0].c_Name = "ComPool";
+   c_Pools[0].e_Type = C_OscNodeDataPool::eCOM;
+
+   C_OscCanProtocol c_Target;
+   ASSERT_FALSE(static_cast<bool>(C_OscNodeCommFiler::h_LoadNodeComProtocolFile(c_Target, c_Path.string(), c_Pools)));
+
+   uint32_t u32_A = 0xFFFFFFFFUL;
+   uint32_t u32_B = 0xFFFFFFFFUL;
+   c_Proto.CalcHash(u32_A);
+   c_Target.CalcHash(u32_B);
+   EXPECT_EQ(u32_A, u32_B) << "a field is lost that the checks below do not cover";
+
+   ASSERT_EQ(1U, c_Target.c_ComMessages[0].c_TxMessages.size());
+   const C_OscCanMessage & rc_Tx = c_Target.c_ComMessages[0].c_TxMessages[0];
+   EXPECT_EQ("ECUIdentificationInformation", rc_Tx.c_Name);
+   EXPECT_EQ(0x18FECA00U, rc_Tx.u32_CanId);
+   EXPECT_EQ(1785U, rc_Tx.u16_Dlc);
+   EXPECT_TRUE(rc_Tx.q_IsMultipacket);
+   ASSERT_EQ(1U, rc_Tx.c_Signals.size());
+   EXPECT_EQ(0U, rc_Tx.c_Signals[0].u16_ComBitStart);
+   EXPECT_EQ(14280U, rc_Tx.c_Signals[0].u16_ComBitLength);
+
+   (void)std::filesystem::remove(c_Path);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

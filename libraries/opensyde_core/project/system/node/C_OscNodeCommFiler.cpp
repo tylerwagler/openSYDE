@@ -564,6 +564,15 @@ std::error_code C_OscNodeCommFiler::h_LoadNodeComMessage(C_OscCanMessage & orc_N
    orc_NodeComMessage.u32_CanId = orc_XmlParser.GetAttributeUint32("can-id");
    orc_NodeComMessage.q_IsExtended = orc_XmlParser.GetAttributeBool("is-extended");
    orc_NodeComMessage.u16_Dlc = static_cast<uint16_t>(orc_XmlParser.GetAttributeUint32("dlc"));
+   if (orc_XmlParser.AttributeExists("multipacket") == true)
+   {
+      orc_NodeComMessage.q_IsMultipacket = orc_XmlParser.GetAttributeBool("multipacket");
+   }
+   else
+   {
+      //Backward compatibility: pre-multipacket 0x0003 files encode TP messages via dlc > 8
+      orc_NodeComMessage.q_IsMultipacket = (orc_NodeComMessage.u16_Dlc > 8U);
+   }
    orc_NodeComMessage.u32_CycleTimeMs = orc_XmlParser.GetAttributeUint32("cycle-time");
    orc_NodeComMessage.u16_DelayTimeMs =
       static_cast<uint16_t>(orc_XmlParser.GetAttributeUint32("minimum-cycle-time"));
@@ -648,6 +657,7 @@ void C_OscNodeCommFiler::h_SaveNodeComMessage(const C_OscCanMessage & orc_NodeCo
    orc_XmlParser.SetAttributeUint32("can-id", orc_NodeComMessage.u32_CanId);
    orc_XmlParser.SetAttributeBool("is-extended", orc_NodeComMessage.q_IsExtended);
    orc_XmlParser.SetAttributeUint32("dlc", orc_NodeComMessage.u16_Dlc);
+   orc_XmlParser.SetAttributeBool("multipacket", orc_NodeComMessage.q_IsMultipacket);
    orc_XmlParser.SetAttributeUint32("cycle-time", orc_NodeComMessage.u32_CycleTimeMs);
    orc_XmlParser.SetAttributeUint32("minimum-cycle-time", orc_NodeComMessage.u16_DelayTimeMs);
    orc_XmlParser.SetAttributeUint32("receive-timeout", orc_NodeComMessage.u32_TimeoutMs);

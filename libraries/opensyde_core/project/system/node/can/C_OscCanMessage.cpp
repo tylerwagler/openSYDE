@@ -46,6 +46,7 @@ C_OscCanMessage::C_OscCanMessage(void) :
    u32_CanId(0x7FF),
    q_IsExtended(false),
    u16_Dlc(8),
+   q_IsMultipacket(false),
    e_TxMethod(eTX_METHOD_CYCLIC),
    u32_CycleTimeMs(100),
    u16_DelayTimeMs(10),
@@ -77,6 +78,7 @@ bool C_OscCanMessage::operator !=(const C_OscCanMessage & orc_Cmp) const
        (this->u32_CanId       != orc_Cmp.u32_CanId) ||
        (this->q_IsExtended    != orc_Cmp.q_IsExtended) ||
        (this->u16_Dlc         != orc_Cmp.u16_Dlc) ||
+       (this->q_IsMultipacket != orc_Cmp.q_IsMultipacket) ||
        (this->e_TxMethod      != orc_Cmp.e_TxMethod) ||
        (this->u32_CycleTimeMs != orc_Cmp.u32_CycleTimeMs) ||
        (this->u16_DelayTimeMs != orc_Cmp.u16_DelayTimeMs) ||
@@ -127,6 +129,8 @@ void C_OscCanMessage::CalcHash(uint32_t & oru32_HashValue, const bool oq_R20Comp
    {
       this->c_CanOpenManagerOwnerNodeIndex.CalcHash(oru32_HashValue);
 
+      stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsMultipacket, sizeof(this->q_IsMultipacket),
+                                          oru32_HashValue);
       stw::scl::C_SclChecksums::CalcCRC32(&this->q_CanOpenManagerCobIdIncludesNodeId,
                                           sizeof(this->q_CanOpenManagerCobIdIncludesNodeId),
                                           oru32_HashValue);
