@@ -112,6 +112,9 @@ C_SdNdeNodePropertiesWidget::C_SdNdeNodePropertiesWidget(QWidget * const opc_Par
                                                                       C_SdNdeComIfSettingsTableDelegate::eNODEID))->
    setTextAlignment(static_cast<int32_t> (Qt::AlignHCenter));
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(static_cast<int32_t> (
+                                                                      C_SdNdeComIfSettingsTableDelegate::eJ1939_ADDRESS))
+   ->setTextAlignment(static_cast<int32_t> (Qt::AlignHCenter));
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(static_cast<int32_t> (
                                                                       C_SdNdeComIfSettingsTableDelegate::eIPADDRESS))->
    setTextAlignment(static_cast<int32_t> (Qt::AlignHCenter));
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(static_cast<int32_t> (
@@ -147,6 +150,13 @@ C_SdNdeNodePropertiesWidget::C_SdNdeNodePropertiesWidget(QWidget * const opc_Par
                                                                                        QHeaderView::Fixed);
    this->mpc_Ui->pc_TableWidgetComIfSettings->setColumnWidth(static_cast<int32_t> (C_SdNdeComIfSettingsTableDelegate::
                                                                                    eNODEID), 150);
+
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeader()->setSectionResizeMode(static_cast<int32_t> (
+                                                                                          C_SdNdeComIfSettingsTableDelegate
+                                                                                          ::eJ1939_ADDRESS),
+                                                                                       QHeaderView::Fixed);
+   this->mpc_Ui->pc_TableWidgetComIfSettings->setColumnWidth(static_cast<int32_t> (C_SdNdeComIfSettingsTableDelegate::
+                                                                                   eJ1939_ADDRESS), 150);
 
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeader()->setSectionResizeMode(static_cast<int32_t> (
                                                                                           C_SdNdeComIfSettingsTableDelegate
@@ -290,6 +300,13 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
    c_ConnectString.append("Linked to...");
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_CONNECTION)->setText(c_ConnectString);
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_NODE_ID)->setText("Node ID");
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(
+      static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eJ1939_ADDRESS))->setText("J1939 Address");
+   this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipHeadingAt(
+      static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eJ1939_ADDRESS), Qt::Horizontal, "J1939 Address",
+      "The node's J1939 source address on this bus (0x00..0xFD). It is written into the source address byte of every "
+      "J1939 message the node sends, so the messages follow the node rather than each carrying its own address.\n"
+      "0xFE is the null address: the node has no J1939 address on this bus and its messages are left as they are.");
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_IP_ADDRESS)->setText("IP Address");
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_UPDATE)->setText("Usable for Update");
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_ROUTING)->setText("Usable for Routing");
@@ -774,6 +791,26 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                this->mpc_Ui->pc_TableWidgetComIfSettings->item(u8_ComIfCnt, s32_COL_NODE_ID)->setFlags(
                   Qt::ItemIsEnabled | Qt::ItemIsEditable);
                /**********************************************************************************************************/
+               //J1939 ADDRESS (CAN interfaces only)
+               {
+                  const int32_t s32_COL_J1939 = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eJ1939_ADDRESS);
+                  QTableWidgetItem * const pc_Item = new QTableWidgetItem("");
+                  pc_Item->setTextAlignment(static_cast<int32_t> (Qt::AlignCenter));
+                  if (u8_ComIfCnt < pc_DevDef->u8_NumCanBusses)
+                  {
+                     pc_Item->setText("0x" + QString::number(
+                                         pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt].u8_J1939SourceAddress,
+                                         16).toUpper());
+                     pc_Item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+                  }
+                  else
+                  {
+                     pc_Item->setText("-");
+                     pc_Item->setFlags(Qt::ItemIsEnabled);
+                  }
+                  this->mpc_Ui->pc_TableWidgetComIfSettings->setItem(u8_ComIfCnt, s32_COL_J1939, pc_Item);
+               }
+               /**********************************************************************************************************/
                //IP Address
                {
                   QLabel * const pc_LabelIp = new QLabel(this);
@@ -1021,6 +1058,7 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
             C_OscNodeProperties::E_DiagnosticServerProtocol e_DiagnosticServer;
             C_OscNodeProperties::E_FlashLoaderProtocol e_FlashLoader;
             std::vector<uint8_t> c_NodeIds;
+            std::vector<uint8_t> c_J1939Addresses;
             std::vector<bool> c_UpdateFlags;
             std::vector<bool> c_RoutingFlags;
             std::vector<bool> c_DiagnosisFlags;
@@ -1099,6 +1137,19 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
                c_NodeIds.push_back(
                   static_cast<uint8_t>((this->mpc_Ui->pc_TableWidgetComIfSettings->
                                         item(u16_ComIfCnt, s32_COL_NODE_ID)->text().toInt())));
+               //J1939 source address (CAN only; Ethernet rows carry the null address)
+               if (rc_CurInterface.e_InterfaceType == C_OscSystemBus::eCAN)
+               {
+                  c_J1939Addresses.push_back(
+                     static_cast<uint8_t>(this->mpc_Ui->pc_TableWidgetComIfSettings->item(
+                                             u16_ComIfCnt,
+                                             static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eJ1939_ADDRESS))->
+                                          text().toInt(nullptr, 0))); //base 0: accepts "0x.." as well as decimal
+               }
+               else
+               {
+                  c_J1939Addresses.push_back(C_OscNodeComInterfaceSettings::hu8_J1939_NULL_ADDRESS);
+               }
 
                //update
                if (q_IsUpdateAvailable == true)
@@ -1172,6 +1223,9 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
                                                                           e_DiagnosticServer, e_FlashLoader,
                                                                           c_NodeIds, c_UpdateFlags, c_RoutingFlags,
                                                                           c_DiagnosisFlags);
+
+            //J1939 addressing: stored on the interfaces and written into the J1939 Tx identifiers
+            C_PuiSdHandler::h_GetInstance()->SetOscNodeJ1939SourceAddresses(this->mu32_NodeIndex, c_J1939Addresses);
 
             //UDS addressing (the rest of the UDS configuration is kept as it is)
             {

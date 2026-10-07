@@ -150,6 +150,8 @@ public:
                                 const uint32_t & oru32_SignalIndex, const uint16_t ou16_MultiplexValue);
 
    //Can protocol add/delete/move
+   void SetOscNodeJ1939SourceAddresses(const uint32_t ou32_NodeIndex,
+                                       const std::vector<uint8_t> & orc_SourceAddresses);
    int32_t AddCanMessage(const uint32_t & oru32_NodeIndex,
                          const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType,
                          const uint32_t & oru32_InterfaceIndex, const uint32_t ou32_DatapoolIndex,

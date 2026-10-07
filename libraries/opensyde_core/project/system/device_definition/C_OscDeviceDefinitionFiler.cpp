@@ -761,6 +761,15 @@ std::error_code C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefin
       tgl_assert(c_Text == "sub-device");
    }
 
+   //J1939 default source address (file version 0x0004); optional
+   if (orc_Parser.SelectNodeChild("j1939") == "j1939")
+   {
+      orc_SubDeviceDefinition.u8_J1939SourceAddress =
+         static_cast<uint8_t>(orc_Parser.GetAttributeUint32("source-address"));
+      c_Text = orc_Parser.SelectNodeParent(); //back to parent ...
+      tgl_assert(c_Text == "sub-device");
+   }
+
    c_Text = orc_Parser.SelectNodeChild("memory");
    if (c_Text != "memory")
    {
@@ -880,6 +889,9 @@ void C_OscDeviceDefinitionFiler::mh_SaveSubDevice(const C_OscSubDeviceDefinition
    orc_Parser.SelectNodeParent();
    orc_Parser.CreateAndSelectNodeChild("uds");
    C_OscNodeUdsConfigFiler::h_SaveData(orc_SubDeviceDefinition.c_UdsConfig, orc_Parser);
+   orc_Parser.SelectNodeParent();
+   orc_Parser.CreateAndSelectNodeChild("j1939");
+   orc_Parser.SetAttributeUint32("source-address", orc_SubDeviceDefinition.u8_J1939SourceAddress);
    orc_Parser.SelectNodeParent();
    orc_Parser.CreateAndSelectNodeChild("memory");
    orc_Parser.CreateAndSelectNodeChild("user-eeprom");

@@ -250,6 +250,7 @@ inline C_OscNode h_MakeNode(const std::string & orc_Name, const uint8_t ou8_Node
       c_If.e_InterfaceType = C_OscSystemBus::eCAN;
       c_If.u8_InterfaceNumber = 0U;
       c_If.u8_NodeId = ou8_NodeId;
+      c_If.u8_J1939SourceAddress = 0x80U;
       c_If.q_IsUpdateEnabled = true;
       c_If.q_IsRoutingEnabled = false;
       c_If.q_IsDiagnosisEnabled = true;
@@ -396,6 +397,7 @@ inline C_OscDeviceDefinition h_MakeDeviceDefinition(void)
    //a plain UDS device at the usual tester/ECU pair, with one routine it offers
    c_Sub.q_DiagnosticProtocolUdsCan = true;
    c_Sub.q_FlashloaderUdsCan = false;
+   c_Sub.u8_J1939SourceAddress = 0x21U;
    c_Sub.c_UdsConfig.u32_RequestId = 0x7E1U;
    c_Sub.c_UdsConfig.u32_ResponseId = 0x7E9U;
    c_Sub.c_UdsConfig.c_SecurityLevels = {0x01U};

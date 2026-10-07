@@ -1571,6 +1571,11 @@
         </column>
         <column>
          <property name="text">
+          <string>_J1939 Address</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>_IpAddress</string>
          </property>
         </column>

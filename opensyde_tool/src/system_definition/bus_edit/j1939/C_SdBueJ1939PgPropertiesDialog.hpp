@@ -40,6 +40,7 @@ public:
    void InitStaticNames(void) const;
 
    uint32_t GetNewCanId(void) const;
+   void SetSourceAddressFixed(const uint8_t ou8_SourceAddress);
 
 
 private:

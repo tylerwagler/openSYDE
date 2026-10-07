@@ -82,13 +82,24 @@ QWidget * C_SdNdeComIfSettingsTableDelegate::createEditor(QWidget * const opc_Pa
 
    if (orc_Index.isValid() == true)
    {
-      if (static_cast<E_Columns>(orc_Index.column()) == E_Columns::eNODEID)
+      const E_Columns e_Column = static_cast<E_Columns>(orc_Index.column());
+      if ((e_Column == E_Columns::eNODEID) || (e_Column == E_Columns::eJ1939_ADDRESS))
       {
          pc_SpinBox = new C_OgeSpxToolTipBase(opc_Parent);
          pc_SpinBox->setProperty("styleRole", "spx-table-com-if");
-         pc_SpinBox->SetMaximumCustom(u8_Maximum);
-         connect(pc_SpinBox, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged), this,
-                 &C_SdNdeComIfSettingsTableDelegate::m_CheckValue);
+         if (e_Column == E_Columns::eNODEID)
+         {
+            pc_SpinBox->SetMaximumCustom(u8_Maximum);
+            connect(pc_SpinBox, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged), this,
+                    &C_SdNdeComIfSettingsTableDelegate::m_CheckValue);
+         }
+         else
+         {
+            //0..253 are addresses, 254 is the null address (none), 255 is the global address and not a node's
+            pc_SpinBox->SetMaximumCustom(254);
+            pc_SpinBox->setPrefix("0x");
+            pc_SpinBox->setDisplayIntegerBase(16);
+         }
          pc_Retval = pc_SpinBox;
          Q_EMIT this->SigEdit(orc_Index);
       }
@@ -116,12 +127,14 @@ void C_SdNdeComIfSettingsTableDelegate::setEditorData(QWidget * const opc_Editor
    {
       QSpinBox * const pc_SpinBoxInt = dynamic_cast<QSpinBox * const>(opc_Editor);
 
-      if (static_cast<E_Columns>(orc_Index.column()) == E_Columns::eNODEID)
+      if ((static_cast<E_Columns>(orc_Index.column()) == E_Columns::eNODEID) ||
+          (static_cast<E_Columns>(orc_Index.column()) == E_Columns::eJ1939_ADDRESS))
       {
          if (pc_SpinBoxInt != nullptr)
          {
             //pc_SpinBoxInt->setAlignment(Qt::AlignCenter);
-            pc_SpinBoxInt->setValue(orc_Index.data().toInt());
+            //base 0: the J1939 address cell reads "0x..", the node id cell is decimal
+            pc_SpinBoxInt->setValue(orc_Index.data().toString().toInt(nullptr, 0));
          }
       }
       else
@@ -148,11 +161,19 @@ void C_SdNdeComIfSettingsTableDelegate::setModelData(QWidget * const opc_Editor,
    {
       QSpinBox * const pc_SpinBoxInt = dynamic_cast<QSpinBox * const>(opc_Editor);
 
-      if (static_cast<E_Columns>(orc_Index.column()) == E_Columns::eNODEID)
+      if ((static_cast<E_Columns>(orc_Index.column()) == E_Columns::eNODEID) ||
+          (static_cast<E_Columns>(orc_Index.column()) == E_Columns::eJ1939_ADDRESS))
       {
          if (pc_SpinBoxInt != nullptr)
          {
-            opc_Model->setData(orc_Index, pc_SpinBoxInt->value());
+            if (static_cast<E_Columns>(orc_Index.column()) == E_Columns::eJ1939_ADDRESS)
+            {
+               opc_Model->setData(orc_Index, "0x" + QString::number(pc_SpinBoxInt->value(), 16).toUpper());
+            }
+            else
+            {
+               opc_Model->setData(orc_Index, pc_SpinBoxInt->value());
+            }
          }
       }
       else

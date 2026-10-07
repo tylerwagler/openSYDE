@@ -708,6 +708,11 @@ std::error_code C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInte
          c_ComInterface.q_IsUpdateEnabled = orc_XmlParser.GetAttributeBool("update-available");
          c_ComInterface.q_IsRoutingEnabled = orc_XmlParser.GetAttributeBool("routing-available");
          c_ComInterface.q_IsDiagnosisEnabled = orc_XmlParser.GetAttributeBool("diagnosis-available");
+         if (orc_XmlParser.AttributeExists("j1939-source-address") == true)
+         {
+            c_ComInterface.u8_J1939SourceAddress =
+               static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("j1939-source-address"));
+         }
 
          //IP address
          if ((orc_XmlParser.SelectNodeChild("ip-address") == "ip-address") && (!c_Retval))
@@ -828,6 +833,7 @@ void C_OscNodeFiler::mh_SaveComInterface(const std::vector<C_OscNodeComInterface
       orc_XmlParser.SetAttributeBool("update-available", rc_CurComInterface.q_IsUpdateEnabled);
       orc_XmlParser.SetAttributeBool("routing-available", rc_CurComInterface.q_IsRoutingEnabled);
       orc_XmlParser.SetAttributeBool("diagnosis-available", rc_CurComInterface.q_IsDiagnosisEnabled);
+      orc_XmlParser.SetAttributeUint32("j1939-source-address", rc_CurComInterface.u8_J1939SourceAddress);
       if (rc_CurComInterface.e_InterfaceType == C_OscSystemBus::eETHERNET)
       {
          orc_XmlParser.CreateAndSelectNodeChild("ip-address");

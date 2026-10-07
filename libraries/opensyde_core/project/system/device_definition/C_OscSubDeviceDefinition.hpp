@@ -53,6 +53,9 @@ public:
    bool q_FlashloaderUdsCan;
    ///how the UDS server is addressed and what it offers; seeds C_OscNode::c_UdsConfig when the node is created
    C_OscNodeUdsConfig c_UdsConfig;
+   ///J1939 source address the device uses by default on every CAN bus; 0xFE (null address) if it is not a
+   ///J1939 node. Seeds C_OscNodeComInterfaceSettings::u8_J1939SourceAddress when the node is created.
+   uint8_t u8_J1939SourceAddress;
 
    ///is the openSYDE protocol supported on CAN bus ?
    bool q_DiagnosticProtocolOpenSydeCan;

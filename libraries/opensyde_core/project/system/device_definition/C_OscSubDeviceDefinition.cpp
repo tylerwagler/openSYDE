@@ -51,6 +51,7 @@ void C_OscSubDeviceDefinition::Clear()
    q_DiagnosticProtocolUdsCan = false;
    q_FlashloaderUdsCan = false;
    c_UdsConfig.Initialize();
+   u8_J1939SourceAddress = 0xFEU;
    q_DiagnosticProtocolOpenSydeCan = false;
    q_DiagnosticProtocolOpenSydeEthernet = false;
    q_FlashloaderOpenSydeCan = false;

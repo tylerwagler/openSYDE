@@ -45,6 +45,7 @@ C_OscNodeComInterfaceSettings::C_OscNodeComInterfaceSettings(void) :
    e_InterfaceType(C_OscSystemBus::eCAN),
    u8_InterfaceNumber(0),
    u8_NodeId(0),
+   u8_J1939SourceAddress(hu8_J1939_NULL_ADDRESS),
    q_IsUpdateEnabled(false),
    q_IsRoutingEnabled(false),
    q_IsDiagnosisEnabled(false),
@@ -76,6 +77,8 @@ void C_OscNodeComInterfaceSettings::CalcHash(uint32_t & oru32_HashValue) const
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_InterfaceType, sizeof(this->e_InterfaceType), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u8_InterfaceNumber, sizeof(this->u8_InterfaceNumber), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u8_NodeId, sizeof(this->u8_NodeId), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(&this->u8_J1939SourceAddress, sizeof(this->u8_J1939SourceAddress),
+                                       oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->c_Ip.au8_IpAddress[0], sizeof(this->c_Ip.au8_IpAddress), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->c_Ip.au8_NetMask[0], sizeof(this->c_Ip.au8_NetMask), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->c_Ip.au8_DefaultGateway[0], sizeof(this->c_Ip.au8_DefaultGateway),

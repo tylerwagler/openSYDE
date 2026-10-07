@@ -496,3 +496,20 @@ uint32_t C_OscCanUtil::h_GetVisiblePgn(const uint32_t ou32_Pgn)
    }
    return u32_VisiblePgn;
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Replace the source address byte of a J1939 identifier
+
+   The source address is the low byte of the 29 bit identifier; priority, data page and PGN stay as they are.
+
+   \param[in]  ou32_CanId           J1939 identifier
+   \param[in]  ou8_SourceAddress    source address to put in
+
+   \return
+   identifier with the new source address
+*/
+//----------------------------------------------------------------------------------------------------------------------
+uint32_t C_OscCanUtil::h_SetJ1939SourceAddress(const uint32_t ou32_CanId, const uint8_t ou8_SourceAddress)
+{
+   return (ou32_CanId & 0x1FFFFF00U) | static_cast<uint32_t>(ou8_SourceAddress);
+}

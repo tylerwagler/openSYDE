@@ -50,9 +50,14 @@ public:
 
    void CalcHash(uint32_t & oru32_HashValue) const;
 
+   static constexpr uint8_t hu8_J1939_NULL_ADDRESS = 0xFEU; ///< J1939 "null address": no source address assigned
+
    C_OscSystemBus::E_Type e_InterfaceType; ///< e.g. CAN, ethernet
    uint8_t u8_InterfaceNumber;             ///< 0 = first interface for this type
    uint8_t u8_NodeId;                      ///< Node ID on bus
+   uint8_t u8_J1939SourceAddress;          ///< J1939 source address on this bus; hu8_J1939_NULL_ADDRESS if
+                                           ///< the node has none. Owns the source address byte of every J1939
+                                           ///< Tx message on this interface (C_OscNode::ApplyJ1939SourceAddresses)
 
    C_IpAddress c_Ip; ///< only used with interface type ethernet
 

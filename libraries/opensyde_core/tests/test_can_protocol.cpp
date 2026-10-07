@@ -17,6 +17,9 @@
 #include "C_OscCanProtocol.hpp"
 #include "C_OscNodeDataPool.hpp"
 #include "C_OscNodeCommFiler.hpp"
+#include "C_OscCanUtil.hpp"
+#include "C_OscNode.hpp"
+#include "osy_test_models.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -99,4 +102,37 @@ TEST(CanProtocol, UnknownProtocolStringIsRejected)
 
    EXPECT_EQ(Errc::range, C_OscNodeCommFiler::h_StringToCommunicationProtocol("not-a-protocol", e_Loaded));
    EXPECT_EQ(C_OscCanProtocol::eJ1939, e_Loaded);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   A node's J1939 source address lands in the source byte of its J1939 Tx identifiers and nowhere else
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(CanProtocol, J1939SourceAddressRewritesTxIdentifiersOnly)
+{
+   EXPECT_EQ(0x18FEF180U, C_OscCanUtil::h_SetJ1939SourceAddress(0x18FEF100U, 0x80U));
+   EXPECT_EQ(0x0CF004FEU, C_OscCanUtil::h_SetJ1939SourceAddress(0x0CF00400U, 0xFEU)) << "priority and PGN untouched";
+
+   //h_MakeNode: CAN interface at source address 0x80, a J1939 protocol with Tx EngineStatus and Rx Command
+   C_OscNode c_Node = h_MakeNode("Sensor", 5U, 0U);
+   const C_OscCanProtocol * pc_Protocol = nullptr;
+   for (const C_OscCanProtocol & rc_Protocol : c_Node.c_ComProtocols)
+   {
+      if (rc_Protocol.e_Type == C_OscCanProtocol::eJ1939)
+      {
+         pc_Protocol = &rc_Protocol;
+      }
+   }
+   ASSERT_NE(nullptr, pc_Protocol);
+   const uint32_t u32_RxBefore = pc_Protocol->c_ComMessages[0].c_RxMessages[0].u32_CanId;
+   ASSERT_EQ(0x18FEF100U, pc_Protocol->c_ComMessages[0].c_TxMessages[0].u32_CanId);
+
+   c_Node.ApplyJ1939SourceAddresses();
+   EXPECT_EQ(0x18FEF180U, pc_Protocol->c_ComMessages[0].c_TxMessages[0].u32_CanId);
+   EXPECT_EQ(u32_RxBefore, pc_Protocol->c_ComMessages[0].c_RxMessages[0].u32_CanId) << "Rx carries the sender's";
+
+   //the null address means "no address": the identifiers are left alone
+   c_Node.c_Properties.c_ComInterfaces[0].u8_J1939SourceAddress = C_OscNodeComInterfaceSettings::hu8_J1939_NULL_ADDRESS;
+   c_Node.ApplyJ1939SourceAddresses();
+   EXPECT_EQ(0x18FEF180U, pc_Protocol->c_ComMessages[0].c_TxMessages[0].u32_CanId);
 }

@@ -38,6 +38,7 @@ public:
       eINTERFACE = 0,
       eCONNECTION,
       eNODEID,
+      eJ1939_ADDRESS,
       eIPADDRESS,
       eUPDATE,
       eDIAGNOSTIC,

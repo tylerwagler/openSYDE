@@ -21,6 +21,7 @@
 #include "C_OscErrorCategory.hpp"
 
 #include "C_OscNode.hpp"
+#include "C_OscCanUtil.hpp"
 #include "C_OscDeviceDefinition.hpp"
 #include "C_SclChecksums.hpp"
 #include "TglUtils.hpp"
@@ -2659,5 +2660,41 @@ void C_OscNode::AddComDataFromDeviceDefinition(const C_OscDeviceDefinition & orc
          rc_Protocol.u32_DataPoolIndex = u32_OldDataPoolCount + rc_Protocol.u32_DataPoolIndex;
       }
       this->c_ComProtocols.push_back(rc_Protocol);
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Put each CAN interface's J1939 source address into the identifiers of its J1939 Tx messages
+
+   A node's J1939 address lives on the interface, not in every message. This writes it into the source address byte
+   of every Tx message of every J1939 protocol, interface by interface. Interfaces at the null address are left
+   alone, as are Rx messages: their source address is the sender's.
+
+   This touches the node only. In the GUI, matching Rx copies on other nodes have to follow, which the message sync
+   manager does; the handler goes through that instead of calling this directly.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNode::ApplyJ1939SourceAddresses(void)
+{
+   for (C_OscCanProtocol & rc_Protocol : this->c_ComProtocols)
+   {
+      if (rc_Protocol.e_Type == C_OscCanProtocol::eJ1939)
+      {
+         for (uint32_t u32_ItInterface = 0U;
+              (u32_ItInterface < rc_Protocol.c_ComMessages.size()) &&
+              (u32_ItInterface < this->c_Properties.c_ComInterfaces.size()); ++u32_ItInterface)
+         {
+            const C_OscNodeComInterfaceSettings & rc_Interface = this->c_Properties.c_ComInterfaces[u32_ItInterface];
+            if ((rc_Interface.e_InterfaceType == C_OscSystemBus::eCAN) &&
+                (rc_Interface.u8_J1939SourceAddress != C_OscNodeComInterfaceSettings::hu8_J1939_NULL_ADDRESS))
+            {
+               for (C_OscCanMessage & rc_Message : rc_Protocol.c_ComMessages[u32_ItInterface].c_TxMessages)
+               {
+                  rc_Message.u32_CanId = C_OscCanUtil::h_SetJ1939SourceAddress(rc_Message.u32_CanId,
+                                                                               rc_Interface.u8_J1939SourceAddress);
+               }
+            }
+         }
+      }
    }
 }

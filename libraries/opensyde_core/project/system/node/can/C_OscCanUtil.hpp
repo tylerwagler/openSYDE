@@ -64,6 +64,7 @@ public:
    static void h_GetJ1939PgInfoFromCanId(const uint32_t ou32_CanId, C_OscCanUtilJ1939PgInfo & orc_PgInfo);
    static void h_GetCanIdFromJ1939PgInfo(const C_OscCanUtilJ1939PgInfo & orc_PgInfo, uint32_t & oru32_CanId);
    static uint32_t h_GetVisiblePgn(const uint32_t ou32_Pgn);
+   static uint32_t h_SetJ1939SourceAddress(const uint32_t ou32_CanId, const uint8_t ou8_SourceAddress);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

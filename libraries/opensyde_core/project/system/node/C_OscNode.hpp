@@ -159,6 +159,7 @@ public:
    // carries its messages (C_OscDeviceDefinition::c_ComDataPools / c_ComProtocols).
    // No-op if the device has none.
    void AddComDataFromDeviceDefinition(const C_OscDeviceDefinition & orc_Device);
+   void ApplyJ1939SourceAddresses(void);
 
    const C_OscDeviceDefinition * pc_DeviceDefinition; ///< Pointer to device definition
    uint32_t u32_SubDeviceIndex;

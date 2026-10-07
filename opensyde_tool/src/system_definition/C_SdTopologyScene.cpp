@@ -3852,6 +3852,20 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode & orc_OscNode, const QString & 
          this->m_InitNodeComIfSettings(orc_OscNode, orc_NodeType, orc_MainDevice);
          //---Seed the node with the device's embedded CAN messages (if any)
          orc_OscNode.AddComDataFromDeviceDefinition(*(orc_OscNode.pc_DeviceDefinition));
+         //---J1939: the device's default source address goes on every CAN interface and into its Tx identifiers
+         if (orc_OscNode.u32_SubDeviceIndex < orc_OscNode.pc_DeviceDefinition->c_SubDevices.size())
+         {
+            const uint8_t u8_SourceAddress =
+               orc_OscNode.pc_DeviceDefinition->c_SubDevices[orc_OscNode.u32_SubDeviceIndex].u8_J1939SourceAddress;
+            for (C_OscNodeComInterfaceSettings & rc_Interface : orc_OscNode.c_Properties.c_ComInterfaces)
+            {
+               if (rc_Interface.e_InterfaceType == C_OscSystemBus::eCAN)
+               {
+                  rc_Interface.u8_J1939SourceAddress = u8_SourceAddress;
+               }
+            }
+            orc_OscNode.ApplyJ1939SourceAddresses();
+         }
       }
    }
 }

@@ -3351,3 +3351,69 @@ int32_t C_PuiSdHandlerBusLogic::m_DeleteUiCanMessage(const C_OscCanMessageIdenti
    }
    return s32_Retval;
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set the J1939 source address of each CAN interface and rewrite the node's J1939 Tx identifiers
+
+   The address goes on the interface. Every J1939 Tx message on that interface gets it as its source address byte,
+   through the message sync manager so that matching Rx copies on other nodes follow. Interfaces at the null address
+   leave their messages alone.
+
+   \param[in]  ou32_NodeIndex          Node index
+   \param[in]  orc_SourceAddresses     One address per interface, in interface order (Ethernet entries are ignored)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_PuiSdHandlerBusLogic::SetOscNodeJ1939SourceAddresses(const uint32_t ou32_NodeIndex,
+                                                            const std::vector<uint8_t> & orc_SourceAddresses)
+{
+   if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
+   {
+      C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
+      for (uint32_t u32_ItInterface = 0U;
+           (u32_ItInterface < rc_Node.c_Properties.c_ComInterfaces.size()) &&
+           (u32_ItInterface < orc_SourceAddresses.size()); ++u32_ItInterface)
+      {
+         C_OscNodeComInterfaceSettings & rc_Interface = rc_Node.c_Properties.c_ComInterfaces[u32_ItInterface];
+         if (rc_Interface.e_InterfaceType == C_OscSystemBus::eCAN)
+         {
+            const uint8_t u8_SourceAddress = orc_SourceAddresses[u32_ItInterface];
+            rc_Interface.u8_J1939SourceAddress = u8_SourceAddress;
+            if (u8_SourceAddress != C_OscNodeComInterfaceSettings::hu8_J1939_NULL_ADDRESS)
+            {
+               for (uint32_t u32_ItProtocol = 0U; u32_ItProtocol < rc_Node.c_ComProtocols.size(); ++u32_ItProtocol)
+               {
+                  const C_OscCanProtocol & rc_Protocol = rc_Node.c_ComProtocols[u32_ItProtocol];
+                  if ((rc_Protocol.e_Type == C_OscCanProtocol::eJ1939) &&
+                      (u32_ItInterface < rc_Protocol.c_ComMessages.size()))
+                  {
+                     const uint32_t u32_MessageCount =
+                        static_cast<uint32_t>(rc_Protocol.c_ComMessages[u32_ItInterface].c_TxMessages.size());
+                     C_PuiSdNodeCanMessageSyncManager c_SyncManager;
+                     c_SyncManager.Init(ou32_NodeIndex, u32_ItInterface, C_OscCanProtocol::eJ1939);
+                     for (uint32_t u32_ItMessage = 0U; u32_ItMessage < u32_MessageCount; ++u32_ItMessage)
+                     {
+                        const C_OscCanMessageIdentificationIndices c_Id(ou32_NodeIndex, C_OscCanProtocol::eJ1939,
+                                                                        u32_ItInterface,
+                                                                        rc_Protocol.u32_DataPoolIndex, true,
+                                                                        u32_ItMessage);
+                        const C_OscCanMessage * const pc_Message = this->GetCanMessage(c_Id);
+                        if (pc_Message != nullptr)
+                        {
+                           const uint32_t u32_NewId = C_OscCanUtil::h_SetJ1939SourceAddress(pc_Message->u32_CanId,
+                                                                                            u8_SourceAddress);
+                           if (u32_NewId != pc_Message->u32_CanId)
+                           {
+                              C_OscCanMessage c_Message = *pc_Message;
+                              c_Message.u32_CanId = u32_NewId;
+                              tgl_assert(c_SyncManager.SetCanMessagePropertiesWithoutDirectionChangeAndWithoutTimeoutChange(
+                                            c_Id, c_Message) == C_NO_ERR);
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+}

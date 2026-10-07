@@ -482,6 +482,7 @@ TEST(FilerRoundTrip, DeviceDefinition)
    c_Sub.q_FlashloaderOpenSydeIsFileBased = true;
    c_Sub.q_DiagnosticProtocolUdsCan = true;
    c_Sub.q_FlashloaderUdsCan = true;
+   c_Sub.u8_J1939SourceAddress = 0x33U;
    c_Sub.c_UdsConfig.u32_RequestId = 0x7E3U;
    c_Sub.c_UdsConfig.u32_ResponseId = 0x7EBU;
    c_Sub.c_UdsConfig.u32_P2Ms = 75U;
@@ -568,6 +569,7 @@ TEST(FilerRoundTrip, DeviceDefinition)
    //device.syd v0x0004: the plain UDS flags and the UDS description
    EXPECT_TRUE(rc_Sub.q_DiagnosticProtocolUdsCan);
    EXPECT_TRUE(rc_Sub.q_FlashloaderUdsCan);
+   EXPECT_EQ(0x33U, rc_Sub.u8_J1939SourceAddress);
    EXPECT_EQ(0x7E3U, rc_Sub.c_UdsConfig.u32_RequestId);
    EXPECT_EQ(0x7EBU, rc_Sub.c_UdsConfig.u32_ResponseId);
    EXPECT_EQ(75U, rc_Sub.c_UdsConfig.u32_P2Ms);
@@ -1304,6 +1306,7 @@ TEST(FilerRoundTrip, SystemDefinitionFile)
       EXPECT_EQ(rc_S.e_InterfaceType, rc_T.e_InterfaceType) << c_W << "type";
       EXPECT_EQ(rc_S.u8_InterfaceNumber, rc_T.u8_InterfaceNumber) << c_W << "number";
       EXPECT_EQ(rc_S.u8_NodeId, rc_T.u8_NodeId) << c_W << "node id";
+      EXPECT_EQ(rc_S.u8_J1939SourceAddress, rc_T.u8_J1939SourceAddress) << c_W << "j1939 source address";
       EXPECT_EQ(rc_S.q_IsUpdateEnabled, rc_T.q_IsUpdateEnabled) << c_W << "update flag";
       EXPECT_EQ(rc_S.q_IsRoutingEnabled, rc_T.q_IsRoutingEnabled) << c_W << "routing flag";
       EXPECT_EQ(rc_S.q_IsDiagnosisEnabled, rc_T.q_IsDiagnosisEnabled) << c_W << "diagnosis flag";

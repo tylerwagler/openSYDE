@@ -2633,6 +2633,31 @@ void C_SdBueMessagePropertiesWidget::m_OnEditJ1939PgPropertiesClicked(void)
    C_SdBueJ1939PgPropertiesDialog * const pc_AddDialog = new C_SdBueJ1939PgPropertiesDialog(
       this->mpc_Ui->pc_SpinBoxId->value(), *c_PopUp, this->mpc_Ui->pc_LineEditName->text());
 
+   //the sending node's J1939 address, if it has one, owns the source address byte
+   if (this->mpc_MessageSyncManager != nullptr)
+   {
+      std::vector<C_OscCanMessageIdentificationIndices> c_Ids =
+         this->mpc_MessageSyncManager->GetMatchingMessageVector(this->mc_MessageId);
+      c_Ids.push_back(this->mc_MessageId);
+      for (const C_OscCanMessageIdentificationIndices & rc_Id : c_Ids)
+      {
+         if (rc_Id.q_MessageIsTx == true)
+         {
+            const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(rc_Id.u32_NodeIndex);
+            if ((pc_Node != nullptr) && (rc_Id.u32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
+            {
+               const uint8_t u8_SourceAddress =
+                  pc_Node->c_Properties.c_ComInterfaces[rc_Id.u32_InterfaceIndex].u8_J1939SourceAddress;
+               if (u8_SourceAddress != C_OscNodeComInterfaceSettings::hu8_J1939_NULL_ADDRESS)
+               {
+                  pc_AddDialog->SetSourceAddressFixed(u8_SourceAddress);
+               }
+            }
+            break;
+         }
+      }
+   }
+
    //Resize
    const QSize c_SIZE(600, 456);
 

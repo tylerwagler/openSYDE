@@ -252,3 +252,21 @@ void C_SdBueJ1939PgPropertiesDialog::m_SetPgInfo(stw::opensyde_core::C_OscCanUti
    orc_PgInfo.u8_Priority = static_cast<uint8_t>(this->mpc_Ui->pc_CbxPriority->currentText().toUInt());
    orc_PgInfo.u8_SourceAddress = static_cast<uint8_t>(this->mpc_Ui->pc_SpinBoxSourceAddress->value());
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Show the source address as the node's, not editable here
+
+   When the sending node has a J1939 address on its interface, that address owns the source address byte of every
+   message it sends; it is changed on the node's Properties page, not per message.
+
+   \param[in]  ou8_SourceAddress   the node's J1939 source address
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueJ1939PgPropertiesDialog::SetSourceAddressFixed(const uint8_t ou8_SourceAddress)
+{
+   this->mc_PgInfo.u8_SourceAddress = ou8_SourceAddress;
+   this->mpc_Ui->pc_SpinBoxSourceAddress->setValue(ou8_SourceAddress);
+   this->mpc_Ui->pc_SpinBoxSourceAddress->setEnabled(false);
+   this->mpc_Ui->pc_LabelSourceAddress->SetToolTipInformation(
+      "Source Address", "Set by the sending node's J1939 Address on its Properties page.");
+}
