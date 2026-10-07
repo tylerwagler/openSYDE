@@ -20,6 +20,7 @@ when this table and the plan files disagree. The rules are in `README.md`.
 |------|--------|-----------------|
 | `uds-first-class-protocol.md` | UDS as a first-class protocol | Runtime (layers 0, B1, B2) and the core data model (A1, A2) are in; the per-protocol editing UI, CAN Monitor DID decoding and the consumers remain |
 | `device-definition-com-messages.md` | CAN messages embedded in `device.syd` | Mechanism done; devices being regenerated one by one |
+| `connectors-and-pinouts.md` | Electrical connectors and pinouts on the device/node | Scoped 2026-10-07; five decisions open, nothing implemented |
 | `r38_bringin/PLAN.md` | Upstream R38 bring-in | Phases 1 and 3 to 6 done; phase 2 partially done |
 
 ---
