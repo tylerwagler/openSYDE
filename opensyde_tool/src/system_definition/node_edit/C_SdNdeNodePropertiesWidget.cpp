@@ -18,6 +18,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QStandardItemModel>
 
 #include "C_Uti.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -243,6 +244,35 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
    this->mpc_Ui->pc_ComboBoxProtocol->addItem("UDS");
    this->mpc_Ui->pc_ComboBoxProtocol->addItem("None");
 
+   //UDS addressing (shown when the protocol is UDS)
+   this->mpc_Ui->pc_LabelUdsAddressing->setText("UDS Addressing");
+   this->mpc_Ui->pc_LabelUdsRequestId->setText("Request ID");
+   this->mpc_Ui->pc_LabelUdsResponseId->setText("Response ID");
+   this->mpc_Ui->pc_LabelUdsFunctionalId->setText("Functional ID");
+   this->mpc_Ui->pc_LabelUdsExtendedId->setText("29 bit identifiers");
+   this->mpc_Ui->pc_LabelUdsPadFrames->setText("Pad frames to 8 bytes");
+   this->mpc_Ui->pc_LabelUdsExtendedId->SetToolTipInformation(
+      "29 bit identifiers", "Checked: the identifiers above are 29 bit (extended). Unchecked: 11 bit.");
+   this->mpc_Ui->pc_LabelUdsPadFrames->SetToolTipInformation(
+      "Pad frames", "Checked: every frame to the node is padded to 8 data bytes, as most UDS servers require.");
+   this->mpc_Ui->pc_LabelUdsRequestId->SetToolTipInformation(
+      "Request ID", "CAN identifier the tool sends requests on (client to node), e.g. 0x7E0.");
+   this->mpc_Ui->pc_LabelUdsResponseId->SetToolTipInformation(
+      "Response ID", "CAN identifier the node answers on (node to client), e.g. 0x7E8.");
+   this->mpc_Ui->pc_LabelUdsFunctionalId->SetToolTipInformation(
+      "Functional ID", "CAN identifier for requests to every node on the bus, e.g. 0x7DF. 0 if the node has none.");
+   this->mpc_Ui->pc_CheckBoxUdsExtendedId->SetToolTipInformation(
+      "29 bit identifiers", "Checked: the identifiers above are 29 bit (extended). Unchecked: 11 bit.");
+   this->mpc_Ui->pc_CheckBoxUdsPadFrames->SetToolTipInformation(
+      "Pad frames", "Checked: every frame to the node is padded to 8 data bytes, as most UDS servers require.");
+   this->mpc_Ui->pc_SpinBoxUdsRequestId->setPrefix("0x");
+   this->mpc_Ui->pc_SpinBoxUdsResponseId->setPrefix("0x");
+   this->mpc_Ui->pc_SpinBoxUdsFunctionalId->setPrefix("0x");
+   this->mpc_Ui->pc_SpinBoxUdsRequestId->setDisplayIntegerBase(16);
+   this->mpc_Ui->pc_SpinBoxUdsResponseId->setDisplayIntegerBase(16);
+   this->mpc_Ui->pc_SpinBoxUdsFunctionalId->setDisplayIntegerBase(16);
+   this->m_SetUdsIdRange(true);
+
    this->mpc_Ui->pc_ComboBoxProgramming->addItem("Disabled");
    this->mpc_Ui->pc_ComboBoxProgramming->addItem("Enabled");
 
@@ -406,6 +436,17 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
    disconnect(this->mpc_Ui->pc_ComboBoxXAppSupport,
               static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged), this,
               &C_SdNdeNodePropertiesWidget::m_XappSupportChange);
+   disconnect(this->mpc_Ui->pc_SpinBoxUdsRequestId, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged),
+              this, &C_SdNdeNodePropertiesWidget::m_UdsAddressingChanged);
+   disconnect(this->mpc_Ui->pc_SpinBoxUdsResponseId, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged),
+              this, &C_SdNdeNodePropertiesWidget::m_UdsAddressingChanged);
+   disconnect(this->mpc_Ui->pc_SpinBoxUdsFunctionalId,
+              static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged),
+              this, &C_SdNdeNodePropertiesWidget::m_UdsAddressingChanged);
+   disconnect(this->mpc_Ui->pc_CheckBoxUdsExtendedId, &QCheckBox::toggled, this,
+              &C_SdNdeNodePropertiesWidget::m_UdsExtendedIdChanged);
+   disconnect(this->mpc_Ui->pc_CheckBoxUdsPadFrames, &QCheckBox::toggled, this,
+              &C_SdNdeNodePropertiesWidget::m_UdsAddressingChanged);
 
    tgl_assert(pc_Node != nullptr);
    if (pc_Node != nullptr)
@@ -451,24 +492,47 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
             //comment
             this->mpc_Ui->pc_TextEditComment->setText(pc_Node->c_Properties.c_Comment.c_str());
 
-            //protocol
-            if ((pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeEthernet == true) ||
-                (pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeCan == true))
+            //protocol: the node's own setting. The device definition seeds it when the node is placed and decides
+            //whether openSYDE may be chosen at all; UDS and "None" are always available.
             {
-               tgl_assert(pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_OPEN_SYDE);
-               this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_OS);
+               const C_OscSubDeviceDefinition & rc_SubDevice = pc_DevDef->c_SubDevices[u32_SubDeviceIndex];
+               const bool q_OpenSydeSupported = (rc_SubDevice.q_FlashloaderOpenSydeEthernet == true) ||
+                                                (rc_SubDevice.q_FlashloaderOpenSydeCan == true) ||
+                                                (rc_SubDevice.q_DiagnosticProtocolOpenSydeEthernet == true) ||
+                                                (rc_SubDevice.q_DiagnosticProtocolOpenSydeCan == true);
+               QStandardItemModel * const pc_Model =
+                  dynamic_cast<QStandardItemModel *>(this->mpc_Ui->pc_ComboBoxProtocol->model());
+               if ((pc_Model != nullptr) && (pc_Model->item(mu8_FL_INDEX_OS) != nullptr))
+               {
+                  pc_Model->item(mu8_FL_INDEX_OS)->setEnabled(q_OpenSydeSupported);
+               }
+               this->mpc_Ui->pc_ComboBoxProtocol->setEnabled(true);
+               if ((pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_OPEN_SYDE) ||
+                   (pc_Node->c_Properties.e_DiagnosticServer == C_OscNodeProperties::eDS_OPEN_SYDE))
+               {
+                  this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_OS);
+               }
+               else if ((pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_UDS) ||
+                        (pc_Node->c_Properties.e_DiagnosticServer == C_OscNodeProperties::eDS_UDS))
+               {
+                  this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_UDS);
+               }
+               else
+               {
+                  this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_NOSUPPORT);
+               }
             }
-            else if ((pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_DiagnosticProtocolUdsCan == true) ||
-                     (pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderUdsCan == true))
-            {
-               //plain UDS
-               this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_UDS);
-            }
-            else
-            {
-               //not supported
-               this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_NOSUPPORT);
-            }
+
+            //UDS addressing: the values are always loaded, the block is shown for a UDS node only
+            this->m_SetUdsIdRange(pc_Node->c_UdsConfig.q_ExtendedId);
+            this->mpc_Ui->pc_CheckBoxUdsExtendedId->setChecked(pc_Node->c_UdsConfig.q_ExtendedId);
+            this->mpc_Ui->pc_CheckBoxUdsPadFrames->setChecked(pc_Node->c_UdsConfig.q_PadFrames);
+            this->mpc_Ui->pc_SpinBoxUdsRequestId->setValue(static_cast<int32_t>(pc_Node->c_UdsConfig.u32_RequestId));
+            this->mpc_Ui->pc_SpinBoxUdsResponseId->setValue(static_cast<int32_t>(pc_Node->c_UdsConfig.u32_ResponseId));
+            this->mpc_Ui->pc_SpinBoxUdsFunctionalId->setValue(
+               static_cast<int32_t>(pc_Node->c_UdsConfig.u32_FunctionalId));
+            this->mpc_Ui->pc_WidgetUds->setVisible(this->mpc_Ui->pc_ComboBoxProtocol->currentIndex() ==
+                                                   mu8_FL_INDEX_UDS);
 
             //programming
             if (pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_ProgrammingSupport == true)
@@ -917,6 +981,16 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
    connect(this->mpc_Ui->pc_ComboBoxXAppSupport,
            static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged), this,
            &C_SdNdeNodePropertiesWidget::m_XappSupportChange);
+   connect(this->mpc_Ui->pc_SpinBoxUdsRequestId, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged),
+           this, &C_SdNdeNodePropertiesWidget::m_UdsAddressingChanged);
+   connect(this->mpc_Ui->pc_SpinBoxUdsResponseId, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged),
+           this, &C_SdNdeNodePropertiesWidget::m_UdsAddressingChanged);
+   connect(this->mpc_Ui->pc_SpinBoxUdsFunctionalId, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged),
+           this, &C_SdNdeNodePropertiesWidget::m_UdsAddressingChanged);
+   connect(this->mpc_Ui->pc_CheckBoxUdsExtendedId, &QCheckBox::toggled, this,
+           &C_SdNdeNodePropertiesWidget::m_UdsExtendedIdChanged);
+   connect(this->mpc_Ui->pc_CheckBoxUdsPadFrames, &QCheckBox::toggled, this,
+           &C_SdNdeNodePropertiesWidget::m_UdsAddressingChanged);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1099,6 +1173,17 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
                                                                           c_NodeIds, c_UpdateFlags, c_RoutingFlags,
                                                                           c_DiagnosisFlags);
 
+            //UDS addressing (the rest of the UDS configuration is kept as it is)
+            {
+               C_OscNodeUdsConfig c_UdsConfig = pc_Node->c_UdsConfig;
+               c_UdsConfig.u32_RequestId = static_cast<uint32_t>(this->mpc_Ui->pc_SpinBoxUdsRequestId->value());
+               c_UdsConfig.u32_ResponseId = static_cast<uint32_t>(this->mpc_Ui->pc_SpinBoxUdsResponseId->value());
+               c_UdsConfig.u32_FunctionalId = static_cast<uint32_t>(this->mpc_Ui->pc_SpinBoxUdsFunctionalId->value());
+               c_UdsConfig.q_ExtendedId = this->mpc_Ui->pc_CheckBoxUdsExtendedId->isChecked();
+               c_UdsConfig.q_PadFrames = this->mpc_Ui->pc_CheckBoxUdsPadFrames->isChecked();
+               C_PuiSdHandler::h_GetInstance()->SetOscNodeUdsConfig(this->mu32_NodeIndex, c_UdsConfig);
+            }
+
             //send signal SigNodePropChanged (trigger to adapt canopen config)
             Q_EMIT (this->SigNodePropChanged());
          }
@@ -1113,6 +1198,9 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
 void C_SdNdeNodePropertiesWidget::m_SupportedProtocolChange(void)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
+
+   //the UDS addressing block belongs to the UDS protocol only
+   this->mpc_Ui->pc_WidgetUds->setVisible(this->mpc_Ui->pc_ComboBoxProtocol->currentIndex() == mu8_FL_INDEX_UDS);
 
    // Save the data
    this->m_RegisterChange();
@@ -1254,6 +1342,47 @@ void C_SdNdeNodePropertiesWidget::m_RegisterChange(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   A UDS identifier or the padding flag was edited
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdNdeNodePropertiesWidget::m_UdsAddressingChanged(void)
+{
+   this->m_RegisterChange();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   The identifier format was switched between 11 and 29 bit
+
+   The identifier spin boxes take the matching range; a value beyond 11 bit is clamped by the spin box.
+
+   \param[in]  oq_Checked   true: 29 bit identifiers
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdNdeNodePropertiesWidget::m_UdsExtendedIdChanged(const bool oq_Checked)
+{
+   this->m_SetUdsIdRange(oq_Checked);
+   this->m_RegisterChange();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set the range of the three UDS identifier spin boxes
+
+   \param[in]  oq_ExtendedId   true: 0..0x1FFFFFFF; false: 0..0x7FF
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdNdeNodePropertiesWidget::m_SetUdsIdRange(const bool oq_ExtendedId) const
+{
+   const int32_t s32_Max = oq_ExtendedId ? 0x1FFFFFFF : 0x7FF;
+
+   this->mpc_Ui->pc_SpinBoxUdsRequestId->SetMinimumCustom(0);
+   this->mpc_Ui->pc_SpinBoxUdsRequestId->SetMaximumCustom(s32_Max);
+   this->mpc_Ui->pc_SpinBoxUdsResponseId->SetMinimumCustom(0);
+   this->mpc_Ui->pc_SpinBoxUdsResponseId->SetMaximumCustom(s32_Max);
+   this->mpc_Ui->pc_SpinBoxUdsFunctionalId->SetMinimumCustom(0);
+   this->mpc_Ui->pc_SpinBoxUdsFunctionalId->SetMaximumCustom(s32_Max);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Register error change
 
    Function where ui elements register an error change. Change will be sent via a signal
@@ -1356,7 +1485,6 @@ void C_SdNdeNodePropertiesWidget::m_CheckComInterface(const uint32_t, const uint
 {
    const int32_t s32_COL_NODE_ID = static_cast<int32_t> (C_SdNdeComIfSettingsTableDelegate::eNODEID);
    const int32_t s32_COL_IP = static_cast<int32_t> (C_SdNdeComIfSettingsTableDelegate::eIPADDRESS);
-
 
    //node id or ip change?
    if ((ou32_Column == s32_COL_NODE_ID) || (ou32_Column == s32_COL_IP))
@@ -1653,7 +1781,6 @@ void C_SdNdeNodePropertiesWidget::m_IpAddressClick(const uint32_t ou32_Row)
       const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this->parentWidget(), this->parentWidget());
       new C_SdNdeIpAddressConfigurationWidget(*c_New, this->mu32_NodeIndex, ou32_Row);
       const QSize c_SIZE(600, 416);
-
 
       //Resize
       c_New->SetSize(c_SIZE);

@@ -58,6 +58,7 @@ public:
                                      const QString & orc_Comment, const stw::opensyde_core::C_OscNodeProperties::E_DiagnosticServerProtocol
                                      oe_DiagnosticServer,
                                      const stw::opensyde_core::C_OscNodeProperties::E_FlashLoaderProtocol oe_FlashLoader, const std::vector<uint8_t> & orc_NodeIds, const std::vector<bool> & orc_UpdateFlags, const std::vector<bool> & orc_RoutingFlags, const std::vector<bool> & orc_DiagnosisFlags);
+   void SetOscNodeUdsConfig(const uint32_t ou32_NodeIndex, const stw::opensyde_core::C_OscNodeUdsConfig & orc_Config);
    void SetUiNodeBox(const uint32_t ou32_NodeIndex, const C_PuiBsBox & orc_Box);
    uint32_t AddNodeAndSort(stw::opensyde_core::C_OscNode & orc_OscNode, const C_PuiSdNode & orc_UiNode,
                            const QString & orc_SubDeviceName, const QString & orc_MainDevice);

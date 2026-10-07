@@ -160,7 +160,7 @@
          <number>5</number>
         </property>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,1">
+         <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,1">
           <property name="spacing">
            <number>0</number>
           </property>
@@ -819,6 +819,285 @@
            </layout>
           </item>
           <item>
+           <widget class="QWidget" name="pc_WidgetUds" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_Uds">
+             <property name="spacing">
+              <number>5</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelUdsAddressing">
+               <property name="styleRole" stdset="0">
+                <string>heading-group-bold</string>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Calibri</family>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>UDS Addressing</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_UdsRequest" stretch="0,0,1">
+               <item>
+                <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelUdsRequestId">
+                 <property name="styleRole" stdset="0">
+                  <string>group-item</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Request ID</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxUdsRequestId">
+                 <property name="styleRole" stdset="0">
+                  <string>spx-number</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>160</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_UdsRequest">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>10</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_UdsResponse" stretch="0,0,1">
+               <item>
+                <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelUdsResponseId">
+                 <property name="styleRole" stdset="0">
+                  <string>group-item</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Response ID</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxUdsResponseId">
+                 <property name="styleRole" stdset="0">
+                  <string>spx-number</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>160</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_UdsResponse">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>10</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_UdsFunctional" stretch="0,0,1">
+               <item>
+                <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelUdsFunctionalId">
+                 <property name="styleRole" stdset="0">
+                  <string>group-item</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Functional ID</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxUdsFunctionalId">
+                 <property name="styleRole" stdset="0">
+                  <string>spx-number</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>160</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_UdsFunctional">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>10</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_pc_CheckBoxUdsExtendedId" stretch="0,0,1">
+               <item>
+                <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelUdsExtendedId">
+                 <property name="styleRole" stdset="0">
+                  <string>group-item</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>29 bit identifiers</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxUdsExtendedId">
+                 <property name="styleRole" stdset="0">
+                  <string>chx-properties</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_pc_CheckBoxUdsExtendedId">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>10</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_pc_CheckBoxUdsPadFrames" stretch="0,0,1">
+               <item>
+                <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelUdsPadFrames">
+                 <property name="styleRole" stdset="0">
+                  <string>group-item</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Pad frames to 8 bytes</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxUdsPadFrames">
+                 <property name="styleRole" stdset="0">
+                  <string>chx-properties</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_pc_CheckBoxUdsPadFrames">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>10</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer_15">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -1340,6 +1619,16 @@
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
    <extends>QComboBox</extends>
    <header>C_OgeCbxText.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
+   <extends>QSpinBox</extends>
+   <header>C_OgeSpxToolTipBase.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
+   <extends>QCheckBox</extends>
+   <header>C_OgeChxToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>

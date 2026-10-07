@@ -56,6 +56,9 @@ private:
    static const int32_t mhs32_PR_INDEX_ENABLED;
 
    void m_SupportedProtocolChange(void);
+   void m_UdsAddressingChanged(void);
+   void m_UdsExtendedIdChanged(const bool oq_Checked);
+   void m_SetUdsIdRange(const bool oq_ExtendedId) const;
    void m_CheckNodeName(void);
    void m_TrimNodeName(void) const;
    void m_RegisterChange(void);

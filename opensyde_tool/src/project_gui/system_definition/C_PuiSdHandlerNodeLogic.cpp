@@ -553,6 +553,21 @@ void C_PuiSdHandlerNodeLogic::SetOscNodePropertiesDetailed(const uint32_t ou32_N
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set the node's UDS configuration (addressing, timing, routines, DTCs)
+
+   \param[in]  ou32_NodeIndex    Node index
+   \param[in]  orc_Config        Configuration
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_PuiSdHandlerNodeLogic::SetOscNodeUdsConfig(const uint32_t ou32_NodeIndex, const C_OscNodeUdsConfig & orc_Config)
+{
+   if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
+   {
+      this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex].c_UdsConfig = orc_Config;
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set UI node box
 
    \param[in]  ou32_NodeIndex    Node index

@@ -169,6 +169,17 @@ needs a Mac to verify.
 
 ### 7. Low / cosmetic bucket
 
+**Property checkboxes render unstyled** (found 2026-10-07): every
+`C_OgeChxToolTipBase` with `styleRole="chx-properties"` draws Qt's default small
+dark indicator instead of the 30 px light square the stylesheet defines, on the
+message properties page ("Extended Type") and the node UDS panel alike. The role
+has size rules in `CheckBox.qss` and colour rules in `Color.qss` but no
+`image:` rule, and the size rule does not take effect either, so the selector is
+not matching at runtime. Labels with `group-item` on the same pages match fine.
+Also: a layout-only (`.ui`) edit regenerates the `ui_*.h` header but Ninja did
+not recompile the including source on this host; `touch` the `.cpp` after a
+`.ui`-only change, or the deployed binary silently keeps the old layout.
+
 `std::endl` → `"\n"` in console logging; ~208 `#define` wire-constants →
 `constexpr`; god-functions with 16–18 parameter signatures; `== true` / `== false`;
 `osc_write_log_*` macros → `std::source_location`.
