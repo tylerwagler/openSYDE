@@ -1323,6 +1323,9 @@ std::string C_OscExportCommunicationStack::mh_GetProtocolNameByType(const C_OscC
    case C_OscCanProtocol::eJ1939:
       c_Name = "j1939";
       break;
+   case C_OscCanProtocol::eUDS:
+      c_Name = "uds";
+      break;
    default:
       tgl_assert(false);
       break;

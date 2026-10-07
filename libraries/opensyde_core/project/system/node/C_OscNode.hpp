@@ -25,6 +25,7 @@
 #include "C_OscXappProperties.hpp"
 #include "C_OscCanMessageUniqueId.hpp"
 #include "C_OscCanOpenManagerInfo.hpp"
+#include "C_OscNodeUdsConfig.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -179,6 +180,8 @@ public:
    C_OscHalcConfig c_HalcConfig;                                 ///< Optional HALC configuration for this node
    std::map<uint8_t, C_OscCanOpenManagerInfo> c_CanOpenManagers; ///< CANopen managers grouped by their
    ///< according CAN interface ID
+   C_OscNodeUdsConfig c_UdsConfig; ///< UDS addressing, timing, routines and DTCs; meaningful when the node has a
+   ///< protocol of type eUDS or a UDS diagnostic server
    std::vector<C_OscDataLoggerJob> c_DataLoggerJobs; ///< Data logger jobs
    C_OscXappProperties c_XappProperties;             ///< X-App properties
 

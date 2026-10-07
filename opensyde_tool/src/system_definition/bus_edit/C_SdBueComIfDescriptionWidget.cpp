@@ -243,6 +243,13 @@ void C_SdBueComIfDescriptionWidget::InitStaticNames(void) const
       static_cast<QString>("Edit PG Messages and SP Signals of protocol type %1 ").arg(
          c_Protocol));
 
+   // tooltip UDS
+   c_Protocol = C_PuiSdUtil::h_ConvertProtocolTypeToString(C_OscCanProtocol::eUDS);
+   this->mpc_Ui->pc_ProtocolTabWidget->SetToolTipInformation(
+      5, c_Protocol,
+      static_cast<QString>("Edit Data Identifiers (DIDs) and their record Signals of protocol type %1 ").arg(
+         c_Protocol));
+
    this->mpc_Ui->pc_InterfaceSelectorTitleLabel->setText("Node Interface");
 
    this->mpc_Ui->pc_HintToBusLabel->setText("Node Interface is already used on a bus.\n"
@@ -1131,6 +1138,9 @@ C_OscCanProtocol::E_Type C_SdBueComIfDescriptionWidget::h_GetProtocolOfIndex(con
    case 4:
       e_Protocol = C_OscCanProtocol::eJ1939;
       break;
+   case 5:
+      e_Protocol = C_OscCanProtocol::eUDS;
+      break;
    default:
       break;
    }
@@ -1471,6 +1481,9 @@ int32_t C_SdBueComIfDescriptionWidget::h_GetIndexOfProtocol(const C_OscCanProtoc
       break;
    case C_OscCanProtocol::eJ1939:
       s32_Index = 4;
+      break;
+   case C_OscCanProtocol::eUDS:
+      s32_Index = 5;
       break;
    default:
       tgl_assert(false);
@@ -1934,6 +1947,7 @@ void C_SdBueComIfDescriptionWidget::m_UpdateTabText(void)
    this->m_UpdateTabText(C_OscCanProtocol::eCAN_OPEN_SAFETY);
    this->m_UpdateTabText(C_OscCanProtocol::eCAN_OPEN);
    this->m_UpdateTabText(C_OscCanProtocol::eJ1939);
+   this->m_UpdateTabText(C_OscCanProtocol::eUDS);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

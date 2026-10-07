@@ -333,6 +333,8 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerDeviceInfo.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfo.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/uds/C_OscNodeUdsConfig.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/uds/C_OscNodeUdsConfigFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJob.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobProperties.cpp
@@ -431,6 +433,8 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerDeviceInfo.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfo.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/uds/C_OscNodeUdsConfig.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/uds/C_OscNodeUdsConfigFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJob.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobProperties.hpp
@@ -466,6 +470,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/uds
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package

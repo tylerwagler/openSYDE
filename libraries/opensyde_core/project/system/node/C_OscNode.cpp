@@ -85,6 +85,7 @@ void C_OscNode::Initialize(void)
    c_ComProtocols.resize(0);
    c_HalcConfig.Clear();
    c_CanOpenManagers.clear();
+   c_UdsConfig.Initialize();
    c_DataLoggerJobs.clear();
    c_XappProperties.Initialize();
 }
@@ -874,6 +875,7 @@ void C_OscNode::CalcHash(uint32_t & oru32_HashValue) const
       this->c_DataLoggerJobs[u32_Counter].CalcHash(oru32_HashValue);
    }
    this->c_XappProperties.CalcHash(oru32_HashValue);
+   this->c_UdsConfig.CalcHash(oru32_HashValue);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2395,6 +2397,10 @@ void C_OscNode::m_GetAllMessages(const uint32_t ou32_InterfaceIndex,
 
    //J1939
    m_AppendAllProtocolMessages(ou32_InterfaceIndex, C_OscCanProtocol::eJ1939, orc_Messages,
+                               ope_SkipComProtocol, opu32_SkipInterfaceIndex, opq_SkipMessageIsTxFlag,
+                               opu32_SkipMessageIndex);
+   //UDS
+   m_AppendAllProtocolMessages(ou32_InterfaceIndex, C_OscCanProtocol::eUDS, orc_Messages,
                                ope_SkipComProtocol, opu32_SkipInterfaceIndex, opq_SkipMessageIsTxFlag,
                                opu32_SkipMessageIndex);
 }

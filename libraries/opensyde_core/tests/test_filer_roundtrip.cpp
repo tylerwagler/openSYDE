@@ -480,6 +480,14 @@ TEST(FilerRoundTrip, DeviceDefinition)
    c_Sub.q_FlashloaderOpenSydeCan = true;
    c_Sub.q_FlashloaderOpenSydeEthernet = true;
    c_Sub.q_FlashloaderOpenSydeIsFileBased = true;
+   c_Sub.q_DiagnosticProtocolUdsCan = true;
+   c_Sub.q_FlashloaderUdsCan = true;
+   c_Sub.c_UdsConfig.u32_RequestId = 0x7E3U;
+   c_Sub.c_UdsConfig.u32_ResponseId = 0x7EBU;
+   c_Sub.c_UdsConfig.u32_P2Ms = 75U;
+   c_Sub.c_UdsConfig.c_Dtcs.push_back(C_OscUdsDtc());
+   c_Sub.c_UdsConfig.c_Dtcs[0].u32_Code = 0xC0FFEEU;
+   c_Sub.c_UdsConfig.c_Dtcs[0].c_Name = "Overtemperature";
    c_Sub.u32_FlashloaderResetWaitTimeNoChangesCan = 1100U;
    c_Sub.u32_FlashloaderResetWaitTimeNoChangesEthernet = 2200U;
    c_Sub.u32_FlashloaderResetWaitTimeNoFundamentalChangesCan = 3300U;
@@ -557,6 +565,15 @@ TEST(FilerRoundTrip, DeviceDefinition)
    EXPECT_EQ(c_Sub.q_FlashloaderOpenSydeCan, rc_Sub.q_FlashloaderOpenSydeCan);
    EXPECT_EQ(c_Sub.q_FlashloaderOpenSydeEthernet, rc_Sub.q_FlashloaderOpenSydeEthernet);
    EXPECT_EQ(c_Sub.q_FlashloaderOpenSydeIsFileBased, rc_Sub.q_FlashloaderOpenSydeIsFileBased);
+   //device.syd v0x0004: the plain UDS flags and the UDS description
+   EXPECT_TRUE(rc_Sub.q_DiagnosticProtocolUdsCan);
+   EXPECT_TRUE(rc_Sub.q_FlashloaderUdsCan);
+   EXPECT_EQ(0x7E3U, rc_Sub.c_UdsConfig.u32_RequestId);
+   EXPECT_EQ(0x7EBU, rc_Sub.c_UdsConfig.u32_ResponseId);
+   EXPECT_EQ(75U, rc_Sub.c_UdsConfig.u32_P2Ms);
+   ASSERT_EQ(1U, rc_Sub.c_UdsConfig.c_Dtcs.size());
+   EXPECT_EQ(0xC0FFEEU, rc_Sub.c_UdsConfig.c_Dtcs[0].u32_Code);
+   EXPECT_EQ("Overtemperature", rc_Sub.c_UdsConfig.c_Dtcs[0].c_Name);
    EXPECT_EQ(1100U, rc_Sub.u32_FlashloaderResetWaitTimeNoChangesCan);
    EXPECT_EQ(2200U, rc_Sub.u32_FlashloaderResetWaitTimeNoChangesEthernet);
    EXPECT_EQ(3300U, rc_Sub.u32_FlashloaderResetWaitTimeNoFundamentalChangesCan);
@@ -809,6 +826,80 @@ void h_RoundTripProtocol(const C_OscCanProtocol & orc_Source, const std::string 
 TEST(FilerRoundTrip, NodeComProtocolJ1939)
 {
    h_RoundTripProtocol(h_MakeProtocol(C_OscCanProtocol::eJ1939), "osy_rt_com_j1939.xml");
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   A UDS protocol (DIDs as messages) survives a save/load round trip
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(FilerRoundTrip, NodeComProtocolUds)
+{
+   C_OscCanProtocol c_Proto = h_MakeProtocol(C_OscCanProtocol::eUDS);
+   //a DID: the identifier is the 16 bit DID, the length the record size, the signals its layout
+   c_Proto.c_ComMessages[0].c_TxMessages[0].u32_CanId = 0xF190U;
+   c_Proto.c_ComMessages[0].c_TxMessages[0].q_IsExtended = false;
+   c_Proto.c_ComMessages[0].c_TxMessages[0].u16_Dlc = 17U;
+   c_Proto.c_ComMessages[0].c_TxMessages[0].q_IsMultipacket = true;
+   c_Proto.c_ComMessages[0].c_TxMessages[0].e_TxMethod = C_OscCanMessage::eTX_METHOD_ON_EVENT;
+   h_RoundTripProtocol(c_Proto, "osy_rt_com_uds.xml");
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   A node's UDS configuration survives the node file round trip, and its absence yields the defaults
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(FilerRoundTrip, NodeUdsConfig)
+{
+   const std::filesystem::path c_Path = std::filesystem::temp_directory_path() / "osy_rt_node_uds.xml";
+   const std::map<uint32_t, std::string> c_NoNames;
+   const C_OscNode c_Source = h_MakeNode("UdsNode", 9U, 0U);
+   C_OscNode c_Target;
+   uint32_t u32_SourceHash = 0xFFFFFFFFU;
+   uint32_t u32_TargetHash = 0xFFFFFFFFU;
+
+   (void)std::filesystem::remove(c_Path);
+   ASSERT_FALSE(static_cast<bool>(C_OscNodeFiler::h_SaveNodeFile(c_Source, c_Path.string(), nullptr, c_NoNames)));
+   ASSERT_FALSE(static_cast<bool>(C_OscNodeFiler::h_LoadNodeFile(c_Target, c_Path.string())));
+
+   c_Source.c_UdsConfig.CalcHash(u32_SourceHash);
+   c_Target.c_UdsConfig.CalcHash(u32_TargetHash);
+   EXPECT_EQ(u32_SourceHash, u32_TargetHash);
+   EXPECT_EQ(0x18DA10F1U, c_Target.c_UdsConfig.u32_RequestId);
+   EXPECT_TRUE(c_Target.c_UdsConfig.q_ExtendedId);
+   EXPECT_FALSE(c_Target.c_UdsConfig.q_PadFrames);
+   EXPECT_EQ(0x55U, c_Target.c_UdsConfig.u8_PadByte);
+   EXPECT_EQ(2500U, c_Target.c_UdsConfig.u32_P2StarMs);
+   EXPECT_EQ((std::vector<uint8_t>{0x01U, 0x11U}), c_Target.c_UdsConfig.c_SecurityLevels);
+   EXPECT_EQ("vendor-xor", c_Target.c_UdsConfig.c_SeedKeyAlgorithm);
+   ASSERT_EQ(1U, c_Target.c_UdsConfig.c_Routines.size());
+   EXPECT_EQ("erases the\napplication area", c_Target.c_UdsConfig.c_Routines[0].c_Comment);
+   EXPECT_TRUE(c_Target.c_UdsConfig.c_Routines[0].q_SupportsRequestResults);
+   ASSERT_EQ(1U, c_Target.c_UdsConfig.c_Dtcs.size());
+   EXPECT_EQ(0x123456U, c_Target.c_UdsConfig.c_Dtcs[0].u32_Code);
+   EXPECT_EQ(0x40U, c_Target.c_UdsConfig.c_Dtcs[0].u8_Severity);
+
+   //a node file from before UDS support has no "uds" section: the loader must leave the defaults
+   {
+      std::string c_Xml;
+      {
+         std::ifstream c_In(c_Path);
+         c_Xml.assign(std::istreambuf_iterator<char>(c_In), std::istreambuf_iterator<char>());
+      }
+      const size_t x_Start = c_Xml.find("<uds>");
+      const size_t x_End = c_Xml.find("</uds>");
+      ASSERT_NE(std::string::npos, x_Start);
+      ASSERT_NE(std::string::npos, x_End);
+      c_Xml.erase(x_Start, (x_End + 6U) - x_Start);
+      std::ofstream c_Out(c_Path, std::ios::binary | std::ios::trunc);
+      c_Out << c_Xml;
+   }
+   C_OscNode c_Legacy;
+   ASSERT_FALSE(static_cast<bool>(C_OscNodeFiler::h_LoadNodeFile(c_Legacy, c_Path.string())));
+   EXPECT_EQ(0x7E0U, c_Legacy.c_UdsConfig.u32_RequestId);
+   EXPECT_EQ(C_OscNodeUdsConfig::hc_SEED_KEY_CONSTANT, c_Legacy.c_UdsConfig.c_SeedKeyAlgorithm);
+   EXPECT_TRUE(c_Legacy.c_UdsConfig.c_Routines.empty());
+
+   (void)std::filesystem::remove(c_Path);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1184,6 +1275,7 @@ TEST(FilerRoundTrip, SystemDefinitionFile)
       }
       h_ExpectSameHash(rc_S.c_HalcConfig, rc_T.c_HalcConfig, c_N + "halc");
       h_ExpectSameHash(rc_S.c_XappProperties, rc_T.c_XappProperties, c_N + "x-app properties");
+      h_ExpectSameHash(rc_S.c_UdsConfig, rc_T.c_UdsConfig, c_N + "uds config");
       EXPECT_EQ(rc_S.c_CanOpenManagers.size(), rc_T.c_CanOpenManagers.size()) << c_N << "canopen managers";
       EXPECT_EQ(rc_S.c_DataLoggerJobs.size(), rc_T.c_DataLoggerJobs.size()) << c_N << "data logger jobs";
    }

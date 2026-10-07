@@ -308,6 +308,35 @@ inline C_OscNode h_MakeNode(const std::string & orc_Name, const uint8_t ou8_Node
       c_Prog.c_ResultPaths.push_back("out/app.syde_hex");
       c_Node.c_Applications.push_back(c_Prog);
    }
+   //a UDS description that differs from every default, so a lost field shows up in a hash comparison
+   c_Node.c_UdsConfig.u32_RequestId = 0x18DA10F1U;
+   c_Node.c_UdsConfig.u32_ResponseId = 0x18DAF110U;
+   c_Node.c_UdsConfig.u32_FunctionalId = 0x18DB33F1U;
+   c_Node.c_UdsConfig.q_ExtendedId = true;
+   c_Node.c_UdsConfig.q_PadFrames = false;
+   c_Node.c_UdsConfig.u8_PadByte = 0x55U;
+   c_Node.c_UdsConfig.u32_P2Ms = 100U;
+   c_Node.c_UdsConfig.u32_P2StarMs = 2500U;
+   c_Node.c_UdsConfig.u32_S3ClientMs = 1500U;
+   c_Node.c_UdsConfig.c_SupportedSessions = {0x01U, 0x02U, 0x03U};
+   c_Node.c_UdsConfig.c_SecurityLevels = {0x01U, 0x11U};
+   c_Node.c_UdsConfig.c_SeedKeyAlgorithm = "vendor-xor";
+   {
+      C_OscUdsRoutine c_Routine;
+      c_Routine.u16_Identifier = 0xFF00U;
+      c_Routine.c_Name = "EraseMemory";
+      c_Routine.c_Comment = "erases the\napplication area";
+      c_Routine.q_SupportsStart = true;
+      c_Routine.q_SupportsStop = false;
+      c_Routine.q_SupportsRequestResults = true;
+      c_Node.c_UdsConfig.c_Routines.push_back(c_Routine);
+      C_OscUdsDtc c_Dtc;
+      c_Dtc.u32_Code = 0x123456U;
+      c_Dtc.c_Name = "SensorOpenCircuit";
+      c_Dtc.c_Comment = "wiring";
+      c_Dtc.u8_Severity = 0x40U;
+      c_Node.c_UdsConfig.c_Dtcs.push_back(c_Dtc);
+   }
    c_Node.c_DataPools.push_back(h_MakeDataPool(C_OscNodeDataPool::eDIAG));
    c_Node.c_DataPools.push_back(h_MakeDataPool(C_OscNodeDataPool::eNVM));
    c_Node.c_DataPools[1].c_Name = "NvmPool";
@@ -364,6 +393,18 @@ inline C_OscDeviceDefinition h_MakeDeviceDefinition(void)
 
    C_OscSubDeviceDefinition c_Sub;
    c_Sub.c_SubDeviceName = "RT-Device 1";
+   //a plain UDS device at the usual tester/ECU pair, with one routine it offers
+   c_Sub.q_DiagnosticProtocolUdsCan = true;
+   c_Sub.q_FlashloaderUdsCan = false;
+   c_Sub.c_UdsConfig.u32_RequestId = 0x7E1U;
+   c_Sub.c_UdsConfig.u32_ResponseId = 0x7E9U;
+   c_Sub.c_UdsConfig.c_SecurityLevels = {0x01U};
+   {
+      C_OscUdsRoutine c_Routine;
+      c_Routine.u16_Identifier = 0x0203U;
+      c_Routine.c_Name = "CheckMemory";
+      c_Sub.c_UdsConfig.c_Routines.push_back(c_Routine);
+   }
    c_Device.c_SubDevices.push_back(c_Sub);
 
    // COM datapool + J1939 protocol, mirroring h_MakeNode's eCOM block (the protocol filer

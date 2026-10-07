@@ -25,6 +25,7 @@
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscNodeCommFiler.hpp"
+#include "C_OscNodeUdsConfigFiler.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -36,9 +37,10 @@ using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
-const uint16_t C_OscDeviceDefinitionFiler::mhu16_FILE_VERSION = 0x0003U;
-///< File version 0x0002 (no messages) is still read for backward compatibility.
+const uint16_t C_OscDeviceDefinitionFiler::mhu16_FILE_VERSION = 0x0004U;
+///< File versions 0x0002 (no messages) and 0x0003 (messages, no UDS) are still read for backward compatibility.
 const uint16_t C_OscDeviceDefinitionFiler::mhu16_FILE_VERSION_NO_COM = 0x0002U;
+const uint16_t C_OscDeviceDefinitionFiler::mhu16_FILE_VERSION_NO_UDS = 0x0003U;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -528,6 +530,13 @@ std::error_code C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefin
          c_Text = orc_Parser.SelectNodeParent(); //back to parent ...
          tgl_assert(c_Text == "protocols-diagnostics");
       }
+      //plain UDS server (file version 0x0004); optional
+      if (orc_Parser.SelectNodeChild("uds") == "uds")
+      {
+         orc_SubDeviceDefinition.q_DiagnosticProtocolUdsCan = orc_Parser.GetAttributeBool("can");
+         c_Text = orc_Parser.SelectNodeParent(); //back to parent ...
+         tgl_assert(c_Text == "protocols-diagnostics");
+      }
       c_Text = orc_Parser.SelectNodeParent(); //back to parent of parent ...
       tgl_assert(c_Text == "sub-device");
    }
@@ -733,7 +742,22 @@ std::error_code C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefin
          c_Text = orc_Parser.SelectNodeParent(); //back to parent ...
          tgl_assert(c_Text == "protocols-flashloader");
       }
+      //plain UDS download (file version 0x0004); optional
+      if (orc_Parser.SelectNodeChild("uds") == "uds")
+      {
+         orc_SubDeviceDefinition.q_FlashloaderUdsCan = orc_Parser.GetAttributeBool("can");
+         c_Text = orc_Parser.SelectNodeParent(); //back to parent ...
+         tgl_assert(c_Text == "protocols-flashloader");
+      }
       c_Text = orc_Parser.SelectNodeParent(); //back to parent of parent ...
+      tgl_assert(c_Text == "sub-device");
+   }
+
+   //how the UDS server is addressed and what it offers (file version 0x0004); optional
+   if ((!c_Return) && (orc_Parser.SelectNodeChild("uds") == "uds"))
+   {
+      c_Return = C_OscNodeUdsConfigFiler::h_LoadData(orc_SubDeviceDefinition.c_UdsConfig, orc_Parser);
+      c_Text = orc_Parser.SelectNodeParent(); //back to parent ...
       tgl_assert(c_Text == "sub-device");
    }
 
@@ -805,6 +829,9 @@ void C_OscDeviceDefinitionFiler::mh_SaveSubDevice(const C_OscSubDeviceDefinition
    orc_Parser.SetAttributeBool("ethernet",
                                orc_SubDeviceDefinition.q_DiagnosticProtocolOpenSydeEthernet);
    orc_Parser.SelectNodeParent();
+   orc_Parser.CreateAndSelectNodeChild("uds");
+   orc_Parser.SetAttributeBool("can", orc_SubDeviceDefinition.q_DiagnosticProtocolUdsCan);
+   orc_Parser.SelectNodeParent();
    orc_Parser.SelectNodeParent();
 
    orc_Parser.CreateAndSelectNodeChild("protocols-flashloader");
@@ -847,6 +874,12 @@ void C_OscDeviceDefinitionFiler::mh_SaveSubDevice(const C_OscSubDeviceDefinition
    orc_Parser.SetAttributeBool("is-file-based",
                                orc_SubDeviceDefinition.q_FlashloaderOpenSydeIsFileBased);
    orc_Parser.SelectNodeParent();
+   orc_Parser.CreateAndSelectNodeChild("uds");
+   orc_Parser.SetAttributeBool("can", orc_SubDeviceDefinition.q_FlashloaderUdsCan);
+   orc_Parser.SelectNodeParent();
+   orc_Parser.SelectNodeParent();
+   orc_Parser.CreateAndSelectNodeChild("uds");
+   C_OscNodeUdsConfigFiler::h_SaveData(orc_SubDeviceDefinition.c_UdsConfig, orc_Parser);
    orc_Parser.SelectNodeParent();
    orc_Parser.CreateAndSelectNodeChild("memory");
    orc_Parser.CreateAndSelectNodeChild("user-eeprom");
@@ -1339,10 +1372,11 @@ std::error_code C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_D
                   //Return
                   c_Xml.SelectNodeParent();
                   //Check file version
-                  if ((u16_FileVersion == mhu16_FILE_VERSION) || (u16_FileVersion == mhu16_FILE_VERSION_NO_COM))
+                  if ((u16_FileVersion == mhu16_FILE_VERSION) || (u16_FileVersion == mhu16_FILE_VERSION_NO_UDS) ||
+                      (u16_FileVersion == mhu16_FILE_VERSION_NO_COM))
                   {
                      c_Return = C_OscDeviceDefinitionFiler::mh_Load(orc_DeviceDefinition, c_Xml, orc_Path,
-                                                                    (u16_FileVersion == mhu16_FILE_VERSION));
+                                                                    (u16_FileVersion != mhu16_FILE_VERSION_NO_COM));
                   }
                   else
                   {

@@ -37,7 +37,9 @@ public:
       eCAN_OPEN_SAFETY, ///< Data pool communication protocol CAN open safety (safety protocol)
       eECES,            ///< Data pool communication protocol ECeS (safety protocol)
       eCAN_OPEN,        ///< Data pool communication protocol CAN open manager
-      eJ1939            ///< Data pool communication protocol J1939
+      eJ1939,           ///< Data pool communication protocol J1939
+      eUDS              ///< Diagnostic data identifiers (ISO 14229 UDS): a "message" is a DID, its signals are the
+                        ///< record layout; see C_OscNodeUdsConfig for the rest of the node's UDS description
    };
 
    C_OscCanProtocol(void);

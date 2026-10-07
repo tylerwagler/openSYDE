@@ -3897,6 +3897,11 @@ void C_SdTopologyScene::m_InitNodeComIfSettings(C_OscNode & orc_OscNode, const Q
             //openSYDE
             orc_OscNode.c_Properties.e_DiagnosticServer = C_OscNodeProperties::eDS_OPEN_SYDE;
          }
+         else if (pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_DiagnosticProtocolUdsCan == true)
+         {
+            //plain UDS
+            orc_OscNode.c_Properties.e_DiagnosticServer = C_OscNodeProperties::eDS_UDS;
+         }
          else
          {
             //not supported
@@ -3909,10 +3914,22 @@ void C_SdTopologyScene::m_InitNodeComIfSettings(C_OscNode & orc_OscNode, const Q
             //open SYDE
             orc_OscNode.c_Properties.e_FlashLoader = C_OscNodeProperties::eFL_OPEN_SYDE;
          }
+         else if (pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderUdsCan == true)
+         {
+            //plain UDS
+            orc_OscNode.c_Properties.e_FlashLoader = C_OscNodeProperties::eFL_UDS;
+         }
          else
          {
             //not supported
             orc_OscNode.c_Properties.e_FlashLoader = C_OscNodeProperties::eFL_NONE;
+         }
+
+         //the device's UDS description (addressing, timing, routines, DTCs) becomes the node's
+         if ((pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_DiagnosticProtocolUdsCan == true) ||
+             (pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderUdsCan == true))
+         {
+            orc_OscNode.c_UdsConfig = pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].c_UdsConfig;
          }
 
          //init interfaces

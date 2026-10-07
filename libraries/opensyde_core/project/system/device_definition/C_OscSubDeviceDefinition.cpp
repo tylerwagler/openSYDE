@@ -48,6 +48,9 @@ void C_OscSubDeviceDefinition::Clear()
    c_ConnectedInterfaces.clear();
    c_OtherAcceptedNames.clear();
    q_ProgrammingSupport = false;
+   q_DiagnosticProtocolUdsCan = false;
+   q_FlashloaderUdsCan = false;
+   c_UdsConfig.Initialize();
    q_DiagnosticProtocolOpenSydeCan = false;
    q_DiagnosticProtocolOpenSydeEthernet = false;
    q_FlashloaderOpenSydeCan = false;

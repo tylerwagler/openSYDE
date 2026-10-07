@@ -2391,6 +2391,12 @@ std::error_code C_OscComDriverFlash::m_InitFlashProtocol(void)
                this->mc_OsyProtocols[u32_ActiveNodeCounter] =
                   std::unique_ptr<C_OscProtocolDriverOsy>(pc_ProtocolOsy);
                break;
+            case C_OscNodeProperties::eFL_UDS:
+               osc_write_log_error("Initializing flash protocol",
+                                   "Node \"" + pc_Node->c_Properties.c_Name +
+                                   "\": a plain UDS flashloader is not supported by the system update yet.");
+               c_Return = Errc::overflow;
+               break;
             case C_OscNodeProperties::eFL_NONE:
             default:
                c_Return = Errc::overflow;

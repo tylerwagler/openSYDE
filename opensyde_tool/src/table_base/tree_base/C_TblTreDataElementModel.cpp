@@ -775,6 +775,9 @@ void C_TblTreDataElementModel::m_InitBusSignal(const uint32_t ou32_ViewIndex,  c
                case 4U:
                   e_Type = C_OscCanProtocol::eJ1939;
                   break;
+               case 5U:
+                  e_Type = C_OscCanProtocol::eUDS;
+                  break;
                default:
                   e_Type = C_OscCanProtocol::eLAYER2;
                   tgl_assert(false);

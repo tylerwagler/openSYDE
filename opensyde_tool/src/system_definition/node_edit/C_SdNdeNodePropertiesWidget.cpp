@@ -54,7 +54,8 @@ using namespace stw::tgl;
 const uint16_t mu16_NODE_IMG_WIDTH = 300;
 
 const uint8_t mu8_FL_INDEX_OS = 0;
-const uint8_t mu8_FL_INDEX_NOSUPPORT = 1;
+const uint8_t mu8_FL_INDEX_UDS = 1;
+const uint8_t mu8_FL_INDEX_NOSUPPORT = 2;
 
 const int32_t C_SdNdeNodePropertiesWidget::mhs32_PR_INDEX_DISABLED = 0;
 const int32_t C_SdNdeNodePropertiesWidget::mhs32_PR_INDEX_ENABLED = 1;
@@ -251,6 +252,7 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
    this->mpc_Ui->pc_LabelComIfSettings->setText("Communication Interfaces Settings");
 
    this->mpc_Ui->pc_ComboBoxProtocol->addItem("openSYDE");
+   this->mpc_Ui->pc_ComboBoxProtocol->addItem("UDS");
    this->mpc_Ui->pc_ComboBoxProtocol->addItem("None");
 
    this->mpc_Ui->pc_ComboBoxProgramming->addItem("Disabled");
@@ -476,6 +478,12 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
             {
                tgl_assert(pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_OPEN_SYDE);
                this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_OS);
+            }
+            else if ((pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_DiagnosticProtocolUdsCan == true) ||
+                     (pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderUdsCan == true))
+            {
+               //plain UDS
+               this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_UDS);
             }
             else
             {
@@ -1248,6 +1256,10 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
             case mu8_FL_INDEX_OS:
                e_FlashLoader = C_OscNodeProperties::eFL_OPEN_SYDE;
                e_DiagnosticServer = C_OscNodeProperties::eDS_OPEN_SYDE;
+               break;
+            case mu8_FL_INDEX_UDS:
+               e_FlashLoader = C_OscNodeProperties::eFL_UDS;
+               e_DiagnosticServer = C_OscNodeProperties::eDS_UDS;
                break;
             default:
                //Not supported

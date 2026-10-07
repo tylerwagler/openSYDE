@@ -398,6 +398,12 @@ std::error_code C_OscExportNode::mh_CreateCommStackCode(const C_OscNode & orc_No
 
    for (const C_OscCanProtocol & rc_Protocol : orc_Node.c_ComProtocols)
    {
+      if (rc_Protocol.e_Type == C_OscCanProtocol::eUDS)
+      {
+         //UDS describes the node's diagnostic data identifiers; it is not a cyclic comm stack and has no generated
+         //code (the datapool its signals live in is exported like any other)
+         continue;
+      }
 
       //logic: C_OscCanProtocol refers to a Datapool; if that Datapool is owned by the application than create code
       if (orc_Node.c_DataPools[rc_Protocol.u32_DataPoolIndex].s32_RelatedDataBlockIndex == ou16_ApplicationIndex)

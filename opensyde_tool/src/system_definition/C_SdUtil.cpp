@@ -1015,6 +1015,7 @@ void C_SdUtil::h_AdaptMessageToProtocolType(C_OscCanMessage & orc_Message, C_Pui
          break;
       case C_OscCanProtocol::eCAN_OPEN:
       case C_OscCanProtocol::eLAYER2:
+      case C_OscCanProtocol::eUDS:
       default:
          //No restrictions
          break;

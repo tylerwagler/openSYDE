@@ -428,6 +428,7 @@ uint32_t C_OscCanProtocol::h_GetCanMessageValidSignalsDlcOffset(const E_Type oe_
    case C_OscCanProtocol::eCAN_OPEN_SAFETY:
    case C_OscCanProtocol::eCAN_OPEN:
    case C_OscCanProtocol::eJ1939:
+   case C_OscCanProtocol::eUDS:
    default:
       u32_Retval = 0UL;
       break;
@@ -458,6 +459,7 @@ bool C_OscCanProtocol::h_GetCanMessageSignalGapsValid(const E_Type oe_Type)
    case C_OscCanProtocol::eCAN_OPEN_SAFETY:
    case C_OscCanProtocol::eECES:
    case C_OscCanProtocol::eJ1939:
+   case C_OscCanProtocol::eUDS:
    default:
       q_Retval = true;
       break;
@@ -488,6 +490,7 @@ bool C_OscCanProtocol::h_GetCanMessageSignalByteAlignmentRequired(const E_Type o
    case C_OscCanProtocol::eCAN_OPEN_SAFETY:
    case C_OscCanProtocol::eECES:
    case C_OscCanProtocol::eJ1939:
+   case C_OscCanProtocol::eUDS:
    default:
       q_Retval = false;
       break;
@@ -518,6 +521,7 @@ bool C_OscCanProtocol::h_GetCanMessageSignalsRequired(const E_Type oe_Type)
    case C_OscCanProtocol::eCAN_OPEN_SAFETY:
    case C_OscCanProtocol::eECES:
    case C_OscCanProtocol::eJ1939:
+   case C_OscCanProtocol::eUDS:
    default:
       q_Retval = false;
       break;
@@ -541,6 +545,7 @@ std::vector<C_OscCanProtocol::E_Type> C_OscCanProtocol::mh_GetAllProtocols()
    c_Retval.push_back(eECES);
    c_Retval.push_back(eCAN_OPEN);
    c_Retval.push_back(eJ1939);
+   c_Retval.push_back(eUDS);
    //Check vector indices are same as enum values
    for (uint32_t u32_ItProt = 0UL; u32_ItProt < c_Retval.size(); ++u32_ItProt)
    {

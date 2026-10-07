@@ -1041,6 +1041,7 @@ void C_SdNdeDpProperties::m_InitComboBoxProtocols(const bool oq_NewDatapool,
                                                                                          eCAN_OPEN));
    this->mpc_Ui->pc_ComboBoxProtocol->addItem(C_PuiSdUtil::h_ConvertProtocolTypeToString(C_OscCanProtocol::
                                                                                          eJ1939));
+   this->mpc_Ui->pc_ComboBoxProtocol->addItem(C_PuiSdUtil::h_ConvertProtocolTypeToString(C_OscCanProtocol::eUDS));
 
    this->mpc_Ui->pc_ComboBoxProtocol->setCurrentText(C_PuiSdUtil::h_ConvertProtocolTypeToString(oe_ComProtocolType));
 
@@ -1083,6 +1084,10 @@ C_OscCanProtocol::E_Type C_SdNdeDpProperties::m_GetSelectedProtocol(void) const
    else if (c_ActualProtocol == C_PuiSdUtil::h_ConvertProtocolTypeToString(C_OscCanProtocol::eJ1939))
    {
       e_Retval = C_OscCanProtocol::eJ1939;
+   }
+   else if (c_ActualProtocol == C_PuiSdUtil::h_ConvertProtocolTypeToString(C_OscCanProtocol::eUDS))
+   {
+      e_Retval = C_OscCanProtocol::eUDS;
    }
    else
    {

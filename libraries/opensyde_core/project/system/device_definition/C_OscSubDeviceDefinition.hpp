@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <string>
 #include "C_OscSystemBus.hpp"
+#include "C_OscNodeUdsConfig.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -45,6 +46,13 @@ public:
 
    ///is programming supported enabled?
    bool q_ProgrammingSupport;
+
+   ///is a plain UDS (ISO 14229) server reachable on CAN bus ?
+   bool q_DiagnosticProtocolUdsCan;
+   ///does the device take a UDS download (0x34/0x36/0x37) on CAN bus ?
+   bool q_FlashloaderUdsCan;
+   ///how the UDS server is addressed and what it offers; seeds C_OscNode::c_UdsConfig when the node is created
+   C_OscNodeUdsConfig c_UdsConfig;
 
    ///is the openSYDE protocol supported on CAN bus ?
    bool q_DiagnosticProtocolOpenSydeCan;

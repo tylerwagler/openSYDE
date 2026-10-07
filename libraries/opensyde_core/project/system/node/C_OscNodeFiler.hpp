@@ -72,6 +72,10 @@ private:
    [[nodiscard]] static std::error_code mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXmlParserBase & orc_XmlParser,
                                       const std::string & orc_BasePath,
                                       std::vector<std::string> * const opc_CreatedFiles);
+   [[nodiscard]] static std::error_code mh_LoadUdsConfig(C_OscNodeUdsConfig & orc_Config,
+                                                         C_OscXmlParserBase & orc_XmlParser);
+   [[nodiscard]] static std::error_code mh_SaveUdsConfig(const C_OscNodeUdsConfig & orc_Config,
+                                                         C_OscXmlParserBase & orc_XmlParser);
    [[nodiscard]] static std::error_code mh_LoadCanOpenManagers(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
                                                  C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath);
    [[nodiscard]] static std::error_code mh_SaveCanOpenManagers(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,

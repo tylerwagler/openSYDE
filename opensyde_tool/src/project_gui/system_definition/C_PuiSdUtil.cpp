@@ -139,6 +139,9 @@ QString C_PuiSdUtil::h_ConvertProtocolTypeToString(const C_OscCanProtocol::E_Typ
    case C_OscCanProtocol::eJ1939:
       c_ProtocolName = "J1939";
       break;
+   case C_OscCanProtocol::eUDS:
+      c_ProtocolName = "UDS";
+      break;
    case C_OscCanProtocol::eLAYER2: // default case
    default:
       c_ProtocolName = "OSI Layer 2";
@@ -174,6 +177,9 @@ QString C_PuiSdUtil::h_ConvertProtocolTypeToDatapoolNameString(const C_OscCanPro
       break;
    case C_OscCanProtocol::eJ1939:
       c_ProtocolName = "J1939";
+      break;
+   case C_OscCanProtocol::eUDS:
+      c_ProtocolName = "UDS";
       break;
    case C_OscCanProtocol::eLAYER2: // default case
    default:

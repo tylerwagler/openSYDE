@@ -909,6 +909,9 @@ std::string C_OscNodeCommFiler::h_CommunicationProtocolToString(
    case C_OscCanProtocol::eJ1939:
       c_Retval = "j1939";
       break;
+   case C_OscCanProtocol::eUDS:
+      c_Retval = "uds";
+      break;
    default:
       c_Retval = "invalid";
       break;
@@ -951,6 +954,10 @@ std::error_code C_OscNodeCommFiler::h_StringToCommunicationProtocol(const std::s
    else if (orc_String == "j1939")
    {
       ore_Type = C_OscCanProtocol::eJ1939;
+   }
+   else if (orc_String == "uds")
+   {
+      ore_Type = C_OscCanProtocol::eUDS;
    }
    else
    {

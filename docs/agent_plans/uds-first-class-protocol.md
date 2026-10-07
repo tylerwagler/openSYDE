@@ -198,6 +198,24 @@ openSYDE server assumptions and the whole update path sits on it. The new
 
 ## Layer A: data model and bus editor
 
+**Status 2026-10-07: A1 and A2 are done in core, and the GUI compiles with minimal
+handling** (decided with the user: DID as message, sixth tab plus a node panel,
+core first). What landed: `eUDS` appended to `E_Type` with the Layer 2 answers in
+the four property switches and `"uds"` in the filer strings; `C_OscNodeUdsConfig`
+(addressing, timing, sessions, security levels, seed-key selector, routines, DTCs)
+with its own filer, hung off `C_OscNode::c_UdsConfig` and persisted as an optional
+`<uds>` node section; `eDS_UDS` / `eFL_UDS` on the node properties; the sub-device
+definition carries `q_DiagnosticProtocolUdsCan`, `q_FlashloaderUdsCan` and a
+default `C_OscNodeUdsConfig`, and `device.syd` is at version `0x0004` with v2 and
+v3 still loading; code export emits nothing for a UDS protocol; the system update
+and the dashboard driver report a UDS node as not supported yet. In the GUI the
+sixth tab exists with its index mappings, the protocol names resolve, the datapool
+and node-properties combos offer UDS, and node creation seeds the node's UDS
+config from the device. Not done: the per-protocol show/hide in the message and
+signal property widgets and tables (A3), the node-properties UDS panel (A3), and
+the DID-aware CAN Monitor decoding (A4). Routine request/response record layouts
+were left out of `C_OscUdsRoutine` until the panel exists to edit them.
+
 ### A1. Representing UDS in `E_Type`
 
 Append `eUDS` **at the end** of `E_Type`. The integer value is persisted in two

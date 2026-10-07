@@ -52,15 +52,17 @@ public:
    ///possible types of diagnostic protocols
    enum E_DiagnosticServerProtocol
    {
-      eDS_NONE,     ///< No diagnostic server available
-      eDS_OPEN_SYDE ///< Diagnostic server protocol type openSYDE
+      eDS_NONE,      ///< No diagnostic server available
+      eDS_OPEN_SYDE, ///< Diagnostic server protocol type openSYDE
+      eDS_UDS        ///< Plain UDS (ISO 14229) server; addressed through C_OscNode::c_UdsConfig
    };
 
    ///possible types of flashloader protocols
    enum E_FlashLoaderProtocol
    {
-      eFL_NONE,     ///< No Flash loader available
-      eFL_OPEN_SYDE ///< Flash loader protocol type openSYDE
+      eFL_NONE,      ///< No Flash loader available
+      eFL_OPEN_SYDE, ///< Flash loader protocol type openSYDE
+      eFL_UDS        ///< Plain UDS (ISO 14229) download services
    };
 
    std::string c_Name;                               ///< Unique name

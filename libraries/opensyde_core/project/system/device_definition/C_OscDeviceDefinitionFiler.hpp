@@ -32,6 +32,7 @@ class C_OscDeviceDefinitionFiler
 private:
    static const uint16_t mhu16_FILE_VERSION; ///< file version this class can read / write
    static const uint16_t mhu16_FILE_VERSION_NO_COM; ///< older version without embedded COM messages (still read)
+   static const uint16_t mhu16_FILE_VERSION_NO_UDS; ///< older version with COM messages but no UDS (still read)
 
    static void mh_ParseOpenSydeAvailability(const C_OscXmlParser & orc_Parser, bool & orq_ProtocolSupportedCan,
                                             bool & orq_ProtocolSupportedEthernet);

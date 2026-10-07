@@ -2956,6 +2956,8 @@ const
                                      c_ExistingNames);
    m_GetExistingMessageNamesProtocol(oru32_NodeIndex, C_OscCanProtocol::eJ1939, oru32_InterfaceIndex,
                                      c_ExistingNames);
+   m_GetExistingMessageNamesProtocol(oru32_NodeIndex, C_OscCanProtocol::eUDS, oru32_InterfaceIndex,
+                                     c_ExistingNames);
 
    return c_ExistingNames;
 }

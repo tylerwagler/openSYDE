@@ -129,7 +129,8 @@ std::error_code C_OscExportOsyInit::h_CreateSourceCode(const std::string & orc_F
    //count how many node protocols are NOT CANopen and how many ARE CANopen
    for (uint32_t u32_ProtIt = 0U; u32_ProtIt < orc_Node.c_ComProtocols.size(); ++u32_ProtIt)
    {
-      if (orc_Node.c_ComProtocols[u32_ProtIt].e_Type != C_OscCanProtocol::eCAN_OPEN)
+      if ((orc_Node.c_ComProtocols[u32_ProtIt].e_Type != C_OscCanProtocol::eCAN_OPEN) &&
+          (orc_Node.c_ComProtocols[u32_ProtIt].e_Type != C_OscCanProtocol::eUDS))
       {
          u32_CommProtocolCnt++;
       }
@@ -144,8 +145,8 @@ std::error_code C_OscExportOsyInit::h_CreateSourceCode(const std::string & orc_F
       for (const C_OscCanProtocol & rc_Protocol : orc_Node.c_ComProtocols)
       {
 
-         //skip CANopen protocol
-         if (rc_Protocol.e_Type != C_OscCanProtocol::eCAN_OPEN)
+         //skip CANopen protocol; UDS describes diagnostic identifiers and has no comm stack either
+         if ((rc_Protocol.e_Type != C_OscCanProtocol::eCAN_OPEN) && (rc_Protocol.e_Type != C_OscCanProtocol::eUDS))
          {
             //logic: C_OscCanProtocol refers to a Datapool; if that Datapool is owned by the
             // C_OscNodeApplication then create it
@@ -524,8 +525,8 @@ std::error_code C_OscExportOsyInit::h_CreateSourceCode(const std::string & orc_F
             bool oq_Skip = false;
             const C_OscCanProtocol & rc_Protocol = orc_Node.c_ComProtocols[u32_Protocol];
 
-            //skip any CANopen protocol
-            if (rc_Protocol.e_Type == C_OscCanProtocol::eCAN_OPEN)
+            //skip any CANopen protocol; UDS has no comm stack either
+            if ((rc_Protocol.e_Type == C_OscCanProtocol::eCAN_OPEN) || (rc_Protocol.e_Type == C_OscCanProtocol::eUDS))
             {
                oq_Skip = true;
             }

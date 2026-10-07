@@ -28,6 +28,7 @@
 #include "C_OscDataLoggerJobFiler.hpp"
 #include "C_OscXappPropertiesFiler.hpp"
 #include "C_OscCanOpenManagerFiler.hpp"
+#include "C_OscNodeUdsConfigFiler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -189,6 +190,10 @@ std::error_code C_OscNodeFiler::h_LoadNode(C_OscNode & orc_Node, C_OscXmlParserB
                      c_Retval = mh_LoadCanOpenManagers(orc_Node.c_CanOpenManagers, orc_XmlParser, orc_BasePath);
                      if (!c_Retval)
                      {
+                        c_Retval = mh_LoadUdsConfig(orc_Node.c_UdsConfig, orc_XmlParser);
+                     }
+                     if (!c_Retval)
+                     {
                         c_Retval = mh_LoadDataLoggers(orc_Node.c_DataLoggerJobs, orc_XmlParser, orc_BasePath);
                         if (!c_Retval)
                         {
@@ -302,6 +307,10 @@ std::error_code C_OscNodeFiler::h_SaveNode(const C_OscNode & orc_Node, C_OscXmlP
    {
       c_Retval = mh_SaveCanOpenManagers(orc_Node.c_CanOpenManagers, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
                                         orc_NodeIndicesToNameMap);
+   }
+   if (!c_Retval)
+   {
+      c_Retval = mh_SaveUdsConfig(orc_Node.c_UdsConfig, orc_XmlParser);
    }
    if (!c_Retval)
    {
@@ -1856,6 +1865,9 @@ std::string C_OscNodeFiler::mh_DiagnosticServerToString(
    case C_OscNodeProperties::eDS_OPEN_SYDE:
       c_Retval = "open-syde";
       break;
+   case C_OscNodeProperties::eDS_UDS:
+      c_Retval = "uds";
+      break;
    case C_OscNodeProperties::eDS_NONE:
       c_Retval = "none";
       break;
@@ -1885,6 +1897,10 @@ std::error_code C_OscNodeFiler::mh_StringToDiagnosticServer(const std::string & 
    if (orc_String == "open-syde")
    {
       ore_Type = C_OscNodeProperties::eDS_OPEN_SYDE;
+   }
+   else if (orc_String == "uds")
+   {
+      ore_Type = C_OscNodeProperties::eDS_UDS;
    }
    else if (orc_String == "kefex")
    {
@@ -1923,6 +1939,9 @@ std::string C_OscNodeFiler::mh_FlashLoaderToString(const C_OscNodeProperties::E_
    case C_OscNodeProperties::eFL_OPEN_SYDE:
       c_Retval = "open-syde";
       break;
+   case C_OscNodeProperties::eFL_UDS:
+      c_Retval = "uds";
+      break;
    case C_OscNodeProperties::eFL_NONE:
       c_Retval = "none";
       break;
@@ -1957,6 +1976,10 @@ std::error_code C_OscNodeFiler::mh_StringToFlashLoader(const std::string & orc_S
    else if (orc_String == "open-syde")
    {
       ore_Type = C_OscNodeProperties::eFL_OPEN_SYDE;
+   }
+   else if (orc_String == "uds")
+   {
+      ore_Type = C_OscNodeProperties::eFL_UDS;
    }
    else if (orc_String == "none")
    {
@@ -2034,4 +2057,52 @@ std::error_code C_OscNodeFiler::mh_StringToMaxServiceSizeModeType(
    }
 
    return c_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load the node's UDS configuration
+
+   The "uds" node is optional: projects from before UDS support have none and keep the defaults.
+
+   \param[out]     orc_Config      configuration
+   \param[in,out]  orc_XmlParser   parser, positioned on "node"; left there
+
+   \return
+   Errc::success   data read or section absent
+   Errc::config    content of section is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscNodeFiler::mh_LoadUdsConfig(C_OscNodeUdsConfig & orc_Config, C_OscXmlParserBase & orc_XmlParser)
+{
+   std::error_code c_Retval = Errc::success;
+
+   if (orc_XmlParser.SelectNodeChild("uds") == "uds")
+   {
+      c_Retval = C_OscNodeUdsConfigFiler::h_LoadData(orc_Config, orc_XmlParser);
+      tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
+   }
+   else
+   {
+      orc_Config.Initialize();
+   }
+   return c_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save the node's UDS configuration
+
+   \param[in]      orc_Config      configuration
+   \param[in,out]  orc_XmlParser   parser, positioned on "node"; left there
+
+   \return
+   Errc::success   always
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscNodeFiler::mh_SaveUdsConfig(const C_OscNodeUdsConfig & orc_Config,
+                                                 C_OscXmlParserBase & orc_XmlParser)
+{
+   orc_XmlParser.CreateAndSelectNodeChild("uds");
+   C_OscNodeUdsConfigFiler::h_SaveData(orc_Config, orc_XmlParser);
+   tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
+   return Errc::success;
 }

@@ -58,6 +58,17 @@ TEST(CodeExport, ProgrammableApplicationExportsSaneFiles)
       rc_Dp.s32_RelatedDataBlockIndex = 1; //the programmable application owns every datapool
    }
    c_Node.c_Applications[1].u16_GenCodeVersion = C_OscNodeApplication::hu16_HIGHEST_KNOWN_CODE_VERSION;
+   //a UDS protocol on the same COM datapool: it describes DIDs, not a comm stack, and must produce no comm file
+   for (uint32_t u32_Dp = 0U; u32_Dp < c_Node.c_DataPools.size(); ++u32_Dp)
+   {
+      if (c_Node.c_DataPools[u32_Dp].e_Type == C_OscNodeDataPool::eCOM)
+      {
+         C_OscCanProtocol c_Uds = h_MakeProtocol(C_OscCanProtocol::eUDS);
+         c_Uds.u32_DataPoolIndex = u32_Dp;
+         c_Node.c_ComProtocols.push_back(c_Uds);
+         break;
+      }
+   }
 
    std::vector<std::string> c_Files;
    const std::error_code c_Res = C_OscExportNode::h_CreateSourceCode(c_Node, 1U, c_Dir.string(), c_Files,
@@ -97,5 +108,10 @@ TEST(CodeExport, ProgrammableApplicationExportsSaneFiles)
    EXPECT_TRUE(h_Has("comm_j1939_can1.c", "&gt_ComPool_DataPool  ///< Datapool containing signal values"))
       << "the comm stack must reference the Tx list's datapool, which needs h_ListIsComTx to work";
    EXPECT_TRUE(h_Has("osy_init.c", "const T_osy_dpd_data * osy_dpd_get_init_config(void)"));
+   for (const std::string & rc_File : c_Files)
+   {
+      EXPECT_EQ(std::string::npos, rc_File.find("comm_uds")) << rc_File << ": UDS protocols generate no comm stack";
+   }
+   EXPECT_EQ(std::string::npos, h_ReadAll((c_Dir / "osy_init.c").string()).find("comm_uds"));
    (void)std::filesystem::remove_all(c_Dir);
 }

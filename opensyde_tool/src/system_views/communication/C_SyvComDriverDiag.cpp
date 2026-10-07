@@ -1836,6 +1836,11 @@ int32_t C_SyvComDriverDiag::m_InitDiagProtocol(void)
                this->mc_OsyProtocols[u32_ItActiveNode] =
                   std::unique_ptr<C_OscProtocolDriverOsy>(pc_DiagProtocolOsy);
                break;
+            case C_OscNodeProperties::eDS_UDS:
+               osc_write_log_error("Initializing diagnostic protocol",
+                                   "A plain UDS diagnostic server is not supported by the dashboards yet");
+               s32_Retval = C_OVERFLOW;
+               break;
             case C_OscNodeProperties::eDS_NONE:
             default:
                osc_write_log_error("Initializing diagnostic protocol", "Unknown diagnostic protocol");
