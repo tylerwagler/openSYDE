@@ -70,8 +70,9 @@ class ProtocolDriverUds :
 protected:
    void SetUp(void) override
    {
-      //silence is 20 ms, a pending answer 200 ms; not the ISO defaults of 50 ms and 5 s
-      mc_Driver.SetTimings(20U, 200U);
+      //a scripted reply is immediate, but P2 still has to outlast a scheduling stall on a loaded CI runner;
+      //the tests that measure the timeouts shorten both themselves
+      mc_Driver.SetTimings(200U, 1000U);
       ASSERT_FALSE(static_cast<bool>(mc_Driver.SetTransportProtocol(&mc_Transport)));
    }
 
@@ -105,6 +106,7 @@ TEST_F(ProtocolDriverUds, NegativeResponse_IsWarnWithTheCode)
 
 TEST_F(ProtocolDriverUds, NoResponse_TimesOutAfterP2)
 {
+   mc_Driver.SetTimings(20U, 200U); //silence is 20 ms, a pending answer 200 ms
    T_Bytes c_Data;
    const uint32_t u32_Start = stw::tgl::TglGetTickCount();
 
@@ -116,6 +118,7 @@ TEST_F(ProtocolDriverUds, NoResponse_TimesOutAfterP2)
 
 TEST_F(ProtocolDriverUds, ResponsePending_ExtendsTheWaitToP2Star)
 {
+   mc_Driver.SetTimings(20U, 200U); //silence is 20 ms, a pending answer 200 ms
    //the answer comes 60 ms after the request: past P2 (20 ms), within P2* (200 ms)
    mc_Transport.Reply({{0x7FU, 0x22U, 0x78U}});
    mc_Transport.InjectAfterMs(60U, {0x62U, 0xF1U, 0x90U, 0x01U});
@@ -127,6 +130,7 @@ TEST_F(ProtocolDriverUds, ResponsePending_ExtendsTheWaitToP2Star)
 
 TEST_F(ProtocolDriverUds, LateAnswerWithoutResponsePending_IsATimeout)
 {
+   mc_Driver.SetTimings(20U, 200U); //silence is 20 ms, a pending answer 200 ms
    //the same late answer, but nobody said "pending": P2 rules
    mc_Transport.InjectAfterMs(60U, {0x62U, 0xF1U, 0x90U, 0x01U});
    T_Bytes c_Data;
@@ -212,7 +216,7 @@ TEST_F(ProtocolDriverUds, DiagnosticSessionControl_WrongSessionEchoIsRejected)
    mc_Transport.Reply({{0x50U, 0x01U, 0x00U, 0x32U, 0x01U, 0xF4U}});
 
    EXPECT_EQ(Errc::rd_wr, mc_Driver.DiagnosticSessionControl(C_OscProtocolDriverUds::hu8_SESSION_PROGRAMMING));
-   EXPECT_EQ(20U, mc_Driver.GetP2Ms()); //untouched
+   EXPECT_EQ(200U, mc_Driver.GetP2Ms()); //untouched
 }
 
 TEST_F(ProtocolDriverUds, TesterPresentSuppressed_SendsAndDoesNotWait)

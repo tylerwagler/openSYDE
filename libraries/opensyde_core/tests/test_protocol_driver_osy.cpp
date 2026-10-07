@@ -94,8 +94,10 @@ class ProtocolDriverOsy :
 protected:
    void SetUp(void) override
    {
-      //silence is a 20 ms wait, not the one second a device gets
-      mc_Driver.SetTimeoutPolling(20U);
+      //a scripted reply is immediate, but the poll budget still has to outlast a scheduling stall on a
+      //loaded CI runner (macOS once lost 20 ms before the first cycle); the tests that wait for silence
+      //shorten it themselves
+      mc_Driver.SetTimeoutPolling(200U);
       ASSERT_FALSE(static_cast<bool>(mc_Driver.SetNodeIdentifiers(C_OscProtocolDriverOsyNode(0U, 1U),
                                                                    C_OscProtocolDriverOsyNode(0U, 5U))));
       ASSERT_FALSE(static_cast<bool>(mc_Driver.SetTransportProtocol(&mc_Transport)));
@@ -240,6 +242,7 @@ TEST_F(ProtocolDriverOsy, WrongDataIdentifierInResponse_IsRdWr)
 
 TEST_F(ProtocolDriverOsy, ResponseOfTheWrongLength_IsIgnoredAndTheCallTimesOut)
 {
+   mc_Driver.SetTimeoutPolling(20U); //silence is a 20 ms wait, not the one second a device gets
    //three payload bytes where exactly four are required
    mc_Transport.Reply({mh_Bytes({0x62U, 0xF1U, 0x92U, 1U, 2U, 3U})});
 
@@ -249,6 +252,7 @@ TEST_F(ProtocolDriverOsy, ResponseOfTheWrongLength_IsIgnoredAndTheCallTimesOut)
 
 TEST_F(ProtocolDriverOsy, Silence_IsTimeout)
 {
+   mc_Driver.SetTimeoutPolling(20U); //silence is a 20 ms wait, not the one second a device gets
    uint32_t u32_Number = 0U;
    EXPECT_EQ(Errc::timeout, mc_Driver.OsyReadHardwareNumber(u32_Number));
    EXPECT_GT(mc_Transport.u32_Cycles, 1U); //it kept polling until the deadline
