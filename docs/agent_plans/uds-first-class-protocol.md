@@ -1,5 +1,7 @@
 # Scope: UDS (ISO 14229) as a first-class protocol
 
+**Status:** active — 2026-10-07 — layers 0, B1, B2 and the A1/A2 core chunk are done; A3 (per-protocol editing UI), A4 (CAN Monitor DID decoding) and layer C are open
+
 Status: **scoping, not started.** Written 2026-10-07 from a survey of the tree at
 `ad07f7841`. Nothing below is implemented; the "what exists" section is verified
 against the code, the estimates are not.

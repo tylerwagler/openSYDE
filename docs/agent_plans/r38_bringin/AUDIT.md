@@ -1,5 +1,7 @@
 # R37 → R38 upstream bring-in — audit findings
 
+**Status:** reference — 2026-09-22 — the audit the plan was written from; not maintained
+
 Companion to `PLAN.md`. Records what changed between Release 37 (`26-0B`,
 `1d3ac3395`) and Release 38 (`26-0C`, `f4f195a44`) on the upstream `master` line,
 and what is worth bringing into this fork. Last audited 2026-09-22.

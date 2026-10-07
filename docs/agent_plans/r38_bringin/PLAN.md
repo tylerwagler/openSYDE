@@ -1,5 +1,7 @@
 # Bringing upstream R38 (26-0C) changes into the fork — plan
 
+**Status:** active — 2026-10-07 — phases 1, 3, 4, 5 and 6 done; phase 2 partially done (see its status line)
+
 Companion to `AUDIT.md` (the findings). This plan sequences the bring-in of the
 upstream R37→R38 delta into the fork's `develop` branch. Active work — update this
 file as it proceeds; archive it the day it stops being the working document.
@@ -263,6 +265,8 @@ piecemeal. Do them after phases 1–3 land. The fork-specific bridges in `AUDIT.
 - Nothing calls the util yet — that is Phase 5.
 
 ### Phase 5 — protocol-driver refactor (breaks existing callers)
+**Status: done on 2026-09-26** as `4aa9be239` (core: route secure authentication through the crypto agent).
+
 - `C_OscComDriverProtocol`/`C_OscComDriverFlash`/`C_OscComSequencesBase::Init`
   drop the PEM-db param; `m_SetNodeSecurityAccess` → virtual
   `m_HandleCryptoAgentCommunication`; `ReConnectNode` extra out-param;

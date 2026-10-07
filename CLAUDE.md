@@ -252,6 +252,7 @@ three target platforms build on every push:**
 | **GUI Tools** | `ubuntu-26.04`, `macos-14` | Smoke-builds all nine tools (`./build.sh -b Debug all`), then checks one tool still configures standalone | 12–20 min |
 | **Tools + Core Tests** | `windows-2022` | All nine tools under LLVM-MinGW clang, plus the core unit tests | ~35 min |
 
+| **Plan status index** | `ubuntu-26.04` | `docs/agent_plans/check_plans.py`: every plan has a status line, done plans are archived and indexed, the roadmap's active-plans table matches | seconds |
 | **Static Analysis** | `ubuntu-26.04` | clang analyser over `opensyde_core`, findings in the job summary | ~5 min |
 
 The first three are not `continue-on-error`: they are the targets that have to
@@ -535,6 +536,11 @@ scaffolding (verified against an untouched `develop` worktree) and is on the roa
 
 - Persistent artifacts (plans, checklists, notes) go in `docs/agent_plans/`. There is
   no `plans/` directory on this branch.
+- Every plan there carries a status line (`**Status:** active|blocked|done|reference — date — note`)
+  within its first ten lines, the roadmap's `## Active plans` table lists the active ones, and a
+  done plan moves to `docs/agent_plans/archive/<effort>/` with a row in `archive/README.md`.
+  `python3 docs/agent_plans/check_plans.py` enforces all of it and runs in CI. Rules and
+  rationale in `docs/agent_plans/README.md`.
 - Do not reference plan documents from source comments — plans get archived and the
   references rot. `CLAUDE.md` is fine; `.cpp`/`.hpp` are not.
 - Fix root causes. No `Q_UNUSED` to silence warnings, no backward-compat shims or

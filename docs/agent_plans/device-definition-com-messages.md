@@ -1,5 +1,7 @@
 # Plan: Embed CAN messages in the device definition
 
+**Status:** active — 2026-10-05 — model, filer, seeding, tests and generator are in; devices are being regenerated one by one (see the dated status sections at the end)
+
 ## Context
 
 This fork's device library stores one `device.syd` per device — the `opensyde-device-definition` hardware card (name, bus counts, bitrates, protocols, EEPROM). A device's CAN messages live separately in a node config (`C_OscNode` + `C_OscCanProtocol` + `C_OscNodeDataPool`), which today is only reachable through a `.syde_tsp` wrapper the user must import when placing the device on the topology.

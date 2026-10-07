@@ -235,6 +235,20 @@ jobs:
   # real false-positive rate on this codebase, so it reports and never blocks a merge. Read the
   # summary, do not assume a finding is a bug -- docs/agent_plans/consolidation_sweep/FINDINGS.md
   # records which of the known findings are real and which are not.
+  # Every plan under docs/agent_plans carries a status line, done plans are archived and
+  # indexed, and the roadmap's active-plans table matches the files. Seconds, and it gates:
+  # the archive holds two plans that described finished work as unstarted for weeks because
+  # nothing checked. Rules in docs/agent_plans/README.md.
+  plans:
+    name: Plan status index
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Check plan status lines and indexes
+        run: python3 docs/agent_plans/check_plans.py
+
   static-analysis:
     name: Static Analysis (advisory)
     runs-on: ubuntu-26.04
