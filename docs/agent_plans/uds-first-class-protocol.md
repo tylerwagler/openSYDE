@@ -143,23 +143,30 @@ Independent of any decision, small, and each item was a defect.
 
 ## Layer B: a generic UDS client in core
 
-### B1. Make the CAN transport ISO 15765-2 conformant
+### B1. Make the CAN transport ISO 15765-2 conformant — done 2026-10-07
 
-Change `C_OscProtocolDriverOsyTpCan` rather than adopt the CAN Monitor's
+Changed `C_OscProtocolDriverOsyTpCan` rather than adopting the CAN Monitor's
 `C_CamCanTp*` pair: the core transport has the Tx/Rx service queues, the
 `Cycle()` contract, the broadcast handling and the test double, and the Monitor's
-pair lives in a GUI tool where core cannot reach it. Work:
+pair lives in a GUI tool where core cannot reach it. What landed:
 
-- Accept padded FC (DLC up to 8), honour BS and STmin on transmit, handle FC WAIT
-  and OVFLW, add the FF length escape.
-- Add a configurable addressing mode next to the derived one: explicit request and
-  response CAN IDs, 11-bit or 29-bit, optional functional (broadcast) ID, optional
-  Tx padding to DLC 8 with a configurable pad byte.
-- Keep the openSYDE derived addressing as the default so the existing nine tools
-  and every existing test are untouched. Verify with the full nine-tool build and
-  the virtual CAN bus suite.
-- CAN FD and DoIP routing activation: **out of scope for the first pass**, listed
-  under decisions.
+- Flow control: any DLC from 3 up is accepted; BS and STmin are honoured on
+  transmit (the CF sender stops after a block and waits for the next FC, and
+  paces frames by STmin, with the 100–900 µs codes rounded up to 1 ms); FC WAIT
+  restarts N_Bs up to N_WFTmax = 16 times; FC OVFLW aborts the transfer.
+- Addressing: `SetExplicitIdentifiers(request, response, extended)` replaces the
+  derived IDs with a fixed pair, 11-bit or 29-bit; `SetNodeIdAddressing()` goes
+  back. Broadcasts stay on openSYDE's own 29-bit scheme either way.
+- `SetTxPadding(enabled, byte)` pads SF, CF and FC to DLC 8 (default off, pad
+  byte 0xCC).
+- Defaults are unchanged, so the nine tools and every existing test are
+  untouched. The virtual CAN bus double now models BS, STmin, padded and WAIT
+  and OVFLW flow controls, and an explicitly addressed 11-bit server; ten tests
+  cover the new behaviour, one of them with a conformance counter that catches a
+  client sending CFs past a block before reading the next FC.
+
+Not done, by decision: the FF length escape above 4095 (the service maximum is
+4095), CAN FD, a functional request ID, and DoIP routing activation.
 
 ### B2. A generic UDS service layer
 

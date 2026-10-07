@@ -57,7 +57,19 @@ private:
       // timeout
       uint32_t u32_SendCfTimeout; ///< Tx:time at which sending all CFs should have been finished; set upon
       ///< reception of FC
+      uint8_t u8_BlockSize;          ///< Tx: block size (BS) from the last flow control; 0 = no limit
+      uint8_t u8_FramesLeftInBlock;  ///< Tx: CFs still allowed before another flow control is required
+      uint32_t u32_StMinMs;          ///< Tx: separation time (STmin) from the last flow control, in ms
+      uint32_t u32_NextCfTimeMs;     ///< Tx: earliest time the next CF may go out
+      uint8_t u8_WaitFramesReceived; ///< Tx: WAIT flow controls seen for this block
    };
+
+   ///CAN-TP flow control flow status (lower nibble of the FC PCI byte)
+   static const uint8_t mhu8_FC_FLOW_STATUS_CONTINUE_TO_SEND = 0x00U;
+   static const uint8_t mhu8_FC_FLOW_STATUS_WAIT             = 0x01U;
+   static const uint8_t mhu8_FC_FLOW_STATUS_OVERFLOW         = 0x02U;
+   ///ISO 15765-2 N_WFTmax: WAIT flow controls tolerated for one block before the transfer is abandoned
+   static const uint8_t mhu8_MAX_WAIT_FRAMES = 16U;
 
    ///CAN-TP PCI types:
    static const uint8_t mhu8_ISO15765_N_PCI_SF  = 0x00U; // single frame <=8bytes
@@ -98,6 +110,19 @@ private:
    C_ServiceState mc_TxService; ///< status of Tx service currently ongoing
    C_ServiceState mc_RxService; ///< status of Rx service currently ongoing
 
+   ///addressing: openSYDE derives the CAN IDs from bus and node ids (normal fixed addressing, 29 bit);
+   ///a UDS server outside openSYDE has a fixed request/response ID pair instead
+   bool mq_ExplicitIds;      ///< false: derived from mc_ClientId/mc_ServerId; true: the two IDs below
+   uint32_t mu32_RequestId;  ///< explicit addressing: ID requests go out on
+   uint32_t mu32_ResponseId; ///< explicit addressing: ID responses are expected on
+   bool mq_ExtendedId;       ///< explicit addressing: 29 bit (true) or 11 bit IDs
+   bool mq_PadFrames;        ///< pad every transmitted frame to DLC 8 (many servers require it)
+   uint8_t mu8_PadByte;      ///< byte to pad with
+
+   void m_InitTxFrame(stw::can::T_STWCAN_Msg_TX & orc_CanMessage) const;
+   void m_PadTxFrame(stw::can::T_STWCAN_Msg_TX & orc_CanMessage) const;
+   static uint32_t mh_StMinToMs(const uint8_t ou8_StMin);
+
    [[nodiscard]] std::error_code m_SetRxFilter(const bool oq_ForBroadcast);
    uint32_t m_GetTxIdentifier(void) const;
    uint32_t m_GetTxBroadcastIdentifier(void) const;
@@ -113,7 +138,7 @@ private:
    [[nodiscard]] std::error_code m_SendNextConsecutiveFrames(void);
 
    static void mh_ComposeSingleFrame(const C_OscProtocolDriverOsyService & orc_Service, const uint32_t ou32_Identifier,
-                                     stw::can::T_STWCAN_Msg_TX & orc_CanMessage);
+                                     const bool oq_ExtendedId, stw::can::T_STWCAN_Msg_TX & orc_CanMessage);
 
    [[nodiscard]] std::error_code m_HandleBroadcastSetNodeIdBySerialNumberResponse(const uint8_t ou8_RoutineIdMsb,
                                                                     const uint8_t ou8_RoutineIdLsb,
@@ -158,6 +183,10 @@ public:
    virtual std::error_code SetNodeIdentifiers(const C_OscProtocolDriverOsyNode & orc_ClientIdentifier,
                                               const C_OscProtocolDriverOsyNode & orc_ServerIdentifier);
    [[nodiscard]] std::error_code SetNodeIdentifiersForBroadcasts(const C_OscProtocolDriverOsyNode & orc_ClientIdentifier);
+   [[nodiscard]] std::error_code SetExplicitIdentifiers(const uint32_t ou32_RequestId, const uint32_t ou32_ResponseId,
+                                                        const bool oq_ExtendedId);
+   [[nodiscard]] std::error_code SetNodeIdAddressing(void);
+   void SetTxPadding(const bool oq_Enabled, const uint8_t ou8_PadByte = 0xCCU);
 
    [[nodiscard]] std::error_code SetDispatcher(stw::can::C_CanDispatcher * const opc_Dispatcher);
 

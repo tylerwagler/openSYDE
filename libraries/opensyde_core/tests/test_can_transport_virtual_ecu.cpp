@@ -41,6 +41,7 @@
 #include "C_OscSuSequences.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_OscSystemDefinition.hpp"
+#include "TglTime.hpp"
 #include "osy_virtual_ecu.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -75,16 +76,32 @@ class C_VirtualCanBus :
 {
 public:
    std::vector<T_STWCAN_Msg_TX> c_SentByClient;
+   std::vector<uint32_t> c_ClientSendTimesMs; ///< TglGetTickCount at each client send, parallel to c_SentByClient
    std::vector<T_STWCAN_Msg_RX> c_SentByDevices;
    int32_t s32_Bitrate;
    uint32_t u32_CorruptSequenceOfConsecutiveFrame; ///< 1-based index of a device CF to send with a wrong number, 0 = none
    bool q_DevicesWithholdFlowControl;              ///< true: no device answers a first frame with flow control
+   //how the devices answer a first frame (and each block after it)
+   uint8_t u8_FlowControlBlockSize;       ///< BS the devices announce; 0 = no limit
+   uint8_t u8_FlowControlStMin;           ///< STmin the devices announce
+   bool q_PadFlowControl;                 ///< true: flow controls go out with DLC 8 as many servers send them
+   uint32_t u32_FlowControlWaitFrames;    ///< WAIT flow controls sent before the clear-to-send
+   bool q_FlowControlOverflow;            ///< true: the devices answer every first frame with OVFLW
+   uint32_t u32_ConsecutiveFramesBeforeFlowControlRead; ///< CFs the client sent while a flow control it had not
+   ///< yet read was pending: a conformance violation
 
    C_VirtualCanBus(void) :
       s32_Bitrate(0),
       u32_CorruptSequenceOfConsecutiveFrame(0U),
       q_DevicesWithholdFlowControl(false),
-      mu64_Time(0U)
+      u8_FlowControlBlockSize(0U),
+      u8_FlowControlStMin(0U),
+      q_PadFlowControl(false),
+      u32_FlowControlWaitFrames(0U),
+      q_FlowControlOverflow(false),
+      u32_ConsecutiveFramesBeforeFlowControlRead(0U),
+      mu64_Time(0U),
+      mu32_UnreadFlowControls(0U)
    {
    }
 
@@ -94,6 +111,33 @@ public:
       c_Device.u8_NodeId = ou8_NodeId;
       c_Device.pc_Ecu = &orc_Ecu;
       mc_Devices.push_back(c_Device);
+   }
+
+   ///a UDS server with a fixed request/response identifier pair, 11 or 29 bit, outside openSYDE's addressing
+   void AttachExplicit(const uint32_t ou32_RequestId, const uint32_t ou32_ResponseId, const bool oq_Extended,
+                       C_VirtualEcu & orc_Ecu)
+   {
+      T_Device c_Device;
+      c_Device.u8_NodeId = 0U;
+      c_Device.pc_Ecu = &orc_Ecu;
+      c_Device.q_Explicit = true;
+      c_Device.u32_RequestId = ou32_RequestId;
+      c_Device.u32_ResponseId = ou32_ResponseId;
+      c_Device.q_Extended = oq_Extended;
+      mc_Devices.push_back(c_Device);
+   }
+
+   uint32_t CountDeviceFramesWithPci(const uint8_t ou8_Pci) const
+   {
+      uint32_t u32_Count = 0U;
+      for (const T_STWCAN_Msg_RX & rc_Msg : c_SentByDevices)
+      {
+         if ((rc_Msg.au8_Data[0] & 0xF0U) == ou8_Pci)
+         {
+            ++u32_Count;
+         }
+      }
+      return u32_Count;
    }
 
    ///a frame from a device the client did not ask anything, e.g. an event
@@ -140,6 +184,19 @@ public:
    std::error_code CAN_Send_Msg(const T_STWCAN_Msg_TX & orc_Message) override
    {
       c_SentByClient.push_back(orc_Message);
+      c_ClientSendTimesMs.push_back(stw::tgl::TglGetTickCount());
+      if (((orc_Message.au8_Data[0] & 0xF0U) == 0x20U) && (mu32_UnreadFlowControls > 0U))
+      {
+         ++u32_ConsecutiveFramesBeforeFlowControlRead;
+      }
+      for (T_Device & rc_Device : mc_Devices)
+      {
+         if (rc_Device.q_Explicit && (rc_Device.u32_RequestId == orc_Message.u32_ID) &&
+             (rc_Device.q_Extended == (orc_Message.u8_XTD == 1U)))
+         {
+            m_DeviceReceive(rc_Device, 0U, orc_Message, false);
+         }
+      }
       if (orc_Message.u8_XTD == 1U)
       {
          const uint32_t u32_Family = orc_Message.u32_ID & 0x1FFF0000U;
@@ -150,7 +207,7 @@ public:
          {
             for (T_Device & rc_Device : mc_Devices)
             {
-               if (q_Broadcast || (rc_Device.u8_NodeId == u8_Target))
+               if ((rc_Device.q_Explicit == false) && (q_Broadcast || (rc_Device.u8_NodeId == u8_Target)))
                {
                   m_DeviceReceive(rc_Device, u8_Source, orc_Message, q_Broadcast);
                }
@@ -175,6 +232,10 @@ protected:
       }
       orc_Message = mc_ToClient.front();
       mc_ToClient.pop_front();
+      if (((orc_Message.au8_Data[0] & 0xF0U) == 0x30U) && (mu32_UnreadFlowControls > 0U))
+      {
+         --mu32_UnreadFlowControls;
+      }
       return Errc::success;
    }
 
@@ -195,17 +256,54 @@ private:
       uint8_t u8_TxTarget = 0U;
       bool q_WaitingForFlowControl = false;
       uint32_t u32_ConsecutiveFramesSent = 0U;
+      uint8_t u8_ConsecutiveFramesInBlock = 0U;
+      //explicit addressing instead of openSYDE's derived identifiers
+      bool q_Explicit = false;
+      uint32_t u32_RequestId = 0U;
+      uint32_t u32_ResponseId = 0U;
+      bool q_Extended = true;
    };
 
    std::vector<T_Device> mc_Devices;
    std::deque<T_STWCAN_Msg_RX> mc_ToClient;
    uint64_t mu64_Time;
+   uint32_t mu32_UnreadFlowControls; ///< flow controls queued for the client that it has not read yet
 
-   void m_Queue(const uint32_t ou32_Id, const std::vector<uint8_t> & orc_Data)
+   uint32_t m_ResponseId(const T_Device & orc_Device, const uint8_t ou8_Target) const
+   {
+      return orc_Device.q_Explicit ? orc_Device.u32_ResponseId : mh_PhysicalId(ou8_Target, orc_Device.u8_NodeId);
+   }
+
+   void m_QueueFromDevice(const T_Device & orc_Device, const uint8_t ou8_Target, const std::vector<uint8_t> & orc_Data)
+   {
+      m_Queue(m_ResponseId(orc_Device, ou8_Target), orc_Data, orc_Device.q_Extended);
+   }
+
+   ///what a device answers a first frame (or a completed block) with, as configured on the bus
+   void m_SendFlowControl(const T_Device & orc_Device, const uint8_t ou8_Target)
+   {
+      std::vector<uint8_t> c_Wait{0x31U, 0U, 0U};
+      std::vector<uint8_t> c_ClearToSend{static_cast<uint8_t>(q_FlowControlOverflow ? 0x32U : 0x30U),
+                                         u8_FlowControlBlockSize, u8_FlowControlStMin};
+      if (q_PadFlowControl)
+      {
+         c_Wait.resize(8U, 0xCCU);
+         c_ClearToSend.resize(8U, 0xCCU);
+      }
+      for (uint32_t u32_Index = 0U; u32_Index < u32_FlowControlWaitFrames; ++u32_Index)
+      {
+         m_QueueFromDevice(orc_Device, ou8_Target, c_Wait);
+         ++mu32_UnreadFlowControls;
+      }
+      m_QueueFromDevice(orc_Device, ou8_Target, c_ClearToSend);
+      ++mu32_UnreadFlowControls;
+   }
+
+   void m_Queue(const uint32_t ou32_Id, const std::vector<uint8_t> & orc_Data, const bool oq_Extended = true)
    {
       T_STWCAN_Msg_RX c_Msg;
       c_Msg.u32_ID = ou32_Id;
-      c_Msg.u8_XTD = 1U;
+      c_Msg.u8_XTD = oq_Extended ? 1U : 0U;
       c_Msg.u8_RTR = 0U;
       c_Msg.u8_DLC = static_cast<uint8_t>(orc_Data.size());
       (void)std::memset(&c_Msg.au8_Data[0], 0, 8U);
@@ -232,15 +330,25 @@ private:
          orc_Device.c_Assembly.assign(&orc_Msg.au8_Data[2], &orc_Msg.au8_Data[8]);
          orc_Device.u8_RxSequence = 1U;
          orc_Device.q_Receiving = true;
+         orc_Device.u8_ConsecutiveFramesInBlock = 0U;
          if (q_DevicesWithholdFlowControl == false)
          {
-            m_Queue(mh_PhysicalId(ou8_Source, orc_Device.u8_NodeId), {0x30U, 0x00U, 0x00U});
+            m_SendFlowControl(orc_Device, ou8_Source);
          }
          break;
       case 0x20U: //consecutive frame
          if (orc_Device.q_Receiving && (u8_Low == orc_Device.u8_RxSequence))
          {
             m_DeviceAppend(orc_Device, ou8_Source, orc_Msg, 0U);
+            if (orc_Device.q_Receiving && (u8_FlowControlBlockSize != 0U))
+            {
+               ++orc_Device.u8_ConsecutiveFramesInBlock;
+               if (orc_Device.u8_ConsecutiveFramesInBlock == u8_FlowControlBlockSize)
+               {
+                  orc_Device.u8_ConsecutiveFramesInBlock = 0U;
+                  m_SendFlowControl(orc_Device, ou8_Source);
+               }
+            }
          }
          else
          {
@@ -323,19 +431,18 @@ private:
 
    void m_DeviceSend(T_Device & orc_Device, const uint8_t ou8_Target, const std::vector<uint8_t> & orc_Payload)
    {
-      const uint32_t u32_Id = mh_PhysicalId(ou8_Target, orc_Device.u8_NodeId);
       if (orc_Payload.size() <= 7U)
       {
          std::vector<uint8_t> c_Frame{static_cast<uint8_t>(orc_Payload.size())};
          c_Frame.insert(c_Frame.end(), orc_Payload.begin(), orc_Payload.end());
-         m_Queue(u32_Id, c_Frame);
+         m_QueueFromDevice(orc_Device, ou8_Target, c_Frame);
       }
       else
       {
          std::vector<uint8_t> c_Frame{static_cast<uint8_t>(0x10U | ((orc_Payload.size() >> 8U) & 0x0FU)),
                                       static_cast<uint8_t>(orc_Payload.size() & 0xFFU)};
          c_Frame.insert(c_Frame.end(), orc_Payload.begin(), orc_Payload.begin() + 6);
-         m_Queue(u32_Id, c_Frame);
+         m_QueueFromDevice(orc_Device, ou8_Target, c_Frame);
          orc_Device.c_Pending = orc_Payload;
          orc_Device.u16_TxIndex = 6U;
          orc_Device.u8_TxSequence = 1U;
@@ -359,7 +466,7 @@ private:
          std::vector<uint8_t> c_Frame{static_cast<uint8_t>(0x20U | u8_Sequence)};
          c_Frame.insert(c_Frame.end(), orc_Device.c_Pending.begin() + orc_Device.u16_TxIndex,
                         orc_Device.c_Pending.begin() + orc_Device.u16_TxIndex + static_cast<long>(x_Take));
-         m_Queue(mh_PhysicalId(orc_Device.u8_TxTarget, orc_Device.u8_NodeId), c_Frame);
+         m_QueueFromDevice(orc_Device, orc_Device.u8_TxTarget, c_Frame);
          orc_Device.u16_TxIndex = static_cast<uint16_t>(orc_Device.u16_TxIndex + x_Take);
          orc_Device.u8_TxSequence = static_cast<uint8_t>((orc_Device.u8_TxSequence + 1U) & 0x0FU);
       }
@@ -541,6 +648,193 @@ TEST_F(CanTransportVirtualEcu, NoFlowControlFromTheDevice_RequestIsNeverComplete
    ASSERT_EQ(1U, c_Frames.size());
    EXPECT_EQ(0x10U, c_Frames[0].au8_Data[0]);
    EXPECT_TRUE(mc_Ecu.RequestsFor(0xBCU).empty());
+}
+
+/* -- ISO 15765-2 conformance beyond the openSYDE dialect ------------------------------------------------------------ */
+
+TEST_F(CanTransportVirtualEcu, PaddedFlowControl_IsAcceptedLikeAThreeByteOne)
+{
+   //most production servers pad the flow control to DLC 8; the transport used to insist on DLC 3
+   mc_Bus.q_PadFlowControl = true;
+   std::vector<uint8_t> c_Value(20U, 0x22U);
+
+   EXPECT_EQ(Errc::success, mc_Driver.OsyWriteDataPoolData(1U, 2U, 3U, c_Value));
+   ASSERT_GE(mc_Bus.c_SentByDevices.size(), 1U);
+   EXPECT_EQ(8U, mc_Bus.c_SentByDevices[0].u8_DLC);
+   EXPECT_EQ(0x30U, mc_Bus.c_SentByDevices[0].au8_Data[0]);
+   EXPECT_EQ(1U, mc_Ecu.RequestsFor(0xBCU).size());
+}
+
+TEST_F(CanTransportVirtualEcu, BlockSize_ClientWaitsForAFlowControlAfterEveryBlock)
+{
+   //202 bytes: 6 in the first frame, 28 consecutive frames; with a block size of 5 the server owes 6 flow controls
+   mc_Bus.u8_FlowControlBlockSize = 5U;
+   std::vector<uint8_t> c_Data(200U, 0x5AU);
+   mc_Ecu.Handle({0x34U, 0x00U, 0x44U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0xC8U});
+
+   EXPECT_EQ(Errc::success, mc_Driver.OsyTransferData(1U, c_Data));
+
+   EXPECT_EQ(1U + 28U, mc_Bus.SentTo(mhu32_REQUEST_ID).size());
+   EXPECT_EQ(6U, mc_Bus.CountDeviceFramesWithPci(0x30U));
+   //and no consecutive frame went out while the client still had a flow control to read: each block waited
+   EXPECT_EQ(0U, mc_Bus.u32_ConsecutiveFramesBeforeFlowControlRead);
+   ASSERT_EQ(1U, mc_Ecu.RequestsFor(0x36U).size());
+   EXPECT_EQ(202U, mc_Ecu.RequestsFor(0x36U)[0].size());
+}
+
+TEST_F(CanTransportVirtualEcu, SeparationTime_ClientSpacesConsecutiveFrames)
+{
+   //STmin 5 ms: three consecutive frames, each at least 5 ms after the one before
+   mc_Bus.u8_FlowControlStMin = 5U;
+   std::vector<uint8_t> c_Value(20U, 0x33U);
+
+   EXPECT_EQ(Errc::success, mc_Driver.OsyWriteDataPoolData(1U, 2U, 3U, c_Value));
+
+   ASSERT_EQ(4U, mc_Bus.c_SentByClient.size());
+   ASSERT_EQ(4U, mc_Bus.c_ClientSendTimesMs.size());
+   EXPECT_GE(mc_Bus.c_ClientSendTimesMs[2] - mc_Bus.c_ClientSendTimesMs[1], 5U);
+   EXPECT_GE(mc_Bus.c_ClientSendTimesMs[3] - mc_Bus.c_ClientSendTimesMs[2], 5U);
+   EXPECT_EQ(1U, mc_Ecu.RequestsFor(0xBCU).size());
+}
+
+TEST_F(CanTransportVirtualEcu, SeparationTimeInMicroseconds_RoundsUpToOneMillisecond)
+{
+   //0xF3 is 300 us; we have no sub-millisecond timer, so it must behave as 1 ms and not as the reserved maximum
+   mc_Bus.u8_FlowControlStMin = 0xF3U;
+   std::vector<uint8_t> c_Value(20U, 0x44U);
+
+   const uint32_t u32_Start = stw::tgl::TglGetTickCount();
+   EXPECT_EQ(Errc::success, mc_Driver.OsyWriteDataPoolData(1U, 2U, 3U, c_Value));
+   EXPECT_LT(stw::tgl::TglGetTickCount() - u32_Start, 100U); //three frames at 127 ms each would take ~380 ms
+   EXPECT_EQ(1U, mc_Ecu.RequestsFor(0xBCU).size());
+}
+
+TEST_F(CanTransportVirtualEcu, WaitFlowControls_TransferContinuesOnTheClearToSend)
+{
+   mc_Bus.u32_FlowControlWaitFrames = 3U;
+   std::vector<uint8_t> c_Value(20U, 0x55U);
+
+   EXPECT_EQ(Errc::success, mc_Driver.OsyWriteDataPoolData(1U, 2U, 3U, c_Value));
+   EXPECT_EQ(4U, mc_Bus.CountDeviceFramesWithPci(0x30U)); //three WAIT, one CTS
+   EXPECT_EQ(0U, mc_Bus.u32_ConsecutiveFramesBeforeFlowControlRead);
+   EXPECT_EQ(1U, mc_Ecu.RequestsFor(0xBCU).size());
+}
+
+TEST_F(CanTransportVirtualEcu, OverflowFlowControl_AbortsTheTransfer)
+{
+   mc_Bus.q_FlowControlOverflow = true;
+   std::vector<uint8_t> c_Value(20U, 0x66U);
+
+   EXPECT_EQ(Errc::timeout, mc_Driver.OsyWriteDataPoolData(1U, 2U, 3U, c_Value));
+   //only the first frame went out
+   EXPECT_EQ(1U, mc_Bus.SentTo(mhu32_REQUEST_ID).size());
+   EXPECT_TRUE(mc_Ecu.RequestsFor(0xBCU).empty());
+}
+
+TEST_F(CanTransportVirtualEcu, TxPadding_EveryFrameToTheServerIsDlc8)
+{
+   mc_Tp.SetTxPadding(true, 0xAAU);
+   uint32_t u32_Number = 0U;
+   std::vector<uint8_t> c_Value(20U, 0x77U);
+
+   EXPECT_EQ(Errc::success, mc_Driver.OsyReadHardwareNumber(u32_Number));
+   EXPECT_EQ(Errc::success, mc_Driver.OsyWriteDataPoolData(1U, 2U, 3U, c_Value));
+
+   const std::vector<T_STWCAN_Msg_TX> c_Frames = mc_Bus.SentTo(mhu32_REQUEST_ID);
+   ASSERT_EQ(5U, c_Frames.size());
+   for (const T_STWCAN_Msg_TX & rc_Frame : c_Frames)
+   {
+      EXPECT_EQ(8U, rc_Frame.u8_DLC);
+   }
+   //the single frame: PCI, three service bytes, four pad bytes
+   EXPECT_EQ(0x03U, c_Frames[0].au8_Data[0]);
+   EXPECT_EQ(0xAAU, c_Frames[0].au8_Data[4]);
+   EXPECT_EQ(0xAAU, c_Frames[0].au8_Data[7]);
+   //the last consecutive frame: PCI, four data bytes, three pad bytes
+   EXPECT_EQ(0x23U, c_Frames[4].au8_Data[0]);
+   EXPECT_EQ(0x77U, c_Frames[4].au8_Data[4]);
+   EXPECT_EQ(0xAAU, c_Frames[4].au8_Data[5]);
+   //and the server still read the right lengths
+   EXPECT_EQ(4711U, u32_Number);
+   ASSERT_EQ(1U, mc_Ecu.RequestsFor(0xBCU).size());
+   EXPECT_EQ(24U, mc_Ecu.RequestsFor(0xBCU)[0].size());
+}
+
+TEST(CanTransportExplicitAddressing, ElevenBitIdentifierPair_ReachesAUdsServerOutsideOpenSyde)
+{
+   //a plain UDS server at 0x7E0/0x7E8, 11 bit, as most automotive ECUs are addressed
+   C_VirtualEcu c_Ecu;
+   C_VirtualCanBus c_Bus;
+   C_OscProtocolDriverOsyTpCan c_Tp;
+   C_OscProtocolDriverOsy c_Driver;
+   c_Bus.AttachExplicit(0x7E0U, 0x7E8U, false, c_Ecu);
+   ASSERT_FALSE(static_cast<bool>(c_Tp.SetDispatcher(&c_Bus)));
+   ASSERT_FALSE(static_cast<bool>(c_Tp.SetExplicitIdentifiers(0x7E0U, 0x7E8U, false)));
+   c_Tp.SetTxPadding(true);
+   c_Driver.SetTimeoutPolling(200U);
+   ASSERT_FALSE(static_cast<bool>(c_Driver.SetNodeIdentifiers(C_OscProtocolDriverOsyNode(mhu8_BUS_ID, mhu8_CLIENT_NODE_ID),
+                                                              C_OscProtocolDriverOsyNode(mhu8_BUS_ID, mhu8_ECU_NODE_ID))));
+   ASSERT_FALSE(static_cast<bool>(c_Driver.SetTransportProtocol(&c_Tp)));
+
+   uint32_t u32_Number = 0U;
+   EXPECT_EQ(Errc::success, c_Driver.OsyReadHardwareNumber(u32_Number));
+   EXPECT_EQ(4711U, u32_Number);
+
+   ASSERT_EQ(1U, c_Bus.c_SentByClient.size());
+   EXPECT_EQ(0x7E0U, c_Bus.c_SentByClient[0].u32_ID);
+   EXPECT_EQ(0U, c_Bus.c_SentByClient[0].u8_XTD);
+   EXPECT_EQ(8U, c_Bus.c_SentByClient[0].u8_DLC);
+   EXPECT_EQ(0xCCU, c_Bus.c_SentByClient[0].au8_Data[7]);
+   ASSERT_EQ(1U, c_Bus.c_SentByDevices.size());
+   EXPECT_EQ(0x7E8U, c_Bus.c_SentByDevices[0].u32_ID);
+   EXPECT_EQ(0U, c_Bus.c_SentByDevices[0].u8_XTD);
+
+   //segmented both ways on the same pair
+   std::vector<uint8_t> c_Value(20U, 0x88U);
+   EXPECT_EQ(Errc::success, c_Driver.OsyWriteDataPoolData(1U, 2U, 3U, c_Value));
+   C_OscProtocolDriverOsy::C_FlashBlockInfo c_Info;
+   EXPECT_EQ(Errc::success, c_Driver.OsyReadFlashBlockData(1U, c_Info));
+   EXPECT_EQ("OldApp", c_Info.c_ApplicationName);
+   for (const T_STWCAN_Msg_TX & rc_Frame : c_Bus.c_SentByClient)
+   {
+      EXPECT_EQ(0x7E0U, rc_Frame.u32_ID);
+      EXPECT_EQ(0U, rc_Frame.u8_XTD);
+      EXPECT_EQ(8U, rc_Frame.u8_DLC);
+   }
+}
+
+TEST(CanTransportExplicitAddressing, IdentifierTooLargeForTheFormat_IsRejected)
+{
+   C_OscProtocolDriverOsyTpCan c_Tp;
+
+   EXPECT_EQ(Errc::range, c_Tp.SetExplicitIdentifiers(0x800U, 0x7E8U, false));
+   EXPECT_EQ(Errc::range, c_Tp.SetExplicitIdentifiers(0x7E0U, 0x20000000U, true));
+   EXPECT_EQ(Errc::success, c_Tp.SetExplicitIdentifiers(0x18DA10F1U, 0x18DAF110U, true));
+}
+
+TEST(CanTransportExplicitAddressing, BackToNodeIdAddressing_UsesTheDerivedIdentifiersAgain)
+{
+   C_VirtualEcu c_Ecu;
+   C_VirtualCanBus c_Bus;
+   C_OscProtocolDriverOsyTpCan c_Tp;
+   C_OscProtocolDriverOsy c_Driver;
+   c_Bus.Attach(mhu8_ECU_NODE_ID, c_Ecu);
+   ASSERT_FALSE(static_cast<bool>(c_Tp.SetDispatcher(&c_Bus)));
+   ASSERT_FALSE(static_cast<bool>(c_Tp.SetExplicitIdentifiers(0x7E0U, 0x7E8U, false)));
+   c_Driver.SetTimeoutPolling(200U);
+   ASSERT_FALSE(static_cast<bool>(c_Driver.SetNodeIdentifiers(C_OscProtocolDriverOsyNode(mhu8_BUS_ID, mhu8_CLIENT_NODE_ID),
+                                                              C_OscProtocolDriverOsyNode(mhu8_BUS_ID, mhu8_ECU_NODE_ID))));
+   ASSERT_FALSE(static_cast<bool>(c_Driver.SetTransportProtocol(&c_Tp)));
+
+   //nobody listens on 0x7E0 here
+   uint32_t u32_Number = 0U;
+   EXPECT_EQ(Errc::timeout, c_Driver.OsyReadHardwareNumber(u32_Number));
+
+   ASSERT_FALSE(static_cast<bool>(c_Tp.SetNodeIdAddressing()));
+   EXPECT_EQ(Errc::success, c_Driver.OsyReadHardwareNumber(u32_Number));
+   EXPECT_EQ(4711U, u32_Number);
+   EXPECT_EQ(mhu32_REQUEST_ID, c_Bus.c_SentByClient.back().u32_ID);
+   EXPECT_EQ(1U, c_Bus.c_SentByClient.back().u8_XTD);
 }
 
 TEST_F(CanTransportVirtualEcu, FramesFromAnotherNode_DoNotReachThisDriver)

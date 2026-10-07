@@ -54,7 +54,12 @@ C_OscProtocolDriverOsyTpCan::C_ServiceState::C_ServiceState(void) :
    u8_SequenceNumber(0U),
    e_Status(eIDLE),
    u32_StartTimeMs(0U),
-   u32_SendCfTimeout(0U)
+   u32_SendCfTimeout(0U),
+   u8_BlockSize(0U),
+   u8_FramesLeftInBlock(0U),
+   u32_StMinMs(0U),
+   u32_NextCfTimeMs(0U),
+   u8_WaitFramesReceived(0U)
 {
 }
 
@@ -69,7 +74,13 @@ C_OscProtocolDriverOsyTpCan::C_ServiceState::C_ServiceState(void) :
 C_OscProtocolDriverOsyTpCan::C_OscProtocolDriverOsyTpCan(const uint16_t ou16_MaxServiceQueueSize) :
    C_OscProtocolDriverOsyTpBase(ou16_MaxServiceQueueSize),
    mpc_CanDispatcher(nullptr),
-   mu16_DispatcherClientHandle(0U)
+   mu16_DispatcherClientHandle(0U),
+   mq_ExplicitIds(false),
+   mu32_RequestId(0U),
+   mu32_ResponseId(0U),
+   mq_ExtendedId(true),
+   mq_PadFrames(false),
+   mu8_PadByte(0xCCU)
 {
 }
 
@@ -240,13 +251,12 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_HandleIncomingFirstFrame(const T_
       mc_RxService.u8_SequenceNumber = 1U;
 
       //send flow control:
-      c_TxMsg.u32_ID = m_GetTxIdentifier();
-      c_TxMsg.u8_XTD = 1U;
-      c_TxMsg.u8_RTR = 0U;
+      m_InitTxFrame(c_TxMsg);
       c_TxMsg.u8_DLC = 3U;
-      c_TxMsg.au8_Data[0] = mhu8_ISO15765_N_PCI_FC;
+      c_TxMsg.au8_Data[0] = mhu8_ISO15765_N_PCI_FC + mhu8_FC_FLOW_STATUS_CONTINUE_TO_SEND;
       c_TxMsg.au8_Data[1] = 0U; //no block limits (BS)
       c_TxMsg.au8_Data[2] = 0U; //no separation time (STmin)
+      m_PadTxFrame(c_TxMsg);
 
       //lint -e{613}  //caller is responsible for valid dispatcher
       if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != Errc::success)
@@ -271,16 +281,20 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_HandleIncomingFirstFrame(const T_
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Send next consecutive frames
 
-   Try to send as many CFs as left in the Tx state machine.
-   Advance the Tx state machine accordingly
-   If the dispatcher reports a problem leave the state machine as it is.
+   Send as many consecutive frames as the last flow control allows right now:
+   - no more than the block size (BS) before the server owes us another flow control
+   - no earlier than the separation time (STmin) after the previous one
+   Advance the Tx state machine accordingly:
+   - all data sent: eIDLE
+   - block exhausted with data left: eWAITING_FOR_FLOW_CONTROL, with the N_Bs timer restarted
+   - separation time not yet elapsed, or the dispatcher could not take a frame: still eMORE_CONSECUTIVE_FRAMES_TO_SEND,
+     to be retried on the next cycle
 
    Only to be called when the state machine is in state eMORE_CONSECUTIVE_FRAMES_TO_SEND
 
    \return
-   Errc::success   no problems: all pending CFs sent; Tx state machine set to eIDLE again
+   Errc::success   no problems (the transfer may or may not be finished; see the state machine)
    Errc::com       could not send out consecutive frame (one/some might have been sent, however)
-                Tx state machine still at eMORE_CONSECUTIVE_FRAMES_TO_SEND
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscProtocolDriverOsyTpCan::m_SendNextConsecutiveFrames(void)
@@ -288,44 +302,66 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_SendNextConsecutiveFrames(void)
    std::error_code c_Return = Errc::success;
 
    //continue where we left:
-   for (; mc_TxService.u16_TransmissionIndex < mc_TxService.c_ServiceData.c_Data.size();
-        mc_TxService.u16_TransmissionIndex += 7)
+   while (mc_TxService.u16_TransmissionIndex < mc_TxService.c_ServiceData.c_Data.size())
    {
-      T_STWCAN_Msg_TX c_TxMsg;
-      const uint8_t u8_NumBytesToSend = static_cast<uint8_t>
-                                        (((mc_TxService.c_ServiceData.c_Data.size() -
-                                           mc_TxService.u16_TransmissionIndex) > 7U) ? 7U :
-                                         (mc_TxService.c_ServiceData.c_Data.size() -
-                                          mc_TxService.u16_TransmissionIndex));
-      c_TxMsg.u32_ID = m_GetTxIdentifier();
-      c_TxMsg.u8_XTD = 1U;
-      c_TxMsg.u8_RTR = 0U;
-      c_TxMsg.u8_DLC = 1U + u8_NumBytesToSend;
-      c_TxMsg.au8_Data[0] = mhu8_ISO15765_N_PCI_CF + mc_TxService.u8_SequenceNumber;
-      //lint -e{670} //std::vector reference returned by [] is guaranteed to have linear data in memory
-      (void)std::memcpy(&c_TxMsg.au8_Data[1],
-                        &mc_TxService.c_ServiceData.c_Data[mc_TxService.u16_TransmissionIndex],
-                        u8_NumBytesToSend);
-
-      //send message:
-      //lint -e{613}  //caller is responsible for valid dispatcher
-      if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != Errc::success)
+      if ((mc_TxService.u8_BlockSize != 0U) && (mc_TxService.u8_FramesLeftInBlock == 0U))
       {
-         //most likely Tx buffer is full; but we cannot be 100% sure, so write a log entry
-         m_LogWarningWithHeader("Could not send consecutive frame CAN message (Tx buffer full ?).", TGL_UTIL_FUNC_ID);
-         c_Return = Errc::com; //probably the Tx queue is full, we'll retry later
+         //block complete: the server has to send another flow control before we may continue
+         mc_TxService.e_Status = C_ServiceState::eWAITING_FOR_FLOW_CONTROL;
+         mc_TxService.u32_StartTimeMs = TglGetTickCount();
+         mc_TxService.u8_WaitFramesReceived = 0U;
          break;
       }
-
-      //set sequence number for next block:
-      mc_TxService.u8_SequenceNumber++;
-      if (mc_TxService.u8_SequenceNumber == 16U)
+      if ((mc_TxService.u32_StMinMs != 0U) &&
+          (static_cast<int32_t>(TglGetTickCount() - mc_TxService.u32_NextCfTimeMs) < 0))
       {
-         mc_TxService.u8_SequenceNumber = 0U;
+         //separation time not elapsed yet; try again on the next cycle
+         break;
+      }
+      else
+      {
+         T_STWCAN_Msg_TX c_TxMsg;
+         const uint8_t u8_NumBytesToSend = static_cast<uint8_t>
+                                           (((mc_TxService.c_ServiceData.c_Data.size() -
+                                              mc_TxService.u16_TransmissionIndex) > 7U) ? 7U :
+                                            (mc_TxService.c_ServiceData.c_Data.size() -
+                                             mc_TxService.u16_TransmissionIndex));
+         m_InitTxFrame(c_TxMsg);
+         c_TxMsg.u8_DLC = 1U + u8_NumBytesToSend;
+         c_TxMsg.au8_Data[0] = mhu8_ISO15765_N_PCI_CF + mc_TxService.u8_SequenceNumber;
+         //lint -e{670} //std::vector reference returned by [] is guaranteed to have linear data in memory
+         (void)std::memcpy(&c_TxMsg.au8_Data[1],
+                           &mc_TxService.c_ServiceData.c_Data[mc_TxService.u16_TransmissionIndex],
+                           u8_NumBytesToSend);
+         m_PadTxFrame(c_TxMsg);
+
+         //send message:
+         //lint -e{613}  //caller is responsible for valid dispatcher
+         if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != Errc::success)
+         {
+            //most likely Tx buffer is full; but we cannot be 100% sure, so write a log entry
+            m_LogWarningWithHeader("Could not send consecutive frame CAN message (Tx buffer full ?).",
+                                   TGL_UTIL_FUNC_ID);
+            c_Return = Errc::com; //probably the Tx queue is full, we'll retry later
+            break;
+         }
+
+         mc_TxService.u16_TransmissionIndex += u8_NumBytesToSend;
+         mc_TxService.u32_NextCfTimeMs = TglGetTickCount() + mc_TxService.u32_StMinMs;
+         if (mc_TxService.u8_BlockSize != 0U)
+         {
+            mc_TxService.u8_FramesLeftInBlock--;
+         }
+         //set sequence number for next block:
+         mc_TxService.u8_SequenceNumber++;
+         if (mc_TxService.u8_SequenceNumber == 16U)
+         {
+            mc_TxService.u8_SequenceNumber = 0U;
+         }
       }
    }
    //finished with this transfer ?
-   if (!c_Return)
+   if ((!c_Return) && (mc_TxService.u16_TransmissionIndex >= mc_TxService.c_ServiceData.c_Data.size()))
    {
       mc_TxService.e_Status = C_ServiceState::eIDLE;
    }
@@ -336,6 +372,11 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_SendNextConsecutiveFrames(void)
 /*! \brief   Handle incoming flow control
 
    Continue sending ongoing Tx transfer consecutive frames when waiting for flow control.
+   The flow status decides:
+   - ContinueToSend: take over BS and STmin and send the next block
+   - Wait: restart the N_Bs timer and keep waiting (up to N_WFTmax times per block)
+   - Overflow: the server cannot take the service; abort the transfer
+   A flow control is three bytes; servers that pad to eight bytes are accepted.
    Invalid and unexpected frames will be ignored.
 
    We already know
@@ -348,8 +389,9 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_SendNextConsecutiveFrames(void)
    \return
    Errc::success    no problems
    Errc::noact      unexpected flow control
-   Errc::config     frame invalid (DLC is not 3)
-   Errc::overflow   invalid STmin or BS (only 0 supported for each)
+   Errc::config     frame invalid (DLC below 3, or reserved flow status)
+   Errc::overflow   server reported overflow; transfer aborted
+   Errc::timeout    server sent more WAIT flow controls than N_WFTmax allows; transfer aborted
    Errc::com        could not send out following consecutive frames
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -360,33 +402,74 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_HandleIncomingFlowControl(const T
    //are we in a segmented Tx transfer ?
    if (mc_TxService.e_Status == C_ServiceState::eWAITING_FOR_FLOW_CONTROL)
    {
-      //only accept STmin=0 and BS=0
-      if (orc_CanMessage.u8_DLC == 3U)
+      if (orc_CanMessage.u8_DLC >= 3U)
       {
-         if ((orc_CanMessage.au8_Data[1] == 0U) && (orc_CanMessage.au8_Data[2] == 0U))
+         const uint8_t u8_FlowStatus = orc_CanMessage.au8_Data[0] & 0x0FU;
+         switch (u8_FlowStatus)
          {
-            //set total timeout value for sending all CFs (kicks in if the Tx buffer of the CAN dispatcher is full)
+         case mhu8_FC_FLOW_STATUS_CONTINUE_TO_SEND:
+         {
+            const uint32_t u32_FramesLeft =
+               ((mc_TxService.c_ServiceData.c_Data.size() - mc_TxService.u16_TransmissionIndex) + 6U) / 7U;
+            uint32_t u32_FramesInBlock;
+            uint32_t u32_BlockTimeoutMs;
+
+            mc_TxService.u8_BlockSize = orc_CanMessage.au8_Data[1];
+            mc_TxService.u8_FramesLeftInBlock = mc_TxService.u8_BlockSize;
+            mc_TxService.u32_StMinMs = mh_StMinToMs(orc_CanMessage.au8_Data[2]);
+            mc_TxService.u32_NextCfTimeMs = TglGetTickCount(); //the first CF of a block may go out at once
+
+            //set total timeout value for sending the CFs of this block (kicks in if the Tx buffer of the CAN
+            // dispatcher is full)
             //N_As is ISO 15765-2 is per CAN frame (and quite high at 1000ms ...)
-            //For the total transfer we use the total number of CAN frames, assume the lowest supported bitrate
-            // in openSYDE (100 kbit/s) and an alien busload of 50%
-            //So we'll have around 2 ms/message
+            //For the whole block we use the number of CAN frames, assume the lowest supported bitrate
+            // in openSYDE (100 kbit/s) and an alien busload of 50%: around 2 ms/message, plus the separation time
             //But we'll add a lower limit of 100ms to compensate for client side timing constraints
-            mc_TxService.u32_SendCfTimeout =
-               static_cast<uint32_t>((mc_TxService.c_ServiceData.c_Data.size() / 7U) * 2U);
-            if (mc_TxService.u32_SendCfTimeout < 100U)
+            if ((mc_TxService.u8_BlockSize == 0U) || (u32_FramesLeft < mc_TxService.u8_BlockSize))
             {
-               mc_TxService.u32_SendCfTimeout = 100U;
+               u32_FramesInBlock = u32_FramesLeft;
+            }
+            else
+            {
+               u32_FramesInBlock = mc_TxService.u8_BlockSize;
+            }
+            u32_BlockTimeoutMs = u32_FramesInBlock * (2U + mc_TxService.u32_StMinMs);
+            if (u32_BlockTimeoutMs < 100U)
+            {
+               u32_BlockTimeoutMs = 100U;
             }
             //offset with current system time:
-            mc_TxService.u32_SendCfTimeout += TglGetTickCount();
+            mc_TxService.u32_SendCfTimeout = TglGetTickCount() + u32_BlockTimeoutMs;
             mc_TxService.e_Status = C_ServiceState::eMORE_CONSECUTIVE_FRAMES_TO_SEND;
 
             c_Return = m_SendNextConsecutiveFrames();
          }
-         else
-         {
-            m_LogWarningWithHeader("Flow control with unsupported STmin or BS received. Ignoring.", TGL_UTIL_FUNC_ID);
+         break;
+         case mhu8_FC_FLOW_STATUS_WAIT:
+            mc_TxService.u8_WaitFramesReceived++;
+            if (mc_TxService.u8_WaitFramesReceived > mhu8_MAX_WAIT_FRAMES)
+            {
+               m_LogWarningWithHeader("More WAIT flow controls received than N_WFTmax allows. Aborting ongoing Tx transfer.",
+                                      TGL_UTIL_FUNC_ID);
+               mc_TxService.e_Status = C_ServiceState::eIDLE;
+               c_Return = Errc::timeout;
+            }
+            else
+            {
+               //the server needs more time: restart N_Bs and keep waiting
+               mc_TxService.u32_StartTimeMs = TglGetTickCount();
+            }
+            break;
+         case mhu8_FC_FLOW_STATUS_OVERFLOW:
+            m_LogWarningWithHeader("Flow control with overflow status received. Aborting ongoing Tx transfer.",
+                                   TGL_UTIL_FUNC_ID);
+            mc_TxService.e_Status = C_ServiceState::eIDLE;
             c_Return = Errc::overflow;
+            break;
+         default:
+            m_LogWarningWithHeader("Flow control with reserved flow status received. Ignoring.", TGL_UTIL_FUNC_ID);
+            c_Return = Errc::config;
+            break;
          }
       }
       else
@@ -636,7 +719,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_BroadcastSendDiagnosticSessionCon
       c_Service.c_Data[0] = mhu8_OSY_BC_SI_DIAGNOSTIC_SESSION_CONTROL;
       // We do not want any answer for this broadcast. Use the suppressPosRspMsgIndicationBit
       c_Service.c_Data[1] = ou8_Session | 0x80U;
-      mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
+      mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), true, c_Msg);
 
       if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
       {
@@ -657,15 +740,16 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_BroadcastSendDiagnosticSessionCon
 
    \param[in]  orc_Service       service to put into frame
    \param[in]  ou32_Identifier   CAN identifier to use
+   \param[in]  oq_ExtendedId     true: 29 bit identifier; false: 11 bit
    \param[out] orc_CanMessage    resulting CAN message
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsyTpCan::mh_ComposeSingleFrame(const C_OscProtocolDriverOsyService & orc_Service,
-                                                        const uint32_t ou32_Identifier,
+                                                        const uint32_t ou32_Identifier, const bool oq_ExtendedId,
                                                         T_STWCAN_Msg_TX & orc_CanMessage)
 {
    orc_CanMessage.u32_ID = ou32_Identifier;
-   orc_CanMessage.u8_XTD = 1U;
+   orc_CanMessage.u8_XTD = (oq_ExtendedId == true) ? 1U : 0U;
    orc_CanMessage.u8_RTR = 0U;
    orc_CanMessage.u8_DLC = static_cast<uint8_t>(orc_Service.c_Data.size() + 1U);
 
@@ -831,7 +915,8 @@ std::error_code C_OscProtocolDriverOsyTpCan::Cycle(void)
                {
                   //simple single frame:
                   T_STWCAN_Msg_TX c_Msg;
-                  mh_ComposeSingleFrame(mc_TxService.c_ServiceData, m_GetTxIdentifier(), c_Msg);
+                  mh_ComposeSingleFrame(mc_TxService.c_ServiceData, m_GetTxIdentifier(), mq_ExtendedId, c_Msg);
+                  m_PadTxFrame(c_Msg);
 
                   if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
                   {
@@ -846,9 +931,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::Cycle(void)
                   T_STWCAN_Msg_TX c_TxMsg;
                   const uint32_t u32_CountBytes = static_cast<uint32_t>(mc_TxService.c_ServiceData.c_Data.size());
 
-                  c_TxMsg.u32_ID = m_GetTxIdentifier();
-                  c_TxMsg.u8_XTD = 1U;
-                  c_TxMsg.u8_RTR = 0U;
+                  m_InitTxFrame(c_TxMsg);
                   c_TxMsg.u8_DLC = 8U;
 
                   // First frame
@@ -910,9 +993,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::Cycle(void)
                {
                   //multi-frame; compose first frame:
                   T_STWCAN_Msg_TX c_TxMsg;
-                  c_TxMsg.u32_ID = m_GetTxIdentifier();
-                  c_TxMsg.u8_XTD = 1U;
-                  c_TxMsg.u8_RTR = 0U;
+                  m_InitTxFrame(c_TxMsg);
                   c_TxMsg.u8_DLC = 8U;
 
                   c_TxMsg.au8_Data[0] = static_cast<uint8_t>(mhu8_ISO15765_N_PCI_FF +
@@ -931,6 +1012,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::Cycle(void)
                   {
                      mc_TxService.e_Status = C_ServiceState::eWAITING_FOR_FLOW_CONTROL;
                      mc_TxService.u32_StartTimeMs = TglGetTickCount();
+                     mc_TxService.u8_WaitFramesReceived = 0U;
                   }
 
                   break; //not yet finished with this transfer
@@ -1119,8 +1201,12 @@ uint32_t C_OscProtocolDriverOsyTpCan::m_GetTxIdentifier(void) const
 {
    uint32_t u32_Identifier;
 
+   if (mq_ExplicitIds == true)
+   {
+      u32_Identifier = mu32_RequestId;
+   }
    //is routing required ?
-   if (mc_ServerId.u8_BusIdentifier == mc_ClientId.u8_BusIdentifier)
+   else if (mc_ServerId.u8_BusIdentifier == mc_ClientId.u8_BusIdentifier)
    {
       //same bus; no routing -> we use normal fixed addressing
       u32_Identifier = static_cast<uint32_t>(0x18DA0000U) +
@@ -1165,6 +1251,7 @@ uint32_t C_OscProtocolDriverOsyTpCan::m_GetTxBroadcastIdentifier(void) const
    For non-broadcasts:
    - from mc_ServerId
    - to mc_ClientId (us)
+   - or, with explicit addressing, exactly the configured response ID
 
    For broadcasts:
    - from any node on the local bus
@@ -1183,13 +1270,20 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_SetRxFilter(const bool oq_ForBroa
 
    c_Filter.q_RTR = false; //pfuideifi !
    c_Filter.q_RTRMustMatch = true;
-   c_Filter.q_XTD = true; //only 29bit IDs in this protocol
+   c_Filter.q_XTD = true; //openSYDE addressing: only 29bit IDs
    c_Filter.q_XTDMustMatch = true;
 
    if (oq_ForBroadcast == false)
    {
+      if (mq_ExplicitIds == true)
+      {
+         //fixed response ID of a UDS server; 11 or 29 bit
+         c_Filter.q_XTD = mq_ExtendedId;
+         c_Filter.u32_Code = mu32_ResponseId;
+         c_Filter.u32_Mask = (mq_ExtendedId == true) ? 0x1FFFFFFFU : 0x7FFU;
+      }
       //is routing required ?
-      if (mc_ServerId.u8_BusIdentifier == mc_ClientId.u8_BusIdentifier)
+      else if (mc_ServerId.u8_BusIdentifier == mc_ClientId.u8_BusIdentifier)
       {
          //same bus; no routing -> we use normal fixed addressing (physical)
          c_Filter.u32_Code = static_cast<uint32_t>(0x18DA0000U) +
@@ -1310,7 +1404,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
 
       c_Service.c_Data.resize(1);
       c_Service.c_Data[0] = mhu8_OSY_BC_SI_READ_SERIAL_NUMBER;
-      mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
+      mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), true, c_Msg);
 
       if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
       {
@@ -1373,7 +1467,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
          c_Service.c_Data.resize(3);
          c_Service.c_Data[1] = 0U; // Block number. Start with the first block
          c_Service.c_Data[2] = 0U; // Reserved byte
-         mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
+         mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), true, c_Msg);
 
          do
          {
@@ -1623,7 +1717,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
                {
                   // Next bock number for next request
                   c_Service.c_Data[1] = c_Service.c_Data[1] + 1U;
-                  mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
+                  mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), true, c_Msg);
                }
             }
          }
@@ -1703,7 +1797,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastRequestProgramming(
       c_Service.c_Data[1] = mhu8_OSY_BC_RC_SUB_FUNCTION_START_ROUTINE;
       c_Service.c_Data[2] = static_cast<uint8_t>(mhu16_OSY_BC_RC_SID_REQUEST_PROGRAMMING >> 8U);
       c_Service.c_Data[3] = static_cast<uint8_t>(mhu16_OSY_BC_RC_SID_REQUEST_PROGRAMMING & 0xFFU);
-      mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
+      mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), true, c_Msg);
 
       if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
       {
@@ -1830,7 +1924,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
       c_Service.c_Data[4] = orc_SerialNumber.au8_SerialNumber[0];
       c_Service.c_Data[5] = orc_SerialNumber.au8_SerialNumber[1];
       c_Service.c_Data[6] = orc_SerialNumber.au8_SerialNumber[2];
-      mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
+      mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), true, c_Msg);
 
       if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
       {
@@ -1844,7 +1938,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
          c_Service.c_Data[4] = orc_SerialNumber.au8_SerialNumber[3];
          c_Service.c_Data[5] = orc_SerialNumber.au8_SerialNumber[4];
          c_Service.c_Data[6] = orc_SerialNumber.au8_SerialNumber[5];
-         mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
+         mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), true, c_Msg);
 
          if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
          {
@@ -1860,7 +1954,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
             c_Service.c_Data[3] = static_cast<uint8_t>(mhu16_OSY_BC_RC_SID_SET_NODEID_BY_SERIALNUMBER_PART3 & 0xFFU);
             c_Service.c_Data[4] = orc_NewNodeId.u8_BusIdentifier;
             c_Service.c_Data[5] = orc_NewNodeId.u8_NodeIdentifier;
-            mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
+            mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), true, c_Msg);
 
             if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
             {
@@ -1990,7 +2084,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumberExt
             u8_SerialNumberBytesSent += u8_BytesToCopy;
          }
 
-         mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
+         mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), true, c_Msg);
 
          if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
          {
@@ -2056,7 +2150,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastEcuReset(const uint8_t ou8
       c_Service.c_Data.resize(2);
       c_Service.c_Data[0] = mhu8_OSY_BC_SI_ECU_RESET;
       c_Service.c_Data[1] = ou8_ResetType;
-      mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
+      mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), true, c_Msg);
 
       if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
       {
@@ -2135,4 +2229,152 @@ void C_OscProtocolDriverOsyTpCan::m_LogWarningWithHeader(const std::string & orc
                                         std::to_string(
                                            mc_ServerId.u8_NodeIdentifier) + ": " + orc_Information, __FILE__,
                                         opcn_Function);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Address the server by a fixed request/response CAN identifier pair
+
+   For a UDS server outside openSYDE: its identifiers do not follow from bus and node ids.
+   Requests go out on ou32_RequestId; only frames on ou32_ResponseId are taken as responses.
+   The node identifiers set with SetNodeIdentifiers remain in place for the protocol driver's own use, they just no
+   longer decide the CAN identifiers. Broadcasts keep openSYDE's own 29 bit addressing.
+
+   \param[in]  ou32_RequestId    identifier for client -> server
+   \param[in]  ou32_ResponseId   identifier for server -> client
+   \param[in]  oq_ExtendedId     true: both are 29 bit identifiers; false: 11 bit
+
+   \return
+   Errc::success   no problems
+   Errc::range     an identifier does not fit the chosen format
+   Errc::noact     could not reconfigure Rx filters
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscProtocolDriverOsyTpCan::SetExplicitIdentifiers(const uint32_t ou32_RequestId,
+                                                                    const uint32_t ou32_ResponseId,
+                                                                    const bool oq_ExtendedId)
+{
+   std::error_code c_Return = Errc::success;
+   const uint32_t u32_MaxId = (oq_ExtendedId == true) ? 0x1FFFFFFFU : 0x7FFU;
+
+   if ((ou32_RequestId > u32_MaxId) || (ou32_ResponseId > u32_MaxId))
+   {
+      c_Return = Errc::range;
+   }
+   else
+   {
+      mq_ExplicitIds = true;
+      mu32_RequestId = ou32_RequestId;
+      mu32_ResponseId = ou32_ResponseId;
+      mq_ExtendedId = oq_ExtendedId;
+      if (mpc_CanDispatcher != nullptr)
+      {
+         (void)mpc_CanDispatcher->ClearQueue(mu16_DispatcherClientHandle);
+         if (this->m_SetRxFilter(false))
+         {
+            c_Return = Errc::noact;
+         }
+      }
+   }
+   return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Go back to deriving the CAN identifiers from the bus and node ids (openSYDE addressing)
+
+   \return
+   Errc::success   no problems
+   Errc::noact     could not reconfigure Rx filters
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::error_code C_OscProtocolDriverOsyTpCan::SetNodeIdAddressing(void)
+{
+   std::error_code c_Return = Errc::success;
+
+   mq_ExplicitIds = false;
+   mq_ExtendedId = true;
+   if (mpc_CanDispatcher != nullptr)
+   {
+      (void)mpc_CanDispatcher->ClearQueue(mu16_DispatcherClientHandle);
+      if (this->m_SetRxFilter(false))
+      {
+         c_Return = Errc::noact;
+      }
+   }
+   return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Pad every transmitted frame to DLC 8
+
+   openSYDE servers take frames at their natural length. Many UDS servers only accept DLC 8, so the client has to pad.
+   ISO 15765-2 recommends 0xCC as the pad byte.
+
+   \param[in]  oq_Enabled    true: pad single, consecutive and flow control frames to DLC 8
+   \param[in]  ou8_PadByte   byte to pad with
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscProtocolDriverOsyTpCan::SetTxPadding(const bool oq_Enabled, const uint8_t ou8_PadByte)
+{
+   mq_PadFrames = oq_Enabled;
+   mu8_PadByte = ou8_PadByte;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set identifier and format of a frame to the server
+
+   \param[out]  orc_CanMessage   frame to initialize (identifier, format, no remote request)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscProtocolDriverOsyTpCan::m_InitTxFrame(T_STWCAN_Msg_TX & orc_CanMessage) const
+{
+   orc_CanMessage.u32_ID = m_GetTxIdentifier();
+   orc_CanMessage.u8_XTD = (mq_ExtendedId == true) ? 1U : 0U;
+   orc_CanMessage.u8_RTR = 0U;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Pad a frame to DLC 8 if padding is enabled
+
+   \param[in,out]  orc_CanMessage   frame with its payload and DLC set
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscProtocolDriverOsyTpCan::m_PadTxFrame(T_STWCAN_Msg_TX & orc_CanMessage) const
+{
+   if ((mq_PadFrames == true) && (orc_CanMessage.u8_DLC < 8U))
+   {
+      (void)std::memset(&orc_CanMessage.au8_Data[orc_CanMessage.u8_DLC], mu8_PadByte,
+                        static_cast<size_t>(8U - orc_CanMessage.u8_DLC));
+      orc_CanMessage.u8_DLC = 8U;
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Separation time from a flow control, in milliseconds
+
+   ISO 15765-2: 0x00..0x7F are milliseconds, 0xF1..0xF9 are 100..900 microseconds, the rest is reserved and is to be
+   treated as the maximum. We have no sub-millisecond timer, so the microsecond range rounds up to one millisecond.
+
+   \param[in]  ou8_StMin   STmin byte of the flow control
+
+   \return
+   separation time in ms
+*/
+//----------------------------------------------------------------------------------------------------------------------
+uint32_t C_OscProtocolDriverOsyTpCan::mh_StMinToMs(const uint8_t ou8_StMin)
+{
+   uint32_t u32_Ms;
+
+   if (ou8_StMin <= 0x7FU)
+   {
+      u32_Ms = ou8_StMin;
+   }
+   else if ((ou8_StMin >= 0xF1U) && (ou8_StMin <= 0xF9U))
+   {
+      u32_Ms = 1U;
+   }
+   else
+   {
+      u32_Ms = 0x7FU;
+   }
+   return u32_Ms;
 }
