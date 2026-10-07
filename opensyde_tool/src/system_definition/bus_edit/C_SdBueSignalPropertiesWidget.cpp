@@ -438,6 +438,12 @@ void C_SdBueSignalPropertiesWidget::m_LoadFromData(void)
          //Copy
          this->mc_DataOscSignal = rc_OscSignal;
          this->mc_DataOscSignalCommon = *pc_OscSignalCommon;
+         // Older device definitions may not store the initial value; ensure it is present so the
+         // rest of the widget can safely access c_DataSetValues[0].
+         if (this->mc_DataOscSignalCommon.c_DataSetValues.empty() == true)
+         {
+            this->mc_DataOscSignalCommon.c_DataSetValues.push_back(this->mc_DataOscSignalCommon.c_Value);
+         }
          this->mc_DataUiSignal = *pc_UiSignal;
          this->mc_DataUiSignalCommon = *pc_UiSignalCommon;
 
@@ -1946,11 +1952,24 @@ void C_SdBueSignalPropertiesWidget::m_UpdateUiForChange(const E_Change oe_Change
          this->mpc_Ui->pc_WidgetInit->setEnabled(true);
       }
       //Value
-      tgl_assert(m_LoadGeneric(this->mpc_Ui->pc_WidgetInit, this->mc_DataOscSignalCommon.c_DataSetValues[0],
-                               this->mc_DataOscSignalCommon.f64_Factor, this->mc_DataOscSignalCommon.f64_Offset,
-                               this->mc_DataOscSignal.u16_ComBitLength,
-                               &this->mc_DataOscSignalCommon.c_MinValue,
-                               &this->mc_DataOscSignalCommon.c_MaxValue) == C_NO_ERR);
+      if (this->mc_DataOscSignalCommon.c_DataSetValues.empty() == true)
+      {
+         // Gracefully handle elements without an initial value (e.g. older device definitions that
+         // did not store the dataset value). Fall back to the element value which carries the type.
+         (void)m_LoadGeneric(this->mpc_Ui->pc_WidgetInit, this->mc_DataOscSignalCommon.c_Value,
+                             this->mc_DataOscSignalCommon.f64_Factor, this->mc_DataOscSignalCommon.f64_Offset,
+                             this->mc_DataOscSignal.u16_ComBitLength,
+                             &this->mc_DataOscSignalCommon.c_MinValue,
+                             &this->mc_DataOscSignalCommon.c_MaxValue);
+      }
+      else
+      {
+         tgl_assert(m_LoadGeneric(this->mpc_Ui->pc_WidgetInit, this->mc_DataOscSignalCommon.c_DataSetValues[0],
+                                  this->mc_DataOscSignalCommon.f64_Factor, this->mc_DataOscSignalCommon.f64_Offset,
+                                  this->mc_DataOscSignal.u16_ComBitLength,
+                                  &this->mc_DataOscSignalCommon.c_MinValue,
+                                  &this->mc_DataOscSignalCommon.c_MaxValue) == C_NO_ERR);
+      }
       break;
    case eCHA_UNIT:
       //Restrictions

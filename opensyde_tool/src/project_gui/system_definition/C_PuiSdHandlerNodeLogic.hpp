@@ -355,6 +355,9 @@ protected:
                            const bool & orq_AllowDataAdaptation = false, const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComProtocolType =
                               stw::opensyde_core::C_OscCanProtocol::eLAYER2);
    void m_CleanUpComDataPool(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex);
+   void m_BuildUiComDataFromCore(const uint32_t oru32_NodeIndex);
+   void m_BuildUiCanMessageFromCore(const stw::opensyde_core::C_OscCanMessage & orc_OscMessage,
+                                    C_PuiSdNodeCanMessage & orc_UiMessage) const;
    virtual void m_SyncOsyNodeIdChange(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
                                       const uint8_t ou8_NewNodeId) = 0;
 

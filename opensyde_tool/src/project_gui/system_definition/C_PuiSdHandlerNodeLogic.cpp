@@ -627,7 +627,113 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeAndSort(C_OscNode & orc_OscNode, const 
    // No adaption of the shared Datapools necessary.
    // The new node index is always higher than the already existing nodes indexes
 
+   // The device definition import (C_OscNode::AddComDataFromDeviceDefinition) copies the core COM
+   // data pools and protocols but leaves the UI counterpart empty. Build it now so the signal
+   // properties panel can resolve names/min/max/factor/offset; otherwise the element lookup fails
+   // and the panel falls back to "Signal_XY" with default values.
+   if (this->mc_UiNodes[u32_Index].c_UiDataPools.empty() == true)
+   {
+      this->m_BuildUiComDataFromCore(u32_Index);
+   }
+
    return u32_Index;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Build UI COM data pools and CAN protocols to mirror the core data
+
+   The device definition import (AddComDataFromDeviceDefinition) only copies the core COM data pools
+   and protocols. The UI counterpart must be built from it, otherwise the UI signal properties (which
+   read the UI data pool) resolve to nothing.
+
+   \param[in]  oru32_NodeIndex   Node index
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_PuiSdHandlerNodeLogic::m_BuildUiComDataFromCore(const uint32_t oru32_NodeIndex)
+{
+   tgl_assert(this->mc_UiNodes.size() == this->mc_CoreDefinition.c_Nodes.size());
+   if (oru32_NodeIndex < this->mc_UiNodes.size())
+   {
+      C_PuiSdNode & rc_UiNode = this->mc_UiNodes[oru32_NodeIndex];
+      const C_OscNode & rc_OscNode = this->mc_CoreDefinition.c_Nodes[oru32_NodeIndex];
+
+      // Build UI data pools (lists/elements) to mirror the core data pools
+      rc_UiNode.c_UiDataPools.resize(rc_OscNode.c_DataPools.size());
+      for (uint32_t u32_ItDataPool = 0U; u32_ItDataPool < rc_OscNode.c_DataPools.size(); ++u32_ItDataPool)
+      {
+         C_PuiSdNodeDataPool & rc_UiDataPool = rc_UiNode.c_UiDataPools[u32_ItDataPool];
+         const C_OscNodeDataPool & rc_OscDataPool = rc_OscNode.c_DataPools[u32_ItDataPool];
+         rc_UiDataPool.c_DataPoolLists.resize(rc_OscDataPool.c_Lists.size());
+         for (uint32_t u32_ItList = 0U; u32_ItList < rc_OscDataPool.c_Lists.size(); ++u32_ItList)
+         {
+            C_PuiSdNodeDataPoolList & rc_UiList = rc_UiDataPool.c_DataPoolLists[u32_ItList];
+            const C_OscNodeDataPoolList & rc_OscList = rc_OscDataPool.c_Lists[u32_ItList];
+            rc_UiList.c_DataPoolListElements.resize(rc_OscList.c_Elements.size());
+         }
+      }
+
+      // Build UI CAN protocols (containers/messages/signals) to mirror the core COM protocols
+      rc_UiNode.c_UiCanProtocols.resize(rc_OscNode.c_ComProtocols.size());
+      for (uint32_t u32_ItProtocol = 0U; u32_ItProtocol < rc_OscNode.c_ComProtocols.size(); ++u32_ItProtocol)
+      {
+         const C_OscCanProtocol & rc_OscProtocol = rc_OscNode.c_ComProtocols[u32_ItProtocol];
+         C_PuiSdNodeCanProtocol & rc_UiProtocol = rc_UiNode.c_UiCanProtocols[u32_ItProtocol];
+         rc_UiProtocol.c_ComMessages.resize(rc_OscProtocol.c_ComMessages.size());
+         for (uint32_t u32_ItContainer = 0U;
+              u32_ItContainer < rc_OscProtocol.c_ComMessages.size(); ++u32_ItContainer)
+         {
+            const C_OscCanMessageContainer & rc_OscContainer = rc_OscProtocol.c_ComMessages[u32_ItContainer];
+            C_PuiSdNodeCanMessageContainer & rc_UiContainer = rc_UiProtocol.c_ComMessages[u32_ItContainer];
+
+            // TX messages
+            rc_UiContainer.c_TxMessages.resize(rc_OscContainer.c_TxMessages.size());
+            for (uint32_t u32_ItMessage = 0U; u32_ItMessage < rc_OscContainer.c_TxMessages.size(); ++u32_ItMessage)
+            {
+               m_BuildUiCanMessageFromCore(rc_OscContainer.c_TxMessages[u32_ItMessage],
+                                           rc_UiContainer.c_TxMessages[u32_ItMessage]);
+            }
+            // RX messages
+            rc_UiContainer.c_RxMessages.resize(rc_OscContainer.c_RxMessages.size());
+            for (uint32_t u32_ItMessage = 0U; u32_ItMessage < rc_OscContainer.c_RxMessages.size(); ++u32_ItMessage)
+            {
+               m_BuildUiCanMessageFromCore(rc_OscContainer.c_RxMessages[u32_ItMessage],
+                                           rc_UiContainer.c_RxMessages[u32_ItMessage]);
+            }
+         }
+      }
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Build a single UI CAN message to mirror a core CAN message
+
+   \param[in]   orc_OscMessage   Core CAN message
+   \param[out]  orc_UiMessage    UI CAN message
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_PuiSdHandlerNodeLogic::m_BuildUiCanMessageFromCore(const C_OscCanMessage & orc_OscMessage,
+                                                          C_PuiSdNodeCanMessage & orc_UiMessage) const
+{
+   orc_UiMessage.c_Signals.resize(orc_OscMessage.c_Signals.size());
+
+   // Adapt the UI specific receive timeout mode (same logic as the DBC import)
+   if (orc_OscMessage.u32_TimeoutMs == 0U)
+   {
+      if ((orc_OscMessage.e_TxMethod == C_OscCanMessage::eTX_METHOD_ON_EVENT) ||
+          (orc_OscMessage.e_TxMethod == C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254) ||
+          (orc_OscMessage.e_TxMethod == C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_255))
+      {
+         orc_UiMessage.e_ReceiveTimeoutMode = C_PuiSdNodeCanMessage::eRX_TIMEOUT_MODE_DISABLED;
+      }
+      else
+      {
+         orc_UiMessage.e_ReceiveTimeoutMode = C_PuiSdNodeCanMessage::eRX_TIMEOUT_MODE_AUTO;
+      }
+   }
+   else
+   {
+      orc_UiMessage.e_ReceiveTimeoutMode = C_PuiSdNodeCanMessage::eRX_TIMEOUT_MODE_AUTO;
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
