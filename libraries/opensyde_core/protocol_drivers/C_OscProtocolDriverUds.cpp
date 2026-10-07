@@ -940,9 +940,11 @@ std::error_code C_OscProtocolDriverUds::m_Transact(const std::vector<uint8_t> & 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Wait for the response to one service
 
-   Drives the transport until the positive or negative response to ou8_ServiceId arrives or P2 runs out.
-   A requestCorrectlyReceived-ResponsePending extends the deadline to P2* from its arrival. Services that are
-   neither are late or unsolicited and are dropped.
+   Drives the transport until the positive or negative response to ou8_ServiceId arrives or P2 runs out. P2 is
+   counted from the end of the request's transmission: while the transport still has the request on its way out
+   (a segmented transfer waiting for flow control, say) the deadline keeps moving. The transport's own N_Bs and
+   consecutive-frame timeouts bound that phase. A requestCorrectlyReceived-ResponsePending extends the deadline to
+   P2* from its arrival. Services that are neither are late or unsolicited and are dropped.
 
    \param[in]   ou8_ServiceId   service identifier the request carried
    \param[out]  orc_Response    positive response, service identifier first
@@ -973,6 +975,15 @@ std::error_code C_OscProtocolDriverUds::m_WaitForResponse(const uint8_t ou8_Serv
       }
       else
       {
+         if (mpc_TransportProtocol->IsTransmissionPending() == true)
+         {
+            //the request is not out yet: P2 has not started
+            const uint32_t u32_FromNow = stw::tgl::TglGetTickCount() + mu32_P2Ms;
+            if (static_cast<int32_t>(u32_FromNow - u32_Deadline) > 0)
+            {
+               u32_Deadline = u32_FromNow;
+            }
+         }
          while ((q_Finished == false) && (mpc_TransportProtocol->ReadResponse(c_Service) == Errc::success))
          {
             const std::vector<uint8_t> & rc_Data = c_Service.c_Data;

@@ -12,7 +12,8 @@
    test doubles, but shares no code with C_OscProtocolDriverOsy: that driver is 6,500 lines of openSYDE server
    assumptions and this one is deliberately small.
 
-   Every service is "polled": the request goes out, the client waits up to P2 for the matching response, a
+   Every service is "polled": the request goes out, the client waits up to P2 (counted from the end of the request's
+   transmission, as ISO 14229-2 defines it; a segmented request does not eat its own timeout) for the matching response, a
    requestCorrectlyReceived-ResponsePending (0x78) negative response extends the wait to P2*, and a
    busyRepeatRequest (0x21) makes it send the request again a bounded number of times. P2 and P2* start at the
    ISO defaults and are taken over from every DiagnosticSessionControl response.

@@ -1101,6 +1101,20 @@ std::error_code C_OscProtocolDriverOsyTpCan::Cycle(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Is a request still on its way out ?
+
+   \return
+   true    a request is queued, or a segmented transfer is waiting for flow control or still sending frames
+   false   nothing left to send
+*/
+//----------------------------------------------------------------------------------------------------------------------
+bool C_OscProtocolDriverOsyTpCan::IsTransmissionPending(void)
+{
+   return C_OscProtocolDriverOsyTpBase::IsTransmissionPending() ||
+          (mc_TxService.e_Status != C_ServiceState::eIDLE);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Make server and client identifiers known to TP.
 
    * remember IDs

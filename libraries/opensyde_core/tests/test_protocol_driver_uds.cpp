@@ -110,15 +110,15 @@ TEST_F(ProtocolDriverUds, NoResponse_TimesOutAfterP2)
 
    EXPECT_EQ(Errc::timeout, mc_Driver.ReadDataByIdentifier(0xF190U, c_Data));
    const uint32_t u32_Elapsed = stw::tgl::TglGetTickCount() - u32_Start;
-   EXPECT_GE(u32_Elapsed, 19U);
-   EXPECT_LT(u32_Elapsed, 150U); //P2 is 20 ms; P2* (200 ms) must not have been used
+   EXPECT_GE(u32_Elapsed, 15U);  //P2 is 20 ms, read on a clock with up to 16 ms granularity on Windows
+   EXPECT_LT(u32_Elapsed, 150U); //P2* (200 ms) must not have been used
 }
 
 TEST_F(ProtocolDriverUds, ResponsePending_ExtendsTheWaitToP2Star)
 {
-   //the answer comes about 60 cycles (one ms each) after the request: past P2, within P2*
+   //the answer comes 60 ms after the request: past P2 (20 ms), within P2* (200 ms)
    mc_Transport.Reply({{0x7FU, 0x22U, 0x78U}});
-   mc_Transport.InjectAfterCycles(60U, {0x62U, 0xF1U, 0x90U, 0x01U});
+   mc_Transport.InjectAfterMs(60U, {0x62U, 0xF1U, 0x90U, 0x01U});
    T_Bytes c_Data;
 
    EXPECT_EQ(Errc::success, mc_Driver.ReadDataByIdentifier(0xF190U, c_Data));
@@ -128,7 +128,7 @@ TEST_F(ProtocolDriverUds, ResponsePending_ExtendsTheWaitToP2Star)
 TEST_F(ProtocolDriverUds, LateAnswerWithoutResponsePending_IsATimeout)
 {
    //the same late answer, but nobody said "pending": P2 rules
-   mc_Transport.InjectAfterCycles(60U, {0x62U, 0xF1U, 0x90U, 0x01U});
+   mc_Transport.InjectAfterMs(60U, {0x62U, 0xF1U, 0x90U, 0x01U});
    T_Bytes c_Data;
 
    EXPECT_EQ(Errc::timeout, mc_Driver.ReadDataByIdentifier(0xF190U, c_Data));
@@ -217,11 +217,13 @@ TEST_F(ProtocolDriverUds, DiagnosticSessionControl_WrongSessionEchoIsRejected)
 
 TEST_F(ProtocolDriverUds, TesterPresentSuppressed_SendsAndDoesNotWait)
 {
+   //a long P2 so that waiting for a response would be unmistakable
+   mc_Driver.SetTimings(500U, 2000U);
    const uint32_t u32_Start = stw::tgl::TglGetTickCount();
 
    EXPECT_EQ(Errc::success, mc_Driver.TesterPresent(true));
    EXPECT_EQ((T_Bytes{0x3EU, 0x80U}), mc_Transport.LastRequest());
-   EXPECT_LT(stw::tgl::TglGetTickCount() - u32_Start, 15U); //well under P2: nothing was waited for
+   EXPECT_LT(stw::tgl::TglGetTickCount() - u32_Start, 100U); //well under P2: nothing was waited for
 }
 
 TEST_F(ProtocolDriverUds, TesterPresentAnswered_WaitsForTheResponse)

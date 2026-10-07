@@ -132,6 +132,7 @@ public:
    //Deliberately not [[nodiscard]] yet -- dispatcher poll, called from a read loop.
    //Whether its callers should propagate is a protocol decision, not a call-site one.
    virtual std::error_code Cycle(void) = 0;
+   virtual bool IsTransmissionPending(void);
    //Deliberately not [[nodiscard]] yet -- routing setup: a rejected identifier change means the router is misconfigured.
    //Whether its callers should propagate is a protocol decision, not a call-site one.
    virtual std::error_code SetNodeIdentifiers(const C_OscProtocolDriverOsyNode & orc_ClientIdentifier,

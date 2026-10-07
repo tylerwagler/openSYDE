@@ -189,6 +189,28 @@ std::error_code C_OscProtocolDriverOsyTpBase::m_AddToTxQueue(const C_OscProtocol
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Is a request still on its way out ?
+
+   The base knows only its Tx queue; a transport with its own segmentation state (CAN-TP) extends this.
+   Response timeouts (ISO 14229-2 P2) run from the end of the request's transmission, so a client asks this before
+   it starts its clock.
+
+   \return
+   true    a request is queued or (in a derived transport) being transmitted
+   false   nothing left to send
+*/
+//----------------------------------------------------------------------------------------------------------------------
+bool C_OscProtocolDriverOsyTpBase::IsTransmissionPending(void)
+{
+   bool q_Pending;
+
+   mc_CsTxQueue.lock();
+   q_Pending = (mc_TxQueue.empty() == false);
+   mc_CsTxQueue.unlock();
+   return q_Pending;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   add new service to Rx queue
 
    Add specified service to Rx queue for incoming responses.
