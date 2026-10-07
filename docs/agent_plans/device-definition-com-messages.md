@@ -62,7 +62,7 @@ In `m_InitNodeData` (cpp:3809), after `m_InitNodeComIfSettings` (line 3852, whic
 
 ### 5. Generator + TSP cleanup
 
-- Update the headless generator (`/tmp/gen_gps_node.cpp`) to emit a `device.syd` **with embedded messages** (via `C_OscDeviceDefinitionFiler::h_Save`) instead of separate `gps.syde_node`/`comm_*.xml`/`dp_*.xml`. Run it for the GPS (and later every device with a DBC).
+- Update the headless generator (`docs/agent_plans/gen_device_com_messages.cpp`) to emit a `device.syd` **with embedded messages** (via `C_OscDeviceDefinitionFiler::h_Save`) instead of separate `gps.syde_node`/`comm_*.xml`/`dp_*.xml`. Run it for the GPS (and later every device with a DBC).
 - The separate node-config files and the `.syde_tsp` are no longer needed for the message payload. The TSP machinery stays in the codebase (still used for programmable devices / template projects) but is not required for the sensors.
 
 ## Backward compatibility
@@ -94,7 +94,7 @@ Implemented and verified:
 - **Data model**: `C_OscDeviceDefinition` gained `c_ComProtocols` + `c_ComDataPools` (with `Clear()`).
 - **Filer**: `C_OscDeviceDefinitionFiler` bumped to `mhu16_FILE_VERSION = 0x0003`; `h_Load` accepts both 0x0002 (backward compat) and 0x0003; `h_Save` writes optional `<data-pools>`/`<com-protocols>` inline, reusing `C_OscNodeDataPoolFiler::h_SaveDataPool`/`h_LoadDataPool` and `C_OscNodeCommFiler::h_SaveNodeComProtocol`/`h_LoadNodeComProtocol`.
 - **Node seeding**: `C_OscNode::AddComDataFromDeviceDefinition(const C_OscDeviceDefinition&)` appends the device's COM datapools and rebases each protocol's `u32_DataPoolIndex`; called from `C_SdTopologyScene::m_InitNodeData`.
-- **Generator**: `/tmp/gen_gps_device.cpp` loads a device.syd, parses a DBC (Vector::DBC), and re-saves as v0x0003 with embedded messages.
+- **Generator**: `docs/agent_plans/gen_device_com_messages.cpp` loads a device.syd, parses a DBC (Vector::DBC), and re-saves as v0x0003 with embedded messages.
 - **Tests**: `FilerRoundTrip.DeviceDefinition` extended with a COM datapool + J1939 protocol round-trip; new `FilerRoundTrip.DeviceDefinitionSeedsNodeCom` and `FilerRoundTrip.DeviceDefinitionV2LoadsWithoutCom` (backward compat). `osy_test_models.hpp` gained `h_MakeDeviceDefinition()`. All pass; `test_device_manager` + `test_can_protocol` pass; full `FilerRoundTrip` suite (23 tests) passes.
 - **GPS device.syd** regenerated to v0x0003 with its 4 J1939 messages (12 signals, SPNs); device manager loads all 61 devices `C_NO_ERR`.
 - **GyroInclinometer** (Trombetta) regenerated to v0x0003 with its 1 J1939 message (`Slope_Sensor_Information`, 8 signals, SPN unset — proprietary params, no SAE SPNs). Verified round-trip; device manager loads all 61 devices `C_NO_ERR`, `withCom=2` (GPS + Inclinometer).
@@ -111,7 +111,7 @@ Done / resolved:
   Hydrapulse, PVCAN20-J, PVCAN35-S, em200, DCAC_ACHV_IMP), each v0x0003 with embedded messages.
 - **9 multi-DBC devices installed** (PM250DZ, N32123, DCDC_HVLV_LP, BelFuse 12V, BelFuse 24V,
   CellGuard, Fan, WP32, HBridge) after adding a device→node-name override to the generator
-  (`/tmp/gen_gps_device.cpp`, optional 5th arg = the device's node name in the DBC). This fixes
+  (`docs/agent_plans/gen_device_com_messages.cpp`, optional 5th arg = the device's node name in the DBC). This fixes
   the TX/RX split that the device-name match alone got wrong (e.g. BelFuse-12V → `BP_12V_1`,
   EMP Fan → `Fan`, H_Bridge → `HBridge`, EMP Pump → `Pump`, DCDC_HVLV_LP → `DCDC`).
 - **21 devices now carry embedded messages** (3 earlier + 18 this session). All 61 device.syd
