@@ -68,7 +68,7 @@ In `m_InitNodeData` (cpp:3809), after `m_InitNodeComIfSettings` (line 3852, whic
 ## Backward compatibility
 
 - Existing v0x0002 `device.syd` files (the 61 currently in the device library) load unchanged — the new sections are optional, and `h_Load` accepts both versions.
-- Devices that still rely on the DBC-sync convention (`C_SdNdeDbcSync`, sibling `<device>_CAN<n>.dbc`) keep working; the embedded messages are additive.
+- The DBC-sync convention (a `C_SdNdeDbcSync` helper, a Sync DBC column on the node's interface table, a sibling `<device>_CAN<n>.dbc`) was removed on 2026-10-07 at the user's request; embedded messages are the only path.
 
 ## Files to modify
 

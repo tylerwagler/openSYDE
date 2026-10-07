@@ -708,21 +708,6 @@ std::error_code C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInte
          c_ComInterface.q_IsUpdateEnabled = orc_XmlParser.GetAttributeBool("update-available");
          c_ComInterface.q_IsRoutingEnabled = orc_XmlParser.GetAttributeBool("routing-available");
          c_ComInterface.q_IsDiagnosisEnabled = orc_XmlParser.GetAttributeBool("diagnosis-available");
-         if (orc_XmlParser.AttributeExists("dbc-sha256") == true)
-         {
-            c_ComInterface.c_LastSyncedDbcSha256 = orc_XmlParser.GetAttributeString("dbc-sha256");
-         }
-         if (orc_XmlParser.AttributeExists("dbc-project-msg-hash") == true)
-         {
-            c_ComInterface.c_LastSyncedProjectMsgHash = orc_XmlParser.GetAttributeString("dbc-project-msg-hash");
-         }
-         if (orc_XmlParser.AttributeExists("dbc-protocol") == true)
-         {
-            // Errors fall through to the eLAYER2 default; an unknown protocol string in an
-            // older project shouldn't fail the whole load.
-            (void)C_OscNodeCommFiler::h_StringToCommunicationProtocol(
-               orc_XmlParser.GetAttributeString("dbc-protocol"), c_ComInterface.e_DbcProtocol);
-         }
 
          //IP address
          if ((orc_XmlParser.SelectNodeChild("ip-address") == "ip-address") && (!c_Retval))
@@ -843,21 +828,6 @@ void C_OscNodeFiler::mh_SaveComInterface(const std::vector<C_OscNodeComInterface
       orc_XmlParser.SetAttributeBool("update-available", rc_CurComInterface.q_IsUpdateEnabled);
       orc_XmlParser.SetAttributeBool("routing-available", rc_CurComInterface.q_IsRoutingEnabled);
       orc_XmlParser.SetAttributeBool("diagnosis-available", rc_CurComInterface.q_IsDiagnosisEnabled);
-      if (rc_CurComInterface.c_LastSyncedDbcSha256.empty() == false)
-      {
-         orc_XmlParser.SetAttributeString("dbc-sha256", rc_CurComInterface.c_LastSyncedDbcSha256);
-      }
-      if (rc_CurComInterface.c_LastSyncedProjectMsgHash.empty() == false)
-      {
-         orc_XmlParser.SetAttributeString("dbc-project-msg-hash", rc_CurComInterface.c_LastSyncedProjectMsgHash);
-      }
-      // Only persist when non-default to keep older project files clean.
-      if (rc_CurComInterface.e_DbcProtocol != C_OscCanProtocol::eLAYER2)
-      {
-         orc_XmlParser.SetAttributeString("dbc-protocol",
-                                          C_OscNodeCommFiler::h_CommunicationProtocolToString(
-                                             rc_CurComInterface.e_DbcProtocol));
-      }
       if (rc_CurComInterface.e_InterfaceType == C_OscSystemBus::eETHERNET)
       {
          orc_XmlParser.CreateAndSelectNodeChild("ip-address");

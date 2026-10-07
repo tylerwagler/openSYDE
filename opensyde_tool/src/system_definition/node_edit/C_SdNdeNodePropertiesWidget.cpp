@@ -26,7 +26,6 @@
 #include "ui_C_SdNdeNodePropertiesWidget.h"
 #include "C_OscUtils.hpp"
 #include "C_SdNdeComIfSettingsTableDelegate.hpp"
-#include "C_SdNdeDbcSync.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "TglUtils.hpp"
 #include "C_SdUtil.hpp"
@@ -123,9 +122,6 @@ C_SdNdeNodePropertiesWidget::C_SdNdeNodePropertiesWidget(QWidget * const opc_Par
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(static_cast<int32_t> (
                                                                       C_SdNdeComIfSettingsTableDelegate::eDIAGNOSTIC))->
    setTextAlignment(static_cast<int32_t> (Qt::AlignHCenter));
-   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(static_cast<int32_t> (
-                                                                      C_SdNdeComIfSettingsTableDelegate::eSYNC_DBC))->
-   setTextAlignment(static_cast<int32_t> (Qt::AlignHCenter));
 
    //set min column width (necessary for "Linked to..." strech column
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeader()->setMinimumSectionSize(150);
@@ -178,13 +174,6 @@ C_SdNdeNodePropertiesWidget::C_SdNdeNodePropertiesWidget(QWidget * const opc_Par
                                                                                        QHeaderView::Fixed);
    this->mpc_Ui->pc_TableWidgetComIfSettings->setColumnWidth(static_cast<int32_t> (C_SdNdeComIfSettingsTableDelegate::
                                                                                    eDIAGNOSTIC), 150);
-
-   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeader()->setSectionResizeMode(static_cast<int32_t> (
-                                                                                          C_SdNdeComIfSettingsTableDelegate
-                                                                                          ::eSYNC_DBC),
-                                                                                       QHeaderView::Fixed);
-   this->mpc_Ui->pc_TableWidgetComIfSettings->setColumnWidth(static_cast<int32_t> (C_SdNdeComIfSettingsTableDelegate::
-                                                                                   eSYNC_DBC), 150);
 
    //Name restriction
    this->mpc_Ui->pc_LineEditNodeName->setMaxLength(C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit());
@@ -240,7 +229,6 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
    const int32_t s32_COL_UPDATE = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eUPDATE);
    const int32_t s32_COL_ROUTING = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eROUTING);
    const int32_t s32_COL_DIAGNOSTIC = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eDIAGNOSTIC);
-   const int32_t s32_COL_SYNC_DBC = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eSYNC_DBC);
 
    this->mpc_Ui->pc_LabSubNodeTitle->setText("Sub-Node");
    this->mpc_Ui->pc_LabelName->setText("Name");
@@ -276,7 +264,6 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_UPDATE)->setText("Usable for Update");
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_ROUTING)->setText("Usable for Routing");
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_DIAGNOSTIC)->setText("Usable for Dashboard");
-   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_SYNC_DBC)->setText("Sync DBC");
 
    this->mpc_Ui->pc_TextEditComment->setPlaceholderText("Add your comment here ...");
 
@@ -365,14 +352,6 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
                                                                      "property is just a configuration for openSYDE tool, "
                                                                      "it is NOT configured on device.");
 
-   this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipHeadingAt(s32_COL_SYNC_DBC, Qt::Horizontal,
-                                                                  "Sync DBC",
-                                                                  "Pull the device's bundled DBC file (named "
-                                                                     "<device_name>_CAN<n>.dbc, sibling of device.syd) "
-                                                                     "and add its messages onto the connected bus. "
-                                                                     "Stores a SHA-256 fingerprint of the DBC at sync "
-                                                                     "time so the project can flag the interface as "
-                                                                     "out-of-sync if the DBC content drifts.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -613,7 +592,6 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                const int32_t s32_COL_UPDATE = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eUPDATE);
                const int32_t s32_COL_ROUTING = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eROUTING);
                const int32_t s32_COL_DIAGNOSTIC = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eDIAGNOSTIC);
-               const int32_t s32_COL_SYNC_DBC = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eSYNC_DBC);
                bool q_IsUpdateAvailable;
                bool q_IsRoutingAvailable;
                bool q_IsDiagnosisAvailable;
@@ -890,244 +868,6 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                connect(dynamic_cast<C_OgeChxTristateBase *> (
                           this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u8_ComIfCnt, s32_COL_DIAGNOSTIC)),
                        &QCheckBox::stateChanged, this, &C_SdNdeNodePropertiesWidget::m_RegisterChange);
-
-               /**********************************************************************************************************/
-               //SYNC DBC — bidirectional. Button label/tooltip and click action both come from
-               //the live sync state (see C_SdNdeDbcSync::E_SyncState).
-               {
-                  QPushButton * const pc_BtnSync = new QPushButton(this);
-                  const QString c_DbcPath = C_SdNdeDbcSync::h_GetExpectedDbcPath(this->mu32_NodeIndex,
-                                                                                 static_cast<uint32_t>(u8_ComIfCnt));
-                  const QString c_DisplayPath = C_SdNdeDbcSync::h_GetDisplayDbcPath(c_DbcPath);
-                  const bool q_IsCanIface = u8_ComIfCnt < pc_DevDef->u8_NumCanBusses;
-                  const bool q_BusConnected =
-                     pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt].GetBusConnected();
-
-                  // Enable when CAN + bus connected. The state determines whether the click does
-                  // Pull, Push, or pops a conflict-resolution prompt; even with a missing DBC the
-                  // user can Push to (re)create the file from the project's messages.
-                  pc_BtnSync->setEnabled(q_IsCanIface && q_BusConnected);
-                  pc_BtnSync->setText("Sync");
-
-                  if (q_IsCanIface == false)
-                  {
-                     pc_BtnSync->setToolTip("Sync DBC is only available for CAN interfaces.");
-                  }
-                  else if (q_BusConnected == false)
-                  {
-                     pc_BtnSync->setToolTip("Sync DBC requires the interface to be connected to a bus.");
-                  }
-                  else
-                  {
-                     const C_SdNdeDbcSync::E_SyncState e_State = C_SdNdeDbcSync::h_GetSyncState(
-                        this->mu32_NodeIndex, static_cast<uint32_t>(u8_ComIfCnt));
-                     switch (e_State)
-                     {
-                     case C_SdNdeDbcSync::eNEVER_SYNCED:
-                        pc_BtnSync->setText("Sync");
-                        pc_BtnSync->setToolTip(static_cast<QString>("Never synced: %1\n"
-                                                                       "Click to import messages from the DBC.").arg(
-                                                  c_DisplayPath));
-                        break;
-                     case C_SdNdeDbcSync::eIN_SYNC:
-                        pc_BtnSync->setText("Sync");
-                        pc_BtnSync->setToolTip(static_cast<QString>("In sync with %1\n"
-                                                                       "Click to re-pull.").arg(c_DisplayPath));
-                        break;
-                     case C_SdNdeDbcSync::eDBC_DRIFTED:
-                        pc_BtnSync->setText("Pull");
-                        pc_BtnSync->setToolTip(static_cast<QString>("DBC drifted: %1\n"
-                                                                       "Click to pull DBC into the project.").arg(
-                                                  c_DisplayPath));
-                        break;
-                     case C_SdNdeDbcSync::ePROJECT_DRIFTED:
-                        pc_BtnSync->setText("Push");
-                        pc_BtnSync->setToolTip(static_cast<QString>("Project drifted from %1\n"
-                                                                       "Click to push project messages to the DBC.").arg(
-                                                  c_DisplayPath));
-                        break;
-                     case C_SdNdeDbcSync::eCONFLICT:
-                        pc_BtnSync->setText("Resolve");
-                        pc_BtnSync->setToolTip(static_cast<QString>("Conflict: %1\n"
-                                                                       "Both DBC and project drifted. Click to choose "
-                                                                       "Pull or Push.").arg(c_DisplayPath));
-                        break;
-                     case C_SdNdeDbcSync::eDBC_MISSING:
-                        pc_BtnSync->setText("Push");
-                        pc_BtnSync->setToolTip(static_cast<QString>("DBC missing: %1\n"
-                                                                       "Click to (re)create it from the project's "
-                                                                       "messages.").arg(c_DisplayPath));
-                        break;
-                     }
-                  }
-
-                  this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(u8_ComIfCnt, s32_COL_SYNC_DBC, pc_BtnSync);
-
-                  const uint32_t u32_CapturedNode = this->mu32_NodeIndex;
-                  const uint32_t u32_CapturedInterface = static_cast<uint32_t>(u8_ComIfCnt);
-                  connect(pc_BtnSync, &QPushButton::clicked, this,
-                          [this, pc_BtnSync, u32_CapturedNode, u32_CapturedInterface, c_DisplayPath]()
-                  {
-                     // Re-evaluate state at click time (cheap; lets the button respond to any
-                     // file or project change since the row was last filled).
-                     C_SdNdeDbcSync::E_SyncState e_State = C_SdNdeDbcSync::h_GetSyncState(u32_CapturedNode,
-                                                                                          u32_CapturedInterface);
-                     enum E_Action { ePULL_ACT, ePUSH_ACT, eABORT_ACT };
-                     E_Action e_Action = ePULL_ACT;
-
-                     if (e_State == C_SdNdeDbcSync::eCONFLICT)
-                     {
-                        QMessageBox c_Box(this);
-                        c_Box.setWindowTitle("DBC Sync Conflict");
-                        c_Box.setIcon(QMessageBox::Warning);
-                        c_Box.setText("Both the DBC file and the project's messages have changed "
-                                         "since the last sync.\n\nChoose which side to keep:");
-                        QPushButton * const pc_PullBtn =
-                           c_Box.addButton("Pull (use DBC)", QMessageBox::AcceptRole);
-                        QPushButton * const pc_PushBtn =
-                           c_Box.addButton("Push (use project)",
-                                           QMessageBox::DestructiveRole);
-                        c_Box.addButton(QMessageBox::Cancel);
-                        c_Box.exec();
-                        if (c_Box.clickedButton() == pc_PullBtn)
-                        {
-                           e_Action = ePULL_ACT;
-                        }
-                        else if (c_Box.clickedButton() == pc_PushBtn)
-                        {
-                           e_Action = ePUSH_ACT;
-                        }
-                        else
-                        {
-                           e_Action = eABORT_ACT;
-                        }
-                     }
-                     else if ((e_State == C_SdNdeDbcSync::ePROJECT_DRIFTED) ||
-                              (e_State == C_SdNdeDbcSync::eDBC_MISSING))
-                     {
-                        e_Action = ePUSH_ACT;
-                     }
-                     else
-                     {
-                        // eNEVER_SYNCED, eIN_SYNC, eDBC_DRIFTED — pull is the action.
-                        e_Action = ePULL_ACT;
-                     }
-
-                     if (e_Action == eABORT_ACT)
-                     {
-                        // user cancelled the conflict dialog
-                     }
-                     else
-                     {
-                        QString c_ErrorMessage;
-                        int32_t s32_Result;
-                        QString c_Heading;
-                        QString c_SuccessDescription;
-                        if (e_Action == ePULL_ACT)
-                        {
-                           s32_Result = C_SdNdeDbcSync::h_PullInterface(u32_CapturedNode, u32_CapturedInterface,
-                                                                        c_ErrorMessage);
-                           c_Heading = "Pull DBC";
-                           c_SuccessDescription = "DBC messages imported into the project. Existing same-ID messages were "
-                              "updated in place; new messages were added to the node's Layer 2 COMM "
-                              "datapool.";
-                        }
-                        else
-                        {
-                           s32_Result = C_SdNdeDbcSync::h_PushInterface(u32_CapturedNode, u32_CapturedInterface,
-                                                                        c_ErrorMessage);
-                           c_Heading = "Push DBC";
-                           c_SuccessDescription = "Project messages exported to the DBC file. The DBC now matches the "
-                              "current state of the node's Layer 2 COMM datapool.";
-                        }
-
-                        if (s32_Result == stw::errors::C_NO_ERR)
-                        {
-                           // Reset the button to its in-sync visual state.
-                           pc_BtnSync->setText("Sync");
-                           pc_BtnSync->setToolTip(static_cast<QString>("In sync with %1\n"
-                                                                          "Click to re-pull.").arg(c_DisplayPath));
-                           C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eINFORMATION);
-                           c_Msg.SetHeading(c_Heading);
-                           c_Msg.SetDescription(c_SuccessDescription);
-                           c_Msg.Execute();
-                        }
-                        else
-                        {
-                           C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eERROR);
-                           c_Msg.SetHeading(c_Heading + " failed");
-                           c_Msg.SetDescription(c_ErrorMessage);
-                           c_Msg.Execute();
-                        }
-                     }
-                  });
-
-                  // Right-click protocol selector. Layer 2 and J1939 are the realistic DBC
-                  // targets — CANopen has its own EDS/DCF import flow, and ECeS / CANopen-Safety
-                  // are too niche to expose here.
-                  pc_BtnSync->setContextMenuPolicy(Qt::CustomContextMenu);
-                  connect(pc_BtnSync, &QWidget::customContextMenuRequested, this,
-                          [this, pc_BtnSync, u32_CapturedNode, u32_CapturedInterface](const QPoint & orc_Pos)
-                  {
-                     const C_OscNode * const pc_NodeRo =
-                        C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_CapturedNode);
-                     if ((pc_NodeRo != nullptr) &&
-                         (u32_CapturedInterface < pc_NodeRo->c_Properties.c_ComInterfaces.size()))
-                     {
-                        const C_OscCanProtocol::E_Type e_Current =
-                           pc_NodeRo->c_Properties.c_ComInterfaces[u32_CapturedInterface].e_DbcProtocol;
-                        QMenu c_Menu(pc_BtnSync);
-                        QAction * const pc_Header = c_Menu.addAction("DBC sync protocol");
-                        pc_Header->setEnabled(false);
-                        c_Menu.addSeparator();
-
-                        struct T_Option
-                        {
-                           C_OscCanProtocol::E_Type e_Type;
-                           QString c_Label;
-                        };
-                        const std::vector<T_Option> c_Options = {
-                           {C_OscCanProtocol::eLAYER2, "Layer 2 (raw CAN)"},
-                           {C_OscCanProtocol::eJ1939, "J1939"}
-                        };
-
-                        for (uint32_t u32_OptIt = 0U; u32_OptIt < c_Options.size(); ++u32_OptIt)
-                        {
-                           const T_Option & rc_Option = c_Options[u32_OptIt];
-                           QAction * const pc_Act = c_Menu.addAction(rc_Option.c_Label);
-                           pc_Act->setCheckable(true);
-                           pc_Act->setChecked(e_Current == rc_Option.e_Type);
-                           const C_OscCanProtocol::E_Type e_Selected = rc_Option.e_Type;
-                           connect(pc_Act, &QAction::triggered, this,
-                                   [this, u32_CapturedNode, u32_CapturedInterface, e_Selected, pc_BtnSync]()
-                           {
-                              C_OscNode * const pc_MutNode =
-                                 C_PuiSdHandler::h_GetInstance()->GetOscNode(u32_CapturedNode);
-                              if ((pc_MutNode != nullptr) &&
-                                  (u32_CapturedInterface < pc_MutNode->c_Properties.c_ComInterfaces.size()))
-                              {
-                                 C_OscNodeComInterfaceSettings & rc_If =
-                                    pc_MutNode->c_Properties.c_ComInterfaces[u32_CapturedInterface];
-                                 if (rc_If.e_DbcProtocol != e_Selected)
-                                 {
-                                    // Switching protocol invalidates the prior sync baseline; the
-                                    // user starts fresh on the new protocol.
-                                    rc_If.e_DbcProtocol = e_Selected;
-                                    rc_If.c_LastSyncedDbcSha256 = "";
-                                    rc_If.c_LastSyncedProjectMsgHash = "";
-                                    this->m_RegisterChange();
-                                    pc_BtnSync->setText("Sync");
-                                    pc_BtnSync->setToolTip("Protocol changed. Click to perform the first "
-                                                              "sync on the new protocol.");
-                                 }
-                              }
-                           });
-                        }
-
-                        c_Menu.exec(pc_BtnSync->mapToGlobal(orc_Pos));
-                     }
-                  });
-               }
 
                //hide rows if they are not connected (necessary for sub nodes)
 
@@ -1849,50 +1589,6 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(const int32_t os32_Inter
                }
             }
          }
-      }
-   }
-
-   // DBC sync drift on this interface — surface it on the same Interface cell as a
-   // warning when there's no higher-severity ID/IP error already overwriting the
-   // tooltip. The button column already changes its label per state, but the row-level
-   // marker on the Interface cell mirrors the topology icon so the user can see at a
-   // glance which interface is causing a node to be flagged.
-   if (q_ShowIcon == false)
-   {
-      const C_SdNdeDbcSync::E_SyncState e_DriftState = C_SdNdeDbcSync::h_GetSyncState(
-         this->mu32_NodeIndex, static_cast<uint32_t>(os32_InterfaceIndex));
-      QString c_DriftHeading;
-      QString c_DriftBody;
-      switch (e_DriftState)
-      {
-      case C_SdNdeDbcSync::eDBC_DRIFTED:
-         c_DriftHeading = "DBC drifted";
-         c_DriftBody = "The bundled DBC has changed since the last sync. Pull on the Sync DBC button to import the new content.";
-         break;
-      case C_SdNdeDbcSync::ePROJECT_DRIFTED:
-         c_DriftHeading = "Project drifted";
-         c_DriftBody = "The project's messages have changed since the last sync. Push on the Sync DBC button to write them back.";
-         break;
-      case C_SdNdeDbcSync::eCONFLICT:
-         c_DriftHeading = "DBC sync conflict";
-         c_DriftBody = "Both the DBC file and the project's messages have changed. Resolve via the Sync DBC button.";
-         break;
-      case C_SdNdeDbcSync::eDBC_MISSING:
-         c_DriftHeading = "DBC missing";
-         c_DriftBody = "The expected DBC file is gone. Push on the Sync DBC button to re-create it from the project's messages.";
-         break;
-      case C_SdNdeDbcSync::eNEVER_SYNCED:
-      case C_SdNdeDbcSync::eIN_SYNC:
-      default:
-         break;
-      }
-      if (c_DriftHeading.isEmpty() == false)
-      {
-         q_ShowIcon = true;
-         this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipAt(
-            os32_InterfaceIndex,
-            static_cast<uint32_t>(C_SdNdeComIfSettingsTableDelegate::eINTERFACE),
-            c_DriftHeading, c_DriftBody, C_NagToolTip::eWARNING);
       }
    }
 

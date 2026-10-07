@@ -1309,9 +1309,6 @@ TEST(FilerRoundTrip, SystemDefinitionFile)
       EXPECT_EQ(rc_S.q_IsDiagnosisEnabled, rc_T.q_IsDiagnosisEnabled) << c_W << "diagnosis flag";
       EXPECT_EQ(rc_S.GetBusConnectedRawValue(), rc_T.GetBusConnectedRawValue()) << c_W << "bus connected";
       EXPECT_EQ(rc_S.u32_BusIndex, rc_T.u32_BusIndex) << c_W << "bus index";
-      EXPECT_EQ(rc_S.e_DbcProtocol, rc_T.e_DbcProtocol) << c_W << "dbc protocol";
-      EXPECT_EQ(rc_S.c_LastSyncedDbcSha256, rc_T.c_LastSyncedDbcSha256) << c_W << "dbc sha";
-      EXPECT_EQ(rc_S.c_LastSyncedProjectMsgHash, rc_T.c_LastSyncedProjectMsgHash) << c_W << "dbc msg hash";
       for (uint32_t u32_B = 0U; u32_B < 4U; ++u32_B)
       {
          EXPECT_EQ(rc_S.c_Ip.au8_IpAddress[u32_B], rc_T.c_Ip.au8_IpAddress[u32_B]) << c_W << "ip byte " << u32_B;

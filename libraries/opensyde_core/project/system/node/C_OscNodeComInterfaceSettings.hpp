@@ -63,21 +63,6 @@ public:
    ///< (index in system definition)
    ///< Only valid if bus flag q_IsBusConnected is true
 
-   std::string c_LastSyncedDbcSha256;   ///< SHA-256 hex of the device's per-interface DBC at the last
-                                                  ///< user-triggered sync; empty if never synced. Compared against the
-                                                  ///< on-disk DBC's current hash to detect that the DBC drifted.
-   std::string c_LastSyncedProjectMsgHash; ///< CRC32 hex of the project's CAN message container for this
-                                                     ///< interface at the last sync; empty if never synced. Compared
-                                                     ///< against the live container hash to detect that the project's
-                                                     ///< messages drifted away from the synced baseline. The pair of
-                                                     ///< fingerprints together gives a four-state model: in-sync,
-                                                     ///< DBC-drifted, project-drifted, or both-drifted (conflict).
-   C_OscCanProtocol::E_Type e_DbcProtocol; ///< Target COMM protocol for the DBC sync action on this interface.
-                                           ///< Defaults to Layer 2 for backward compat. Determines which COMM
-                                           ///< datapool (auto-creating one if needed) the Pull writes into and
-                                           ///< the Push reads from. Project-side setting; not derived from the
-                                           ///< device manifest.
-
    void AddConnection(const uint32_t & oru32_BusIndex);
    void RemoveConnection(void);
 
