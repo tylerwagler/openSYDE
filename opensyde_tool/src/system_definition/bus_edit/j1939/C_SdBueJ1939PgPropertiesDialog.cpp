@@ -61,12 +61,18 @@ C_SdBueJ1939PgPropertiesDialog::C_SdBueJ1939PgPropertiesDialog(const uint32_t ou
    this->mpc_Ui->pc_SpinBoxPgn->SetMinimumCustom(0);
    this->mpc_Ui->pc_SpinBoxPgn->SetMaximumCustom(262143);
    this->mpc_Ui->pc_SpinBoxPgn->setKeyboardTracking(false);
+   this->mpc_Ui->pc_SpinBoxPgn->setPrefix("0x");
+   this->mpc_Ui->pc_SpinBoxPgn->setDisplayIntegerBase(16);
 
    this->mpc_Ui->pc_SpinBoxSourceAddress->SetMinimumCustom(0);
    this->mpc_Ui->pc_SpinBoxSourceAddress->SetMaximumCustom(255);
+   this->mpc_Ui->pc_SpinBoxSourceAddress->setPrefix("0x");
+   this->mpc_Ui->pc_SpinBoxSourceAddress->setDisplayIntegerBase(16);
 
    this->mpc_Ui->pc_SpinBoxDestinationAddress->SetMinimumCustom(0);
    this->mpc_Ui->pc_SpinBoxDestinationAddress->SetMaximumCustom(255);
+   this->mpc_Ui->pc_SpinBoxDestinationAddress->setPrefix("0x");
+   this->mpc_Ui->pc_SpinBoxDestinationAddress->setDisplayIntegerBase(16);
    this->mpc_Ui->pc_SpinBoxDestinationAddress->setKeyboardTracking(false);
 
    this->m_HandleDestinationSectionVisibility(this->mc_PgInfo.q_HasDestinationAddress);

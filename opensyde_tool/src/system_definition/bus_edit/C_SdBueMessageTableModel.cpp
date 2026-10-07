@@ -1221,12 +1221,13 @@ void C_SdBueMessageTableModel::m_FillJ1939MsgInfo(C_SdBueMessageTableModel::C_Ms
 
    C_OscCanUtil::h_GetJ1939PgInfoFromCanId(orc_MessageData.u32_CanId, c_PgInfo);
 
-   orc_MessageTableData.c_J1939Pgn = C_OscCanUtil::h_GetVisiblePgn(c_PgInfo.u32_Pgn);
+   orc_MessageTableData.c_J1939Pgn =
+      "0x" + QString::number(C_OscCanUtil::h_GetVisiblePgn(c_PgInfo.u32_Pgn), 16).toUpper();
    orc_MessageTableData.c_J1939Priority = static_cast<uint32_t>(c_PgInfo.u8_Priority);
-   orc_MessageTableData.c_J1939SourceAddress = static_cast<uint32_t>(c_PgInfo.u8_SourceAddress);
+   orc_MessageTableData.c_J1939SourceAddress = "0x" + QString::number(c_PgInfo.u8_SourceAddress, 16).toUpper();
    if (c_PgInfo.q_HasDestinationAddress)
    {
-      orc_MessageTableData.c_J1939DestinationAddress = QString::number(c_PgInfo.u8_PduSpecific);
+      orc_MessageTableData.c_J1939DestinationAddress = "0x" + QString::number(c_PgInfo.u8_PduSpecific, 16).toUpper();
       orc_MessageTableData.c_J1939Format = "PDU 1";
    }
    else

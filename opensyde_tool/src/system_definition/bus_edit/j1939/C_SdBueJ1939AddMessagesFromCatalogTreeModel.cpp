@@ -150,7 +150,7 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::m_FillMessageInfo()
                   c_MessageData.c_Signals.push_back(c_SignalData);
 
                   C_TblTreeModelCheckableItem * const pc_SignalItem = new C_TblTreeModelCheckableItem();
-                  pc_SignalItem->c_Name = QString::number(c_SignalData.u32_Spn);
+                  pc_SignalItem->c_Name = "0x" + QString::number(c_SignalData.u32_Spn, 16).toUpper();
                   pc_SignalItem->u32_Index = u32_SignalIndex; // Signal index in the vector
                   pc_SignalItem->c_Icon = QIcon(":/images/system_definition/IconSignal.svg");
 

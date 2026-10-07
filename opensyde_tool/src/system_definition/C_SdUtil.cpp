@@ -989,9 +989,9 @@ void C_SdUtil::h_AdaptMessageToProtocolType(C_OscCanMessage & orc_Message, C_Pui
             c_Info.push_back(
                static_cast<QString>("Message ID changed from 0x%1 to 0x%2 due to ECoS protocol "
                                                            "restrictions. Allowed IDs: 0x%3-0x%2.").
-               arg(orc_Message.u32_CanId, 0, 16).
-               arg(mu32_PROTOCOL_ECOS_MESSAGE_ID_MAX, 0, 16).
-               arg(mu32_PROTOCOL_ECOS_MESSAGE_ID_MIN, 0, 16));
+               arg(QString::number(orc_Message.u32_CanId, 16).toUpper()).
+               arg(QString::number(mu32_PROTOCOL_ECOS_MESSAGE_ID_MAX, 16).toUpper()).
+               arg(QString::number(mu32_PROTOCOL_ECOS_MESSAGE_ID_MIN, 16).toUpper()));
             orc_Message.u32_CanId = mu32_PROTOCOL_ECOS_MESSAGE_ID_MAX;
          }
          break;

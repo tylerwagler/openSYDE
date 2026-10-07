@@ -624,7 +624,7 @@ QVariant C_SdBueSignalTableModel::m_GetDisplayAndEditValue(const QModelIndex & o
          c_Retval = this->mc_SigInfoAll[s32_Index].c_SignalData.c_MsgName;
          break;
       case eJ1939_SPN:
-         c_Retval = this->mc_SigInfoAll[s32_Index].c_SignalData.u32_J1939Spn;
+         c_Retval = "0x" + QString::number(this->mc_SigInfoAll[s32_Index].c_SignalData.u32_J1939Spn, 16).toUpper();
          break;
       case eCAN_OPEN_INDEX:
          c_Retval = this->mc_SigInfoAll[s32_Index].c_SignalData.c_CoIndex;

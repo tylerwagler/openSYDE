@@ -136,6 +136,8 @@ void C_SdBueSignalPropertiesWidget::InitStaticNames(void) const
    this->mpc_Ui->pc_LabelObjectDictTitle->setText("Object Dictionary");
    this->mpc_Ui->pc_LabelJ1939->setText("J1939 Specific");
    this->mpc_Ui->pc_LabelJ1939Spn->setText("SPN");
+   this->mpc_Ui->pc_SpinBoxJ1939Spn->setPrefix("0x");
+   this->mpc_Ui->pc_SpinBoxJ1939Spn->setDisplayIntegerBase(16);
 
    this->mpc_Ui->pc_TextEditComment->setPlaceholderText("Add your comment here ...");
 

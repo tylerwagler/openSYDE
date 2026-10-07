@@ -2793,12 +2793,14 @@ QString C_PuiSdHandlerBusLogic::GetCanSignalDisplayName(const C_OscCanMessageIde
          if (oq_ToolTip == false)
          {
             c_Retval =
-               static_cast<QString>("SPN %1  %2").arg(pc_Signal->u32_J1939SuspectParameterNumber).arg(c_Retval);
+               static_cast<QString>("SPN 0x%1  %2").arg(
+                  QString::number(pc_Signal->u32_J1939SuspectParameterNumber, 16).toUpper()).arg(c_Retval);
          }
          else
          {
             c_Retval =
-               static_cast<QString>("%1 (SPN %2)").arg(c_Retval).arg(pc_Signal->u32_J1939SuspectParameterNumber);
+               static_cast<QString>("%1 (SPN 0x%2)").arg(c_Retval).arg(
+                  QString::number(pc_Signal->u32_J1939SuspectParameterNumber, 16).toUpper());
          }
       }
    }
@@ -2834,7 +2836,7 @@ QString C_PuiSdHandlerBusLogic::GetCanMessageDisplayName(const C_OscCanMessageId
          C_OscCanUtil::h_GetJ1939PgInfoFromCanId(pc_MessageData->u32_CanId, c_PgInfo);
 
          const uint32_t u32_VisiblePgn = C_OscCanUtil::h_GetVisiblePgn(c_PgInfo.u32_Pgn);
-         c_Retval = static_cast<QString>("PGN %1  %2").arg(u32_VisiblePgn).arg(c_Retval);
+         c_Retval = static_cast<QString>("PGN 0x%1  %2").arg(QString::number(u32_VisiblePgn, 16).toUpper()).arg(c_Retval);
       }
    }
 

@@ -2694,13 +2694,13 @@ void C_SdBueMessagePropertiesWidget::m_UpdateJ1939PgInfo(void)
 
       const uint32_t u32_VisiblePgn = C_OscCanUtil::h_GetVisiblePgn(c_PgInfo.u32_Pgn);
 
-      this->mpc_Ui->pc_LabelJ1939PgnValue->setText(QString::number(u32_VisiblePgn) + " (0x" +
-                                                   QString::number(u32_VisiblePgn, 16).toUpper() + ")");
+      this->mpc_Ui->pc_LabelJ1939PgnValue->setText("0x" + QString::number(u32_VisiblePgn, 16).toUpper() + " (" +
+                                                   QString::number(u32_VisiblePgn) + ")");
       this->mpc_Ui->pc_LabelJ1939PriorityValue->setText(QString::number(c_PgInfo.u8_Priority));
-      this->mpc_Ui->pc_LabelJ1939SourceAddrValue->setText(QString::number(c_PgInfo.u8_SourceAddress));
+      this->mpc_Ui->pc_LabelJ1939SourceAddrValue->setText("0x" + QString::number(c_PgInfo.u8_SourceAddress, 16).toUpper());
       if (c_PgInfo.q_HasDestinationAddress == true)
       {
-         this->mpc_Ui->pc_LabelJ1939DestAddrValue->setText(QString::number(c_PgInfo.u8_PduSpecific));
+         this->mpc_Ui->pc_LabelJ1939DestAddrValue->setText("0x" + QString::number(c_PgInfo.u8_PduSpecific, 16).toUpper());
          this->mpc_Ui->pc_LabelJ1939FormatValue->setText("PDU 1 (Point-to-Point)");
       }
       else
