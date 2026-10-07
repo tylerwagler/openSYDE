@@ -66,7 +66,6 @@ private:
    std::string m_ServiceDataToText(const uint8_t * const opu8_ServiceData, const uint8_t ou8_ServiceSize,
                                              const T_CanAddressInformation & orc_CanAddressInformation,
                                              const bool oq_IsSingleFrame) const;
-   std::string m_NegativeResponseCodeToText(const uint8_t ou8_NrCode) const;
    std::string m_DataIdentifierAndDataToText(const bool oq_IsWrite, const uint16_t ou16_DataIdentifier,
                                                        const bool oq_IsResponse, const uint8_t ou8_PayloadSize,
                                                        const uint8_t * const opu8_Payload) const;

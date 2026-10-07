@@ -130,16 +130,16 @@ Device definitions (`C_OscSubDeviceDefinition`) carry only openSYDE flags
 recognises only an `<opensyde>` sub-element under `<protocols-diagnostics>` and
 `<protocols-flashloader>`.
 
-## Layer 0: finish what is already there
+## Layer 0: finish what is already there — done 2026-10-07
 
-Independent of any decision, small, and each item is a defect today.
+Independent of any decision, small, and each item was a defect.
 
-| Item | Size |
+| Item | Outcome |
 |---|---|
-| Fix the first-frame length truncation in `C_CanMonProtocolUds::MessageToString` | hours |
-| Consolidate the three NRC tables into one core table (roadmap item 1; needs the wording decision) | half day |
-| Either wire `C_CamUdsRequestBuilderDialog` into the CAN Monitor build and the generator, or delete it. Deleting is the honest default until layer C decides what the generator should do with a DID table | hours either way |
-| Add an exhaustive round-trip test over `hc_ALL_PROTOCOLS` for the string converters (`h_CommunicationProtocolToString` and its inverse) so the eventual `eUDS` cannot be forgotten in a filer | hours |
+| First-frame length truncation in `C_CanMonProtocolUds::MessageToString` | Fixed; the interpreter now shows `FF(<total length>)` and reads only the bytes the frame carries. Pinned by `test_cmon_protocol_uds` |
+| Three NRC tables (driver, openSYDE interpreter, UDS interpreter) | One table, `protocol_drivers/C_OscUdsNrc`, with the code constants the sequences compare against. ISO 14229-1 Table A.1 spelling, hyphens included. Pinned by `test_uds_nrc` |
+| `C_CamUdsRequestBuilderDialog`, in the tree but in no build | Deleted. It is in history at `ad07f7841` if layer C3 wants to revive it against a DID table |
+| Round trip over `hc_ALL_PROTOCOLS` through the filer string converters | Added to `test_can_protocol`, so an `eUDS` missing from either converter fails the suite |
 
 ## Layer B: a generic UDS client in core
 

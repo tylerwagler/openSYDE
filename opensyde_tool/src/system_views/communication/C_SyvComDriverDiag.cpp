@@ -30,6 +30,7 @@
 #include "C_Uti.hpp"
 #include "C_SyvComDriverUtil.hpp"
 #include "C_OscCanUtil.hpp"
+#include "C_OscUdsNrc.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -340,7 +341,7 @@ int32_t C_SyvComDriverDiag::SetDiagnosticMode(QString & orc_ErrorDetails)
    \param[in,out]  orc_FailedIdRegisters           Element IDs which failed registration (if any)
    \param[in,out]  orc_FailedIdErrorDetails        Error details for element IDs which failed registration (if any)
    \param[out]     orc_FailedNodesElementNumber    Map with all nodes as key with the number (not the index) of the
-                                                   element which caused the error OSY_UDS_NRC_UPLOAD_DOWNLOAD_NOT_ACCEPTED
+                                                   element which caused the error C_OscUdsNrc::hu8_UPLOAD_DOWNLOAD_NOT_ACCEPTED
                                                    (0x70: To many transmissions already registered)
    \param[out]     orc_NodesElementNumber          Map with all nodes as key with the number (not the index) of the
                                                    element which should be registered (With and without error)
@@ -2133,7 +2134,7 @@ int32_t C_SyvComDriverDiag::m_GetAllDatapoolMetadata(const uint32_t ou32_ActiveD
          if (s32_Return == C_WARN)
          {
             // Error response
-            if (u8_ErrorCode == C_OscProtocolDriverOsy::hu8_NR_CODE_REQUEST_OUT_OF_RANGE)
+            if (u8_ErrorCode == C_OscUdsNrc::hu8_REQUEST_OUT_OF_RANGE)
             {
                // Range reached. No error, no further Datapools available on node
                s32_Return = C_NO_ERR;

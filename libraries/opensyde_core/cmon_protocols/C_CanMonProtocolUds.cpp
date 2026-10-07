@@ -17,6 +17,7 @@
 #include <iomanip>
 #include <cstdint>
 #include "C_CanMonProtocolUds.hpp"
+#include "C_OscUdsNrc.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::cmon_protocol;
@@ -58,31 +59,6 @@ using namespace stw::can;
 #define SID_RESPONSE_EVENT_ON_DTC_STATUS       (0x86U)
 #define SID_LINK_CONTROL                       (0x87U)
 
-// Negative response codes (ISO 14229)
-#define NRC_NO_ERROR                                   (0x00U)
-#define NRC_SERVICE_NOT_SUPPORTED                      (0x11U)
-#define NRC_SUB_FUNCTION_NOT_SUPPORTED                 (0x12U)
-#define NRC_INCORRECT_MESSAGE_LENGTH_OR_INVALID_FORMAT (0x13U)
-#define NRC_RESPONSE_TOO_LONG                          (0x14U)
-#define NRC_BUSY_REPEAT_REQUEST                        (0x21U)
-#define NRC_CONDITIONS_NOT_CORRECT                     (0x22U)
-#define NRC_REQUEST_SEQUENCE_ERROR                     (0x24U)
-#define NRC_NO_RESPONSE_FROM_SUBNET_COMPONENT          (0x25U)
-#define NRC_FAILURE_PREVENTS_EXECUTION_OF_REQUEST      (0x26U)
-#define NRC_REQUEST_OUT_OF_RANGE                       (0x31U)
-#define NRC_SECURITY_ACCESS_DENIED                     (0x33U)
-#define NRC_INVALID_KEY                                (0x35U)
-#define NRC_EXCEEDED_NUMBER_OF_ATTEMPTS                (0x36U)
-#define NRC_REQUIRED_TIME_DELAY_NOT_EXPIRED            (0x37U)
-#define NRC_UPLOAD_DOWNLOAD_NOT_ACCEPTED               (0x70U)
-#define NRC_TRANSFER_DATA_SUSPENDED                    (0x71U)
-#define NRC_GENERAL_PROGRAMMING_FAILURE                (0x72U)
-#define NRC_WRONG_BLOCK_SEQUENCE_COUNTER               (0x73U)
-#define NRC_REQUEST_CORRECTLY_RECEIVED_RESPONSE_PENDING (0x78U)
-#define NRC_SUBFUNCTION_NOT_SUPPORTED_IN_ACTIVE_SESSION (0x7EU)
-#define NRC_SERVICE_NOT_SUPPORTED_IN_ACTIVE_SESSION    (0x7FU)
-#define NRC_VOLTAGE_TOO_HIGH                           (0x92U)
-#define NRC_VOLTAGE_TOO_LOW                            (0x93U)
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -393,101 +369,6 @@ std::string C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Convert UDS negative response code to text
-
-   \param[in]  ou8_Nrc  Negative response code
-
-   \return
-   Text interpretation of NRC
-*/
-//----------------------------------------------------------------------------------------------------------------------
-std::string C_CanMonProtocolUds::mh_NegativeResponseCodeToText(const uint8_t ou8_Nrc)
-{
-   std::string c_Text;
-
-   switch (ou8_Nrc)
-   {
-   case NRC_NO_ERROR:
-      c_Text = "positiveResponse";
-      break;
-   case NRC_SERVICE_NOT_SUPPORTED:
-      c_Text = "serviceNotSupported";
-      break;
-   case NRC_SUB_FUNCTION_NOT_SUPPORTED:
-      c_Text = "subFunctionNotSupported";
-      break;
-   case NRC_INCORRECT_MESSAGE_LENGTH_OR_INVALID_FORMAT:
-      c_Text = "incorrectMessageLengthOrInvalidFormat";
-      break;
-   case NRC_RESPONSE_TOO_LONG:
-      c_Text = "responseTooLong";
-      break;
-   case NRC_BUSY_REPEAT_REQUEST:
-      c_Text = "busyRepeatRequest";
-      break;
-   case NRC_CONDITIONS_NOT_CORRECT:
-      c_Text = "conditionsNotCorrect";
-      break;
-   case NRC_REQUEST_SEQUENCE_ERROR:
-      c_Text = "requestSequenceError";
-      break;
-   case NRC_NO_RESPONSE_FROM_SUBNET_COMPONENT:
-      c_Text = "noResponseFromSubnetComponent";
-      break;
-   case NRC_FAILURE_PREVENTS_EXECUTION_OF_REQUEST:
-      c_Text = "failurePreventsExecutionOfRequest";
-      break;
-   case NRC_REQUEST_OUT_OF_RANGE:
-      c_Text = "requestOutOfRange";
-      break;
-   case NRC_SECURITY_ACCESS_DENIED:
-      c_Text = "securityAccessDenied";
-      break;
-   case NRC_INVALID_KEY:
-      c_Text = "invalidKey";
-      break;
-   case NRC_EXCEEDED_NUMBER_OF_ATTEMPTS:
-      c_Text = "exceededNumberOfAttempts";
-      break;
-   case NRC_REQUIRED_TIME_DELAY_NOT_EXPIRED:
-      c_Text = "requiredTimeDelayNotExpired";
-      break;
-   case NRC_UPLOAD_DOWNLOAD_NOT_ACCEPTED:
-      c_Text = "uploadDownloadNotAccepted";
-      break;
-   case NRC_TRANSFER_DATA_SUSPENDED:
-      c_Text = "transferDataSuspended";
-      break;
-   case NRC_GENERAL_PROGRAMMING_FAILURE:
-      c_Text = "generalProgrammingFailure";
-      break;
-   case NRC_WRONG_BLOCK_SEQUENCE_COUNTER:
-      c_Text = "wrongBlockSequenceCounter";
-      break;
-   case NRC_REQUEST_CORRECTLY_RECEIVED_RESPONSE_PENDING:
-      c_Text = "responsePending";
-      break;
-   case NRC_SUBFUNCTION_NOT_SUPPORTED_IN_ACTIVE_SESSION:
-      c_Text = "subFunctionNotSupportedInActiveSession";
-      break;
-   case NRC_SERVICE_NOT_SUPPORTED_IN_ACTIVE_SESSION:
-      c_Text = "serviceNotSupportedInActiveSession";
-      break;
-   case NRC_VOLTAGE_TOO_HIGH:
-      c_Text = "voltageTooHigh";
-      break;
-   case NRC_VOLTAGE_TOO_LOW:
-      c_Text = "voltageTooLow";
-      break;
-   default:
-      c_Text = "unknownNRC(0x" + stw::scl::IntToHexCompat(ou8_Nrc, 2) + ")";
-      break;
-   }
-
-   return c_Text;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Convert UDS session to text
 
    \param[in]  ou8_Session  Session ID
@@ -650,20 +531,24 @@ std::string C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
 
    // Determine PCI type from first nibble
    const uint8_t u8_Pci = (orc_Msg.au8_Data[0] & 0xF0U);
-   uint8_t u8_NumDataBytes = 0U;
-   uint8_t u8_ServiceStart = 1U; // byte index where service data starts
+   uint16_t u16_NumDataBytes = 0U; // service bytes in the whole message (SF: this frame; FF: all frames)
+   uint8_t u8_ServiceStart = 1U;   // byte index where service data starts
 
    switch (u8_Pci)
    {
    case PCI_SF:
       // Single Frame: lower nibble is data length
-      u8_NumDataBytes = (orc_Msg.au8_Data[0] & 0x0FU);
+      u16_NumDataBytes = (orc_Msg.au8_Data[0] & 0x0FU);
       u8_ServiceStart = 1U;
       break;
    case PCI_FF:
       // First Frame: lower nibble + next byte = 12-bit data length
-      u8_NumDataBytes = static_cast<uint8_t>(((static_cast<uint16_t>(orc_Msg.au8_Data[0] & 0x0FU) << 8U) |
-                                                orc_Msg.au8_Data[1]) & 0x0FFFU);
+      if (orc_Msg.u8_DLC < 2U)
+      {
+         return "FF(DLC too short)";
+      }
+      u16_NumDataBytes = static_cast<uint16_t>((static_cast<uint16_t>(orc_Msg.au8_Data[0] & 0x0FU) << 8U) |
+                                               orc_Msg.au8_Data[1]);
       u8_ServiceStart = 2U;
       break;
    case PCI_CF:
@@ -678,16 +563,31 @@ std::string C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
       return "";
    }
 
-   // Check if we have enough data
-   if ((static_cast<uint16_t>(u8_ServiceStart) + static_cast<uint16_t>(u8_NumDataBytes)) >
-       static_cast<uint16_t>(orc_Msg.u8_DLC))
+   // A single frame carries all of its service bytes; a first frame carries only the first DLC - 2 of them
+   uint8_t u8_ServiceLen;
+   if (u8_Pci == PCI_SF)
    {
-      return "SF(DLC too short)";
+      if ((static_cast<uint16_t>(u8_ServiceStart) + u16_NumDataBytes) > static_cast<uint16_t>(orc_Msg.u8_DLC))
+      {
+         return "SF(DLC too short)";
+      }
+      if (u16_NumDataBytes < 1U)
+      {
+         return "SF(empty)";
+      }
+      u8_ServiceLen = static_cast<uint8_t>(u16_NumDataBytes);
    }
-
-   if (u8_NumDataBytes < 1U)
+   else
    {
-      return "SF(empty)";
+      if (u16_NumDataBytes <= 7U)
+      {
+         return "FF(length " + std::to_string(u16_NumDataBytes) + " fits a single frame)";
+      }
+      u8_ServiceLen = static_cast<uint8_t>(orc_Msg.u8_DLC - u8_ServiceStart);
+      if (u8_ServiceLen < 1U)
+      {
+         return "FF(DLC too short)";
+      }
    }
 
    // Get the service ID (first byte after PCI)
@@ -696,14 +596,14 @@ std::string C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
    // Check for negative response
    if (u8_Sid == SID_NEGATIVE_RESPONSE)
    {
-      if (u8_NumDataBytes < 3U)
+      if (u8_ServiceLen < 3U)
       {
          return "NEGRES(invalid length)";
       }
       const uint8_t u8_ReqSid = orc_Msg.au8_Data[u8_ServiceStart + 1U];
       const uint8_t u8_Nrc = orc_Msg.au8_Data[u8_ServiceStart + 2U];
       c_Text = mh_ServiceIdToText(u8_ReqSid, false, true);
-      c_Text += " NRC:" + mh_NegativeResponseCodeToText(u8_Nrc);
+      c_Text += " NRC:" + stw::opensyde_core::C_OscUdsNrc::h_ToText(u8_Nrc);
       return c_Text;
    }
 
@@ -718,14 +618,13 @@ std::string C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
    }
    else
    {
-      c_Text = "FF ";
+      c_Text = "FF(" + std::to_string(u16_NumDataBytes) + ") ";
    }
 
    c_Text += mh_ServiceIdToText(u8_BaseSid, q_IsResponse, false);
 
    // Decode service-specific data
    const uint8_t * const pu8_ServiceData = &orc_Msg.au8_Data[u8_ServiceStart];
-   const uint8_t u8_ServiceLen = u8_NumDataBytes;
    uint8_t u8_Consumed = 1U; // bytes consumed by service-specific decoding
 
    switch (u8_BaseSid)

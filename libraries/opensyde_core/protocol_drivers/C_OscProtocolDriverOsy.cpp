@@ -506,7 +506,7 @@ std::error_code C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const u
                {
                   // Matching error response found!
                   // special handling for "responsePending": rewind Rx timeout expectation
-                  if (orc_Service.c_Data[2] == hu8_NR_CODE_RESPONSE_PENDING)
+                  if (orc_Service.c_Data[2] == C_OscUdsNrc::hu8_REQUEST_CORRECTLY_RECEIVED_RESPONSE_PENDING)
                   {
                      osc_write_log_info("Synchronous communication",
                                         "ResponsePending detected, rewinding timeout ...");
@@ -1672,7 +1672,7 @@ std::error_code C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNu
          osc_write_log_warning("Protocol driver",
                                "Protocol violation: received an empty certificate serial number. Reporting an invalid value to application.");
 
-         u8_NrErrorCode = hu8_NR_CODE_CONDITIONS_NOT_CORRECT;
+         u8_NrErrorCode = C_OscUdsNrc::hu8_CONDITIONS_NOT_CORRECT;
       }
       else
       {
@@ -6427,65 +6427,7 @@ std::string C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(const std::
       {
          (*opq_IsHardError) = false;
       }
-      c_Text = "Error response received (";
-      switch (ou8_NrCode)
-      {
-      case (0x00U):
-         c_Text += "positive response";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_SERVICE_NOT_SUPPORTED):
-         c_Text += "serviceNotSupported";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_SUB_FUNCTION_NOT_SUPPORTED):
-         c_Text += "sub-functionNotSupported";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_INCORRECT_MESSAGE_LENGTH_OR_FORMAT):
-         c_Text += "incorrectMessageLengthOrInvalidFormat";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_RESPONSE_TOO_LONG):
-         c_Text += "responseTooLong";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_CONDITIONS_NOT_CORRECT):
-         c_Text += "conditionsNotCorrect";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_REQUEST_SEQUENCE_ERROR):
-         c_Text += "requestSequenceError";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_REQUEST_OUT_OF_RANGE):
-         c_Text += "requestOutOfRange";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_SECURITY_ACCESS_DENIED):
-         c_Text += "securityAccessDenied";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_INVALID_KEY):
-         c_Text += "invalidKey";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_EXCEEDED_NUMBER_OF_ATTEMPTS):
-         c_Text += "exceededNumberOfAttempts";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_REQUIRED_TIME_DELAY_NOT_EXPIRED):
-         c_Text += "requiredTimeDelayNotExpired";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_SECURE_DATA_TRANSMISSION_NOT_ALLOWED):
-         c_Text += "secureDataTransmissionNotAllowed";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_SECURE_DATA_VERIFICATION_FAILED):
-         c_Text += "secureDataVerificationFailed";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_UPLOAD_DOWNLOAD_NOT_ACCEPTED):
-         c_Text += "uploadDownloadNotAccepted";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_GENERAL_PROGRAMMING_FAILURE):
-         c_Text += "generalProgrammingFailure";
-         break;
-      case (C_OscProtocolDriverOsy::hu8_NR_CODE_SERVICE_NOT_SUPPORTED_IN_ACTIVE_SESSION):
-         c_Text += "serviceNotSupportedInActiveSession";
-         break;
-      default:
-         c_Text += "unknownnegativeresponsecode";
-         break;
-      }
-      c_Text += ")";
+      c_Text = "Error response received (" + C_OscUdsNrc::h_ToText(ou8_NrCode) + ")";
    }
    else if (orc_FunctionResult == Errc::rd_wr)
    {

@@ -26,6 +26,7 @@
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscUpdateUtil.hpp"
 #include "C_OscBuSequences.hpp"
+#include "C_OscUdsNrc.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;
@@ -609,7 +610,7 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
                                                              c_TrafficEncryptionInitVector, &u8_NumberCode);
 
       if ((c_Return == Errc::warn) &&
-          (u8_NumberCode == C_OscProtocolDriverOsy::hu8_NR_CODE_REQUIRED_TIME_DELAY_NOT_EXPIRED))
+          (u8_NumberCode == C_OscUdsNrc::hu8_REQUIRED_TIME_DELAY_NOT_EXPIRED))
       {
          // Special case: The server must wait for a second to allow a request after a reset.
          // In some scenarios the normal waiting times after resets are not enough (this times are not calculated for

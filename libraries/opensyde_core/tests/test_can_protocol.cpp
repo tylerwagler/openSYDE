@@ -16,6 +16,7 @@
 #include "C_OscErrorCategory.hpp"
 #include "C_OscCanProtocol.hpp"
 #include "C_OscNodeDataPool.hpp"
+#include "C_OscNodeCommFiler.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -69,4 +70,33 @@ TEST(CanProtocol, ComListIndexFindsTxAndRxPerInterface)
    const C_OscNodeDataPoolList * const pc_Rx = C_OscCanProtocol::h_GetComListConst(c_Pool, 1U, false);
    ASSERT_NE(nullptr, pc_Rx);
    EXPECT_EQ("CAN2_RX", pc_Rx->c_Name);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Every protocol type survives the string round trip the node filer uses
+
+   hc_ALL_PROTOCOLS is the list the GUI and the error checks iterate. A protocol added to the enum but not to the
+   two converters would save as "invalid" and fail to load; this walks the list so that cannot slip through.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+TEST(CanProtocol, EveryProtocolTypeRoundTripsThroughTheFilerStrings)
+{
+   ASSERT_FALSE(C_OscCanProtocol::hc_ALL_PROTOCOLS.empty());
+   for (const C_OscCanProtocol::E_Type e_Type : C_OscCanProtocol::hc_ALL_PROTOCOLS)
+   {
+      const std::string c_Text = C_OscNodeCommFiler::h_CommunicationProtocolToString(e_Type);
+      C_OscCanProtocol::E_Type e_Loaded = C_OscCanProtocol::eLAYER2;
+
+      EXPECT_NE("invalid", c_Text) << static_cast<int32_t>(e_Type);
+      ASSERT_EQ(Errc::success, C_OscNodeCommFiler::h_StringToCommunicationProtocol(c_Text, e_Loaded)) << c_Text;
+      EXPECT_EQ(e_Type, e_Loaded) << c_Text;
+   }
+}
+
+TEST(CanProtocol, UnknownProtocolStringIsRejected)
+{
+   C_OscCanProtocol::E_Type e_Loaded = C_OscCanProtocol::eJ1939;
+
+   EXPECT_EQ(Errc::range, C_OscNodeCommFiler::h_StringToCommunicationProtocol("not-a-protocol", e_Loaded));
+   EXPECT_EQ(C_OscCanProtocol::eJ1939, e_Loaded);
 }

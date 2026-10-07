@@ -32,7 +32,6 @@ private:
    static std::string mh_ServiceIdToText(const uint8_t ou8_Sid, const bool oq_IsResponse,
                                                     const bool oq_IsNegativeResponse);
    static std::string mh_SubFunctionToText(const uint8_t ou8_ServiceId, const uint8_t ou8_SubFunc);
-   static std::string mh_NegativeResponseCodeToText(const uint8_t ou8_Nrc);
    static std::string mh_SessionToText(const uint8_t ou8_Session);
    static std::string mh_ResetTypeToText(const uint8_t ou8_ResetType);
    static std::string mh_DataIdentifierToText(const uint16_t ou16_Did);

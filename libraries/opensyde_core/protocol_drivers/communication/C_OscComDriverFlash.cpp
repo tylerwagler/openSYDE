@@ -21,6 +21,7 @@
 
 #include "C_OscComDriverFlash.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_OscUdsNrc.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -983,7 +984,7 @@ const
                (*opu8_NrCode) = u8_NrCode;
             }
 
-            if ((c_Return == Errc::warn) && (u8_NrCode == C_OscProtocolDriverOsy::hu8_NR_CODE_REQUEST_OUT_OF_RANGE))
+            if ((c_Return == Errc::warn) && (u8_NrCode == C_OscUdsNrc::hu8_REQUEST_OUT_OF_RANGE))
             {
                //no more blocks
                //done here ... not a real problem

@@ -36,6 +36,7 @@
 #include "C_OscCryptoAgentAccessUtil.hpp"
 #include "TglUtils.hpp"
 #include "TglTime.hpp"
+#include "C_OscUdsNrc.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::can;
@@ -1469,7 +1470,7 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(const uint32_t o
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Sets a node into a security level
 
-   If the first request fails with the error hu8_NR_CODE_REQUIRED_TIME_DELAY_NOT_EXPIRED, the node is not ready for
+   If the first request fails with the error C_OscUdsNrc::hu8_REQUIRED_TIME_DELAY_NOT_EXPIRED, the node is not ready for
    the security access request. The reason is to avoid brute force attacks. Waiting for one second before try again
    in this case.
 
@@ -1527,7 +1528,7 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDri
          }
 
          if ((c_Return == Errc::warn) &&
-             (u8_NrErrorCode == C_OscProtocolDriverOsy::hu8_NR_CODE_REQUIRED_TIME_DELAY_NOT_EXPIRED))
+             (u8_NrErrorCode == C_OscUdsNrc::hu8_REQUIRED_TIME_DELAY_NOT_EXPIRED))
          {
             // Special case: The server must wait for a second to allow a request after a reset.
             // In some scenarios the normal waiting times after resets are not enough (this times are not calculated for
@@ -2445,7 +2446,7 @@ std::error_code C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_Activ
 
                      if ((c_Return == Errc::warn) &&
                          (pc_RoutingDispatcher->GetNrCodeOfCanInit() ==
-                          C_OscProtocolDriverOsy::hu8_NR_SECURE_DATA_TRANSMISSION_NOT_ALLOWED))
+                          C_OscUdsNrc::hu8_SECURE_DATA_TRANSMISSION_NOT_ALLOWED))
                      {
                         // Special case: Routing to a legacy node is not possible if router has traffic encryption
                         // activated

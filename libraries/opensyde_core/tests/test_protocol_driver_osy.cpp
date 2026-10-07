@@ -27,6 +27,7 @@
 
 #include "C_OscErrorCategory.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
+#include "C_OscUdsNrc.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
 
@@ -288,7 +289,7 @@ TEST_F(ProtocolDriverOsy, NegativeResponse_IsWarnWithTheCode)
    uint32_t u32_Number = 0U;
    uint8_t u8_Nrc = 0U;
    EXPECT_EQ(Errc::warn, mc_Driver.OsyReadHardwareNumber(u32_Number, &u8_Nrc));
-   EXPECT_EQ(C_OscProtocolDriverOsy::hu8_NR_CODE_REQUEST_OUT_OF_RANGE, u8_Nrc);
+   EXPECT_EQ(C_OscUdsNrc::hu8_REQUEST_OUT_OF_RANGE, u8_Nrc);
 }
 
 TEST_F(ProtocolDriverOsy, ResponsePending_IsWaitedOutUntilThePositiveResponse)
@@ -635,7 +636,7 @@ TEST_F(ProtocolDriverOsy, SecurityAccessSendKey_UsesTheNextSubFunctionAndBigEndi
    mc_Transport.Reply({mh_Bytes({0x7FU, 0x27U, 0x35U})});
    uint8_t u8_Nrc = 0U;
    EXPECT_EQ(Errc::warn, mc_Driver.OsySecurityAccessSendKey(1U, 0U, &u8_Nrc));
-   EXPECT_EQ(C_OscProtocolDriverOsy::hu8_NR_CODE_INVALID_KEY, u8_Nrc);
+   EXPECT_EQ(C_OscUdsNrc::hu8_INVALID_KEY, u8_Nrc);
 }
 
 /* -- Download sequence ---------------------------------------------------------------------------------------------- */

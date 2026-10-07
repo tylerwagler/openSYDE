@@ -553,6 +553,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolSerialNumber.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolSecuritySubLayer.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscUdsNrc.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscHexFile.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscApplicationInfoBlock.cpp
@@ -578,6 +579,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolSerialNumber.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpBase.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolSecuritySubLayer.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscUdsNrc.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscHexFile.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscApplicationInfoBlock.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscCanDispatcherOsyRouter.hpp

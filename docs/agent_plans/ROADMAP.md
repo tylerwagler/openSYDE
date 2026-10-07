@@ -87,16 +87,15 @@ flashloader paths -- see open item 2.
 
 Ranked by value, with enough context to start without opening the archive.
 
-### 1. UDS negative-response-code table is duplicated and has already drifted
+### 1. UDS negative-response-code table: done (2026-10-07)
 
-`cmon_protocols/C_CanMonProtocolUds.cpp:412` versus
-`C_CanMonProtocolOpenSyde.cpp:1043`. Two copies of the NRC→text mapping that
-**already differ in wording** (`positiveResponse` versus `positive response`).
-
-The duplication is the ordinary kind; the drift is the reason this is first. Any
-further divergence is a user-visible inconsistency nobody will notice until a
-support call. Consolidating changes the displayed text for one of the two, so it
-needs a wording decision first.
+There were three copies, not two (the driver's `h_GetOpenSydeServiceErrorDetails`
+was the third), and all three differed. They are now one table,
+`protocol_drivers/C_OscUdsNrc`, which also owns the code constants the update
+sequences compare against. Wording follows ISO 14229-1 Table A.1 verbatim,
+hyphens included (`sub-functionNotSupported`,
+`requestCorrectlyReceived-ResponsePending`), pinned by `test_uds_nrc`. Done as
+layer 0 of the UDS work (`uds-first-class-protocol.md`).
 
 ### 2. Extend the virtual ECU to CAN, routing and the other flashloader paths
 
@@ -258,7 +257,6 @@ These are not blocked on effort. Each needs a product call.
 | **EDS `LoadFromIni` strictness** | `C_OscCanOpenEdsDeviceInfoBlock::LoadFromIni` and its `FileInfoBlock` twin document `Errc::config` for a missing value and never return it. Four validating `h_Load*ValueFromIniFile` helpers sit **unused** in the same file behind a `//lint -e{8062} Kept for later error reporting` comment. Wiring them up makes EDS import stricter and may reject files that work today — and the original author's own "Maybe mandatory values" comment says they were unsure which keys are mandatory |
 | **5 deferred `[[nodiscard]]` callees** | `SetNodeIdentifiers`, `SendCanMessageDirect`, `HandleCanMessage`, `Cycle`, `m_HandleAsyncResponse` (12 declarations in `protocol_drivers`). Whether a caller should abort on one failed send is a protocol decision. Reasons are recorded at each declaration; one line each once decided |
 | **`C_SyvDaDashboardsWidget::m_InitOsyDriver`** | Discards `StartLogging`. On failure, CAN signal interpretation silently does not start on the dashboard. It sits inside a `switch (s32_Retval)`, so propagating is a restructure |
-| **UDS wording** | See open item 1 — consolidating the two NRC tables changes displayed text for one of them |
 | **CAN interfaces hash an IP the filer never persists** | `C_IpAddress()` seeds a default, the node filer writes it only for Ethernet, the loader zeros it for the rest, `CalcHash` covers it on every type. Tidy fix is for the loader to keep the constructor default; that changes what a loaded Ethernet interface without an `ip-address` node looks like, so it needs a look at the GUI first (FINDINGS, filer wave 2) |
 | **`CalcCRC32C` has no caller** | Phase 7.2 added a hardware CRC-32C (`C_SclChecksums::CalcCRC32C`, SSE4.2 at runtime, 4 GiB/s) before noticing that every persisted checksum uses the IEEE polynomial, which the instruction cannot compute. It stays tested and benchmarked but nothing calls it. Keep it for a future format, or delete it: a product call. The IEEE `CalcCRC32` got slicing-by-8 instead (4.2x, bit-identical; FINDINGS) |
 | **Report the fork's findings upstream?** | The ECDH double free is the fork's own (upstream frees once), but `h_ListIsComTx`'s second-to-last-letter check and the `[i + 1]` availability parsing are correct upstream only because their string class is 1-based — anyone else porting to `std::string` will hit the same six shapes. Whether to write that up for the openSYDE project is a call for a person |

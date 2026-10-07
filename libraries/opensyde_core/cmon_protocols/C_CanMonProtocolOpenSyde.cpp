@@ -21,6 +21,7 @@
 #include <cstdint>
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolOpenSyde.hpp"
+#include "C_OscUdsNrc.hpp"
 #include "C_OscErrorCategory.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -89,29 +90,6 @@ using namespace stw::can;
 #define OSY_UDS_NR_SI       (0x7FU) ///< Negative response service identifier
 
 //negative response codes
-#define OSY_UDS_NRC_NO_ERROR                                    (0x00U) ///< positive response
-#define OSY_UDS_NRC_SERVICE_NOT_SUPPORTED                       (0x11U) ///< serviceNotSupported
-#define OSY_UDS_NRC_SUB_FUNCTION_NOT_SUPPORTED                  (0x12U) ///< sub-functionNotSupported
-#define OSY_UDS_NRC_INCORRECT_MESSAGE_LENGTH_OR_INVALID_FORMAT  (0x13U) ///< incorrectMessageLengthOrInvalidFormat
-#define OSY_UDS_NRC_RESPONSE_TOO_LONG                           (0x14U) ///< responseTooLong
-#define OSY_UDS_NRC_CONDITIONS_NOT_CORRECT                      (0x22U) ///< conditionsNotCorrect
-#define OSY_UDS_NRC_REQUEST_SEQUENCE_ERROR                      (0x24U) ///< requestSequenceError
-#define OSY_UDS_NRC_REQUEST_OUT_OF_RANGE                        (0x31U) ///< requestOutOfRange
-#define OSY_UDS_NRC_SECURITY_ACCESS_DENIED                      (0x33U) ///< securityAccessDenied
-#define OSY_UDS_NRC_INVALID_KEY                                 (0x35U) ///< invalidKey
-#define OSY_UDS_NRC_EXCEEDED_NUMBER_OF_ATTEMPTS                 (0x36U) ///< exceededNumberOfAttempts
-#define OSY_UDS_NRC_REQUIRED_TIME_DELAY_NOT_EXPIRED             (0x37U) ///< requiredTimeDelayNotExpired
-#define OSY_UDS_NRC_SECURE_DATA_TRANSMISSION_NOT_ALLOWED        (0x39U) ///< secureDataTransmissionNotAllowed
-#define OSY_UDS_NRC_SECURE_DATA_VERIFICATION_FAILED             (0x3AU) ///< secureDataVerificationFailed
-#define OSY_UDS_NRC_UPLOAD_DOWNLOAD_NOT_ACCEPTED                (0x70U) ///< uploadDownloadNotAccepted
-#define OSY_UDS_NRC_TRANSFER_DATA_SUSPENDED                     (0x71U) ///< transferDataSuspended
-#define OSY_UDS_NRC_GENERAL_PROGRAMMING_FAILURE                 (0x72U) ///< generalProgrammingFailure
-#define OSY_UDS_NRC_WRONG_BLOCK_SEQUENCE_COUNTER                (0x73U) ///< wrongBlockSequenceCounter
-#define OSY_UDS_NRC_RESPONSE_PENDING                            (0x78U) ///< requestCorrectlyReceivedResponsePending
-#define OSY_UDS_NRC_SUBFUNCTION_NOT_SUPPORTED_IN_ACTIVE_SESSION (0x7EU) ///< sub-functionNotSupportedInActiveSession
-#define OSY_UDS_NRC_SERVICE_NOT_SUPPORTED_IN_ACTIVE_SESSION     (0x7FU) ///< serviceNotSupportedInActiveSession
-#define OSY_UDS_NRC_VOLTAGE_TOO_HIGH                            (0x92U) ///< voltageTooHigh
-#define OSY_UDS_NRC_VOLTAGE_TOO_LOW                             (0x93U) ///< voltageTooLow
 
 //data identifiers
 #define DPD_DATAID_LIST_OF_FEATURES                         (0xA800U)
@@ -1023,98 +1001,6 @@ std::string C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Convert openSYDE negative response code to text
-
-   \param[in]     ou8_NrCode      negative response code
-
-   \return
-   Text interpretation of negative response code
-*/
-//----------------------------------------------------------------------------------------------------------------------
-std::string C_CanMonProtocolOpenSyde::m_NegativeResponseCodeToText(const uint8_t ou8_NrCode) const
-{
-   std::string c_Text;
-
-   switch (ou8_NrCode)
-   {
-   case OSY_UDS_NRC_NO_ERROR:
-      c_Text = "positive response";
-      break;
-   case OSY_UDS_NRC_SERVICE_NOT_SUPPORTED:
-      c_Text = "serviceNotSupported";
-      break;
-   case OSY_UDS_NRC_SUB_FUNCTION_NOT_SUPPORTED:
-      c_Text = "sub-functionNotSupported";
-      break;
-   case OSY_UDS_NRC_INCORRECT_MESSAGE_LENGTH_OR_INVALID_FORMAT:
-      c_Text = "incorrectMessageLengthOrInvalidFormat";
-      break;
-   case OSY_UDS_NRC_RESPONSE_TOO_LONG:
-      c_Text = "responseTooLong";
-      break;
-   case OSY_UDS_NRC_CONDITIONS_NOT_CORRECT:
-      c_Text = "conditionsNotCorrect";
-      break;
-   case OSY_UDS_NRC_REQUEST_SEQUENCE_ERROR:
-      c_Text = "requestSequenceError";
-      break;
-   case OSY_UDS_NRC_REQUEST_OUT_OF_RANGE:
-      c_Text = "requestOutOfRange";
-      break;
-   case OSY_UDS_NRC_SECURITY_ACCESS_DENIED:
-      c_Text = "securityAccessDenied";
-      break;
-   case OSY_UDS_NRC_INVALID_KEY:
-      c_Text = "invalidKey";
-      break;
-   case OSY_UDS_NRC_EXCEEDED_NUMBER_OF_ATTEMPTS:
-      c_Text = "exceededNumberOfAttempts";
-      break;
-   case OSY_UDS_NRC_REQUIRED_TIME_DELAY_NOT_EXPIRED:
-      c_Text = "requiredTimeDelayNotExpired";
-      break;
-   case OSY_UDS_NRC_SECURE_DATA_TRANSMISSION_NOT_ALLOWED:
-      c_Text = "secureDataTransmissionNotAllowed";
-      break;
-   case OSY_UDS_NRC_SECURE_DATA_VERIFICATION_FAILED:
-      c_Text = "secureDataVerificationFailed";
-      break;
-   case OSY_UDS_NRC_UPLOAD_DOWNLOAD_NOT_ACCEPTED:
-      c_Text = "uploadDownloadNotAccepted";
-      break;
-   case OSY_UDS_NRC_TRANSFER_DATA_SUSPENDED:
-      c_Text = "transferDataSuspended";
-      break;
-   case OSY_UDS_NRC_GENERAL_PROGRAMMING_FAILURE:
-      c_Text = "generalProgrammingFailure";
-      break;
-   case OSY_UDS_NRC_WRONG_BLOCK_SEQUENCE_COUNTER:
-      c_Text = "wrongBlockSequenceCounter";
-      break;
-   case OSY_UDS_NRC_RESPONSE_PENDING:
-      c_Text = "requestCorrectlyReceivedResponsePending";
-      break;
-   case OSY_UDS_NRC_SUBFUNCTION_NOT_SUPPORTED_IN_ACTIVE_SESSION:
-      c_Text = "sub-functionNotSupportedInActiveSession";
-      break;
-   case OSY_UDS_NRC_SERVICE_NOT_SUPPORTED_IN_ACTIVE_SESSION:
-      c_Text = "serviceNotSupportedInActiveSession";
-      break;
-   case OSY_UDS_NRC_VOLTAGE_TOO_HIGH:
-      c_Text = "voltageTooHigh";
-      break;
-   case OSY_UDS_NRC_VOLTAGE_TOO_LOW:
-      c_Text = "voltageTooLow";
-      break;
-   default:
-      c_Text = "unknownnegativeresponsecode (" + m_GetValueDecHex(ou8_NrCode) + ")";
-      break;
-   }
-
-   return c_Text;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get data as ASCII text if representable
 
    Will add printable characters as such.
@@ -1957,7 +1843,7 @@ std::string C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
                      //regular negative response
                      //set response flag to let engine flag the message as "response"
                      c_Text += m_ServiceIdToText(orc_Msg.au8_Data[2], true) + " NRC:" +
-                               m_NegativeResponseCodeToText(orc_Msg.au8_Data[3]);
+                               stw::opensyde_core::C_OscUdsNrc::h_ToText(orc_Msg.au8_Data[3]);
                   }
                   else if ((u16_NumBytes == 6U) && (orc_Msg.u8_DLC >= 7U) &&
                            (orc_Msg.au8_Data[2] == OSY_DPD_SI_OS_READ_DATAPOOLDATA_EVENT_DRIVEN))
@@ -1967,7 +1853,7 @@ std::string C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
                                                   (static_cast<uint32_t>(orc_Msg.au8_Data[5]) << 8U) +
                                                   orc_Msg.au8_Data[6];
                      c_Text += m_ServiceIdToText(orc_Msg.au8_Data[2], true) + " NRC:" +
-                               m_NegativeResponseCodeToText(orc_Msg.au8_Data[3]) + " " +
+                               stw::opensyde_core::C_OscUdsNrc::h_ToText(orc_Msg.au8_Data[3]) + " " +
                                m_DataPoolIdentifierToText(u32_DpIndex, true, t_Address);
                   }
                   else

@@ -33,6 +33,7 @@
 #include "C_OscDiagProtocolOsy.hpp"
 #include "C_OscSecurityPem.hpp"
 #include "C_OscUpdateUtil.hpp"
+#include "C_OscUdsNrc.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -1116,7 +1117,7 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeFile(
          (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_EXIT_ERROR, c_Return.value(),
                                 u8_ProgressPercentage, mc_CurrentNode, "Could not finalize the transfer. Details: " +
                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NrCode));
-         if ((c_Return == Errc::warn) && (u8_NrCode == C_OscProtocolDriverOsy::hu8_NR_CODE_GENERAL_PROGRAMMING_FAILURE))
+         if ((c_Return == Errc::warn) && (u8_NrCode == C_OscUdsNrc::hu8_GENERAL_PROGRAMMING_FAILURE))
          {
             q_RejectedByTargetLayer = true;
          }

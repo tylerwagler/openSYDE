@@ -24,6 +24,7 @@
 
 #include "C_OscEndian.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
+#include "C_OscUdsNrc.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscSuSequences.hpp"
 
@@ -161,7 +162,7 @@ public:
       case 0x36U: //TransferData, into whichever transfer is open
          if ((mq_DownloadOpen == false) && (mq_FileOpen == false))
          {
-            return mh_Negative(u8_Sid, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_REQUEST_SEQUENCE_ERROR);
+            return mh_Negative(u8_Sid, stw::opensyde_core::C_OscUdsNrc::hu8_REQUEST_SEQUENCE_ERROR);
          }
          mc_DownloadData.insert(mc_DownloadData.end(), orc_Request.begin() + 2, orc_Request.end());
          return T_Bytes{0x76U, orc_Request[1]};
@@ -172,7 +173,7 @@ public:
          }
          if (mq_DownloadOpen == false)
          {
-            return mh_Negative(u8_Sid, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_REQUEST_SEQUENCE_ERROR);
+            return mh_Negative(u8_Sid, stw::opensyde_core::C_OscUdsNrc::hu8_REQUEST_SEQUENCE_ERROR);
          }
          c_Flash[mu32_DownloadAddress] = mc_DownloadData;
          mq_DownloadOpen = false;
@@ -188,7 +189,7 @@ public:
       case 0x3DU: //WriteMemoryByAddress: same header, then the data; echoes the header
          return m_WriteMemory(orc_Request);
       default:
-         return mh_Negative(u8_Sid, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_SERVICE_NOT_SUPPORTED);
+         return mh_Negative(u8_Sid, stw::opensyde_core::C_OscUdsNrc::hu8_SERVICE_NOT_SUPPORTED);
       }
    }
 
@@ -217,12 +218,12 @@ private:
    {
       if ((orc_Request.size() < 10U) || (orc_Request[1] != 0x03U))
       {
-         return mh_Negative(0x38U, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_INCORRECT_MESSAGE_LENGTH_OR_FORMAT);
+         return mh_Negative(0x38U, stw::opensyde_core::C_OscUdsNrc::hu8_INCORRECT_MESSAGE_LENGTH_OR_INVALID_FORMAT);
       }
       const uint16_t u16_PathLength = stw::opensyde_core::C_OscEndian::h_GetU16Big(&orc_Request[2]);
       if (orc_Request.size() != (10U + static_cast<size_t>(u16_PathLength)))
       {
-         return mh_Negative(0x38U, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_INCORRECT_MESSAGE_LENGTH_OR_FORMAT);
+         return mh_Negative(0x38U, stw::opensyde_core::C_OscUdsNrc::hu8_INCORRECT_MESSAGE_LENGTH_OR_INVALID_FORMAT);
       }
       mc_FileName.assign(orc_Request.begin() + 4, orc_Request.begin() + 4 + u16_PathLength);
       const uint32_t u32_Size = stw::opensyde_core::C_OscEndian::h_GetU32Big(&orc_Request[6U + u16_PathLength]);
@@ -238,7 +239,7 @@ private:
    {
       if (orc_Request.size() != 9U)
       {
-         return mh_Negative(0x37U, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_INCORRECT_MESSAGE_LENGTH_OR_FORMAT);
+         return mh_Negative(0x37U, stw::opensyde_core::C_OscUdsNrc::hu8_INCORRECT_MESSAGE_LENGTH_OR_INVALID_FORMAT);
       }
       mq_FileOpen = false;
       c_Files[mc_FileName] = mc_DownloadData;
@@ -252,7 +253,7 @@ private:
       if (q_RejectFileCrc || (u32_Claimed != u32_Crc))
       {
          mc_TransferExitResult = "CRC mismatch for " + mc_FileName;
-         return mh_Negative(0x37U, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_GENERAL_PROGRAMMING_FAILURE);
+         return mh_Negative(0x37U, stw::opensyde_core::C_OscUdsNrc::hu8_GENERAL_PROGRAMMING_FAILURE);
       }
       mc_TransferExitResult = "OK: " + mc_FileName + " stored";
       return T_Bytes{0x77U};
@@ -293,7 +294,7 @@ private:
       size_t x_DataStart = 0U;
       if (mh_ParseMemoryHeader(orc_Request, u32_Address, u32_Size, x_DataStart) == false)
       {
-         return mh_Negative(0x23U, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_INCORRECT_MESSAGE_LENGTH_OR_FORMAT);
+         return mh_Negative(0x23U, stw::opensyde_core::C_OscUdsNrc::hu8_INCORRECT_MESSAGE_LENGTH_OR_INVALID_FORMAT);
       }
       T_Bytes c_Response{0x63U};
       for (uint32_t u32_Index = 0U; u32_Index < u32_Size; ++u32_Index)
@@ -312,7 +313,7 @@ private:
       if ((mh_ParseMemoryHeader(orc_Request, u32_Address, u32_Size, x_DataStart) == false) ||
           (orc_Request.size() != (x_DataStart + u32_Size)))
       {
-         return mh_Negative(0x3DU, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_INCORRECT_MESSAGE_LENGTH_OR_FORMAT);
+         return mh_Negative(0x3DU, stw::opensyde_core::C_OscUdsNrc::hu8_INCORRECT_MESSAGE_LENGTH_OR_INVALID_FORMAT);
       }
       for (uint32_t u32_Index = 0U; u32_Index < u32_Size; ++u32_Index)
       {
@@ -383,7 +384,7 @@ private:
                                               static_cast<uint8_t>(mhu32_MAX_BLOCK_LENGTH)});
          break;
       default:
-         return mh_Negative(0x22U, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_REQUEST_OUT_OF_RANGE);
+         return mh_Negative(0x22U, stw::opensyde_core::C_OscUdsNrc::hu8_REQUEST_OUT_OF_RANGE);
       }
       return c_Response;
    }
@@ -410,7 +411,7 @@ private:
          c_AuthenticationKeysWritten.emplace_back(orc_Request.begin() + 3, orc_Request.end());
          return c_Ack;
       default:
-         return mh_Negative(0x2EU, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_REQUEST_OUT_OF_RANGE);
+         return mh_Negative(0x2EU, stw::opensyde_core::C_OscUdsNrc::hu8_REQUEST_OUT_OF_RANGE);
       }
    }
 
@@ -433,7 +434,7 @@ private:
                                      stw::opensyde_core::C_OscEndian::h_GetU32Big(&orc_Request[8]));
          if (q_RefuseFlashMemory)
          {
-            return mh_Negative(0x31U, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_CONDITIONS_NOT_CORRECT);
+            return mh_Negative(0x31U, stw::opensyde_core::C_OscUdsNrc::hu8_CONDITIONS_NOT_CORRECT);
          }
          return c_Response;
       case 0x0209U: //ReadFlashBlockData: TLVs 1 (addresses), 2 (signature), 3 (version), 5 (name)
@@ -441,7 +442,7 @@ private:
          const uint8_t u8_Block = orc_Request[4];
          if (u8_Block >= c_ExistingBlocks.size())
          {
-            return mh_Negative(0x31U, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_REQUEST_OUT_OF_RANGE);
+            return mh_Negative(0x31U, stw::opensyde_core::C_OscUdsNrc::hu8_REQUEST_OUT_OF_RANGE);
          }
          const T_FlashBlock & rc_Block = c_ExistingBlocks[u8_Block];
          c_Response.push_back(1U);
@@ -459,7 +460,7 @@ private:
          return c_Response;
       }
       default:
-         return mh_Negative(0x31U, stw::opensyde_core::C_OscProtocolDriverOsy::hu8_NR_CODE_REQUEST_OUT_OF_RANGE);
+         return mh_Negative(0x31U, stw::opensyde_core::C_OscUdsNrc::hu8_REQUEST_OUT_OF_RANGE);
       }
    }
 };
