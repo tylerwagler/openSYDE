@@ -225,6 +225,16 @@ project is not:
    backgrounds to something readable in daylight and less harsh at night. Never
    matches OS dark mode, but needs no per-screen audit.
 
+### UDS (ISO 14229) as a first-class protocol
+
+Scoped 2026-10-07 in `uds-first-class-protocol.md`. The short version: the openSYDE
+protocol already *is* UDS with supplier extensions, the CAN Monitor already has a UDS
+decoder (with a first-frame bug) and an unbuilt request-builder dialog, and the CAN
+transport only speaks the openSYDE ISO-TP dialect. The scope splits into a generic
+UDS client in core (transport conformance first), a DID-as-message data model with
+a sixth bus-editor tab, and consumers (dashboards, flash, generator). Which of those
+"first class" means is the first decision in that document.
+
 ### Show actually-linked library versions in About
 
 The dependency *list* is now accurate. What remains is *versions*: only Qt reports
