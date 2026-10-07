@@ -254,8 +254,8 @@ void C_SebGraphicsView::ShowToolTip(const QPointF & orc_ScenePos, const QString 
    {
       mc_ToolTip.HideImage();
    }
-   mc_ToolTip.show();
    mc_ToolTip.DoMove(this->mapToGlobal(this->mapFromScene(c_AdaptedScenePos)));
+   mc_ToolTip.show();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

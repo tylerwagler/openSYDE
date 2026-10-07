@@ -214,8 +214,8 @@ bool C_OgeTableWidgetComIf::event(QEvent * const opc_Event)
                      this->mpc_ToolTip->SetHeading(c_Heading);
                      this->mpc_ToolTip->SetContent(c_Content);
                      this->mpc_ToolTip->SetType(C_NagToolTip::eDEFAULT);
-                     this->mpc_ToolTip->show();
                      this->mpc_ToolTip->DoMove(pc_HelpEvent->globalPos());
+                     this->mpc_ToolTip->show();
                   }
                }
             }
@@ -243,8 +243,8 @@ bool C_OgeTableWidgetComIf::event(QEvent * const opc_Event)
                      this->mpc_ToolTip->SetHeading(c_Heading);
                      this->mpc_ToolTip->SetContent(c_Content);
                      this->mpc_ToolTip->SetType(C_NagToolTip::eDEFAULT);
-                     this->mpc_ToolTip->show();
                      this->mpc_ToolTip->DoMove(pc_HelpEvent->globalPos());
+                     this->mpc_ToolTip->show();
                   }
                }
             }
@@ -269,8 +269,8 @@ bool C_OgeTableWidgetComIf::event(QEvent * const opc_Event)
                      this->mpc_ToolTip->SetHeading(c_ItToolTip->second.c_Heading);
                      this->mpc_ToolTip->SetContent(c_ItToolTip->second.c_Content);
                      this->mpc_ToolTip->SetType(c_ItToolTip->second.e_Type);
-                     this->mpc_ToolTip->show();
                      this->mpc_ToolTip->DoMove(pc_HelpEvent->globalPos());
+                     this->mpc_ToolTip->show();
                   }
                }
             }

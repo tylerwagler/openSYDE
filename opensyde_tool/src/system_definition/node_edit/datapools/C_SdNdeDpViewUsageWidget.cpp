@@ -487,8 +487,8 @@ bool C_SdNdeDpViewUsageWidget::event(QEvent * const opc_Event)
          {
             this->setMouseTracking(true);
             this->m_UpdateTooltip(pc_HelpEvent->pos().x());
-            this->mpc_ToolTip->show();
             this->mpc_ToolTip->DoMove(this->mapToGlobal(pc_HelpEvent->pos()));
+            this->mpc_ToolTip->show();
          }
       }
 

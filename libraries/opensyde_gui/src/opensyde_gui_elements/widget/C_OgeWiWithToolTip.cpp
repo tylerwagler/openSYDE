@@ -87,8 +87,8 @@ bool C_OgeWiWithToolTip::event(QEvent * const opc_Event)
                this->m_GetToolTip()->SetHeading(this->mc_ToolTipHeading);
                this->m_GetToolTip()->SetContent(this->mc_ToolTipContent);
                this->m_GetToolTip()->SetType(this->me_ToolTipType);
-               this->m_GetToolTip()->show();
                this->m_GetToolTip()->DoMove(this->mapToGlobal(pc_HelpEvent->pos()));
+               this->m_GetToolTip()->show();
             }
          }
 

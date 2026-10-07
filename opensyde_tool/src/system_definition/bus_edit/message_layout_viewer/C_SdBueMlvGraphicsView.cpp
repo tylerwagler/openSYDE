@@ -80,8 +80,8 @@ void C_SdBueMlvGraphicsView::ShowToolTip(const QPointF & orc_ScenePos, const QSt
    {
       this->mc_ToolTip.SetType(C_NagToolTip::eDEFAULT);
    }
-   this->mc_ToolTip.show();
    this->mc_ToolTip.DoMove(this->mapToGlobal(this->mapFromScene(c_AdaptedScenePos)));
+   this->mc_ToolTip.show();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

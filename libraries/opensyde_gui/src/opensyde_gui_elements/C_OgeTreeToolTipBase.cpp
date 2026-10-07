@@ -110,9 +110,9 @@ bool C_OgeTreeToolTipBase::m_CallForEvent(QEvent * const opc_Event)
                      this->m_GetToolTip()->SetHeading(c_Heading);
                      this->m_GetToolTip()->SetContent(c_Content);
                      this->m_GetToolTip()->SetType(e_Type);
-                     this->m_GetToolTip()->show();
                      //Use global pos for move because that's the actual target position
                      this->m_GetToolTip()->DoMove(pc_HelpEvent->globalPos());
+                     this->m_GetToolTip()->show();
                   }
                }
             }
@@ -138,9 +138,9 @@ bool C_OgeTreeToolTipBase::m_CallForEvent(QEvent * const opc_Event)
                      this->m_GetToolTip()->SetHeading(c_Heading);
                      this->m_GetToolTip()->SetContent(c_Content);
                      this->m_GetToolTip()->SetType(e_Type);
-                     this->m_GetToolTip()->show();
                      //Use global pos for move because that's the actual target position
                      this->m_GetToolTip()->DoMove(pc_HelpEvent->globalPos());
+                     this->m_GetToolTip()->show();
                   }
                }
             }

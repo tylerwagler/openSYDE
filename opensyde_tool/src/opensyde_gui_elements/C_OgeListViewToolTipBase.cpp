@@ -108,8 +108,8 @@ bool C_OgeListViewToolTipBase::event(QEvent * const opc_Event)
                   this->m_GetToolTip()->SetHeading(c_Heading);
                   this->m_GetToolTip()->SetContent(c_Content);
                   this->m_GetToolTip()->SetType(e_Type);
-                  this->m_GetToolTip()->show();
                   this->m_GetToolTip()->DoMove(pc_HelpEvent->globalPos());
+                  this->m_GetToolTip()->show();
                }
             }
          }

@@ -134,9 +134,9 @@ bool C_TblViewToolTipBase::event(QEvent * const opc_Event)
                      this->mpc_ToolTip->SetHeading(c_Heading);
                      this->mpc_ToolTip->SetContent(c_Content);
                      this->mpc_ToolTip->SetType(C_NagToolTip::eDEFAULT);
-                     this->mpc_ToolTip->show();
                      //Use global pos for move because that's the actual target position
                      this->mpc_ToolTip->DoMove(pc_HelpEvent->globalPos());
+                     this->mpc_ToolTip->show();
                   }
                }
             }
@@ -163,9 +163,9 @@ bool C_TblViewToolTipBase::event(QEvent * const opc_Event)
                      this->mpc_ToolTip->SetHeading(c_Heading);
                      this->mpc_ToolTip->SetContent(c_Content);
                      this->mpc_ToolTip->SetType(C_NagToolTip::eDEFAULT);
-                     this->mpc_ToolTip->show();
                      //Use global pos for move because that's the actual target position
                      this->mpc_ToolTip->DoMove(pc_HelpEvent->globalPos());
+                     this->mpc_ToolTip->show();
                   }
                }
             }
@@ -191,9 +191,9 @@ bool C_TblViewToolTipBase::event(QEvent * const opc_Event)
                      this->mpc_ToolTip->SetHeading(c_Heading);
                      this->mpc_ToolTip->SetContent(c_Content);
                      this->mpc_ToolTip->SetType(e_Type);
-                     this->mpc_ToolTip->show();
                      //Use global pos for move because that's the actual target position
                      this->mpc_ToolTip->DoMove(pc_HelpEvent->globalPos());
+                     this->mpc_ToolTip->show();
                   }
                }
             }

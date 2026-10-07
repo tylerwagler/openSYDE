@@ -178,8 +178,8 @@ bool C_OgeToolTipBase::m_HandleToolTipEvent(QEvent * const opc_Event, QWidget & 
                this->m_GetToolTip()->SetHeading(this->mc_ToolTipHeading);
                this->m_GetToolTip()->SetContent(this->mc_ToolTipContent);
                this->m_GetToolTip()->SetType(this->me_ToolTipType);
-               this->m_GetToolTip()->show();
                this->m_GetToolTip()->DoMove(pc_HelpEvent->globalPos());
+               this->m_GetToolTip()->show();
             }
          }
          //Accept event because of Qt dynamic tooltip time based on the fact if there was a tooltip in this widget

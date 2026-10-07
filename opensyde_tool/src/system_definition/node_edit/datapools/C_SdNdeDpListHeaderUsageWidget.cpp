@@ -163,8 +163,8 @@ bool C_SdNdeDpListHeaderUsageWidget::event(QEvent * const opc_Event)
                this->mpc_ToolTip->SetContent(c_Text);
                this->mpc_ToolTip->SetType(C_NagToolTip::eDEFAULT);
             }
-            this->mpc_ToolTip->show();
             this->mpc_ToolTip->DoMove(this->mapToGlobal(pc_HelpEvent->pos()));
+            this->mpc_ToolTip->show();
          }
       }
 

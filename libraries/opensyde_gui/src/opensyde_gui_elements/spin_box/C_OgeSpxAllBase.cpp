@@ -148,8 +148,8 @@ bool C_OgeSpxAllBase::m_HandleEvent(QEvent * const opc_Event)
                   this->m_SetMouseTracking(true);
 
                   m_ApplyToolTipInfo();
-                  this->m_GetToolTip()->show();
                   this->m_GetToolTip()->DoMove(pc_HelpEvent->globalPos());
+                  this->m_GetToolTip()->show();
                }
             }
          }

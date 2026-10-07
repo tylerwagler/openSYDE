@@ -131,8 +131,8 @@ bool C_OgeTawToolTipBase::event(QEvent * const opc_Event)
 
                   this->mpc_ToolTip->SetHeading(c_It->second.c_Heading);
                   this->mpc_ToolTip->SetContent(c_It->second.c_Content);
-                  this->mpc_ToolTip->show();
                   this->mpc_ToolTip->DoMove(pc_HelpEvent->globalPos());
+                  this->mpc_ToolTip->show();
 
                   //Accept event because of Qt dynamic tooltip time based on the fact if there was a tooltip in this
                   // widget
