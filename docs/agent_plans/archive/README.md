@@ -18,6 +18,7 @@ is open, check the code, then record the answer in `../ROADMAP.md` rather than h
 | `gui_consolidation/` | Removing redundant GUI widget classes: ~148 stylesheet-only shells plus dashboard panels, popups, title bars. Six phases, ~30 tracking files | Complete. Phase 6 closed **won't-fix**: the three model-view-delegates inherit from different model bases and solve structurally different problems — they are not parallel implementations |
 | `qsettings_migration/` | Replace `C_SclIniFile`-based user settings with idiomatic `QSettings` across the three GUI apps | **Stale.** Document says "not started"; all three apps were already migrated when this was checked on 2026-09-17. Worth reading only for the rationale on *not* cherry-picking the `dev` branch version, which grew the file by mechanically preserving every `C_SclIniFile` idiom |
 | `stwtypes_removal/` | Retire the STW type aliases in favour of standard fixed-width types | **Stale.** Document says "scoping, not yet started". `stwtypes.hpp` (C++) has been removed; `stwtypes.h` (C) deliberately remains as the contract for generated controller code |
+| `j1939_multipacket/` | Paginated message-layout grid for J1939 transport-protocol messages whose payload exceeds 8 bytes: a per-page 64-bit grid with an absolute page offset, so no grid array grew | Complete (`942c632a9`, `72c91d655`, `43e1e7672`). Written as the `plans/` scratch file of the session that built it; moved here 2026-10-07 |
 
 ## Why two plans were wrong
 
