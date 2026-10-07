@@ -38,6 +38,7 @@
 #include "C_OscNode.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
 #include "C_OscProtocolDriverOsyTpCan.hpp"
+#include "C_OscProtocolDriverUds.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_OscSystemDefinition.hpp"
@@ -835,6 +836,88 @@ TEST(CanTransportExplicitAddressing, BackToNodeIdAddressing_UsesTheDerivedIdenti
    EXPECT_EQ(4711U, u32_Number);
    EXPECT_EQ(mhu32_REQUEST_ID, c_Bus.c_SentByClient.back().u32_ID);
    EXPECT_EQ(1U, c_Bus.c_SentByClient.back().u8_XTD);
+}
+
+/* -- The generic UDS client over the CAN transport ----------------------------------------------------------------- */
+
+TEST(UdsClientOverCan, SessionSecurityDidsDtcsAndADownloadAgainstAnElevenBitServer)
+{
+   //a plain UDS server at 0x7E0/0x7E8 that pads its flow control and wants blocks of two frames
+   C_VirtualEcu c_Ecu;
+   C_VirtualCanBus c_Bus;
+   C_OscProtocolDriverOsyTpCan c_Tp;
+   C_OscProtocolDriverUds c_Uds;
+   c_Ecu.q_AnswerEcuReset = true;
+   c_Bus.q_PadFlowControl = true;
+   c_Bus.u8_FlowControlBlockSize = 2U;
+   c_Bus.AttachExplicit(0x7E0U, 0x7E8U, false, c_Ecu);
+   ASSERT_FALSE(static_cast<bool>(c_Tp.SetDispatcher(&c_Bus)));
+   ASSERT_FALSE(static_cast<bool>(c_Tp.SetExplicitIdentifiers(0x7E0U, 0x7E8U, false)));
+   c_Tp.SetTxPadding(true);
+   ASSERT_FALSE(static_cast<bool>(c_Uds.SetTransportProtocol(&c_Tp)));
+
+   //session: the virtual ECU reports P2 = 50 ms, P2* = 5000 ms
+   EXPECT_EQ(Errc::success, c_Uds.DiagnosticSessionControl(C_OscProtocolDriverUds::hu8_SESSION_EXTENDED_DIAGNOSTIC));
+   EXPECT_EQ(50U, c_Uds.GetP2Ms());
+   EXPECT_EQ(5000U, c_Uds.GetP2StarMs());
+   ASSERT_EQ(1U, c_Ecu.c_Sessions.size());
+   EXPECT_EQ(0x03U, c_Ecu.c_Sessions[0]);
+
+   //a standard DID
+   std::vector<uint8_t> c_Data;
+   EXPECT_EQ(Errc::success, c_Uds.ReadDataByIdentifier(0xF192U, c_Data));
+   ASSERT_EQ(4U, c_Data.size());
+   EXPECT_EQ(4711U, C_OscEndian::h_GetU32Big(&c_Data[0]));
+
+   //security access with the built-in constant key; the virtual ECU takes any key
+   EXPECT_EQ(Errc::success, c_Uds.SecurityAccess(0x01U));
+   ASSERT_EQ(1U, c_Ecu.c_SecurityLevelsUnlocked.size());
+   EXPECT_EQ(0x01U, c_Ecu.c_SecurityLevelsUnlocked[0]);
+
+   //DTCs: read, clear, count
+   uint8_t u8_Availability = 0U;
+   std::vector<C_OscProtocolDriverUds::C_DtcRecord> c_Dtcs;
+   EXPECT_EQ(Errc::success, c_Uds.ReadDtcByStatusMask(0xFFU, u8_Availability, c_Dtcs));
+   ASSERT_EQ(2U, c_Dtcs.size());
+   EXPECT_EQ(0x123456U, c_Dtcs[0].u32_Dtc);
+   EXPECT_EQ(0x09U, c_Dtcs[0].u8_Status);
+   EXPECT_EQ(Errc::success, c_Uds.ClearDiagnosticInformation(C_OscProtocolDriverUds::hu32_DTC_GROUP_ALL));
+   uint16_t u16_Count = 99U;
+   EXPECT_EQ(Errc::success, c_Uds.ReadNumberOfDtcByStatusMask(0xFFU, u8_Availability, u16_Count));
+   EXPECT_EQ(0U, u16_Count);
+
+   //a keep-alive nobody answers
+   EXPECT_EQ(Errc::success, c_Uds.TesterPresent(true));
+   EXPECT_EQ(1U, c_Ecu.RequestsFor(0x3EU).size());
+
+   //a download: the 200 byte block is segmented over the explicit pair in blocks of two frames
+   std::vector<uint8_t> c_Image(200U);
+   for (uint32_t u32_Index = 0U; u32_Index < c_Image.size(); ++u32_Index)
+   {
+      c_Image[u32_Index] = static_cast<uint8_t>(u32_Index * 3U);
+   }
+   uint32_t u32_MaxBlock = 0U;
+   EXPECT_EQ(Errc::success, c_Uds.RequestDownload(0x00U, 0x00000100U, 200U, u32_MaxBlock));
+   EXPECT_EQ(mhu32_MAX_BLOCK_LENGTH, u32_MaxBlock);
+   EXPECT_EQ(Errc::success, c_Uds.TransferData(0x01U, c_Image));
+   EXPECT_EQ(Errc::success, c_Uds.RequestTransferExit());
+   ASSERT_EQ(1U, c_Ecu.c_Flash.count(0x00000100U));
+   EXPECT_EQ(c_Image, c_Ecu.c_Flash[0x00000100U]);
+   EXPECT_EQ(0U, c_Bus.u32_ConsecutiveFramesBeforeFlowControlRead);
+   EXPECT_GE(c_Bus.CountDeviceFramesWithPci(0x30U), 14U); //28 consecutive frames in blocks of two
+
+   //and a reset the standard way, with an answer
+   EXPECT_EQ(Errc::success, c_Uds.EcuReset(C_OscProtocolDriverUds::hu8_RESET_HARD));
+   ASSERT_EQ(1U, c_Ecu.c_ResetTypes.size());
+   EXPECT_EQ(0x01U, c_Ecu.c_ResetTypes[0]);
+
+   //everything went out on the configured pair, 11 bit, padded
+   for (const T_STWCAN_Msg_TX & rc_Frame : c_Bus.c_SentByClient)
+   {
+      EXPECT_EQ(0x7E0U, rc_Frame.u32_ID);
+      EXPECT_EQ(0U, rc_Frame.u8_XTD);
+      EXPECT_EQ(8U, rc_Frame.u8_DLC);
+   }
 }
 
 TEST_F(CanTransportVirtualEcu, FramesFromAnotherNode_DoNotReachThisDriver)

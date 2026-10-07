@@ -201,7 +201,7 @@ Per-tool build directories under `build/`; deploy target defaults to
 Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `-DOPENSYDE_CORE_BUILD_TESTS=ON`, run with `ctest`.
 
-53 suites, 499 tests: `test_application_info_block`, `test_build_info`, `test_can_protocol`,
+54 suites, 534 tests: `test_application_info_block`, `test_build_info`, `test_can_protocol`,
 `test_can_transport_virtual_ecu`, `test_canopen_eds`, `test_checksummed_xml`, `test_checksums`,
 `test_cmon_protocol_uds`, `test_code_export`,
 `test_com_message_logger`, `test_conf_file_handler`, `test_crypto_agent_access`, `test_cstdint`,
@@ -211,7 +211,7 @@ Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `test_hex_string_parsing`, `test_logging`, `test_md5`, `test_node_datapool_content`,
 `test_osc_error_category`, `test_osc_utils_niceify`, `test_project_metadata`,
 `test_protocol_driver_base`, `test_protocol_driver_osy`, `test_protocol_driver_osy_tp`,
-`test_protocol_serial_number`, `test_routing_calculation`,
+`test_protocol_driver_uds`, `test_protocol_serial_number`, `test_routing_calculation`,
 `test_scl_ini_file`, `test_scl_string`, `test_security_aes_file`,
 `test_security_signatures`, `test_string_prefix_parsing`, `test_stwerrors`,
 `test_su_sequences_virtual_ecu`, `test_sup_package`, `test_tgl_file`, `test_tgl_tasks`, `test_tgl_time`,

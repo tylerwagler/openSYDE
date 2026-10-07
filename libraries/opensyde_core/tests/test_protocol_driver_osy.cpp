@@ -30,6 +30,7 @@
 #include "C_OscUdsNrc.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
+#include "osy_scripted_transport.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -45,79 +46,7 @@ T_Bytes mh_Bytes(const std::initializer_list<uint8_t> oc_Values)
    return T_Bytes(oc_Values);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   A transport that answers from a script
-
-   Cycle() is where a real transport talks to a bus. This one moves every queued request into the
-   record, and for each request hands out the next scripted reply (if any) as if the server had
-   answered at once. Injected services are unsolicited: they land in the Rx queue on the next cycle
-   whether or not anything was sent.
-*/
-//----------------------------------------------------------------------------------------------------------------------
-class C_ScriptedTransport :
-   public C_OscProtocolDriverOsyTpBase
-{
-public:
-   C_ScriptedTransport(void) :
-      C_OscProtocolDriverOsyTpBase(50U),
-      u32_Cycles(0U)
-   {
-   }
-
-   std::error_code Cycle(void) override
-   {
-      ++u32_Cycles;
-      for (const T_Bytes & rc_Unsolicited : c_Injected)
-      {
-         C_OscProtocolDriverOsyService c_Service;
-         c_Service.c_Data = rc_Unsolicited;
-         (void)m_AddToRxQueue(c_Service);
-      }
-      c_Injected.clear();
-
-      C_OscProtocolDriverOsyService c_Request;
-      while (!m_GetFromTxQueue(c_Request))
-      {
-         c_Requests.push_back(c_Request.c_Data);
-         if (c_Replies.empty() == false)
-         {
-            for (const T_Bytes & rc_Reply : c_Replies.front())
-            {
-               C_OscProtocolDriverOsyService c_Response;
-               c_Response.c_Data = rc_Reply;
-               (void)m_AddToRxQueue(c_Response);
-            }
-            c_Replies.pop_front();
-         }
-      }
-      return Errc::success;
-   }
-
-   ///the next request gets exactly these services back, in this order
-   void Reply(const std::initializer_list<T_Bytes> oc_Services)
-   {
-      c_Replies.emplace_back(oc_Services);
-   }
-
-   ///arrives on the next cycle, unasked
-   void Inject(const T_Bytes & orc_Service)
-   {
-      c_Injected.push_back(orc_Service);
-   }
-
-   const T_Bytes & LastRequest(void) const
-   {
-      return c_Requests.back();
-   }
-
-   std::vector<T_Bytes> c_Requests;
-   uint32_t u32_Cycles;
-
-private:
-   std::deque<std::vector<T_Bytes> > c_Replies;
-   std::vector<T_Bytes> c_Injected;
-};
-
+using osy_scripted_transport::C_ScriptedTransport;
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Driver that records the asynchronous datapool events it is handed
 */

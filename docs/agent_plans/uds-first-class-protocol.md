@@ -168,29 +168,33 @@ pair lives in a GUI tool where core cannot reach it. What landed:
 Not done, by decision: the FF length escape above 4095 (the service maximum is
 4095), CAN FD, a functional request ID, and DoIP routing activation.
 
-### B2. A generic UDS service layer
+### B2. A generic UDS service layer — done 2026-10-07
 
-Do not grow `C_OscProtocolDriverOsy` further; it is 6,500 lines and every method
-assumes an openSYDE server. Do not try to extract a shared base from it either;
-the request/response/poll core (`m_SendRequest`, `m_ReadResponse`,
-`m_PollForSpecificServiceResponse`) is about 500 lines and copying it into a new
-class is cheaper and safer than refactoring a class that the whole update path
-sits on.
+`C_OscProtocolDriverOsy` was not grown or refactored; it is 6,500 lines of
+openSYDE server assumptions and the whole update path sits on it. The new
+`protocol_drivers/C_OscProtocolDriverUds` (about 900 lines) runs on the same
+`C_OscProtocolDriverOsyTpBase` transports and shares no code with it.
 
-New `protocol_drivers/C_OscProtocolDriverUds` on top of `C_OscProtocolDriverOsyTpBase`:
-
-- Services: 0x10, 0x11, 0x14, 0x19 (sub-functions 0x01, 0x02, 0x0A), 0x22, 0x27,
-  0x28, 0x2E, 0x31, 0x34, 0x36, 0x37, 0x3E, 0x85. Each returns `std::error_code`
-  with the NRC through the same `opu8_NrCode` convention the openSYDE driver uses.
-- P2 / P2\* from the session, NRC 0x78 extends to P2\*, 0x21 retries.
-- Seed-key: an interface with one virtual method, `CalculateKey(seed, level) ->
-  key`. Ship one built-in implementation (the constant one the openSYDE driver
-  uses) and leave the algorithm per device as a decision below. The security
-  sublayer (0x84) and the crypto agent do not apply here.
-- Extend `osy_virtual_ecu.hpp` to answer standard DIDs, hold a DTC list and a
-  seed-key, and run the new driver's suite against it over the CAN double.
-
-Rough size: driver 1,500–2,000 lines, transport changes 400–600, tests 800–1,000.
+- Services: 0x10, 0x11, 0x14, 0x19 (reportNumberOfDTCByStatusMask,
+  reportDTCByStatusMask, reportSupportedDTC), 0x22, 0x27, 0x28, 0x2E, 0x31, 0x34,
+  0x36, 0x37, 0x3E, 0x85, plus `SendRequest` for anything else. Results are
+  `std::error_code` with the NRC through the same `opu8_NrCode` out-parameter the
+  openSYDE driver uses, so a sequence can treat both drivers alike.
+- Timing: P2 and P2\* start at the ISO 14229-2 defaults and are taken over from
+  every DiagnosticSessionControl response. ResponsePending (0x78) extends the wait
+  to P2\*; busyRepeatRequest (0x21) resends up to three times. The
+  suppressPosRspMsgIndicationBit is honoured on TesterPresent and ECUReset.
+- Seed-key: `C_OscUdsSeedKey` is an interface with one method; the built-in
+  `C_OscUdsSeedKeyConstant` answers every seed with openSYDE's non-secure constant.
+  An all-zero seed is treated as already unlocked. The 0x84 security sublayer and
+  the crypto agent do not apply.
+- Tests: `test_protocol_driver_uds` (34 cases) over the scripted transport, which
+  moved to `tests/osy_scripted_transport.hpp` and learned to answer late so the
+  P2 / P2\* rules are observable. The virtual ECU answers 0x14, 0x19, 0x28 and
+  0x85 and can answer ECUReset the standard way; one case in
+  `test_can_transport_virtual_ecu` runs session, DID, security access, DTCs, a
+  200-byte download in blocks of two frames and a reset against an 11-bit,
+  padded server through the real CAN transport.
 
 ## Layer A: data model and bus editor
 

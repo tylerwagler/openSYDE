@@ -94,6 +94,12 @@ public:
    std::vector<T_Bytes> c_AuthenticationKeysWritten;                   ///< modulus + exponent + serial, as sent to 0xA823
    std::vector<T_Bytes> c_NodeIdsSetForChannel;                        ///< (type, index, bus id, node id) from routine 0x0214
    std::vector<T_Bytes> c_BitratesSetForChannel;                       ///< (type, index, bitrate big endian) from routine 0x0207
+   //plain UDS beyond what openSYDE uses
+   bool q_AnswerEcuReset = false;                                         ///< true: answer ECUReset the standard way
+   std::vector<std::pair<uint32_t, uint8_t> > c_Dtcs{{0x123456U, 0x09U}, {0xABCDEFU, 0x2FU}}; ///< DTCs with status
+   std::vector<uint32_t> c_ClearedDtcGroups;                              ///< groupOfDTC of each ClearDiagnosticInformation
+   std::vector<std::pair<uint8_t, uint8_t> > c_CommunicationControls;     ///< (control type, communication type)
+   std::vector<uint8_t> c_DtcSettings;                                    ///< ControlDTCSetting types
 
    C_VirtualEcu(void) :
       c_DeviceName("VIRTUAL-ECU"),
@@ -129,11 +135,30 @@ public:
       case 0x10U: //DiagnosticSessionControl
          c_Sessions.push_back(orc_Request[1]);
          return T_Bytes{0x50U, orc_Request[1], 0x00U, 0x32U, 0x01U, 0xF4U};
-      case 0x11U: //EcuReset: no answer, the device is gone
+      case 0x11U: //EcuReset: openSYDE devices do not answer, a plain UDS server does unless suppressed
          c_ResetTypes.push_back(orc_Request[1]);
          mq_DownloadOpen = false;
          mq_FileOpen = false;
+         if (q_AnswerEcuReset && ((orc_Request[1] & 0x80U) == 0U))
+         {
+            return T_Bytes{0x51U, orc_Request[1]};
+         }
          return std::nullopt;
+      case 0x14U: //ClearDiagnosticInformation: 24 bit group; everything goes regardless
+         c_ClearedDtcGroups.push_back((static_cast<uint32_t>(orc_Request[1]) << 16U) |
+                                      (static_cast<uint32_t>(orc_Request[2]) << 8U) | orc_Request[3]);
+         c_Dtcs.clear();
+         return T_Bytes{0x54U};
+      case 0x19U: //ReadDTCInformation
+         return m_ReadDtcInformation(orc_Request);
+      case 0x28U: //CommunicationControl
+         c_CommunicationControls.emplace_back(static_cast<uint8_t>(orc_Request[1] & 0x7FU), orc_Request[2]);
+         return ((orc_Request[1] & 0x80U) != 0U) ? std::nullopt :
+                std::optional<T_Bytes>(T_Bytes{0x68U, orc_Request[1]});
+      case 0x85U: //ControlDTCSetting
+         c_DtcSettings.push_back(static_cast<uint8_t>(orc_Request[1] & 0x7FU));
+         return ((orc_Request[1] & 0x80U) != 0U) ? std::nullopt :
+                std::optional<T_Bytes>(T_Bytes{0xC5U, orc_Request[1]});
       case 0x3EU: //TesterPresent
          return ((orc_Request[1] & 0x80U) != 0U) ? std::nullopt : std::optional<T_Bytes>(T_Bytes{0x7EU, 0x00U});
       case 0x22U: //ReadDataByIdentifier
@@ -190,6 +215,46 @@ public:
          return m_WriteMemory(orc_Request);
       default:
          return mh_Negative(u8_Sid, stw::opensyde_core::C_OscUdsNrc::hu8_SERVICE_NOT_SUPPORTED);
+      }
+   }
+
+   ///ReadDTCInformation: count, by status mask, or every supported DTC
+   std::optional<T_Bytes> m_ReadDtcInformation(const T_Bytes & orc_Request)
+   {
+      const uint8_t u8_SubFunction = orc_Request[1] & 0x7FU;
+      T_Bytes c_Response{0x59U, u8_SubFunction, 0xFFU}; //every status bit supported
+      switch (u8_SubFunction)
+      {
+      case 0x01U: //reportNumberOfDTCByStatusMask: format identifier (ISO 15031-6), then the count
+      {
+         uint16_t u16_Count = 0U;
+         for (const std::pair<uint32_t, uint8_t> & rc_Dtc : c_Dtcs)
+         {
+            if ((rc_Dtc.second & orc_Request[2]) != 0U)
+            {
+               ++u16_Count;
+            }
+         }
+         c_Response.push_back(0x01U);
+         c_Response.push_back(static_cast<uint8_t>(u16_Count >> 8U));
+         c_Response.push_back(static_cast<uint8_t>(u16_Count));
+         return c_Response;
+      }
+      case 0x02U: //reportDTCByStatusMask
+      case 0x0AU: //reportSupportedDTC
+         for (const std::pair<uint32_t, uint8_t> & rc_Dtc : c_Dtcs)
+         {
+            if ((u8_SubFunction == 0x0AU) || ((rc_Dtc.second & orc_Request[2]) != 0U))
+            {
+               c_Response.push_back(static_cast<uint8_t>(rc_Dtc.first >> 16U));
+               c_Response.push_back(static_cast<uint8_t>(rc_Dtc.first >> 8U));
+               c_Response.push_back(static_cast<uint8_t>(rc_Dtc.first));
+               c_Response.push_back(rc_Dtc.second);
+            }
+         }
+         return c_Response;
+      default:
+         return mh_Negative(0x19U, stw::opensyde_core::C_OscUdsNrc::hu8_SUB_FUNCTION_NOT_SUPPORTED);
       }
    }
 
