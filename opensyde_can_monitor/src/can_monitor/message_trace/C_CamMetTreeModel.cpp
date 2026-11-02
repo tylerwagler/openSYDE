@@ -2962,12 +2962,10 @@ void C_CamMetTreeModel::mh_ApplyPreviousGreyOutInformation(C_CamMetTreeLoggerDat
       orc_Message.c_GreyOutInformation.u32_DataChangedTimeStamp = orc_StoredGrayOutInformation.u32_DataChangedTimeStamp;
    }
 
-   // Reassign the data byte timestamps
-   for (uint8_t u8_DbCounter = 0; u8_DbCounter < 8U; ++u8_DbCounter)
-   {
-      orc_Message.c_GreyOutInformation.c_DataBytesChangedTimeStamps[u8_DbCounter] =
-         orc_StoredGrayOutInformation.c_DataBytesChangedTimeStamps[u8_DbCounter];
-   }
+   // Reassign the data byte timestamps (one entry per CAN data byte)
+   orc_Message.c_GreyOutInformation.c_DataBytesChangedTimeStamps =
+      orc_StoredGrayOutInformation.c_DataBytesChangedTimeStamps;
+   orc_Message.c_GreyOutInformation.c_DataBytesChangedTimeStamps.resize(8U, 0U);
 
    // Restore previous values after the assignment to avoid further temporary copies of the instance
    orc_Message.c_GreyOutInformation.s32_GrayOutValueMsg = orc_StoredGrayOutInformation.s32_GrayOutValueMsg;
