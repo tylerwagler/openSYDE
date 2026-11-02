@@ -2882,6 +2882,7 @@ C_CamMetTreeLoggerDataGreyOutInformation C_CamMetTreeModel::mh_ExtractPreviousGr
       orc_MessagePrev.c_GreyOutInformation.c_MapMultiplexerValueToGrayOutValue;
    c_Retval.c_GrayOutValueDataBytes =
       orc_MessagePrev.c_GreyOutInformation.c_GrayOutValueDataBytes;
+   c_Retval.c_GrayOutValueDataBytes.resize(8U, 0);
 
    c_Retval.c_MapMultiplexerValueToChangedTimeStamps =
       orc_MessagePrev.c_GreyOutInformation.c_MapMultiplexerValueToChangedTimeStamps;
@@ -2974,6 +2975,7 @@ void C_CamMetTreeModel::mh_ApplyPreviousGreyOutInformation(C_CamMetTreeLoggerDat
    orc_Message.c_GreyOutInformation.c_MapMultiplexerValueToChangedTimeStamps =
       orc_StoredGrayOutInformation.c_MapMultiplexerValueToChangedTimeStamps;
    orc_Message.c_GreyOutInformation.c_GrayOutValueDataBytes = orc_StoredGrayOutInformation.c_GrayOutValueDataBytes;
+   orc_Message.c_GreyOutInformation.c_GrayOutValueDataBytes.resize(8U, 0);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
