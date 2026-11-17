@@ -47,8 +47,10 @@ jobs:
         include:
           - os: ubuntu-26.04
             slug: linux-x86_64
-          - os: macos-14
+          - os: macos-26
             slug: macos-arm64
+          - os: macos-26-intel
+            slug: macos-x86_64
           - os: windows-2022
             slug: windows-x86_64
 

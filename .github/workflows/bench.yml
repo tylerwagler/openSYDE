@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-26.04, macos-14, windows-2022]
+        os: [ubuntu-26.04, macos-26, macos-26-intel, windows-2022]
 
     steps:
       - name: Checkout repository

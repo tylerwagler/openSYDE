@@ -4,7 +4,7 @@
 # three platforms the project ships: Linux, macOS and Windows. The toolchain is
 # clang everywhere (build.sh selects the per-OS toolchain file):
 #   - Linux   (ubuntu-26.04):  clang + libstdc++  (matches the system Qt)
-#   - macOS   (macos-14):      Apple clang + libc++
+#   - macOS   (macos-26 / macos-26-intel): Apple clang + libc++
 #   - Windows (windows-2022):  LLVM-MinGW clang + libc++ (Qt llvm-mingw_64 kit)
 #
 # Nothing is vendored: OpenSSL and zlib are resolved via find_package (zlib is
@@ -37,13 +37,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-26.04, macos-14]
+        os: [ubuntu-26.04, macos-26, macos-26-intel]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
           submodules: recursive
+
+      # The two mac images cannot carry the same Xcode: Intel is frozen at the
+      # last Intel-capable one while arm64 tracks the current generation. Log
+      # which clang each job actually built with, so an Intel-only diagnostic
+      # divergence is visible in the run instead of inferred from a failure.
+      - name: Toolchain version (macOS)
+        if: runner.os == 'macOS'
+        run: clang++ --version && uname -m
 
       # flex/bison generate the Vector_DBC scanner; FlexLexer.h ships in libfl-dev.
       # clang is the compiler the Linux toolchain selects.
@@ -96,7 +104,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-26.04, macos-14]
+        os: [ubuntu-26.04, macos-26, macos-26-intel]
 
     steps:
       - name: Checkout repository

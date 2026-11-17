@@ -26,6 +26,7 @@ under an hour later (Windows is the long pole). Nothing is signed.
 |---|---|---|
 | `openSYDE-<tag>-linux-x86_64.tar.gz` | the nine binaries, one folder each | Qt 6 and OpenSSL 3 from the distribution (see `RUNTIME.md` inside) |
 | `openSYDE-<tag>-macos-arm64.tar.gz` | the nine binaries | Qt 6.8 and OpenSSL 3 from Homebrew |
+| `openSYDE-<tag>-macos-x86_64.tar.gz` | the nine binaries, Intel (macOS 26 is the last Intel-capable macOS; built on `macos-26-intel`) | Qt 6.8 and OpenSSL 3 from Homebrew (`/usr/local`) |
 | `openSYDE-<tag>-windows-x86_64.zip` | the nine binaries with every DLL they import (Qt, OpenSSL, the llvm-mingw runtime) and the Qt plugins next to them; resolved by an `llvm-objdump` import walk, not `windeployqt`, which misclassifies the llvm-mingw Qt plugins and refuses to deploy | none |
 
 Each archive comes with a `.sha256`.
