@@ -167,6 +167,45 @@ jobs:
           cmake -S opensyde_tsp_convert/pjt -B build/standalone-check -G Ninja
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
 
+  # --- PCAN backend on macOS (compile coverage) -------------------------------------------------------------------
+  # pcan_backend.cpp is compiled by nothing else: CAN_BACKEND_PCAN defaults OFF on
+  # every platform, so the whole file — including the macOS-only parts (PCBUSB
+  # include branch, socketpair shutdown sideband, USB 1..8 handle range) — goes
+  # untested by the tool builds. This job configures can-libraries standalone with
+  # the backend ON against UV Software's PCBUSB, the freeware PCANBasic-compatible
+  # macOS SDK (PEAK ships no macOS driver). The tarball needs no bison/flex, so the
+  # Vector parsers are switched off; the release-asset URL is public and fetchable
+  # unattended.
+  pcan-backend-macos:
+    name: PCAN Backend (macOS)
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Install ninja
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: brew install -q ninja
+
+      - name: Download PCBUSB (UV Software libPCBUSB v0.13)
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/pcbusb.tar.gz" \
+            https://github.com/mac-can/PCBUSB-Library/releases/download/v0.13/macOS_Library_for_PCANUSB_v0.13.tar.gz
+          tar -xzf "$RUNNER_TEMP/pcbusb.tar.gz" -C "$RUNNER_TEMP"
+
+      - name: Configure + build libcan with CAN_BACKEND_PCAN=ON
+        run: |
+          cmake -S libraries/can-libraries -B build/pcan -G Ninja \
+            -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+            -DCAN_BACKEND_PCAN=ON \
+            -DPCANBASIC_ROOT="$RUNNER_TEMP/PCBUSB" \
+            -DCANLIB_USE_VECTOR_DBC=OFF -DCANLIB_USE_VECTOR_BLF=OFF -DCANLIB_USE_VECTOR_ASC=OFF \
+            -DBUILD_TESTING=OFF -DCANLIB_BUILD_EXAMPLES=OFF -DCANLIB_INSTALL=OFF
+          cmake --build build/pcan --target libcan
+
   # --- all eight tools + core tests (Windows, LLVM-MinGW clang) --------------------------------------------------------
   windows:
     name: Tools + Core Tests (windows-2022)
