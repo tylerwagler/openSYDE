@@ -218,26 +218,34 @@ The R37→R38 delta is not `git cherry-pick`-able directly because of the fork's
 divergence (consolidated single core, `std::string`, `std::error_code`, i18n
 stripped); each subsystem is applied by diff + manual adaptation.
 
-### 9. Ship CAN on macOS: PCAN enablement, then CAN FD
+### 9. Ship CAN on macOS: CAN FD remains
 
-The `mac-pcan-pcbusb` spike branch (superproject + can-libraries) makes
-`PcanBackend` build and run on macOS against UV Software's PCBUSB — verified
-on live hardware (enumerate, open, fd-based RX, TX with remote ACK, error
-accounting, teardown). Two things remain:
+The `mac-pcan-pcbusb` branch (superproject + can-libraries) makes `PcanBackend`
+build and run on macOS against UV Software's PCBUSB — verified on live hardware
+(enumerate, open, fd-based RX, TX with remote ACK, error accounting, teardown).
+**Enablement decided 2026-11-16** (a mac build without the backend "is not
+really useable"): can-libraries now auto-enables `CAN_BACKEND_PCAN` on macOS
+when PCBUSB is installed (soft probe — absent SDK keeps configure green with
+the backend off), `gui-tools` and `release` install PCBUSB on their mac steps
+so smoke and shipped builds configure identically, and the macOS `RUNTIME.md`
+tells users to install it. Windows/Linux defaults stay OFF (SocketCAN policy on
+Linux; no silent SDK linking on Windows).
 
-- **Ship-time enablement.** `CAN_BACKEND_PCAN` defaults OFF everywhere, so the
-  current macOS release binaries contain no PCAN support; `RUNTIME.md` stays
-  silent until that is decided (see Decisions). The mechanism is one auto-detect
-  probe in `can-libraries/CMakeLists.txt` (its own comment at the backend
-  options already claims "attempt to auto-enable PCAN if its SDK is found" — the
-  implementation does not do this yet) or an explicit flag in `build.sh`.
-  Whichever way, the macOS `RUNTIME.md` heredoc in `release.yml` then gains the
-  PCBUSB install line.
-- **CAN FD through the PCBUSB path.** PCBUSB implements
-  `CAN_InitializeFD`/`CAN_ReadFD`/`CAN_WriteFD` and the user's PCAN-USB is
-  FD-capable hardware; the backend still rejects `data_bitrate > 0`. Needs the
-  FD wire types, the bitrate-string contract from `ChannelConfig::extra`, and
-  a device on an FD bus — the bench node here is 250 kbps classic J1939.
+Remaining: **CAN FD through the PCBUSB path.** PCBUSB implements
+`CAN_InitializeFD`/`CAN_ReadFD`/`CAN_WriteFD` and the bench PCAN-USB is
+FD-capable hardware; the backend still rejects `data_bitrate > 0`. Needs the FD
+wire types, the bitrate-string contract from `ChannelConfig::extra`, and a node
+on an FD bus — the bench node here is 250 kbps classic J1939.
+
+Maintenance posture: PCBUSB is **closed-source freeware** (the driver core
+ships only as binary; the GitHub repo carries header + wrapper + examples),
+so it cannot be forked into our own maintenance. Every consumer site is
+version-pinned (v0.13, 2024-07) in the CI workflows and reached only through
+`FindPCANBasic.cmake` behind `ICanBackend`, so a replacement — another vendor
+library, a userspace PCAN-USB driver of our own against IOKit, or a source
+license from UV Software — is contained to `pcan_backend.cpp` + the find
+module. The live risk to watch is Apple breaking user-space USB APIs; last
+update cadence was roughly annual.
 
 ---
 
@@ -303,7 +311,6 @@ These are not blocked on effort. Each needs a product call.
 | **`C_SyvDaDashboardsWidget::m_InitOsyDriver`** | Discards `StartLogging`. On failure, CAN signal interpretation silently does not start on the dashboard. It sits inside a `switch (s32_Retval)`, so propagating is a restructure |
 | **CAN interfaces hash an IP the filer never persists** | `C_IpAddress()` seeds a default, the node filer writes it only for Ethernet, the loader zeros it for the rest, `CalcHash` covers it on every type. Tidy fix is for the loader to keep the constructor default; that changes what a loaded Ethernet interface without an `ip-address` node looks like, so it needs a look at the GUI first (FINDINGS, filer wave 2) |
 | **`CalcCRC32C` has no caller** | Phase 7.2 added a hardware CRC-32C (`C_SclChecksums::CalcCRC32C`, SSE4.2 at runtime, 4 GiB/s) before noticing that every persisted checksum uses the IEEE polynomial, which the instruction cannot compute. It stays tested and benchmarked but nothing calls it. Keep it for a future format, or delete it: a product call. The IEEE `CalcCRC32` got slicing-by-8 instead (4.2x, bit-identical; FINDINGS) |
-| **Enable the PCAN backend in shipped builds?** | The macOS PCBUSB path works (branch `mac-pcan-pcbusb`) but ships OFF: `CAN_BACKEND_PCAN` is default-OFF on every platform, so no released binary can open a PCAN channel. Auto-enabling on SDK-found changes behavior on Linux dev boxes too (libpcanbasic), against the README's "use SocketCAN there" policy; a `build.sh` per-platform flag avoids that but makes macOS builds differ by flag. Also a ship-notes question: PCBUSB is freeware-with-EULA, user-installed, never vendored — consistent with how the Windows PEAK SDK is treated. Backlog item 9 |
 | **Report the fork's findings upstream?** | The ECDH double free is the fork's own (upstream frees once), but `h_ListIsComTx`'s second-to-last-letter check and the `[i + 1]` availability parsing are correct upstream only because their string class is 1-based — anyone else porting to `std::string` will hit the same six shapes. Whether to write that up for the openSYDE project is a call for a person |
 
 ---

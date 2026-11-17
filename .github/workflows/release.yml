@@ -87,6 +87,22 @@ jobs:
           target: desktop
           arch: clang_64
 
+      # PEAK ships no macOS driver; UV Software's freeware PCBUSB is the
+      # PCAN path there, and can-libraries auto-enables CAN_BACKEND_PCAN
+      # when it is installed (same files as its install.sh, without the
+      # script). Without this step the mac release binaries cannot open a
+      # PCAN channel; with it they need PCBUSB at runtime — see RUNTIME.md.
+      - name: Install PCBUSB (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/pcbusb.tar.gz" \
+            https://github.com/mac-can/PCBUSB-Library/releases/download/v0.13/macOS_Library_for_PCANUSB_v0.13.tar.gz
+          tar -xzf "$RUNNER_TEMP/pcbusb.tar.gz" -C "$RUNNER_TEMP"
+          sudo mkdir -p /usr/local/include /usr/local/lib
+          sudo cp "$RUNNER_TEMP/PCBUSB/PCBUSB.h" /usr/local/include/
+          sudo cp "$RUNNER_TEMP/PCBUSB/libPCBUSB.0.13.dylib" /usr/local/lib/
+          sudo ln -sf /usr/local/lib/libPCBUSB.0.13.dylib /usr/local/lib/libPCBUSB.dylib
+
       - name: Install Qt + LLVM-MinGW + Ninja + OpenSSL (Windows)
         if: runner.os == 'Windows'
         uses: jurplel/install-qt-action@v4
@@ -145,6 +161,9 @@ jobs:
           # Runtime requirements (macOS)
           The GUI tools link Qt 6.8 and OpenSSL 3; install them with Homebrew: `brew install qtbase qtsvg openssl@3`.
           Bundled .app images with the Qt frameworks inside are on the roadmap.
+          To use a PEAK PCAN-USB adapter: macOS has no PEAK driver; these binaries talk PCAN through
+          UV Software's freeware PCBUSB library. Install it from https://www.mac-can.com (its install.sh
+          copies libPCBUSB into /usr/local). Without it, no PCAN channels are listed — everything else works.
           TXT
               ;;
             windows-*)

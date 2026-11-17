@@ -252,7 +252,7 @@ three target platforms build on every push:**
 | **GUI Tools** | `ubuntu-26.04`, `macos-26`, `macos-26-intel` | Smoke-builds all nine tools (`./build.sh -b Debug all`), then checks one tool still configures standalone | 12–20 min |
 | **Tools + Core Tests** | `windows-2022` | All nine tools under LLVM-MinGW clang, plus the core unit tests | ~35 min |
 
-| **PCAN Backend (macOS)** | `macos-14` | Builds `libcan` with `CAN_BACKEND_PCAN=ON` against UV Software's PCBUSB — the only job that compiles `pcan_backend.cpp` at all | ~1 min |
+| **PCAN Backend (macOS)** | `macos-14` | Builds `libcan` with `CAN_BACKEND_PCAN=ON` against UV Software's PCBUSB — fast dedicated gate for `pcan_backend.cpp` (GUI Tools' macOS job enables the same backend via the SDK install) | ~1 min |
 | **Plan status index** | `ubuntu-26.04` | `docs/agent_plans/check_plans.py`: every plan has a status line, done plans are archived and indexed, the roadmap's active-plans table matches | seconds |
 | **Static Analysis** | `ubuntu-26.04` | clang analyser over `opensyde_core`, findings in the job summary | ~5 min |
 

@@ -148,6 +148,19 @@ jobs:
           target: desktop
           arch: clang_64
 
+      # Same PCBUSB install as release.yml so the smoke build configures the
+      # PCAN backend ON, exactly like the shipped mac binaries.
+      - name: Install PCBUSB (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/pcbusb.tar.gz" \
+            https://github.com/mac-can/PCBUSB-Library/releases/download/v0.13/macOS_Library_for_PCANUSB_v0.13.tar.gz
+          tar -xzf "$RUNNER_TEMP/pcbusb.tar.gz" -C "$RUNNER_TEMP"
+          sudo mkdir -p /usr/local/include /usr/local/lib
+          sudo cp "$RUNNER_TEMP/PCBUSB/PCBUSB.h" /usr/local/include/
+          sudo cp "$RUNNER_TEMP/PCBUSB/libPCBUSB.0.13.dylib" /usr/local/lib/
+          sudo ln -sf /usr/local/lib/libPCBUSB.0.13.dylib /usr/local/lib/libPCBUSB.dylib
+
       - name: Restore ccache
         uses: actions/cache@v5
         with:
@@ -176,14 +189,15 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
 
   # --- PCAN backend on macOS (compile coverage) -------------------------------------------------------------------
-  # pcan_backend.cpp is compiled by nothing else: CAN_BACKEND_PCAN defaults OFF on
-  # every platform, so the whole file — including the macOS-only parts (PCBUSB
-  # include branch, socketpair shutdown sideband, USB 1..8 handle range) — goes
-  # untested by the tool builds. This job configures can-libraries standalone with
-  # the backend ON against UV Software's PCBUSB, the freeware PCANBasic-compatible
-  # macOS SDK (PEAK ships no macOS driver). The tarball needs no bison/flex, so the
-  # Vector parsers are switched off; the release-asset URL is public and fetchable
-  # unattended.
+  # Fast, dedicated compile gate for pcan_backend.cpp's macOS-only parts (PCBUSB
+  # include branch, socketpair shutdown sideband, USB 1..8 handle range): it
+  # configures can-libraries standalone with the backend ON against UV Software's
+  # PCBUSB, the freeware PCANBasic-compatible macOS SDK (PEAK ships no macOS
+  # driver). The gui-tools job now installs the same SDK so its mac build
+  # configures PCAN ON like the shipped binaries, but a tools-level failure there
+  # takes ~15 minutes to surface; this one says "the backend broke" in a minute.
+  # The tarball needs no bison/flex, so the Vector parsers are switched off; the
+  # release-asset URL is public and fetchable unattended.
   pcan-backend-macos:
     name: PCAN Backend (macOS)
     runs-on: macos-14
