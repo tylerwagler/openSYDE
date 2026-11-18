@@ -8,7 +8,7 @@
    encode / poll / decode path in-process. Shared by the openSYDE driver suite and the generic UDS driver suite.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef OSY_SCRIPTED_TRANSPORT_HPP

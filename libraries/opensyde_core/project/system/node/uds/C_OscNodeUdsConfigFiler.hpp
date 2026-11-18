@@ -4,7 +4,7 @@
    \brief       XML persistence of a node's UDS configuration
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCNODEUDSCONFIGFILER_HPP

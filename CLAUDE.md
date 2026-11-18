@@ -395,7 +395,7 @@ base-class pointer without ever naming it.
 
 ### File header
 
-New files carry **both** copyright lines — STW and Elytron Defense:
+New files carry **both** copyright lines — STW and Elytron Systems:
 
 ```cpp
 //----------------------------------------------------------------------------------------------------------------------
@@ -404,7 +404,7 @@ New files carry **both** copyright lines — STW and Elytron Defense:
    \brief       Brief description
 
    \copyright   Copyright [YEAR] Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright [YEAR] Elytron Defense. All rights reserved.
+                Copyright [YEAR] Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

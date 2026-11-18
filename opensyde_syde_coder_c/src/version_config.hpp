@@ -7,7 +7,7 @@
    non-Windows version function. Keep in sync with resources.rc (FILEVERSION).
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef VERSION_CONFIG_HPP

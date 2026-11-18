@@ -18,7 +18,7 @@
    Every section is optional on load and falls back to the defaults of C_OscNodeUdsConfig::Initialize.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

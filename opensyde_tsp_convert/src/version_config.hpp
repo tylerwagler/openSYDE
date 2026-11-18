@@ -7,7 +7,7 @@
    carries this file at the same place; this one had no version at all until 2026-09-17.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef VERSION_CONFIG_HPP
