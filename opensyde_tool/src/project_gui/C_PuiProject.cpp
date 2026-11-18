@@ -8,6 +8,7 @@
    Note: For openSYDE_Test.pro there exists a simply copied dummy class of this class!
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

@@ -6,6 +6,8 @@
    Phase 7.1 target. Measures C_OscLoggingHandler::h_WriteLogInfo with the heavy
    sinks (file/console) disabled, so the number reflects the message-formatting
    and dispatch path that 7.1 addresses (std::stringstream -> std::format).
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

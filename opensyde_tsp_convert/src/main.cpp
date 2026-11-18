@@ -8,6 +8,7 @@
    COM protocols and HALC are not present in V2 TSPs and are written empty in V3.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

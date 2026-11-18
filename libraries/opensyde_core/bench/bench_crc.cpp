@@ -10,6 +10,8 @@
    own polynomial; note the polynomials DIFFER (CalcCRC32C is Castagnoli / CRC-32C
    per its documentation), so the numbers here are the cost comparison, not proof
    of interchangeable results.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

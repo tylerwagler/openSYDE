@@ -9,6 +9,7 @@
    substantially reduce per-TU parse time across the tool's ~1300 source files.
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef  PRECOMP_HEADERS_GUI_HPP

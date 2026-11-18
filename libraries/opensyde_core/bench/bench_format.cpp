@@ -6,6 +6,8 @@
    Phase 7.1 prerequisite: confirms std::format (the C++23 substitute chosen for
    the logging hot path) actually beats std::stringstream. snprintf is shown for
    reference.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

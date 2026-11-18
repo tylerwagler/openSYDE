@@ -3,6 +3,7 @@
    \file
    \brief       Class for simple device configuration sequence
    \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCDCBASICSEQUENCES_HPP

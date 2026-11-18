@@ -8,6 +8,7 @@
    No color styling for this label as color is set by hyperlink (cf. C_Uti::h_GetLink())
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

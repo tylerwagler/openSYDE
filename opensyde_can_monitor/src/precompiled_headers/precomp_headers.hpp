@@ -7,6 +7,7 @@
    pre-includes beyond the shared Qt/C++ set, so this is just a forwarder.
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef  PRECOMP_HEADERS_HPP

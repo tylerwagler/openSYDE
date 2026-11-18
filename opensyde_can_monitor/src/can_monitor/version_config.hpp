@@ -6,6 +6,8 @@
    Single source of truth for the openSYDE CAN Monitor application version. Consumed by
    cam_resources.rc (Windows file-info block) and by cam_main.cpp (Qt application version,
    surfaced in the About dialog on every platform).
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef VERSION_CONFIG_HPP

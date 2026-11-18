@@ -6,6 +6,7 @@
    Create a .c and .h file providing initialization structures for the OSS DPD and DPH init functions.
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

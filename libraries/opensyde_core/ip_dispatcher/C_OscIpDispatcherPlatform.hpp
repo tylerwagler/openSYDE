@@ -5,6 +5,8 @@
 
    Maps C_OscIpDispatcherWinSock to the correct platform implementation so that
    GUI code can use a single name on both Windows and Linux.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCIPDISPATCHERPLATFORM_HPP

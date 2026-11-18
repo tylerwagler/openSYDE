@@ -8,6 +8,7 @@
    zip archive (can be opened via 7zip). If a password is given the generated syde_sp file will be encrypted.
 
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

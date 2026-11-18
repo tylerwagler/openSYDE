@@ -7,6 +7,7 @@
    code convention (C_NO_ERR, C_CONFIG, etc.) with std::error_code.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSC_ERROR_CATEGORY_HPP

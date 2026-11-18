@@ -8,6 +8,7 @@
 /// the stwtypes removal migration: the codebase now uses the standard types.
 ///
 /// \copyright Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+               Copyright 2026 Elytron Systems. All rights reserved.
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <cstdint>

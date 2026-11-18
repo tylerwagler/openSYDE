@@ -6,6 +6,7 @@
    openSYDE utility layer on top of the generic Intel HEX file parser.
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCHEXFILE_HPP

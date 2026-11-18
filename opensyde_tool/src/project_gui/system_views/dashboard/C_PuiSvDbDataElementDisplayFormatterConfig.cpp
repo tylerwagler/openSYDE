@@ -4,6 +4,7 @@
    \brief       Helper class for formatter to have the information about an invalid formatter config on initialization
 
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
