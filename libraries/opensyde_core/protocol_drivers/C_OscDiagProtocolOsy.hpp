@@ -16,6 +16,7 @@
    - event-driven responses will be reported via function pointers (see Cycle())
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCDIAGPROTOCOLOSY_HPP

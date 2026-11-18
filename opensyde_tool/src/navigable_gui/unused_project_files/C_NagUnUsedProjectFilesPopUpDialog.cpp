@@ -4,6 +4,7 @@
    \brief       UnUsed ProjectFiles Settings PopUp Dialog
 
    \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

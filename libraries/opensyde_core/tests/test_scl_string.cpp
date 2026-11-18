@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \file
+   \brief       test_scl_string (fork-authored)
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+
 #include "gtest/gtest.h"
 #include <string>
 #include <vector>

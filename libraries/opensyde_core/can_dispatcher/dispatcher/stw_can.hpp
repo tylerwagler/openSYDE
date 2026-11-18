@@ -8,6 +8,7 @@
    alongside the STW DLL shim; libcan-backed adapters now provide that capability metadata.
 
    \copyright   Copyright 2010 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef STWCAN_H

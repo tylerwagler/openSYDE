@@ -6,6 +6,7 @@
    Widget to put together update package and update summary widgets and handle some progress calculation.
 
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

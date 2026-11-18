@@ -6,6 +6,7 @@
    Translate L2 CAN message to Unified Diagnostic Services (ISO 14229) L7 interpretation
 
    \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

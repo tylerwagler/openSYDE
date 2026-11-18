@@ -4,6 +4,7 @@
    \brief       Widget for showing a concrete instance of C_SyvDaDashboardWidget in a seperated window
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

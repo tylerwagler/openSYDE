@@ -6,6 +6,7 @@
    Defines version constants used by both the Windows resource file and the Linux version function.
 
    \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef VERSION_CONFIG_HPP

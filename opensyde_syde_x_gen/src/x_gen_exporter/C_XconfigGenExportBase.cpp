@@ -6,6 +6,7 @@
    Provides generic function for openSYDE X-config generation tools.
 
    \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

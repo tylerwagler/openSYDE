@@ -4,6 +4,7 @@
    \brief       Tree model for HALC configuration import items
 
    \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

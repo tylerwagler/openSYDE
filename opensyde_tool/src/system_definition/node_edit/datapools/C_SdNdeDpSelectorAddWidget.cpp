@@ -4,6 +4,7 @@
    \brief       Widget for adding a new Datapool and configuring if it is a stand alone or shared Datapool
 
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

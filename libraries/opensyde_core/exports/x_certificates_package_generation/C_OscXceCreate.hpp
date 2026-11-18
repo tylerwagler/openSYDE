@@ -3,6 +3,7 @@
    \file
    \brief       openSYDE: X-Certificates Package creation
    \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCXCECREATE_HPP

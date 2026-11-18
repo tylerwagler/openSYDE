@@ -6,6 +6,7 @@
    Adds functionality to the base class: flashloader protocol instance for the openSYDE protocol.
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

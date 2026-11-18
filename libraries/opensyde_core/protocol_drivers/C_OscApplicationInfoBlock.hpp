@@ -6,6 +6,7 @@
    Handling of the openSYDE "application_info" block written by ECU firmware into its hex file.
 
    \copyright   Copyright 2015 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCAPPLICATIONINFOBLOCK_HPP
