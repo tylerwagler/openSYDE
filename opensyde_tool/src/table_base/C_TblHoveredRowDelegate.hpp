@@ -6,7 +6,7 @@
    See cpp file for detailed description
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_TBLHOVEREDROWDELEGATE_HPP

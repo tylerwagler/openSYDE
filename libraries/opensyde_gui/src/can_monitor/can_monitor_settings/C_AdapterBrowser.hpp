@@ -5,7 +5,7 @@
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2026 Elytron Defense. All rights reserved.
+   \copyright   Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_ADAPTERBROWSERHPP
@@ -43,7 +43,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 ///Inline picker for CAN backend + adapter + bitrate, fed by libcan's ICanBackend::enumerateAdapters().
 ///Styled to match the other settings subsections (header strip + content card on dark background).
-///Adapted from Elytron Defense's Qt_Template/AdapterBrowser; signal-driven so embedding settings
+///Adapted from Elytron Systems's Qt_Template/AdapterBrowser; signal-driven so embedding settings
 ///widgets can save selections on change.
 class C_AdapterBrowser :
    public stw::opensyde_gui_elements::C_OgeWiOnlyBackground

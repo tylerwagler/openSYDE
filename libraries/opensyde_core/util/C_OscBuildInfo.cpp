@@ -11,7 +11,7 @@
    so a binary in the field can be tied back to a tag or a commit.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

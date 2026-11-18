@@ -4,7 +4,7 @@
    \brief       Tests for the X-config package creator's parameter checks
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

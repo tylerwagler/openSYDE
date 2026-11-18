@@ -14,7 +14,7 @@
    ownership sweep): flashing any hex file crashed before a single byte was sent.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

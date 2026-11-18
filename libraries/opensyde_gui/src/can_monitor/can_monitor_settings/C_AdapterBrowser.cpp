@@ -15,9 +15,9 @@
    the header's expand toggle. Adapter info is rendered as a flat details panel — no white
    inner card that would break the visual rhythm.
 
-   Adapted from Elytron Defense's Qt_Template/AdapterBrowser. License-compatible (both GPL-3).
+   Adapted from Elytron Systems's Qt_Template/AdapterBrowser. License-compatible (both GPL-3).
 
-   \copyright   Copyright 2026 Elytron Defense. All rights reserved.
+   \copyright   Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

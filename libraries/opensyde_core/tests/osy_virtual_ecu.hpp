@@ -7,7 +7,7 @@
    One request payload in, at most one response payload out; the transport double does the framing.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef OSY_VIRTUAL_ECU_HPP

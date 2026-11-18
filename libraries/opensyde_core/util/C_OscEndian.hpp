@@ -13,7 +13,7 @@
    a wire constant can be assembled at compile time.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCENDIAN_HPP

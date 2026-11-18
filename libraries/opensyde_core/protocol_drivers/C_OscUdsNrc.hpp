@@ -10,7 +10,7 @@
    The names are the ones in ISO 14229-1 Table A.1, verbatim, including its hyphens.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-                Copyright 2026 Elytron Defense. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCUDSNRC_HPP
