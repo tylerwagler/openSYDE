@@ -3,6 +3,7 @@
    \file
    \brief       Dialog is shown if a encrypted service project is loaded
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_POPPASSWORDDIALOGWIDGET_HPP

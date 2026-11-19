@@ -4,6 +4,7 @@
    \brief       Table view for showing the PDO configuration of a specific device on a specific interface of the CANopen Manager
 
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

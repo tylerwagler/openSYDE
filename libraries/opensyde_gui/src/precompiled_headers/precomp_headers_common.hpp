@@ -9,6 +9,7 @@
    etc.). Targets wire up their wrapper via target_precompile_headers(<target> PRIVATE ...).
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef  PRECOMP_HEADERS_COMMON_HPP

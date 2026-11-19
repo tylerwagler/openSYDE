@@ -12,6 +12,7 @@
    see http://doc.qt.io/qt-5/qmake-precompiledheaders.html for details
 
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef PRECOMP_HEADERS_HPP

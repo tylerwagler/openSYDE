@@ -3,6 +3,7 @@
    \file
    \brief       Widget for showing any file as part of a file based node
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SYVUPPACLISTNODEITEMFILEWIDGET_HPP

@@ -8,6 +8,7 @@
    Implemented version: SAE J1939/71 REV June 2006
 
    \copyright   Copyright 2010 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

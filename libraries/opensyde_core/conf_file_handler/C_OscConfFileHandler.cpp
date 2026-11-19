@@ -6,6 +6,7 @@
    For using an derived class is necessary which is using the concrete conent
 
    \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

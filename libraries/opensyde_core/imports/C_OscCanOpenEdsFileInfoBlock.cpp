@@ -6,6 +6,7 @@
    Class for file info block handling of EDS/DCF files
 
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

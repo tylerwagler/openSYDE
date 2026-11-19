@@ -6,6 +6,7 @@
    Generic filter for a multi column model displaying leaf items as result
 
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

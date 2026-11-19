@@ -3,6 +3,7 @@
    \file
    \brief       Widget for dashboard interactions (connect and dark mode)
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SYVDADASHBOARDINTERACTION_HPP

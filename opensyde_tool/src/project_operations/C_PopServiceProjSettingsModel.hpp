@@ -3,6 +3,7 @@
    \file
    \brief       Model for Create Service Dialog permission tree
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_POPSERVICEPROJSETTINGSMODEL_HPP

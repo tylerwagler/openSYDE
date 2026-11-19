@@ -6,6 +6,7 @@
    Base class for graphics items with system view dashboard data elements
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

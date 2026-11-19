@@ -4,6 +4,7 @@
    \brief       Widget for system definition update
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

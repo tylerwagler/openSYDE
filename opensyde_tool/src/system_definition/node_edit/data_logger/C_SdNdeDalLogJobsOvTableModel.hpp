@@ -3,6 +3,7 @@
    \file
    \brief       Log Jobs overview table model
    \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDNDEDALLOGJOBSOVTABLEMODEL_H

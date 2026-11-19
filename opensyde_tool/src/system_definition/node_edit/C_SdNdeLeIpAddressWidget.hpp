@@ -3,6 +3,7 @@
    \file
    \brief       Widget for editing one single IPv4 address.
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDNDELEIPADDRESSWIDGET_HPP

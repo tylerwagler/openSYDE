@@ -4,6 +4,7 @@
    \brief       Bus edit widget (note: main module description should be in .cpp file)
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDBUEBUSEDITWIDGET_HPP

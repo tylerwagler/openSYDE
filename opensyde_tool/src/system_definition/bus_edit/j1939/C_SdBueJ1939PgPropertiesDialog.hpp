@@ -3,6 +3,7 @@
    \file
    \brief       Dialog for showing and editing of all J1939 specific PG properties
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDBUEJ1939PGPROPERTIESDIALOG_HPP

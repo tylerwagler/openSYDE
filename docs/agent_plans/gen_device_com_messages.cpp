@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \file
+   \brief       gen_device_com_messages
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+
 // Headless generator: build an openSYDE device definition (opensyde-device-definition v0x0003)
 // with the device's CAN messages embedded (from a DBC). Loads an existing device.syd for the
 // hardware card, then adds the COM datapool + CAN protocol.

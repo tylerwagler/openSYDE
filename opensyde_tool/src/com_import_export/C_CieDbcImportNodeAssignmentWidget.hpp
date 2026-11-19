@@ -3,6 +3,7 @@
    \file
    \brief       Popup widget where user can select which DBC node corresponds to which openSYDE node
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_CIEDBCIMPORTNODEASSIGNMENTWIDGET_HPP

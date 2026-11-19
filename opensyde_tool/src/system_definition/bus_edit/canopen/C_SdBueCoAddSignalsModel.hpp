@@ -3,6 +3,7 @@
    \file
    \brief       Model part for add signals tree
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDBUECOADDSIGNALSMODEL_HPP

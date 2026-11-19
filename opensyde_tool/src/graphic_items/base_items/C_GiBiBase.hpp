@@ -3,6 +3,7 @@
    \file
    \brief       Common base for all graphics items
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_GIBIBASE_HPP

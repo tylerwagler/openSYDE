@@ -4,6 +4,7 @@
    \brief       Widget for showing a concrete dashboard
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SYVDADASHBOARDWIDGET_HPP

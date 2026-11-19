@@ -6,6 +6,7 @@
    Made for all node specific system view user settings where the identifier for a node is the node name.
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

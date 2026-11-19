@@ -3,6 +3,7 @@
    \file
    \brief       Event filter to be installed on the color-select-widget while in screen-color-picking mode.
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_GISYSCREENCOLORPICKINGEVENTFILTER_HPP

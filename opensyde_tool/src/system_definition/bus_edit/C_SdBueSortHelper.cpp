@@ -6,6 +6,7 @@
    Utility class for comparison operation of sorting algorithm
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

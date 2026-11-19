@@ -6,6 +6,7 @@
    Translate L2 CAN message to J1939 protocol L7 interpretation
 
    \copyright   Copyright 2010 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef CCMONPROTOCOLJ1939HPP

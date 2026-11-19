@@ -6,6 +6,7 @@
    Abstract base class for interfacing with different CAN communication driver architectures.
 
    \copyright   Copyright 2010 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

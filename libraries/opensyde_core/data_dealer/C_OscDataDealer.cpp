@@ -7,6 +7,7 @@
    The application is responsible to not "::Cycle" and poll at the same time from different threads.
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

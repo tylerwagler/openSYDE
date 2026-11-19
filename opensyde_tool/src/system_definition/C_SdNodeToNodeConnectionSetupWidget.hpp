@@ -4,6 +4,7 @@
    \brief       Node to Node connection setup pop up dialog (header)
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDNODETONODECONNECTIONSETUPWIDGET_HPP

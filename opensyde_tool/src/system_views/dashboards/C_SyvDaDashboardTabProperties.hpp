@@ -4,6 +4,7 @@
    \brief       Properties dialog for dashboard tab properties (header)
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SYVDADASHBOARDTABPROPERTIES_HPP

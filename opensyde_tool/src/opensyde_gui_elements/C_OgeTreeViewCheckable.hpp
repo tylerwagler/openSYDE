@@ -4,6 +4,7 @@
    \brief       Tree view with checkable items (for style only)
 
    \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGETREEVIEWCHECKABLE_HPP

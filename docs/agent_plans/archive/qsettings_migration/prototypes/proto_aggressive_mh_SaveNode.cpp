@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \file
+   \brief       proto_aggressive_mh_SaveNode
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+
 // Prototype: aggressive idiomatic-QSettings refactor of C_UsFiler::mh_SaveNode.
 // Uses beginGroup() and beginWriteArray() throughout. CHANGES the on-disk INI
 // format — see "On-disk format change" note at the bottom.

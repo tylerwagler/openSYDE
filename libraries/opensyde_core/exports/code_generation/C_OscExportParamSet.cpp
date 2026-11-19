@@ -6,6 +6,7 @@
    Create a .syde_psi file providing entire NVM hardware configuration.
 
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

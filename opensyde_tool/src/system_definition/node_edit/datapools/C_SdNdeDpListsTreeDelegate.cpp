@@ -6,6 +6,7 @@
    Node data pool lists tree drawing delegate
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

@@ -4,6 +4,7 @@
    \brief       Widget for showing a specific application or data block as part of a node
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SYVUPPACLISTNODEITEMWIDGET_HPP

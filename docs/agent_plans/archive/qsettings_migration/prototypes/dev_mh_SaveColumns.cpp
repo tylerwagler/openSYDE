@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \file
+   \brief       dev_mh_SaveColumns
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+
 void C_UsFiler::mh_SaveColumns(QSettings &orc_Ini,
                                const QString &orc_SectionName,
                                const QString &orc_IdBase,

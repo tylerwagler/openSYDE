@@ -3,6 +3,7 @@
    \file
    \brief       HALC overview table model
    \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDNDEHALCOVTABLEMODEL_HPP

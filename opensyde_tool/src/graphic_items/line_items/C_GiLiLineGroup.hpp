@@ -4,6 +4,7 @@
    \brief       Complete line with all functionality (header)
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_GILILINEGROUP_HPP

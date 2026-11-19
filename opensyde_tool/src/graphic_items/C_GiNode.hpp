@@ -4,6 +4,7 @@
    \brief       Offers visualization and functionality of a node (header)
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_GILINODE_HPP

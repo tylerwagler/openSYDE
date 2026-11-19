@@ -4,6 +4,7 @@
    \brief       Widget for selecting a system definition node for DCF/EDS file import (header)
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_CIEDCFEDSIMPORTNODESELECTWIDGET_HPP

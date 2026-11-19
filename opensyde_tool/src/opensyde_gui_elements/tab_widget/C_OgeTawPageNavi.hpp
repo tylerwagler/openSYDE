@@ -6,6 +6,7 @@
    Tab widget for page navigation (note: main module description should be in .cpp file)
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGETAWPAGENAVI_HPP

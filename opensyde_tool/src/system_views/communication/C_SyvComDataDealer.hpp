@@ -4,6 +4,7 @@
    \brief       Connects the openSYDE protocol driver to a node with GUI specific functionality
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SYVCOMDATADEALER_HPP

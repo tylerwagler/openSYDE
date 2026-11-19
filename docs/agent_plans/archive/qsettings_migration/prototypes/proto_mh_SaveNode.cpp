@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \file
+   \brief       proto_mh_SaveNode
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+
 // Prototype: format-compatible refactor of C_UsFiler::mh_SaveNode using QSettings idioms.
 // Preserves the exact on-disk INI key layout produced by the dev migration —
 // no migration of existing user settings files is required.

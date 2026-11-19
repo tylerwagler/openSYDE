@@ -3,6 +3,7 @@
    \file
    \brief       Widget for showing a specific file associated to concrete datablock as part of a node
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SYVUPPACLISTNODEITEMDATABLOCKWIDGET_HPP

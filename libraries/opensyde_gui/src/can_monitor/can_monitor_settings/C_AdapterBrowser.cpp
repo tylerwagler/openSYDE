@@ -17,7 +17,8 @@
 
    Adapted from Elytron Systems's Qt_Template/AdapterBrowser. License-compatible (both GPL-3).
 
-   \copyright   Copyright 2026 Elytron Systems. All rights reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

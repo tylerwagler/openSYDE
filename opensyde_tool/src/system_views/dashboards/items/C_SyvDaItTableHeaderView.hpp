@@ -3,6 +3,7 @@
    \file
    \brief       Custom header view for table for tables used in proxy widgets
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SYVDAITTABLEHEADERVIEW_HPP

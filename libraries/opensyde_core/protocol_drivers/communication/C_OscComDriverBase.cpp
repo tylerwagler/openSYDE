@@ -7,6 +7,7 @@
    Distributes all received messages to the registered C_OscMessageLogger instances.
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

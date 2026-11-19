@@ -3,6 +3,7 @@
    \file
    \brief       Group for message ID part which identifies a unique CAN message
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCCANMESSAGEUNIQUEID_HPP

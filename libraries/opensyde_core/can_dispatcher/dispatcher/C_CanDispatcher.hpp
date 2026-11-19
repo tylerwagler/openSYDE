@@ -9,6 +9,7 @@
    Multiple clients can register in order to receive all incoming CAN traffic.
 
    \copyright   Copyright 2010 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef CCANDISPATCHERHPP

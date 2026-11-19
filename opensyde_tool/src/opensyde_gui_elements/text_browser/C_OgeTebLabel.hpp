@@ -3,6 +3,7 @@
    \file
    \brief       Class for text brower with context menu styled as a simple label
    \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGETEBLABEL_HPP

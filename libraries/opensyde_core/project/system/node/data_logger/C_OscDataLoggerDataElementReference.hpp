@@ -3,6 +3,7 @@
    \file
    \brief       Data logger configured data element information
    \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCDATALOGGERDATAELEMENTREFERENCE_HPP

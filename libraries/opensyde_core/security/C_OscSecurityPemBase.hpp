@@ -3,6 +3,7 @@
    \file
    \brief       Base class for handling PEM file content
    \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCSECURITYPEMBASE_HPP

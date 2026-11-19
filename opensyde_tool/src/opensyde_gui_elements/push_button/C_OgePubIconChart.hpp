@@ -3,6 +3,7 @@
    \file
    \brief       Button for dashboard chart control buttons with background styles in dark and bright.
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGEPUBICONCHART_HPP

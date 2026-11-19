@@ -4,6 +4,7 @@
    \brief       Widget for bus style setup to customize bus optics (header)
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_GISYLINEWIDGET_HPP

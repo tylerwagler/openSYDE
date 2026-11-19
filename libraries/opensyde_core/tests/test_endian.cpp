@@ -1,14 +1,16 @@
 //----------------------------------------------------------------------------------------------------------------------
-/// \file
-/// \brief  Unit tests for C_OscEndian, the one place the wire byte order lives
-///
-/// The protocol drivers used to reassemble every multi-byte value by hand, and a transposed
-/// index in one of those sites is invisible to the compiler. These tests pin each helper to
-/// a known byte pattern, in both directions, and check that the two orders really are
-/// mirror images of each other.
-///
-/// \copyright Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-///            Copyright 2026 Elytron Systems. All rights reserved.
+/*!
+   \file
+   \brief       Unit tests for C_OscEndian, the one place the wire byte order lives
+
+   The protocol drivers used to reassemble every multi-byte value by hand, and a transposed
+   index in one of those sites is invisible to the compiler. These tests pin each helper to
+   a known byte pattern, in both directions, and check that the two orders really are
+   mirror images of each other.
+
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
+*/
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <cstdint>

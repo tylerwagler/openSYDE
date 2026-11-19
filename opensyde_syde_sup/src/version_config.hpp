@@ -4,6 +4,8 @@
    \brief       Version configuration (header)
 
    Contains the version information to be used e.g. from resources.rc or from .cpp files.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef VERSION_CONFIG_HPP

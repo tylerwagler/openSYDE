@@ -4,6 +4,7 @@
    \brief       Widget which shows the QCustomplot and handles its chart functionality
 
    \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SYVDACHAPLOTHANDLERWIDGET_HPP
