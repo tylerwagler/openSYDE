@@ -11,6 +11,7 @@
    Elements and functionality that is specific to the transport protocol needs to be implemented there.
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCPROTOCOLDRIVEROSYTPBASEHPP

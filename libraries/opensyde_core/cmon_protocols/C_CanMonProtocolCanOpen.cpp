@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \file
+   \brief       C_CanMonProtocolCanOpen
+   \copyright   Copyright 2002 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+
 #include "C_SclStringUtil.hpp"
 #include "precomp_headers.hpp" //pre-compiled headers
 

@@ -1,14 +1,16 @@
 //----------------------------------------------------------------------------------------------------------------------
-/// \file
-/// \brief  Unit tests for <cstdint> — type sizes, signedness, and limits
-///
-/// Verifies that the C++ fixed-width integer types are globally available
-/// (via <cstdint>) with the expected sizes and signedness, and that float and
-/// double have the expected IEEE characteristics. This is a regression pin for
-/// the stwtypes removal migration: the codebase now uses the standard types.
-///
-/// \copyright Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-               Copyright 2026 Elytron Systems. All rights reserved.
+/*!
+   \file
+   \brief       Unit tests for <cstdint> — type sizes, signedness, and limits
+
+   Verifies that the C++ fixed-width integer types are globally available
+   (via <cstdint>) with the expected sizes and signedness, and that float and
+   double have the expected IEEE characteristics. This is a regression pin for
+   the stwtypes removal migration: the codebase now uses the standard types.
+
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
+*/
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <cstdint>

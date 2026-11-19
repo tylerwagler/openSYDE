@@ -5,6 +5,7 @@
                 creates a MD5-Checksum from this file. It also sets an boolean global state, if the Checksum has already
                 been calculated.
    \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCUTILBINARYHASH_HPP

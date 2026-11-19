@@ -3,6 +3,7 @@
    \file
    \brief       openSYDE: X-Config Package loading
    \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCXCOLOAD_HPP

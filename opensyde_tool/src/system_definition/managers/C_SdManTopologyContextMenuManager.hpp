@@ -4,6 +4,7 @@
    \brief       Context menu manager of system definition toplogy
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDMANTOPOLOGYCONTEXTMENUMANAGER_HPP

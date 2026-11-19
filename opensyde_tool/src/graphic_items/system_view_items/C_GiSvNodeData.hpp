@@ -3,6 +3,7 @@
    \file
    \brief       Data class to hold node specific data in C_GiSvNodeSyvUpdate.
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_GISVNODEDATA_HPP

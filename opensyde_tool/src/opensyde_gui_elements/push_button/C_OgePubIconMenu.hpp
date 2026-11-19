@@ -3,6 +3,7 @@
    \file
    \brief       Button with icon only that can be used with a menu.
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGEPUBICONMENU_HPP

@@ -6,6 +6,7 @@
    Base class for pop-up dialog content widgets (note: main module description should be in .cpp file)
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGEPOPUPCONTENTBASE_HPP

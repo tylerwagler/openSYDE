@@ -6,6 +6,7 @@
    Small utility data structure to group all imported message data for one specific direction (TX/RX)
 
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

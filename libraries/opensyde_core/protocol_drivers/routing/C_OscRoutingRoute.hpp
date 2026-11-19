@@ -4,6 +4,7 @@
    \brief       Holding the necessary information about a concrete route to a specific node from the PC.
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCROUTINGROUTE_HPP

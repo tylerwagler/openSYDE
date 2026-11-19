@@ -4,6 +4,7 @@
    \brief       Utility class for static functions for usage in system update and basic update.
 
    \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

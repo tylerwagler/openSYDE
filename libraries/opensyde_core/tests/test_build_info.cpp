@@ -1,15 +1,17 @@
 //----------------------------------------------------------------------------------------------------------------------
-/// \file
-/// \brief  Unit tests for C_OscBuildInfo -- the stamp that ties a binary to a commit
-///
-/// The values come from osy_build_info.hpp, generated from the git checkout by
-/// osy_build_info.cmake before every build of the core. CI builds from a checkout, so
-/// there the stamp must be a real describe string and a real ISO 8601 date; a build from
-/// an exported tarball legitimately gets "unknown" for both, which is the only other
-/// accepted shape.
-///
-/// \copyright Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-///            Copyright 2026 Elytron Systems. All rights reserved.
+/*!
+   \file
+   \brief       Unit tests for C_OscBuildInfo -- the stamp that ties a binary to a commit
+
+   The values come from osy_build_info.hpp, generated from the git checkout by
+   osy_build_info.cmake before every build of the core. CI builds from a checkout, so
+   there the stamp must be a real describe string and a real ISO 8601 date; a build from
+   an exported tarball legitimately gets "unknown" for both, which is the only other
+   accepted shape.
+
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
+*/
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <cctype>

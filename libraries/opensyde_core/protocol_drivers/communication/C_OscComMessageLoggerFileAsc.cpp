@@ -4,6 +4,7 @@
    \brief       Class with generic interface to handle and write a CAN log file (implementation)
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

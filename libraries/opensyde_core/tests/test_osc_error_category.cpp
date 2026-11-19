@@ -1,9 +1,11 @@
 //----------------------------------------------------------------------------------------------------------------------
-/// \file
-/// \brief  Unit tests for C_OscErrorCategory — Errc enum and std::error_category integration
-///
-/// \copyright Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
-               Copyright 2026 Elytron Systems. All rights reserved.
+/*!
+   \file
+   \brief       Unit tests for C_OscErrorCategory — Errc enum and std::error_category integration
+
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
+*/
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"

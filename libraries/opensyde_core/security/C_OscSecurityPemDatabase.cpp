@@ -6,6 +6,7 @@
    Class to handle parsing of PEM file folder and stores all necessary information about all read PEM files
 
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

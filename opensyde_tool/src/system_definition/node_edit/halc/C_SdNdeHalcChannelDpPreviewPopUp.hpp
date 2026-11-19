@@ -3,6 +3,7 @@
    \file
    \brief       Pop up widget for DP preview
    \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDNDEHALCCHANNELDPPREVIEWPOPUP_HPP

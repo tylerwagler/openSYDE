@@ -3,6 +3,7 @@
    \file
    \brief       Widget for displaying and editing hardware configuration of a specific channel
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDNDEHALCCHANNELWIDGET_HPP

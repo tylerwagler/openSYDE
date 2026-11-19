@@ -6,6 +6,7 @@
    See cpp file for detailed description
 
    \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_XCONFIGGENEXPORT_HPP

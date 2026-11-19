@@ -4,6 +4,7 @@
    \brief       Widget for boundary style setup to customize boundary optics (header)
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_GISYBOUNDARYWIDGET_HPP

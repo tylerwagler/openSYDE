@@ -11,6 +11,7 @@
    directly on CAN but be communicated to the openSYDE server node using the routing services.
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

@@ -3,6 +3,7 @@
    \file
    \brief       CANopen logic part of UI system definition
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_PUISDHANDLERCANOPENLOGIC_HPP

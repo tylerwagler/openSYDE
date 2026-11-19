@@ -3,6 +3,7 @@
    \file
    \brief       Show the brightness of the current color.
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_GISYCOLORBRIGHTNESSPICKER_HPP

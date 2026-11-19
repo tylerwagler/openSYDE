@@ -4,6 +4,7 @@
    \brief       Push button with specific style for use on dashboard chart signal selector widget
 
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

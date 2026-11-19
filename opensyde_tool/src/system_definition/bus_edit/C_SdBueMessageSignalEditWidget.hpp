@@ -4,6 +4,7 @@
    \brief       Widget for editing messages and / or signals
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDBUEMESSAGESIGNALEDITWIDGET_HPP

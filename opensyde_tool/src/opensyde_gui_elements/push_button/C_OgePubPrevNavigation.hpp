@@ -3,6 +3,7 @@
    \file
    \brief       System definition lists previous navigation.
    \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGEPUBPREVNAVIGATION_HPP

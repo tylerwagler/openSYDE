@@ -3,6 +3,7 @@
    \file
    \brief       Store all indices to identify a data element stored in a node including an optional array
    \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCNODEDATAPOOLLISTELEMENTOPTARRAYID_HPP

@@ -10,6 +10,7 @@
    For now only CRC routines.
 
    \copyright   Copyright 2015 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef CSCLCHECKSUMSHPP

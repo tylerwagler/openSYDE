@@ -3,6 +3,7 @@
    \file
    \brief       Push button style for system commisioning edit bar
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGEPUBSYSTEMCOMMISSIONINGEDIT_HPP

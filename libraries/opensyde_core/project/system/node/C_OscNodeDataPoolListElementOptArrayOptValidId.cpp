@@ -6,6 +6,7 @@
    All indices to identify a data element stored in a node including an optional array and a valid flag
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

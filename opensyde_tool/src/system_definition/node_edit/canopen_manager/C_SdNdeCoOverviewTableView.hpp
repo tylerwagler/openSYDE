@@ -4,6 +4,7 @@
    \brief       Table view widget with current CANopen configuration of Manager and devices on the used interfaces
 
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDNDECOOVERVIEWTABLEVIEW_HPP

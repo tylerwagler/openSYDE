@@ -3,6 +3,7 @@
    \file
    \brief       Dialog shows settings for creating a Service Project
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_POPCREATESERVICEPROJDIALOGWIDGET_HPP

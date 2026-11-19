@@ -4,6 +4,7 @@
    \brief       Wrapper class for Calculation of all potential routes to a specific node in a specific view.
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

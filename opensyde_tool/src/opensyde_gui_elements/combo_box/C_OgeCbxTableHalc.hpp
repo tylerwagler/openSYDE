@@ -3,6 +3,7 @@
    \file
    \brief       Styled combobox for HALC parameter configuration.
    \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGECBXTABLEHALC_HPP

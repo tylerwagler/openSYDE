@@ -10,6 +10,7 @@
    Aim: provide commonly used date and time functionality while only using plain ANSI C++.
 
    \copyright   Copyright 2009 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef CSCLDATETIMEHPP

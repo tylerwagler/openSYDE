@@ -6,6 +6,7 @@
    Handles generic code structures of export classes for Datapool, COMM and HALC export.
 
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

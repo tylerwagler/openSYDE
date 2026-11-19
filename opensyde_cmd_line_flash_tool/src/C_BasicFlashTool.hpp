@@ -3,6 +3,7 @@
    \file
    \brief       Base class of openSYDE simple command line flash tool
    \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_BASICFLASHTOOL_HPP

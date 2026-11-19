@@ -6,6 +6,7 @@
    Translate L2 CAN message to CANopen protocol L7 interpretation
 
    \copyright   Copyright 2006 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef CCMONPROTOCOLCANOPENHPP

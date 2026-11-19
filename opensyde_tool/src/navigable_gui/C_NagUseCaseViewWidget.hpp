@@ -4,6 +4,7 @@
    \brief       Widget for showing use case specific widgets based on class C_NagUseCaseWidget
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 

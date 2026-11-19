@@ -4,6 +4,7 @@
    \brief       Widget for showing the progress and the state of the update process
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SYVUPSUMMARYWIDGET_HPP

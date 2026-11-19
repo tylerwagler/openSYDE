@@ -3,6 +3,7 @@
    \file
    \brief       Pop up dialog for choosing and adding signals to CANopen manager
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDBUECOADDSIGNALSDIALOG_HPP

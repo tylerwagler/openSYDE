@@ -4,6 +4,7 @@
    \brief       Translate L2 CAN message to textual representation
 
    \copyright   Copyright 2003 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef CCMONPROTOCOLL2HPP

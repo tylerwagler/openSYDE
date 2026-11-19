@@ -3,6 +3,7 @@
    \file
    \brief       Group box style for selectable navigation section
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGEGBXNAVIGATIONSECTIONSELECTED_HPP

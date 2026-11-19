@@ -3,6 +3,7 @@
    \file
    \brief       Widget for showing a dashboard with a graphics view and scene with different dashboard items
    \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SYVDADASHBOARDSCENEWIDGET_HPP

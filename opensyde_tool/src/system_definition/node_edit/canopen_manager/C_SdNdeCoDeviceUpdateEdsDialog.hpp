@@ -3,6 +3,7 @@
    \file
    \brief       Pop up dialog widget for updating the EDS file for any existing device
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDNDECODEVICEUPDATEEDSDIALOG_HPP

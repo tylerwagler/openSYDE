@@ -9,6 +9,7 @@
    Provides functions to encrypt/decrypt text with AES-128 CBC with PKCS#7 and initialization vector.
 
    \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCSECURITYAESCBC_HPP

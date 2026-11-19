@@ -3,6 +3,7 @@
    \file
    \brief       Widget with current CANopen settings of Manager for a specific device on one interface
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SDNDECODEVICEWIDGET_HPP

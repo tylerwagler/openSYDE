@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \file
+   \brief       C_CanMonProtocol
+   \copyright   Copyright 2000 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include <cstring>

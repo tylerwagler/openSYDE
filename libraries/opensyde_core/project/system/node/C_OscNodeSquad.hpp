@@ -4,6 +4,7 @@
    \brief       The squad of nodes. In case of multiple CPUs it has all indexes of the sub nodes and has its base name
 
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCNODESQUAD_HPP

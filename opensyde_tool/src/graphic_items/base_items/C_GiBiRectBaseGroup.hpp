@@ -4,6 +4,7 @@
    \brief       Base class for all graphic items which are rectangle based (header)
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_GIBIRECTBASEGROUP_HPP

@@ -4,6 +4,7 @@
    \brief       Base tree model implementation with checkable items
 
    \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_TBLTREEMODELCHECKABLE_HPP
