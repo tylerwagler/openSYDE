@@ -200,7 +200,7 @@ jobs:
   # release-asset URL is public and fetchable unattended.
   pcan-backend-macos:
     name: PCAN Backend (macOS)
-    runs-on: macos-14
+    runs-on: macos-26
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
