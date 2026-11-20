@@ -38,6 +38,8 @@ endif()
 
 # bison: Apple ships 2.3 and Vector_DBC requires >= 3.3.
 #   brew install bison
+# With no Homebrew (a plain CommandLineTools Mac, e.g. a CI runner), a
+# GNU bison built into ~/.local/bin is picked up from PATH by FindBISON.
 if(EXISTS "${OSY_BREW_PREFIX}/opt/bison/bin/bison")
    set(BISON_EXECUTABLE "${OSY_BREW_PREFIX}/opt/bison/bin/bison" CACHE FILEPATH "" FORCE)
 endif()
@@ -46,11 +48,13 @@ endif()
 # the executable's prefix, and Apple keeps it in CommandLineTools instead -- so
 # FLEX_INCLUDE_DIR comes back NOTFOUND and Vector_DBC cannot generate its scanner.
 # This is the macOS twin of the libfl-dev gotcha on Ubuntu. brew's flex ships the
-# binary and header together.
+# binary and header together; without brew, point at the SDK header directly.
 #   brew install flex
 if(EXISTS "${OSY_BREW_PREFIX}/opt/flex/bin/flex")
-   set(FLEX_EXECUTABLE  "${OSY_BREW_PREFIX}/opt/flex/bin/flex"  CACHE FILEPATH "" FORCE)
+   set(FLEX_EXECUTABLE  "${OSY_BREW_PREFIX}/opt/flex/bin/flex"   CACHE FILEPATH "" FORCE)
    set(FLEX_INCLUDE_DIR "${OSY_BREW_PREFIX}/opt/flex/include"   CACHE PATH     "" FORCE)
+elseif(EXISTS "/Library/Developer/CommandLineTools/usr/include/FlexLexer.h")
+   set(FLEX_INCLUDE_DIR "/Library/Developer/CommandLineTools/usr/include" CACHE PATH "" FORCE)
 endif()
 
 # OpenSSL and Qt are keg-only too; put their CMake configs where find_package looks.
