@@ -38,10 +38,14 @@ endif()
 
 # bison: Apple ships 2.3 and Vector_DBC requires >= 3.3.
 #   brew install bison
-# With no Homebrew (a plain CommandLineTools Mac, e.g. a CI runner), a
-# GNU bison built into ~/.local/bin is picked up from PATH by FindBISON.
+# Without Homebrew (a plain CommandLineTools Mac, e.g. a CI runner) a GNU
+# bison in ~/.local/bin is preferred explicitly: FindBISON would otherwise take
+# Apple's /usr/bin/bison from PATH, and a cached value in a reused build
+# directory keeps winning even after a correct one appears.
 if(EXISTS "${OSY_BREW_PREFIX}/opt/bison/bin/bison")
    set(BISON_EXECUTABLE "${OSY_BREW_PREFIX}/opt/bison/bin/bison" CACHE FILEPATH "" FORCE)
+elseif(EXISTS "$ENV{HOME}/.local/bin/bison")
+   set(BISON_EXECUTABLE "$ENV{HOME}/.local/bin/bison" CACHE FILEPATH "" FORCE)
 endif()
 
 # flex: Apple's /usr/bin/flex works, but FindFLEX looks for FlexLexer.h next to
@@ -66,6 +70,10 @@ endif()
 # Widgets, PrintSupport) and qtsvg (Svg, SvgWidgets) -- are exactly what openSYDE
 # needs. The EXISTS guard picks up whichever are present, so this works whether the
 # meta-formula completed or only its components did.
+#
+# A brew-less Mac points CMAKE_PREFIX_PATH at its own Qt instead (the CI runner
+# uses the Qt 6.12 archive unpacked under ~/Qt); the environment variable is
+# honoured by CMake and nothing here overrides it.
 foreach(_pkg openssl@3 qt qtbase qtsvg)
    if(EXISTS "${OSY_BREW_PREFIX}/opt/${_pkg}")
       list(APPEND CMAKE_PREFIX_PATH "${OSY_BREW_PREFIX}/opt/${_pkg}")
