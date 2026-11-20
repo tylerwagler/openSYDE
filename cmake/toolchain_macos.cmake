@@ -70,12 +70,16 @@ endif()
 # Widgets, PrintSupport) and qtsvg (Svg, SvgWidgets) -- are exactly what openSYDE
 # needs. The EXISTS guard picks up whichever are present, so this works whether the
 # meta-formula completed or only its components did.
-#
-# A brew-less Mac points CMAKE_PREFIX_PATH at its own Qt instead (the CI runner
-# uses the Qt 6.12 archive unpacked under ~/Qt); the environment variable is
-# honoured by CMake and nothing here overrides it.
 foreach(_pkg openssl@3 qt qtbase qtsvg)
    if(EXISTS "${OSY_BREW_PREFIX}/opt/${_pkg}")
       list(APPEND CMAKE_PREFIX_PATH "${OSY_BREW_PREFIX}/opt/${_pkg}")
    endif()
 endforeach()
+
+# A Mac without Homebrew can carry its own Qt; the CI runner uses the Qt 6.12
+# archive unpacked under ~/Qt. CMAKE_PREFIX_PATH is cached on first configure,
+# so append into the cache rather than only the local variable -- otherwise a
+# runner that gained Qt later never sees it in a reused build directory.
+if(EXISTS "$ENV{HOME}/Qt/6.12.0/macos")
+   set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};$ENV{HOME}/Qt/6.12.0/macos" CACHE STRING "" FORCE)
+endif()
