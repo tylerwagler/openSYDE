@@ -5,7 +5,7 @@
 # clang everywhere (build.sh selects the per-OS toolchain file):
 #   - Linux   (ubuntu-26.04):  clang + libstdc++  (matches the system Qt)
 #   - macOS   (macos-26 / macos-26-intel): Apple clang + libc++
-#   - Windows (windows-2022):  LLVM-MinGW clang + libc++ (Qt llvm-mingw_64 kit)
+#   - Windows (windows-latest): LLVM-MinGW clang + libc++ (Qt llvm-mingw_64 kit)
 #
 # Nothing is vendored: OpenSSL and zlib are resolved via find_package (zlib is
 # built from source on Windows, where LLVM-MinGW ships none), and QCustomPlot is
@@ -230,8 +230,8 @@ jobs:
 
   # --- all eight tools + core tests (Windows, LLVM-MinGW clang) --------------------------------------------------------
   windows:
-    name: Tools + Core Tests (windows-2022)
-    runs-on: windows-2022
+    name: Tools + Core Tests (windows-latest)
+    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
