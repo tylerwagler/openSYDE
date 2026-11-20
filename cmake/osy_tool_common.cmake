@@ -34,3 +34,34 @@ function(osy_tool_werror)
       endforeach()
    endif()
 endfunction()
+
+# Drop framework flags Qt still carries for libraries macOS 26 removed.
+#
+# Qt 6.8's macOS packages list "-framework AGL" in Qt6::Gui's link interface. AGL (the
+# legacy Apple Graphics Library) no longer exists in the macOS 26 SDK, so every GUI link
+# on a macOS 26 runner dies with "ld: framework 'AGL' not found" before a single object
+# of ours is considered. Qt does not use AGL; on older SDKs the flag was merely inert,
+# so stripping it changes nothing where it was harmless.
+#
+# Call after find_package(Qt6 ...) in each GUI tool:
+#
+#   osy_strip_qt_removed_macos_frameworks()
+function(osy_strip_qt_removed_macos_frameworks)
+   if(NOT APPLE)
+      return()
+   endif()
+   foreach(OSY_QT_TARGET Qt6::Gui Qt6::Widgets Qt6::PrintSupport Qt6::Svg Qt6::SvgWidgets)
+      if(TARGET ${OSY_QT_TARGET})
+         get_target_property(_osy_libs ${OSY_QT_TARGET} INTERFACE_LINK_LIBRARIES)
+         if(_osy_libs)
+            list(REMOVE_ITEM _osy_libs "-framework AGL" "AGL")
+            set_target_properties(${OSY_QT_TARGET} PROPERTIES INTERFACE_LINK_LIBRARIES "${_osy_libs}")
+         endif()
+         get_target_property(_osy_opts ${OSY_QT_TARGET} INTERFACE_LINK_OPTIONS)
+         if(_osy_opts)
+            list(REMOVE_ITEM _osy_opts "-framework AGL" "AGL")
+            set_target_properties(${OSY_QT_TARGET} PROPERTIES INTERFACE_LINK_OPTIONS "${_osy_opts}")
+         endif()
+      endif()
+   endforeach()
+endfunction()

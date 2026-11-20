@@ -54,6 +54,8 @@ find_package(Qt6 REQUIRED COMPONENTS Svg)
 find_package(Qt6 REQUIRED COMPONENTS SvgWidgets)
 find_package(Qt6 REQUIRED COMPONENTS PrintSupport)
 
+osy_strip_qt_removed_macos_frameworks()
+
 # --- PROJECT INCLUDE PATHS --------------------------------------------------------------------------------------------
 
 include_directories()
