@@ -37,11 +37,16 @@ endfunction()
 
 # Drop framework flags Qt still carries for libraries macOS 26 removed.
 #
-# Qt 6.8's macOS packages list "-framework AGL" in Qt6::Gui's link interface. AGL (the
-# legacy Apple Graphics Library) no longer exists in the macOS 26 SDK, so every GUI link
-# on a macOS 26 runner dies with "ld: framework 'AGL' not found" before a single object
-# of ours is considered. Qt does not use AGL; on older SDKs the flag was merely inert,
-# so stripping it changes nothing where it was harmless.
+# AGL (the legacy Apple Graphics Library) no longer exists in the macOS 26 SDK, and
+# Qt <= 6.8 still links it on Apple: its FindWrapOpenGL.cmake adds AGL to the
+# WrapOpenGL::WrapOpenGL target, which Qt6::Gui pulls in. Every GUI link on a macOS 26
+# runner therefore dies with "ld: framework 'AGL' not found" before one object of ours
+# is considered. Qt does not use AGL; on older SDKs the flag was inert, so removing it
+# changes nothing there.
+#
+# The item can appear in several shapes -- "-framework AGL" as one string, "-framework"
+# followed by "AGL" as two list items, or an absolute /System/Library/Frameworks path --
+# so match on AGL anywhere and drop a dangling -framework left behind.
 #
 # Call after find_package(Qt6 ...) in each GUI tool:
 #
@@ -50,18 +55,37 @@ function(osy_strip_qt_removed_macos_frameworks)
    if(NOT APPLE)
       return()
    endif()
-   foreach(OSY_QT_TARGET Qt6::Gui Qt6::Widgets Qt6::PrintSupport Qt6::Svg Qt6::SvgWidgets)
-      if(TARGET ${OSY_QT_TARGET})
-         get_target_property(_osy_libs ${OSY_QT_TARGET} INTERFACE_LINK_LIBRARIES)
-         if(_osy_libs)
-            list(REMOVE_ITEM _osy_libs "-framework AGL" "AGL")
-            set_target_properties(${OSY_QT_TARGET} PROPERTIES INTERFACE_LINK_LIBRARIES "${_osy_libs}")
-         endif()
-         get_target_property(_osy_opts ${OSY_QT_TARGET} INTERFACE_LINK_OPTIONS)
-         if(_osy_opts)
-            list(REMOVE_ITEM _osy_opts "-framework AGL" "AGL")
-            set_target_properties(${OSY_QT_TARGET} PROPERTIES INTERFACE_LINK_OPTIONS "${_osy_opts}")
-         endif()
+   foreach(OSY_QT_TARGET
+           Qt6::Gui Qt6::Widgets Qt6::PrintSupport Qt6::Svg Qt6::SvgWidgets
+           Qt6::OpenGL Qt6::OpenGLWidgets WrapOpenGL::WrapOpenGL)
+      if(NOT TARGET ${OSY_QT_TARGET})
+         continue()
       endif()
+      foreach(_osy_prop INTERFACE_LINK_LIBRARIES INTERFACE_LINK_OPTIONS)
+         get_target_property(_osy_items ${OSY_QT_TARGET} ${_osy_prop})
+         if(NOT _osy_items)
+            continue()
+         endif()
+         set(_osy_kept "")
+         set(_osy_pending_framework FALSE)
+         foreach(_osy_item IN LISTS _osy_items)
+            if(_osy_item MATCHES "AGL")
+               # Drop the item, and a "-framework" that was only there to introduce it.
+               if(_osy_pending_framework)
+                  list(REMOVE_AT _osy_kept -1)
+                  set(_osy_pending_framework FALSE)
+               endif()
+            elseif(_osy_item STREQUAL "-framework")
+               set(_osy_pending_framework TRUE)
+               list(APPEND _osy_kept "${_osy_item}")
+            else()
+               set(_osy_pending_framework FALSE)
+               list(APPEND _osy_kept "${_osy_item}")
+            endif()
+         endforeach()
+         if(NOT _osy_kept STREQUAL _osy_items)
+            set_target_properties(${OSY_QT_TARGET} PROPERTIES ${_osy_prop} "${_osy_kept}")
+         endif()
+      endforeach()
    endforeach()
 endfunction()
