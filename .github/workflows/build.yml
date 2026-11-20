@@ -77,8 +77,20 @@ jobs:
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew update -q
-          brew install -q ninja bison flex openssl@3
+          # Homebrew on Intel macOS (our macos-26-intel runners) is a Tier 3
+          # configuration: openssl@3 has no bottle and is built from source
+          # (~5 min), then its post-install hook fails, so `brew install`
+          # exits 1 even though every tool we need is installed. Trust the
+          # tools, not the exit code -- but fail loudly if one is missing.
+          brew install -q ninja bison flex openssl@3 || brew postinstall openssl@3 || true
+          for tool in ninja bison flex; do
+            command -v "${tool}" >/dev/null || { echo "::error::${tool} missing after brew install"; exit 1; }
+          done
+          OPENSSL_PREFIX="$(brew --prefix openssl@3)"
+          [ -x "${OPENSSL_PREFIX}/bin/openssl" ] || { echo "::error::openssl@3 missing after brew install"; exit 1; }
+          bison --version | head -1
+          flex --version
+          "${OPENSSL_PREFIX}/bin/openssl" version
 
       # Both OSes drive core through their toolchain file so the compiler/flags match
       # build.sh (clang). Only the Windows-only subsystems are skipped here.
@@ -137,7 +149,15 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: "1"
           HOMEBREW_NO_INSTALL_CLEANUP: "1"
         run: |
-          brew install -q ninja bison flex openssl@3 ccache
+          # Tier 3 on Intel macOS: openssl@3 builds from source and its
+          # post-install hook fails, so brew exits 1 with everything we
+          # need installed. Verify the tools instead of trusting the code.
+          brew install -q ninja bison flex openssl@3 ccache || brew postinstall openssl@3 || true
+          for tool in ninja bison flex ccache; do
+            command -v "${tool}" >/dev/null || { echo "::error::${tool} missing after brew install"; exit 1; }
+          done
+          OPENSSL_PREFIX="$(brew --prefix openssl@3)"
+          [ -x "${OPENSSL_PREFIX}/bin/openssl" ] || { echo "::error::openssl@3 missing after brew install"; exit 1; }
 
       - name: Install Qt (macOS)
         if: runner.os == 'macOS'
