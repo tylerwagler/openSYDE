@@ -1,23 +1,19 @@
 # openSYDE — GitLab CI
 #
 # The internal CI home. Mirrors .github/workflows/build.yml job for job, so the
-# move changes where the pipeline runs and nothing about what it proves. The
-# GitHub workflows stay in the tree until the public mirrors are archived.
+# move changes where the pipeline runs and nothing about what it proves.
 #
-# Runners this file expects (register once, in Settings -> CI/CD -> Runners):
+# Runners (Settings -> CI/CD -> Runners):
+#   docker    Linux build host, docker executor.
+#   macos     Shell executor on a Mac. Needs ninja, bison >= 3.3, flex with
+#             FlexLexer.h, Qt and (for pcan:macos) PCBUSB in /usr/local.
+#   windows   Shell executor on Windows with Git Bash on PATH; Qt 6.12
+#             llvm-mingw kit, LLVM-MinGW, Ninja, OpenSSL, winflexbison.
 #
-#   docker    Linux build host, docker executor. Linux jobs pull an image each.
-#   macos     Shell executor on a Mac. Needs the Homebrew deps (ninja, bison
-#             >= 3.3, flex, openssl@3), Qt 6.8 via a Qt install, and PCBUSB in
-#             /usr/local for the PCAN job. A universal build can be produced
-#             from an Intel Mac with CMAKE_OSX_ARCHITECTURES="x86_64;arm64".
-#   windows   Shell executor on Windows with Git Bash on PATH; Qt (llvm-mingw
-#             kit), LLVM-MinGW, Ninja, OpenSSL and winflexbison installed as on
-#             a dev box. Set OPENSSL_ROOT_DIR and CMAKE_PREFIX_PATH as runner
-#             environment variables, as the GitHub job does.
-#
-# Everything below drives the repo's own build.sh / CMake. Nothing installs a
-# toolchain a developer would not have.
+# NOTE: GitLab's GIT_SUBMODULE_STRATEGY=recursive only initialises one level.
+# This repo nests Vector_DBC/Vector_BLF/Vector_ASC under can-libraries, so every
+# job runs an explicit `git submodule update --init --recursive` first; without
+# it bison/flex have no Parser.yy or Scanner.ll to generate from.
 
 workflow:
   rules:
@@ -35,10 +31,10 @@ variables:
   BUILD_TYPE: "Debug"
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_DEPTH: "50"
-  # ccache shared per OS; harmless when a runner has no ccache.
   CCACHE_DIR: "$CI_PROJECT_DIR/.ccache"
   CCACHE_SLOPPINESS: "pch_defines,time_macros,include_file_mtime,include_file_ctime"
   CCACHE_BASEDIR: "$CI_PROJECT_DIR"
+  SUBMODULES: git submodule sync --recursive && git submodule update --init --recursive
 
 # --- verify ------------------------------------------------------------------
 
@@ -60,6 +56,7 @@ core:linux:
   extends: .linux
   stage: verify
   script:
+    - git submodule sync --recursive && git submodule update --init --recursive
     - cmake -S libraries/opensyde_core -B build/core -G Ninja
         -DCMAKE_BUILD_TYPE=$BUILD_TYPE
         -DOPENSYDE_CORE_BUILD_TESTS=ON
@@ -76,6 +73,7 @@ core:macos:
   stage: verify
   tags: [macos]
   script:
+    - git submodule sync --recursive && git submodule update --init --recursive
     - clang++ --version
     - cmake -S libraries/opensyde_core -B build/core -G Ninja
         -DCMAKE_BUILD_TYPE=$BUILD_TYPE
@@ -96,13 +94,13 @@ core:windows:
     # tgl_assert on Windows is a message box; headless it would wait forever.
     OSY_ASSERT_NO_DIALOG: "1"
   script:
-    - bash -lc "cmake -S . -B build/coretests -G Ninja
-        -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-        -DOPENSYDE_BUILD_GUI_TOOLS=OFF
-        -DOPENSYDE_CORE_BUILD_TESTS=ON
-        -DCMAKE_TOOLCHAIN_FILE=\"$CI_PROJECT_DIR/cmake/toolchain_windows.cmake\""
-    - bash -lc "cmake --build build/coretests -j $(nproc)"
-    - bash -lc "ctest --test-dir build/coretests/opensyde_core --output-on-failure -j $(nproc)"
+    # Single quotes: powershell passes the script through untouched and bash
+    # expands $CI_PROJECT_DIR / $BUILD_TYPE itself. Double quotes here made
+    # powershell eat the escaped toolchain path.
+    - bash -lc 'git submodule sync --recursive && git submodule update --init --recursive'
+    - bash -lc 'cmake -S . -B build/coretests -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DOPENSYDE_BUILD_GUI_TOOLS=OFF -DOPENSYDE_CORE_BUILD_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/cmake/toolchain_windows.cmake'
+    - bash -lc 'cmake --build build/coretests -j 8'
+    - bash -lc 'ctest --test-dir build/coretests/opensyde_core --output-on-failure -j 8'
   artifacts:
     when: on_failure
     paths: [build/coretests/opensyde_core/Testing/Temporary/LastTest.log]
@@ -118,8 +116,8 @@ tools:linux:
         libgl1-mesa-dev libssl-dev
         flex bison libfl-dev
   script:
+    - git submodule sync --recursive && git submodule update --init --recursive
     - ./build.sh -b Debug all
-    # One tool must still configure standalone, as on GitHub.
     - cmake -S opensyde_tsp_convert/pjt -B build/standalone-check -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE
   cache:
     key: ccache-linux
@@ -129,6 +127,7 @@ tools:macos:
   stage: verify
   tags: [macos]
   script:
+    - git submodule sync --recursive && git submodule update --init --recursive
     - |
       for tool in ninja bison flex; do
         command -v "$tool" >/dev/null || { echo "missing $tool on the macOS runner"; exit 1; }
@@ -142,7 +141,8 @@ tools:windows:
   stage: verify
   tags: [windows]
   script:
-    - bash -lc "./build.sh -b Debug all"
+    - bash -lc 'git submodule sync --recursive && git submodule update --init --recursive'
+    - bash -lc './build.sh -b Debug all'
   cache:
     key: ccache-windows
     paths: [.ccache]
@@ -154,6 +154,7 @@ pcan:macos:
   stage: verify
   tags: [macos]
   script:
+    - git submodule sync --recursive && git submodule update --init --recursive
     - |
       if [ ! -f /usr/local/include/PCBUSB.h ]; then
         echo "PCBUSB is not installed on this Mac — see https://www.mac-can.com (its install.sh puts libPCBUSB in /usr/local)."
@@ -186,6 +187,7 @@ static-analysis:
     - apt-get install -y -qq clang clang-tidy cmake ninja-build
         libgl1-mesa-dev libssl-dev flex bison libfl-dev git
   script:
+    - git submodule sync --recursive && git submodule update --init --recursive
     - cmake -S libraries/opensyde_core -B build/analysis -G Ninja
         -DCMAKE_BUILD_TYPE=Debug
         -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/cmake/toolchain_linux.cmake
@@ -204,13 +206,8 @@ static-analysis:
       grep -E "warning:" /tmp/analysis.log | sed "s|$PWD/||" | sort -u || echo "None."
 
 # --- release -----------------------------------------------------------------
-# Tags only. Builds the nine tools in Release on each platform and publishes
-# the per-platform folders as release assets. Packaging mirrors
-# .github/workflows/release.yml: Linux/macOS are bare binaries plus a
-# RUNTIME.md; Windows carries the DLLs its import walk resolves.
-#
-# GPLv3 note: recipients outside the organisation also get the corresponding
-# source. Attach a source archive to any release that leaves the org.
+# Tags only. GPLv3: recipients outside the organisation also get the
+# corresponding source; attach a source archive to any external release.
 
 .release-base:
   stage: release
@@ -225,9 +222,8 @@ release:linux:
         qt6-base-dev qt6-svg-dev qt6-tools-dev libgl1-mesa-dev libssl-dev
         flex bison libfl-dev
   script:
+    - git submodule sync --recursive && git submodule update --init --recursive
     - ./build.sh -b Release all
-    # Per-platform subtrees: the three jobs' artifacts merge into one
-    # workspace in release:publish, so they must not share a path.
     - mkdir -p dist/linux-x86_64 && cp -R result/Release/. dist/linux-x86_64/
   artifacts:
     paths: [dist/]
@@ -236,6 +232,7 @@ release:macos:
   extends: .release-base
   tags: [macos]
   script:
+    - git submodule sync --recursive && git submodule update --init --recursive
     - ./build.sh -b Release all
     - mkdir -p dist/macos && cp -R result/Release/. dist/macos/
   artifacts:
@@ -245,7 +242,8 @@ release:windows:
   extends: .release-base
   tags: [windows]
   script:
-    - bash -lc "./build.sh -b Release all"
+    - bash -lc 'git submodule sync --recursive && git submodule update --init --recursive'
+    - bash -lc './build.sh -b Release all'
     - mkdir -p dist/windows-x86_64 && cp -R result/Release/. dist/windows-x86_64/
   artifacts:
     paths: [dist/]
