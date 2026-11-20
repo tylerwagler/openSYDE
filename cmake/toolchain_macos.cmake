@@ -38,19 +38,27 @@ endif()
 
 # bison: Apple ships 2.3 and Vector_DBC requires >= 3.3.
 #   brew install bison
+# Without Homebrew (a plain CommandLineTools Mac, e.g. a CI runner) a GNU
+# bison in ~/.local/bin is preferred explicitly: FindBISON would otherwise take
+# Apple's /usr/bin/bison from PATH, and a cached value in a reused build
+# directory keeps winning even after a correct one appears.
 if(EXISTS "${OSY_BREW_PREFIX}/opt/bison/bin/bison")
    set(BISON_EXECUTABLE "${OSY_BREW_PREFIX}/opt/bison/bin/bison" CACHE FILEPATH "" FORCE)
+elseif(EXISTS "$ENV{HOME}/.local/bin/bison")
+   set(BISON_EXECUTABLE "$ENV{HOME}/.local/bin/bison" CACHE FILEPATH "" FORCE)
 endif()
 
 # flex: Apple's /usr/bin/flex works, but FindFLEX looks for FlexLexer.h next to
 # the executable's prefix, and Apple keeps it in CommandLineTools instead -- so
 # FLEX_INCLUDE_DIR comes back NOTFOUND and Vector_DBC cannot generate its scanner.
 # This is the macOS twin of the libfl-dev gotcha on Ubuntu. brew's flex ships the
-# binary and header together.
+# binary and header together; without brew, point at the SDK header directly.
 #   brew install flex
 if(EXISTS "${OSY_BREW_PREFIX}/opt/flex/bin/flex")
-   set(FLEX_EXECUTABLE  "${OSY_BREW_PREFIX}/opt/flex/bin/flex"  CACHE FILEPATH "" FORCE)
+   set(FLEX_EXECUTABLE  "${OSY_BREW_PREFIX}/opt/flex/bin/flex"   CACHE FILEPATH "" FORCE)
    set(FLEX_INCLUDE_DIR "${OSY_BREW_PREFIX}/opt/flex/include"   CACHE PATH     "" FORCE)
+elseif(EXISTS "/Library/Developer/CommandLineTools/usr/include/FlexLexer.h")
+   set(FLEX_INCLUDE_DIR "/Library/Developer/CommandLineTools/usr/include" CACHE PATH "" FORCE)
 endif()
 
 # OpenSSL and Qt are keg-only too; put their CMake configs where find_package looks.
@@ -67,3 +75,11 @@ foreach(_pkg openssl@3 qt qtbase qtsvg)
       list(APPEND CMAKE_PREFIX_PATH "${OSY_BREW_PREFIX}/opt/${_pkg}")
    endif()
 endforeach()
+
+# A Mac without Homebrew can carry its own Qt; the CI runner uses the Qt 6.12
+# archive unpacked under ~/Qt. CMAKE_PREFIX_PATH is cached on first configure,
+# so append into the cache rather than only the local variable -- otherwise a
+# runner that gained Qt later never sees it in a reused build directory.
+if(EXISTS "$ENV{HOME}/Qt/6.12.0/macos")
+   set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};$ENV{HOME}/Qt/6.12.0/macos" CACHE STRING "" FORCE)
+endif()

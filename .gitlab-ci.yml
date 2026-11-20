@@ -1,0 +1,280 @@
+# openSYDE — GitLab CI
+#
+# The internal CI home. Mirrors .github/workflows/build.yml job for job, so the
+# move changes where the pipeline runs and nothing about what it proves.
+#
+# Runners (Settings -> CI/CD -> Runners):
+#   docker    Linux build host, docker executor.
+#   macos     Shell executor on a Mac. Needs ninja, bison >= 3.3, flex with
+#             FlexLexer.h, Qt and (for pcan:macos) PCBUSB in /usr/local.
+#   windows   Shell executor on Windows with Git Bash on PATH; Qt 6.12
+#             llvm-mingw kit, LLVM-MinGW, Ninja, OpenSSL, winflexbison.
+#
+# NOTE: GitLab's GIT_SUBMODULE_STRATEGY=recursive only initialises one level.
+# This repo nests Vector_DBC/Vector_BLF/Vector_ASC under can-libraries, so every
+# job runs an explicit `git submodule update --init --recursive` first; without
+# it bison/flex have no Parser.yy or Scanner.ll to generate from.
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+stages:
+  - verify
+  - release
+
+variables:
+  BUILD_TYPE: "Debug"
+  GIT_SUBMODULE_STRATEGY: recursive
+  GIT_DEPTH: "50"
+  CCACHE_DIR: "$CI_PROJECT_DIR/.ccache"
+  CCACHE_SLOPPINESS: "pch_defines,time_macros,include_file_mtime,include_file_ctime"
+  CCACHE_BASEDIR: "$CI_PROJECT_DIR"
+  SUBMODULES: git submodule sync --recursive && git submodule update --init --recursive
+
+# --- verify ------------------------------------------------------------------
+
+.linux:
+  image: ubuntu:26.04
+  tags: [docker]
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y -qq
+        clang cmake ninja-build ccache git
+        libgl1-mesa-dev libssl-dev
+        flex bison libfl-dev locales
+    # A comma-decimal locale must exist or the XML float tests skip, and a
+    # skipped test protects nothing.
+    - locale-gen de_DE.UTF-8
+    - locale -a | grep -i de_DE
+
+core:linux:
+  extends: .linux
+  stage: verify
+  script:
+    - git submodule sync --recursive && git submodule update --init --recursive
+    - cmake -S libraries/opensyde_core -B build/core -G Ninja
+        -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        -DOPENSYDE_CORE_BUILD_TESTS=ON
+        -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON
+        -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
+        -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/cmake/toolchain_linux.cmake
+    - cmake --build build/core -j "$(nproc)"
+    - ctest --test-dir build/core --output-on-failure -j "$(nproc)"
+  artifacts:
+    when: on_failure
+    paths: [build/core/Testing/Temporary/LastTest.log]
+
+core:macos:
+  stage: verify
+  tags: [macos]
+  script:
+    - git submodule sync --recursive && git submodule update --init --recursive
+    - clang++ --version
+    - cmake -S libraries/opensyde_core -B build/core -G Ninja
+        -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        -DOPENSYDE_CORE_BUILD_TESTS=ON
+        -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON
+        -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
+        -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/cmake/toolchain_macos.cmake
+    - cmake --build build/core -j "$(sysctl -n hw.ncpu)"
+    - ctest --test-dir build/core --output-on-failure -j "$(sysctl -n hw.ncpu)"
+  artifacts:
+    when: on_failure
+    paths: [build/core/Testing/Temporary/LastTest.log]
+
+core:windows:
+  stage: verify
+  tags: [windows]
+  variables:
+    # tgl_assert on Windows is a message box; headless it would wait forever.
+    OSY_ASSERT_NO_DIALOG: "1"
+  script:
+    # Single quotes: powershell passes the script through untouched and bash
+    # expands $CI_PROJECT_DIR / $BUILD_TYPE itself. Double quotes here made
+    # powershell eat the escaped toolchain path.
+    - bash -lc 'git submodule sync --recursive && git submodule update --init --recursive'
+    - bash -lc 'cmake -S . -B build/coretests -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DOPENSYDE_BUILD_GUI_TOOLS=OFF -DOPENSYDE_CORE_BUILD_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/cmake/toolchain_windows.cmake'
+    - bash -lc 'cmake --build build/coretests -j 8'
+    - bash -lc 'ctest --test-dir build/coretests/opensyde_core --output-on-failure -j 8'
+  artifacts:
+    when: on_failure
+    paths: [build/coretests/opensyde_core/Testing/Temporary/LastTest.log]
+
+tools:linux:
+  extends: .linux
+  stage: verify
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y -qq
+        clang cmake ninja-build ccache git
+        qt6-base-dev qt6-svg-dev qt6-tools-dev
+        libgl1-mesa-dev libssl-dev
+        flex bison libfl-dev
+  script:
+    - git submodule sync --recursive && git submodule update --init --recursive
+    - ./build.sh -b Debug all
+    - cmake -S opensyde_tsp_convert/pjt -B build/standalone-check -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+  cache:
+    key: ccache-linux
+    paths: [.ccache]
+
+tools:macos:
+  stage: verify
+  tags: [macos]
+  script:
+    - git submodule sync --recursive && git submodule update --init --recursive
+    - |
+      for tool in ninja bison flex; do
+        command -v "$tool" >/dev/null || { echo "missing $tool on the macOS runner"; exit 1; }
+      done
+    - ./build.sh -b Debug all
+  cache:
+    key: ccache-macos
+    paths: [.ccache]
+
+tools:windows:
+  stage: verify
+  tags: [windows]
+  script:
+    - bash -lc 'git submodule sync --recursive && git submodule update --init --recursive'
+    - bash -lc './build.sh -b Debug all'
+  cache:
+    key: ccache-windows
+    paths: [.ccache]
+
+# pcan_backend.cpp is compiled by nothing else: CAN_BACKEND_PCAN is default-OFF
+# everywhere, so the macOS branch (PCBUSB include, socketpair sideband, USB
+# 1..8 handles) needs this dedicated configure to stay compiled.
+pcan:macos:
+  stage: verify
+  tags: [macos]
+  script:
+    - git submodule sync --recursive && git submodule update --init --recursive
+    - |
+      if [ ! -f /usr/local/include/PCBUSB.h ]; then
+        echo "PCBUSB is not installed on this Mac — see https://www.mac-can.com (its install.sh puts libPCBUSB in /usr/local)."
+        exit 1
+      fi
+    - cmake -S libraries/can-libraries -B build/pcan -G Ninja
+        -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        -DCAN_BACKEND_PCAN=ON
+        -DCANLIB_USE_VECTOR_DBC=OFF -DCANLIB_USE_VECTOR_BLF=OFF -DCANLIB_USE_VECTOR_ASC=OFF
+        -DBUILD_TESTING=OFF -DCANLIB_BUILD_EXAMPLES=OFF -DCANLIB_INSTALL=OFF
+    - cmake --build build/pcan --target libcan
+
+# Every plan under docs/agent_plans carries a status line, done plans are
+# archived and indexed, and the roadmap's active-plans table matches. Seconds.
+plans:
+  stage: verify
+  image: python:3.12-slim
+  tags: [docker]
+  script:
+    - python3 docs/agent_plans/check_plans.py
+
+# Advisory on purpose: the clang analyser has a real false-positive rate here,
+# and the known findings are triaged in docs/agent_plans/FINDINGS.md.
+static-analysis:
+  extends: .linux
+  stage: verify
+  allow_failure: true
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y -qq clang clang-tidy cmake ninja-build
+        libgl1-mesa-dev libssl-dev flex bison libfl-dev git
+  script:
+    - git submodule sync --recursive && git submodule update --init --recursive
+    - cmake -S libraries/opensyde_core -B build/analysis -G Ninja
+        -DCMAKE_BUILD_TYPE=Debug
+        -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/cmake/toolchain_linux.cmake
+        -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON
+        -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
+        -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    - cmake --build build/analysis -j "$(nproc)"
+    - |
+      find libraries/opensyde_core -name "*.cpp" \
+        | grep -vE "tinyxml2|miniz|/tests/|/bench/" | sort > /tmp/sources.txt
+      echo "Analysing $(wc -l < /tmp/sources.txt) files"
+      xargs -a /tmp/sources.txt -P "$(nproc)" -n 1 -I{} \
+        clang-tidy -p build/analysis --checks="-*,clang-analyzer-*" \
+          --header-filter="libraries/opensyde_core/.*" --quiet {} \
+        2>/dev/null > /tmp/analysis.log || true
+      grep -E "warning:" /tmp/analysis.log | sed "s|$PWD/||" | sort -u || echo "None."
+
+# --- release -----------------------------------------------------------------
+# Tags only. GPLv3: recipients outside the organisation also get the
+# corresponding source; attach a source archive to any external release.
+
+.release-base:
+  stage: release
+  rules:
+    - if: $CI_COMMIT_TAG
+
+release:linux:
+  extends: [.linux, .release-base]
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y -qq clang cmake ninja-build git
+        qt6-base-dev qt6-svg-dev qt6-tools-dev libgl1-mesa-dev libssl-dev
+        flex bison libfl-dev
+  script:
+    - git submodule sync --recursive && git submodule update --init --recursive
+    - ./build.sh -b Release all
+    - mkdir -p dist/linux-x86_64 && cp -R result/Release/. dist/linux-x86_64/
+  artifacts:
+    paths: [dist/]
+
+release:macos:
+  extends: .release-base
+  tags: [macos]
+  script:
+    - git submodule sync --recursive && git submodule update --init --recursive
+    - ./build.sh -b Release all
+    - mkdir -p dist/macos && cp -R result/Release/. dist/macos/
+  artifacts:
+    paths: [dist/]
+
+release:windows:
+  extends: .release-base
+  tags: [windows]
+  script:
+    - bash -lc 'git submodule sync --recursive && git submodule update --init --recursive'
+    - bash -lc './build.sh -b Release all'
+    - mkdir -p dist/windows-x86_64 && cp -R result/Release/. dist/windows-x86_64/
+  artifacts:
+    paths: [dist/]
+
+release:publish:
+  extends: .release-base
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  tags: [docker]
+  needs:
+    - job: release:linux
+      artifacts: true
+    - job: release:macos
+      artifacts: true
+    - job: release:windows
+      artifacts: true
+  script:
+    - tar -czf "openSYDE-$CI_COMMIT_TAG-linux-x86_64.tar.gz" -C dist/linux-x86_64 .
+    - tar -czf "openSYDE-$CI_COMMIT_TAG-macos.tar.gz" -C dist/macos .
+    - tar -czf "openSYDE-$CI_COMMIT_TAG-windows-x86_64.tar.gz" -C dist/windows-x86_64 .
+  artifacts:
+    paths:
+      - "openSYDE-$CI_COMMIT_TAG-*.tar.gz"
+  release:
+    tag_name: "$CI_COMMIT_TAG"
+    name: "openSYDE $CI_COMMIT_TAG"
+    description: "Internal release. Binaries per platform; source at this tag."
+    assets:
+      links:
+        - name: "Linux x86_64"
+          url: "$CI_PROJECT_URL/-/jobs/artifacts/$CI_COMMIT_TAG/raw/openSYDE-$CI_COMMIT_TAG-linux-x86_64.tar.gz?job=release:publish"
+        - name: "macOS"
+          url: "$CI_PROJECT_URL/-/jobs/artifacts/$CI_COMMIT_TAG/raw/openSYDE-$CI_COMMIT_TAG-macos.tar.gz?job=release:publish"
+        - name: "Windows x86_64"
+          url: "$CI_PROJECT_URL/-/jobs/artifacts/$CI_COMMIT_TAG/raw/openSYDE-$CI_COMMIT_TAG-windows-x86_64.tar.gz?job=release:publish"
