@@ -38,14 +38,16 @@ endif()
 
 # bison: Apple ships 2.3 and Vector_DBC requires >= 3.3.
 #   brew install bison
-# Without Homebrew (a plain CommandLineTools Mac, e.g. a CI runner) a GNU
-# bison in ~/.local/bin is preferred explicitly: FindBISON would otherwise take
-# Apple's /usr/bin/bison from PATH, and a cached value in a reused build
-# directory keeps winning even after a correct one appears.
+# Without Homebrew the toolchain lives wherever it was built: a developer's
+# ~/.local/bin, or the shared /Users/Shared/bin the CI runner uses (jobs run as
+# a dedicated `ci` account there, so $HOME is not the person's). Anchor it with
+# FORCE -- a cached value in a reused build directory keeps winning otherwise.
 if(EXISTS "${OSY_BREW_PREFIX}/opt/bison/bin/bison")
    set(BISON_EXECUTABLE "${OSY_BREW_PREFIX}/opt/bison/bin/bison" CACHE FILEPATH "" FORCE)
 elseif(EXISTS "$ENV{HOME}/.local/bin/bison")
    set(BISON_EXECUTABLE "$ENV{HOME}/.local/bin/bison" CACHE FILEPATH "" FORCE)
+elseif(EXISTS "/Users/Shared/bin/bison")
+   set(BISON_EXECUTABLE "/Users/Shared/bin/bison" CACHE FILEPATH "" FORCE)
 endif()
 
 # flex: Apple's /usr/bin/flex works, but FindFLEX looks for FlexLexer.h next to
@@ -76,10 +78,13 @@ foreach(_pkg openssl@3 qt qtbase qtsvg)
    endif()
 endforeach()
 
-# A Mac without Homebrew can carry its own Qt; the CI runner uses the Qt 6.12
-# archive unpacked under ~/Qt. CMAKE_PREFIX_PATH is cached on first configure,
-# so append into the cache rather than only the local variable -- otherwise a
-# runner that gained Qt later never sees it in a reused build directory.
-if(EXISTS "$ENV{HOME}/Qt/6.12.0/macos")
-   set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};$ENV{HOME}/Qt/6.12.0/macos" CACHE STRING "" FORCE)
-endif()
+# A Mac without Homebrew can carry its own Qt: a developer's ~/Qt, or the
+# shared /Users/Shared/Qt the CI runner uses (as account `ci`). CMAKE_PREFIX_PATH
+# is cached on first configure, so append into the cache rather than only the
+# local variable -- otherwise a runner that gained Qt later never sees it.
+foreach(_qt "$ENV{HOME}/Qt/6.12.0/macos" "/Users/Shared/Qt/6.12.0/macos")
+   if(EXISTS "${_qt}")
+      set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${_qt}" CACHE STRING "" FORCE)
+      break()
+   endif()
+endforeach()
