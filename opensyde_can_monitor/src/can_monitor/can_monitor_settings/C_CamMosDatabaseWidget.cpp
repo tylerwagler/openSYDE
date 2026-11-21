@@ -7,6 +7,7 @@
    Widget for configuring database files like DBC or syde_sysdef files.
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -82,9 +83,11 @@ C_CamMosDatabaseWidget::C_CamMosDatabaseWidget(QWidget * const opc_Parent) :
 //----------------------------------------------------------------------------------------------------------------------
 C_CamMosDatabaseWidget::~C_CamMosDatabaseWidget()
 {
-   // clean up item widgets
-   this->Clear();
-
+   // Deliberately not calling Clear() here: its SigRemoveDatabase emission targets the parent
+   // C_CamMosWidget's slot, but during teardown the parent's derived destructor has already run
+   // and Qt aborts on the dead receiver (assertObjectType). The entry widgets are children and
+   // Qt deletes them with this widget; a live clear must go through C_CamMosWidget, which calls
+   // Clear() explicitly.
    delete this->mpc_Ui;
 }
 

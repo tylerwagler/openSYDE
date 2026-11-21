@@ -6,6 +6,7 @@
    Widget for handling CAN Message filter configuration
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -75,9 +76,11 @@ C_CamMosFilterWidget::C_CamMosFilterWidget(QWidget * const opc_Parent) :
 //----------------------------------------------------------------------------------------------------------------------
 C_CamMosFilterWidget::~C_CamMosFilterWidget()
 {
-   // clean up item widgets
-   this->Clear();
-
+   // Deliberately not calling Clear() here: its SigRemoveAllFilters / SigFilterNumberChanged
+   // emissions target the parent C_CamMosWidget's slots, but during teardown the parent's
+   // derived destructor has already run and Qt aborts on the dead receiver (assertObjectType).
+   // The entry widgets are children and Qt deletes them with this widget; a live clear must
+   // go through C_CamMosWidget, which calls Clear() explicitly.
    delete this->mpc_Ui;
 }
 
