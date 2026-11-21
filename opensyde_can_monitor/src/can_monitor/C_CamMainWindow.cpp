@@ -6,6 +6,7 @@
    Main window for project openSYDE CAN Monitor
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -677,7 +678,7 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
       s32_Return = (c_CanInitResult == Errc::success) ? C_NO_ERR : C_COM;
    }
 
-#ifndef _WIN32
+#ifdef __linux__
    if (s32_Return == C_NO_ERR)
    {
       // SocketCAN doesn't expose bitrate through the dispatcher abstract API; query the kernel via
@@ -708,7 +709,8 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
 #else
    if (s32_Return == C_NO_ERR)
    {
-      // Bitrate is whatever was configured into the PEAK adapter via its constructor (default 500).
+      // PEAK (Windows PCANBasic) and PCBUSB (macOS) both take the bitrate from the channel
+      // configuration, so report the configured value; SocketCAN's `ip` query does not exist here.
       ors32_Bitrate = static_cast<int32_t>(c_Config.u32_BitrateBps / 1000U);
    }
 #endif

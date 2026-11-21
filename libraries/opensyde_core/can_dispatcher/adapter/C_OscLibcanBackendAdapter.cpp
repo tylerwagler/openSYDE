@@ -195,7 +195,14 @@ std::error_code C_OscLibcanBackendAdapter::m_CAN_Read_Msg(T_STWCAN_Msg_RX & orc_
          {
             orc_Message.au8_Data[u8_Byte] = c_Frame.data[u8_Byte];
          }
-         if (c_Frame.timestamp_us != 0ULL)
+         // Frame::timestamp_us carries a backend-defined epoch. Only SocketCAN populates it with
+         // CLOCK_REALTIME (SO_TIMESTAMPNS, with a system_clock fallback), which converts cleanly to
+         // the monotonic tick base the monitor uses. PCAN's TPCANTimestamp counts microseconds since
+         // channel activation — subtracting the realtime offset from that goes negative and clamps
+         // to zero, blanking every timestamp — so device-clock backends are stamped host-side at
+         // receipt instead, matching the no-timestamp fallback.
+         if ((c_Frame.timestamp_us != 0ULL) &&
+             (mpc_Backend->kind() == ::can::BackendKind::SocketCan))
          {
             // Kernel timestamp is CLOCK_REALTIME; convert to monotonic
             const int64_t s64_MonoTs =

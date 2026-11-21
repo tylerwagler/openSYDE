@@ -6,6 +6,7 @@
    Max performance model
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Systems. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -871,12 +872,6 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
                      {
                          if (this->mq_DisplayAsHex == true)
                          {
-                            qDebug("UNIQUE_DBG: proto=[%s] rtr=%d markerEmpty=%d hex=[%s] dlc=[%s]",
-                                   pc_CurMessage->c_ProtocolTextDec.c_str(),
-                                   pc_CurMessage->c_CanMsg.u8_RTR,
-                                   orc_Index.data(ms32_USER_ROLE_MARKER).toBitArray().isEmpty() ? 1 : 0,
-                                   pc_CurMessage->c_CanDataHex.c_str(),
-                                   pc_CurMessage->c_CanDlc.c_str());
                             c_Retval = pc_CurMessage->c_CanDataHex.c_str();
                          }
                          else
@@ -1914,18 +1909,7 @@ void C_CamMetTreeModel::m_AddRowsUnique(const std::list<C_CamMetTreeLoggerData> 
             if ((c_ItData->e_TpFrameType != stw::opensyde_core::eCTFT_NONE) &&
                 (!c_ItData->q_TpReassembled))
             {
-               qDebug("SKIP id=%s type=%d reassembled=%d",
-                      c_ItData->c_CanIdDec.c_str(),
-                      static_cast<int>(c_ItData->e_TpFrameType),
-                      c_ItData->q_TpReassembled ? 1 : 0);
                continue;
-            }
-            else
-            {
-               qDebug("SHOW id=%s type=%d reassembled=%d proto=CAN_TP",
-                      c_ItData->c_CanIdDec.c_str(),
-                      static_cast<int>(c_ItData->e_TpFrameType),
-                      c_ItData->q_TpReassembled ? 1 : 0);
             }
          }
 
