@@ -16,6 +16,7 @@
 
 #include <cstdint>
 #include "C_Uti.hpp"
+#include "user_settings/C_UsHandler.hpp"
 #include "C_CamMainWindow.hpp"
 #include "C_PopErrorHandling.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -96,5 +97,12 @@ int32_t main(int32_t os32_Argc, char * opacn_Argv[])
       //lint -e{1705} Working Qt example code
       s32_Result = c_Appl.exec();
    }
+
+   // Destroy the settings singleton only after the window (and with it every widget that
+   // reads or writes user settings in its destructor) is gone. h_GetInstance() cannot
+   // resurrect a destroyed instance (std::call_once is spent), so any later access
+   // dereferences null.
+   stw::opensyde_gui_logic::C_UsHandler::h_Destroy();
+
    return s32_Result;
 }

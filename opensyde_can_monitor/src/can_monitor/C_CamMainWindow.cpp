@@ -339,8 +339,9 @@ void C_CamMainWindow::closeEvent(QCloseEvent * const opc_Event)
       // Call all functions for saving user settings
       this->m_SaveUserSettings();
 
-      //Clean up user settings
-      C_UsHandler::h_Destroy();
+      // Do NOT destroy the C_UsHandler singleton here: the window is a stack object in
+      // main(), so its widget destructors run later, and several of them read or write
+      // user settings. cam_main() destroys the singleton after the window is gone.
 
       QMainWindow::closeEvent(opc_Event);
    }
